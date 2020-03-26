@@ -57,7 +57,7 @@ public class EntityCacodemon extends RideableCreatureEntity {
     // ========== Living Update ==========
     @Override
     public void onLivingUpdate() {
-        if(!this.getEntityWorld().isRemote && this.getSubspeciesIndex() == 3 && this.hasAttackTarget() && this.ticksExisted % 20 == 0) {
+        if(!this.getEntityWorld().isRemote && this.isRareVariant() && this.hasAttackTarget() && this.ticksExisted % 20 == 0) {
             this.allyUpdate();
         }
 

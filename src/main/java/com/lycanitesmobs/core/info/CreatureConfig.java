@@ -105,7 +105,7 @@ public class CreatureConfig {
 
 	// Variations:
 	/** If true, mobs will have a chance of becoming a subspecies when spawned. **/
-	public boolean subspeciesSpawn = true;
+	public boolean variantSpawn = true;
 
 	/** If true, mobs will vary in sizes when spawned. **/
 	public boolean randomSizes = true;
@@ -178,11 +178,11 @@ public class CreatureConfig {
 
 		// Variations:
 		config.setCategoryComment("Mob Variations", "Settings for how mobs randomly vary such as subspecies. Subspecies are uncommon and rare variants of regular mobs, uncommon subspecies tend to be a bit tougher and rare subspecies are quite powerful and can be considered as mini bosses..");
-		this.subspeciesSpawn = config.getBool("Mob Variations", "Subspecies Can Spawn", this.subspeciesSpawn, "Set to false to prevent subspecies from spawning, this will not affect mobs that have already spawned as subspecies.");
+		this.variantSpawn = config.getBool("Mob Variations", "Variants Can Spawn", this.variantSpawn, "Set to false to prevent variants from spawning, this will not affect mobs that have already spawned as variants.");
 		this.randomSizes = config.getBool("Mob Variations", "Random Sizes", this.randomSizes, "Set to false to prevent mobs from having a random size variation when spawning, this will not affect mobs that have already spawned.");
 		this.randomSizeMin = config.getDouble("Mob Variations", "Random Size Min", this.randomSizeMin, "The minimum size scale mobs can randomly spawn at.");
 		this.randomSizeMax = config.getDouble("Mob Variations", "Random Size Max", this.randomSizeMax, "The maximum size scale mobs can randomly spawn at.");
-		Subspecies.loadGlobalSettings(config);
+		Variant.loadGlobalSettings(config);
 
 		// Drops:
 		config.setCategoryComment("Custom Item Drops", "Here you can add a global list of item drops to add to every mob from Lycanites Mobs. Format is: mod:item,metadata,chance,min,max Multiple drops should be semicolon separated and chances are in decimal format. You can also add an additional comma and then a subspecies ID to restrict that drop to a certain subspecies like so: mod:item,metadata,chance,min,max,subspecies. minecraft:wool,2,0.25,0,3 is Green Wool with a 25% drop rate and will drop 0 to 3 blocks. Be sure to use a colon for mod:item and commas for everything else in an entry. Semicolons can be used to separate multiple entries.");

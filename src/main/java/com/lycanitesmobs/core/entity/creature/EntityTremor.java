@@ -52,7 +52,7 @@ public class EntityTremor extends TameableCreatureEntity implements IMob {
     public void onLivingUpdate() {
         super.onLivingUpdate();
         
-        if(!this.getEntityWorld().isRemote && this.getSubspeciesIndex() == 3 && !this.isPetType("familiar")) {
+        if(!this.getEntityWorld().isRemote && this.isRareVariant() && !this.isPetType("familiar")) {
 	    	// Random Charging:
 	    	if(this.hasAttackTarget() && this.getDistance(this.getAttackTarget()) > 1 && this.getRNG().nextInt(20) == 0) {
 	    		if(this.posY - 1 > this.getAttackTarget().posY)

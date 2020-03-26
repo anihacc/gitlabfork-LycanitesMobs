@@ -87,7 +87,7 @@
 		{
 			"mobId": "lycanitesmobs:conba",
 			"weight": 1,
-			"subspecies": 1,
+			"variant": 1,
 			"mobNameTag": "Pong Kong",
 			"mobSizeScale": 2,
 			"naturalDespawn": "false",
@@ -110,7 +110,7 @@
 		{
 			"mobId": "lycanitesmobs:jabberwock",
 			"weight": 1,
-			"subspecies": 1,
+			"variant": 1,
 			"mobNameTag": "Princess",
 			"mobSizeScale": 2,
 			"naturalDespawn": "false",
@@ -134,7 +134,7 @@
 		{
 			"mobId": "lycanitesmobs:beholder",
 			"weight": 1,
-			"subspecies": 2,
+			"variant": 2,
 			"mobSizeScale": 1.25,
 			"mobNameTag": "Malevolent Observer",
 			"naturalDespawn": "false",

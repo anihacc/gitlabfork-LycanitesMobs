@@ -1,6 +1,5 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.api.IFusable;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
@@ -65,7 +64,7 @@ public class EntityGeonach extends TameableCreatureEntity implements IMob, IFusa
         super.onLivingUpdate();
 
         if(!this.getEntityWorld().isRemote) {
-			if (this.getSubspeciesIndex() == 3 && !this.isPetType("familiar")){
+			if (this.isRareVariant() && !this.isPetType("familiar")){
 				// Random Charging:
 				if (this.hasAttackTarget() && this.getDistance(this.getAttackTarget()) > 1 && this.getRNG().nextInt(20) == 0) {
 					if (this.posY - 1 > this.getAttackTarget().posY)
@@ -81,7 +80,7 @@ public class EntityGeonach extends TameableCreatureEntity implements IMob, IFusa
 			}
 
 			// Environmental Transformation:
-			if(!this.isTamed() && !this.isRareSubspecies()) {
+			if(!this.isTamed() && !this.isRareVariant()) {
 				if (this.updateTick % 40 == 0 && this.isInLava()) {
 					this.transform(CreatureManager.getInstance().getEntityClass("volcan"), null, false);
 				}

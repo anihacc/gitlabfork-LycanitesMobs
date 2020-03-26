@@ -17,6 +17,7 @@ import net.minecraftforge.fml.relauncher.Side;
 public class MessageSummoningPedestalSummonSet implements IMessage, IMessageHandler<MessageSummoningPedestalSummonSet, IMessage> {
 	public String summonType;
 	public int subpsecies;
+	public int variant;
 	public byte behaviour;
     public int x;
     public int y;
@@ -30,6 +31,7 @@ public class MessageSummoningPedestalSummonSet implements IMessage, IMessageHand
 	public MessageSummoningPedestalSummonSet(SummonSet summonSet, int x, int y, int z) {
 		this.summonType = summonSet.summonType;
 		this.subpsecies = summonSet.subspecies;
+		this.variant = summonSet.variant;
 		this.behaviour = summonSet.getBehaviourByte();
         this.x = x;
         this.y = y;
@@ -59,7 +61,7 @@ public class MessageSummoningPedestalSummonSet implements IMessage, IMessageHand
 				return;
 			if(summoningPedestal.summonSet == null)
 				summoningPedestal.summonSet = new SummonSet(null);
-			summoningPedestal.summonSet.readFromPacket(message.summonType, message.subpsecies, message.behaviour);
+			summoningPedestal.summonSet.readFromPacket(message.summonType, message.subpsecies, message.variant, message.behaviour);
 		});
         return null;
 	}
@@ -79,6 +81,7 @@ public class MessageSummoningPedestalSummonSet implements IMessage, IMessageHand
         this.z = packet.readInt();
         this.summonType = packet.readString(256);
         this.subpsecies = packet.readInt();
+        this.variant = packet.readInt();
         this.behaviour = packet.readByte();
 	}
 	
@@ -97,6 +100,7 @@ public class MessageSummoningPedestalSummonSet implements IMessage, IMessageHand
         packet.writeInt(this.z);
         packet.writeString(this.summonType);
         packet.writeInt(this.subpsecies);
+        packet.writeInt(this.variant);
         packet.writeByte(this.behaviour);
 	}
 	

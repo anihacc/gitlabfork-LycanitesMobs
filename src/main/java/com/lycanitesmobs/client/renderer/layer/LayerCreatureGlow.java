@@ -33,8 +33,8 @@ public class LayerCreatureGlow extends LayerCreatureBase {
     @Override
     public ResourceLocation getLayerTexture(BaseCreatureEntity entity) {
 		String textureName = entity.getTextureName();
-		if(entity.getSubspecies() != null) {
-			textureName += "_" + entity.getSubspecies().color;
+		if(entity.getVariant() != null) {
+			textureName += "_" + entity.getVariant().color;
 		}
 		textureName += "_glow";
 		if(AssetManager.getTexture(textureName) == null)

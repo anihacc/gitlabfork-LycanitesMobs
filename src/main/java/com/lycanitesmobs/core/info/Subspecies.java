@@ -5,12 +5,10 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.config.ConfigBase;
-import com.lycanitesmobs.core.entity.CreatureStats;
+import com.lycanitesmobs.client.localisation.LanguageManager;
 import com.lycanitesmobs.core.helpers.JSONHelper;
 import com.lycanitesmobs.core.spawner.condition.SpawnCondition;
 import net.minecraft.entity.EntityLivingBase;
-import com.lycanitesmobs.client.localisation.LanguageManager;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -20,70 +18,21 @@ import javax.annotation.Nullable;
 import java.util.*;
 
 public class Subspecies {
-    // ========== Subspecies Global ==========
-    /** The weight used by the default subspecies. **/
-    public static int baseSpeciesWeight = 400;
+	/** A map of creature variants available to this subspecies. **/
+	public Map<Integer, Variant> variants = new HashMap<>();
 
-    /** Common weights used by most subspecies. **/
-    public static Map<String, Integer> commonWeights = new HashMap<String, Integer>() {{
-    	put("common", 100);
-    	put("uncommon", 20);
-    	put("rare", 2);
-    	put("legendary", 1);
-    }};
-
-	/** A static map containing all the global multipliers for each stat for each subspecies. **/
-	public static Map<String, Double> statMultipliers = new HashMap<>();
-
-    /** The drop amount scale of uncommon subspecies. **/
-    public static int uncommonDropScale = 2;
-
-    /** The drop amount scale of rare subspecies. **/
-    public static int rareDropScale = 5;
-
-    /** The scale of experience for uncommon subspecies. **/
-    public static double uncommonExperienceScale = 2.0D;
-
-    /** The scale of experience for uncommon subspecies. **/
-    public static double rareExperienceScale = 10.0D;
-
-	/** The minimum amount of days before uncommon species start to spawn. **/
-	public static int uncommonSpawnDayMin = 0;
-
-	/** The minimum amount of days before rare species start to spawn. **/
-	public static int rareSpawnDayMin = 0;
-
-	/** If true, rare subspecies will despawn naturally over time. **/
-	public static boolean rareDespawning = false;
-
-    /** Whether rare subspecies should show boss health bars or not. **/
-    public static boolean rareHealthBars = false;
-
-    // ========== Subspecies General ==========
-    /** The index of this subspecies in MobInfo. Set by MobInfo when added. Should never be 0 as that is used by the default and will result in this subspecies being ignored. **/
+    /** The index of this subspecies in MobInfo. Set by MobInfo when added. **/
     public int index;
 
-	/** The size scale of this subspecies. **/
-	public double scale = 1.0D;
+	/** Higher priority Subspecies will always spawn in place of lower priority ones if they can spawn (conditions are met) regardless of weight. Only increase this above 0 if a subspecies has conditions otherwise they will stop standard/base Subspecies from showing up. **/
+	public int priority = 0;
 
-	/** The skin of this subspecies. Skins refer to different models and major texture changes. Ex: Void Astaroth. **/
-	public String skin;
-
-    /** The color of this subspecies. Colors refer to just color or minor texture variations. Ex: Verdant Grue. **/
-    public String color;
-
-    /** The rarity of this subspecies. **/
-    public String rarity = "uncommon";
+	/** The name of this subspecies. Null for the default normal subspecies. **/
+	public String name;
 
 	/** The model class used by this subspecies. If null a hardcoded default model is searched for. **/
 	@SideOnly(Side.CLIENT)
 	public Class<? extends net.minecraft.client.model.ModelBase> modelClass;
-
-    /** The weight of this subspecies, used when randomly determining the subspecies of a mob. A base species uses the static baseSpeciesWeight value. **/
-    public int weight;
-
-    /** Higher priority Subspecies will always spawn in place of lower priority ones if they can spawn (conditions are met) regardless of weight. Only increase this above 0 if a subspecies has conditions otherwise they will stop standard/base Subspecies from showing up. **/
-    public int priority = 0;
 
 	/** The Elements of this subspecies, affects buffs and debuffs amongst other things. **/
 	public List<ElementInfo> elements = new ArrayList<>();
@@ -95,97 +44,23 @@ public class Subspecies {
 	public Vec3d mountOffset = new Vec3d(0.0D, 1.0D, 0.0D);
 
 
-	/**
-	 * Loads global Subspecies config values, etc.
-	 * @param config The config instance to load values from.
-	 */
-	public static void loadGlobalSettings(ConfigBase config) {
-        baseSpeciesWeight = config.getInt("Mob Variations", "Subspecies Base Weight", baseSpeciesWeight, "The weight of base subspecies (regular mobs).");
-        commonWeights.put("uncommon", config.getInt("Mob Variations", "Subspecies Uncommon Weight", commonWeights.get("uncommon"), "The weight of uncommon subspecies (such as Azure, Verdant, Scarlet, etc)."));
-        commonWeights.put("rare", config.getInt("Mob Variations", "Subspecies Rare Weight", commonWeights.get("rare"), "The weight of rare subspecies (such as Lunar or Celestial)."));
-
-        // Difficulty:
-        String[] subspeciesNames = new String[] {"uncommon", "rare"};
-		statMultipliers = new HashMap<>();
-        config.setCategoryComment("Subspecies Multipliers", "Here you can scale the stats of every mob on a per subspecies basis.");
-        for(String subspeciesName : subspeciesNames) {
-            for(String statName : CreatureStats.STAT_NAMES) {
-                double defaultValue = 1.0;
-				if("uncommon".equals(subspeciesName)) {
-					if("health".equals(statName)) {
-						defaultValue = 2;
-					}
-				}
-                if("rare".equals(subspeciesName)) {
-					if("health".equals(statName)) {
-						defaultValue = 20;
-					}
-					else if("attackSpeed".equals(statName)) {
-						defaultValue = 2;
-					}
-					else if("rangedSpeed".equals(statName)) {
-						defaultValue = 2;
-					}
-					else if("effect".equals(statName)) {
-						defaultValue = 2;
-					}
-				}
-                statMultipliers.put((subspeciesName + "-" + statName).toUpperCase(), config.getDouble("Subspecies Multipliers", subspeciesName + " " + statName, defaultValue));
-            }
-        }
-
-
-        uncommonDropScale = config.getInt("Mob Variations", "Subspecies Uncommon Item Drops Scale", uncommonDropScale, "When a creature with the uncommon subspecies (Azure, Verdant, etc) dies, its item drops amount is multiplied by this value.");
-        rareDropScale = config.getInt("Mob Variations", "Subspecies Rare Item Drops Scale", rareDropScale, "When a creature with the rare subspecies (Celestial, Lunar, etc) dies, its item drops amount is multiplied by this value.");
-
-        uncommonExperienceScale = config.getDouble("Mob Variations", "Subspecies Uncommon Experience Scale", uncommonExperienceScale, "When a creature with the uncommon subspecies (Azure, Verdant, etc) dies, its experience amount is multiplied by this value.");
-        rareExperienceScale = config.getDouble("Mob Variations", "Subspecies Rare Experience Scale", rareExperienceScale, "When a creature with the rare subspecies (Celestial, Lunar, etc) dies, its experience amount is multiplied by this value.");
-
-		uncommonSpawnDayMin = config.getInt("Mob Variations", "Subspecies Uncommon Spawn Day Min", uncommonSpawnDayMin, "The minimum amount of days before uncommon species start to spawn.");
-		rareSpawnDayMin = config.getInt("Mob Variations", "Subspecies Rare Spawn Day Min", rareSpawnDayMin, "The minimum amount of days before rare species start to spawn.");
-
-		rareDespawning = config.getBool("Mob Variations", "Subspecies Rare Despawning", rareDespawning, "If set to true, rare subspecies such as the Lunar Grue will despawn naturally over time.");
-
-		rareHealthBars = config.getBool("Mob Variations", "Subspecies Rare Health Bars", rareHealthBars, "If set to true, rare subspecies such as the Lunar Grue or Celestial Geonach will display boss health bars.");
-    }
-
-
     public static Subspecies createFromJSON(CreatureInfo creatureInfo, JsonObject json) {
-		// Rarity:
-		String rarity = "uncommon";
-		if(json.has("rarity")) {
-			rarity = json.get("rarity").getAsString().toLowerCase();
-		}
-		else if(json.has("type")) {
-			rarity = json.get("type").getAsString().toLowerCase();
-		}
-
-		// Skin:
-		String skin = null;
-		if(json.has("skin")) {
-			skin = json.get("skin").getAsString().toLowerCase();
-		}
-
-		// Color:
-		String color = null;
-		if(json.has("color")) {
-			color = json.get("color").getAsString().toLowerCase();
-		}
-		else if(json.has("name")) {
-			color = json.get("name").getAsString().toLowerCase();
-		}
-
-		if(skin == null && color == null) {
-			throw new RuntimeException("Invalid subspecies added with no Skin and/or Color defined! At least one value must be set.");
+		// Name:
+		String name = null;
+		if(json.has("name")) {
+			name = json.get("name").getAsString().toLowerCase();
 		}
 
 		// Create Subspecies:
-		Subspecies subspecies = new Subspecies(skin, color, rarity);
-		subspecies.index = json.get("index").getAsInt();
+		Subspecies subspecies = new Subspecies(name, json.get("index").getAsInt());
 
-		// Scale:
-		if(json.has("scale")) {
-			subspecies.scale = json.get("scale").getAsDouble();
+		// Create Variants:
+		if(json.has("variants")) {
+			for (JsonElement jsonElement : json.get("variants").getAsJsonArray()) {
+				JsonObject jsonObject = jsonElement.getAsJsonObject();
+				Variant variant = Variant.createFromJSON(creatureInfo, jsonObject);
+				subspecies.variants.put(variant.index, variant);
+			}
 		}
 
 		// Model Class:
@@ -214,7 +89,7 @@ public class Subspecies {
 		for(String elementName : elementNames) {
 			ElementInfo element = ElementManager.getInstance().getElement(elementName);
 			if (element == null) {
-				throw new RuntimeException("[Creature] The element " + elementName + " cannot be found for subspecies: " + subspecies.skin);
+				throw new RuntimeException("[Creature] The element " + elementName + " cannot be found for subspecies: " + subspecies.name);
 			}
 			subspecies.elements.add(element);
 		}
@@ -238,16 +113,13 @@ public class Subspecies {
 
 
 	/**
-	 * Constructor for creating a color/skin Subspecies based on a rarity.
-	 * @param skin The skin of the Subspecies. Can be null for default skin.
-	 * @param color The color of the Subspecies. Can be null for default color.
-	 * @param rarity The rarity of the Subspecies ('common', 'uncommon' or 'rare').
+	 * Constructor for creating a Subspecies.
+	 * @param name The skin of the Subspecies. Can be null for default subspecies.
+	 * @param index The index of the Subspecies. Should be 0 for the default subspecies.
 	 */
-	public Subspecies(@Nullable String skin, @Nullable String color, String rarity) {
-        this.color = color;
-        this.skin = skin;
-        this.rarity = rarity;
-        this.weight = commonWeights.get(rarity);
+	public Subspecies(@Nullable String name, int index) {
+        this.name = name;
+		this.index = index;
     }
 
 
@@ -255,9 +127,9 @@ public class Subspecies {
 	 * Loads this subspecies, used for adding new sounds, etc. Can only be done during startup.
 	 */
 	public void load(CreatureInfo creatureInfo) {
-		if(this.skin != null && !creatureInfo.loadedSubspeciesSkins.contains(this.skin)) {
-			creatureInfo.addSounds("." + this.skin);
-			creatureInfo.loadedSubspeciesSkins.add(this.skin);
+		if(this.name != null && !creatureInfo.loadedSubspeciesSkins.contains(this.name)) {
+			creatureInfo.addSounds("." + this.name);
+			creatureInfo.loadedSubspeciesSkins.add(this.name);
 		}
 	}
 
@@ -267,27 +139,11 @@ public class Subspecies {
 	 * @return The Subspecies title.
 	 */
 	public String getTitle() {
-		String subspeciesName = "";
-		if(this.color != null) {
-			subspeciesName += LanguageManager.translate("subspecies." + this.color + ".name");
+		if(this.name != null) {
+			return LanguageManager.translate("subspecies." + this.name + ".name");
 		}
-		if(this.skin != null) {
-			if(!subspeciesName.equals("")) {
-				subspeciesName += " ";
-			}
-			subspeciesName += LanguageManager.translate("subspecies." + this.skin + ".name");
-		}
-        return subspeciesName;
+        return "";
     }
-
-
-	/**
-	 * Gets the size scale of this subspecies.
-	 * @return The size scale.
-	 */
-	public double getScale() {
-		return this.scale;
-	}
 
 
 	/**
@@ -297,19 +153,6 @@ public class Subspecies {
 	public boolean canSpawn(EntityLivingBase entityLiving) {
 		if(entityLiving != null) {
 			World world = entityLiving.getEntityWorld();
-
-			// Spawn Day Limit:
-			int day = (int)Math.floor(world.getTotalWorldTime() / 23999D);
-			int spawnDayMin = 0;
-			if("uncommon".equalsIgnoreCase(this.rarity)) {
-				spawnDayMin = uncommonSpawnDayMin;
-			}
-			else if("rare".equalsIgnoreCase(this.rarity)) {
-				spawnDayMin = rareSpawnDayMin;
-			}
-			if(day < spawnDayMin) {
-				return false;
-			}
 
 			// Check Conditions:
 			for(SpawnCondition condition : this.spawnConditions) {
@@ -322,13 +165,102 @@ public class Subspecies {
 	}
 
 
+	/**
+	 * Gets a random variant, normally used by a new mob when spawned.
+	 * @param entity The entity that has this subspecies.
+	 * @param rare If true, there will be much higher odds of a variant being picked.
+	 * @return A Variant or null if using the base variant.
+	 */
+	public Variant getRandomVariant(EntityLivingBase entity, boolean rare) {
+		LycanitesMobs.logDebug("Subspecies", "~0===== Variant =====0~");
+		LycanitesMobs.logDebug("Subspecies", "Selecting random variant for: " + entity);
+		if(rare) {
+			LycanitesMobs.logDebug("Subspecies", "The conditions have been set to rare increasing the chances of a variant being picked.");
+		}
+		if(this.variants.isEmpty()) {
+			LycanitesMobs.logDebug("Subspecies", "No variants available, will be base variant.");
+			return null;
+		}
+		LycanitesMobs.logDebug("Subspecies", "Variants Available: " + this.variants.size());
+
+		// Get Weights:
+		int baseSpeciesWeightScaled = Variant.BASE_WEIGHT;
+		if(rare) {
+			baseSpeciesWeightScaled = Math.round((float)baseSpeciesWeightScaled / 4);
+		}
+		int totalWeight = baseSpeciesWeightScaled;
+		for(Variant variant : this.variants.values()) {
+			totalWeight += variant.weight;
+		}
+		LycanitesMobs.logDebug("Subspecies", "Total Weight: " + totalWeight);
+
+		// Roll and Check Default:
+		int roll = entity.getRNG().nextInt(totalWeight) + 1;
+		LycanitesMobs.logDebug("Subspecies", "Rolled: " + roll);
+		if(roll <= baseSpeciesWeightScaled) {
+			LycanitesMobs.logDebug("Subspecies", "Base variant selected: " + baseSpeciesWeightScaled);
+			return null;
+		}
+
+		// Get Random Subspecies:
+		int checkWeight = baseSpeciesWeightScaled;
+		for(Variant variant : this.variants.values()) {
+			checkWeight += variant.weight;
+			if(roll <= checkWeight) {
+				LycanitesMobs.logDebug("Subspecies", "Variant selected: " + variant.toString());
+				return variant;
+			}
+		}
+
+		LycanitesMobs.logWarning("", "The roll was higher than the Total Weight, this shouldn't happen.");
+		return null;
+	}
+
+	/**
+	 * Returns a variant for the provided index or null if invalid or index 0.
+	 * @param index The index of the variant for this creature, 0 for default variant (null).
+	 * @return Creature variant.
+	 */
+	@Nullable
+	public Variant getVariant(int index) {
+		if(!this.variants.containsKey(index)) {
+			return null;
+		}
+		return this.variants.get(index);
+	}
+
+	/**
+	 * Used for when two mobs breed to randomly determine the variant of the child.
+	 * @param entity The entity that has this subspecies, currently only used to get RNG.
+	 * @param hostVariant The variant of the host entity.
+	 * @param partnerVariant The variant of the partner entity.
+	 * @return The varaint the child should have, null for base variant.
+	 */
+	public Variant getChildVariant(EntityLivingBase entity, @Nullable Variant hostVariant, @Nullable Variant partnerVariant) {
+		int hostVariantIndex = (hostVariant != null ? hostVariant.index : 0);
+		int partnerVariantIndex = (partnerVariant != null ? partnerVariant.index : 0);
+		if(hostVariant == partnerVariant)
+			return hostVariant;
+
+		int hostWeight = (hostVariant != null ? hostVariant.weight : Variant.BASE_WEIGHT);
+		int partnerWeight = (partnerVariant != null ? partnerVariant.weight : Variant.BASE_WEIGHT);
+		int roll = entity.getRNG().nextInt(hostWeight + partnerWeight);
+		if(roll > hostWeight)
+			return partnerVariant;
+		return hostVariant;
+	}
+
+
 	@Override
 	public String toString() {
-		String subspeciesName = this.color != null ? this.color : "normal";
-		if(this.skin != null) {
-			subspeciesName += " - " + this.skin;
+		return this.name != null ? this.name : "normal";
+	}
+
+
+	public static int getIndexFromOld(int oldIndex) {
+		if(oldIndex > 3) {
+			return 1;
 		}
-		subspeciesName += " - " + this.weight;
-		return subspeciesName;
+		return 0;
 	}
 }

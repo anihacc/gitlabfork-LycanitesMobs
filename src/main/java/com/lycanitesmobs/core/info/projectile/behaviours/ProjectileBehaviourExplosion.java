@@ -35,7 +35,7 @@ public class ProjectileBehaviourExplosion extends ProjectileBehaviour {
 		int explosionRadius = this.radius;
 		if (projectile.getThrower() != null && projectile.getThrower() instanceof BaseCreatureEntity) {
 			BaseCreatureEntity baseCreatureEntity = (BaseCreatureEntity)projectile.getThrower();
-			if (baseCreatureEntity.isRareSubspecies()) {
+			if (baseCreatureEntity.isRareVariant()) {
 				explosionRadius += 2;
 			}
 		}

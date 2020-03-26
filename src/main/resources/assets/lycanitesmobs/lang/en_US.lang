@@ -187,8 +187,8 @@ diet.geovore=Geovore
 # Beastiary:
 message.beastiary.new=You have gained Knowledge Rank %rank% of the %creature%! Check your Beastiary!
 message.beastiary.summonable=You are now able to summon the %creature% as a temporary minion! You will need a Summoning Item to summon it.
-message.beastiary.summonable.colors=You can now summon subspecies color variations of the %creature%!
-message.beastiary.summonable.skins=You can now summon subspecies skin variations of the %creature%!
+message.beastiary.summonable.colors=You can now summon variations of the %creature%!
+message.beastiary.summonable.skins=You can now summon subspecies of the %creature%!
 message.beastiary.known=You have already have Knowledge Rank %rank% of the %creature%.
 message.beastiary.unknown=There is nothing to be learnt about this creature.
 #
@@ -376,6 +376,8 @@ item.equipment.name=Crafted Equipment
 # ========== Creatures ==========
 creature.stat.element=Element
 creature.stat.subspecies=Subspecies
+creature.stat.variant=Variant
+creature.stat.variants=Variants
 creature.stat.cost=Summoning Cost
 creature.stat.spirit=Summoning Spirit Cost
 creature.stat.focus=Summoning Focus Cost

@@ -68,7 +68,7 @@ public class EntityLobber extends BaseCreatureEntity implements IMob {
         if(!this.getEntityWorld().isRemote && this.isMoving() && this.ticksExisted % 5 == 0) {
         	int trailHeight = 1;
             int trailWidth = 1;
-            if(this.getSubspeciesIndex() >= 3)
+            if(this.isRareVariant())
                 trailWidth = 3;
         	for(int y = 0; y < trailHeight; y++) {
         		Block block = this.getEntityWorld().getBlockState(this.getPosition().add(0, y, 0)).getBlock();
@@ -86,7 +86,7 @@ public class EntityLobber extends BaseCreatureEntity implements IMob {
 		}
 
         // Rare Subspecies Powers:
-        if(!this.getEntityWorld().isRemote && this.getSubspeciesIndex() >= 3 && this.getEntityWorld().getGameRules().getBoolean("mobGriefing") && this.blockMeltingRadius > 0 && this.ticksExisted % 10 == 0) {
+        if(!this.getEntityWorld().isRemote && this.isRareVariant() && this.getEntityWorld().getGameRules().getBoolean("mobGriefing") && this.blockMeltingRadius > 0 && this.ticksExisted % 10 == 0) {
 
             // Melt Blocks:
             int range = this.blockMeltingRadius;
@@ -189,7 +189,7 @@ public class EntityLobber extends BaseCreatureEntity implements IMob {
     public boolean canBurn() { return false; }
     
     @Override
-    public boolean waterDamage() { return this.getSubspeciesIndex() < 3; }
+    public boolean waterDamage() { return !this.isRareVariant(); }
     
     @Override
     public boolean canBreatheUnderlava() {

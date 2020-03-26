@@ -152,6 +152,15 @@ public class ConfigBase {
         category = category.toLowerCase();
         this.config.addCustomCategoryComment(category, comment);
     }
+
+	public boolean setCategoryReplacedComment(String category, String newCategory) {
+		category = category.toLowerCase();
+		if(this.config.hasCategory(category)) {
+			this.config.addCustomCategoryComment(category, "This category has been replaced with the " + newCategory + " category, your settings have been copied to the new category for you and this category can now safely be deleted.");
+			return true;
+		}
+		return false;
+	}
 	
 	
 	// ========================================
@@ -175,6 +184,16 @@ public class ConfigBase {
         if(newEntry) this.config.save();
 		return property.getBoolean(defaultValue);
 	}
+
+	public boolean getBoolReplaced(String category, String key, String newKey, boolean defaultValue) {
+    	if(this.config.getCategory(category).containsKey(newKey))
+    		return defaultValue;
+		category = category.toLowerCase();
+		Property property = this.config.get(category, key, defaultValue);
+		property.setComment("This config setting has been replaced with " + newKey + ", the value this was set to has been copied to the new setting for you, you can safely delete this setting.");
+		this.config.save();
+		return property.getBoolean(defaultValue);
+	}
 	
 	// ========== Get Int ==========
 	public int getInt(String category, String key) {
@@ -193,6 +212,16 @@ public class ConfigBase {
         if(newEntry) this.config.save();
 		return property.getInt(defaultValue);
 	}
+
+	public int getIntReplaced(String category, String key, String newKey, int defaultValue) {
+		if(this.config.getCategory(category).containsKey(newKey))
+			return defaultValue;
+		category = category.toLowerCase();
+		Property property = this.config.get(category, key, defaultValue);
+		property.setComment("This config setting has been replaced with " + newKey + ", the value this was set to has been copied to the new setting for you, you can safely delete this setting.");
+		this.config.save();
+		return property.getInt(defaultValue);
+	}
 	
 	// ========== Get Double ==========
 	public double getDouble(String category, String key) {
@@ -209,6 +238,16 @@ public class ConfigBase {
 		Property property = this.config.get(category, key, defaultValue);
 		if(comment != null) property.setComment(comment);
         if(newEntry) this.config.save();
+		return property.getDouble(defaultValue);
+	}
+
+	public double getDoubleReplaced(String category, String key, String newKey, double defaultValue) {
+		if(this.config.getCategory(category).containsKey(newKey))
+			return defaultValue;
+		category = category.toLowerCase();
+		Property property = this.config.get(category, key, defaultValue);
+		property.setComment("This config setting has been replaced with " + newKey + ", the value this was set to has been copied to the new setting for you, you can safely delete this setting.");
+		this.config.save();
 		return property.getDouble(defaultValue);
 	}
 	

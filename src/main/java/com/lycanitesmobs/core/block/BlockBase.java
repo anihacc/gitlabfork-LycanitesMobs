@@ -1,5 +1,6 @@
 package com.lycanitesmobs.core.block;
 
+import com.lycanitesmobs.client.localisation.LanguageManager;
 import com.lycanitesmobs.core.info.ModInfo;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -15,7 +16,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import com.lycanitesmobs.client.localisation.LanguageManager;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -64,6 +64,7 @@ public class BlockBase extends Block {
         super(material);
         this.group = group;
         this.blockName = name;
+        this.fullBlock = this.isOpaque;
         this.setup();
     }
 
@@ -257,6 +258,14 @@ public class BlockBase extends Block {
     @Override
     public boolean isOpaqueCube(IBlockState state) {
         return this.isOpaque;
+    }
+
+    @Override
+    public int getLightOpacity(IBlockState state, IBlockAccess world, BlockPos pos) {
+        if(this.isOpaqueCube(state)) {
+            return 255;
+        }
+        return super.getLightOpacity(state, world, pos);
     }
     
     

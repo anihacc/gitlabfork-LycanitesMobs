@@ -11,6 +11,7 @@ import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureKnowledge;
 import com.lycanitesmobs.client.localisation.LanguageManager;
 import com.lycanitesmobs.core.info.Subspecies;
+import com.lycanitesmobs.core.info.Variant;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
 
@@ -116,10 +117,7 @@ public class CreaturesBeastiaryScreen extends BeastiaryScreen {
 
 		// Creature Display:
 		if(this.playerExt.selectedCreature != null) {
-			Subspecies subspecies = null;
-			if(this.playerExt.selectedSubspecies != 0) {
-				subspecies = this.playerExt.selectedCreature.getSubspecies(this.playerExt.selectedSubspecies);
-			}
+			Subspecies subspecies = this.playerExt.selectedCreature.getSubspecies(this.playerExt.selectedSubspecies);
 
 			// Model:
 			this.renderCreature(this.playerExt.selectedCreature, this.colRightX + (marginX / 2) + (this.colRightWidth / 2), this.colRightY + 100, mouseX, mouseY, partialTicks);

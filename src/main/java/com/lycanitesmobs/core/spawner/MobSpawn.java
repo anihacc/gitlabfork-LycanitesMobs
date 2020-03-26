@@ -68,6 +68,9 @@ public class MobSpawn {
 	/** If set, the spawned mob will have its subspecies changed to this value. Only works with Lycanites Mobs. **/
 	protected int subspecies = -1;
 
+	/** If set, the spawned mob will have its variant changed to this value. Only works with Lycanites Mobs. **/
+	protected int variant = -1;
+
 	/** If true, the spawned mob will fixate on the player that triggered the spawn, always attacking that player. **/
 	protected boolean fixate = false;
 
@@ -176,6 +179,9 @@ public class MobSpawn {
 		if(json.has("subspecies"))
 			this.subspecies = json.get("subspecies").getAsInt();
 
+		if(json.has("variant"))
+			this.variant = json.get("variant").getAsInt();
+
 		if(json.has("fixate"))
 			this.fixate = json.get("fixate").getAsBoolean();
 
@@ -189,6 +195,7 @@ public class MobSpawn {
 			this.spawnAsBoss = json.get("spawnAsBoss").getAsBoolean();
 
 		if(json.has("mobDrops")) {
+			this.mobDrops.clear();
 			JsonArray mobDropEntries = json.getAsJsonArray("mobDrops");
 			for(JsonElement mobDropJson : mobDropEntries) {
 				ItemDrop itemDrop = ItemDrop.createFromJSON(mobDropJson.getAsJsonObject());
@@ -389,7 +396,11 @@ public class MobSpawn {
 				firstSpawn = false;
 			}
 			if(this.subspecies > -1) {
-				entityCreature.applySubspecies(this.subspecies);
+				entityCreature.setSubspecies(this.subspecies);
+				firstSpawn = false;
+			}
+			if(this.variant > -1) {
+				entityCreature.applyVariant(this.variant);
 				firstSpawn = false;
 			}
 			if(this.fixate && player != null) {

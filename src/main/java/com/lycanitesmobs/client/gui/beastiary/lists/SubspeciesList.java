@@ -1,8 +1,10 @@
 package com.lycanitesmobs.client.gui.beastiary.lists;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.gui.beastiary.BeastiaryScreen;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.Subspecies;
+import com.lycanitesmobs.core.info.Variant;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraftforge.fml.client.GuiScrollingList;
@@ -13,7 +15,7 @@ import java.util.Map;
 public class SubspeciesList extends GuiScrollingList {
 	private BeastiaryScreen parentGui;
 	private CreatureInfo creature;
-	private Map<Integer, Integer> subspeciesList = new HashMap<>();
+	private Map<Integer, Entry> entryList = new HashMap<>();
 	private boolean summoning;
 
 	/**
@@ -38,7 +40,7 @@ public class SubspeciesList extends GuiScrollingList {
 	 */
 	public void refreshList() {
 		// Clear:
-		this.subspeciesList.clear();
+		this.entryList.clear();
 
 		if(!this.summoning) {
 			this.creature = this.parentGui.playerExt.selectedCreature;
@@ -50,24 +52,29 @@ public class SubspeciesList extends GuiScrollingList {
 			return;
 		}
 
-		this.subspeciesList.put(0, 0);
-		int index = 1;
-		for(int subspeciesIndex : this.creature.subspecies.keySet()) {
-			if(!this.parentGui.playerExt.getBeastiary().hasKnowledgeRank(this.creature.getName(), 2)) {
-				continue;
+		int index = 0;
+		for(Subspecies subspecies : this.creature.subspecies.values()) {
+			this.entryList.put(index++, new Entry(subspecies.index, 0));
+			for (int variantIndex : subspecies.variants.keySet()) {
+				if (!this.parentGui.playerExt.getBeastiary().hasKnowledgeRank(this.creature.getName(), 2)) {
+					continue;
+				}
+				Variant variant = subspecies.getVariant(variantIndex);
+				if(variant == null) {
+					continue;
+				}
+				if (this.summoning && "rare".equals(variant.rarity)) {
+					continue;
+				}
+				this.entryList.put(index++, new Entry(subspecies.index, variant.index));
 			}
-			Subspecies subspecies = this.creature.subspecies.get(subspeciesIndex);
-			if (subspecies != null && "rare".equals(subspecies.rarity)) {
-				continue;
-			}
-			this.subspeciesList.put(index++, subspeciesIndex);
 		}
 	}
 
 
 	@Override
 	protected int getSize() {
-		return this.subspeciesList.size();
+		return this.entryList.size();
 	}
 
 
@@ -75,10 +82,12 @@ public class SubspeciesList extends GuiScrollingList {
 	protected void elementClicked(int index, boolean doubleClick) {
 		this.selectedIndex = index;
 		if(!this.summoning) {
-			this.parentGui.playerExt.selectedSubspecies = this.subspeciesList.get(index);
+			this.parentGui.playerExt.selectedSubspecies = this.entryList.get(index).subspeciesIndex;
+			this.parentGui.playerExt.selectedVariant = this.entryList.get(index).variantIndex;
 		}
 		else {
-			this.parentGui.playerExt.getSelectedSummonSet().setSubspecies(this.subspeciesList.get(index));
+			this.parentGui.playerExt.getSelectedSummonSet().setSubspecies(this.entryList.get(index).subspeciesIndex);
+			this.parentGui.playerExt.getSelectedSummonSet().setVariant(this.entryList.get(index).variantIndex);
 			this.parentGui.playerExt.sendSummonSetToServer((byte)this.parentGui.playerExt.selectedSummonSet);
 		}
 	}
@@ -87,10 +96,12 @@ public class SubspeciesList extends GuiScrollingList {
 	@Override
 	protected boolean isSelected(int index) {
 		if(!this.summoning) {
-			return this.parentGui.playerExt.selectedSubspecies == this.subspeciesList.get(index);
+			return this.parentGui.playerExt.selectedSubspecies == this.entryList.get(index).subspeciesIndex &&
+					this.parentGui.playerExt.selectedVariant == this.entryList.get(index).variantIndex;
 		}
 		else {
-			return this.parentGui.playerExt.getSelectedSummonSet().getSubspecies() == this.subspeciesList.get(index);
+			return this.parentGui.playerExt.getSelectedSummonSet().getSubspecies() == this.entryList.get(index).subspeciesIndex &&
+					this.parentGui.playerExt.getSelectedSummonSet().getVariant() == this.entryList.get(index).variantIndex;
 		}
 	}
 	
@@ -119,15 +130,34 @@ public class SubspeciesList extends GuiScrollingList {
 
 	@Override
 	protected void drawSlot(int index, int boxRight, int boxTop, int boxBottom, Tessellator tessellator) {
-		int subspeciesId = this.subspeciesList.get(index);
+		int subspeciesId = this.entryList.get(index).subspeciesIndex;
 		Subspecies subspecies = this.creature.getSubspecies(subspeciesId);
-
-		// Name:
-		int nameY = boxTop + 6;
-		if(subspecies == null) {
-			this.parentGui.getFontRenderer().drawString("Normal", this.left + 20, nameY, 0xFFFFFF);
-			return;
+		String subspeciesName = "";
+		if(subspecies.name != null) {
+			subspeciesName = " " + subspecies.getTitle();
 		}
-		this.parentGui.getFontRenderer().drawString(subspecies.getTitle(), this.left + 20, nameY, 0xFFFFFF);
+
+		int variantId = this.entryList.get(index).variantIndex;
+		Variant variant = subspecies.getVariant(variantId);
+		String variantName = "Normal";
+		if(variant != null) {
+			variantName = variant.getTitle();
+		}
+
+		int nameY = boxTop + 6;
+		this.parentGui.getFontRenderer().drawString(variantName + subspeciesName, this.left + 10, nameY, 0xFFFFFF);
+	}
+
+	/**
+	 * List Entry
+	 */
+	public static class Entry {
+		int subspeciesIndex;
+		int variantIndex;
+
+		public Entry(int subspeciesIndex, int variantIndex) {
+			this.subspeciesIndex = subspeciesIndex;
+			this.variantIndex = variantIndex;
+		}
 	}
 }

@@ -16,6 +16,7 @@ import net.minecraftforge.fml.relauncher.Side;
 public class MessageSummonSet implements IMessage, IMessageHandler<MessageSummonSet, IMessage> {
 	public byte summonSetID;
 	public int subpsecies;
+	public int variant;
 	public String summonType;
 	public byte behaviour;
 	
@@ -28,6 +29,7 @@ public class MessageSummonSet implements IMessage, IMessageHandler<MessageSummon
 		this.summonSetID = summonSetID;
 		this.summonType = playerExt.getSummonSet(summonSetID).summonType;
 		this.subpsecies = playerExt.getSummonSet(summonSetID).subspecies;
+		this.variant = playerExt.getSummonSet(summonSetID).variant;
 		this.behaviour = playerExt.getSummonSet(summonSetID).getBehaviourByte();
 	}
 	
@@ -48,7 +50,7 @@ public class MessageSummonSet implements IMessage, IMessageHandler<MessageSummon
 				ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
 
 				SummonSet summonSet = playerExt.getSummonSet(message.summonSetID);
-				summonSet.readFromPacket(message.summonType, message.subpsecies, message.behaviour);
+				summonSet.readFromPacket(message.summonType, message.subpsecies, message.variant, message.behaviour);
 			});
             return null;
         }
@@ -59,7 +61,7 @@ public class MessageSummonSet implements IMessage, IMessageHandler<MessageSummon
         if(playerExt == null) return null;
 
 		SummonSet summonSet = playerExt.getSummonSet(message.summonSetID);
-		summonSet.readFromPacket(message.summonType, message.subpsecies, message.behaviour);
+		summonSet.readFromPacket(message.summonType, message.subpsecies, message.variant, message.behaviour);
 		return null;
 	}
 	
@@ -76,6 +78,7 @@ public class MessageSummonSet implements IMessage, IMessageHandler<MessageSummon
         this.summonSetID = packet.readByte();
         this.summonType = packet.readString(256);
 		this.subpsecies = packet.readInt();
+		this.variant = packet.readInt();
         this.behaviour = packet.readByte();
 	}
 	
@@ -92,6 +95,7 @@ public class MessageSummonSet implements IMessage, IMessageHandler<MessageSummon
         packet.writeByte(this.summonSetID);
         packet.writeString(this.summonType);
 		packet.writeInt(this.subpsecies);
+		packet.writeInt(this.variant);
         packet.writeByte(this.behaviour);
 	}
 	

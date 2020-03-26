@@ -21,6 +21,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import com.lycanitesmobs.client.localisation.LanguageManager;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 
 import java.io.IOException;
@@ -367,6 +368,9 @@ public abstract class BeastiaryScreen extends BaseScreen {
 			boolean subspeciesMatch = true;
 			if(this.creaturePreviewEntity instanceof BaseCreatureEntity) {
 				subspeciesMatch = ((BaseCreatureEntity)this.creaturePreviewEntity).getSubspeciesIndex() == this.getDisplaySubspecies(creatureInfo);
+				if(subspeciesMatch) {
+					subspeciesMatch = ((BaseCreatureEntity)this.creaturePreviewEntity).getVariantIndex() == this.getDisplayVariant(creatureInfo);
+				}
 			}
 
 			// Create New:
@@ -375,6 +379,7 @@ public abstract class BeastiaryScreen extends BaseScreen {
 				this.creaturePreviewEntity.onGround = true;
 				if (this.creaturePreviewEntity instanceof BaseCreatureEntity) {
 					((BaseCreatureEntity) this.creaturePreviewEntity).setSubspecies(this.getDisplaySubspecies(creatureInfo));
+					((BaseCreatureEntity) this.creaturePreviewEntity).setVariant(this.getDisplayVariant(creatureInfo));
 					((BaseCreatureEntity) this.creaturePreviewEntity).updateSize();
 				}
 				if (this.creaturePreviewEntity instanceof AgeableCreatureEntity) {
@@ -455,11 +460,25 @@ public abstract class BeastiaryScreen extends BaseScreen {
 
 
 	/**
+	 * Gets the Variant to use for the display creature.
+	 * @param creatureInfo The Creature Info being displayed.
+	 */
+	public int getDisplayVariant(CreatureInfo creatureInfo) {
+		return this.playerExt.selectedVariant;
+	}
+
+
+	/**
 	 * Plays an idle or tame sound of the provided creature when it is selected in the GUI.
 	 * @param creatureInfo The creature to play the sound from.
 	 */
 	public void playCreatureSelectSound(CreatureInfo creatureInfo) {
-		this.player.getEntityWorld().playSound(this.player, this.player.posX, this.player.posY, this.player.posZ, AssetManager.getSound(creatureInfo.getName() + "_say"), SoundCategory.NEUTRAL, 1, 1);
+		String soundSuffix = "";
+		if(creatureInfo.getSubspecies(this.playerExt.selectedSubspecies).name != null) {
+			soundSuffix += "." + creatureInfo.getSubspecies(this.playerExt.selectedSubspecies).name;
+		}
+		SoundEvent soundEvent = AssetManager.getSound(creatureInfo.getName() + soundSuffix + "_say");
+		this.player.getEntityWorld().playSound(this.player, this.player.posX, this.player.posY, this.player.posZ, soundEvent, SoundCategory.NEUTRAL, 1, 1);
 	}
 
 

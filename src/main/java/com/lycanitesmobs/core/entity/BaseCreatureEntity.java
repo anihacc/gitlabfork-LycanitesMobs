@@ -9,16 +9,16 @@ import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.api.*;
 import com.lycanitesmobs.client.AssetManager;
 import com.lycanitesmobs.client.localisation.LanguageManager;
-import com.lycanitesmobs.core.entity.navigate.DirectNavigator;
+import com.lycanitesmobs.core.container.CreatureContainer;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.entity.navigate.CreatureMoveHelper;
 import com.lycanitesmobs.core.entity.navigate.CreaturePathNavigate;
+import com.lycanitesmobs.core.entity.navigate.DirectNavigator;
 import com.lycanitesmobs.core.entity.navigate.ICreatureNodeProcessor;
 import com.lycanitesmobs.core.info.*;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
-import com.lycanitesmobs.core.container.CreatureContainer;
 import com.lycanitesmobs.core.inventory.InventoryCreature;
 import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
 import com.lycanitesmobs.core.pets.PetEntry;
@@ -81,8 +81,10 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 	public CreatureInfo creatureInfo;
 	/** The Creature Stats instance used by this Entity instance to get and manage stats. **/
 	public CreatureStats creatureStats;
-	/** The Subspecies of this creature, if null this creature is the default common species. **/
+	/** The Subspecies of this creature. **/
 	public Subspecies subspecies = null;
+	/** The Variant of this creature, if null this creature is the default common variant. **/
+	public Variant variant = null;
 	/** What attribute is this creature, used for effects such as Bane of Arthropods. **/
 	public EnumCreatureAttribute attribute = EnumCreatureAttribute.UNDEAD;
 	/** A class that opens up extra stats and behaviours for NBT based customization.**/
@@ -315,8 +317,10 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 	protected static final DataParameter<Integer> LEVEL = EntityDataManager.createKey(BaseCreatureEntity.class, DataSerializers.VARINT);
 	/** Used to sync the experience of this creature. **/
 	protected static final DataParameter<Integer> EXPERIENCE = EntityDataManager.createKey(BaseCreatureEntity.class, DataSerializers.VARINT);
-	/** Used to sync the subspecies ID used by this creature. **/
+	/** Used to sync the subspecies used by this creature. **/
 	protected static final DataParameter<Byte> SUBSPECIES = EntityDataManager.createKey(BaseCreatureEntity.class, DataSerializers.BYTE);
+	/** Used to sync the variant used by this creature. **/
+	protected static final DataParameter<Byte> VARIANT = EntityDataManager.createKey(BaseCreatureEntity.class, DataSerializers.BYTE);
 
 	/** Used to sync the central arena position that this creature is using if any. See Asmodeus jumping for an example. **/
 	protected static final DataParameter<Optional<BlockPos>> ARENA = EntityDataManager.createKey(BaseCreatureEntity.class, DataSerializers.OPTIONAL_BLOCK_POS);
@@ -594,6 +598,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 		this.dataManager.register(LEVEL, 1);
 		this.dataManager.register(EXPERIENCE, 0);
         this.dataManager.register(SUBSPECIES, (byte) 0);
+        this.dataManager.register(VARIANT, (byte) 0);
 
         this.dataManager.register(ARENA, Optional.absent());
         InventoryCreature.registerDataParameters(this.dataManager);
@@ -625,12 +630,19 @@ public abstract class BaseCreatureEntity extends EntityLiving {
     	return this.creatureInfo.getTitle();
     }
 
-    /** Returns the subpsecies title (translated name) of this entity, returns a blank string if this is a base species mob. **/
+    /** Returns the subspecies title (translated name) of this entity, returns a blank string if this is a base species mob. **/
     public String getSubspeciesTitle() {
+    	String subspeciesName = "";
+    	if(this.getVariant() != null) {
+			subspeciesName += this.getVariant().getTitle();
+		}
     	if(this.getSubspecies() != null) {
-    		return this.getSubspecies().getTitle();
+			if(this.getVariant() != null) {
+				subspeciesName += " ";
+			}
+			subspeciesName += this.getSubspecies().getTitle();
     	}
-    	return "";
+    	return subspeciesName;
     }
 
 	/** Returns a mobs level to append to the name if above level 1. **/
@@ -948,7 +960,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
     		return true;
     	if(!this.creatureInfo.creatureSpawn.despawnNatural)
     		return false;
-        if(this.creatureInfo.boss || (this.isRareSubspecies() && !Subspecies.rareDespawning))
+        if(this.creatureInfo.boss || (this.isRareVariant() && !Variant.RARE_DESPAWNING))
             return false;
     	if(this.isPersistant() || this.getLeashed() || (this.hasCustomName() && "".equals(this.spawnEventType)))
     		return false;
@@ -1125,7 +1137,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
         minion.setLocationAndAngles(x, y, z, this.rand.nextFloat() * 360.0F, 0.0F);
         if(minion instanceof BaseCreatureEntity) {
             ((BaseCreatureEntity)minion).setMinion(true);
-            ((BaseCreatureEntity)minion).applySubspecies(this.getSubspeciesIndex());
+            ((BaseCreatureEntity)minion).applyVariant(this.getVariantIndex());
             ((BaseCreatureEntity)minion).setMasterTarget(this);
             ((BaseCreatureEntity)minion).spawnEventType = this.spawnEventType;
             if(this.isTemporary) {
@@ -1242,34 +1254,48 @@ public abstract class BaseCreatureEntity extends EntityLiving {
             return;
 		if(this.needsInitialLevel)
 			this.applyLevel(this.getStartingLevel());
-        if(CreatureManager.getInstance().config.subspeciesSpawn && !this.creatureInfo.creatureSpawn.disableSubspecies)
-    	    this.getRandomSubspecies();
-		if(CreatureManager.getInstance().config.randomSizes)
-			this.getRandomSize();
+		if(this.getSubspeciesIndex() == 0 && this.getVariantIndex() == 0) {
+			this.getRandomSubspecies();
+			if(CreatureManager.getInstance().config.variantSpawn && !this.creatureInfo.creatureSpawn.disableVariants)
+				this.getRandomVariant();
+        }
+		if(this.sizeScale == 1.0D) {
+			if (CreatureManager.getInstance().config.randomSizes)
+				this.getRandomSize();
+		}
     }
 
-    // ========== Get Random Subspecies ==========
-    public void getRandomSubspecies() {
-    	if(this.subspecies == null && !this.isMinion()) {
-    		Subspecies randomSubspecies = this.creatureInfo.getRandomSubspecies(this, this.spawnedRare);
-    		if(randomSubspecies != null) {
-				LycanitesMobs.logDebug("Subspecies", "Setting " + this.getSpeciesName() + " to " + randomSubspecies.getTitle());
-				this.applySubspecies(randomSubspecies.index);
+	// ========== Get Random Subspecies ==========
+	public void getRandomSubspecies() {
+		if(!this.isMinion()) {
+			Subspecies randomSubspecies = this.creatureInfo.getRandomSubspecies(this);
+			this.setSubspecies(randomSubspecies.index);
+			LycanitesMobs.logDebug("Subspecies", "Setting " + this.getSpeciesName() + " subspecies to " + randomSubspecies.getTitle());
+		}
+	}
+
+    // ========== Get Random Variant ==========
+	public void getRandomVariant() {
+		if(!this.isMinion()) {
+			Variant randomVariant = this.getSubspecies().getRandomVariant(this, this.spawnedRare);
+			if(randomVariant != null) {
+				LycanitesMobs.logDebug("Subspecies", "Setting " + this.getSpeciesName() + " variant to " + randomVariant.getTitle());
+				this.applyVariant(randomVariant.index);
 			}
-    		else {
-				LycanitesMobs.logDebug("Subspecies", "Setting " + this.getSpeciesName() + " to base species.");
-				this.applySubspecies(0);
+			else {
+				LycanitesMobs.logDebug("Subspecies", "Setting " + this.getSpeciesName() + " variant to base variant.");
+				this.applyVariant(0);
 			}
-    	}
-    }
+		}
+	}
 
     // ========== Get Random Size ==========
     public void getRandomSize() {
 		double range = CreatureManager.getInstance().config.randomSizeMax - CreatureManager.getInstance().config.randomSizeMin;
 		double randomScale = range * this.getRNG().nextDouble();
 		double scale = CreatureManager.getInstance().config.randomSizeMin + randomScale;
-		if(this.subspecies != null)
-			scale *= this.subspecies.getScale();
+		if(this.getVariant() != null)
+			scale *= this.getVariant().getScale();
 		this.setSizeScale(scale);
     }
 
@@ -1445,34 +1471,46 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 	// ==================================================
 	//                    Subspecies
 	// ==================================================
-	/** Sets the subspecies of this mob by index and refreshes stats. If not a valid ID or 0 it will be set to null which is for base species. **/
-	public void applySubspecies(int subspeciesIndex) {
-		this.setSubspecies(subspeciesIndex);
-		this.refreshAttributes();
-	}
-
-	/** Sets the subspecies of this mob by index without refreshing stats, use applySubspecies() if changing toa  new subspecies. If not a valid ID or 0 it will be set to null which is for base species. **/
+	/** Sets the subspecies of this mob by index, if invalid, defaults to base subspecies. **/
 	public void setSubspecies(int subspeciesIndex) {
 		this.subspecies = this.creatureInfo.getSubspecies(subspeciesIndex);
+	}
 
-		if(this.subspecies != null) {
+	/** Sets the variant of this mob by index without refreshing stats, use applyVariant() if changing to a new variant. If not a valid ID or 0 it will be set to null which is for the base variant. **/
+	public void setVariant(int variantIndex) {
+		this.variant = this.getSubspecies().getVariant(variantIndex);
+		if(this.variant != null) {
 			float scaledExp = this.creatureInfo.experience;
-			if ("uncommon".equals(this.subspecies.rarity))
-				scaledExp = Math.round((float) (this.creatureInfo.experience * Subspecies.uncommonExperienceScale));
-			else if ("rare".equals(this.subspecies.rarity))
-				scaledExp = Math.round((float) (this.creatureInfo.experience * Subspecies.rareExperienceScale));
+			if ("uncommon".equals(this.variant.rarity))
+				scaledExp = Math.round((float) (this.creatureInfo.experience * Variant.UNCOMMON_EXPERIENCE_SCALE));
+			else if ("rare".equals(this.variant.rarity))
+				scaledExp = Math.round((float) (this.creatureInfo.experience * Variant.RARE_EXPERIENCE_SCALE));
 			this.experienceValue = Math.round(scaledExp);
-			if ("rare".equals(this.subspecies.rarity)) {
+			if ("rare".equals(this.variant.rarity)) {
 				this.damageLimit = 40;
 				this.damageMax = 25;
 			}
 		}
 	}
 
-	/** Gets the subspecies of this mob, will return null if this is a base species mob. **/
-	@Nullable
+	/** Sets the subspecies of this mob by index and refreshes stats. If not a valid ID or 0 it will be set to null which is for base species. **/
+	public void applyVariant(int variantIndex) {
+		this.setVariant(variantIndex);
+		this.refreshAttributes();
+	}
+
+	/** Gets the subspecies of this mob. **/
 	public Subspecies getSubspecies() {
+		if(this.subspecies == null) {
+			this.subspecies = this.creatureInfo.getSubspecies(0);
+		}
 		return this.subspecies;
+	}
+
+	/** Gets the variant of this mob, will return null if this is a base variant mob. **/
+	@Nullable
+	public Variant getVariant() {
+		return this.variant;
 	}
 
 	/** Gets the subspecies index of this mob.
@@ -1482,16 +1520,25 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 	 * Most mobs have 2 uncommon subspecies, some have rare subspecies.
 	 * **/
 	public int getSubspeciesIndex() {
-		return this.getSubspecies() != null ? this.getSubspecies().index : 0;
+		return this.getSubspecies().index;
 	}
 
+	/** Gets the variant index of this mob.
+	 * 0 = Base Subspecies
+	 * 1/2 = Uncommon Species
+	 * 3+ = Rare Species
+	 * Most mobs have 2 uncommon variants, some have rare variants.
+	 * **/
+	public int getVariantIndex() {
+		return this.getVariant() != null ? this.getVariant().index : 0;
+	}
 
 	/**
-	 * Returns true if this creature is a rare subspecies (and should act like a mini boss).
+	 * Returns true if this creature is a rare variant (and should act like a mini boss).
 	 * @return True if rare.
 	 */
-	public boolean isRareSubspecies() {
-		return this.getSubspecies() != null && "rare".equals(this.getSubspecies().rarity);
+	public boolean isRareVariant() {
+		return this.getVariant() != null && "rare".equals(this.getVariant().rarity);
 	}
 
 
@@ -1563,8 +1610,9 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 			// With Partner:
 			if (partner instanceof BaseCreatureEntity) {
 				BaseCreatureEntity partnerCreature = (BaseCreatureEntity) partner;
-				Subspecies fusionSubspecies = transformedCreature.creatureInfo.getChildSubspecies(this, this.getSubspeciesIndex(), partnerCreature.getSubspecies());
-				transformedCreature.applySubspecies(fusionSubspecies != null ? fusionSubspecies.index : 0);
+				Variant fusionVariant = transformedCreature.getSubspecies().getChildVariant(this, this.getVariant(), partnerCreature.getVariant());
+				transformedCreature.setSubspecies(this.getSubspeciesIndex());
+				transformedCreature.applyVariant(fusionVariant != null ? fusionVariant.index : 0);
 				transformedCreature.setSizeScale(this.sizeScale + partnerCreature.sizeScale);
 
 				// Summoning Pedestal:
@@ -1637,7 +1685,8 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 
 			// Without Partner:
 			else {
-				transformedCreature.applySubspecies(this.getSubspeciesIndex());
+				transformedCreature.setSubspecies(this.getSubspeciesIndex());
+				transformedCreature.applyVariant(this.getVariantIndex());
 				transformedCreature.setSizeScale(this.sizeScale);
 				transformedCreature.applyLevel(this.getLevel());
 
@@ -2036,14 +2085,23 @@ public abstract class BaseCreatureEntity extends EntityLiving {
     		this.isMinion = (this.getByteFromDataManager(ANIMATION_STATE) & ANIMATION_STATE_BITS.MINION.id) > 0;
         }
 
-        // Subspecies:
-        if(!this.getEntityWorld().isRemote) {
-    		this.dataManager.set(SUBSPECIES, (byte)this.getSubspeciesIndex());
-        }
-        else {
-        	if(this.getSubspeciesIndex() != this.getByteFromDataManager(SUBSPECIES))
-        		this.applySubspecies(this.getByteFromDataManager(SUBSPECIES));
-        }
+		// Subspecies:
+		if(!this.getEntityWorld().isRemote) {
+			this.dataManager.set(SUBSPECIES, (byte)this.getSubspeciesIndex());
+		}
+		else {
+			if(this.getSubspeciesIndex() != this.getByteFromDataManager(SUBSPECIES))
+				this.setSubspecies(this.getByteFromDataManager(SUBSPECIES));
+		}
+
+		// Variant:
+		if(!this.getEntityWorld().isRemote) {
+			this.dataManager.set(VARIANT, (byte)this.getVariantIndex());
+		}
+		else {
+			if(this.getVariantIndex() != this.getByteFromDataManager(VARIANT))
+				this.applyVariant(this.getByteFromDataManager(VARIANT));
+		}
 
         // Size:
         if(!this.getEntityWorld().isRemote) {
@@ -2792,7 +2850,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 					if(targetCreature.isBoss()) {
 						return false;
 					}
-					if(this.isRareSubspecies()) {
+					if(this.isRareVariant()) {
 						return false;
 					}
 				}
@@ -3211,7 +3269,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 		damageAmount = this.applyArmorCalculations(damageSrc, damageAmount);
 		damageAmount = this.applyPotionDamageCalculations(damageSrc, damageAmount);
 		damageAmount = this.getDamageAfterDefense(damageAmount);
-		if(this.isBoss() || this.isRareSubspecies()) {
+		if(this.isBoss() || this.isRareVariant()) {
 			if (!(damageSrc.getTrueSource() instanceof EntityPlayer))
 				damageAmount *= 0.25F;
 		}
@@ -3667,7 +3725,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
     public boolean isCurrentlyFlying() { return this.isFlying(); }
     /** Can this entity by tempted (usually lured by an item) currently? **/
     public boolean canBeTempted() {
-    	if(this.isRareSubspecies() || this.spawnedAsBoss) {
+    	if(this.isRareVariant() || this.spawnedAsBoss) {
     		return false;
 		}
     	if(this.creatureInfo.isFarmable()) {
@@ -3943,19 +4001,22 @@ public abstract class BaseCreatureEntity extends EntityLiving {
     protected void dropFewItems(boolean playerKill, int lootLevel) {
     	if(this.getEntityWorld().isRemote || this.isMinion() || this.isBoundPet())
     		return;
-    	int subspeciesScale = 1;
-    	if(this.isRareSubspecies())
-    		subspeciesScale = Subspecies.rareDropScale;
-    	else if(this.getSubspecies() != null && "uncommon".equals(this.getSubspecies().rarity))
-    		subspeciesScale = Subspecies.uncommonDropScale;
+    	int variantScale = 1;
+    	if(this.isRareVariant())
+    		variantScale = Variant.RARE_DROP_SCALE;
+    	else if(this.getVariant() != null && "uncommon".equals(this.getVariant().rarity))
+    		variantScale = Variant.UNCOMMON_DROP_SCALE;
 
     	for(ItemDrop itemDrop : this.drops) {
-			if(itemDrop.subspeciesID >= 0 && itemDrop.subspeciesID != this.getSubspeciesIndex()) {
+			if(itemDrop.subspeciesIndex >= 0 && itemDrop.subspeciesIndex != this.getSubspeciesIndex()) {
+				continue;
+			}
+			if(itemDrop.variantIndex >= 0 && itemDrop.variantIndex != this.getVariantIndex()) {
 				continue;
 			}
 			int multiplier = 1;
-			if(itemDrop.subspeciesID < 0) {
-				multiplier *= subspeciesScale;
+			if(itemDrop.variantIndex < 0) {
+				multiplier *= variantScale;
 			}
 			if(this.extraMobBehaviour != null && this.extraMobBehaviour.itemDropMultiplierOverride != 1) {
 				multiplier = Math.round((float) multiplier * (float) this.extraMobBehaviour.itemDropMultiplierOverride);
@@ -4173,14 +4234,14 @@ public abstract class BaseCreatureEntity extends EntityLiving {
     /** Gets whether this mob should always display its nametag client side. **/
     @SideOnly(Side.CLIENT)
     public boolean getAlwaysRenderNameTagForRender() {
-        if(this.getSubspecies() != null && this.getSubspecies().color != null && !this.hasCustomName())
-    		return this.renderSubspeciesNameTag();
+        if(this.getVariant() != null && !this.hasCustomName())
+    		return this.renderVariantNameTag();
         return super.getAlwaysRenderNameTagForRender();
     }
     
     // ========== Render Subspecies Name Tag ==========
     /** Gets whether this mob should always display its nametag if it's a subspecies. **/
-    public boolean renderSubspeciesNameTag() {
+    public boolean renderVariantNameTag() {
     	return CreatureManager.getInstance().config.subspeciesTags;
     }
     
@@ -4354,7 +4415,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 
     /** Returns whether or not the given damage type is applicable, if not no damage will be taken. **/
     public boolean isDamageTypeApplicable(String type, DamageSource source, float damage) {
-        if(("inWall".equals(type) || "cactus".equals(type)) && (this.isRareSubspecies() || this.isBoss()))
+        if(("inWall".equals(type) || "cactus".equals(type)) && (this.isRareVariant() || this.isBoss()))
             return false;
 		if("inWall".equals(type))
 			return !CreatureManager.getInstance().config.suffocationImmunity && !this.hasPerchTarget();
@@ -4367,7 +4428,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 
     /** Returns whether or not this entity can be harmed by the specified entity. **/
     public boolean isDamageEntityApplicable(Entity entity) {
-        if(this.isBoss() || this.isRareSubspecies()) {
+        if(this.isBoss() || this.isRareVariant()) {
             if(entity == null)
                 return false;
             return this.getDistance(entity) <= this.bossRange;
@@ -4706,14 +4767,22 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 			this.setSizeScale(nbtTagCompound.getDouble("Size"));
 		}
 
-        if(nbtTagCompound.hasKey("Subspecies")) {
-    		if(this.firstSpawn) {
-				this.applySubspecies(nbtTagCompound.getByte("Subspecies"));
-			}
-			else {
+		if(!this.firstSpawn && nbtTagCompound.hasKey("Subspecies") && !nbtTagCompound.hasKey("Variant")) { // Convert Old Subspecies IDs:
+			this.setSubspecies(Variant.getIndexFromOld(nbtTagCompound.getByte("Subspecies")));
+			this.setVariant(Variant.getIndexFromOld(nbtTagCompound.getByte("Subspecies")));
+		}
+		else {
+			if (nbtTagCompound.hasKey("Subspecies")) {
 				this.setSubspecies(nbtTagCompound.getByte("Subspecies"));
 			}
-        }
+			if (nbtTagCompound.hasKey("Variant")) {
+				if (this.firstSpawn) {
+					this.applyVariant(nbtTagCompound.getByte("Variant"));
+				} else {
+					this.setVariant(nbtTagCompound.getByte("Variant"));
+				}
+			}
+		}
 
 		if(nbtTagCompound.hasKey("MobLevel")) {
 			if(this.firstSpawn) {
@@ -4789,6 +4858,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
     	nbtTagCompound.setBoolean("ForceNoDespawn", this.forceNoDespawn);
     	nbtTagCompound.setByte("Color", (byte) this.getColor());
         nbtTagCompound.setByte("Subspecies", (byte) this.getSubspeciesIndex());
+        nbtTagCompound.setByte("Variant", (byte) this.getVariantIndex());
     	nbtTagCompound.setDouble("Size", this.sizeScale);
 		nbtTagCompound.setInteger("MobLevel", this.getLevel());
 		nbtTagCompound.setInteger("Experience", this.getExperience());
@@ -4894,13 +4964,11 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 	/** Returns this creature's main texture. Also checks for for subspecies. **/
 	public ResourceLocation getTexture(String suffix) {
 		String textureName = this.getTextureName();
-		if(this.getSubspecies() != null) {
-			if(this.getSubspecies().skin != null) {
-				textureName += "_" + this.getSubspecies().skin;
-			}
-			if(this.getSubspecies().color != null) {
-				textureName += "_" + this.getSubspecies().color;
-			}
+		if(this.getSubspecies().name != null) {
+			textureName += "_" + this.getSubspecies().name;
+		}
+		if(this.getVariant() != null) {
+			textureName += "_" + this.getVariant().color;
 		}
 		if(!"".equals(suffix)) {
 			textureName += "_" + suffix;
@@ -4914,8 +4982,8 @@ public abstract class BaseCreatureEntity extends EntityLiving {
     public ResourceLocation getEquipmentTexture(String equipmentName) {
         if(!this.canEquip())
             return this.getTexture();
-		if(this.getSubspecies() != null && this.getSubspecies().skin != null) {
-			equipmentName = this.getSubspecies().skin + "_" + equipmentName;
+		if(this.getSubspecies() != null && this.getSubspecies().name != null) {
+			equipmentName = this.getSubspecies().name + "_" + equipmentName;
 		}
     	return this.getSubTexture(equipmentName);
     }
@@ -4970,8 +5038,8 @@ public abstract class BaseCreatureEntity extends EntityLiving {
         if(this.forceBossHealthBar || this.isBoss())
             return true;
         // Rare subspecies health bar:
-        if(this.isRareSubspecies())
-            return Subspecies.rareHealthBars;
+        if(this.isRareVariant())
+            return Variant.RARE_HEALTH_BARS;
         return false;
     }
 
@@ -4998,7 +5066,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
     protected float getSoundVolume() {
         if(this.isBoss())
             return 4.0F;
-        if(this.isRareSubspecies())
+        if(this.isRareVariant())
             return 2.0F;
         return 1.0F;
     }
@@ -5006,8 +5074,8 @@ public abstract class BaseCreatureEntity extends EntityLiving {
     /** Returns the name to use for sound assets. **/
     public String getSoundName() {
     	String soundSuffix = "";
-    	if(this.getSubspecies() != null && this.getSubspecies().skin != null) {
-			soundSuffix += "." + this.getSubspecies().skin;
+    	if(this.getSubspecies() != null && this.getSubspecies().name != null) {
+			soundSuffix += "." + this.getSubspecies().name;
 		}
     	return this.creatureInfo.getName() + soundSuffix;
 	}

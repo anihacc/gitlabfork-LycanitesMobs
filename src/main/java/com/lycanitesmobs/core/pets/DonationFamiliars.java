@@ -5,13 +5,14 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.lycanitesmobs.LycanitesMobs;
+import com.lycanitesmobs.core.info.Subspecies;
+import com.lycanitesmobs.core.info.Variant;
 import net.minecraft.entity.player.EntityPlayer;
 import org.apache.commons.io.IOUtils;
 
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
-import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.util.*;
 
@@ -83,7 +84,8 @@ public class DonationFamiliars {
                     UUID familiar_uuid = UUID.fromString(familiarJson.get("familiar_uuid").getAsString());
 
                     String familiar_species = familiarJson.get("familiar_species").getAsString();
-                    int familiar_subspecies = familiarJson.get("familiar_subspecies").getAsInt();
+                    int familiar_subspecies = Subspecies.getIndexFromOld(familiarJson.get("familiar_subspecies").getAsInt());
+                    int familiar_variant = Variant.getIndexFromOld(familiarJson.get("familiar_subspecies").getAsInt());
                     String familiar_name = familiarJson.get("familiar_name").getAsString();
                     String familiar_color = familiarJson.get("familiar_color").getAsString();
                     double familiar_size = 0;
@@ -92,7 +94,8 @@ public class DonationFamiliars {
                     }
 
                     PetEntryFamiliar familiarEntry = new PetEntryFamiliar(familiar_uuid, null, familiar_species.toLowerCase());
-                    familiarEntry.setEntitySubspeciesID(familiar_subspecies);
+                    familiarEntry.setEntitySubspecies(familiar_subspecies);
+                    familiarEntry.setEntityVariant(familiar_variant);
                     if (familiar_size <= 0) {
                         familiarEntry.setEntitySize(familiar_subspecies < 3 ? 0.6D : 0.3D);
                     } else {

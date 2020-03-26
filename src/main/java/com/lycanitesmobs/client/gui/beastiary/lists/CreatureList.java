@@ -5,6 +5,8 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.gui.beastiary.BeastiaryScreen;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
+import com.lycanitesmobs.core.info.Subspecies;
+import com.lycanitesmobs.core.info.Variant;
 import com.lycanitesmobs.core.network.MessageSummonSetSelection;
 import com.lycanitesmobs.core.pets.PetEntry;
 import net.minecraft.client.Minecraft;
@@ -114,16 +116,21 @@ public class CreatureList extends GuiScrollingList {
 		if(this.listType == Type.KNOWLEDGE) {
 			this.parentGui.playerExt.selectedCreature = this.creatureList.get(index);
 			this.parentGui.playerExt.selectedSubspecies = 0;
+			this.parentGui.playerExt.selectedVariant = 0;
 		}
 		else if(this.listType == Type.SUMMONABLE) {
 			this.parentGui.playerExt.getSelectedSummonSet().setSummonType(this.creatureList.get(index).getName());
 
-			int subspeciesId = this.parentGui.playerExt.getSelectedSummonSet().getSubspecies();
-			if(!this.parentGui.playerExt.getBeastiary().hasKnowledgeRank(this.creatureList.get(index).getName(), 2)) {
-				subspeciesId = 0;
-			}
+			Subspecies subspecies = this.creatureList.get(index).getSubspecies(this.parentGui.playerExt.getSelectedSummonSet().getSubspecies());
+			this.parentGui.playerExt.getSelectedSummonSet().setSubspecies(subspecies.index);
 
-			this.parentGui.playerExt.getSelectedSummonSet().setSubspecies(subspeciesId);
+			Variant variant = subspecies.getVariant(this.parentGui.playerExt.getSelectedSummonSet().getVariant());
+			int variantId = variant != null? variant.index : 0;
+			if(!this.parentGui.playerExt.getBeastiary().hasKnowledgeRank(this.creatureList.get(index).getName(), 2)) {
+				variantId = 0;
+			}
+			this.parentGui.playerExt.getSelectedSummonSet().setVariant(variantId);
+
 			this.parentGui.playerExt.sendSummonSetToServer((byte)this.parentGui.playerExt.selectedSummonSet);
 			MessageSummonSetSelection message = new MessageSummonSetSelection(this.parentGui.playerExt);
 			LycanitesMobs.packetHandler.sendToServer(message);

@@ -153,7 +153,7 @@ public class EntityVespidQueen extends AgeableCreatureEntity implements IMob {
 		EntityLivingBase minion = CreatureManager.getInstance().getCreature("vespid").createEntity(this.getEntityWorld());
     	minion.setLocationAndAngles(x, y, z, this.rand.nextFloat() * 360.0F, 0.0F);
     	if(minion instanceof BaseCreatureEntity) {
-    		((BaseCreatureEntity)minion).applySubspecies(this.getSubspeciesIndex());
+    		((BaseCreatureEntity)minion).applyVariant(this.getVariantIndex());
     	}
     	this.getEntityWorld().spawnEntity(minion);
         if(this.getAttackTarget() != null)

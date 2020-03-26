@@ -84,7 +84,7 @@
 		{
 			"mobId": "lycanitesmobs:wraamon",
 			"weight": 1,
-			"subspecies": 1,
+			"variant": 1,
 			"mobNameTag": "Experiment 69R",
 			"mobSizeScale": 6,
 			"naturalDespawn": "false",
@@ -108,7 +108,6 @@
 		{
 			"mobId": "lycanitesmobs:astaroth",
 			"weight": 1,
-			"subspecies": 0,
 			"mobNameTag": "Arachnotron",
 			"mobSizeScale": 1,
 			"naturalDespawn": "false",
@@ -136,14 +135,13 @@
 		{
 			"mobId": "lycanitesmobs:astaroth",
 			"weight": 1,
-			"subspecies": 4,
+			"subspecies": 1,
 			"mobNameTag": "Asakku",
 			"mobSizeScale": 1.5,
 			"naturalDespawn": "false",
 			"mobLevel": 250,
 			"spawnAsBoss": true,
-			"dungeonLevelMin": "1",
-			"dungeonLevelMax": "1",
+			"dungeonLevelMin": "2",
 			"dungeonBoss": true,
 			"mobDrops": [
 				{

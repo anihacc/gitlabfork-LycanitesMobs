@@ -74,6 +74,7 @@ public class ClientProxy extends CommonProxy {
 	@SideOnly(Side.CLIENT)
 	@Override
     public FontRenderer getFontRenderer() {
+		if(true) return Minecraft.getMinecraft().fontRenderer;
 		if(this.fontRenderer == null) {
 			ResourceLocation font = new ResourceLocation("textures/font/ascii.png");
 			this.fontRenderer = new FontRenderer(Minecraft.getMinecraft().gameSettings, font, Minecraft.getMinecraft().renderEngine, true);

@@ -67,7 +67,7 @@ public class EntityGorgomite extends BaseCreatureEntity implements IMob {
 		BaseCreatureEntity minion = (BaseCreatureEntity) this.creatureInfo.createEntity(this.getEntityWorld());
     	minion.setLocationAndAngles(x, y, z, this.rand.nextFloat() * 360.0F, 0.0F);
 		minion.setMinion(true);
-		minion.applySubspecies(this.getSubspeciesIndex());
+		minion.applyVariant(this.getVariantIndex());
     	this.getEntityWorld().spawnEntity(minion);
         if(this.getAttackTarget() != null)
         	minion.setRevengeTarget(this.getAttackTarget());

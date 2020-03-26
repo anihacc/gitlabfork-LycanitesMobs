@@ -3,8 +3,6 @@ package com.lycanitesmobs.core.entity.creature;
 import com.lycanitesmobs.client.localisation.LanguageManager;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
-import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
-import com.lycanitesmobs.core.entity.goals.actions.AvoidGoal;
 import com.lycanitesmobs.core.entity.goals.actions.abilities.FireProjectilesGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.FindAvoidTargetGoal;
 import com.lycanitesmobs.core.info.CreatureManager;
@@ -167,7 +165,7 @@ public class EntityConba extends TameableCreatureEntity implements IMob {
             float f1 = ((float)(k / 2) - 0.5F) * this.width / 4.0F;
             EntityVespid vespid = (EntityVespid)CreatureManager.getInstance().getCreature("vespid").createEntity(this.getEntityWorld());
             vespid.setLocationAndAngles(this.posX + (double)f, this.posY + 0.5D, this.posZ + (double)f1, this.rand.nextFloat() * 360.0F, 0.0F);
-            vespid.applySubspecies(this.getSubspeciesIndex());
+            vespid.applyVariant(this.getVariantIndex());
             vespid.setGrowingAge(vespid.growthTime);
             vespid.spawnEventType = this.spawnEventType;
             this.getEntityWorld().spawnEntity(vespid);

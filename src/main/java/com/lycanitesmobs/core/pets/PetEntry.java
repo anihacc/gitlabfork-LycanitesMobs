@@ -5,6 +5,8 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.*;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
+import com.lycanitesmobs.core.info.Subspecies;
+import com.lycanitesmobs.core.info.Variant;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -63,8 +65,10 @@ public class PetEntry {
 
     /** The name to use for the entity. Leave empty/null "" for no name. **/
     public String entityName = "";
-    /** The Subspecies ID to use for the entity. **/
-    public int subspeciesID = 0;
+    /** The Subspecies to use for the entity. **/
+    public int subspeciesIndex = 0;
+    /** The Variant to use for the entity. **/
+    public int variantIndex = 0;
     /** The size scale to use for the entity. **/
     public double entitySize = 1.0D;
     /** Coloring for this entity such as collar coloring. **/
@@ -86,7 +90,8 @@ public class PetEntry {
         if(entity.hasCustomName()) {
 			petEntry.setEntityName(entity.getCustomNameTag());
 		}
-        petEntry.setEntitySubspeciesID(entity.getSubspeciesIndex());
+        petEntry.setEntitySubspecies(entity.getSubspeciesIndex());
+        petEntry.setEntityVariant(entity.getVariantIndex());
         petEntry.setEntitySize(entity.sizeScale);
         petEntry.setColor("000000");
         return petEntry;
@@ -118,8 +123,13 @@ public class PetEntry {
         return this;
     }
 
-    public PetEntry setEntitySubspeciesID(int id) {
-        this.subspeciesID = id;
+    public PetEntry setEntitySubspecies(int index) {
+        this.subspeciesIndex = index;
+        return this;
+    }
+
+    public PetEntry setEntityVariant(int index) {
+        this.variantIndex = index;
         return this;
     }
 
@@ -215,7 +225,8 @@ public class PetEntry {
     /** Makes this entry copy all information from another entry, useful for updating entries. Does not copy over the owner, ID or entry name and will only copy the SummonSet's summon type. **/
     public void copy(PetEntry copyEntry) {
         this.setEntityName(copyEntry.entityName);
-        this.setEntitySubspeciesID(copyEntry.subspeciesID);
+        this.setEntitySubspecies(copyEntry.subspeciesIndex);
+        this.setEntityVariant(copyEntry.variantIndex);
         this.setEntitySize(copyEntry.entitySize);
         this.setColor(copyEntry.color);
         if(copyEntry.summonSet != null)
@@ -429,7 +440,8 @@ public class PetEntry {
 				entityCreature.setCustomNameTag(this.entityName);
 			}
             entityCreature.setSizeScale(this.entitySize);
-            entityCreature.applySubspecies(this.subspeciesID);
+            entityCreature.setSubspecies(this.subspeciesIndex);
+            entityCreature.applyVariant(this.variantIndex);
 
             // Tamed Behaviour:
             if(entityCreature instanceof TameableCreatureEntity && this.host instanceof EntityPlayer) {
@@ -504,7 +516,8 @@ public class PetEntry {
             if(this.entityName != null && !"".equals(this.entityName))
                 entityCreature.setCustomNameTag(this.entityName);
             entityCreature.setSizeScale(this.entitySize);
-            entityCreature.applySubspecies(this.subspeciesID);
+            entityCreature.setSubspecies(this.subspeciesIndex);
+            entityCreature.applyVariant(this.variantIndex);
         }
 
         this.spawnCount++;
@@ -563,8 +576,14 @@ public class PetEntry {
         // Load Entity:
         if(nbtTagCompound.hasKey("EntityName"))
             this.setEntityName(nbtTagCompound.getString("EntityName"));
-        if(nbtTagCompound.hasKey("SubspeciesID"))
-            this.setEntitySubspeciesID(nbtTagCompound.getInteger("SubspeciesID"));
+        if(nbtTagCompound.hasKey("SubspeciesID")) {
+            this.setEntitySubspecies(Subspecies.getIndexFromOld(nbtTagCompound.getInteger("SubspeciesID")));
+            this.setEntityVariant(Variant.getIndexFromOld(nbtTagCompound.getInteger("SubspeciesID")));
+        }
+        if(nbtTagCompound.hasKey("Subspecies"))
+            this.setEntitySubspecies(nbtTagCompound.getInteger("Subspecies"));
+        if(nbtTagCompound.hasKey("Variant"))
+            this.setEntityVariant(nbtTagCompound.getInteger("Variant"));
         if(nbtTagCompound.hasKey("EntitySize"))
             this.setEntitySize(nbtTagCompound.getDouble("EntitySize"));
         if(nbtTagCompound.hasKey("Color"))
@@ -589,7 +608,8 @@ public class PetEntry {
         // Save Entity:
         if (this.usesSpirit()) {
             nbtTagCompound.setString("EntityName", this.entityName);
-            nbtTagCompound.setInteger("SubspeciesID", this.subspeciesID);
+            nbtTagCompound.setInteger("Subspecies", this.subspeciesIndex);
+            nbtTagCompound.setInteger("Variant", this.variantIndex);
             nbtTagCompound.setDouble("EntitySize", this.entitySize);
             nbtTagCompound.setString("Color", this.color);
         }

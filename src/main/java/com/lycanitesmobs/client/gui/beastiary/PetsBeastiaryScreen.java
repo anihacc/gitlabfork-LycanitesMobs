@@ -13,6 +13,7 @@ import com.lycanitesmobs.core.pets.PetEntry;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 
 import java.io.IOException;
 
@@ -37,6 +38,7 @@ public class PetsBeastiaryScreen extends BeastiaryScreen {
 	public PetsBeastiaryScreen(EntityPlayer player) {
 		super(player);
 		this.playerExt.selectedSubspecies = 0;
+		this.playerExt.selectedVariant = 0;
 	}
 
 
@@ -418,12 +420,23 @@ public class PetsBeastiaryScreen extends BeastiaryScreen {
 
 	@Override
 	public int getDisplaySubspecies(CreatureInfo creatureInfo) {
-		return this.playerExt.selectedPet.subspeciesID;
+		return this.playerExt.selectedPet.subspeciesIndex;
+	}
+
+
+	@Override
+	public int getDisplayVariant(CreatureInfo creatureInfo) {
+		return this.playerExt.selectedPet.variantIndex;
 	}
 
 
 	@Override
 	public void playCreatureSelectSound(CreatureInfo creatureInfo) {
-		this.player.getEntityWorld().playSound(this.player, this.player.posX, this.player.posY, this.player.posZ, AssetManager.getSound(creatureInfo.getName() + "_tame"), SoundCategory.NEUTRAL, 1, 1);
+		String soundSuffix = "";
+		if(this.playerExt.selectedPet != null && creatureInfo.getSubspecies(this.playerExt.selectedPet.subspeciesIndex).name != null) {
+			soundSuffix += "." + creatureInfo.getSubspecies(this.playerExt.selectedPet.subspeciesIndex).name;
+		}
+		SoundEvent soundEvent = AssetManager.getSound(creatureInfo.getName() + soundSuffix + "_say");
+		this.player.getEntityWorld().playSound(this.player, this.player.posX, this.player.posY, this.player.posZ, soundEvent, SoundCategory.NEUTRAL, 1, 1);
 	}
 }
