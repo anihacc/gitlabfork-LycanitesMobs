@@ -97,6 +97,9 @@ public class FindAvoidTargetGoal extends TargetingGoal {
   	// ==================================================
     @Override
     public boolean shouldExecute() {
+        if (!this.tameTargeting && this.host.isTamed()) {
+            return false;
+        }
 		if (this.host.updateTick % 20 != 0) {
 			return false;
 		}

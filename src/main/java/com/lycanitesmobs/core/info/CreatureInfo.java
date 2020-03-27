@@ -630,7 +630,7 @@ public class CreatureInfo {
 
 			Subspecies subspecies = this.getSubspecies(0);
 			if(drop.subspeciesIndex > 0) {
-				subspecies = this.getSubspecies(drop.variantIndex);
+				subspecies = this.getSubspecies(drop.subspeciesIndex);
 				if(subspecies.name != null) {
 					dropNames.appendText(" ");
 					dropNames.appendSibling(subspecies.getTitle());

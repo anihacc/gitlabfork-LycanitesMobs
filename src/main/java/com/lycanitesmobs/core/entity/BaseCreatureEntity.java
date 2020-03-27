@@ -533,7 +533,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
 		// Lesser Targeting:
 		this.targetSelector.addGoal(this.nextFindTargetIndex++, new FindGroupAttackTargetGoal(this));
-		this.targetSelector.addGoal(this.nextFindTargetIndex++, new FindGroupAvoidTargetGoal(this));
+		this.targetSelector.addGoal(this.nextFindTargetIndex++, new FindGroupAvoidTargetGoal(this).setTameTargetting(false));
 
 		// Lesser Actions:
 		this.goalSelector.addGoal(this.nextTravelGoalIndex++, new FollowMasterGoal(this).setStrayDistance(12.0D));
@@ -1555,6 +1555,9 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     @Override
     public void tick() {
         super.tick();
+		if(this.creatureInfo.dummy) {
+			return;
+		}
         this.onSyncUpdate();
 
         if(this.despawnCheck()) {
@@ -1657,6 +1660,9 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		}
 
         super.livingTick();
+		if(this.creatureInfo.dummy) {
+			return;
+		}
 
 		// Attack Updates:
 		if(this.attackCooldown > 0) {
@@ -3848,10 +3854,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 			variantScale = Variant.UNCOMMON_DROP_SCALE;
 
     	for(ItemDrop itemDrop : this.drops) {
-			if(itemDrop.subspeciesIndex >= 0 && itemDrop.subspeciesIndex != this.getSubspeciesIndex()) {
-				continue;
-			}
-            if(itemDrop.variantIndex >= 0 && itemDrop.variantIndex != this.getVariantIndex()) {
+			if(!this.canDropItem(itemDrop)) {
 				continue;
 			}
             int multiplier = 1;
@@ -3870,6 +3873,16 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
 		this.func_226294_cV_(); // Drop XP
     }
+
+	public boolean canDropItem(ItemDrop itemDrop) {
+		if(itemDrop.subspeciesIndex >= 0 && itemDrop.subspeciesIndex != this.getSubspeciesIndex()) {
+			return false;
+		}
+		if(itemDrop.variantIndex >= 0 && itemDrop.variantIndex != this.getVariantIndex()) {
+			return false;
+		}
+		return true;
+	}
     
     // ========== Drop Item ==========
     /** Tells this entity to drop the specified itemStack, used by DropRate and InventoryCreature, can be used by anything though. **/
@@ -4597,7 +4610,12 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     /** Used when loading this mob from a saved chunk. **/
     @Override
     public void readAdditional(CompoundNBT nbtTagCompound) {
-    	if(nbtTagCompound.contains("FirstSpawn")) {
+		if(this.creatureInfo.dummy) {
+			super.readAdditional(nbtTagCompound);
+			return;
+		}
+
+		if(nbtTagCompound.contains("FirstSpawn")) {
             this.firstSpawn = nbtTagCompound.getBoolean("FirstSpawn");
     	}
     	else {
@@ -4727,7 +4745,12 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     /** Used when saving this mob to a chunk. **/
     @Override
     public void writeAdditional(CompoundNBT nbtTagCompound) {
-    	nbtTagCompound.putBoolean("FirstSpawn", this.firstSpawn);
+		if(this.creatureInfo.dummy) {
+			super.writeAdditional(nbtTagCompound);
+			return;
+		}
+
+		nbtTagCompound.putBoolean("FirstSpawn", this.firstSpawn);
     	nbtTagCompound.putString("SpawnEventType", this.spawnEventType);
     	nbtTagCompound.putInt("SpawnEventCount", this.spawnEventCount);
     	
