@@ -1,5 +1,6 @@
 package com.lycanitesmobs.core.entity.goals.actions;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
@@ -253,6 +254,7 @@ public class TemptGoal extends EntityAIBase {
         }
         this.host.getLookHelper().setLookPositionWithEntity(this.player, 30.0F, (float)this.host.getVerticalFaceSpeed());
         if(this.host.getDistanceSq(this.player) < this.temptDistanceMin * this.temptDistanceMin) {
+            LycanitesMobs.logDebug("", "CLEARED!");
             this.host.clearMovement();
         }
         else {

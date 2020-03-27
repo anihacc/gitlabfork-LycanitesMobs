@@ -4,6 +4,7 @@ import com.lycanitesmobs.core.entity.goals.actions.FollowParentGoal;
 import com.lycanitesmobs.core.entity.goals.actions.MateGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.FindParentGoal;
 import com.lycanitesmobs.core.info.CreatureInfo;
+import com.lycanitesmobs.core.info.ItemDrop;
 import com.lycanitesmobs.core.info.Subspecies;
 import com.lycanitesmobs.core.info.Variant;
 import com.lycanitesmobs.core.item.ItemCustomSpawnEgg;
@@ -174,6 +175,14 @@ public abstract class AgeableCreatureEntity extends BaseCreatureEntity {
         if(!this.canBreed())
             this.loveTime = 0;
         super.updateAITasks();
+    }
+
+    @Override
+    public boolean canDropItem(ItemDrop itemDrop) {
+        if(itemDrop.adultOnly && this.isChild()) {
+            return false;
+        }
+        return super.canDropItem(itemDrop);
     }
     
 	

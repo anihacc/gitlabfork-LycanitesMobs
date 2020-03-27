@@ -40,6 +40,9 @@ public class ItemDrop {
 	/** The ID of the variant that this drop is restricted to. An ID below 0 will have this drop ignore the variant. **/
 	public int variantIndex = -1;
 
+	/** If true, items will only drop for adults and not babies. True by default. **/
+	public boolean adultOnly = true;
+
 
 	// ==================================================
 	//                       JSON
@@ -128,6 +131,8 @@ public class ItemDrop {
 			this.subspeciesIndex = json.get("subspecies").getAsInt();
 		if(json.has("variant"))
 			this.variantIndex = json.get("variant").getAsInt();
+		if(json.has("adultOnly"))
+			this.adultOnly = json.get("adultOnly").getAsBoolean();
 
 		if(json.has("burningItem")) {
 			this.burningItemId = json.get("burningItem").getAsString();
@@ -304,15 +309,17 @@ public class ItemDrop {
 			this.metadata = nbtTagCompound.getInteger("Metadata");
 		this.minAmount = nbtTagCompound.getInteger("MinAmount");
 		this.maxAmount = nbtTagCompound.getInteger("MaxAmount");
-		if(nbtTagCompound.hasKey("Subspecies"))
-			this.subspeciesIndex = nbtTagCompound.getInteger("Subspecies");
-		if(nbtTagCompound.hasKey("Variant"))
-			this.variantIndex = nbtTagCompound.getInteger("Variant");
 		if(nbtTagCompound.hasKey("BonusAmount"))
 			this.bonusAmount = nbtTagCompound.getBoolean("BonusAmount");
 		this.chance = nbtTagCompound.getFloat("Chance");
 		if(nbtTagCompound.hasKey("AmountMultiplier"))
 			this.amountMultiplier = nbtTagCompound.getBoolean("AmountMultiplier");
+		if(nbtTagCompound.hasKey("Subspecies"))
+			this.subspeciesIndex = nbtTagCompound.getInteger("Subspecies");
+		if(nbtTagCompound.hasKey("Variant"))
+			this.variantIndex = nbtTagCompound.getInteger("Variant");
+		if(nbtTagCompound.hasKey("AdultOnly"))
+			this.adultOnly = nbtTagCompound.getBoolean("AdultOnly");
 	}
 
 
@@ -330,11 +337,12 @@ public class ItemDrop {
 		nbtTagCompound.setInteger("Metadata", this.metadata);
 		nbtTagCompound.setInteger("MinAmount", this.minAmount);
 		nbtTagCompound.setInteger("MaxAmount", this.maxAmount);
-		nbtTagCompound.setInteger("Subspecies", this.subspeciesIndex);
-		nbtTagCompound.setInteger("Variant", this.variantIndex);
 		nbtTagCompound.setBoolean("BonusAmount", this.bonusAmount);
 		nbtTagCompound.setFloat("Chance", this.chance);
 		nbtTagCompound.setBoolean("AmountMultiplier", this.amountMultiplier);
+		nbtTagCompound.setInteger("Subspecies", this.subspeciesIndex);
+		nbtTagCompound.setInteger("Variant", this.variantIndex);
+		nbtTagCompound.setBoolean("AdultOnly", this.adultOnly);
 
 		return true;
 	}
