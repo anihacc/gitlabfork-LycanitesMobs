@@ -107,7 +107,7 @@ public class GetBlockGoal extends EntityAIBase {
         	for(int y = (int)this.host.posY - heightDistance; y < (int)this.host.posY + heightDistance; y++) {
         		for(int z = (int)this.host.posZ - this.distanceMax; z < (int)this.host.posZ + this.distanceMax; z++) {
         			Block searchBlock = this.host.getEntityWorld().getBlockState(new BlockPos(x, y, z)).getBlock();
-                	if(searchBlock != null && searchBlock != Blocks.AIR) {
+                	if(searchBlock != null && searchBlock != Blocks.AIR && searchBlock != Blocks.REDSTONE_TORCH) {
                         BlockPos possibleTarget = null;
                 		if(!"".equalsIgnoreCase(this.targetBlockName)) {
                 			if(ObjectLists.isName(searchBlock, this.targetBlockName)) {

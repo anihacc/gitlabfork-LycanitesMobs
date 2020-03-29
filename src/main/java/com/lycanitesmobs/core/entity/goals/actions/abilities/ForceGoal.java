@@ -5,6 +5,7 @@ import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.play.server.SPacketEntityVelocity;
 import net.minecraft.util.math.MathHelper;
@@ -130,21 +131,18 @@ public class ForceGoal extends EntityAIBase {
 		double motionCap = -this.force;
 		double factor = -this.force * 0.1D;
 		if(this.abilityTime < this.windUp) {
-			factor *= this.abilityTime / this.windUp;
+			factor *= (double)this.abilityTime / this.windUp;
 		}
-		for(Entity entity : this.host.getNearbyEntities(Entity.class, null, this.range)) {
+		for(Entity entity : this.host.getNearbyEntities(Entity.class, this::isValidTarget, this.range)) {
 			if(!(entity instanceof EntityLivingBase)) {
 				continue;
 			}
 			double xDist = this.host.posX - entity.posX;
 			double zDist = this.host.posZ - entity.posZ;
-			double xzDist = MathHelper.sqrt(xDist * xDist + zDist * zDist);
+			double xzDist = Math.max(MathHelper.sqrt(xDist * xDist + zDist * zDist), 0.01D);
 			EntityPlayerMP player = null;
 			if (entity instanceof EntityPlayerMP) {
 				player = (EntityPlayerMP) entity;
-				if (player.capabilities.isCreativeMode) {
-					continue;
-				}
 			}
 			if (entity.motionX < motionCap && entity.motionX > -motionCap && entity.motionZ < motionCap && entity.motionZ > -motionCap) {
 				entity.addVelocity(
@@ -158,4 +156,17 @@ public class ForceGoal extends EntityAIBase {
 			}
 		}
     }
+
+    public boolean isValidTarget(Entity entity) {
+		if(entity == this.host) {
+			return false;
+		}
+		if (entity instanceof EntityPlayer) {
+			EntityPlayer player = (EntityPlayer) entity;
+			if (player.capabilities.isCreativeMode) {
+				return false;
+			}
+		}
+		return true;
+	}
 }

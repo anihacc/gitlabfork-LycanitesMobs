@@ -589,7 +589,7 @@ public class ItemEquipment extends ItemBase {
 			if (knockback != 0 && attacker != null && target != null) {
 				double xDist = attacker.posX - target.posX;
 				double zDist = attacker.posZ - target.posZ;
-				double xzDist = MathHelper.sqrt(xDist * xDist + zDist * zDist);
+				double xzDist = Math.max(MathHelper.sqrt(xDist * xDist + zDist * zDist), 0.01D);
 				double motionCap = 10;
 				if (target.motionX < motionCap && target.motionX > -motionCap && target.motionZ < motionCap && target.motionZ > -motionCap) {
 					target.addVelocity(

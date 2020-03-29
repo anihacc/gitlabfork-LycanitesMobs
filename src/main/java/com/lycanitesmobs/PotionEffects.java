@@ -6,6 +6,7 @@ import com.lycanitesmobs.client.AssetManager;
 import com.lycanitesmobs.core.config.ConfigBase;
 import com.lycanitesmobs.core.entity.FearEntity;
 import com.lycanitesmobs.core.entity.ExtendedEntity;
+import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.network.MessageEntityVelocity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -478,18 +479,20 @@ public class PotionEffects {
 		// Repulsion
 		PotionBase repulsion = ObjectManager.getEffect("repulsion");
 		if(repulsion != null) {
-			if(attacker != null && !(attacker instanceof IGroupBoss) && target.isPotionActive(repulsion)) {
+			boolean attackerIsBoss = attacker instanceof IGroupBoss;
+			if(!attackerIsBoss && CreatureManager.getInstance().getCreatureGroup("boss") != null) {
+				attackerIsBoss = CreatureManager.getInstance().getCreatureGroup("boss").hasEntity(attacker);
+			}
+			if(attacker != null && !attackerIsBoss && target.isPotionActive(repulsion)) {
 				float knockback = target.getActivePotionEffect(repulsion).getAmplifier() + 2;
 				double xDist = attacker.getPositionVector().x - target.getPositionVector().x;
 				double zDist = attacker.getPositionVector().z - target.getPositionVector().z;
-				double xzDist = MathHelper.sqrt(xDist * xDist + zDist * zDist);
+				double xzDist = Math.max(MathHelper.sqrt(xDist * xDist + zDist * zDist), 0.01D);
 				double motionCap = 10;
+				double xVel = xDist / xzDist * knockback;
+				double zVel = zDist / xzDist * knockback;
 				if (attacker.motionX < motionCap && attacker.motionX > -motionCap && attacker.motionZ < motionCap && attacker.motionZ > -motionCap) {
-					attacker.addVelocity(
-							(xDist / xzDist * knockback - attacker.motionX),
-							0,
-							(zDist / xzDist * knockback - attacker.motionZ)
-					);
+					attacker.addVelocity(xVel, 0, zVel);
 				}
 			}
 		}

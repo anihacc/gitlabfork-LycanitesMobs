@@ -254,7 +254,6 @@ public class TemptGoal extends EntityAIBase {
         }
         this.host.getLookHelper().setLookPositionWithEntity(this.player, 30.0F, (float)this.host.getVerticalFaceSpeed());
         if(this.host.getDistanceSq(this.player) < this.temptDistanceMin * this.temptDistanceMin) {
-            LycanitesMobs.logDebug("", "CLEARED!");
             this.host.clearMovement();
         }
         else {

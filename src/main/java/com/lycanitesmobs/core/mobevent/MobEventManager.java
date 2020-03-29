@@ -207,9 +207,9 @@ public class MobEventManager extends JSONLoader {
 		worldExt.lastEventUpdateTime = world.getTotalWorldTime();
 
 		// Only Run If Players Are Present:
-		if(world.playerEntities.size() < 1) {
-			return;
-		}
+//		if(world.playerEntities.size() < 1) {
+//			return;
+//		}
 
 		// Update World Mob Event Player:
 		if(worldExt.serverWorldEventPlayer != null) {
