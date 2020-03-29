@@ -31,6 +31,8 @@ public class MessagePetEntry implements IMessage, IMessageHandler<MessagePetEntr
 	public String petEntryEntityName;
 	public int respawnTime;
 	public int respawnTimeMax;
+	public int entityLevel;
+	public int entityExperience;
 	public boolean isRespawning;
 
 
@@ -52,6 +54,8 @@ public class MessagePetEntry implements IMessage, IMessageHandler<MessagePetEntr
 		this.petEntryEntityName = petEntry.entityName;
 		this.respawnTime = petEntry.respawnTime;
 		this.respawnTimeMax = petEntry.respawnTimeMax;
+		this.entityLevel = petEntry.entityLevel;
+		this.entityExperience = petEntry.entityExperience;
 		this.isRespawning = petEntry.isRespawning;
 	}
 	
@@ -107,6 +111,8 @@ public class MessagePetEntry implements IMessage, IMessageHandler<MessagePetEntr
         petEntry.entityName = message.petEntryEntityName;
         petEntry.respawnTime = message.respawnTime;
         petEntry.respawnTimeMax = message.respawnTimeMax;
+        petEntry.entityLevel = message.entityLevel;
+        petEntry.entityExperience = message.entityExperience;
         petEntry.isRespawning = message.isRespawning;
 		return null;
 	}
@@ -133,6 +139,8 @@ public class MessagePetEntry implements IMessage, IMessageHandler<MessagePetEntr
 		this.petEntryEntityName = packet.readString(1024);
         this.respawnTime = packet.readInt();
         this.respawnTimeMax = packet.readInt();
+        this.entityLevel = packet.readInt();
+        this.entityExperience = packet.readInt();
         this.isRespawning = packet.readBoolean();
 	}
 	
@@ -158,6 +166,8 @@ public class MessagePetEntry implements IMessage, IMessageHandler<MessagePetEntr
 		packet.writeString(this.petEntryEntityName);
         packet.writeInt(this.respawnTime);
         packet.writeInt(this.respawnTimeMax);
+        packet.writeInt(this.entityLevel);
+        packet.writeInt(this.entityExperience);
         packet.writeBoolean(this.isRespawning);
 	}
 	
