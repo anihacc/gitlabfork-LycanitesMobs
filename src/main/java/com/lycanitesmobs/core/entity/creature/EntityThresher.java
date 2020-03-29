@@ -91,7 +91,7 @@ public class EntityThresher extends RideableCreatureEntity implements IMob, IGro
                     }
                     double xDist = this.getPositionVec().getX() - entity.getPositionVec().getX();
                     double zDist = this.getPositionVec().getZ() - entity.getPositionVec().getZ();
-                    double xzDist = MathHelper.sqrt(xDist * xDist + zDist * zDist);
+                    double xzDist = Math.max(MathHelper.sqrt(xDist * xDist + zDist * zDist), 0.01D);
                     double factor = 0.1D;
                     entity.addVelocity(
                             xDist / xzDist * factor + entity.getMotion().getX() * factor,

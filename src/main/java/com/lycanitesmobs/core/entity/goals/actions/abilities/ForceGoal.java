@@ -4,6 +4,7 @@ import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.play.server.SEntityVelocityPacket;
 import net.minecraft.util.math.MathHelper;
@@ -129,21 +130,18 @@ public class ForceGoal extends Goal {
 		double motionCap = -this.force;
 		double factor = -this.force * 0.1D;
 		if(this.abilityTime < this.windUp) {
-			factor *= this.abilityTime / this.windUp;
+			factor *= (double)this.abilityTime / this.windUp;
 		}
-		for(Entity entity : this.host.getNearbyEntities(Entity.class, null, this.range)) {
+		for(Entity entity : this.host.getNearbyEntities(Entity.class, this::isValidTarget, this.range)) {
 			if(!(entity instanceof LivingEntity)) {
 				continue;
 			}
 			double xDist = this.host.getPositionVec().getX() - entity.getPositionVec().getX();
 			double zDist = this.host.getPositionVec().getZ() - entity.getPositionVec().getZ();
-			double xzDist = MathHelper.sqrt(xDist * xDist + zDist * zDist);
+			double xzDist = Math.max(MathHelper.sqrt(xDist * xDist + zDist * zDist), 0.01D);
 			ServerPlayerEntity player = null;
 			if (entity instanceof ServerPlayerEntity) {
 				player = (ServerPlayerEntity) entity;
-				if (player.abilities.isCreativeMode) {
-					continue;
-				}
 			}
 			if (entity.getMotion().getX() < motionCap && entity.getMotion().getX() > -motionCap && entity.getMotion().getZ() < motionCap && entity.getMotion().getZ() > -motionCap) {
 				entity.addVelocity(
@@ -157,4 +155,17 @@ public class ForceGoal extends Goal {
 			}
 		}
     }
+
+	public boolean isValidTarget(Entity entity) {
+		if(entity == this.host) {
+			return false;
+		}
+		if (entity instanceof PlayerEntity) {
+			PlayerEntity player = (PlayerEntity) entity;
+			if (player.isCreative()) {
+				return false;
+			}
+		}
+		return true;
+	}
 }

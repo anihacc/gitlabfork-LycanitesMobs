@@ -478,18 +478,20 @@ public class Effects {
 		// Repulsion
 		EffectBase repulsion = ObjectManager.getEffect("repulsion");
 		if(repulsion != null) {
-			if(attacker != null && !(attacker instanceof IGroupBoss) && target.isPotionActive(repulsion)) {
-				float knockback = target.getActivePotionEffect(repulsion).getAmplifier() + 2;
+			boolean attackerIsBoss = attacker instanceof IGroupBoss;
+			if(!attackerIsBoss && CreatureManager.getInstance().getCreatureGroup("boss") != null) {
+				attackerIsBoss = CreatureManager.getInstance().getCreatureGroup("boss").hasEntity(attacker);
+			}
+			if(attacker != null && !attackerIsBoss && target.isPotionActive(repulsion)) {
+				double knockback = target.getActivePotionEffect(repulsion).getAmplifier() + 2;
 				double xDist = attacker.getPositionVec().getX() - target.getPositionVec().getX();
 				double zDist = attacker.getPositionVec().getZ() - target.getPositionVec().getZ();
-				double xzDist = MathHelper.sqrt(xDist * xDist + zDist * zDist);
+				double xzDist = Math.max(MathHelper.sqrt(xDist * xDist + zDist * zDist), 0.01D);
 				double motionCap = 10;
+				double xVel = xDist / xzDist * knockback;
+				double zVel = zDist / xzDist * knockback;
 				if (attacker.getMotion().getX() < motionCap && attacker.getMotion().getX() > -motionCap && attacker.getMotion().getZ() < motionCap && attacker.getMotion().getZ() > -motionCap) {
-					attacker.addVelocity(
-							(xDist / xzDist * knockback - attacker.getMotion().getX()),
-							0,
-							(zDist / xzDist * knockback - attacker.getMotion().getZ())
-					);
+					attacker.addVelocity(xVel, 0, zVel);
 				}
 			}
 		}

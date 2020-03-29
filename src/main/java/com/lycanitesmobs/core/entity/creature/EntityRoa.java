@@ -89,7 +89,7 @@ public class EntityRoa extends RideableCreatureEntity implements IMob {
                     }
                     double xDist = this.getPositionVec().getX() - entity.getPositionVec().getX();
                     double zDist = this.getPositionVec().getZ() - entity.getPositionVec().getZ();
-                    double xzDist = MathHelper.sqrt(xDist * xDist + zDist * zDist);
+                    double xzDist = Math.max(MathHelper.sqrt(xDist * xDist + zDist * zDist), 0.01D);
                     double factor = 0.1D;
                     double motionCap = 10;
                     if(entity.getMotion().getX() < motionCap && entity.getMotion().getX() > -motionCap && entity.getMotion().getZ() < motionCap && entity.getMotion().getZ() > -motionCap) {

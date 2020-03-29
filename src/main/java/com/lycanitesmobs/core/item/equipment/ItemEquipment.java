@@ -592,7 +592,7 @@ public class ItemEquipment extends BaseItem {
 			if (knockback != 0 && attacker != null && target != null) {
 				double xDist = attacker.getPositionVec().getX() - target.getPositionVec().getX();
 				double zDist = attacker.getPositionVec().getZ() - target.getPositionVec().getZ();
-				double xzDist = MathHelper.sqrt(xDist * xDist + zDist * zDist);
+				double xzDist = Math.max(MathHelper.sqrt(xDist * xDist + zDist * zDist), 0.01D);
 				double motionCap = 10;
 				if (target.getMotion().getX() < motionCap && target.getMotion().getX() > -motionCap && target.getMotion().getZ() < motionCap && target.getMotion().getZ() > -motionCap) {
 					target.addVelocity(

@@ -105,7 +105,7 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
 		this.targetSelector.addGoal(this.nextSpecialTargetIndex++, new DefendOwnerGoal(this));
 
 		// Lesser Actions:
-		this.goalSelector.addGoal(this.nextTravelGoalIndex++, new FollowOwnerGoal(this).setStrayDistance(4).setLostDistance(32).setSpeed(1.5D));
+		this.goalSelector.addGoal(this.nextTravelGoalIndex++, new FollowOwnerGoal(this).setStrayDistance(5).setLostDistance(32).setSpeed(1.5D));
 		this.goalSelector.addGoal(this.nextIdleGoalIndex++, new BegGoal(this));
     }
     

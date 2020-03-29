@@ -109,7 +109,7 @@ public class GetBlockGoal extends Goal {
         	for(int y = (int)this.host.getPositionVec().getY() - heightDistance; y < (int)this.host.getPositionVec().getY() + heightDistance; y++) {
         		for(int z = (int)this.host.getPositionVec().getZ() - this.distanceMax; z < (int)this.host.getPositionVec().getZ() + this.distanceMax; z++) {
         			Block searchBlock = this.host.getEntityWorld().getBlockState(new BlockPos(x, y, z)).getBlock();
-                	if(searchBlock != null && searchBlock != Blocks.AIR) {
+                	if(searchBlock != null && searchBlock != Blocks.AIR && searchBlock != Blocks.REDSTONE_TORCH) {
                         BlockPos possibleTarget = null;
                 		if(!"".equalsIgnoreCase(this.targetBlockName)) {
                 			if(ObjectLists.isName(searchBlock, this.targetBlockName)) {
