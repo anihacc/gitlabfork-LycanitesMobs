@@ -598,6 +598,7 @@ public class PetEntry {
             this.setColor(nbtTagCompound.getString("Color"));
         if(nbtTagCompound.contains("EntityNBT"))
             this.entityNBT = nbtTagCompound.getCompound("EntityNBT");
+        this.loadEntityNBT();
     }
 
     // ========== Write ==========
@@ -630,49 +631,45 @@ public class PetEntry {
         if(this.entityNBT == null) {
             this.entityNBT = new CompoundNBT();
         }
-    	if(this.entity == null) {
-    		return;
-		}
+
+        this.entityNBT.putInt("MobLevel", this.getLevel());
+        this.entityNBT.putInt("Experience", this.getExperience());
 
 		// Creature Base:
         if(this.entity instanceof BaseCreatureEntity) {
             BaseCreatureEntity baseCreatureEntity = (BaseCreatureEntity)this.entity;
-
             baseCreatureEntity.inventory.write(this.entityNBT);
-
-            this.entityNBT.putInt("MobLevel", this.getLevel());
-            this.entityNBT.putInt("Experience", this.getExperience());
 
             if(this.entity instanceof AgeableCreatureEntity) {
                 AgeableCreatureEntity ageableCreatureEntity = (AgeableCreatureEntity)this.entity;
                 this.entityNBT.putInt("Age", ageableCreatureEntity.getGrowingAge());
             }
-        }
 
-        // Update Pet Name:
-		if(this.entity instanceof BaseCreatureEntity && this.entity.hasCustomName()) {
-			this.entityName = this.entity.getCustomName().getFormattedText();
-		}
-		this.entity.writeWithoutTypeId(this.entityNBT);
+            // Update Pet Name:
+            if(this.entity.hasCustomName()) {
+                this.entityName = this.entity.getCustomName().getFormattedText();
+            }
+
+            this.entity.writeWithoutTypeId(this.entityNBT);
+        }
     }
 
     // ========== Load Entity NBT ==========
     /** If this PetEntry is spawning a new entity, this will load any saved entity NBT data onto it. **/
     public void loadEntityNBT() {
-        if(this.entity == null || this.entityNBT == null)
+        if(this.entityNBT == null)
             return;
+
+        if(this.entityNBT.contains("MobLevel")) {
+            this.setLevel(this.entityNBT.getInt("MobLevel"));
+        }
+        if(this.entityNBT.contains("Experience")) {
+            this.setExperience(this.entityNBT.getInt("Experience"));
+        }
+
         if(this.entity instanceof BaseCreatureEntity) {
             BaseCreatureEntity baseCreatureEntity = (BaseCreatureEntity)this.entity;
-
             baseCreatureEntity.inventory.read(this.entityNBT);
-
-            if(this.entityNBT.contains("MobLevel")) {
-                this.setLevel(this.entityNBT.getInt("MobLevel"));
-            }
-            if(this.entityNBT.contains("Experience")) {
-                this.setExperience(this.entityNBT.getInt("Experience"));
-            }
-
             if(this.entity instanceof AgeableCreatureEntity) {
                 AgeableCreatureEntity ageableCreatureEntity = (AgeableCreatureEntity)this.entity;
                 if(this.entityNBT.contains("Age"))
