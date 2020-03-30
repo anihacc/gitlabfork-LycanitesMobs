@@ -156,8 +156,8 @@ public class MobSpawn {
 		if(json.has("ignoreGroupLimit"))
 			this.ignoreGroupLimit = json.get("ignoreGroupLimit").getAsBoolean();
 
-		if(json.has("ignoreForgeCanSpawnEvent"))
-			this.ignoreForgeCanSpawnEvent = json.get("ignoreForgeCanSpawnEvent").getAsBoolean();
+		if(json.has("ignoreMobInstanceConditions"))
+			this.ignoreMobInstanceConditions = json.get("ignoreMobInstanceConditions").getAsBoolean();
 
 		if(json.has("weight"))
 			this.weight = json.get("weight").getAsInt();

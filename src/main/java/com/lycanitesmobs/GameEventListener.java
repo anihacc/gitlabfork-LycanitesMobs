@@ -19,10 +19,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.*;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -375,14 +372,47 @@ public class GameEventListener {
 	// ==================================================
 	@SubscribeEvent
 	public void onBlockBreak(BlockEvent.BreakEvent event) {
-		if(event.getState() == null || event.getWorld() == null || event.getPlayer() == null || event.getWorld().isRemote() || event.isCanceled()) {
+		if(event.getState() == null || event.getWorld() == null || event.getWorld().isRemote() || event.isCanceled()) {
 			return;
 		}
-		ExtendedPlayer extendedPlayer = ExtendedPlayer.getForPlayer(event.getPlayer());
-		if(extendedPlayer == null) {
+
+		if(event.getWorld() instanceof World) {
+			ExtendedWorld extendedWorld = ExtendedWorld.getForWorld((World)event.getWorld());
+			if (extendedWorld.isBossNearby(new Vec3d(event.getPos()), 60)) {
+				event.setCanceled(true);
+				event.setResult(Event.Result.DENY);
+				return;
+			}
+		}
+
+		if(event.getPlayer() != null) {
+			ExtendedPlayer extendedPlayer = ExtendedPlayer.getForPlayer(event.getPlayer());
+			if (extendedPlayer == null) {
+				return;
+			}
+			extendedPlayer.setJustBrokenBlock(event.getState());
+		}
+	}
+
+
+	// ==================================================
+	//                 Block Place Event
+	// ==================================================
+	/** This uses the block place events to update Block Spawn Triggers. **/
+	@SubscribeEvent
+	public void onBlockPlace(BlockEvent.EntityPlaceEvent event) {
+		if(event.getState() == null || event.getWorld() == null || event.getWorld().isRemote() || event.isCanceled()) {
 			return;
 		}
-		extendedPlayer.setJustBrokenBlock(event.getState());
+
+		if(event.getWorld() instanceof World) {
+			ExtendedWorld extendedWorld = ExtendedWorld.getForWorld((World)event.getWorld());
+			if (extendedWorld.isBossNearby(new Vec3d(event.getPos()), 60)) {
+				event.setCanceled(true);
+				event.setResult(Event.Result.DENY);
+				return;
+			}
+		}
 	}
 
 

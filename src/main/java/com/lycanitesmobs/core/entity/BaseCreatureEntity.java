@@ -1802,8 +1802,12 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 			}
         }
 
-        // Boss Health Bar:
-        this.getBossInfo();
+		// Boss:
+		this.getBossInfo();
+		if(this.isBossAlways()) {
+			ExtendedWorld extendedWorld = ExtendedWorld.getForWorld(this.getEntityWorld());
+			extendedWorld.bossUpdate(this);
+		}
 
 		// Check Minions:
 		if(!this.minions.isEmpty()) {
@@ -3039,6 +3043,12 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
         super.onDeath(damageSource);
         if(!this.dead)
             return;
+
+        if(this.isBossAlways()) {
+        	ExtendedWorld extendedWorld = ExtendedWorld.getForWorld(this.getEntityWorld());
+        	extendedWorld.bossRemoved(this);
+		}
+
         if(!this.getEntityWorld().isRemote) {
             if(!this.isBoundPet())
                 this.inventory.dropInventory();

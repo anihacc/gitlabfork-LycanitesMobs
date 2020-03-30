@@ -89,9 +89,9 @@ public class MobEventListener {
 		worldExt.lastEventScheduleTime = world.getGameTime();
 		
 		// Only Run If Players Are Present:
-		if(world.getPlayers().size() < 1) {
-			return;
-		}
+//		if(world.getPlayers().size() < 1) {
+//			return;
+//		}
 
 		// Scheduled Mob Events:
 		for(MobEventSchedule mobEventSchedule : MobEventManager.getInstance().mobEventSchedules) {
