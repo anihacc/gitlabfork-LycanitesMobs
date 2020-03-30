@@ -10,6 +10,7 @@ import com.lycanitesmobs.core.item.equipment.ItemEquipment;
 import com.lycanitesmobs.core.network.MessagePlayerLeftClick;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -26,6 +27,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.capabilities.Capability;
@@ -460,14 +462,42 @@ public class GameEventListener {
 	// ==================================================
 	@SubscribeEvent
 	public void onBlockBreak(BlockEvent.BreakEvent event) {
-		if(event.getState() == null || event.getWorld() == null || event.getPlayer() == null || event.getWorld().isRemote || event.isCanceled()) {
+		if(event.getState() == null || event.getWorld() == null || event.getWorld().isRemote || event.isCanceled()) {
 			return;
 		}
-		ExtendedPlayer extendedPlayer = ExtendedPlayer.getForPlayer(event.getPlayer());
-		if(extendedPlayer == null) {
+
+		ExtendedWorld extendedWorld = ExtendedWorld.getForWorld(event.getWorld());
+		if(extendedWorld.isBossNearby(new Vec3d(event.getPos()), 60)) {
+			event.setCanceled(true);
+			event.setResult(Result.DENY);
 			return;
 		}
-		extendedPlayer.setJustBrokenBlock(event.getState());
+
+		if(event.getPlayer() != null) {
+			ExtendedPlayer extendedPlayer = ExtendedPlayer.getForPlayer(event.getPlayer());
+			if (extendedPlayer == null) {
+				return;
+			}
+			extendedPlayer.setJustBrokenBlock(event.getState());
+		}
+	}
+
+
+	// ==================================================
+	//                 Block Place Event
+	// ==================================================
+	/** This uses the block place events to update Block Spawn Triggers. **/
+	@SubscribeEvent
+	public void onBlockPlace(BlockEvent.PlaceEvent event) {
+		if(event.getState() == null || event.getWorld() == null || event.getWorld().isRemote || event.isCanceled()) {
+			return;
+		}
+
+		ExtendedWorld extendedWorld = ExtendedWorld.getForWorld(event.getWorld());
+		if(extendedWorld.isBossNearby(new Vec3d(event.getPos()), 60)) {
+			event.setCanceled(true);
+			event.setResult(Result.DENY);
+		}
 	}
 
 

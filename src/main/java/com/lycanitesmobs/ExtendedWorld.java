@@ -8,11 +8,13 @@ import com.lycanitesmobs.core.mobevent.MobEventPlayerClient;
 import com.lycanitesmobs.core.mobevent.MobEventPlayerServer;
 import com.lycanitesmobs.core.network.MessageMobEvent;
 import com.lycanitesmobs.core.network.MessageWorldEvent;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.WorldSavedData;
 
@@ -41,6 +43,9 @@ public class ExtendedWorld extends WorldSavedData {
     private long worldEventLastStartedTime = 0;
 	private String worldEventName = "";
 	private int worldEventCount = -1;
+
+	// Entities:
+	public List<Entity> bosses = new ArrayList<>();
 
 	// Dungeons:
 	public Map<UUID, DungeonInstance> dungeons = new HashMap<>();
@@ -398,6 +403,40 @@ public class ExtendedWorld extends WorldSavedData {
 		}
 
 		return null;
+	}
+
+
+	// ==================================================
+	//                     Entities
+	// ==================================================
+	/** Called by bosses to let this world know that they are active, this will add them to the boss list if they are not already in it. **/
+	public void bossUpdate(Entity entity) {
+		if(entity.isEntityAlive() && !this.bosses.contains(entity)) {
+			this.bosses.add(entity);
+		}
+	}
+
+	/** Called by bosses to let this world know that they are being removed. **/
+	public void bossRemoved(Entity entity) {
+		this.bosses.remove(entity);
+	}
+
+	/**
+	 * Returns true if a boss is nearby.
+	 * @param pos The position to search around.
+	 * @param range The range to search within.
+	 * @return True if a boss is present.
+	 */
+	public boolean isBossNearby(Vec3d pos, double range) {
+		for(Entity entity : this.bosses) {
+			if(entity == null || !entity.isEntityAlive()) {
+				continue;
+			}
+			if(entity.getDistanceSq(pos.x, pos.y, pos.z) <= range * range) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 
