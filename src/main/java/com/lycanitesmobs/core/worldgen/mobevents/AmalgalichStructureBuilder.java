@@ -25,6 +25,7 @@ public class AmalgalichStructureBuilder extends StructureBuilder {
 
 	@Override
 	public void build(World world, EntityPlayer player, BlockPos pos, int level, int ticks, int subspecies) {
+		ExtendedWorld worldExt = ExtendedWorld.getForWorld(world);
 		int originX = pos.getX();
 		int originY = pos.getY();
 		int originZ = pos.getZ();
@@ -38,37 +39,39 @@ public class AmalgalichStructureBuilder extends StructureBuilder {
 		else if(originY + height >= world.getHeight())
 			originY = Math.max(5, world.getHeight() - height - 1);
 
-		// Build Floor:
-		if(ticks == 1 * 20) {
-			this.buildArenaFloor(world, originX, originY, originZ);
-		}
-
-		// Explosions:
-		if(ticks >= 3 * 20 && ticks % 10 == 0) {
-			world.createExplosion(null, originX - 20 + world.rand.nextInt(40), originY + 25 + world.rand.nextInt(10), originZ - 20 + world.rand.nextInt(40), 2, true);
-		}
-
-		// Build Obstacles:
-		if(ticks == 3 * 20) {
-			this.buildObstacles(world, originX, originY, originZ);
-		}
-
-		// Hellfire Pillar Effect:
-		if(ticks == 15 * 20) {
+		// Effects:
+		if(ticks == 1) {
 			for(int i = 0; i < 5; i++) {
 				BaseProjectileEntity baseProjectileEntity = new EntityShadowfireBarrier(world, originX, originY + (10 * i), originZ);
-				baseProjectileEntity.projectileLife = 15 * 20;
+				baseProjectileEntity.projectileLife = 20 * 20;
 				world.spawnEntity(baseProjectileEntity);
+				if(worldExt != null) {
+					worldExt.bossUpdate(baseProjectileEntity);
+				}
 			}
 		}
 
+		// Build Floor:
+		if(ticks == 3 * 20) {
+			this.buildArenaFloor(world, originX, originY, originZ);
+		}
+
+		// Build Obstacles:
+		if(ticks == 5 * 20) {
+			this.buildObstacles(world, originX, originY, originZ);
+		}
+
+		// Explosions:
+		if(ticks >= 10 * 20 && ticks % 10 == 0) {
+			world.createExplosion(null, originX - 20 + world.rand.nextInt(40), originY + 25 + world.rand.nextInt(10), originZ - 20 + world.rand.nextInt(40), 2, true);
+		}
+
 		// Spawn Boss:
-		if(ticks == 25 * 20) {
+		if(ticks == 20 * 20) {
 			BaseCreatureEntity baseCreatureEntity = new EntityAmalgalich(world);
 			baseCreatureEntity.setLocationAndAngles(originX, originY + 1, originZ, 0, 0);
 			world.spawnEntity(baseCreatureEntity);
 			baseCreatureEntity.setArenaCenter(new BlockPos(originX, originY + 1, originZ));
-			ExtendedWorld worldExt = ExtendedWorld.getForWorld(world);
 			if(worldExt != null) {
 				MobEventPlayerServer mobEventPlayerServer = worldExt.getMobEventPlayerServer(this.name);
 				if(mobEventPlayerServer != null) {

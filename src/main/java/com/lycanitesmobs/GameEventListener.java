@@ -462,18 +462,20 @@ public class GameEventListener {
 	// ==================================================
 	@SubscribeEvent
 	public void onBlockBreak(BlockEvent.BreakEvent event) {
-		if(event.getState() == null || event.getWorld() == null || event.getWorld().isRemote || event.isCanceled()) {
+		if(event.getState() == null || event.getWorld() == null || event.isCanceled()) {
 			return;
 		}
 
-		ExtendedWorld extendedWorld = ExtendedWorld.getForWorld(event.getWorld());
-		if(extendedWorld.isBossNearby(new Vec3d(event.getPos()), 60)) {
-			event.setCanceled(true);
-			event.setResult(Result.DENY);
-			return;
+		if(event.getPlayer() == null || !event.getPlayer().isCreative()) {
+			ExtendedWorld extendedWorld = ExtendedWorld.getForWorld(event.getWorld());
+			if (extendedWorld.isBossNearby(new Vec3d(event.getPos()), 60)) {
+				event.setCanceled(true);
+				event.setResult(Result.DENY);
+				return;
+			}
 		}
 
-		if(event.getPlayer() != null) {
+		if(event.getPlayer() != null && event.getWorld().isRemote) {
 			ExtendedPlayer extendedPlayer = ExtendedPlayer.getForPlayer(event.getPlayer());
 			if (extendedPlayer == null) {
 				return;
@@ -489,14 +491,16 @@ public class GameEventListener {
 	/** This uses the block place events to update Block Spawn Triggers. **/
 	@SubscribeEvent
 	public void onBlockPlace(BlockEvent.PlaceEvent event) {
-		if(event.getState() == null || event.getWorld() == null || event.getWorld().isRemote || event.isCanceled()) {
+		if(event.getState() == null || event.getWorld() == null || event.isCanceled()) {
 			return;
 		}
 
-		ExtendedWorld extendedWorld = ExtendedWorld.getForWorld(event.getWorld());
-		if(extendedWorld.isBossNearby(new Vec3d(event.getPos()), 60)) {
-			event.setCanceled(true);
-			event.setResult(Result.DENY);
+		if(event.getPlayer() == null || !event.getPlayer().isCreative()) {
+			ExtendedWorld extendedWorld = ExtendedWorld.getForWorld(event.getWorld());
+			if (extendedWorld.isBossNearby(new Vec3d(event.getPos()), 60)) {
+				event.setCanceled(true);
+				event.setResult(Result.DENY);
+			}
 		}
 	}
 

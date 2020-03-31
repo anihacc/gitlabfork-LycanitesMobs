@@ -23,6 +23,7 @@ public class ForceGoal extends EntityAIBase {
 
 	public int abilityTime = 0;
 	public int cooldownTime = this.cooldownDuration;
+	public boolean dismountTargets = false;
 
 
 	/**
@@ -94,6 +95,16 @@ public class ForceGoal extends EntityAIBase {
 		return this;
 	}
 
+	/**
+	 * Sets if this force goal should dismount any targets affected that are riding another entity.
+	 * @param dismountTargets Whether affected targets should be dismounted.
+	 * @return This goal for chaining.
+	 */
+	public ForceGoal setDismount(boolean dismountTargets) {
+		this.dismountTargets = dismountTargets;
+		return this;
+	}
+
 	@Override
     public boolean shouldExecute() {
 		if(!this.host.isEntityAlive()) {
@@ -150,6 +161,9 @@ public class ForceGoal extends EntityAIBase {
 						0,
 						zDist / xzDist * factor + entity.motionZ * factor
 				);
+			}
+			if(this.dismountTargets && entity.getRidingEntity() != null) {
+				entity.dismountRidingEntity();
 			}
 			if (player != null) {
 				player.connection.sendPacket(new SPacketEntityVelocity(entity));

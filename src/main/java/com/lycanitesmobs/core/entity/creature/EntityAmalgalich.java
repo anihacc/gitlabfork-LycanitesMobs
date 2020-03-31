@@ -72,7 +72,7 @@ public class EntityAmalgalich extends BaseCreatureEntity implements IMob, IGroup
 
         // Phase 1:
         this.tasks.addTask(this.nextIdleGoalIndex, new SummonMinionsGoal(this).setMinionInfo("reaper").setSummonRate(20 * 5).setSummonCap(5).setPhase(0).setPerPlayer(true));
-        this.consumptionGoalP0 = new ForceGoal(this).setRange(64F).setCooldown(consumptionCooldown).setDuration(this.consumptionDuration).setWindUp(this.consumptionWindUp).setForce(-0.75F).setPhase(0);
+        this.consumptionGoalP0 = new ForceGoal(this).setRange(64F).setCooldown(consumptionCooldown).setDuration(this.consumptionDuration).setWindUp(this.consumptionWindUp).setForce(-0.75F).setPhase(0).setDismount(true);
         this.tasks.addTask(this.nextIdleGoalIndex, new EffectAuraGoal(this).setRange(1F).setCooldown(consumptionCooldown + this.consumptionWindUp).setDuration(this.consumptionDuration - this.consumptionWindUp).setTickRate(5).setDamageAmount(1000).setCheckSight(false).setTargetAll(true).setPhase(0));
         this.tasks.addTask(this.nextIdleGoalIndex, this.consumptionGoalP0);
 
@@ -81,7 +81,7 @@ public class EntityAmalgalich extends BaseCreatureEntity implements IMob, IGroup
         this.tasks.addTask(this.nextIdleGoalIndex, new SummonMinionsGoal(this).setMinionInfo("epion").setSummonRate(20 * 5).setSummonCap(3).setPhase(1).setPerPlayer(true));
 
         // Phase 3:
-        this.consumptionGoalP2 = new ForceGoal(this).setRange(64F).setCooldown(consumptionCooldown).setDuration(this.consumptionDuration).setWindUp(this.consumptionWindUp).setForce(-0.75F).setPhase(2);
+        this.consumptionGoalP2 = new ForceGoal(this).setRange(64F).setCooldown(consumptionCooldown).setDuration(this.consumptionDuration).setWindUp(this.consumptionWindUp).setForce(-0.75F).setPhase(2).setDismount(true);
         this.tasks.addTask(this.nextIdleGoalIndex, this.consumptionGoalP2);
         this.tasks.addTask(this.nextIdleGoalIndex, new EffectAuraGoal(this).setRange(1F).setCooldown(consumptionCooldown + this.consumptionWindUp).setDuration(this.consumptionDuration - this.consumptionWindUp).setTickRate(5).setDamageAmount(1000).setCheckSight(false).setTargetAll(true).setPhase(2));
         this.tasks.addTask(this.nextIdleGoalIndex, new FireProjectilesGoal(this).setProjectile("lobdarklings").setFireRate(10 * 20).setVelocity(0.8F).setScale(2F).setRandomCount(3).setAngle(360).setPhase(2));
