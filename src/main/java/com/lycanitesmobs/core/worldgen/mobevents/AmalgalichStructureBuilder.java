@@ -27,6 +27,7 @@ public class AmalgalichStructureBuilder extends StructureBuilder {
 
 	@Override
 	public void build(World world, PlayerEntity player, BlockPos pos, int level, int ticks, int subspecies) {
+		ExtendedWorld worldExt = ExtendedWorld.getForWorld(world);
 		int originX = pos.getX();
 		int originY = pos.getY();
 		int originZ = pos.getZ();
@@ -39,6 +40,18 @@ public class AmalgalichStructureBuilder extends StructureBuilder {
 			originY = 5;
 		else if(originY + height >= world.getActualHeight())
 			originY = Math.max(5, world.getActualHeight() - height - 1);
+
+		// Effects:
+		if(ticks == 1) {
+			for(int i = 0; i < 5; i++) {
+				BaseProjectileEntity baseProjectileEntity = new EntityShadowfireBarrier(ProjectileManager.getInstance().oldProjectileTypes.get(EntityShadowfireBarrier.class), world, originX, originY + (10 * i), originZ);
+				baseProjectileEntity.projectileLife = 20 * 20;
+				world.addEntity(baseProjectileEntity);
+				if(worldExt != null) {
+					worldExt.bossUpdate(baseProjectileEntity);
+				}
+			}
+		}
 
 		// Build Floor:
 		if(ticks == 1 * 20) {
@@ -55,22 +68,12 @@ public class AmalgalichStructureBuilder extends StructureBuilder {
 			this.buildObstacles(world, originX, originY, originZ);
 		}
 
-		// Hellfire Pillar Effect:
-		if(ticks == 15 * 20) {
-			for(int i = 0; i < 5; i++) {
-				BaseProjectileEntity baseProjectileEntity = new EntityShadowfireBarrier(ProjectileManager.getInstance().oldProjectileTypes.get(EntityShadowfireBarrier.class), world, originX, originY + (10 * i), originZ);
-				baseProjectileEntity.projectileLife = 15 * 20;
-				world.addEntity(baseProjectileEntity);
-			}
-		}
-
 		// Spawn Boss:
 		if(ticks == 25 * 20) {
 			BaseCreatureEntity baseCreatureEntity = (BaseCreatureEntity) CreatureManager.getInstance().getCreature("amalgalich").createEntity(world);
 			baseCreatureEntity.setLocationAndAngles(originX, originY + 1, originZ, 0, 0);
 			world.addEntity(baseCreatureEntity);
 			baseCreatureEntity.setArenaCenter(new BlockPos(originX, originY + 1, originZ));
-			ExtendedWorld worldExt = ExtendedWorld.getForWorld(world);
 			if(worldExt != null) {
 				MobEventPlayerServer mobEventPlayerServer = worldExt.getMobEventPlayerServer(this.name);
 				if(mobEventPlayerServer != null) {

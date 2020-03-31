@@ -376,12 +376,14 @@ public class GameEventListener {
 			return;
 		}
 
-		if(event.getWorld() instanceof World) {
-			ExtendedWorld extendedWorld = ExtendedWorld.getForWorld((World)event.getWorld());
-			if (extendedWorld.isBossNearby(new Vec3d(event.getPos()), 60)) {
-				event.setCanceled(true);
-				event.setResult(Event.Result.DENY);
-				return;
+		if(event.getPlayer() == null || !event.getPlayer().isCreative()) {
+			if (event.getWorld() instanceof World) {
+				ExtendedWorld extendedWorld = ExtendedWorld.getForWorld((World) event.getWorld());
+				if (extendedWorld.isBossNearby(new Vec3d(event.getPos()), 60)) {
+					event.setCanceled(true);
+					event.setResult(Event.Result.DENY);
+					return;
+				}
 			}
 		}
 
@@ -405,12 +407,14 @@ public class GameEventListener {
 			return;
 		}
 
-		if(event.getWorld() instanceof World) {
-			ExtendedWorld extendedWorld = ExtendedWorld.getForWorld((World)event.getWorld());
-			if (extendedWorld.isBossNearby(new Vec3d(event.getPos()), 60)) {
-				event.setCanceled(true);
-				event.setResult(Event.Result.DENY);
-				return;
+		if(!(event.getEntity() instanceof PlayerEntity) || !((PlayerEntity)event.getEntity()).isCreative()) {
+			if (event.getWorld() instanceof World) {
+				ExtendedWorld extendedWorld = ExtendedWorld.getForWorld((World) event.getWorld());
+				if (extendedWorld.isBossNearby(new Vec3d(event.getPos()), 60)) {
+					event.setCanceled(true);
+					event.setResult(Event.Result.DENY);
+					return;
+				}
 			}
 		}
 	}
