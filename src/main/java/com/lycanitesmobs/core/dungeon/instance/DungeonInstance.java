@@ -26,7 +26,7 @@ public class DungeonInstance {
 	/** If true, this dungeon has been fully built and does not need to generate its layout, etc. This is where all chunks this dungeon is in have been loaded. **/
 	public boolean complete = false;
 
-	/** Stores how many chunks have been buils. When this matches the number of chunks that are used by this dungeon, this dungeon is marked as complete. **/
+	/** Stores how many chunks have been built. When this matches the number of chunks that are used by this dungeon, this dungeon is marked as complete. **/
 	public int chunksBuilt = 0;
 
 	/** The origin block position of this dungeon where it begins building from. **/
@@ -106,6 +106,7 @@ public class DungeonInstance {
 			this.layout = new DungeonLayout(this);
 			this.layout.generate(this.random);
 		}
+		LycanitesMobs.logDebug("", "Generated New Dungeon Instance " + this);
 
 		// Mark For Save:
 		ExtendedWorld extendedWorld = ExtendedWorld.getForWorld(world);
@@ -212,6 +213,7 @@ public class DungeonInstance {
 		String schematic = "";
 		if(this.schematic != null)
 			schematic = " - Schematic: " + this.schematic.name;
-		return "Dungeon Instance" + schematic + " - Origin: " + this.originPos + " - Complete: " + complete + " - Seed: " + this.seed + " - ID: " + this.uuid;
+		String tpCommand = "/tp " + this.originPos.getX() + " " + (this.originPos.getY() + 2) + " " + this.originPos.getZ() + " ";
+		return "Dungeon Instance" + schematic + " - TP Command: " + tpCommand + " - Origin: " + this.originPos + " - Complete: " + complete + " - Seed: " + this.seed + " - ID: " + this.uuid;
 	}
 }

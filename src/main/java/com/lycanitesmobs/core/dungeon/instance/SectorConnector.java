@@ -57,7 +57,15 @@ public class SectorConnector {
 			return false;
 		}
 		if(sectorInstance == null) {
-			return true;
+			return this.facing != EnumFacing.UP;
+		}
+
+		// Vertical Connectors:
+		if("tower".equalsIgnoreCase(sectorInstance.dungeonSector.type)) {
+			return this.facing == EnumFacing.UP;
+		}
+		if(this.facing == EnumFacing.UP) {
+			return false;
 		}
 
 		// Temp Set Connector:

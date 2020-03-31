@@ -107,8 +107,7 @@ public class SectorInstance {
 	 */
 	public void init(Random random) {
 		if(this.parentConnector == null) {
-			LycanitesMobs.logWarning("Dungeon", "Tried to initialise a Sector Instance with a null Parent Connector: " + this);
-			return;
+			throw new RuntimeException("[Dungeon] Tried to initialise a Sector Instance with a null Parent Connector: " + this);
 		}
 
 		// Close Parent Connector:
@@ -136,31 +135,57 @@ public class SectorInstance {
 		Vec3i size = this.getRoomSize();
 		int centerX = boundsMin.getX() + Math.round((float)size.getX() / 2);
 		int centerZ = boundsMin.getZ() + Math.round((float)size.getZ() / 2);
-		if("corridor".equalsIgnoreCase(this.dungeonSector.type) || "room".equalsIgnoreCase(this.dungeonSector.type) || "entrance".equalsIgnoreCase(this.dungeonSector.type) || "bossRoom".equalsIgnoreCase(this.dungeonSector.type)) {
 
-			// Front Exit:
-			BlockPos blockPos = this.parentConnector.position;
-			if(this.parentConnector.facing == EnumFacing.SOUTH) {
-				blockPos = new BlockPos(this.getConnectorOffset(random, size.getX(), boundsMin.getX()), this.parentConnector.position.getY(), boundsMax.getZ() + 1);
+		// Upper Exit:
+		int upperConnectorY = this.parentConnector.position.getY() + this.getRoomSize().getY();
+		if(upperConnectorY < 255) {
+			BlockPos blockPos = new BlockPos(centerX, upperConnectorY, centerZ);
+			this.addConnector(blockPos, this.parentConnector.level + 1, EnumFacing.UP);
+		}
+
+		if("corridor".equalsIgnoreCase(this.dungeonSector.type) || "room".equalsIgnoreCase(this.dungeonSector.type) || "tower".equalsIgnoreCase(this.dungeonSector.type) || "entrance".equalsIgnoreCase(this.dungeonSector.type) || "bossRoom".equalsIgnoreCase(this.dungeonSector.type)) {
+
+			// Front/Back Exit:
+			BlockPos frontPos = this.parentConnector.position;
+			EnumFacing frontFacing = EnumFacing.SOUTH;
+			BlockPos backPos = this.parentConnector.position;
+			EnumFacing backFacing = EnumFacing.NORTH;
+			if(this.parentConnector.facing == EnumFacing.SOUTH || this.parentConnector.facing == EnumFacing.UP) {
+				frontPos = new BlockPos(this.getConnectorOffset(random, size.getX(), boundsMin.getX()), this.parentConnector.position.getY(), boundsMax.getZ() + 1);
+				frontFacing = EnumFacing.SOUTH;
+				backPos = new BlockPos(this.getConnectorOffset(random, size.getX(), boundsMin.getX()), this.parentConnector.position.getY(), boundsMin.getZ() - 1);
+				backFacing = EnumFacing.NORTH;
 			}
 			else if(this.parentConnector.facing == EnumFacing.EAST) {
-				blockPos = new BlockPos(boundsMax.getX() + 1, this.parentConnector.position.getY(), this.getConnectorOffset(random, size.getZ(), boundsMin.getZ()));
+				frontPos = new BlockPos(boundsMax.getX() + 1, this.parentConnector.position.getY(), this.getConnectorOffset(random, size.getZ(), boundsMin.getZ()));
+				frontFacing = EnumFacing.EAST;
+				backPos = new BlockPos(boundsMin.getX() - 1, this.parentConnector.position.getY(), this.getConnectorOffset(random, size.getZ(), boundsMin.getZ()));
+				backFacing = EnumFacing.WEST;
 			}
 			else if(this.parentConnector.facing == EnumFacing.NORTH) {
-				blockPos = new BlockPos(this.getConnectorOffset(random, size.getX(), boundsMin.getX()), this.parentConnector.position.getY(), boundsMin.getZ() - 1);
+				frontPos = new BlockPos(this.getConnectorOffset(random, size.getX(), boundsMin.getX()), this.parentConnector.position.getY(), boundsMin.getZ() - 1);
+				frontFacing = EnumFacing.NORTH;
+				backPos = new BlockPos(this.getConnectorOffset(random, size.getX(), boundsMin.getX()), this.parentConnector.position.getY(), boundsMax.getZ() + 1);
+				backFacing = EnumFacing.SOUTH;
 			}
 			else if(this.parentConnector.facing == EnumFacing.WEST) {
-				blockPos = new BlockPos(boundsMin.getX() - 1, this.parentConnector.position.getY(), this.getConnectorOffset(random, size.getZ(), boundsMin.getZ()));
+				frontPos = new BlockPos(boundsMin.getX() - 1, this.parentConnector.position.getY(), this.getConnectorOffset(random, size.getZ(), boundsMin.getZ()));
+				frontFacing = EnumFacing.WEST;
+				backPos = new BlockPos(boundsMax.getX() + 1, this.parentConnector.position.getY(), this.getConnectorOffset(random, size.getZ(), boundsMin.getZ()));
+				backFacing = EnumFacing.EAST;
 			}
-			this.addConnector(blockPos, this.parentConnector.level, this.parentConnector.facing);
+			this.addConnector(frontPos, this.parentConnector.level, frontFacing);
+			if("tower".equalsIgnoreCase(this.dungeonSector.type)) {
+				this.addConnector(backPos, this.parentConnector.level, backFacing);
+			}
 
 			// Side Exits:
-			if("room".equalsIgnoreCase(this.dungeonSector.type)) {
+			if("room".equalsIgnoreCase(this.dungeonSector.type) || "tower".equalsIgnoreCase(this.dungeonSector.type)) {
 				BlockPos leftPos = this.parentConnector.position;
 				EnumFacing leftFacing = EnumFacing.WEST;
 				BlockPos rightPos = this.parentConnector.position;
 				EnumFacing rightFacing = EnumFacing.EAST;
-				if(this.parentConnector.facing == EnumFacing.SOUTH || this.parentConnector.facing == EnumFacing.NORTH) {
+				if(this.parentConnector.facing == EnumFacing.SOUTH || this.parentConnector.facing == EnumFacing.NORTH || this.parentConnector.facing == EnumFacing.UP) {
 					leftPos = new BlockPos(boundsMin.getX() - 1, this.parentConnector.position.getY(), this.getConnectorOffset(random, size.getZ(), boundsMin.getZ()));
 					leftFacing = EnumFacing.WEST;
 					rightPos = new BlockPos(boundsMax.getX() + 1, this.parentConnector.position.getY(), this.getConnectorOffset(random, size.getZ(), boundsMin.getZ()));
@@ -176,7 +201,7 @@ public class SectorInstance {
 				this.addConnector(rightPos, this.parentConnector.level, rightFacing);
 			}
 		}
-		else if("stairs".equalsIgnoreCase(this.dungeonSector.type)) {
+		if("stairs".equalsIgnoreCase(this.dungeonSector.type)) {
 
 			// Lower Exit:
 			int y = this.parentConnector.position.getY() - (size.getY() * 2);
@@ -191,7 +216,7 @@ public class SectorInstance {
 				else if (this.parentConnector.facing == EnumFacing.WEST) {
 					blockPos = new BlockPos(boundsMin.getX() - 1, y, centerZ);
 				}
-				this.addConnector(blockPos, this.parentConnector.level + 1, this.parentConnector.facing);
+				this.addConnector(blockPos, this.parentConnector.level - 1, this.parentConnector.facing);
 			}
 		}
 
@@ -249,7 +274,7 @@ public class SectorInstance {
 	/**
 	 * Returns a list of open connectors where they are not set to closed and have no child Sector Instance connected.
 	 * @param sectorInstance The sector to get the open connectors for. If null, collision checks are skipped.
-	 * @return A lit of open connectors.
+	 * @return A list of open connectors.
 	 */
 	public List<SectorConnector> getOpenConnectors(SectorInstance sectorInstance) {
 		List<SectorConnector> openConnectors = new ArrayList<>();
@@ -353,7 +378,7 @@ public class SectorInstance {
 
 
 	/**
-	 * Returns the collision size of this sector. X and Z are swapped when facing EAST or WEST. This is how large this sector is including extra blocks added for layers or structures, etc. Use for detected what chunks this sector needs to generate in, etc.
+	 * Returns the collision size of this sector. X and Z are swapped when facing EAST or WEST. This is how large this sector is including extra blocks added for layers or structures, etc. Use for detecting what chunks this sector needs to generate in, etc.
 	 * @return A vector of the collision size.
 	 */
 	public Vec3i getOccupiedSize() {
@@ -371,7 +396,14 @@ public class SectorInstance {
 	 */
 	public BlockPos getBoundsMin(Vec3i boundsSize) {
 		BlockPos bounds = new BlockPos(this.parentConnector.position);
-		if(this.parentConnector.facing == EnumFacing.SOUTH) {
+		if(this.parentConnector.facing == EnumFacing.UP) {
+			bounds = bounds.add(
+					-(int)Math.ceil((double)boundsSize.getX() / 2),
+					0,
+					-(int)Math.ceil((double)boundsSize.getZ() / 2)
+			);
+		}
+		else if(this.parentConnector.facing == EnumFacing.SOUTH) {
 			bounds = bounds.add(
 					-(int)Math.ceil((double)boundsSize.getX() / 2),
 					0,
@@ -411,7 +443,14 @@ public class SectorInstance {
 	 */
 	public BlockPos getBoundsMax(Vec3i boundsSize) {
 		BlockPos bounds = new BlockPos(this.parentConnector.position);
-		if(this.parentConnector.facing == EnumFacing.SOUTH) {
+		if(this.parentConnector.facing == EnumFacing.UP) {
+			bounds = bounds.add(
+					(int)Math.ceil((double)boundsSize.getX() / 2),
+					boundsSize.getY(),
+					(int)Math.ceil((double)boundsSize.getZ() / 2)
+			);
+		}
+		else if(this.parentConnector.facing == EnumFacing.SOUTH) {
 			bounds = bounds.add(
 					(int)Math.floor((double)boundsSize.getX() / 2),
 					boundsSize.getY(),
@@ -448,11 +487,11 @@ public class SectorInstance {
 	 * @return The minimum bounds position (corner).
 	 */
 	public BlockPos getOccupiedBoundsMin() {
-		Vec3i occupiedSize = this.getOccupiedSize();
+		BlockPos occupiedBoundsMin = this.getBoundsMin(this.getOccupiedSize()).add(-8, 0, -8);
 		if("stairs".equals(this.dungeonSector.type)) {
-			occupiedSize = new Vec3i(occupiedSize.getX(), occupiedSize.getY() - (this.getRoomSize().getY() * 2), occupiedSize.getZ());
+			occupiedBoundsMin = occupiedBoundsMin.subtract(new Vec3i(0, this.getRoomSize().getY() * 2, 0));
 		}
-		return this.getBoundsMin(occupiedSize).add(-8, 0, -8);
+		return occupiedBoundsMin;
 	}
 
 
@@ -591,6 +630,9 @@ public class SectorInstance {
 		if("stairs".equalsIgnoreCase(this.dungeonSector.type)) {
 			this.buildStairs(world, chunkPos, random);
 			this.buildFloor(world, chunkPos, random, -(this.getRoomSize().getY() * 2));
+		}
+		if("tower".equalsIgnoreCase(this.dungeonSector.type)) {
+			this.buildStairs(world, chunkPos, random);
 		}
 		this.buildEntrances(world, chunkPos, random);
 		this.chunksBuilt++;
@@ -795,10 +837,14 @@ public class SectorInstance {
 		int centerX = startPos.getX() + Math.round((float)size.getX() / 2);
 		int centerZ = startPos.getZ() + Math.round((float)size.getZ() / 2);
 
+		int stairsHeight = this.parentConnector.parentSector.getOccupiedSize().getY() - 1;
+		if(this.dungeonSector.type.equalsIgnoreCase("stairs")) {
+			stairsHeight = size.getY() * 2;
+		}
 		int startX = centerX - 1;
 		int stopX = centerX + 1;
 		int startY = Math.min(startPos.getY(), stopPos.getY());
-		int stopY = Math.max(1, startPos.getY() - (size.getY() * 2));
+		int stopY = Math.max(1, startPos.getY() - stairsHeight);
 
 		int startZ = centerZ - 1;
 		int stopZ = centerZ + 1;
