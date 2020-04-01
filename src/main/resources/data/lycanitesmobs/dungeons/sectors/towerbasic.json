@@ -1,11 +1,11 @@
 {
-	"name": "stairsbasic",
-	"type": "stairs",
+	"name": "towerbasic",
+	"type": "tower",
 	"weight": 8,
 	"loadDefault": true,
 	"changeTheme": false,
-	"sizeMin": [8, 9, 8],
-	"sizeMax": [8, 9, 8],
+	"sizeMin": [9, 18, 9],
+	"sizeMax": [18, 18, 18],
 	"floor": [
 		{
 			"layer": 0,

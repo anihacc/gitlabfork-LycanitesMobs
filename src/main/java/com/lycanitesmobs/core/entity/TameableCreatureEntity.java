@@ -642,6 +642,15 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
 	// ========== Damage ==========
 	@Override
 	public boolean isInvulnerableTo(String type, DamageSource source, float damage) {
+		if(this.isTamed()) {
+			Entity entity = source.getTrueSource();
+			if(entity instanceof PlayerEntity && this.getEntityWorld().getServer() != null && !this.getEntityWorld().getServer().isPVPEnabled()) {
+				return false;
+			}
+			if(entity == this.getPlayerOwner()) {
+				return false;
+			}
+		}
 		if("inWall".equals(type) && this.isTamed())
 			return false;
 		return super.isInvulnerableTo(type, source, damage);

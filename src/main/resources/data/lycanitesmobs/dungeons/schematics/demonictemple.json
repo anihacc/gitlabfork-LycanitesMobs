@@ -8,7 +8,7 @@
 	"conditions": [
 		{
 			"type": "world",
-			"dimensionIds": ["minecraft:the_nether"],
+			"dimensionIds": [-1],
 			"dimensionListType": "whitelist"
 		}
 	],
@@ -17,6 +17,7 @@
 	"rooms": ["roombasic", "roombasicloot", "roombasicmob", "roombasicpit", "roomdiamondpit"],
 	"corridors": ["corridorbasic", "corridorbasicdark", "corridorbasicloot", "corridorbasicmob"],
 	"stairs": ["stairsbasic"],
+	"towers": ["towerbasic"],
 	"bossRooms": ["roombasicboss"],
 	"finishes": ["roombasicfinish"],
 	"lootTables": [
@@ -25,23 +26,23 @@
 		},
 		{
 			"id": "minecraft:chests/village_blacksmith",
-			"level": 0
+			"level": 2
 		},
 		{
 			"id": "minecraft:chests/nether_bridge",
-			"level": 1
+			"level": 3
 		},
 		{
 			"id": "minecraft:chests/abandoned_mineshaft",
-			"level": 1
+			"level": 4
 		},
 		{
 			"id": "minecraft:chests/stronghold_corridor",
-			"level": 2
+			"level": 5
 		},
 		{
 			"id": "minecraft:chests/stronghold_crossing",
-			"level": 2
+			"level": 6
 		}
 	],
 	"mobSpawns": [
@@ -51,8 +52,7 @@
 		},
 		{
 			"mobId": "lycanitesmobs:wraith",
-			"weight": 8,
-			"dungeonLevelMin": "0"
+			"weight": 8
 		},
 		{
 			"mobId": "lycanitesmobs:behemoth",
@@ -62,12 +62,12 @@
 		{
 			"mobId": "lycanitesmobs:pinky",
 			"weight": 4,
-			"dungeonLevelMin": "1"
+			"dungeonLevelMin": "2"
 		},
 		{
 			"mobId": "lycanitesmobs:cacodemon",
 			"weight": 1,
-			"dungeonLevelMin": "2"
+			"dungeonLevelMin": "3"
 		},
 		{
 			"mobId": "lycanitesmobs:behemoth",
@@ -79,7 +79,7 @@
 			"mobLevel": 30,
 			"spawnAsBoss": true,
 			"dungeonLevelMin": "0",
-			"dungeonLevelMax": "0",
+			"dungeonLevelMax": "2",
 			"dungeonBoss": true,
 			"mobDrops": [
 				{
@@ -101,8 +101,8 @@
 			"naturalDespawn": "false",
 			"mobLevel": 50,
 			"spawnAsBoss": true,
-			"dungeonLevelMin": "1",
-			"dungeonLevelMax": "1",
+			"dungeonLevelMin": "3",
+			"dungeonLevelMax": "4",
 			"dungeonBoss": true,
 			"mobDrops": [
 				{
@@ -123,9 +123,9 @@
 			"mobSizeScale": 1.25,
 			"mobNameTag": "Pain Elemental",
 			"naturalDespawn": "false",
-			"mobLevel": 15,
+			"mobLevel": 10,
 			"spawnAsBoss": true,
-			"dungeonLevelMin": "2",
+			"dungeonLevelMin": "5",
 			"dungeonBoss": true,
 			"mobDrops": [
 				{

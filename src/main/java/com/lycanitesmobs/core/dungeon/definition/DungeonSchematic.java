@@ -59,6 +59,9 @@ public class DungeonSchematic {
 	/** A list of stairs sectors to use. Required. **/
 	public List<String> stairs = new ArrayList<>();
 
+	/** A list of tower sectors to use. Required. **/
+	public List<String> towers = new ArrayList<>();
+
 	/** A list of stairs sectors to use. Required. **/
 	public List<String> bossRooms = new ArrayList<>();
 
@@ -168,6 +171,15 @@ public class DungeonSchematic {
 				String jsonString = jsonElement.getAsString().toLowerCase();
 				if(!this.stairs.contains(jsonString))
 					this.stairs.add(jsonString);
+			}
+		}
+
+		// Towers:
+		if(json.has("towers")) {
+			for(JsonElement jsonElement : json.get("towers").getAsJsonArray()) {
+				String jsonString = jsonElement.getAsString().toLowerCase();
+				if(!this.towers.contains(jsonString))
+					this.towers.add(jsonString);
 			}
 		}
 
@@ -288,6 +300,8 @@ public class DungeonSchematic {
 			sectorList = this.corridors;
 		else if("stairs".equalsIgnoreCase(type))
 			sectorList = this.stairs;
+		else if("tower".equalsIgnoreCase(type))
+			sectorList = this.towers;
 		else if("bossRoom".equalsIgnoreCase(type))
 			sectorList = this.bossRooms;
 		else if("finish".equalsIgnoreCase(type))
@@ -377,12 +391,16 @@ public class DungeonSchematic {
 
 	/**
 	 * Gets a weighted random mob to spawn.
-	 * @param dungeonLevel The dungeon level to spawn at.
+	 * @param level The dungeon level to spawn at.
 	 * @param boss False for standard mobs, true for bosses.
 	 * @param random The instance of random to use.
 	 * @return The MobSpawn of the mob to spawn or null if no mob can be spawned.
 	 **/
-	public MobSpawn getRandomMobSpawn(int dungeonLevel, boolean boss, Random random) {
+	public MobSpawn getRandomMobSpawn(int level, boolean boss, Random random) {
+		if(level < 0) {
+			level = -level * 2;
+		}
+
 		// Get Weights:
 		int totalWeights = 0;
 		List<MobSpawn> mobSpawns = new ArrayList<>();
@@ -390,10 +408,10 @@ public class DungeonSchematic {
 			if(mobSpawn.dungeonBoss != boss) {
 				continue;
 			}
-			if(mobSpawn.dungeonLevelMin >= 0 && dungeonLevel < mobSpawn.dungeonLevelMin) {
+			if(mobSpawn.dungeonLevelMin >= 0 && level < mobSpawn.dungeonLevelMin) {
 				continue;
 			}
-			if(mobSpawn.dungeonLevelMax >= 0 && dungeonLevel > mobSpawn.dungeonLevelMax) {
+			if(mobSpawn.dungeonLevelMax >= 0 && level > mobSpawn.dungeonLevelMax) {
 				continue;
 			}
 			if(mobSpawn.getWeight() > 0) {
@@ -430,6 +448,10 @@ public class DungeonSchematic {
 	 * @return A loot table.
 	 */
 	public ResourceLocation getRandomLootTable(int level, Random random) {
+		if(level < 0) {
+			level = -level * 2;
+		}
+
 		List<String> possibleLootTables = new ArrayList<>();
 
 		if(this.lootTables.containsKey(-1)) {

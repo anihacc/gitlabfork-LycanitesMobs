@@ -48,19 +48,19 @@ public class DungeonLayout {
 		LycanitesMobs.logDebug("Dungeon", "Created Entrance Sector: " + entranceSector);
 		this.openConnectors.clear();
 
-		// Levels:
+		// Underground Levels:
 		SectorInstance exitSector = entranceSector;
 		int level = 1;
 		boolean onLastLevel = false;
 		while(!onLastLevel && level <= 10) {
 			int sectorCount = this.dungeonInstance.schematic.getRandomSectorCount(random);
-			LycanitesMobs.logDebug("Dungeon", "Starting Level " + level + " - Sector Count: " + sectorCount);
+			LycanitesMobs.logDebug("Dungeon", "Starting Underground Level -" + level + " - Sector Count: " + sectorCount);
 
 			// Snake:
 			int snakeCount = Math.round((float)sectorCount * 0.4f);
 			exitSector = this.snake(random, exitSector, Math.max(3, snakeCount));
 			LycanitesMobs.logDebug("Dungeon", "Snake Sectors: " + snakeCount + " - From Sector: " + exitSector);
-			if(exitSector.connectors.isEmpty()) {
+			if(exitSector == null) {
 				onLastLevel = true;
 			}
 
@@ -77,8 +77,33 @@ public class DungeonLayout {
 			}
 
 			this.openConnectors.clear();
-			LycanitesMobs.logDebug("Dungeon", "Completed Level " + level + (onLastLevel ? " (Final)" : ""));
+			LycanitesMobs.logDebug("Dungeon", "Completed Underground Level -" + level + (onLastLevel ? " (Final)" : ""));
 			level++;
+		}
+
+		// Tower Levels:
+		if(random.nextDouble() <= 0.25D) {
+			exitSector = entranceSector;
+			level = 1;
+			while (level <= 10) {
+				LycanitesMobs.logDebug("Dungeon", "Starting Tower Level " + level);
+
+				// Tower:
+				exitSector = this.tower(random, exitSector);
+				LycanitesMobs.logDebug("Dungeon", "Tower Sector: " + exitSector);
+				if (exitSector == null) {
+					break;
+				}
+
+				// Ledge:
+				int ledgeCount = random.nextInt(exitSector.getOpenConnectors(null).size()) + 1;
+				LycanitesMobs.logDebug("Dungeon", "Ledges: " + ledgeCount);
+				this.ledge(random, exitSector, ledgeCount);
+
+				this.openConnectors.clear();
+				LycanitesMobs.logDebug("Dungeon", "Completed Tower Level " + level);
+				level++;
+			}
 		}
 
 		LycanitesMobs.logDebug("Dungeon", "Dungeon Instance Generation Complete!");
@@ -86,12 +111,12 @@ public class DungeonLayout {
 
 
 	/**
-	 * First Phase - Starts generation by creating an entrance.
+	 * Startup Phase - Starts generation by creating an entrance.
 	 * @param random The instance of Random to use.
 	 * @return The generated entrance sector.
 	 */
 	public SectorInstance start(Random random) {
-		this.originConnector = new SectorConnector(this.dungeonInstance.originPos, null, -1, Direction.byHorizontalIndex(random.nextInt(100)));
+		this.originConnector = new SectorConnector(this.dungeonInstance.originPos, null, 0, Direction.byHorizontalIndex(random.nextInt(100)));
 		DungeonSector entranceDungeonSector = this.dungeonInstance.schematic.getRandomSector("entrance", random);
 		SectorInstance entranceSector = new SectorInstance(this, entranceDungeonSector, random);
 		entranceSector.connect(this.originConnector);
@@ -109,14 +134,13 @@ public class DungeonLayout {
 
 
 	/**
-	 * Second Phase - Generates a linear set of sectors from the starting sector to a finishing sector.
+	 * First Underground Phase - Generates a linear set of sectors from the starting sector to a finishing sector.
 	 * @param random The instance of Random to use.
 	 * @param startSector The Sector Instance to snake from.
 	 * @param length How many sectors to generate.
-	 * @return The end sector.
+	 * @return The end sector or null if it is the finish sector.
 	 */
 	public SectorInstance snake(Random random, SectorInstance startSector, int length) {
-		List<SectorInstance> generatedSectors = new ArrayList<>();
 		SectorInstance lastSector = startSector;
 		for(int i = 0; i < length; i++) {
 			String nextType = this.dungeonInstance.schematic.getNextConnectingSector(lastSector.dungeonSector.type, random);
@@ -141,20 +165,18 @@ public class DungeonLayout {
 
 			sectorInstance.init(random);
 			this.addSectorInstance(sectorInstance);
-			generatedSectors.add(sectorInstance);
 			lastSector = sectorInstance;
+			if("finish".equalsIgnoreCase(nextType)) {
+				lastSector = null;
+			}
 		}
 
-		if(generatedSectors.isEmpty()) {
-			LycanitesMobs.logWarning("Dungeon", "Unable to generate any sectors for the dungeon: " + this.dungeonInstance.schematic.name);
-		}
-
-		return generatedSectors.get(generatedSectors.size() - 1);
+		return lastSector;
 	}
 
 
 	/**
-	 * Third Phase - Generates sectors from the provided array of connectors.
+	 * Third Phase - Generates sectors on any open connectors.
 	 * @param random The instance of Random to use.
 	 * @param maxSectors The maximum amount of sectors to stem.
 	 * @return A list of generated sectors.
@@ -186,6 +208,70 @@ public class DungeonLayout {
 		}
 
 		return generatedSectors;
+	}
+
+
+	/**
+	 * First Tower Phase - Creates a tower sector with stairs.
+	 * @param random The instance of Random to use.
+	 * @param startSector The sector to build on top of.
+	 * @return The generated tower sector.
+	 */
+	public SectorInstance tower(Random random, SectorInstance startSector) {
+		DungeonSector dungeonSector = this.dungeonInstance.schematic.getRandomSector("tower", random);
+		SectorInstance sectorInstance = new SectorInstance(this, dungeonSector, random);
+		SectorConnector sectorConnector = startSector.getRandomConnector(random, sectorInstance);
+		sectorInstance.connect(sectorConnector);
+
+		if(sectorInstance.getOccupiedBoundsMax().getY() > 255) {
+			return null;
+		}
+
+		sectorInstance.init(random);
+		this.addSectorInstance(sectorInstance);
+		return sectorInstance;
+	}
+
+
+	/**
+	 * Second Tower Phase - Creates ledges out from a tower sector consisting of a corridor and room sector.
+	 * @param random The instance of Random to use.
+	 * @param startSector The sector to build out of.
+	 * @param ledgeCount How many ledges to make, there must be enough open connectors to finish.
+	 * @return The generated tower sector.
+	 */
+	public SectorInstance ledge(Random random, SectorInstance startSector, int ledgeCount) {
+		SectorInstance lastSectorInstance = null;
+		int bossIndex = 0;
+		if(ledgeCount > 0) {
+			bossIndex = random.nextInt(ledgeCount);
+		}
+		for(int i = 0; i < ledgeCount; i++) {
+			DungeonSector corridorSector = this.dungeonInstance.schematic.getRandomSector("corridor", random);
+			SectorInstance corridorInstance = new SectorInstance(this, corridorSector, random);
+			SectorConnector corridorConnector = startSector.getRandomConnector(random, corridorInstance);
+			if(corridorConnector == null) {
+				break;
+			}
+			corridorInstance.connect(corridorConnector);
+			corridorInstance.init(random);
+			this.addSectorInstance(corridorInstance);
+
+			String roomType = "room";
+			if(bossIndex == i) {
+				roomType = "bossRoom";
+			}
+			DungeonSector roomSector = this.dungeonInstance.schematic.getRandomSector(roomType, random);
+			SectorInstance roomInstance = new SectorInstance(this, roomSector, random);
+			SectorConnector roomConnector = corridorInstance.getRandomConnector(random, roomInstance);
+			roomInstance.connect(roomConnector);
+			roomInstance.init(random);
+			this.addSectorInstance(roomInstance);
+
+			lastSectorInstance = roomInstance;
+		}
+
+		return lastSectorInstance;
 	}
 
 
