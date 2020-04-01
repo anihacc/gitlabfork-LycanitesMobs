@@ -1482,7 +1482,6 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
 	/** Sets the variant of this mob by index without refreshing stats, use applyVariant() if changing to a new variant. If not a valid ID or 0 it will be set to null which is for the base variant. **/
 	public void setVariant(int variantIndex) {
-		LycanitesMobs.logDebug("", "Setting Variant to: " + variantIndex);
 		this.variant = this.getSubspecies().getVariant(variantIndex);
 		if(this.variant != null) {
 			float scaledExp = this.creatureInfo.experience;
