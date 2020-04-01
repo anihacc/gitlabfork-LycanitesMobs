@@ -165,9 +165,9 @@ public class EntityShade extends RideableCreatureEntity {
     //                     Immunities
     // ==================================================
     @Override
-    public boolean isInvulnerableTo(String type, DamageSource source, float damage) {
+    public boolean isVulnerableTo(String type, DamageSource source, float damage) {
         if(type.equals("inWall")) return false;
-        return super.isInvulnerableTo(type, source, damage);
+        return super.isVulnerableTo(type, source, damage);
     }
 
     @Override

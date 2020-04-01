@@ -176,14 +176,14 @@ public class EntityVapula extends TameableCreatureEntity implements IMob {
    	//                     Immunities
    	// ==================================================
     @Override
-    public boolean isInvulnerableTo(String type, DamageSource source, float damage) {
+    public boolean isVulnerableTo(String type, DamageSource source, float damage) {
     	if(type.equals("cactus") || type.equals("inWall"))
     		return false;
     	if(source.isFireDamage()) {
     		this.fireDamageAbsorbed += damage;
     		return false;
 		}
-		return super.isInvulnerableTo(type, source, damage);
+		return super.isVulnerableTo(type, source, damage);
     }
 
 	@Override

@@ -1,22 +1,13 @@
 {
   "result": {
-    "item": "lycanitesmobs:bucketmoglava"
+    "item": "lycanitesmobs:bucketmoglava",
+    "count": 1
   },
-  "pattern": [
-    " G ",
-    "IMI",
-    " I "
-  ],
-  "type": "minecraft:crafting_shaped",
-  "key": {
-    "G": {
+  "ingredients": [
+	{
+      "item": "minecraft:lava_bucket",
       "item": "minecraft:ghast_tear"
-    },
-    "I": {
-      "item": "minecraft:iron_ingot"
-    },
-    "M": {
-      "item": "minecraft:magma_cream"
     }
-  }
+  ],
+  "type": "minecraft:crafting_shapeless"
 }

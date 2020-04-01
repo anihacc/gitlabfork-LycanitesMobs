@@ -218,7 +218,7 @@ public class RideableCreatureEntity extends TameableCreatureEntity {
                 if(playerExt != null && playerExt.isControlActive(ExtendedPlayer.CONTROL_ID.JUMP)) {
                     verticalMotion = this.creatureStats.getSpeed() * 20;
                 }
-				else if(player.isShiftKeyDown()) { // isSneaking()
+				else if(playerExt != null && playerExt.isControlActive(ExtendedPlayer.CONTROL_ID.DESCEND)) {
                     verticalMotion = -this.creatureStats.getSpeed() * 20;
                 }
                 else {

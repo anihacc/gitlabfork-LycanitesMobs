@@ -3,6 +3,7 @@ package com.lycanitesmobs;
 import com.lycanitesmobs.core.capabilities.CapabilityProviderEntity;
 import com.lycanitesmobs.core.capabilities.CapabilityProviderPlayer;
 import com.lycanitesmobs.core.config.ConfigDebug;
+import com.lycanitesmobs.core.config.ConfigExtra;
 import com.lycanitesmobs.core.entity.*;
 import com.lycanitesmobs.core.info.ItemConfig;
 import com.lycanitesmobs.core.item.equipment.ItemEquipment;
@@ -285,7 +286,7 @@ public class GameEventListener {
 				}
 
 				// Copy Mount Immunities to Rider:
-				if(!creatureRideable.isInvulnerableTo(event.getSource().damageType, event.getSource(), event.getAmount())) {
+				if(!creatureRideable.isVulnerableTo(event.getSource().damageType, event.getSource(), event.getAmount())) {
 					event.setAmount(0);
 					event.setCanceled(true);
 					return;
@@ -442,6 +443,9 @@ public class GameEventListener {
 	// ==================================================
 	@SubscribeEvent
 	public void onEntityMount(EntityMountEvent event) {
+		if(!ConfigExtra.INSTANCE.disableSneakDismount.get()) {
+			return;
+		}
 		if(!event.isDismounting() || !(event.getEntityMounting() instanceof PlayerEntity) || !(event.getEntityBeingMounted() instanceof RideableCreatureEntity)) {
 			return;
 		}

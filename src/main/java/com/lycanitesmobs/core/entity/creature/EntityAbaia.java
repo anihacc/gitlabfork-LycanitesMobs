@@ -122,10 +122,10 @@ public class EntityAbaia extends TameableCreatureEntity implements IMob {
    	// ==================================================
     // ========== Damage ==========
     /** Returns whether or not the given damage type is applicable, if not no damage will be taken. **/
-    public boolean isInvulnerableTo(String type, DamageSource source, float damage) {
+    public boolean isVulnerableTo(String type, DamageSource source, float damage) {
         if("lightning".equalsIgnoreCase(type))
             return false;
-        return super.isInvulnerableTo(type, source, damage);
+        return super.isVulnerableTo(type, source, damage);
     }
     
     @Override

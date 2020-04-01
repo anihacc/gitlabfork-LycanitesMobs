@@ -95,10 +95,10 @@ public class EntityAegis extends TameableCreatureEntity implements IFusable {
    	//                     Immunities
    	// ==================================================
     @Override
-    public boolean isInvulnerableTo(String type, DamageSource source, float damage) {
+    public boolean isVulnerableTo(String type, DamageSource source, float damage) {
     	if(type.equals("cactus") || type.equals("inWall"))
     		return false;
-		return super.isInvulnerableTo(type, source, damage);
+		return super.isVulnerableTo(type, source, damage);
     }
 
 

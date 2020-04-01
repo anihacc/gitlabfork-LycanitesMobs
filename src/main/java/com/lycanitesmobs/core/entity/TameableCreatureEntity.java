@@ -641,7 +641,7 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
 	// ==================================================
 	// ========== Damage ==========
 	@Override
-	public boolean isInvulnerableTo(String type, DamageSource source, float damage) {
+	public boolean isVulnerableTo(String type, DamageSource source, float damage) {
 		if(this.isTamed()) {
 			Entity entity = source.getTrueSource();
 			if(entity instanceof PlayerEntity && this.getEntityWorld().getServer() != null && !this.getEntityWorld().getServer().isPVPEnabled()) {
@@ -653,7 +653,7 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
 		}
 		if("inWall".equals(type) && this.isTamed())
 			return false;
-		return super.isInvulnerableTo(type, source, damage);
+		return super.isVulnerableTo(type, source, damage);
 	}
 
 
@@ -754,7 +754,7 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
     }
     
     public boolean isTamingItem(ItemStack itemstack) {
-		if(itemstack.isEmpty() || this.creatureInfo.creatureType == null) {
+		if(itemstack.isEmpty() || this.creatureInfo.creatureType == null || this.isBoss()) {
 			return false;
 		}
 

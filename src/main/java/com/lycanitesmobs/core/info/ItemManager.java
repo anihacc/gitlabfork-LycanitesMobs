@@ -214,19 +214,28 @@ public class ItemManager extends JSONLoader {
 		Block.Properties waterBlockProperties = Block.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100).noDrops();
 		Block.Properties lavaBlockProperties = Block.Properties.create(Material.LAVA).doesNotBlockMovement().hardnessAndResistance(100).noDrops();
 
-		this.addFluid("ooze", 0x03A9F, 3000, 3000, 0, 5, true);
+		this.addFluid("ooze", 0x003A9F, 3000, 3000, 0, 5, false);
 		ObjectManager.addBlock("ooze", new BlockFluidOoze(() -> ObjectManager.getFluid("ooze").get(), waterBlockProperties, "ooze"));
 		ObjectManager.addDamageSource("ooze", new DamageSource("ooze"));
+
+		this.addFluid("rabbitooze", 0x002AAF, 3000, 3000, 0, 5, true);
+		ObjectManager.addBlock("rabbitooze", new BlockFluidOoze(() -> ObjectManager.getFluid("rabbitooze").get(), waterBlockProperties, "rabbitooze"));
 
 		this.addFluid("moglava", 0xFF5722, 3000, 5000, 1100, 15, true);
 		ObjectManager.addBlock("moglava", new BlockFluidMoglava(() -> ObjectManager.getFluid("moglava").get(), lavaBlockProperties, "moglava"));
 
-		this.addFluid("acid", 0x8BC34A, 1000, 10, 40, 10, true);
+		this.addFluid("acid", 0x8BC34A, 1000, 10, 40, 10, false);
 		ObjectManager.addBlock("acid", new BlockFluidAcid(() -> ObjectManager.getFluid("acid").get(), waterBlockProperties, "acid"));
 		ObjectManager.addDamageSource("acid", new DamageSource("acid"));
 
-		this.addFluid("poison", 0x9C27B0, 1000, 8, 20, 0, true);
+		this.addFluid("sharacid", 0x8BB35A, 1000, 10, 40, 10, true);
+		ObjectManager.addBlock("sharacid", new BlockFluidAcid(() -> ObjectManager.getFluid("sharacid").get(), waterBlockProperties, "sharacid"));
+
+		this.addFluid("poison", 0x9C27B0, 1000, 8, 20, 0, false);
 		ObjectManager.addBlock("poison", new BlockFluidPoison(() -> ObjectManager.getFluid("poison").get(), waterBlockProperties, "poison"));
+
+		this.addFluid("vesspoison", 0xAC27A0, 1000, 8, 20, 0, true);
+		ObjectManager.addBlock("vesspoison", new BlockFluidPoison(() -> ObjectManager.getFluid("vesspoison").get(), waterBlockProperties, "vesspoison"));
 	}
 
 	public void addFluid(String fluidName, int fluidColor, int density, int viscosity, int temperature, int luminosity, boolean multiply) {

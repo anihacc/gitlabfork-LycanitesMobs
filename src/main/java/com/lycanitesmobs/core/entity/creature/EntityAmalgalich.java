@@ -281,7 +281,7 @@ public class EntityAmalgalich extends BaseCreatureEntity implements IMob, IGroup
     }
 
     @Override
-    public boolean isInvulnerableTo(Entity entity) {
+    public boolean isVulnerableTo(Entity entity) {
         if(entity instanceof ZombiePigmanEntity) {
             entity.remove();
             return false;
@@ -296,7 +296,7 @@ public class EntityAmalgalich extends BaseCreatureEntity implements IMob, IGroup
                 return false;
             }
         }
-        return super.isInvulnerableTo(entity);
+        return super.isVulnerableTo(entity);
     }
 
 

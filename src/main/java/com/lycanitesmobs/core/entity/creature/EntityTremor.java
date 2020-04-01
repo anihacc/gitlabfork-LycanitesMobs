@@ -112,21 +112,21 @@ public class EntityTremor extends TameableCreatureEntity implements IMob {
    	// ==================================================
 	// ========== Damage ==========
     @Override
-    public boolean isInvulnerableTo(String type, DamageSource source, float damage) {
+    public boolean isVulnerableTo(String type, DamageSource source, float damage) {
 		if(source.isExplosion()) {
 			this.heal(damage);
 			return false;
 		}
     	if(type.equals("cactus") || type.equals("inWall")) return false;
-    	    return super.isInvulnerableTo(type, source, damage);
+    	    return super.isVulnerableTo(type, source, damage);
     }
 
 	@Override
-	public boolean isInvulnerableTo(Entity entity) {
+	public boolean isVulnerableTo(Entity entity) {
 		if(entity instanceof WitherEntity) {
 			return false;
 		}
-		return super.isInvulnerableTo(entity);
+		return super.isVulnerableTo(entity);
 	}
 
 	@Override

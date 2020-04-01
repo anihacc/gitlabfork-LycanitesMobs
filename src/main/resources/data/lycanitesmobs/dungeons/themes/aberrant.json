@@ -69,7 +69,7 @@
 	],
 	"pitBlocks": [
 		{
-			"blockId": "lycanitesmobs:scorchfire",
+			"blockId": "lycanitesmobs:acid",
 			"weight": 8
 		},
 		{

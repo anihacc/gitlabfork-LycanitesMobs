@@ -104,7 +104,7 @@ public class EntityDjinn extends TameableCreatureEntity implements IMob, IFusabl
    	//                     Immunities
    	// ==================================================
     @Override
-    public boolean isInvulnerableTo(String type, DamageSource source, float damage) {
+    public boolean isVulnerableTo(String type, DamageSource source, float damage) {
         if(type.equals("cactus") || type.equals("inWall"))
             return false;
         if(source.isFireDamage()) {
@@ -115,7 +115,7 @@ public class EntityDjinn extends TameableCreatureEntity implements IMob, IFusabl
         	this.transform(CreatureManager.getInstance().getEntityType("zephyr"), null, false);
         	return false;
 		}
-        return super.isInvulnerableTo(type, source, damage);
+        return super.isVulnerableTo(type, source, damage);
     }
     
     @Override

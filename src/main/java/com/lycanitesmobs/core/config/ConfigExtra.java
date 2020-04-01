@@ -8,6 +8,7 @@ import java.util.List;
 public class ConfigExtra {
 	public static ConfigExtra INSTANCE;
 
+	public final ForgeConfigSpec.ConfigValue<Boolean> disableSneakDismount;
 	public final ForgeConfigSpec.ConfigValue<Integer> summoningPedestalRedstoneTime;
 	public final ForgeConfigSpec.ConfigValue<Boolean> versionCheckerEnabled;
 	public final ForgeConfigSpec.ConfigValue<Boolean> disableNausea;
@@ -16,6 +17,11 @@ public class ConfigExtra {
 	public ConfigExtra(ForgeConfigSpec.Builder builder) {
 		builder.push("Extra");
 		builder.comment("Other extra config settings, some of the aren't necessarily specific to Lycanites Mobs.");
+
+		this.disableSneakDismount = builder
+				.comment("Set to true to prevent players from dismounting from Lycanites Mobs mounts when pressing shift (useful for shift to fly/swim down).")
+				.translation(CoreConfig.CONFIG_PREFIX + "disableSneakDismount")
+				.define("disableSneakDismount", true);
 
 		this.summoningPedestalRedstoneTime = builder
 				.comment("How much summoning time (in ticks) 1 redstone dust provides. 20 ticks = 1 second, default is 12000 (10 minutes).")

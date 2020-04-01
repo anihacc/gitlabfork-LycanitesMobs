@@ -152,7 +152,7 @@ public class FearEntity extends BaseCreatureEntity {
    	//                     Immunities
    	// ==================================================
     @Override
-    public boolean isInvulnerableTo(String type, DamageSource source, float damage) {
+    public boolean isVulnerableTo(String type, DamageSource source, float damage) {
     	return false;
     }
     

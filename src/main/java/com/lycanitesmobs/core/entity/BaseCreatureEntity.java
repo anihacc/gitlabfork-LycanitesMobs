@@ -2983,9 +2983,9 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     		return false;
         if(this.isInvulnerableTo(damageSrc))
         	return false;
-        if(!this.isInvulnerableTo(damageSrc.getDamageType(), damageSrc, damageAmount))
+        if(!this.isVulnerableTo(damageSrc.getDamageType(), damageSrc, damageAmount))
         	return false;
-        if(!this.isInvulnerableTo(damageSrc.getTrueSource()))
+        if(!this.isVulnerableTo(damageSrc.getTrueSource()))
         	return false;
         
         if(super.attackEntityFrom(damageSrc, damageAmount)) {
@@ -4294,11 +4294,22 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 			return false;
 		}
 
+		// Entity:
+		if(!this.isVulnerableTo(source.getTrueSource())) {
+			return true;
+		}
+
+		// Damage Sourcce:
+		if(!this.isVulnerableTo(source.damageType, source, 1)) {
+			return true;
+		}
+
         return super.isInvulnerableTo(source);
     }
 
     /** Returns whether or not the given damage type is applicable, if not no damage will be taken. **/
-    public boolean isInvulnerableTo(String type, DamageSource source, float damage) {
+    @Deprecated
+    public boolean isVulnerableTo(String type, DamageSource source, float damage) {
         if(("inWall".equals(type) || "cactus".equals(type)) && (this.isRareVariant() || this.isBoss()))
             return false;
 		if("inWall".equals(type))
@@ -4309,7 +4320,8 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     }
 
     /** Returns whether or not this entity can be harmed by the specified entity. **/
-    public boolean isInvulnerableTo(Entity entity) {
+	@Deprecated
+    public boolean isVulnerableTo(Entity entity) {
         if(this.isBoss() || this.isRareVariant()) {
             if(entity == null)
                 return false;

@@ -1,11 +1,11 @@
 {
   "result": {
-    "item": "lycanitesmobs:bucketmoglava",
+    "item": "lycanitesmobs:bucketvesspoison",
     "count": 1
   },
   "ingredients": [
-	{
-      "item": "minecraft:lava_bucket",
+    {
+      "item": "lycanitesmobs:bucketpoison",
       "item": "minecraft:ghast_tear"
     }
   ],

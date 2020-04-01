@@ -9,6 +9,7 @@ import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -68,11 +69,11 @@ public class EntityXaphan extends TameableCreatureEntity implements IMob {
     //                      Attacks
     // ==================================================
 	@Override
-	public boolean isInvulnerableTo(Entity entity) {
+	public boolean isVulnerableTo(Entity entity) {
 		if(entity instanceof EntityXaphan && this.getPlayerOwner() == ((EntityXaphan)entity).getPlayerOwner()) {
 			return false;
 		}
-		return super.isInvulnerableTo(entity);
+		return super.isVulnerableTo(entity);
 	}
     
     // ========== Ranged Attack ==========
@@ -114,6 +115,12 @@ public class EntityXaphan extends TameableCreatureEntity implements IMob {
     // ==================================================
    	//                     Immunities
    	// ==================================================
+    @Override
+    public boolean isVulnerableTo(String type, DamageSource source, float damage) {
+        if(type.equals("acid")) return false;
+        return super.isVulnerableTo(type, source, damage);
+    }
+
     @Override
     public boolean canBreatheUnderwater() {
         return true;

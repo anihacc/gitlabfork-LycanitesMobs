@@ -139,10 +139,10 @@ public class EntityCacodemon extends RideableCreatureEntity {
     //                     Immunities
     // ==================================================
     @Override
-    public boolean isInvulnerableTo(Entity entity) {
+    public boolean isVulnerableTo(Entity entity) {
     	if(entity instanceof EntityCacodemon)
     		return false;
-    	return super.isInvulnerableTo(entity);
+    	return super.isVulnerableTo(entity);
     }
     
     @Override

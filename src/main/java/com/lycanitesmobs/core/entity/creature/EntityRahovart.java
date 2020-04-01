@@ -656,7 +656,7 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
     public boolean canBurn() { return false; }
 
     @Override
-    public boolean isInvulnerableTo(Entity entity) {
+    public boolean isVulnerableTo(Entity entity) {
         if(entity instanceof ZombiePigmanEntity) {
             entity.remove();
             return false;
@@ -671,7 +671,7 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
                 return false;
             }
         }
-        return super.isInvulnerableTo(entity);
+        return super.isVulnerableTo(entity);
     }
 
 
