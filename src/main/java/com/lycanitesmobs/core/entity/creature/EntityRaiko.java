@@ -203,7 +203,7 @@ public class EntityRaiko extends RideableCreatureEntity implements IMob {
         if(this.isTamed()) {
             return super.isAggressive();
         }
-        if (this.getEntityWorld().isDaytime() && this.testLightLevel() >= 2) {
+        if ("".equals(this.spawnEventType) && this.getEntityWorld().isDaytime() && this.testLightLevel() >= 2) {
             return false;
         }
         return super.isAggressive();
