@@ -58,32 +58,33 @@
 		},
 		{
 			"mobId": "lycanitesmobs:clink",
-			"weight": 14
+			"weight": 14,
+			"dungeonLevelMin": "2"
 		},
 		{
 			"mobId": "lycanitesmobs:erepede",
 			"weight": 6,
-			"dungeonLevelMin": "1"
+			"dungeonLevelMin": "2"
 		},
 		{
 			"mobId": "lycanitesmobs:geonach",
 			"weight": 8,
-			"dungeonLevelMin": "1"
+			"dungeonLevelMin": "3"
 		},
 		{
 			"mobId": "lycanitesmobs:sylph",
 			"weight": 4,
-			"dungeonLevelMin": "2"
+			"dungeonLevelMin": "4"
 		},
 		{
 			"mobId": "lycanitesmobs:triffid",
 			"weight": 4,
-			"dungeonLevelMin": "2"
+			"dungeonLevelMin": "5"
 		},
 		{
 			"mobId": "lycanitesmobs:gorgomite",
 			"weight": 4,
-			"dungeonLevelMin": "2"
+			"dungeonLevelMin": "5"
 		},
 		{
 			"mobId": "lycanitesmobs:crusk",

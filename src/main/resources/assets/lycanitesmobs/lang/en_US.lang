@@ -891,7 +891,7 @@ entity.lycanitesmobs.ent.habitat=Ents can be found wandering forests at night bu
 entity.lycanitesmobs.ent.combat=Ents have a poisonous attack and will regenerate in water, they will also drain health when attacking. Axes and similar tools are very effective.
 # ========================================================================
 entity.lycanitesmobs.epion.name=Epion
-entity.lycanitesmobs.epion.description=Giant shadow blood bats. When in contact with direct sunlight, Epions drop to the ground and explode on impact!
+entity.lycanitesmobs.epion.description=Giant shadow blood bats. When in contact with direct sunlight, wild Epions panic drop to the ground and explode on impact! Tamed Epions can be trained to not explode in sunlight however.
 entity.lycanitesmobs.epion.habitat=These bats come out at night during a full moon.
 entity.lycanitesmobs.epion.combat=Epions spit Bloodleeches at their victims, draining health on hit.
 # ========================================================================

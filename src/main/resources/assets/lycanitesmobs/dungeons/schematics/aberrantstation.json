@@ -54,8 +54,7 @@
 		},
 		{
 			"mobId": "lycanitesmobs:spectre",
-			"weight": 8,
-			"dungeonLevelMin": "0"
+			"weight": 8
 		},
 		{
 			"mobId": "lycanitesmobs:wraamon",
@@ -65,22 +64,28 @@
 		{
 			"mobId": "lycanitesmobs:chupacabra",
 			"weight": 4,
-			"dungeonLevelMin": "1"
+			"dungeonLevelMin": "2"
 		},
 		{
 			"mobId": "lycanitesmobs:darkling",
 			"weight": 14,
-			"dungeonLevelMin": "1"
+			"dungeonLevelMin": "3"
 		},
 		{
 			"mobId": "lycanitesmobs:astaroth",
 			"weight": 1,
-			"dungeonLevelMin": "2"
+			"dungeonLevelMin": "4"
+		},
+		{
+			"mobId": "lycanitesmobs:trite",
+			"weight": 14,
+			"subspecies": 1,
+			"dungeonLevelMin": "4"
 		},
 		{
 			"mobId": "lycanitesmobs:beholder",
 			"weight": 1,
-			"dungeonLevelMin": "2"
+			"dungeonLevelMin": "5"
 		},
 		{
 			"mobId": "lycanitesmobs:wraamon",

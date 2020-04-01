@@ -52,8 +52,7 @@
 		},
 		{
 			"mobId": "lycanitesmobs:wraith",
-			"weight": 8,
-			"dungeonLevelMin": "0"
+			"weight": 8
 		},
 		{
 			"mobId": "lycanitesmobs:behemoth",
@@ -63,12 +62,12 @@
 		{
 			"mobId": "lycanitesmobs:pinky",
 			"weight": 4,
-			"dungeonLevelMin": "1"
+			"dungeonLevelMin": "2"
 		},
 		{
 			"mobId": "lycanitesmobs:cacodemon",
 			"weight": 1,
-			"dungeonLevelMin": "2"
+			"dungeonLevelMin": "3"
 		},
 		{
 			"mobId": "lycanitesmobs:behemoth",

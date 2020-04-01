@@ -54,8 +54,7 @@
 		},
 		{
 			"mobId": "lycanitesmobs:grue",
-			"weight": 8,
-			"dungeonLevelMin": "0"
+			"weight": 8
 		},
 		{
 			"mobId": "lycanitesmobs:shade",
@@ -65,22 +64,22 @@
 		{
 			"mobId": "lycanitesmobs:gnekk",
 			"weight": 4,
-			"dungeonLevelMin": "1"
+			"dungeonLevelMin": "3"
 		},
 		{
 			"mobId": "lycanitesmobs:darkling",
 			"weight": 14,
-			"dungeonLevelMin": "1"
+			"dungeonLevelMin": "4"
 		},
 		{
 			"mobId": "lycanitesmobs:epion",
 			"weight": 1,
-			"dungeonLevelMin": "2"
+			"dungeonLevelMin": "5"
 		},
 		{
 			"mobId": "lycanitesmobs:reaper",
 			"weight": 1,
-			"dungeonLevelMin": "2"
+			"dungeonLevelMin": "5"
 		},
 		{
 			"mobId": "lycanitesmobs:chupacabra",
