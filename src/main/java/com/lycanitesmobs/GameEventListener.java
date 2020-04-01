@@ -510,6 +510,9 @@ public class GameEventListener {
 	// ==================================================
 	@SubscribeEvent
 	public void onEntityMount(EntityMountEvent event) {
+		if(!LycanitesMobs.config.getBool("Extras", "Disable Sneak Dismount", true)) {
+			return;
+		}
 		if(!event.isDismounting() || !(event.getEntityMounting() instanceof EntityPlayer) || !(event.getEntityBeingMounted() instanceof RideableCreatureEntity)) {
 			return;
 		}

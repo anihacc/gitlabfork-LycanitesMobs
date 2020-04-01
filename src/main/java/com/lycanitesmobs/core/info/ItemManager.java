@@ -6,15 +6,12 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.client.AssetManager;
 import com.lycanitesmobs.core.JSONLoader;
-import com.lycanitesmobs.core.block.BlockEquipmentForge;
-import com.lycanitesmobs.core.block.BlockSoulcube;
-import com.lycanitesmobs.core.block.BlockSummoningPedestal;
-import com.lycanitesmobs.core.block.EquipmentInfuserBlock;
+import com.lycanitesmobs.core.block.*;
 import com.lycanitesmobs.core.block.building.BlockPropolis;
 import com.lycanitesmobs.core.block.building.BlockVeswax;
 import com.lycanitesmobs.core.block.effect.*;
-import com.lycanitesmobs.core.block.fluid.BlockFluidOoze;
-import com.lycanitesmobs.core.block.fluid.BlockFluidPureLava;
+import com.lycanitesmobs.core.block.fluid.*;
+import com.lycanitesmobs.core.item.GenericBucketItem;
 import com.lycanitesmobs.core.item.ItemMobToken;
 import com.lycanitesmobs.core.item.consumable.*;
 import com.lycanitesmobs.core.item.equipment.ItemEquipment;
@@ -139,17 +136,26 @@ public class ItemManager extends JSONLoader {
 
 
 		// Fluids:
-		Fluid fluidOoze = ObjectManager.addFluid("ooze");
-		fluidOoze.setLuminosity(10).setDensity(3000).setViscosity(5000).setTemperature(0);
-		ObjectManager.addBlock("ooze", new BlockFluidOoze(fluidOoze));
-		ObjectManager.addItem("bucketooze", new ItemBucketOoze(fluidOoze).setContainerItem(Items.BUCKET));
-		AssetManager.addSound("ooze", group, "block.ooze");
-		ObjectManager.addDamageSource("ooze", new DamageSource("ooze"));
+		Fluid fluid = ObjectManager.addFluid("ooze");
+		this.addFluid("ooze", fluid, new BlockFluidOoze(fluid, "ooze"), 10, 3000, 5000, 0, true, true);
 
-		Fluid fluidPureLava = ObjectManager.addFluid("purelava");
-		fluidPureLava.setLuminosity(15).setDensity(3000).setViscosity(5000).setTemperature(1100);
-		ObjectManager.addBlock("purelava", new BlockFluidPureLava(fluidPureLava));
-		ObjectManager.addItem("bucketpurelava", new ItemBucketPureLava(fluidPureLava).setContainerItem(Items.BUCKET));
+		fluid = ObjectManager.addFluid("rabbitooze");
+		this.addFluid("rabbitooze", fluid, new BlockFluidRabbitooze(fluid, "rabbitooze"), 10, 3000, 5000, 0, true, true);
+
+		fluid = ObjectManager.addFluid("moglava");
+		this.addFluid("moglava", fluid, new BlockFluidMoglava(fluid), 15, 3000, 5000, 1100, false, false);
+
+		fluid = ObjectManager.addFluid("acid");
+		this.addFluid("acid", fluid, new BlockFluidAcid(fluid, "acid"), 10, 1000, 10, 40, false, true);
+
+		fluid = ObjectManager.addFluid("sharacid");
+		this.addFluid("sharacid", fluid, new BlockFluidSharacid(fluid, "sharacid"), 10, 1000, 10, 40, false, true);
+
+		fluid = ObjectManager.addFluid("poison");
+		this.addFluid("poison", fluid, new BlockFluidPoison(fluid, "poison"), 0, 1000, 8, 20, false, true);
+
+		fluid = ObjectManager.addFluid("vesspoison");
+		this.addFluid("vesspoison", fluid, new BlockFluidVesspoison(fluid, "vesspoison"), 0, 1000, 8, 20, false, true);
 
 
 		// Charges and Scepters:
@@ -220,6 +226,20 @@ public class ItemManager extends JSONLoader {
 		AssetManager.addSound("poopcloud", group, "block.poopcloud");
 		ObjectManager.addBlock("poopcloud", new BlockPoopCloud());
 		ObjectManager.addBlock("quickweb", new BlockQuickWeb());
+	}
+
+
+	/**
+	 * Adds a fluid with associated, blocks, items, sounds, et.
+	 */
+	public void addFluid(String name, Fluid fluid, BlockFluidBase block, int luminosity, int density, int viscosity, int temperature, boolean addSound, boolean addDamageSource) {
+		fluid.setLuminosity(luminosity).setDensity(density).setViscosity(viscosity).setTemperature(temperature);
+		ObjectManager.addBlock(name, block);
+		ObjectManager.addItem("bucket" + name, new GenericBucketItem(fluid, block, name).setContainerItem(Items.BUCKET));
+		if(addSound)
+			AssetManager.addSound(name, LycanitesMobs.modInfo, "block." + name);
+		if(addDamageSource)
+			ObjectManager.addDamageSource(name, new DamageSource(name));
 	}
 
 

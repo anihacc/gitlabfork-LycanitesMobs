@@ -132,6 +132,7 @@ public class LycanitesMobs {
 		config = ConfigBase.getConfig(modInfo, "general");
 		config.setCategoryComment("Debug", "Set debug options to true to show extra debugging information in the console.");
 		config.setCategoryComment("Extras", "Other extra config settings, some of the aren't necessarily specific to Lycanites Mobs.");
+		config.getBool("Extras", "Disable Sneak Dismount", true, "Set to true to prevent players from dismounting from Lycanites Mobs mounts when pressing shift (useful for shift to fly/swim down).");
 		config.setCategoryComment("Player", "Settings for player related stats and features.");
 
 		// Event Listeners:

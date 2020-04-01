@@ -1,6 +1,6 @@
 {
 	"parent": "item/generated",
 	"textures": {
-		"layer0": "lycanitesmobs:blocks/purelava_flow"
+		"layer0": "lycanitesmobs:items/bucketpoison"
 	}
 }

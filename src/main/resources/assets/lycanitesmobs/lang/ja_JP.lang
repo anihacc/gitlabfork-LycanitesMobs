@@ -410,8 +410,8 @@ tile.frostfire.description=霜炎は霜炎の拡張バージョンであり、�
 #
 #
 #===========流体==========
-tile.purelava.name=純粋な溶岩
-tile.purelava.description=水の生き物を産まない、水のように流れる純粋な溶岩。
+tile.moglava.name=純粋な溶岩
+tile.moglava.description=水の生き物を産まない、水のように流れる純粋な溶岩。
 #
 tile.ooze.name=ゼリーアイス
 tile.ooze.description=ゼリーアイスは非常にゆっくり流れるゲル状の液体であり、それに触れる人は寒さと飢fromの被害を受けます。
@@ -1668,8 +1668,8 @@ item.poisongland.description=毒ミストを放出するために使用されま
 item.bucketooze.name=ゼリーアイスバケット
 item.bucketooze.description=ゼリーアイスは非常にゆっくりと流れるゼリー液であり、接触者は氷冷と空腹によって害を受けます。
 #
-item.bucketpurelava.name=純粋溶岩のバケット
-item.bucketpurelava.description=海の生き物を生み出さず、水のように流れる純粋な溶岩。
+item.bucketmoglava.name=純粋溶岩のバケット
+item.bucketmoglava.description=海の生き物を生み出さず、水のように流れる純粋な溶岩。
 #
 #
 #===========季節==========

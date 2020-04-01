@@ -1,16 +1,15 @@
-package com.lycanitesmobs.core.item.special;
+package com.lycanitesmobs.core.item;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
+import com.lycanitesmobs.client.localisation.LanguageManager;
 import com.lycanitesmobs.core.info.ModInfo;
-import com.lycanitesmobs.core.item.ItemBase;
-
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
-import com.lycanitesmobs.client.localisation.LanguageManager;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.relauncher.Side;
@@ -19,21 +18,21 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemBucketPureLava extends ItemBucket {
+public class GenericBucketItem extends ItemBucket {
 	public String itemName;
 	public ModInfo group;
-	
+
 	// ==================================================
 	//                   Constructor
 	// ==================================================
-    public ItemBucketPureLava(Fluid fluid) {
-        super(ObjectManager.getBlock("purelava"));
+    public GenericBucketItem(Fluid fluid, Block fluidBlock, String fluidName) {
+        super(fluidBlock);
         this.group = LycanitesMobs.modInfo;
-        this.itemName = "bucketpurelava";
+        this.itemName = "bucket" + fluidName;
         this.setRegistryName(this.group.modid, this.itemName);
         this.setUnlocalizedName(this.itemName);
         this.setCreativeTab(LycanitesMobs.itemsTab);
-        ObjectManager.addBucket(this, ObjectManager.getBlock("purelava"), fluid);
+        ObjectManager.addBucket(this, fluidBlock, fluid);
     }
     
     

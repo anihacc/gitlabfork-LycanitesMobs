@@ -765,7 +765,7 @@ public class TameableCreatureEntity extends AgeableCreatureEntity implements IEn
     }
     
     public boolean isTamingItem(ItemStack itemstack) {
-		if(itemstack.isEmpty() || this.creatureInfo.creatureType == null) {
+		if(itemstack.isEmpty() || this.creatureInfo.creatureType == null || this.isBoss()) {
 			return false;
 		}
 

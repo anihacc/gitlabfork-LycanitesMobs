@@ -5,42 +5,44 @@ import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.IWorldGenBase;
 import com.lycanitesmobs.core.config.ConfigSpawning;
 import com.lycanitesmobs.core.info.ModInfo;
-
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraft.world.gen.feature.WorldGenLakes;
+import net.minecraftforge.common.BiomeDictionary;
 
 import java.util.Random;
+import java.util.Set;
 
-public class WorldGenPureLavaLakes extends WorldGenLakes implements IWorldGenBase {
-    public String name = "Pure Lava Lakes";
+public class WorldGenPoisonLakes extends WorldGenLakes implements IWorldGenBase {
+    public String name = "Poison Lakes";
     public ModInfo group = LycanitesMobs.modInfo;
     public double generateUndergroundChance = 0.04D;
-    public double generateSurfaceChance = 0;
+    public double generateSurfaceChance = 0.125D;
 
     // Dimensions:
     /** A comma separated list of dimensions that this event can occur in. As read from the config **/
-    public String dimensionEntries = "-1";
+    public String dimensionEntries = "-1, 1";
     /** A blacklist of dimension IDs (changes to whitelist if dimensionWhitelist is true) that this event can occur in. **/
     public int[] dimensionBlacklist;
     /** Extra dimension type info, can contain values such as ALL or VANILLA. **/
     public String[] dimensionTypes;
     /** Controls the behaviour of how Dimension IDs are read. If true only listed Dimension IDs are allowed instead of denied. **/
-    public boolean dimensionWhitelist = true;
+    public boolean dimensionWhitelist = false;
 
     // ==================================================
     //                    Constructors
     // ==================================================
-    public WorldGenPureLavaLakes() {
-        super(ObjectManager.getBlock("purelava"));
+    public WorldGenPoisonLakes() {
+        super(ObjectManager.getBlock("poison"));
 
         ConfigSpawning config = ConfigSpawning.getConfig(this.group, "worldgen");
 
         config.setCategoryComment("WorldGen Chances", "The chance that each worldgen will generate. You can set this to 0 to disable the worldgen or use the dimension black/white list. 1 = all over, 0.04 fairly rare.");
         this.generateUndergroundChance = config.getDouble("WorldGen Chances", this.name + " Underground Chance", this.generateUndergroundChance);
-        this.generateSurfaceChance = config.getDouble("WorldGen Chances", this.name + " Surface Chance", this.generateSurfaceChance);
+        this.generateSurfaceChance = config.getDouble("WorldGen Chances", this.name + " Surface Chance", this.generateSurfaceChance, "Ooze only generates on the surface when in COLD and SNOWY tagged biomes.");
 
         ConfigSpawning.SpawnDimensionSet dimensions = config.getDimensions("WorldGen Dimensions", this.name + " Dimensions", this.dimensionEntries);
         this.dimensionBlacklist = dimensions.dimensionIDs;
@@ -57,11 +59,24 @@ public class WorldGenPureLavaLakes extends WorldGenLakes implements IWorldGenBas
         if(!this.isValidDimension(world))
             return;
 
-        if(this.generateSurfaceChance > 0 && (this.generateSurfaceChance >= 1 || random.nextDouble() <= this.generateSurfaceChance)) {
-            int x = (chunkX * 16) + 16;
-            int z = (chunkZ * 16) + 16;
-            int y = random.nextInt(128);
-            this.generate(world, random, new BlockPos(x, y, z));
+        if(this.generateSurfaceChance > 0) {
+            Biome biome = world.getBiome(new BlockPos(chunkX * 16, 0, chunkZ * 16));
+            Set<BiomeDictionary.Type> biomeTypesSet = BiomeDictionary.getTypes(biome);
+            BiomeDictionary.Type[] biomeTypes = biomeTypesSet.toArray(new BiomeDictionary.Type[biomeTypesSet.size()]);
+            boolean typeValid = false;
+            for(BiomeDictionary.Type type : biomeTypes) {
+                if((type == BiomeDictionary.Type.SWAMP) || (type == BiomeDictionary.Type.SPOOKY)) {
+                    typeValid = true;
+                    break;
+                }
+            }
+
+            if(typeValid && (this.generateSurfaceChance >= 1 || random.nextDouble() <= this.generateSurfaceChance)) {
+                int x = (chunkX * 16) + 16;
+                int z = (chunkZ * 16) + 16;
+                int y = random.nextInt(128);
+                this.generate(world, random, new BlockPos(x, y, z));
+            }
         }
 
         if(this.generateUndergroundChance > 0 && (this.generateUndergroundChance >= 1 || random.nextDouble() <= this.generateUndergroundChance)) {

@@ -8,6 +8,7 @@ import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -113,6 +114,12 @@ public class EntityXaphan extends TameableCreatureEntity implements IMob {
     // ==================================================
    	//                     Immunities
    	// ==================================================
+    @Override
+    public boolean isDamageTypeApplicable(String type, DamageSource source, float damage) {
+        if(type.equals("acid")) return false;
+        return super.isDamageTypeApplicable(type, source, damage);
+    }
+
     @Override
     public boolean canBreatheUnderwater() {
         return true;

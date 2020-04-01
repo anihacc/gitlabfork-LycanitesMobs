@@ -2,19 +2,15 @@ package com.lycanitesmobs.core.block.fluid;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
-
-import com.lycanitesmobs.core.block.BlockFluidBase;
 import com.lycanitesmobs.client.localisation.LanguageManager;
+import com.lycanitesmobs.core.block.BlockFluidBase;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.item.EntityXPOrb;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
@@ -28,12 +24,12 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
 
-public class BlockFluidOoze extends BlockFluidBase {
+public class BlockFluidPoison extends BlockFluidBase {
 
 	// ==================================================
 	//                   Constructor
 	// ==================================================
-	public BlockFluidOoze(Fluid fluid, String name) {
+	public BlockFluidPoison(Fluid fluid, String name) {
         super(fluid, Material.WATER, LycanitesMobs.modInfo, name);
 
         this.setLightOpacity(0);
@@ -65,23 +61,7 @@ public class BlockFluidOoze extends BlockFluidBase {
     @Override
     public boolean canDisplace(IBlockAccess world, BlockPos pos) {
         IBlockState blockState = world.getBlockState(pos);
-        if(blockState == null || blockState.getBlock() == this) {
-            return false;
-        }
-
-        // Freeze Water:
-        if(blockState.getMaterial() == Material.WATER) {
-            if(world instanceof World) {
-                ((World)world).setBlockState(pos, Blocks.PACKED_ICE.getDefaultState());
-            }
-            return false;
-        }
-
-        // Freeze Lava:
-        if(blockState.getMaterial() == Material.LAVA) {
-            if(world instanceof World) {
-                ((World)world).setBlockState(pos, Blocks.OBSIDIAN.getDefaultState());
-            }
+        if(blockState.getBlock() == this) {
             return false;
         }
 
@@ -105,18 +85,10 @@ public class BlockFluidOoze extends BlockFluidBase {
 	@Override
     public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
         if(entity != null) {
-            // Damage:
-            if (!(entity instanceof EntityItem) && !(entity instanceof EntityXPOrb)) {
-                entity.attackEntityFrom(ObjectManager.getDamageSource("ooze"), 1F);
-            }
-
-            // Extinguish:
-            if(entity.isBurning())
-                entity.extinguish();
-
             // Effects:
-            if(entity instanceof EntityLivingBase) {
-                ((EntityLivingBase)entity).addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 5 * 20, 0));
+            Potion effect = ObjectManager.getEffect("plague");
+            if(effect != null && entity instanceof EntityLivingBase) {
+                ((EntityLivingBase)entity).addPotionEffect(new PotionEffect(effect, 10 * 20, 1));
             }
         }
 		super.onEntityCollidedWithBlock(world, pos, state, entity);
@@ -137,7 +109,7 @@ public class BlockFluidOoze extends BlockFluidBase {
             f = (float)pos.getX() + random.nextFloat();
             f1 = (float)pos.getY() + random.nextFloat() * 0.5F;
             f2 = (float)pos.getZ() + random.nextFloat();
-	        world.spawnParticle(EnumParticleTypes.SNOW_SHOVEL, (double)f, (double)f1, (double)f2, 0.0D, 0.0D, 0.0D);
+	        world.spawnParticle(EnumParticleTypes.PORTAL, f, f1, f2, 0.0D, 0.0D, 0.0D);
         }
         super.randomDisplayTick(blockState, world, pos, random);
     }

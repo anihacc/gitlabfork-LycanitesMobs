@@ -56,7 +56,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
 	// Action Controls:
 	public byte controlStates = 0;
 	public static enum CONTROL_ID {
-		JUMP((byte)1), MOUNT_DISMOUNT((byte)2), MOUNT_ABILITY((byte)4), MOUNT_INVENTORY((byte)8), ATTACK((byte)16);
+		JUMP((byte)1), MOUNT_DISMOUNT((byte)2), MOUNT_ABILITY((byte)4), MOUNT_INVENTORY((byte)8), ATTACK((byte)16), DESCEND((byte)32);
 		public byte id;
 		CONTROL_ID(byte i) { id = i; }
 	}

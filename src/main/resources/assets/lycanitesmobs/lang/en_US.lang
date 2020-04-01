@@ -329,6 +329,7 @@ effect.envenom=Envenom
 #
 # ========== Key Bindings ==========
 key.mount.dismount=Dismount / Unperch Pet
+key.mount.descend=Mount Descend
 key.mount.ability=Mount Ability
 key.mount.inventory=Mount Inventory
 key.index=Beastiary Index
@@ -449,8 +450,8 @@ tile.frostfire.description=A magical flame that superfreezes, will cause damage 
 #
 #
 # ========== Fluids ==========
-tile.purelava.name=Moglava
-tile.purelava.description=Clearer than regular lava, flows slightly faster and no creatures spawn in this. Can be renewed like water.
+tile.moglava.name=Moglava
+tile.moglava.description=Clearer than regular lava, flows slightly faster and no creatures spawn in this. Can be renewed like water.
 #
 tile.ooze.name=Ooze
 tile.ooze.description=An icy gel substance, causes slowness, hunger and applies low damage over time.
@@ -1807,8 +1808,23 @@ item.poisongland.description=Squeeze to place a poison cloud!
 item.bucketooze.name=Ooze Bucket
 item.bucketooze.description=Ooze is an icy gel substance, causes slowness and applies low damage over time.
 #
-item.bucketpurelava.name=Moglava Bucket
-item.bucketpurelava.description=Clearer that regular lava, flows slightly faster and no inferno mobs spawn in this. Can be renewed like water.
+item.bucketrabbitooze.name=Rabbitooze Bucket
+item.bucketrabbitooze.description=Just as cold and dangerous as regular Ooze but no mobs spawn in this and can be renewed like water.
+#
+item.bucketmoglava.name=Moglava Bucket
+item.bucketmoglava.description=Clearer that regular lava, flows slightly faster and no mobs spawn in this. Can be renewed like water.
+#
+item.bucketacid.name=Acid Bucket
+item.bucketacid.description=A deadly substance, causes penetration and applies damage over time.
+#
+item.bucketsharacid.name=Sharacid Bucket
+item.bucketsharacid.description=Refined acid, just as deadly but no mobs spawn in this and can be renewed like water.
+#
+item.bucketpoison.name=Poison Bucket
+item.bucketpoison.description=A foul liquid, causes plague.
+#
+item.bucketvesspoison.name=Vesspoison Bucket
+item.bucketvesspoison.description=Just as foul as regular poison but no mobs spawn in this and can be renewed like water.
 #
 #
 # ========== Seasonal ==========

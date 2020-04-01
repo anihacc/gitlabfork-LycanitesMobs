@@ -26,13 +26,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class BlockFluidPureLava extends BlockFluidBase {
+public class BlockFluidMoglava extends BlockFluidBase {
 
 	// ==================================================
 	//                   Constructor
 	// ==================================================
-	public BlockFluidPureLava(Fluid fluid) {
-		super(fluid, Material.LAVA, LycanitesMobs.modInfo, "purelava");
+	public BlockFluidMoglava(Fluid fluid) {
+		super(fluid, Material.LAVA, LycanitesMobs.modInfo, "moglava");
 
         this.setLightOpacity(1);
         this.setLightLevel(1.0F);
