@@ -9,6 +9,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
@@ -62,6 +63,22 @@ public class BlockFluidPoison extends BlockFluidBase {
     public boolean canDisplace(IBlockAccess world, BlockPos pos) {
         IBlockState blockState = world.getBlockState(pos);
         if(blockState.getBlock() == this) {
+            return false;
+        }
+
+        // Gravel Water:
+        if(blockState.getMaterial() == Material.WATER) {
+            if(world instanceof World) {
+                ((World)world).setBlockState(pos, Blocks.GRAVEL.getDefaultState());
+            }
+            return false;
+        }
+
+        // Obsidian Lava:
+        if(blockState.getMaterial() == Material.LAVA) {
+            if(world instanceof World) {
+                ((World)world).setBlockState(pos, Blocks.OBSIDIAN.getDefaultState());
+            }
             return false;
         }
 
