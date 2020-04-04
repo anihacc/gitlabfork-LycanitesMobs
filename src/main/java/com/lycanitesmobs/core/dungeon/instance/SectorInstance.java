@@ -554,6 +554,11 @@ public class SectorInstance {
 			return;
 		}
 
+		// Don't Clear Chests:
+		if(blockState.getBlock() == Blocks.AIR && worldWriter.getBlockState(blockPos).getBlock() == Blocks.CHEST) {
+			return;
+		}
+
 
 		// Block State and Flags:
 		int flags = 2;

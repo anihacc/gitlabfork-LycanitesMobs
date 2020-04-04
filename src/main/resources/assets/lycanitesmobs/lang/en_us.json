@@ -1260,6 +1260,7 @@
     "creaturetype.worm": "Worm",
     "_comment": "#############################",
     "death.attack.ooze": "%1$s was frozen in the icy ooze!",
+    "death.attack.ooze": "%1$s was painfully dissolved by acid!",
     "_comment": "#############################",
     "_comment": "Effect names must also be included in the base en_US.lang for now.",
     "_comment": "Debuffs",
