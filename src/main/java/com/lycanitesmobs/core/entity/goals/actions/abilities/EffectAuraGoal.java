@@ -218,22 +218,25 @@ public class EffectAuraGoal extends EntityAIBase {
 			}
 
 			boolean validTarget = false;
-			if ((this.targetTypes & BaseCreatureEntity.TARGET_TYPES.SELF.id) > 0 && entity == this.host) {
-				validTarget = true;
+			if(entity == this.host) {
+				if ((this.targetTypes & BaseCreatureEntity.TARGET_TYPES.SELF.id) > 0) {
+					validTarget = true;
+				}
 			}
-			if((this.targetTypes & BaseCreatureEntity.TARGET_TYPES.ALLY.id) > 0) {
-				if(this.host.isTamed() && this.host instanceof TameableCreatureEntity) {
-					if(entity instanceof TameableCreatureEntity && ((TameableCreatureEntity)entity).getPlayerOwner() == ((TameableCreatureEntity)this.host).getPlayerOwner()) {
+			else {
+				if ((this.targetTypes & BaseCreatureEntity.TARGET_TYPES.ALLY.id) > 0) {
+					if (this.host.isTamed() && this.host instanceof TameableCreatureEntity) {
+						if (entity instanceof TameableCreatureEntity && ((TameableCreatureEntity) entity).getPlayerOwner() == ((TameableCreatureEntity) this.host).getPlayerOwner()) {
+							validTarget = true;
+						}
+					} else if (entity instanceof BaseCreatureEntity && !((BaseCreatureEntity) entity).isTamed()) {
 						validTarget = true;
 					}
 				}
-				else if(entity instanceof BaseCreatureEntity && !((BaseCreatureEntity)entity).isTamed()) {
-					validTarget = true;
-				}
-			}
-			if((this.targetTypes & BaseCreatureEntity.TARGET_TYPES.ENEMY.id) > 0) {
-				if (this.host.canAttackClass(entity.getClass()) || this.host.canAttackEntity((EntityLivingBase)entity)) {
-					validTarget = true;
+				if ((this.targetTypes & BaseCreatureEntity.TARGET_TYPES.ENEMY.id) > 0) {
+					if (this.host.canAttackClass(entity.getClass()) || this.host.canAttackEntity((EntityLivingBase) entity)) {
+						validTarget = true;
+					}
 				}
 			}
 			if(!validTarget) {
