@@ -576,18 +576,20 @@ public class PetEntry {
         // Load Entity:
         if(nbtTagCompound.hasKey("EntityName"))
             this.setEntityName(nbtTagCompound.getString("EntityName"));
-        if(nbtTagCompound.hasKey("SubspeciesID")) {
-            this.setEntitySubspecies(Subspecies.getIndexFromOld(nbtTagCompound.getInteger("SubspeciesID")));
-            this.setEntityVariant(Variant.getIndexFromOld(nbtTagCompound.getInteger("SubspeciesID")));
+        if(!"familiar".equals(this.getType())) {
+            if (nbtTagCompound.hasKey("SubspeciesID")) {
+                this.setEntitySubspecies(Subspecies.getIndexFromOld(nbtTagCompound.getInteger("SubspeciesID")));
+                this.setEntityVariant(Variant.getIndexFromOld(nbtTagCompound.getInteger("SubspeciesID")));
+            }
+            if (nbtTagCompound.hasKey("Subspecies"))
+                this.setEntitySubspecies(nbtTagCompound.getInteger("Subspecies"));
+            if (nbtTagCompound.hasKey("Variant"))
+                this.setEntityVariant(nbtTagCompound.getInteger("Variant"));
+            if (nbtTagCompound.hasKey("EntitySize"))
+                this.setEntitySize(nbtTagCompound.getDouble("EntitySize"));
+            if (nbtTagCompound.hasKey("Color"))
+                this.setColor(nbtTagCompound.getString("Color"));
         }
-        if(nbtTagCompound.hasKey("Subspecies"))
-            this.setEntitySubspecies(nbtTagCompound.getInteger("Subspecies"));
-        if(nbtTagCompound.hasKey("Variant"))
-            this.setEntityVariant(nbtTagCompound.getInteger("Variant"));
-        if(nbtTagCompound.hasKey("EntitySize"))
-            this.setEntitySize(nbtTagCompound.getDouble("EntitySize"));
-        if(nbtTagCompound.hasKey("Color"))
-            this.setColor(nbtTagCompound.getString("Color"));
         if(nbtTagCompound.hasKey("EntityNBT"))
             this.entityNBT = nbtTagCompound.getCompoundTag("EntityNBT");
         this.loadEntityNBT();

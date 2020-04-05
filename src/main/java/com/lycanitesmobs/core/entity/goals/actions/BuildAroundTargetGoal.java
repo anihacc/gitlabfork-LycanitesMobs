@@ -1,28 +1,22 @@
 package com.lycanitesmobs.core.entity.goals.actions;
 
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.core.entity.TameableCreatureEntity;
+import com.lycanitesmobs.core.entity.goals.BaseGoal;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 
-public class BuildAroundTargetGoal extends EntityAIBase {
-	// Targets:
-    private TameableCreatureEntity host;
-
+public class BuildAroundTargetGoal extends BaseGoal {
     // Properties:
     private Block block = null;
     private int tickRate = 40;
     private int currentTick = 0;
     private int range = 2;
     private boolean enclose = false;
-    private BaseCreatureEntity.TARGET_BITS targetBit = BaseCreatureEntity.TARGET_BITS.ATTACK;
 
-	public BuildAroundTargetGoal(TameableCreatureEntity setHost) {
-        this.host = setHost;
+	public BuildAroundTargetGoal(BaseCreatureEntity setHost) {
+        super(setHost);
     }
 
     /**
@@ -64,42 +58,13 @@ public class BuildAroundTargetGoal extends EntityAIBase {
         this.enclose = enclose;
         return this;
     }
-
-    /**
-     * Sets the target bit to determine which target should be used.
-     * @param targetBit The target to use's bit (defaults to ATTACK).
-     * @return This goal for chaining.
-     */
-    public BuildAroundTargetGoal setTargetBit(BaseCreatureEntity.TARGET_BITS targetBit) {
-        this.targetBit = targetBit;
-        return this;
-    }
     
     @Override
     public boolean shouldExecute() {
+        if(!super.shouldExecute()) {
+            return false;
+        }
         return this.block == null || this.getTarget() != null;
-    }
-
-    public EntityLivingBase getTarget() {
-        if(this.targetBit == BaseCreatureEntity.TARGET_BITS.ATTACK) {
-            return this.host.getAttackTarget();
-        }
-        if(this.targetBit == BaseCreatureEntity.TARGET_BITS.AVOID) {
-            return this.host.getAvoidTarget();
-        }
-        if(this.targetBit == BaseCreatureEntity.TARGET_BITS.MASTER) {
-            return this.host.getMasterTarget();
-        }
-        if(this.targetBit == BaseCreatureEntity.TARGET_BITS.PARENT) {
-            return this.host.getParentTarget();
-        }
-        if(this.targetBit == BaseCreatureEntity.TARGET_BITS.RIDER) {
-            return this.host.getRider();
-        }
-        if(this.targetBit == BaseCreatureEntity.TARGET_BITS.PERCH) {
-            return this.host.getPerchTarget();
-        }
-        return null;
     }
     
     @Override
@@ -114,7 +79,8 @@ public class BuildAroundTargetGoal extends EntityAIBase {
         }
         this.currentTick = 0;
 
-        int range = this.range + 1;
+        int range = this.range;
+        int enclosement = 0;
         BlockPos targetPos = this.getTarget().getPosition();
 
         // Enclose:
@@ -129,21 +95,27 @@ public class BuildAroundTargetGoal extends EntityAIBase {
                     }
                 }
             }
-            range -= (range + 1) - smallestRange;
+            enclosement = range - ((range + 1) - smallestRange);
         }
 
         // Place Blocks:
-        for(int x = -range; x <= range; x++) {
-            for(int z = -range; z <= range; z++) {
-                if(Math.abs(x) != range && Math.abs(z) != range) {
-                    continue;
-                }
-                BlockPos blockPos = targetPos.add(x, 0, z);
-                IBlockState blockState = this.host.getEntityWorld().getBlockState(blockPos);
-                if(blockState.getBlock() == Blocks.AIR || blockState.getBlock() == this.block) {
-                    this.host.getEntityWorld().setBlockState(blockPos, this.block.getDefaultState());
+        for(int currentRange = range; currentRange >= enclosement; currentRange--) {
+            for (int x = -currentRange; x <= currentRange; x++) {
+                for (int z = -currentRange; z <= currentRange; z++) {
+                    if (Math.abs(x) != currentRange && Math.abs(z) != currentRange) {
+                        continue;
+                    }
+                    BlockPos blockPos = targetPos.add(x, 0, z);
+                    IBlockState blockState = this.host.getEntityWorld().getBlockState(blockPos);
+                    if (blockState.getBlock() == Blocks.AIR || blockState.getBlock() == this.block) {
+                        this.host.getEntityWorld().setBlockState(blockPos, this.block.getDefaultState());
+                    }
                 }
             }
         }
+
+        // Play Sound:
+        this.host.triggerAttackCooldown();
+        this.host.playAttackSound();
     }
 }

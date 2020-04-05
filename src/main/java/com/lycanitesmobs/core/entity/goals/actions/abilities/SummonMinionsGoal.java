@@ -1,15 +1,13 @@
 package com.lycanitesmobs.core.entity.goals.actions.abilities;
 
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.goals.BaseGoal;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.player.EntityPlayer;
 
-public class SummonMinionsGoal extends EntityAIBase {
-	BaseCreatureEntity host;
-
+public class SummonMinionsGoal extends BaseGoal {
     // Properties:
 	protected int summonTime = 0;
 	protected int summonRate = 60;
@@ -17,14 +15,13 @@ public class SummonMinionsGoal extends EntityAIBase {
 	protected CreatureInfo minionInfo;
 	protected boolean perPlayer = false;
 	protected boolean antiFlight = false;
-	protected int phase = -1;
 
 	/**
-	 * Constrcutor
+	 * Constructor
 	 * @param setHost The creature using this goal.
 	 */
 	public SummonMinionsGoal(BaseCreatureEntity setHost) {
-        this.host = setHost;
+		super(setHost);
     }
 
 	/**
@@ -77,22 +74,9 @@ public class SummonMinionsGoal extends EntityAIBase {
     	return this;
     }
 
-	/**
-	 * Sets the battle phase to restrict this goal to.
-	 * @param phase The phase to restrict to, if below 0 phases are ignored.
-	 * @return This goal for chaining.
-	 */
-	public SummonMinionsGoal setPhase(int phase) {
-		this.phase = phase;
-		return this;
-	}
-
 	@Override
     public boolean shouldExecute() {
-		if(!this.host.isEntityAlive() || this.minionInfo == null) {
-			return false;
-		}
-		return this.phase < 0 || this.phase == this.host.getBattlePhase();
+		return super.shouldExecute() && this.minionInfo != null;
     }
 
 	@Override

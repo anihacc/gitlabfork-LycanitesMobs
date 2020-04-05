@@ -66,6 +66,12 @@
                     "index": 2,
                     "name": "scarlet",
                     "type": "uncommon"
+                },
+                {
+                    "index": 3,
+                    "name": "royal",
+                    "type": "rare",
+                    "scale": 2
                 }
             ]
         }
