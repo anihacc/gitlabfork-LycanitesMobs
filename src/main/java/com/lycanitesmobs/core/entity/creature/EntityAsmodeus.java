@@ -4,6 +4,7 @@ import com.lycanitesmobs.api.IGroupBoss;
 import com.lycanitesmobs.api.IGroupHeavy;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
+import com.lycanitesmobs.core.entity.goals.GoalConditions;
 import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
 import com.lycanitesmobs.core.entity.goals.actions.abilities.SummonMinionsGoal;
 import com.lycanitesmobs.core.entity.navigate.ArenaNode;
@@ -107,7 +108,8 @@ public class EntityAsmodeus extends BaseCreatureEntity implements IMob, IGroupHe
         this.goalSelector.addGoal(this.nextCombatGoalIndex++, this.aiRangedAttack);
 
         // Phase 1:
-        this.goalSelector.addGoal(this.nextIdleGoalIndex, new SummonMinionsGoal(this).setMinionInfo("trite").setSummonRate(20 * 3).setSummonCap(3).setPerPlayer(true).setPhase(0));
+        this.goalSelector.addGoal(this.nextIdleGoalIndex, new SummonMinionsGoal(this).setMinionInfo("trite").setSummonRate(20 * 3).setSummonCap(3).setPerPlayer(true)
+                .setConditions(new GoalConditions().setBattlePhase(0)));
     }
 
     // ========== Init ==========

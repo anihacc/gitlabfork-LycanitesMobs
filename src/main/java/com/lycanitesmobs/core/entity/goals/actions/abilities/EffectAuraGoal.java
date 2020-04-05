@@ -3,8 +3,8 @@ package com.lycanitesmobs.core.entity.goals.actions.abilities;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
+import com.lycanitesmobs.core.entity.goals.BaseGoal;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.DamageSource;
@@ -12,16 +12,13 @@ import net.minecraft.util.EntityDamageSource;
 
 import java.util.List;
 
-public class EffectAuraGoal extends Goal {
-	BaseCreatureEntity host;
-
+public class EffectAuraGoal extends BaseGoal {
     // Properties:
 	protected Effect effect;
 	protected float auraRange = 10F;
 	protected int effectSeconds = 5;
 	protected int effectAmplifier = 0;
 	protected boolean checkSight = true;
-	protected int phase = -1;
 	protected float damageAmount = 0;
 	protected int duration = 10 * 20;
 	protected int cooldownDuration = 0;
@@ -37,18 +34,8 @@ public class EffectAuraGoal extends Goal {
 	 * @param setHost The creature using this goal.
 	 */
 	public EffectAuraGoal(BaseCreatureEntity setHost) {
-        this.host = setHost;
+		super(setHost);
     }
-
-	/**
-	 * Sets the battle phase to restrict this goal to.
-	 * @param phase The phase to restrict to, if below 0 phases are ignored.
-	 * @return This goal for chaining.
-	 */
-	public EffectAuraGoal setPhase(int phase) {
-		this.phase = phase;
-		return this;
-	}
 
 	/**
 	 * Sets the duration of firing (in ticks).
@@ -153,7 +140,7 @@ public class EffectAuraGoal extends Goal {
 
 	/**
 	 * Sets the target types to affect.
-	 * @param targetAll The target types to affect.
+	 * @param targetTypes The target types to affect.
 	 * @return This goal for chaining.
 	 */
 	public EffectAuraGoal setTargetTypes(byte targetTypes) {
@@ -170,19 +157,6 @@ public class EffectAuraGoal extends Goal {
 		this.targetCreatureType = creatureTypeName;
 		return this;
 	}
-
-	@Override
-    public boolean shouldExecute() {
-		if(!this.host.isAlive()) {
-			return false;
-		}
-
-		if(this.phase >= 0 && this.phase != this.host.getBattlePhase()) {
-			return false;
-		}
-
-		return true;
-    }
 
 	@Override
     public void startExecuting() {
@@ -211,7 +185,7 @@ public class EffectAuraGoal extends Goal {
 			effectInstance = new EffectInstance(this.effect, this.host.getEffectDuration(this.effectSeconds), this.effectAmplifier);
 		}
 
-		List aoeTargets = this.host.getNearbyEntities(LivingEntity.class, entity -> {
+		List<LivingEntity> aoeTargets = this.host.getNearbyEntities(LivingEntity.class, entity -> {
 			if(!(entity instanceof LivingEntity)) {
 				return false;
 			}
@@ -243,7 +217,7 @@ public class EffectAuraGoal extends Goal {
 			}
 
 			if(this.targetCreatureType != null) {
-				if(entity instanceof BaseCreatureEntity) {
+				if(entity instanceof BaseCreatureEntity && ((BaseCreatureEntity)entity).creatureInfo.creatureType != null) {
 					return this.targetCreatureType.equals(((BaseCreatureEntity)entity).creatureInfo.creatureType.getName());
 				}
 				return false;
@@ -251,11 +225,10 @@ public class EffectAuraGoal extends Goal {
 			if(this.checkSight && !this.host.getEntitySenses().canSee(entity)) {
 				return false;
 			}
-			return false;
+			return true;
 		}, this.auraRange);
 
-		for(Object entityObj : aoeTargets) {
-			LivingEntity target = (LivingEntity) entityObj;
+		for(LivingEntity target : aoeTargets) {
 
 			// Apply Effect:
 			if(effectInstance != null) {
