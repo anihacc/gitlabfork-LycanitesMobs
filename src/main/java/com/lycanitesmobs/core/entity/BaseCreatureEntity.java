@@ -334,6 +334,13 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	    ANIMATION_STATE_BITS(byte value) { this.id = value; }
 	    public byte getValue() { return id; }
 	}
+	/** Used by AI Goals to determine target types. **/
+	public enum TARGET_TYPES {
+		ENEMY((byte)1), ALLY((byte)2), SELF((byte)4);
+		public final byte id;
+		TARGET_TYPES(byte value) { this.id = value; }
+		public byte getValue() { return id; }
+	}
 
 	// Interaction:
 	/** Used for the tidier interact code, these are used for right click commands to determine which one is more important. The lower the priority number the higher the priority is. **/

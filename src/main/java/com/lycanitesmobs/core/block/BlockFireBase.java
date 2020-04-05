@@ -180,7 +180,7 @@ public class BlockFireBase extends BlockBase {
 
             // Can't spread, old or on none solid surface:
             if (!this.canNeighborCatchFire(world, pos)) {
-                if (!Block.hasSolidSide(world.getBlockState(pos), world, pos.down(), Direction.UP) || age > 3) {
+                if (age > 3) {
                     world.removeBlock(pos, false);
                 }
                 return;

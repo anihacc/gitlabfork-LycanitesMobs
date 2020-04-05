@@ -4,7 +4,6 @@ import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 
 import java.util.EnumSet;
 
@@ -15,7 +14,8 @@ public class ChaseGoal extends Goal {
     
     // Properties:
     private double speed = 1.0D;
-    private float maxTargetDistance = 8.0F;
+	private float maxTargetDistance = 8.0F;
+	private float minTargetDistance = 0F;
     
     private BlockPos movePos;
 	
@@ -35,10 +35,14 @@ public class ChaseGoal extends Goal {
     	this.speed = setSpeed;
     	return this;
     }
-    public ChaseGoal setMaxDistance(float setDist) {
-    	this.maxTargetDistance = setDist;
-    	return this;
-    }
+	public ChaseGoal setMaxDistance(float setDist) {
+		this.maxTargetDistance = setDist;
+		return this;
+	}
+	public ChaseGoal setMinDistance(float setDist) {
+		this.minTargetDistance = setDist;
+		return this;
+	}
 	
     
 	// ==================================================
@@ -46,17 +50,19 @@ public class ChaseGoal extends Goal {
  	// ==================================================
 	@Override
     public boolean shouldExecute() {
-        this.target = this.host.getAttackTarget();
-        if(this.target == null) {
+		this.target = this.host.getAttackTarget();
+		if(this.target == null || !this.target.isAlive()) {
 			return false;
 		}
-        //else if(this.host.getDistance(this.target) > (double)(this.maxTargetDistance * this.maxTargetDistance))
-            //return false;
-
-		Vec3d vec3 = RandomPositionGenerator.findRandomTargetTowards(this.host, 16, 7, new Vec3d(this.target.getPositionVec().getX(), this.target.getPositionVec().getY(), this.target.getPositionVec().getZ()));
-		if (vec3 == null)
+		float distance = this.host.getDistance(this.target);
+		if(distance > this.maxTargetDistance) {
 			return false;
-		this.movePos = new BlockPos(vec3.x, vec3.y, vec3.z);
+		}
+		if(distance < this.minTargetDistance) {
+			return false;
+		}
+
+		this.movePos = this.target.getPosition();
 
         return true;
     }
@@ -67,38 +73,37 @@ public class ChaseGoal extends Goal {
  	// ==================================================
 	@Override
     public boolean shouldContinueExecuting() {
-		if (!this.host.isAlive()) {
-			return false;
-		}
-		boolean fixated = this.host.hasFixateTarget() && this.host.getFixateTarget() == this.target;
-		if(!fixated && this.target.getDistance(this.host) > (double)(this.maxTargetDistance * this.maxTargetDistance)) {
+		if (!this.shouldExecute()) {
 			return false;
 		}
 		if (!this.host.useDirectNavigator() && this.host.getNavigator().noPath()) {
-			return this.shouldExecute();
+			return false;
 		}
     	return true;
     }
-	
-    
+
+
 	// ==================================================
- 	//                      Start
- 	// ==================================================
-	@Override
-    public void startExecuting() {
-    	if(!this.host.useDirectNavigator())
-    		this.host.getNavigator().tryMoveToXYZ(this.movePos.getX(), this.movePos.getY(), this.movePos.getZ(), this.speed);
-    	else
-    		this.host.directNavigator.setTargetPosition(this.movePos, speed);
-    }
-	
-    
+	//                      Start
 	// ==================================================
- 	//                       Reset
- 	// ==================================================
 	@Override
-    public void resetTask() {
-        this.target = null;
-        this.host.directNavigator.clearTargetPosition(1.0D);
-    }
+	public void startExecuting() {
+		if(!this.host.useDirectNavigator())
+			this.host.getNavigator().tryMoveToXYZ(this.movePos.getX(), this.movePos.getY(), this.movePos.getZ(), this.speed);
+		else
+			this.host.directNavigator.setTargetPosition(this.movePos, this.speed);
+	}
+
+
+	// ==================================================
+	//                       Reset
+	// ==================================================
+	@Override
+	public void resetTask() {
+		this.target = null;
+		if(!this.host.useDirectNavigator())
+			this.host.getNavigator().clearPath();
+		else
+			this.host.directNavigator.clearTargetPosition(this.speed);
+	}
 }
