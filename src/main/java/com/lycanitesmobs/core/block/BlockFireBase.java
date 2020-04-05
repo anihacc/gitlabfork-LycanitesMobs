@@ -170,14 +170,14 @@ public class BlockFireBase extends BlockBase {
         // Natural Extinguish:
         if (!isOnFireSource) {
             // On Air:
-            if(world.getBlockState(pos.down()).getBlock() == Blocks.AIR) {
-				world.setBlockToAir(pos);
-				return;
-			}
+//            if(world.getBlockState(pos.down()).getBlock() == Blocks.AIR) {
+//				world.setBlockToAir(pos);
+//				return;
+//			}
 
             // Can't spread, old or on none solid surface:
             if (!this.canNeighborCatchFire(world, pos)) {
-                if (!world.getBlockState(pos.down()).isSideSolid(world, pos.down(), EnumFacing.UP) || age > 3) {
+                if (age > 3) {
                     world.setBlockToAir(pos);
                 }
                 return;
@@ -257,9 +257,9 @@ public class BlockFireBase extends BlockBase {
     /** Called when an adjacent block changes. **/
     @Override
     public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block, BlockPos triggerPos) {
-        if (!world.getBlockState(pos.down()).isSideSolid(world, pos, EnumFacing.UP) && !this.canNeighborCatchFire(world, pos)) {
-            world.setBlockToAir(pos);
-        }
+//        if (!world.getBlockState(pos.down()).isSideSolid(world, pos, EnumFacing.UP) && !this.canNeighborCatchFire(world, pos)) {
+//            world.setBlockToAir(pos);
+//        }
     }
 
     /** Called when this block is added to the world. **/

@@ -4,7 +4,6 @@ import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 
 public class ChaseGoal extends EntityAIBase {
 	// Targets:
@@ -14,7 +13,8 @@ public class ChaseGoal extends EntityAIBase {
     // Properties:
     private double speed = 1.0D;
     private float maxTargetDistance = 8.0F;
-    
+    private float minTargetDistance = 0F;
+
     private BlockPos movePos;
 	
 	// ==================================================
@@ -22,7 +22,7 @@ public class ChaseGoal extends EntityAIBase {
  	// ==================================================
     public ChaseGoal(BaseCreatureEntity setHost) {
         this.host = setHost;
-		this.setMutexBits(3);
+		this.setMutexBits(1);
     }
     
     
@@ -37,6 +37,10 @@ public class ChaseGoal extends EntityAIBase {
     	this.maxTargetDistance = setDist;
     	return this;
     }
+	public ChaseGoal setMinDistance(float setDist) {
+		this.minTargetDistance = setDist;
+		return this;
+	}
 	
     
 	// ==================================================
@@ -45,16 +49,18 @@ public class ChaseGoal extends EntityAIBase {
 	@Override
     public boolean shouldExecute() {
         this.target = this.host.getAttackTarget();
-        if(this.target == null) {
+        if(this.target == null || !this.target.isEntityAlive()) {
 			return false;
 		}
-        //else if(this.host.getDistance(this.target) > (double)(this.maxTargetDistance * this.maxTargetDistance))
-            //return false;
-
-		Vec3d vec3 = RandomPositionGenerator.findRandomTargetTowards(this.host, 16, 7, new Vec3d(this.target.posX, this.target.posY, this.target.posZ));
-		if (vec3 == null)
+        float distance = this.host.getDistance(this.target);
+        if(distance > this.maxTargetDistance) {
 			return false;
-		this.movePos = new BlockPos(vec3.x, vec3.y, vec3.z);
+		}
+		if(distance < this.minTargetDistance) {
+			return false;
+		}
+
+		this.movePos = this.target.getPosition();
 
         return true;
     }
@@ -65,15 +71,11 @@ public class ChaseGoal extends EntityAIBase {
  	// ==================================================
 	@Override
     public boolean shouldContinueExecuting() {
-		if (!this.host.isEntityAlive()) {
-			return false;
-		}
-		boolean fixated = this.host.hasFixateTarget() && this.host.getFixateTarget() == this.target;
-		if(!fixated && this.target.getDistance(this.host) > (double)(this.maxTargetDistance * this.maxTargetDistance)) {
-			return false;
+    	if (!this.shouldExecute()) {
+    		return false;
 		}
 		if (!this.host.useDirectNavigator() && this.host.getNavigator().noPath()) {
-			return this.shouldExecute();
+			return false;
 		}
     	return true;
     }
@@ -87,7 +89,7 @@ public class ChaseGoal extends EntityAIBase {
     	if(!this.host.useDirectNavigator())
     		this.host.getNavigator().tryMoveToXYZ(this.movePos.getX(), this.movePos.getY(), this.movePos.getZ(), this.speed);
     	else
-    		this.host.directNavigator.setTargetPosition(this.movePos, speed);
+    		this.host.directNavigator.setTargetPosition(this.movePos, this.speed);
     }
 	
     
@@ -97,6 +99,9 @@ public class ChaseGoal extends EntityAIBase {
 	@Override
     public void resetTask() {
         this.target = null;
-        this.host.directNavigator.clearTargetPosition(1.0D);
+		if(!this.host.useDirectNavigator())
+			this.host.getNavigator().clearPath();
+		else
+			this.host.directNavigator.clearTargetPosition(this.speed);
     }
 }

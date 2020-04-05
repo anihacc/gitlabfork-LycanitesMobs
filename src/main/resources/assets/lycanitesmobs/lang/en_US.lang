@@ -745,6 +745,11 @@ entity.lycanitesmobs.aglebemu.description=Large poisonous frogs with excellent s
 entity.lycanitesmobs.aglebemu.habitat=These amphibians are usually found in swamplands.
 entity.lycanitesmobs.aglebemu.combat=Aglebemu use their powerful, extremely long and sharp tongues to spear their victims and inject a deadly concoction of contagious bacteria.
 # ========================================================================
+entity.lycanitesmobs.archvile.name=Archvile
+entity.lycanitesmobs.archvile.description=Malicious demons that rule of areas of the nether, Archviles enjoy the smell of their victim's burning flesh and enjoy watching other demons tear their victims apart!
+entity.lycanitesmobs.archvile.habitat=Archviles live within the depths of the Nether.
+entity.lycanitesmobs.archvile.combat=Archviles prefer to avoid combat themselves, instead they will strengthen any nearby demons and they will slowly engulf their target in flames.
+# ========================================================================
 entity.lycanitesmobs.argus.name=Argus
 entity.lycanitesmobs.argus.description=Disruptive Chaos elementals, Argi (plural) spread havoc in their wake.
 entity.lycanitesmobs.argus.habitat=Being Chaos Elementals, Argi are formed when there is a large concentration of Chaos in the area, this can be caused by several things but usually destroying other Elementals causes a high concentration of Chaos.

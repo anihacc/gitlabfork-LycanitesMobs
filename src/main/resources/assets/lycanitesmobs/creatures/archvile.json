@@ -1,11 +1,11 @@
 {
-    "name": "behemoth",
+    "name": "archvile",
     "creatureType": "demon",
     "groups": [
         "monster"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityBehemoth",
-    "modelClass": "com.lycanitesmobs.client.model.creature.ModelBehemoth",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityArchvile",
+    "modelClass": "com.lycanitesmobs.client.model.creature.ModelArchvile",
     "loadDefault": true,
     "enabled": true,
     "spawning": {
@@ -25,7 +25,7 @@
         "biomes": [
             "nether"
         ],
-        "spawnWeight": 4,
+        "spawnWeight": 1,
         "dungeonWeight": 200,
         "spawnAreaLimit": 5,
         "spawnGroupMin": 1,
@@ -42,8 +42,8 @@
     "health": 40,
     "defense": 2,
     "armor": 0,
-    "speed": 24,
-    "damage": 2,
+    "speed": 32,
+    "damage": 1,
     "attackSpeed": 1,
     "rangedSpeed": 0.75,
     "effectDuration": 5,
@@ -51,26 +51,29 @@
     "pierce": 1,
     "sight": 24,
     "knockbackResistance": 0.25,
-    "eggBackColor": "#FF2222",
-    "eggForeColor": "#FF9900",
+    "eggBackColor": "#473816",
+    "eggForeColor": "#A3964B",
     "subspecies": [
         {
             "index": 0,
             "variants": [
                 {
                     "index": 1,
-                    "name": "russet",
+                    "name": "ashen",
                     "type": "uncommon"
                 },
                 {
                     "index": 2,
-                    "name": "dark",
+                    "name": "scarlet",
                     "type": "uncommon"
                 }
             ]
         }
     ],
-    "element": "void",
+    "elements": [
+        "fire",
+        "nether"
+    ],
     "diets": [
         "carnivore",
         "piscivore",
@@ -80,7 +83,7 @@
     "summonable": true,
     "tameable": false,
     "mountable": false,
-    "summonCost": 4,
+    "summonCost": 6,
     "dungeonLevel": 2,
     "drops": [
         {
@@ -91,9 +94,15 @@
             "chance": 0.25
         },
         {
-            "item": "lycanitesmobs:hellfirecharge",
+            "item": "minecraft:bone",
             "minAmount": 1,
             "maxAmount": 3,
+            "chance": 1
+        },
+        {
+            "item": "lycanitesmobs:doomfirecharge",
+            "minAmount": 5,
+            "maxAmount": 10,
             "chance": 1
         }
     ],
