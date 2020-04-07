@@ -117,6 +117,9 @@ public class AltarInfo {
 
         AltarInfo crimsonEpionAltar = new AltarInfoCrimsonEpion("CrimsonEpion");
         addAltar(crimsonEpionAltar);
+
+        AltarInfo royalArchvileAltar = new AltarInfoRoyalArchvile("RoyalArchvile");
+        addAltar(royalArchvileAltar);
     }
 
 
