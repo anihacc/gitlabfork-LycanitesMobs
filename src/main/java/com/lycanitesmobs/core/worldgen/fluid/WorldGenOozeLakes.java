@@ -42,7 +42,7 @@ public class WorldGenOozeLakes extends WorldGenLakes implements IWorldGenBase {
 
         config.setCategoryComment("WorldGen Chances", "The chance that each worldgen will generate. You can set this to 0 to disable the worldgen or use the dimension black/white list. 1 = all over, 0.04 fairly rare.");
         this.generateUndergroundChance = config.getDouble("WorldGen Chances", this.name + " Underground Chance", this.generateUndergroundChance);
-        this.generateSurfaceChance = config.getDouble("WorldGen Chances", this.name + " Surface Chance", this.generateSurfaceChance, "Ooze only generates on the surface when in COLD and SNOWY tagged biomes.");
+        this.generateSurfaceChance = config.getDouble("WorldGen Chances", this.name + " Surface Chance", this.generateSurfaceChance, "Ooze only generates on the surface when in COLD and SNOWY tagged biomes and not HOT.");
 
         ConfigSpawning.SpawnDimensionSet dimensions = config.getDimensions("WorldGen Dimensions", this.name + " Dimensions", this.dimensionEntries);
         this.dimensionBlacklist = dimensions.dimensionIDs;
@@ -67,9 +67,12 @@ public class WorldGenOozeLakes extends WorldGenLakes implements IWorldGenBase {
             BiomeDictionary.Type[] biomeTypes = biomeTypesSet.toArray(new BiomeDictionary.Type[biomeTypesSet.size()]);
             boolean typeValid = false;
             for(BiomeDictionary.Type type : biomeTypes) {
+                if((type == BiomeDictionary.Type.HOT)) {
+                    typeValid = false;
+                    break;
+                }
                 if((type == BiomeDictionary.Type.SNOWY) || (type == BiomeDictionary.Type.COLD)) {
                     typeValid = true;
-                    break;
                 }
             }
 

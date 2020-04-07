@@ -73,14 +73,9 @@ public class Variant {
 	 * @param config The config instance to load values from.
 	 */
 	public static void loadGlobalSettings(ConfigBase config) {
-        BASE_WEIGHT = config.getIntReplaced("Mob Variations", "Subspecies Base Weight", "Variant Base Weight", BASE_WEIGHT);
         BASE_WEIGHT = config.getInt("Mob Variations", "Variant Base Weight", BASE_WEIGHT, "The weight of base variants (regular mob colors).");
-
-		COMMON_WEIGHTS.put("uncommon", config.getIntReplaced("Mob Variations", "Subspecies Uncommon Weight", "Variant Uncommon Weight", COMMON_WEIGHTS.get("uncommon")));
-		COMMON_WEIGHTS.put("uncommon", config.getInt("Mob Variations", "Variant Uncommon Weight", COMMON_WEIGHTS.get("uncommon"), "The weight of uncommon variants (such as Azure, Verdant, Scarlet, etc)."));
-
-		COMMON_WEIGHTS.put("rare", config.getIntReplaced("Mob Variations", "Subspecies Rare Weight", "Variant Rare Weight", COMMON_WEIGHTS.get("rare")));
-        COMMON_WEIGHTS.put("rare", config.getInt("Mob Variations", "Variant Rare Weight", COMMON_WEIGHTS.get("rare"), "The weight of rare variants (such as Lunar or Celestial)."));
+        COMMON_WEIGHTS.put("uncommon", config.getInt("Mob Variations", "Variant Uncommon Weight", COMMON_WEIGHTS.get("uncommon"), "The weight of uncommon variants (such as Azure, Verdant, Scarlet, etc)."));
+		COMMON_WEIGHTS.put("rare", config.getInt("Mob Variations", "Variant Rare Weight", COMMON_WEIGHTS.get("rare"), "The weight of rare variants (such as Lunar or Celestial)."));
 
         // Difficulty:
         String[] subspeciesNames = new String[] {"uncommon", "rare"};
