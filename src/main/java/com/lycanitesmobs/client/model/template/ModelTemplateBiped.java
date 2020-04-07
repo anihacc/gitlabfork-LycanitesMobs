@@ -151,6 +151,14 @@ public class ModelTemplateBiped extends CreatureObjModel {
                 rotX -= Math.toDegrees(MathHelper.sin(loop * 0.4F * this.wingScale) * 0.6F);
                 rotZ -= Math.toDegrees(MathHelper.sin(loop * 0.4F * this.wingScale + (float)Math.PI) * 0.6F);
             }
+            if(partName.contains("legleft")) {
+                rotZ += Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F + 0.05F);
+                rotX += Math.toDegrees(MathHelper.sin(loop * 0.067F) * 0.05F);
+            }
+            if(partName.contains("legright")) {
+                rotZ -= Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F + 0.05F);
+                rotX -= Math.toDegrees(MathHelper.sin(loop * 0.067F) * 0.05F);
+            }
             if(entity instanceof BaseCreatureEntity && ((BaseCreatureEntity)entity).isFlying()) {
                 if (partName.equals("body")) {
                     float bob = MathHelper.sin(loop * 0.4F) * 0.15F;
