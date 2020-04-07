@@ -42,7 +42,7 @@ public class WorldGenPoisonLakes extends WorldGenLakes implements IWorldGenBase 
 
         config.setCategoryComment("WorldGen Chances", "The chance that each worldgen will generate. You can set this to 0 to disable the worldgen or use the dimension black/white list. 1 = all over, 0.04 fairly rare.");
         this.generateUndergroundChance = config.getDouble("WorldGen Chances", this.name + " Underground Chance", this.generateUndergroundChance);
-        this.generateSurfaceChance = config.getDouble("WorldGen Chances", this.name + " Surface Chance", this.generateSurfaceChance, "Ooze only generates on the surface when in SWAMP and SPOOKY tagged biomes and not COLD or SNOWY.");
+        this.generateSurfaceChance = config.getDouble("WorldGen Chances", this.name + " Surface Chance", this.generateSurfaceChance, "Poison only generates on the surface when in SWAMP and SPOOKY tagged biomes and not COLD or SNOWY.");
 
         ConfigSpawning.SpawnDimensionSet dimensions = config.getDimensions("WorldGen Dimensions", this.name + " Dimensions", this.dimensionEntries);
         this.dimensionBlacklist = dimensions.dimensionIDs;

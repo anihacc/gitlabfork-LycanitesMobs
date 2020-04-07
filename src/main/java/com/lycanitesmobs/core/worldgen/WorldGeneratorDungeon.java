@@ -17,6 +17,7 @@ import java.util.Random;
 import java.util.UUID;
 
 public class WorldGeneratorDungeon implements IWorldGenerator {
+	public static double TOWER_CHANCE = 0.25D;
 	public boolean enabled = true;
 	public int dungeonDistance = 170;
 
@@ -27,6 +28,7 @@ public class WorldGeneratorDungeon implements IWorldGenerator {
 		ConfigBase config = ConfigBase.getConfig(LycanitesMobs.modInfo, "general");
 		this.enabled = config.getBool("Dungeons", "Dungeons Enabled", this.enabled, "If false, all Lycanites Mobs Dungeons are disabled, set to true to enable the Dungeon System. (The JSON files are still loaded but don't do anything.)");
 		this.dungeonDistance = config.getInt("Dungeons", "Dungeon Distance", this.dungeonDistance, "The average distance in chunks that dungeons are spaced apart from each other.");
+		TOWER_CHANCE = config.getDouble("Dungeons", "Tower Chance", TOWER_CHANCE, "The chance of a dungeon generating a tower on top (0.25 by default).");
 	}
 
 
