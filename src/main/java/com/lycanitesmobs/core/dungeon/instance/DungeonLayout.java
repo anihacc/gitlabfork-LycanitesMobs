@@ -1,7 +1,9 @@
 package com.lycanitesmobs.core.dungeon.instance;
 
 import com.lycanitesmobs.LycanitesMobs;
+import com.lycanitesmobs.core.config.ConfigDungeons;
 import com.lycanitesmobs.core.dungeon.definition.DungeonSector;
+import com.lycanitesmobs.core.worldgen.DungeonFeature;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.ChunkPos;
 
@@ -82,7 +84,7 @@ public class DungeonLayout {
 		}
 
 		// Tower Levels:
-		if(random.nextDouble() <= 0.25D) {
+		if(random.nextDouble() <= ConfigDungeons.INSTANCE.towerChance.get()) {
 			exitSector = entranceSector;
 			level = 1;
 			while (level <= 10) {

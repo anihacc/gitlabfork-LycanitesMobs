@@ -7,6 +7,7 @@ public class ConfigDungeons {
 
 	public final ForgeConfigSpec.ConfigValue<Boolean> dungeonsEnabled;
 	public final ForgeConfigSpec.ConfigValue<Integer> dungeonDistance;
+	public final ForgeConfigSpec.ConfigValue<Double> towerChance;
 
 	public ConfigDungeons(ForgeConfigSpec.Builder builder) {
 		builder.push("Dungeons");
@@ -21,6 +22,11 @@ public class ConfigDungeons {
 				.comment("The average distance in chunks that dungeons are spaced apart from each other.")
 				.translation(CoreConfig.CONFIG_PREFIX + "dungeons.distance")
 				.define("distance", 40);
+
+		this.towerChance = builder
+				.comment("The chance of a dungeon generating a tower on top (0.25 by default).")
+				.translation(CoreConfig.CONFIG_PREFIX + "dungeons.tower.chance")
+				.define("tower.chance", 0.25D);
 
 		builder.pop();
 	}
