@@ -161,6 +161,14 @@ public class ModelTemplateBiped extends ModelCreatureObj {
                     posY += bob * this.flightBobScale;
                 }
             }
+            if(partName.contains("legleft")) {
+                rotZ += Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F + 0.05F);
+                rotX += Math.toDegrees(MathHelper.sin(loop * 0.067F) * 0.05F);
+            }
+            if(partName.contains("legright")) {
+                rotZ -= Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F + 0.05F);
+                rotX -= Math.toDegrees(MathHelper.sin(loop * 0.067F) * 0.05F);
+            }
         }
 
         // Attack:

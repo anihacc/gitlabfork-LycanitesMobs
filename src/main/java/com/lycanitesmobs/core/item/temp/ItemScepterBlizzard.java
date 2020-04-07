@@ -43,7 +43,7 @@ public class ItemScepterBlizzard extends ItemScepter {
     @Override
     public boolean rapidAttack(ItemStack itemStack, World world, EntityLivingBase entity) {
     	if(!world.isRemote) {
-			ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile("aquapulse");
+			ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile("blizzard");
 			if(projectileInfo == null) {
 				return true;
 			}

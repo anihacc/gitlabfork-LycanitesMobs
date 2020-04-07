@@ -300,6 +300,9 @@ public class ProjectileInfo {
 	 * @param z The z position of the projectile.
 	 */
 	public BaseProjectileEntity createProjectile(World world, double x, double y, double z) {
+		if(this.modelClassName != null) {
+			return new CustomProjectileModelEntity(world, x, y, z, this);
+		}
 		return new CustomProjectileEntity(world, x, y, z, this);
 	}
 
