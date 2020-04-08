@@ -23,6 +23,7 @@ public class ConfigCreatures {
 	public final ForgeConfigSpec.ConfigValue<Double> levelPerDay;
 	public final ForgeConfigSpec.ConfigValue<Integer> levelPerDayMax;
 	public final ForgeConfigSpec.ConfigValue<Double> levelPerLocalDifficulty;
+	public final ForgeConfigSpec.ConfigValue<Integer> bossDamageCap;
 	
 	public final ForgeConfigSpec.ConfigValue<Boolean> ownerTags;
 	public final ForgeConfigSpec.ConfigValue<Boolean> tamingEnabled;
@@ -30,7 +31,8 @@ public class ConfigCreatures {
 	public final ForgeConfigSpec.ConfigValue<Boolean> mountingFlightEnabled;
 	public final ForgeConfigSpec.ConfigValue<Boolean> friendlyFire;
 	public final ForgeConfigSpec.ConfigValue<Integer> petRespawnTime;
-	
+	public final ForgeConfigSpec.ConfigValue<Integer> petFollowDistance;
+
 	public final ForgeConfigSpec.ConfigValue<Double> beastiaryAddOnDeathChance;
 	public final ForgeConfigSpec.ConfigValue<Boolean> beastiaryKnowledgeMessages;
 	
@@ -85,6 +87,9 @@ public class ConfigCreatures {
 		levelPerLocalDifficulty = builder.comment("How many levels a mob gains multiplied by the local area difficulty level. Staying in an area for a while slowly increases the difficulty of that area ranging from 0.00 to 6.75. So 1.5 means level 10 at full local area difficulty.")
 				.translation(CoreConfig.CONFIG_PREFIX + "creatures.levelPerLocalDifficulty")
 				.define("levelPerLocalDifficulty", 1.5D);
+		bossDamageCap = builder.comment("Caps how much damage a boss can take per tick, this also affects Rare Variants and Dungeon Bosses. Set to 0 to disable the cap.")
+				.translation(CoreConfig.CONFIG_PREFIX + "creatures.bossDamageCap")
+				.define("bossDamageCap", 50);
 
 		ownerTags = builder.comment("If true, tamed mobs will display their owner's name in their name tag.")
 				.translation(CoreConfig.CONFIG_PREFIX + "creatures.ownerTags")
@@ -104,6 +109,9 @@ public class ConfigCreatures {
 		petRespawnTime = builder.comment("The time in tics that it takes for a pet to respawn.")
 				.translation(CoreConfig.CONFIG_PREFIX + "creatures.petRespawnTime")
 				.define("petRespawnTime", 3 * 60 * 20);
+		petFollowDistance = builder.comment("How far in blocks pets stray from their owner when set to follow.")
+				.translation(CoreConfig.CONFIG_PREFIX + "creatures.petFollowDistance")
+				.define("petFollowDistance", 8);
 
 		beastiaryAddOnDeathChance = builder.comment("The chance that creatures are added to the player's Beastiary when killed, the Soulgazer can also be used to add creatures. Bosses are always a 100% chance.")
 				.translation(CoreConfig.CONFIG_PREFIX + "creatures.beastiaryAddOnDeathChance")

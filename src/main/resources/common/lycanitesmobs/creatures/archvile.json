@@ -106,7 +106,7 @@
             "chance": 1
         },
         {
-            "item": "lycanitesmobs:doomfirecharge",
+            "item": "lycanitesmobs:doomfireballcharge",
             "minAmount": 5,
             "maxAmount": 10,
             "chance": 1

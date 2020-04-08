@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.info;
 
 import com.lycanitesmobs.core.config.ConfigCreatures;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +58,9 @@ public class CreatureConfig {
 	/** The time in tics that it takes for a pet to respawn. **/
 	public int petRespawnTime = 3 * 60 * 20;
 
+	/** How far in blocks pets stray from their owner when set to follow. **/
+	public int petFollowDistance = 8;
+
 
 	// Beastiary:
 	/** The chance that a creature gets added to the killing player's Beastiary on death, always 100% for bosses. **/
@@ -69,6 +73,9 @@ public class CreatureConfig {
 	// Bosses:
 	/** How much higher players must be relative to a boss' y position (feet) to trigger anti flight measures. **/
 	public double bossAntiFlight = 10;
+
+	/** Caps how much damage a boss can take per tick, this also affects Rare Variants and Dungeon Bosses. **/
+	public int bossDamageCap = 50;
 
 
 	// Interaction:
@@ -140,6 +147,7 @@ public class CreatureConfig {
 		this.mountingFlightEnabled = ConfigCreatures.INSTANCE.mountingFlightEnabled.get();
 		this.friendlyFire = ConfigCreatures.INSTANCE.friendlyFire.get();
 		this.petRespawnTime = ConfigCreatures.INSTANCE.petRespawnTime.get();
+		this.petFollowDistance = ConfigCreatures.INSTANCE.petFollowDistance.get();
 
 		// Beastiary:
 		this.beastiaryAddOnDeathChance = ConfigCreatures.INSTANCE.beastiaryAddOnDeathChance.get();
@@ -147,6 +155,8 @@ public class CreatureConfig {
 
 		// Bosses:
 		this.bossAntiFlight = ConfigCreatures.INSTANCE.bossAntiFlight.get();
+		this.bossDamageCap = ConfigCreatures.INSTANCE.bossDamageCap.get();
+		BaseCreatureEntity.BOSS_DAMAGE_LIMIT = this.bossDamageCap;
 
 		// Interaction:
 		this.elementalFusion = ConfigCreatures.INSTANCE.elementalFusion.get();
