@@ -179,7 +179,7 @@ public class GameEventListener {
     // ==================================================
 	@SubscribeEvent
 	public void onEntityConstructing(EntityConstructing event) {
-		if(event.getEntity() == null || event.getEntity().getEntityWorld().isRemote)
+		if(event.getEntity() == null || event.getEntity().getEntityWorld() == null || event.getEntity().getEntityWorld().isRemote)
 			return;
 
         // ========== Force Remove Entity ==========
