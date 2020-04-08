@@ -1,5 +1,5 @@
 {
-	"name": "hellsfury_spawner",
+	"name": "hellsfury_skyspawner",
 	"type": "spawner",
 	"enabled": true,
 	"loadDefault": true,

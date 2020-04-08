@@ -179,7 +179,7 @@ public class GameEventListener {
     // ==================================================
 	@SubscribeEvent
 	public void onEntityConstructing(EntityConstructing event) {
-		if(event.getEntity() == null || event.getEntity().getEntityWorld() == null || event.getEntity().getEntityWorld().isRemote)
+		if(event.getEntity() == null || event.getEntity().getEntityWorld().isRemote)
 			return;
 
         // ========== Force Remove Entity ==========
@@ -462,7 +462,7 @@ public class GameEventListener {
 	// ==================================================
 	@SubscribeEvent
 	public void onBlockBreak(BlockEvent.BreakEvent event) {
-		if(event.getState() == null || event.getWorld() == null || event.isCanceled()) {
+		if(event.getState() == null || event.getWorld() == null || event.isCanceled() || event.getWorld().isRemote) {
 			return;
 		}
 
@@ -475,7 +475,7 @@ public class GameEventListener {
 			}
 		}
 
-		if(event.getPlayer() != null && event.getWorld().isRemote) {
+		if(event.getPlayer() != null) {
 			ExtendedPlayer extendedPlayer = ExtendedPlayer.getForPlayer(event.getPlayer());
 			if (extendedPlayer == null) {
 				return;

@@ -150,6 +150,8 @@ public abstract class BaseCreatureEntity extends EntityLiving {
     public int battlePhase = 0;
     /** The maximum amount of damage this mob can take. If 0 or less, this is ignored. **/
     public int damageMax = 0;
+	/** If above 0, no more than this much health can be lost per second. **/
+	public float damageLimit = 0;
     /** The gorwing age of this mob. **/
     protected int growingAge;
 
@@ -160,8 +162,6 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 	public float damageTakenThisSec = 0;
 	/** How much health this creature had last tick. **/
 	public float healthLastTick = -1;
-	/** If above 0, no more than this much health can be lost per second. **/
-	public float damageLimit = 0;
 
 
 	// Abilities:
@@ -1494,8 +1494,8 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 				scaledExp = Math.round((float) (this.creatureInfo.experience * Variant.RARE_EXPERIENCE_SCALE));
 			this.experienceValue = Math.round(scaledExp);
 			if ("rare".equals(this.variant.rarity)) {
-				this.damageLimit = 40;
-				this.damageMax = 25;
+				this.damageLimit = BOSS_DAMAGE_LIMIT;
+				this.damageMax = BOSS_DAMAGE_LIMIT;
 			}
 		}
 	}
