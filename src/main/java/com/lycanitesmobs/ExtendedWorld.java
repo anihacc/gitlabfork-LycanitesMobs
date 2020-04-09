@@ -1,6 +1,7 @@
 package com.lycanitesmobs;
 
 import com.lycanitesmobs.core.dungeon.instance.DungeonInstance;
+import com.lycanitesmobs.core.entity.BossEntry;
 import com.lycanitesmobs.core.mobevent.MobEvent;
 import com.lycanitesmobs.core.mobevent.MobEventManager;
 import com.lycanitesmobs.core.mobevent.MobEventPlayerClient;
@@ -45,7 +46,7 @@ public class ExtendedWorld extends WorldSavedData {
 	private int worldEventCount = -1;
 
 	// Entities:
-	public List<Entity> bosses = new ArrayList<>();
+	public Map<UUID, BossEntry> bosses = new HashMap<>();
 
 	// Dungeons:
 	public Map<UUID, DungeonInstance> dungeons = new HashMap<>();
@@ -399,28 +400,30 @@ public class ExtendedWorld extends WorldSavedData {
 	// ==================================================
 	/** Called by bosses to let this world know that they are active, this will add them to the boss list if they are not already in it. **/
 	public void bossUpdate(Entity entity) {
-		if(entity.isAlive() && !this.bosses.contains(entity)) {
-			this.bosses.add(entity);
+		if(entity.isAlive()) {
+			if(!this.bosses.containsKey(entity.getUniqueID())) {
+				this.bosses.put(entity.getUniqueID(), new BossEntry());
+			}
+			this.bosses.get(entity.getUniqueID()).update(entity);
 		}
 	}
 
 	/** Called by bosses to let this world know that they are being removed. **/
 	public void bossRemoved(Entity entity) {
-		this.bosses.remove(entity);
+		this.bosses.remove(entity.getUniqueID());
 	}
 
 	/**
 	 * Returns true if a boss is nearby.
 	 * @param pos The position to search around.
-	 * @param range The range to search within.
 	 * @return True if a boss is present.
 	 */
-	public boolean isBossNearby(Vec3d pos, double range) {
-		for(Entity entity : this.bosses) {
-			if(entity == null || !entity.isAlive()) {
+	public boolean isBossNearby(Vec3d pos) {
+		for(BossEntry bossEntry : this.bosses.values()) {
+			if(bossEntry == null || bossEntry.entity == null || !bossEntry.entity.isAlive()) {
 				continue;
 			}
-			if(entity.getDistanceSq(pos) <= range * range) {
+			if(bossEntry.entity.getDistanceSq(pos) <= bossEntry.nearbyRange * bossEntry.nearbyRange) {
 				return true;
 			}
 		}

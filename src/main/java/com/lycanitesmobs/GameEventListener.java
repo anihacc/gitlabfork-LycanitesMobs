@@ -1,5 +1,6 @@
 package com.lycanitesmobs;
 
+import com.lycanitesmobs.core.block.BlockFireBase;
 import com.lycanitesmobs.core.capabilities.CapabilityProviderEntity;
 import com.lycanitesmobs.core.capabilities.CapabilityProviderPlayer;
 import com.lycanitesmobs.core.config.ConfigDebug;
@@ -21,6 +22,7 @@ import net.minecraft.potion.Effects;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.*;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -377,12 +379,13 @@ public class GameEventListener {
 			return;
 		}
 
-		if(event.getPlayer() == null || !event.getPlayer().isCreative()) {
+		if(event.getPlayer() != null && !event.getPlayer().isCreative()) {
 			if (event.getWorld() instanceof World) {
 				ExtendedWorld extendedWorld = ExtendedWorld.getForWorld((World) event.getWorld());
-				if (extendedWorld.isBossNearby(new Vec3d(event.getPos()), 60)) {
+				if (!(event.getState().getBlock() instanceof BlockFireBase) && extendedWorld.isBossNearby(new Vec3d(event.getPos()))) {
 					event.setCanceled(true);
 					event.setResult(Event.Result.DENY);
+					event.getPlayer().sendStatusMessage(new TranslationTextComponent("boss.block.protection.break"), true);
 					return;
 				}
 			}
@@ -408,12 +411,13 @@ public class GameEventListener {
 			return;
 		}
 
-		if(!(event.getEntity() instanceof PlayerEntity) || !((PlayerEntity)event.getEntity()).isCreative()) {
+		if(event.getEntity() instanceof PlayerEntity && !((PlayerEntity)event.getEntity()).isCreative()) {
 			if (event.getWorld() instanceof World) {
 				ExtendedWorld extendedWorld = ExtendedWorld.getForWorld((World) event.getWorld());
-				if (extendedWorld.isBossNearby(new Vec3d(event.getPos()), 60)) {
+				if (extendedWorld.isBossNearby(new Vec3d(event.getPos()))) {
 					event.setCanceled(true);
 					event.setResult(Event.Result.DENY);
+					((PlayerEntity)event.getEntity()).sendStatusMessage(new TranslationTextComponent("boss.block.protection.place"), true);
 					return;
 				}
 			}

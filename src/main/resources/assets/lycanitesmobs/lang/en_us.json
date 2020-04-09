@@ -2044,6 +2044,8 @@
     "event.boss.finished.prefix": "",
     "event.boss.finished.suffix": " is unleashed!",
     "event.boss.phase": "Phase",
+    "boss.block.protection.place": "The presence of a powerful being prevents you from placing this block.",
+    "boss.block.protection.break": "The presence of a powerful being prevents you from destroying that block.",
     "_comment": "",
     "_comment": "========== Event Names ==========",
     "mobevent.amalgalich.name": "Amalgalich",

@@ -553,9 +553,6 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	 * The final setup stage when constructing this entity, should be called last by the constructors of each specific entity class.
 	 */
     public void setupMob() {
-        // Size:
-        this.setSizeScale(this.creatureInfo.sizeScale);
-        
         // Stats:
         this.stepHeight = 0.5F;
         this.inventory = new InventoryCreature(this.getName().getFormattedText(), this);
@@ -1312,7 +1309,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
 	/** Sets the size scale of this creature. **/
 	public void setSizeScale(double scale) {
-		this.sizeScale = scale;
+		this.sizeScale = scale * this.creatureInfo.sizeScale;
 	}
 
 	/** Returns the model scale for rendering. **/

@@ -81,6 +81,7 @@
     "mountable": false,
     "summonCost": 2,
     "dungeonLevel": 1,
+    "bossNearbyRange": 120,
     "drops": [
         {
             "item": "minecraft:redstone",
