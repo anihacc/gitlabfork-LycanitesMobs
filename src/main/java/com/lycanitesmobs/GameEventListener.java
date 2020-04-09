@@ -1,5 +1,7 @@
 package com.lycanitesmobs;
 
+import com.lycanitesmobs.client.localisation.LanguageManager;
+import com.lycanitesmobs.core.block.BlockFireBase;
 import com.lycanitesmobs.core.capabilities.IExtendedEntity;
 import com.lycanitesmobs.core.capabilities.IExtendedPlayer;
 import com.lycanitesmobs.core.entity.*;
@@ -28,6 +30,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.capabilities.Capability;
@@ -466,11 +469,12 @@ public class GameEventListener {
 			return;
 		}
 
-		if(event.getPlayer() == null || !event.getPlayer().isCreative()) {
+		if(event.getPlayer() != null && !event.getPlayer().isCreative()) {
 			ExtendedWorld extendedWorld = ExtendedWorld.getForWorld(event.getWorld());
-			if (extendedWorld.isBossNearby(new Vec3d(event.getPos()), 60)) {
+			if (!(event.getState().getBlock() instanceof BlockFireBase) && extendedWorld.isBossNearby(new Vec3d(event.getPos()))) {
 				event.setCanceled(true);
 				event.setResult(Result.DENY);
+				event.getPlayer().sendStatusMessage(new TextComponentString(LanguageManager.translate("boss.block.protection.break")), true);
 				return;
 			}
 		}
@@ -495,11 +499,12 @@ public class GameEventListener {
 			return;
 		}
 
-		if(event.getPlayer() == null || !event.getPlayer().isCreative()) {
+		if(event.getPlayer() != null && !event.getPlayer().isCreative()) {
 			ExtendedWorld extendedWorld = ExtendedWorld.getForWorld(event.getWorld());
-			if (extendedWorld.isBossNearby(new Vec3d(event.getPos()), 60)) {
+			if (extendedWorld.isBossNearby(new Vec3d(event.getPos()))) {
 				event.setCanceled(true);
 				event.setResult(Result.DENY);
+				event.getPlayer().sendStatusMessage(new TextComponentString(LanguageManager.translate("boss.block.protection.place")), true);
 			}
 		}
 	}

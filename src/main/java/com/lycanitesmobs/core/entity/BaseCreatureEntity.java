@@ -547,8 +547,6 @@ public abstract class BaseCreatureEntity extends EntityLiving {
         this.setWidth *= this.creatureInfo.hitboxScale;
         this.setHeight *= this.creatureInfo.hitboxScale;
         this.updateSize();
-        if(this.creatureInfo.sizeScale != 1)
-            this.setSizeScale(this.creatureInfo.sizeScale);
         
         // Stats:
         this.stepHeight = 0.5F;
@@ -2792,7 +2790,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 
     /** Sets the size scale and updates the mobs size. **/
 	public void setSizeScale(double scale) {
-		this.sizeScale = scale;
+		this.sizeScale = scale * this.creatureInfo.sizeScale;
         this.updateSize();
     }
 

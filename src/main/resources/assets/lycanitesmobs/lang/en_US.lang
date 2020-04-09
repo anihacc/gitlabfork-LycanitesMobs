@@ -2087,6 +2087,8 @@ event.boss.started=%event% has been called!
 event.boss.extended=%event% is coming!
 event.boss.finished=%event% is unleashed!
 event.boss.phase=Phase
+boss.block.protection.place=The presence of a powerful being prevents you from placing this block.
+boss.block.protection.break=The presence of a powerful being prevents you from destroying that block.
 #
 # ========== Event Names ==========
 mobevent.amalgalich.name=Amalgalich
