@@ -289,7 +289,7 @@ public class ExtendedWorld extends WorldSavedData {
     /**
      * Starts a provided Mob Event (provided by INSTANCE) on the provided world.
      *  **/
-    public void startMobEvent(MobEvent mobEvent, EntityPlayer player, BlockPos pos, int level, int subspecies) {
+    public void startMobEvent(MobEvent mobEvent, EntityPlayer player, BlockPos pos, int level, int variant) {
         if(mobEvent == null) {
             LycanitesMobs.logWarning("", "Tried to start a null mob event.");
             return;
@@ -302,7 +302,7 @@ public class ExtendedWorld extends WorldSavedData {
 			mobEventPlayerServer.player = player;
             mobEventPlayerServer.origin = pos;
             mobEventPlayerServer.level = level;
-            mobEventPlayerServer.subspecies = subspecies;
+            mobEventPlayerServer.variant = variant;
             mobEventPlayerServer.onStart();
             this.updateAllClientsEvents();
         }
@@ -420,6 +420,13 @@ public class ExtendedWorld extends WorldSavedData {
 		}
 	}
 
+	/** Overrides the boss nearby range for the provided entity. **/
+	public void overrideBossRange(Entity entity, int rangeOverride) {
+		if(this.bosses.containsKey(entity.getUniqueID())) {
+			this.bosses.get(entity.getUniqueID()).nearbyRange = rangeOverride;
+		}
+	}
+
 	/** Called by bosses to let this world know that they are being removed. **/
 	public void bossRemoved(Entity entity) {
 		this.bosses.remove(entity.getUniqueID());
@@ -450,11 +457,11 @@ public class ExtendedWorld extends WorldSavedData {
     public void updateAllClientsEvents() {
     	BlockPos pos = this.serverWorldEventPlayer != null ? this.serverWorldEventPlayer.origin : new BlockPos(0, 0, 0);
 		int level = this.serverWorldEventPlayer != null ? this.serverWorldEventPlayer.level : 0;
-		int subspecies = this.serverWorldEventPlayer != null ? this.serverWorldEventPlayer.subspecies : -1;
+		int subspecies = this.serverWorldEventPlayer != null ? this.serverWorldEventPlayer.variant : -1;
         MessageWorldEvent message = new MessageWorldEvent(this.getWorldEventName(), pos, level, subspecies);
         LycanitesMobs.packetHandler.sendToDimension(message, this.world.provider.getDimension());
         for(MobEventPlayerServer mobEventPlayerServer : this.serverMobEventPlayers.values()) {
-            MessageMobEvent messageMobEvent = new MessageMobEvent(mobEventPlayerServer.mobEvent != null ? mobEventPlayerServer.mobEvent.name : "", mobEventPlayerServer.origin, mobEventPlayerServer.level, mobEventPlayerServer.subspecies);
+            MessageMobEvent messageMobEvent = new MessageMobEvent(mobEventPlayerServer.mobEvent != null ? mobEventPlayerServer.mobEvent.name : "", mobEventPlayerServer.origin, mobEventPlayerServer.level, mobEventPlayerServer.variant);
             LycanitesMobs.packetHandler.sendToDimension(messageMobEvent, this.world.provider.getDimension());
         }
     }

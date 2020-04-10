@@ -20,8 +20,8 @@ public class CommandMobEventEffect extends MobEventEffect {
 	}
 
 	@Override
-	public void onUpdate(World world, EntityPlayer player, BlockPos pos, int level, int ticks, int subspecies) {
-		super.onUpdate(world, player, pos, level, ticks, subspecies);
+	public void onUpdate(World world, EntityPlayer player, BlockPos pos, int level, int ticks, int variant) {
+		super.onUpdate(world, player, pos, level, ticks, variant);
 		if(!this.canActivate(world, player, pos, level, ticks)) {
 			return;
 		}

@@ -31,8 +31,8 @@ public class MobEventPlayerServer {
     /** The level of the mob event, higher levels are more difficult, will spawn more subspecies, have higher mob levels, etc. **/
     public int level = 1;
 
-    /** The specific subspecies to spawn mobs as, if below zero a random subspecies is chosen as normal. **/
-    public int subspecies = -1;
+    /** The specific variant to spawn mobs as, if below zero a random variant is chosen as normal. **/
+    public int variant = -1;
 
 	/** True if the started event was already running and show display as 'Event Extended' in chat. **/
 	public boolean extended = false;
@@ -86,7 +86,7 @@ public class MobEventPlayerServer {
             return;
         }
 
-        this.mobEvent.onUpdate(this.world, this.player, this.origin, this.level, this.ticks, this.subspecies);
+        this.mobEvent.onUpdate(this.world, this.player, this.origin, this.level, this.ticks, this.variant);
         this.ticks++;
 
         // Stop Event When Time Runs Out:

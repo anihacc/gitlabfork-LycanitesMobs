@@ -1128,7 +1128,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
     /**
 	 * Summons the provided entity instance into the world as this creature's minion.
 	 * @param minion The entity instance to summon as a minion.
-	 * @param angle The spawn position angle of the minion reletive to this creature.
+	 * @param angle The spawn position angle of the minion relative to this creature.
 	 * @param distance How far from this creature to summon the minion.
 	 */
 	public void summonMinion(EntityLivingBase minion, double angle, double distance) {
@@ -1143,6 +1143,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
         if(minion instanceof BaseCreatureEntity) {
             ((BaseCreatureEntity)minion).setMinion(true);
             ((BaseCreatureEntity)minion).applyVariant(this.getVariantIndex());
+            ((BaseCreatureEntity)minion).setSubspecies(this.getSubspeciesIndex());
             ((BaseCreatureEntity)minion).setMasterTarget(this);
             ((BaseCreatureEntity)minion).spawnEventType = this.spawnEventType;
             if(this.isTemporary) {
@@ -1249,6 +1250,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
     // ========== On Spawn ==========
     /** This is called when the mob is first spawned to the world either through natural spawning or from a Spawn Egg. **/
     public void onFirstSpawn() {
+		this.firstSpawn = false;
     	if(this.hasPetEntry()) {
     		if(this.getPetEntry().summonSet != null && this.getPetEntry().summonSet.playerExt != null) {
 				this.getPetEntry().summonSet.playerExt.sendPetEntryToPlayer(this.getPetEntry());
@@ -1862,7 +1864,6 @@ public abstract class BaseCreatureEntity extends EntityLiving {
         // First Spawn:
         if(!this.getEntityWorld().isRemote && this.firstSpawn) {
             this.onFirstSpawn();
-            this.firstSpawn = false;
         }
 
         // Fixate Target:
