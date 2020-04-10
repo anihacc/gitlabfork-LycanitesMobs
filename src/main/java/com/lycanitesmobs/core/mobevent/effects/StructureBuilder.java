@@ -27,5 +27,5 @@ public abstract class StructureBuilder {
 	}
 
 
-	public abstract void build(World world, PlayerEntity player, BlockPos pos, int level, int ticks, int subspecies);
+	public abstract void build(World world, PlayerEntity player, BlockPos pos, int level, int ticks, int variant);
 }

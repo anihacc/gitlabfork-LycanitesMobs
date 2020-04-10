@@ -267,6 +267,7 @@ public class MobEvent {
 		}
 		if(entity instanceof BaseCreatureEntity) {
 			BaseCreatureEntity entityCreature = (BaseCreatureEntity)entity;
+			entityCreature.onFirstSpawn();
 			int levelBoost = this.levelBoostMin;
 			if(this.levelBoostMax > this.levelBoostMin) {
 				levelBoost += entityCreature.getRNG().nextInt(this.levelBoostMax - this.levelBoostMin + 1);

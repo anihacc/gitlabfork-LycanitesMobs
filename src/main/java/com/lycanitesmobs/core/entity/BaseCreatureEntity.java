@@ -1113,6 +1113,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
         if(minion instanceof BaseCreatureEntity) {
             ((BaseCreatureEntity)minion).setMinion(true);
             ((BaseCreatureEntity)minion).applyVariant(this.getVariantIndex());
+            ((BaseCreatureEntity)minion).setSubspecies(this.getSubspeciesIndex());
             ((BaseCreatureEntity)minion).setMasterTarget(this);
             ((BaseCreatureEntity)minion).spawnEventType = this.spawnEventType;
 			if(this.isTemporary) {
@@ -1218,6 +1219,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     // ========== On Spawn ==========
     /** This is called when the mob is first spawned to the world either through natural spawning or from a Spawn Egg. **/
     public void onFirstSpawn() {
+		this.firstSpawn = false;
 		if(this.hasPetEntry()) {
 			if(this.getPetEntry().summonSet != null && this.getPetEntry().summonSet.playerExt != null) {
 				this.getPetEntry().summonSet.playerExt.sendPetEntryToPlayer(this.getPetEntry());
@@ -1688,7 +1690,6 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
         // First Spawn:
         if(!this.getEntityWorld().isRemote && this.firstSpawn) {
             this.onFirstSpawn();
-            this.firstSpawn = false;
         }
 
         // Fixate Target:

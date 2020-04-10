@@ -45,33 +45,7 @@ public class ItemSoulstone extends BaseItem {
 	// ==================================================
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
-    	if(this.creatureType == null)
-    		return super.onItemRightClick(world, player, hand);
-
-		ItemStack itemStack = player.getHeldItem(hand);
-		ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
-		if(playerExt == null) {
-			return new ActionResult(ActionResultType.SUCCESS, itemStack);
-		}
-
-		// Get Random Creature from Type:
-		int randomCreatureIndex = player.getRNG().nextInt(this.creatureType.tameableCreatures.size());
-		CreatureInfo creatureInfo = this.creatureType.tameableCreatures.get(randomCreatureIndex);
-		if(creatureInfo == null) {
-			return new ActionResult(ActionResultType.SUCCESS, itemStack);
-		}
-		LivingEntity entity = creatureInfo.createEntity(world);
-
-		if(entity != null) {
-			entity.setLocationAndAngles(player.getPositionVec().getX(), player.getPositionVec().getY(), player.getPositionVec().getZ(), player.rotationYaw, player.rotationPitch);
-			world.addEntity(entity);
-			if (!player.getEntityWorld().isRemote && entity instanceof TameableCreatureEntity) {
-				((TameableCreatureEntity) entity).setPlayerOwner(player);
-			}
-			this.applySoulstoneToEntity(player, entity);
-		}
-
-		return new ActionResult(ActionResultType.SUCCESS, itemStack);
+    	return super.onItemRightClick(world, player, hand);
 	}
 
 	@Override

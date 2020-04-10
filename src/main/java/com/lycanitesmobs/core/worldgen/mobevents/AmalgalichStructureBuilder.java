@@ -26,7 +26,7 @@ public class AmalgalichStructureBuilder extends StructureBuilder {
 	}
 
 	@Override
-	public void build(World world, PlayerEntity player, BlockPos pos, int level, int ticks, int subspecies) {
+	public void build(World world, PlayerEntity player, BlockPos pos, int level, int ticks, int variant) {
 		ExtendedWorld worldExt = ExtendedWorld.getForWorld(world);
 		int originX = pos.getX();
 		int originY = pos.getY();
@@ -77,7 +77,7 @@ public class AmalgalichStructureBuilder extends StructureBuilder {
 			if(worldExt != null) {
 				MobEventPlayerServer mobEventPlayerServer = worldExt.getMobEventPlayerServer(this.name);
 				if(mobEventPlayerServer != null) {
-					mobEventPlayerServer.mobEvent.onSpawn(baseCreatureEntity, world, player, pos, level, ticks, subspecies);
+					mobEventPlayerServer.mobEvent.onSpawn(baseCreatureEntity, world, player, pos, level, ticks, variant);
 				}
 			}
 		}
