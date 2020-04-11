@@ -4464,7 +4464,6 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 				}
 				return false;
 			}
-			return false;
         }
         return true;
     }

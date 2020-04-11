@@ -466,11 +466,17 @@ public class PotionEffects {
         // Leeching
 		PotionBase leech = ObjectManager.getEffect("leech");
 		if(leech != null && event.getSource().getTrueSource() != null) {
-            if(event.getSource().getTrueSource() instanceof EntityLivingBase) {
-                EntityLivingBase attackingEntity = (EntityLivingBase)(event.getSource().getTrueSource());
-                if(attackingEntity.isPotionActive(leech)) {
-                    int leeching = attackingEntity.getActivePotionEffect(leech).getAmplifier() + 1;
-                    attackingEntity.heal(Math.max(leeching, 1));
+			EntityLivingBase leechingEntity = null;
+				if(event.getSource().getImmediateSource() instanceof EntityLivingBase) {
+					leechingEntity = (EntityLivingBase)event.getSource().getImmediateSource();
+				}
+				else if(event.getSource().getTrueSource() instanceof EntityLivingBase) {
+					leechingEntity = (EntityLivingBase)event.getSource().getTrueSource();
+				}
+            if(leechingEntity != null) {
+                if(leechingEntity.isPotionActive(leech)) {
+                    int leeching = leechingEntity.getActivePotionEffect(leech).getAmplifier() + 1;
+					leechingEntity.heal(Math.max(leeching, 1));
                 }
             }
         }
