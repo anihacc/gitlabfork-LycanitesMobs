@@ -2089,6 +2089,7 @@ event.boss.finished=%event% is unleashed!
 event.boss.phase=Phase
 boss.block.protection.place=The presence of a powerful being prevents you from placing this block.
 boss.block.protection.break=The presence of a powerful being prevents you from destroying that block.
+boss.damage.protection.range=That being is too powerful to be damaged from this range.
 #
 # ========== Event Names ==========
 mobevent.amalgalich.name=Amalgalich

@@ -469,9 +469,8 @@ public class PotionEffects {
             if(event.getSource().getTrueSource() instanceof EntityLivingBase) {
                 EntityLivingBase attackingEntity = (EntityLivingBase)(event.getSource().getTrueSource());
                 if(attackingEntity.isPotionActive(leech)) {
-                    float damage = event.getAmount();
-                    float multiplier = attackingEntity.getActivePotionEffect(leech).getAmplifier() + 1;
-                    attackingEntity.heal(Math.max(damage * multiplier * 0.25F, 1));
+                    int leeching = attackingEntity.getActivePotionEffect(leech).getAmplifier() + 1;
+                    attackingEntity.heal(Math.max(leeching, 1));
                 }
             }
         }

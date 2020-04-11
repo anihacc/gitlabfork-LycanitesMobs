@@ -4458,7 +4458,13 @@ public abstract class BaseCreatureEntity extends EntityLiving {
         if(this.isBoss() || this.isRareVariant()) {
             if(entity == null)
                 return false;
-            return this.getDistance(entity) <= this.bossRange;
+			if(this.getDistance(entity) > this.bossRange) {
+				if(entity instanceof EntityPlayer) {
+					((EntityPlayer)entity).sendStatusMessage(new TextComponentString(LanguageManager.translate("boss.damage.protection.range")), true);
+				}
+				return false;
+			}
+			return false;
         }
         return true;
     }

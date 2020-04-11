@@ -21,7 +21,7 @@ public class BlockSoulcube extends BlockBase {
 		
 		// Stats:
 		this.setHardness(5F);
-        this.setResistance(10F);
+        this.setResistance(2000.0F);
 		this.setHarvestLevel("pickaxe", 2);
 		this.setSoundType(SoundType.GLASS);
 	}
