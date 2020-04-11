@@ -50,7 +50,7 @@ public class EffectEquipmentFeature extends EquipmentFeature {
 			description += " " + LanguageManager.translate("entity.level") + " " + this.effectStrength;
 		}
 		if(!"self".equals(this.effectTarget) && this.effectDuration > 0) {
-			description += " " + ((float)this.effectDuration / 20);
+			description += " " + ((float)this.effectDuration / 20) + "s";
 		}
 		description += " (" + this.effectTarget + ")";
 		return description;
@@ -67,7 +67,7 @@ public class EffectEquipmentFeature extends EquipmentFeature {
 			summary += " " + LanguageManager.translate("entity.level") + " " + this.effectStrength;
 		}
 		if(!"self".equals(this.effectTarget) && this.effectDuration > 0) {
-			summary += " " + ((float)this.effectDuration / 20);
+			summary += " " + ((float)this.effectDuration / 20) + "s";
 		}
 		summary += " (" + this.effectTarget + ")";
 		return summary;
