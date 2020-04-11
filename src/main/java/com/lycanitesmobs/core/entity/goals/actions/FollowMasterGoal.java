@@ -43,6 +43,9 @@ public class FollowMasterGoal extends FollowGoal {
  	// ==================================================
     @Override
     public Entity getTarget() {
+		if(this.host.getMasterTarget() != null && this.host.getMasterTarget() instanceof BaseCreatureEntity && ((BaseCreatureEntity)this.host.getMasterTarget()).isBossAlways()) {
+			return null;
+		}
     	return this.host.getMasterTarget();
     }
 
