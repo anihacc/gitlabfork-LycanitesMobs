@@ -85,6 +85,11 @@ public class EntityWraith extends TameableCreatureEntity implements IMob {
         super.livingTick();
     }
 
+	@Override
+	public boolean rollWanderChance() {
+		return this.getRNG().nextDouble() <= 0.25D;
+	}
+
 
     // ==================================================
     //                     Attacks

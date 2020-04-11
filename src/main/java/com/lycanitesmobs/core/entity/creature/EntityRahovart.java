@@ -6,6 +6,11 @@ import com.lycanitesmobs.api.IGroupHeavy;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
+import com.lycanitesmobs.core.entity.goals.actions.FindNearbyPlayersGoal;
+import com.lycanitesmobs.core.entity.goals.actions.abilities.FaceTargetGoal;
+import com.lycanitesmobs.core.entity.goals.actions.abilities.FireProjectilesGoal;
+import com.lycanitesmobs.core.entity.goals.actions.abilities.HealWhenNoPlayersGoal;
+import com.lycanitesmobs.core.entity.goals.actions.abilities.SummonMinionsGoal;
 import com.lycanitesmobs.core.entity.projectile.EntityHellfireBarrier;
 import com.lycanitesmobs.core.entity.projectile.EntityHellfireOrb;
 import com.lycanitesmobs.core.entity.projectile.EntityHellfireWave;
@@ -39,7 +44,6 @@ import java.util.List;
 
 public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHeavy, IGroupBoss {
 
-    public List<PlayerEntity> playerTargets = new ArrayList<>();
     public int hellfireEnergy = 0;
     public List<EntityHellfireOrb> hellfireOrbs = new ArrayList<>();
 
@@ -85,6 +89,15 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
     // ========== Init AI ==========
     @Override
     protected void registerGoals() {
+        this.targetSelector.addGoal(this.nextFindTargetIndex, new FindNearbyPlayersGoal(this));
+
+        // All Phases:
+        this.goalSelector.addGoal(this.nextIdleGoalIndex, new FaceTargetGoal(this));
+        this.goalSelector.addGoal(this.nextIdleGoalIndex, new HealWhenNoPlayersGoal(this));
+        this.goalSelector.addGoal(this.nextIdleGoalIndex, new SummonMinionsGoal(this).setMinionInfo("wraith").setAntiFlight(true));
+        this.goalSelector.addGoal(this.nextIdleGoalIndex, new FireProjectilesGoal(this).setProjectile("hellfireball").setFireRate(40).setVelocity(1.6F).setScale(8F).setAllPlayers(true));
+        this.goalSelector.addGoal(this.nextIdleGoalIndex, new FireProjectilesGoal(this).setProjectile("hellfireball").setFireRate(60).setVelocity(1.6F).setScale(8F));
+
         super.registerGoals();
     }
 
@@ -162,51 +175,6 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
         if(!this.getEntityWorld().isRemote) {
 			this.updatePhases();
 		}
-
-        // Player Targets and No Player Healing:
-        if(!this.getEntityWorld().isRemote && this.updateTick % 200 == 0) {
-            this.playerTargets = this.getNearbyEntities(PlayerEntity.class, null, 64);
-        }
-        if(!this.getEntityWorld().isRemote && this.updateTick % 20 == 0) {
-            if (this.playerTargets.size() == 0)
-                this.heal(50);
-        }
-
-        // Passive Attacks:
-        if(!this.getEntityWorld().isRemote && this.updateTick % 20 == 0) {
-
-            // Random Projectiles:
-            for(int i = 0; i < 3; i++) {
-                ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile("hellfireball");
-                if(projectileInfo != null) {
-                    BaseProjectileEntity projectile = projectileInfo.createProjectile(this.getEntityWorld(), this);
-                    projectile.setProjectileScale(8f);
-                    projectile.shoot((this.getRNG().nextFloat()) - 0.5F, this.getRNG().nextFloat(), (this.getRNG().nextFloat()) - 0.5F, 1.2F, 3.0F);
-                    this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
-                    this.getEntityWorld().addEntity(projectile);
-                }
-            }
-
-            // Flying Player Wraith Attack:
-            for(PlayerEntity target : this.playerTargets) {
-                if(target.abilities.disableDamage || target.isSpectator())
-                    continue;
-                this.attackRanged(target, 1F);
-                if(CreatureManager.getInstance().config.bossAntiFlight > 0 && target.getPositionVec().getY() > this.getPositionVec().getY() + CreatureManager.getInstance().config.bossAntiFlight + 1) {
-                    for(int i = 0; i < 3; i++) {
-                        EntityWraith minion = (EntityWraith)CreatureManager.getInstance().getCreature("wraith").createEntity(this.getEntityWorld());
-                        this.summonMinion(minion, this.getRNG().nextDouble() * 360, 5);
-                        minion.setAttackTarget(target);
-                        minion.setMasterTarget(null); // Clear master target so that these minions don't break phase 3 barriers.
-                    }
-                }
-            }
-
-            // Primary Target
-            if(this.hasAttackTarget()) {
-                this.attackRanged(this.getAttackTarget(), 1F);
-            }
-        }
     }
 
     @Override
