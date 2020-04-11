@@ -321,7 +321,7 @@ public class EntityConcapedeSegment extends AgeableCreatureEntity {
     /** Used when loading this mob from a saved chunk. **/
     @Override
     public void readEntityFromNBT(NBTTagCompound nbtTagCompound) {
-    	if(nbtTagCompound.hasKey("ParentUUIDMost")) {
+    	if(nbtTagCompound.hasUniqueId("ParentUUID")) {
             this.parentUUID = nbtTagCompound.getUniqueId("ParentUUID");
 		}
         super.readEntityFromNBT(nbtTagCompound);

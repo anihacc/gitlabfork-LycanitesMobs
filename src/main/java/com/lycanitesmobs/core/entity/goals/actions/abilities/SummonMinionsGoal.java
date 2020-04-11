@@ -97,7 +97,7 @@ public class SummonMinionsGoal extends BaseGoal {
 		// Anti Flight Mode:
 		if(this.antiFlight) {
 			for (EntityPlayer target : this.host.playerTargets) {
-				if(target.capabilities.disableDamage || target.isSpectator())
+				if(target.isCreative() || target.isSpectator())
 					continue;
 				if (CreatureManager.getInstance().config.bossAntiFlight > 0 && target.posY > this.host.posY + CreatureManager.getInstance().config.bossAntiFlight + 1) {
 					this.summonMinion(target);
