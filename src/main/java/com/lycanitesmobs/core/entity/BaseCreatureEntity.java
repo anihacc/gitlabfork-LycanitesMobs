@@ -4329,7 +4329,13 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
         if(this.isBoss() || this.isRareVariant()) {
             if(entity == null)
                 return false;
-            return this.getDistance(entity) <= this.bossRange;
+            if(this.getDistance(entity) > this.bossRange) {
+            	if(entity instanceof PlayerEntity) {
+					((PlayerEntity)entity).sendStatusMessage(new TranslationTextComponent("boss.damage.protection.range"), true);
+				}
+            	return false;
+			}
+            return false;
         }
         return true;
     }
