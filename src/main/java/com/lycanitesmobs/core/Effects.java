@@ -444,7 +444,7 @@ public class Effects {
 		if(penetration != null) {
 			if(event.getEntityLiving().isPotionActive(penetration)) {
 				float damage = event.getAmount();
-				float multiplier = event.getEntityLiving().getActivePotionEffect(penetration).getAmplifier();
+				float multiplier = 0.25F * (event.getEntityLiving().getActivePotionEffect(penetration).getAmplifier() + 1);
 				event.setAmount(damage + (damage * multiplier));
 			}
 		}
