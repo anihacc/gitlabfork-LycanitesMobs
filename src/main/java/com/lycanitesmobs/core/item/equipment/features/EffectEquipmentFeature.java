@@ -52,7 +52,7 @@ public class EffectEquipmentFeature extends EquipmentFeature {
 			description.appendText(" ").appendSibling(new TranslationTextComponent("entity.level")).appendText(" " + this.effectStrength);
 		}
 		if(!"self".equals(this.effectTarget) && this.effectDuration > 0) {
-			description.appendText(" " + ((float)this.effectDuration / 20));
+			description.appendText(" " + ((float)this.effectDuration / 20) + "s");
 		}
 
 		description.appendText(" (" + this.effectTarget + ")");
@@ -71,7 +71,7 @@ public class EffectEquipmentFeature extends EquipmentFeature {
 			summary.appendText(" ").appendSibling(new TranslationTextComponent("entity.level")).appendText(" " + this.effectStrength);
 		}
 		if(!"self".equals(this.effectTarget) && this.effectDuration > 0) {
-			summary.appendText(" " + ((float)this.effectDuration / 20));
+			summary.appendText(" " + ((float)this.effectDuration / 20) + "s");
 		}
 
 		summary.appendText(" (" + this.effectTarget + ")");
