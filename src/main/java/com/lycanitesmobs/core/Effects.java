@@ -465,13 +465,19 @@ public class Effects {
         // Leeching
 		EffectBase leech = ObjectManager.getEffect("leech");
 		if(leech != null && event.getSource().getTrueSource() != null) {
-            if(event.getSource().getTrueSource() instanceof LivingEntity) {
-                LivingEntity attackingEntity = (LivingEntity)(event.getSource().getTrueSource());
-                if(attackingEntity.isPotionActive(leech)) {
-					int leeching = attackingEntity.getActivePotionEffect(leech).getAmplifier() + 1;
-					attackingEntity.heal(Math.max(leeching, 1));
-                }
-            }
+			LivingEntity leechingEntity = null;
+			if(event.getSource().getImmediateSource() instanceof LivingEntity) {
+				leechingEntity = (LivingEntity)event.getSource().getImmediateSource();
+			}
+			else if(event.getSource().getTrueSource() instanceof LivingEntity) {
+				leechingEntity = (LivingEntity)event.getSource().getTrueSource();
+			}
+			if(leechingEntity != null) {
+				if(leechingEntity.isPotionActive(leech)) {
+					int leeching = leechingEntity.getActivePotionEffect(leech).getAmplifier() + 1;
+					leechingEntity.heal(Math.max(leeching, 1));
+				}
+			}
         }
 
 		// Repulsion

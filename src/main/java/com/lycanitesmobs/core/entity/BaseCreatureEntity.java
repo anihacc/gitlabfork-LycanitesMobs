@@ -4335,7 +4335,6 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 				}
             	return false;
 			}
-            return false;
         }
         return true;
     }
