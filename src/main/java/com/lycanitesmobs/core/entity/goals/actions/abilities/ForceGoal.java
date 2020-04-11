@@ -86,7 +86,7 @@ public class ForceGoal extends Goal {
 
 	/**
 	 * Sets the pull/push force.
-	 * @param range The force, positive pushes, negative pulls.
+	 * @param force The force, positive pushes, negative pulls.
 	 * @return This goal for chaining.
 	 */
 	public ForceGoal setForce(float force) {
@@ -176,7 +176,7 @@ public class ForceGoal extends Goal {
 		}
 		if (entity instanceof PlayerEntity) {
 			PlayerEntity player = (PlayerEntity) entity;
-			if (player.isCreative()) {
+			if (player.isCreative() || player.isSpectator()) {
 				return false;
 			}
 		}
