@@ -36,12 +36,12 @@ public class ModelCacodemon extends ModelTemplateBiped {
 		float rotX = 0;
 		float rotY = 0;
 		if(partName.toLowerCase().equals("body")) {
-			rotX += (Math.toDegrees(lookX / (180F / (float)Math.PI)) * 0.5F);
-			rotY += (Math.toDegrees(lookY / (180F / (float)Math.PI))) * 0.5F;
+			rotX += (Math.toDegrees(lookX / (180F / (float)Math.PI)) * 0.75F);
+			rotY += (Math.toDegrees(lookY / (180F / (float)Math.PI))) * 0.75F;
 		}
 		if(partName.equals("eye")) {
-			rotX += (Math.toDegrees(lookX / (180F / (float)Math.PI)) * this.lookNeckScaleX);
-			rotY += (Math.toDegrees(lookY / (180F / (float)Math.PI))) * this.lookNeckScaleY;
+			rotX += (Math.toDegrees(lookX / (180F / (float)Math.PI)) * 0.25F);
+			rotY += (Math.toDegrees(lookY / (180F / (float)Math.PI))) * 0.25F;
 		}
 		this.rotate(rotX, rotY, 0);
     }
