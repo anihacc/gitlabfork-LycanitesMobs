@@ -26,7 +26,6 @@ public class EntityCacodemon extends RideableCreatureEntity {
         this.attribute = CreatureAttribute.UNDEAD;
         this.hasAttackSound = false;
 
-        this.setAttackCooldownMax(20);
         this.setupMob();
 
         this.stepHeight = 1.0F;
