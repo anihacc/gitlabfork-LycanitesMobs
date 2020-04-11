@@ -87,7 +87,7 @@ public class ForceGoal extends EntityAIBase {
 
 	/**
 	 * Sets the pull/push force.
-	 * @param range The force, positive pushes, negative pulls.
+	 * @param force The force, positive pushes, negative pulls.
 	 * @return This goal for chaining.
 	 */
 	public ForceGoal setForce(float force) {
@@ -177,7 +177,7 @@ public class ForceGoal extends EntityAIBase {
 		}
 		if (entity instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) entity;
-			if (player.capabilities.isCreativeMode) {
+			if (player.capabilities.isCreativeMode || player.isSpectator()) {
 				return false;
 			}
 		}
