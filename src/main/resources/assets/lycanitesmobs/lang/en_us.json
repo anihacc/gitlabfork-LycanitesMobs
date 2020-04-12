@@ -202,6 +202,7 @@
     "lyc.command.dungeons.reload": "JSON Dungeons have been reloaded.",
     "lyc.command.dungeons.enable": "Lycanites Dungeons have been enabled and will generate in new chunks.",
     "lyc.command.dungeons.disable": "Lycanites Dungeons have been disabled and will no longer generate in new chunks.",
+    "lyc.command.dungeons.locate": "Nearby Dungeons:",
     "_comment": "Creatures:",
     "lyc.command.creatures.reload": "Creature configs have been reloaded.",
     "_comment": "Beastiary:",
