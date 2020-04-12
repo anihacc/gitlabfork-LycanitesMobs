@@ -39,6 +39,9 @@ public abstract class ProjectileBehaviour {
 		else if("randomEffect".equals(type)) {
 			projectileBehaviour = new ProjectileBehaviourRandomEffect();
 		}
+		else if("catch".equals(type)) {
+			projectileBehaviour = new ProjectileBehaviourCatch();
+		}
 
 		if(projectileBehaviour == null) {
 			return null;
@@ -61,6 +64,18 @@ public abstract class ProjectileBehaviour {
 	 * @param projectile The projectile entity instance.
 	 */
 	public void onProjectileUpdate(BaseProjectileEntity projectile) {}
+
+	/**
+	 * Called when the projectile has contact with a living entity.
+	 * @param projectile The projectile entity instance.
+	 * @param world The contact world.
+	 * @param target The contact target.
+	 * @param canDamage True if the project can damage the contact entity.
+	 * @return True if damage should be prevented.
+	 */
+	public boolean canDamage(BaseProjectileEntity projectile, World world, LivingEntity target, boolean canDamage) {
+		return true;
+	}
 
 	/**
 	 * Called when the projectile with this behaviour impacts and is destroyed.

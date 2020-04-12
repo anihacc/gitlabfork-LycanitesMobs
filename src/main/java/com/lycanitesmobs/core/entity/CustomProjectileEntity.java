@@ -176,6 +176,19 @@ public class CustomProjectileEntity extends BaseProjectileEntity {
 		}
 	}
 
+	@Override
+	public boolean canDamage(LivingEntity targetEntity) {
+		boolean canDamage = super.canDamage(targetEntity);
+		if(this.projectileInfo != null) {
+			for(ProjectileBehaviour behaviour : this.projectileInfo.behaviours) {
+				if(!behaviour.canDamage(this, this.getEntityWorld(), targetEntity, canDamage)) {
+					canDamage = false;
+				}
+			}
+		}
+		return canDamage;
+	}
+
 	/**
 	 * Syncs the Throwing Entity from server to client.
 	 */
