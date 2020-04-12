@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.entity;
 
 import com.google.common.base.Optional;
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.client.AssetManager;
 import com.lycanitesmobs.client.localisation.LanguageManager;

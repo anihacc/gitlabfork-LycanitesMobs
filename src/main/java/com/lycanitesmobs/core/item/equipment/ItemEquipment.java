@@ -535,6 +535,9 @@ public class ItemEquipment extends ItemBase {
 					if (!possibleTarget.isEntityAlive()) {
 						continue;
 					}
+					if (possibleTarget instanceof EntityPlayer) {
+						continue;
+					}
 					if (possibleTarget instanceof EntityTameable) {
 						EntityTameable possibleTameableTarget = (EntityTameable) possibleTarget;
 						if (possibleTameableTarget.getOwner() != null && !attacker.getEntityWorld().getMinecraftServer().isPVPEnabled()) {

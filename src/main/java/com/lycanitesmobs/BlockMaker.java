@@ -44,6 +44,6 @@ public class BlockMaker {
         ObjectManager.addBlock(stoneName + "stonepolished", new BlockBase(Material.ROCK, group, stoneName + "stonepolished").setHardness(hardness).setResistance(resistance).setCreativeTab(LycanitesMobs.blocksTab));
         ObjectManager.addBlock(stoneName + "stonechiseled", new BlockBase(Material.ROCK, group, stoneName + "stonechiseled").setHardness(hardness).setResistance(resistance).setCreativeTab(LycanitesMobs.blocksTab));
         ObjectManager.addBlock(stoneName + "stonepillar", new BlockPillar(Material.ROCK, group, stoneName + "stonepillar").setHardness(hardness).setResistance(resistance).setCreativeTab(LycanitesMobs.blocksTab));
-        ObjectManager.addBlock(stoneName + "crystal", new BlockBase(Material.GLASS, group, stoneName + "crystal").setBlockStepSound(SoundType.GLASS).setHardness(hardness).setResistance(resistance).setLightLevel(1.0F).setCreativeTab(LycanitesMobs.blocksTab));
+        ObjectManager.addBlock(stoneName + "crystal", new BlockBase(Material.GLASS, group, stoneName + "crystal").setBlockStepSound(SoundType.GLASS).setHardness(0.5F).setResistance(resistance).setLightLevel(1.0F).setCreativeTab(LycanitesMobs.blocksTab));
     }
 }

@@ -13,6 +13,7 @@ import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.EntityGhast;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -147,6 +148,13 @@ public class EntityCacodemon extends RideableCreatureEntity {
     	if(entity instanceof EntityCacodemon)
     		return false;
     	return super.isDamageEntityApplicable(entity);
+    }
+
+    @Override
+    public boolean isDamageTypeApplicable(String type, DamageSource source, float damage) {
+        if("explosion".equals(type))
+            return false;
+        return super.isDamageTypeApplicable(type, source, damage);
     }
     
     @Override
