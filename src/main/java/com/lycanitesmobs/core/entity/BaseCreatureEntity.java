@@ -2775,8 +2775,8 @@ public abstract class BaseCreatureEntity extends EntityLiving {
     /** Sets the width and height of this mob. This applies sizeScale to the provided arguments. **/
 	@Override
 	protected void setSize(float width, float height) {
-        width *= (float)this.sizeScale;
-        height *= (float)this.sizeScale;
+        width *= (float)this.sizeScale * this.creatureInfo.sizeScale;
+        height *= (float)this.sizeScale * this.creatureInfo.sizeScale;
         super.setSize(width, height);
         this.hitAreas = null;
         if(!this.getEntityWorld().isRemote && this.getNavigator() != null && this.getNavigator().getNodeProcessor() instanceof ICreatureNodeProcessor) {
@@ -2791,13 +2791,13 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 
     /** Sets the size scale and updates the mobs size. **/
 	public void setSizeScale(double scale) {
-		this.sizeScale = scale * this.creatureInfo.sizeScale;
+		this.sizeScale = scale;
         this.updateSize();
     }
 
     /** Returns the model scale for rendering. **/
     public double getRenderScale() {
-        return this.sizeScale;
+        return this.sizeScale * this.creatureInfo.sizeScale;
     }
     
     
