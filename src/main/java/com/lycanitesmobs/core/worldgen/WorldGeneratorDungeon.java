@@ -69,8 +69,9 @@ public class WorldGeneratorDungeon implements IWorldGenerator {
 						}
 						BlockPos dungeonPos = new ChunkPos(chunkX + (dungeonSizeMax * x), chunkZ + (dungeonSizeMax * z)).getBlock(7, yPos, 7);
 						dungeonInstance.setOrigin(dungeonPos);
-						extendedWorld.addDungeonInstance(dungeonInstance, new UUID(world.rand.nextLong(), world.rand.nextLong()));
-						dungeonInstance.init(world);
+						if(dungeonInstance.init(world)) {
+							extendedWorld.addDungeonInstance(dungeonInstance, new UUID(world.rand.nextLong(), world.rand.nextLong()));
+						}
 					}
 				}
 				return;

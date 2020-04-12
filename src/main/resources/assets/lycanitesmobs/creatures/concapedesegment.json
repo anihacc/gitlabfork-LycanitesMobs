@@ -18,7 +18,7 @@
         ],
         "dimensionListType": "blacklist",
         "ignoreBiome": false,
-        "biomes": [
+        "biomeTags": [
             "jungle"
         ],
         "spawnWeight": 8,

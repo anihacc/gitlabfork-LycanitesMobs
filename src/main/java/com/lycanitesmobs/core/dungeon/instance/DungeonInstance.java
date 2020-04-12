@@ -84,6 +84,7 @@ public class DungeonInstance {
 				}
 			}
 			if(schematics.isEmpty()) {
+				LycanitesMobs.logDebug("Dungeon", "No valid dungeon schematics found for origin position: " + this.originPos);
 				return false;
 			}
 			if(schematics.size() == 1) {

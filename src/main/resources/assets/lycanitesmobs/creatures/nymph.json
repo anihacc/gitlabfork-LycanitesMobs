@@ -18,7 +18,7 @@
         ],
         "dimensionListType": "blacklist",
         "ignoreBiome": false,
-        "biomes": [],
+        "biomeTags": [],
         "spawnWeight": 2,
         "dungeonWeight": 0,
         "spawnAreaLimit": 1,
