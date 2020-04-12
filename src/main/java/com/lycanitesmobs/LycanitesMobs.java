@@ -48,7 +48,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-@Mod(value = LycanitesMobs.MODID)
+@Mod(LycanitesMobs.MODID)
 public class LycanitesMobs {
 	private static final Logger LOGGER = LogManager.getLogger();
 
