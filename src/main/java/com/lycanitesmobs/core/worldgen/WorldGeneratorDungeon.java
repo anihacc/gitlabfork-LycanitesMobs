@@ -6,7 +6,6 @@ import com.lycanitesmobs.core.config.ConfigBase;
 import com.lycanitesmobs.core.dungeon.instance.DungeonInstance;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
-import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.IChunkGenerator;
@@ -17,9 +16,9 @@ import java.util.Random;
 import java.util.UUID;
 
 public class WorldGeneratorDungeon implements IWorldGenerator {
+	public static int DUNGEON_DISTANCE = 170;
 	public static double TOWER_CHANCE = 0.25D;
 	public boolean enabled = true;
-	public int dungeonDistance = 170;
 
     // ==================================================
     //                    Constructors
@@ -27,7 +26,7 @@ public class WorldGeneratorDungeon implements IWorldGenerator {
     public WorldGeneratorDungeon() {
 		ConfigBase config = ConfigBase.getConfig(LycanitesMobs.modInfo, "general");
 		this.enabled = config.getBool("Dungeons", "Dungeons Enabled", this.enabled, "If false, all Lycanites Mobs Dungeons are disabled, set to true to enable the Dungeon System. (The JSON files are still loaded but don't do anything.)");
-		this.dungeonDistance = config.getInt("Dungeons", "Dungeon Distance", this.dungeonDistance, "The average distance in chunks that dungeons are spaced apart from each other.");
+		DUNGEON_DISTANCE = config.getInt("Dungeons", "Dungeon Distance", this.DUNGEON_DISTANCE, "The average distance in chunks that dungeons are spaced apart from each other.");
 		TOWER_CHANCE = config.getDouble("Dungeons", "Tower Chance", TOWER_CHANCE, "The chance of a dungeon generating a tower on top (0.25 by default).");
 	}
 
@@ -48,7 +47,7 @@ public class WorldGeneratorDungeon implements IWorldGenerator {
 
 		try {
 			ChunkPos chunkPos = new ChunkPos(chunkX, chunkZ);
-			int dungeonSizeMax = this.dungeonDistance;
+			int dungeonSizeMax = this.DUNGEON_DISTANCE;
 			List<DungeonInstance> nearbyDungeons = extendedWorld.getNearbyDungeonInstances(chunkPos, dungeonSizeMax * 2);
 
 			// Create New Instances:

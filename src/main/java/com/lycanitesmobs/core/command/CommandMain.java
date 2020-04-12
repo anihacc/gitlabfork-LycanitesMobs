@@ -1,5 +1,6 @@
 package com.lycanitesmobs.core.command;
 
+import com.lycanitesmobs.core.dungeon.instance.DungeonInstance;
 import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.ExtendedWorld;
 import com.lycanitesmobs.LycanitesMobs;
@@ -17,12 +18,14 @@ import com.lycanitesmobs.core.mobevent.MobEventPlayerServer;
 import com.lycanitesmobs.core.network.MessageSummonSetSelection;
 import com.lycanitesmobs.core.spawner.SpawnerEventListener;
 import com.lycanitesmobs.core.spawner.SpawnerManager;
+import com.lycanitesmobs.core.worldgen.WorldGeneratorDungeon;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.text.TextComponentString;
 import com.lycanitesmobs.client.localisation.LanguageManager;
 import net.minecraft.world.World;
@@ -198,6 +201,23 @@ public class CommandMain implements ICommand {
 				commandSender.sendMessage(new TextComponentString(reply));
 				return;
 			}
+
+			// Locate:
+			if("locate".equalsIgnoreCase(args[1])) {
+				reply = LanguageManager.translate("lyc.command.dungeon.locate");
+				commandSender.sendMessage(new TextComponentString(reply));
+				World world = commandSender.getEntityWorld();
+				ExtendedWorld extendedWorld = ExtendedWorld.getForWorld(world);
+				List<DungeonInstance> nearbyDungeons = extendedWorld.getNearbyDungeonInstances(new ChunkPos(commandSender.getPosition()), WorldGeneratorDungeon.DUNGEON_DISTANCE * 2);
+				if(nearbyDungeons.isEmpty()) {
+					commandSender.sendMessage(new TextComponentString(LanguageManager.translate("common.none")));
+					return;
+				}
+				for(DungeonInstance dungeonInstance : nearbyDungeons) {
+					commandSender.sendMessage(new TextComponentString(dungeonInstance.toString()));
+				}
+				return;
+			}
 		}
 
 		// Player:
@@ -353,7 +373,7 @@ public class CommandMain implements ICommand {
 		}
 		
 		// Mob Event:
-		if("mobevent".equalsIgnoreCase(args[0])) {
+		if("mobevent".equalsIgnoreCase(args[0]) || "mobevents".equalsIgnoreCase(args[0])) {
 			reply = LanguageManager.translate("lyc.command.mobevent.invalid");
 			if(args.length < 2) {
 				commandSender.sendMessage(new TextComponentString(reply));

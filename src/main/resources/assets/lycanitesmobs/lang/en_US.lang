@@ -236,6 +236,7 @@ lyc.command.dungeon.invalid=Invalid arguments, usage: /lycanitesmobs spawners [r
 lyc.command.dungeon.reload=JSON Dungeons have been reloaded.
 lyc.command.dungeon.enable=Lycanites Dungeons have been enabled and will generate in new chunks.
 lyc.command.dungeon.disable=Lycanites Dungeons have been disabled and will no longer generate in new chunks.
+lyc.command.dungeon.locate=Nearby Dungeons:
 #
 # Creatures:
 lyc.command.creatures.invalid=Invalid arguments, usage: /lycanitesmobs creatures [reload]
