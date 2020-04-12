@@ -10,6 +10,7 @@ import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.entity.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.Effects;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
@@ -142,6 +143,13 @@ public class EntityCacodemon extends RideableCreatureEntity {
     	if(entity instanceof EntityCacodemon)
     		return false;
     	return super.isVulnerableTo(entity);
+    }
+
+    @Override
+    public boolean isVulnerableTo(String type, DamageSource source, float damage) {
+        if("explosion".equals(type))
+            return false;
+        return super.isVulnerableTo(type, source, damage);
     }
     
     @Override

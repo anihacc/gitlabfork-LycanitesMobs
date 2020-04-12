@@ -42,7 +42,7 @@ public class BaseGui extends AbstractGui {
         float lookXRot = (float)Math.atan((double)(lookX / 40.0F));
         float lookYRot = (float)Math.atan((double)(lookY / 40.0F));
         RenderSystem.pushMatrix();
-        RenderSystem.translatef((float)x, (float)y, 1050.0F);
+        RenderSystem.translatef((float)x, (float)y, 1500.0F);
         RenderSystem.scalef(1.0F, 1.0F, -1.0F);
         MatrixStack matrixStack = new MatrixStack();
         matrixStack.translate(0.0D, 0.0D, 1000.0D);

@@ -99,9 +99,9 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 	}
 
 	public String getHarvestRangeString(int level) {
-		String harvestRangeString = "" + this.harvestRange.getX();
-		harvestRangeString += "x" + this.harvestRange.getY();
-		harvestRangeString += "x" + this.harvestRange.getZ();
+		String harvestRangeString = "" + ((this.harvestRange.getX()) * 2 + 1);
+		harvestRangeString += "x" + (this.harvestRange.getY() + 1);
+		harvestRangeString += "x" + (this.harvestRange.getZ() + 1);
 		return harvestRangeString;
 	}
 
@@ -264,14 +264,14 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 		}
 		else {
 			selectionRanges[vert][min] = new Vec3i(
-					this.harvestRange.getY() * -Math.abs(facingH.getXOffset()),
-					this.harvestRange.getY() * -Math.abs(facingH.getYOffset()),
-					this.harvestRange.getY() * -Math.abs(facingH.getZOffset())
+					this.harvestRange.getY() * -Math.abs(facingH.getXOffset()) * 0.5F,
+					this.harvestRange.getY() * -Math.abs(facingH.getYOffset()) * 0.5F,
+					this.harvestRange.getY() * -Math.abs(facingH.getZOffset()) * 0.5F
 			);
 			selectionRanges[vert][max] = new Vec3i(
-					this.harvestRange.getY() * Math.abs(facingH.getXOffset()),
-					this.harvestRange.getY() * Math.abs(facingH.getYOffset()),
-					this.harvestRange.getY() * Math.abs(facingH.getZOffset())
+					this.harvestRange.getY() * Math.abs(facingH.getXOffset()) * 0.5F,
+					this.harvestRange.getY() * Math.abs(facingH.getYOffset()) * 0.5F,
+					this.harvestRange.getY() * Math.abs(facingH.getZOffset()) * 0.5F
 			);
 		}
 

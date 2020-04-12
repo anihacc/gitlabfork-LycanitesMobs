@@ -538,6 +538,9 @@ public class ItemEquipment extends BaseItem {
 					if (!possibleTarget.isAlive()) {
 						continue;
 					}
+					if (possibleTarget instanceof PlayerEntity) {
+						continue;
+					}
 					if (possibleTarget instanceof TameableEntity) {
 						TameableEntity possibleTameableTarget = (TameableEntity) possibleTarget;
 						if (possibleTameableTarget.getOwner() != null && !attacker.getEntityWorld().getServer().isPVPEnabled()) {
