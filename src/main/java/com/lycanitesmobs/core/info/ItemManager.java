@@ -215,11 +215,11 @@ public class ItemManager extends JSONLoader {
 		Block.Properties waterLightBlockProperties = Block.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100).noDrops().lightValue(10);
 		Block.Properties lavaBlockProperties = Block.Properties.create(Material.LAVA).doesNotBlockMovement().hardnessAndResistance(100).noDrops().lightValue(15);
 
-		this.addFluid("ooze", 0x003A9F, 3000, 3000, 0, 5, false);
+		this.addFluid("ooze", 0x003A9F, 3000, 3000, 0, 10, false);
 		ObjectManager.addBlock("ooze", new BlockFluidOoze(() -> ObjectManager.getFluid("ooze").get(), waterLightBlockProperties, "ooze"));
 		ObjectManager.addDamageSource("ooze", new DamageSource("ooze"));
 
-		this.addFluid("rabbitooze", 0x002AAF, 3000, 3000, 0, 5, true);
+		this.addFluid("rabbitooze", 0x002AAF, 3000, 3000, 0, 10, true);
 		ObjectManager.addBlock("rabbitooze", new BlockFluidOoze(() -> ObjectManager.getFluid("rabbitooze").get(), waterLightBlockProperties, "rabbitooze"));
 
 		this.addFluid("moglava", 0xFF5722, 3000, 5000, 1100, 15, true);
