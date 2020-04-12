@@ -17,7 +17,7 @@
         ],
         "dimensionListType": "whitelist",
         "ignoreBiome": false,
-        "biomes": [
+        "biomeTags": [
             "nether"
         ],
         "spawnWeight": 1,

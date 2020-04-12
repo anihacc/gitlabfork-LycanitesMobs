@@ -25,7 +25,7 @@
         ],
         "dimensionListType": "whitelist",
         "ignoreBiome": true,
-        "biomes": [
+        "biomeTags": [
             "nether",
             "end",
             "wasteland",

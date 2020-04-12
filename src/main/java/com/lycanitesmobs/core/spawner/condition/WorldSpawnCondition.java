@@ -80,7 +80,12 @@ public class WorldSpawnCondition extends SpawnCondition {
 		if(json.has("dimensionListType"))
 			this.dimensionListType = json.get("dimensionListType").getAsString();
 
-		if(json.has("biomes")) {
+		if(json.has("biomeTags")) {
+			this.biomeTags.clear();
+			this.biomesFromTags = null;
+			this.biomeTags = JSONHelper.getJsonStrings(json.get("biomeTags").getAsJsonArray());
+		}
+		else if(json.has("biomes")) {
 			this.biomeTags.clear();
 			this.biomesFromTags = null;
 			this.biomeTags = JSONHelper.getJsonStrings(json.get("biomes").getAsJsonArray());

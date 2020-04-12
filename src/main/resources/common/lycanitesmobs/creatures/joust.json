@@ -22,7 +22,7 @@
         ],
         "dimensionListType": "blacklist",
         "ignoreBiome": false,
-        "biomes": [
+        "biomeTags": [
             "sandy",
             "wasteland",
             "mesa",
