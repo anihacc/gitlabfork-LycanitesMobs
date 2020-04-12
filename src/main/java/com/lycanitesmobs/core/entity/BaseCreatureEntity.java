@@ -1306,18 +1306,18 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		if(this.creatureSize == null) {
 			return super.getSize(pose);
 		}
-    	return this.creatureSize.scale(this.getRenderScale());
+    	return this.creatureSize.scale(this.getRenderScale() * (float)this.creatureInfo.sizeScale);
 	}
 
 	/** Sets the size scale of this creature. **/
 	public void setSizeScale(double scale) {
-		this.sizeScale = scale * this.creatureInfo.sizeScale;
+		this.sizeScale = scale;
 	}
 
 	/** Returns the model scale for rendering. **/
 	@Override
 	public float getRenderScale() {
-		return (float)this.sizeScale;
+		return (float)this.sizeScale * (float)this.creatureInfo.sizeScale;
 	}
 
 	/** Returns the level of this mob, higher levels have higher stats. **/
