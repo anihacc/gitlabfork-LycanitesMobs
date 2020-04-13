@@ -166,7 +166,7 @@ public class Effects {
 		if(instability != null && !entity.getEntityWorld().isRemote && !(entity instanceof IGroupBoss)) {
 			if(!invulnerable && entity.isPotionActive(instability)) {
 				if(entity.getEntityWorld().rand.nextDouble() <= 0.1) {
-					double strength = (1 + entity.getActivePotionEffect(instability).getAmplifier()) * 0.5D;
+					double strength = 1 + entity.getActivePotionEffect(instability).getAmplifier();
 					double motionX = strength * (entity.getEntityWorld().rand.nextDouble() - 0.5D);
 					double motionY = strength * (entity.getEntityWorld().rand.nextDouble() - 0.5D);
 					double motionZ = strength * (entity.getEntityWorld().rand.nextDouble() - 0.5D);
