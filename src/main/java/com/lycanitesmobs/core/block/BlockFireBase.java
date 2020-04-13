@@ -116,7 +116,8 @@ public class BlockFireBase extends BlockBase {
 
     @Override
     public BlockState updatePostPlacement(BlockState state, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
-        return this.isValidPosition(state, worldIn, currentPos) ? this.getStateForPlacement(worldIn, currentPos).with(AGE, state.get(AGE)) : Blocks.AIR.getDefaultState();
+        //return this.isValidPosition(state, worldIn, currentPos) ? this.getStateForPlacement(worldIn, currentPos).with(AGE, state.get(AGE)) : Blocks.AIR.getDefaultState();
+        return this.getStateForPlacement(worldIn, currentPos).with(AGE, state.get(AGE));
     }
 
 
@@ -132,7 +133,7 @@ public class BlockFireBase extends BlockBase {
 
     // ========== Tick Update ==========
     @Override
-    public void tick(BlockState blockState, ServerWorld world, BlockPos pos, Random rand) { //tick()
+    public void tick(BlockState blockState, ServerWorld world, BlockPos pos, Random rand) {
         if (!world.isAreaLoaded(pos, 2)) {
             return;
         }
@@ -145,8 +146,8 @@ public class BlockFireBase extends BlockBase {
             return;
         }
 
-        // Prevent Self Replacement:
-        if (!this.isValidPosition(blockState, world, pos) || this.removeOnTick) {
+        // Remove On Tick:
+        if (this.removeOnTick) {
             world.removeBlock(pos, false);
         }
 
@@ -172,12 +173,6 @@ public class BlockFireBase extends BlockBase {
 
         // Natural Extinguish:
         if (!isOnFireSource) {
-            // On Air:
-            if(world.getBlockState(pos.down()).getBlock() == Blocks.AIR) {
-				world.removeBlock(pos, false);
-				return;
-			}
-
             // Can't spread, old or on none solid surface:
             if (!this.canNeighborCatchFire(world, pos)) {
                 if (age > 3) {
