@@ -1112,13 +1112,16 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		this.getEntityWorld().addEntity(minion);
         if(minion instanceof BaseCreatureEntity) {
             ((BaseCreatureEntity)minion).setMinion(true);
-            ((BaseCreatureEntity)minion).applyVariant(this.getVariantIndex());
+			if(!this.isRareVariant()) {
+				((BaseCreatureEntity) minion).applyVariant(this.getVariantIndex());
+			}
             ((BaseCreatureEntity)minion).setSubspecies(this.getSubspeciesIndex());
             ((BaseCreatureEntity)minion).setMasterTarget(this);
             ((BaseCreatureEntity)minion).spawnEventType = this.spawnEventType;
 			if(this.isTemporary) {
 				((BaseCreatureEntity)minion).setTemporary(this.temporaryDuration);
 			}
+			((BaseCreatureEntity)minion).onFirstSpawn();
         }
         if(this.getAttackTarget() != null) {
 			minion.setRevengeTarget(this.getAttackTarget());

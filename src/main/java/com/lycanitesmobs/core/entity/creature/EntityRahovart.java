@@ -6,6 +6,7 @@ import com.lycanitesmobs.api.IGroupHeavy;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
+import com.lycanitesmobs.core.entity.goals.GoalConditions;
 import com.lycanitesmobs.core.entity.goals.actions.FindNearbyPlayersGoal;
 import com.lycanitesmobs.core.entity.goals.actions.abilities.FaceTargetGoal;
 import com.lycanitesmobs.core.entity.goals.actions.abilities.FireProjectilesGoal;
@@ -97,6 +98,10 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
         this.goalSelector.addGoal(this.nextIdleGoalIndex, new SummonMinionsGoal(this).setMinionInfo("wraith").setAntiFlight(true));
         this.goalSelector.addGoal(this.nextIdleGoalIndex, new FireProjectilesGoal(this).setProjectile("hellfireball").setFireRate(40).setVelocity(1.6F).setScale(8F).setAllPlayers(true));
         this.goalSelector.addGoal(this.nextIdleGoalIndex, new FireProjectilesGoal(this).setProjectile("hellfireball").setFireRate(60).setVelocity(1.6F).setScale(8F));
+
+        // Phase 3:
+        this.goalSelector.addGoal(this.nextIdleGoalIndex, new SummonMinionsGoal(this).setMinionInfo("archvile").setSummonRate(20 * 10).setSummonCap(1).setPerPlayer(true).setSizeScale(2)
+                .setConditions(new GoalConditions().setBattlePhase(2)));
 
         super.registerGoals();
     }
@@ -460,7 +465,7 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
     //                      Attacks
     // ==================================================
     public boolean canAttack(LivingEntity targetEntity) {
-        if(targetEntity instanceof EntityBelph || targetEntity instanceof EntityBehemoth || targetEntity instanceof EntityWraith) {
+        if(targetEntity instanceof EntityBelph || targetEntity instanceof EntityBehemoth || targetEntity instanceof EntityArchvile || targetEntity instanceof EntityWraith) {
             if(targetEntity instanceof TameableCreatureEntity)
                 return ((TameableCreatureEntity)targetEntity).getOwner() instanceof PlayerEntity;
             else
