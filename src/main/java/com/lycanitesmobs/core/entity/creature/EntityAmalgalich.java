@@ -58,7 +58,7 @@ public class EntityAmalgalich extends BaseCreatureEntity implements IMob, IGroup
         this.consumptionDuration = 15 * 20;
         this.consumptionWindUp = 3 * 20;
         this.consumptionAnimationTime = 0;
-        int consumptionCooldown = 20 * 20;
+        int consumptionGoalCooldown = 20 * 20;
 
         // All Phases:
         this.goalSelector.addGoal(this.nextIdleGoalIndex, new FaceTargetGoal(this));
@@ -71,8 +71,8 @@ public class EntityAmalgalich extends BaseCreatureEntity implements IMob, IGroup
         // Phase 1:
         this.goalSelector.addGoal(this.nextIdleGoalIndex, new SummonMinionsGoal(this).setMinionInfo("reaper").setSummonRate(20 * 5).setSummonCap(5).setPerPlayer(true)
                 .setConditions(new GoalConditions().setBattlePhase(0)));
-        this.consumptionGoalP0 = new ForceGoal(this).setRange(64F).setCooldown(consumptionCooldown).setDuration(this.consumptionDuration).setWindUp(this.consumptionWindUp).setForce(-1F).setPhase(0).setDismount(true);
-        this.goalSelector.addGoal(this.nextIdleGoalIndex, new EffectAuraGoal(this).setRange(1F).setCooldown(consumptionCooldown + this.consumptionWindUp).setDuration(this.consumptionDuration - this.consumptionWindUp).setTickRate(5).setDamageAmount(1000).setCheckSight(false)
+        this.consumptionGoalP0 = new ForceGoal(this).setRange(64F).setCooldown(consumptionGoalCooldown).setDuration(this.consumptionDuration).setWindUp(this.consumptionWindUp).setForce(-1F).setPhase(0).setDismount(true);
+        this.goalSelector.addGoal(this.nextIdleGoalIndex, new EffectAuraGoal(this).setRange(1F).setCooldown(consumptionGoalCooldown + this.consumptionWindUp).setDuration(this.consumptionDuration - this.consumptionWindUp).setTickRate(5).setDamageAmount(1000).setCheckSight(false)
                 .setTargetTypes((byte)(TARGET_TYPES.ALLY.id|TARGET_TYPES.ENEMY.id))
                 .setConditions(new GoalConditions().setBattlePhase(0)));
         this.goalSelector.addGoal(this.nextIdleGoalIndex, this.consumptionGoalP0);
@@ -84,9 +84,9 @@ public class EntityAmalgalich extends BaseCreatureEntity implements IMob, IGroup
                 .setConditions(new GoalConditions().setBattlePhase(1)));
 
         // Phase 3:
-        this.consumptionGoalP2 = new ForceGoal(this).setRange(64F).setCooldown(consumptionCooldown).setDuration(this.consumptionDuration).setWindUp(this.consumptionWindUp).setForce(-1F).setPhase(2).setDismount(true);
+        this.consumptionGoalP2 = new ForceGoal(this).setRange(64F).setCooldown(consumptionGoalCooldown).setDuration(this.consumptionDuration).setWindUp(this.consumptionWindUp).setForce(-1F).setPhase(2).setDismount(true);
         this.goalSelector.addGoal(this.nextIdleGoalIndex, this.consumptionGoalP2);
-        this.goalSelector.addGoal(this.nextIdleGoalIndex, new EffectAuraGoal(this).setRange(1F).setCooldown(consumptionCooldown + this.consumptionWindUp).setDuration(this.consumptionDuration - this.consumptionWindUp).setTickRate(5).setDamageAmount(1000).setCheckSight(false)
+        this.goalSelector.addGoal(this.nextIdleGoalIndex, new EffectAuraGoal(this).setRange(1F).setCooldown(consumptionGoalCooldown + this.consumptionWindUp).setDuration(this.consumptionDuration - this.consumptionWindUp).setTickRate(5).setDamageAmount(1000).setCheckSight(false)
                 .setTargetTypes((byte)(TARGET_TYPES.ALLY.id|TARGET_TYPES.ENEMY.id))
                 .setConditions(new GoalConditions().setBattlePhase(2)));
         this.goalSelector.addGoal(this.nextIdleGoalIndex, new FireProjectilesGoal(this).setProjectile("lobdarklings").setFireRate(10 * 20).setVelocity(0.8F).setScale(2F).setRandomCount(3).setAngle(360).setPhase(2));
