@@ -22,6 +22,7 @@ public class ForceGoal extends Goal {
 
 	public int abilityTime = 0;
 	public int cooldownTime = this.cooldownDuration;
+	public boolean windUpForce = false;
 	public boolean dismountTargets = false;
 
 
@@ -95,6 +96,16 @@ public class ForceGoal extends Goal {
 	}
 
 	/**
+	 * Sets if a weaker force should be applied as this goal winds up.
+	 * @param windUpForce Whether affected targets should be dismounted.
+	 * @return This goal for chaining.
+	 */
+	public ForceGoal setWindUpForce(boolean windUpForce) {
+		this.windUpForce = windUpForce;
+		return this;
+	}
+
+	/**
 	 * Sets if this force goal should dismount any targets affected that are riding another entity.
 	 * @param dismountTargets Whether affected targets should be dismounted.
 	 * @return This goal for chaining.
@@ -141,6 +152,9 @@ public class ForceGoal extends Goal {
 		double motionCap = -this.force;
 		double factor = -this.force * 0.1D;
 		if(this.abilityTime < this.windUp) {
+			if(!this.windUpForce) {
+				return;
+			}
 			factor *= (double)this.abilityTime / this.windUp;
 		}
 		for(Entity entity : this.host.getNearbyEntities(Entity.class, this::isValidTarget, this.range)) {
@@ -148,6 +162,7 @@ public class ForceGoal extends Goal {
 				continue;
 			}
 			double xDist = this.host.getPositionVec().getX() - entity.getPositionVec().getX();
+			double yDist = this.host.getPositionVec().getY() - entity.getPositionVec().getY();
 			double zDist = this.host.getPositionVec().getZ() - entity.getPositionVec().getZ();
 			double xzDist = Math.max(MathHelper.sqrt(xDist * xDist + zDist * zDist), 0.01D);
 			ServerPlayerEntity player = null;
@@ -157,7 +172,7 @@ public class ForceGoal extends Goal {
 			if (entity.getMotion().getX() < motionCap && entity.getMotion().getX() > -motionCap && entity.getMotion().getZ() < motionCap && entity.getMotion().getZ() > -motionCap) {
 				entity.addVelocity(
 						xDist / xzDist * factor + entity.getMotion().getX() * factor,
-						0,
+						yDist * factor + entity.getMotion().getY() * factor,
 						zDist / xzDist * factor + entity.getMotion().getZ() * factor
 				);
 			}
