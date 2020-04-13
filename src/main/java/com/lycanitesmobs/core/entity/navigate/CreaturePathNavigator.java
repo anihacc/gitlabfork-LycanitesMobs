@@ -499,7 +499,9 @@ public class CreaturePathNavigator extends PathNavigator {
             }
 
             if (this.canNavigate()) {
-                this.pathFollow();
+                if(this.currentPath != null) {
+                    this.pathFollow();
+                }
             }
             else if (this.currentPath != null && this.currentPath.getCurrentPathIndex() < this.currentPath.getCurrentPathLength()) {
                 Vec3d vec3d = this.getEntityPosition();
