@@ -1,6 +1,5 @@
 package com.lycanitesmobs.core.entity.goals.actions.abilities;
 
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -23,6 +22,7 @@ public class ForceGoal extends EntityAIBase {
 
 	public int abilityTime = 0;
 	public int cooldownTime = this.cooldownDuration;
+	public boolean windUpForce = false;
 	public boolean dismountTargets = false;
 
 
@@ -96,6 +96,16 @@ public class ForceGoal extends EntityAIBase {
 	}
 
 	/**
+	 * Sets if a weaker force should be applied as this goal winds up.
+	 * @param windUpForce Whether affected targets should be dismounted.
+	 * @return This goal for chaining.
+	 */
+	public ForceGoal setWindUpForce(boolean windUpForce) {
+		this.windUpForce = windUpForce;
+		return this;
+	}
+
+	/**
 	 * Sets if this force goal should dismount any targets affected that are riding another entity.
 	 * @param dismountTargets Whether affected targets should be dismounted.
 	 * @return This goal for chaining.
@@ -142,6 +152,9 @@ public class ForceGoal extends EntityAIBase {
 		double motionCap = -this.force;
 		double factor = -this.force * 0.1D;
 		if(this.abilityTime < this.windUp) {
+			if(!this.windUpForce) {
+				return;
+			}
 			factor *= (double)this.abilityTime / this.windUp;
 		}
 		for(Entity entity : this.host.getNearbyEntities(Entity.class, this::isValidTarget, this.range)) {
@@ -149,6 +162,7 @@ public class ForceGoal extends EntityAIBase {
 				continue;
 			}
 			double xDist = this.host.posX - entity.posX;
+			double yDist = this.host.posY - entity.posY;
 			double zDist = this.host.posZ - entity.posZ;
 			double xzDist = Math.max(MathHelper.sqrt(xDist * xDist + zDist * zDist), 0.01D);
 			EntityPlayerMP player = null;
@@ -158,7 +172,7 @@ public class ForceGoal extends EntityAIBase {
 			if (entity.motionX < motionCap && entity.motionX > -motionCap && entity.motionZ < motionCap && entity.motionZ > -motionCap) {
 				entity.addVelocity(
 						xDist / xzDist * factor + entity.motionX * factor,
-						0,
+						yDist * factor + entity.motionY * factor,
 						zDist / xzDist * factor + entity.motionZ * factor
 				);
 			}
