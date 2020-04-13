@@ -2,11 +2,14 @@ package com.lycanitesmobs.core.dungeon.instance;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.block.BlockFireBase;
+import com.lycanitesmobs.core.block.effect.BlockFrostCloud;
+import com.lycanitesmobs.core.block.effect.BlockPoisonCloud;
 import com.lycanitesmobs.core.dungeon.definition.DungeonSector;
 import com.lycanitesmobs.core.dungeon.definition.DungeonTheme;
 import com.lycanitesmobs.core.dungeon.definition.SectorLayer;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.spawner.MobSpawn;
+import net.minecraft.block.BlockChest;
 import net.minecraft.block.BlockFire;
 import net.minecraft.block.BlockTorch;
 import net.minecraft.block.state.IBlockState;
@@ -574,8 +577,15 @@ public class SectorInstance {
 			flags = 0;
 		}
 
+		// Chest:
+		if(blockState.getBlock() == Blocks.CHEST) {
+			blockState = blockState.withProperty(BlockChest.FACING, facing);
+		}
+
 		// Don't Update:
-		if(blockState.getBlock() == Blocks.AIR || blockState.getBlock() instanceof BlockFluidBase || blockState instanceof BlockFire || blockState instanceof BlockFireBase) {
+		if(blockState.getBlock() == Blocks.AIR || blockState.getBlock() instanceof BlockFluidBase ||
+				blockState.getBlock() instanceof BlockFire || blockState.getBlock() instanceof BlockFireBase ||
+				blockState.getBlock() instanceof BlockPoisonCloud || blockState.getBlock() instanceof BlockFrostCloud) {
 			flags = 0;
 		}
 
