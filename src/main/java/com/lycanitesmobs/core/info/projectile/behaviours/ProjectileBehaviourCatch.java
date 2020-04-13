@@ -32,6 +32,9 @@ public class ProjectileBehaviourCatch extends ProjectileBehaviour {
 
 	@Override
 	public boolean canDamage(BaseProjectileEntity projectile, World world, EntityLivingBase target, boolean canDamage) {
+		if(projectile.getEntityWorld().isRemote || target == projectile.getThrower()) {
+			return canDamage;
+		}
 		ResourceLocation entityResourceLocation = EntityList.getKey(target);
 		if(entityResourceLocation == null) {
 			return canDamage;
