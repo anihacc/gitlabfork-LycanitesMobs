@@ -524,7 +524,7 @@ public class ItemEquipment extends BaseItem {
 		// Sweeping:
 		List<LivingEntity> targets = new ArrayList<>();
 		targets.add(primaryTarget);
-		if(attacker != null && !attacker.getEntityWorld().isRemote && !attacker.isShiftKeyDown()) { // isSneaking()
+		if(attacker != null && !attacker.getEntityWorld().isRemote && !attacker.isShiftKeyDown() && attacker.swingProgress == 0) { // isSneaking()
 			double sweepAngle = this.getDamageSweep(itemStack);
 			if(sweepAngle > 0) {
 				float sweepDamage = (float) this.getDamageAmount(itemStack);
