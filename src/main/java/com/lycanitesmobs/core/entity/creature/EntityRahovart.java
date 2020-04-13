@@ -4,8 +4,8 @@ import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.api.IGroupBoss;
 import com.lycanitesmobs.api.IGroupHeavy;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
+import com.lycanitesmobs.core.entity.goals.GoalConditions;
 import com.lycanitesmobs.core.entity.goals.actions.FindNearbyPlayersGoal;
 import com.lycanitesmobs.core.entity.goals.actions.abilities.FaceTargetGoal;
 import com.lycanitesmobs.core.entity.goals.actions.abilities.FireProjectilesGoal;
@@ -15,8 +15,6 @@ import com.lycanitesmobs.core.entity.projectile.EntityHellfireBarrier;
 import com.lycanitesmobs.core.entity.projectile.EntityHellfireOrb;
 import com.lycanitesmobs.core.entity.projectile.EntityHellfireWave;
 import com.lycanitesmobs.core.info.CreatureManager;
-import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
-import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -98,6 +96,10 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
         this.tasks.addTask(this.nextIdleGoalIndex, new SummonMinionsGoal(this).setMinionInfo("wraith").setAntiFlight(true));
         this.tasks.addTask(this.nextIdleGoalIndex, new FireProjectilesGoal(this).setProjectile("hellfireball").setFireRate(40).setVelocity(1.0F).setScale(8F).setAllPlayers(true));
         this.tasks.addTask(this.nextIdleGoalIndex, new FireProjectilesGoal(this).setProjectile("hellfireball").setFireRate(60).setVelocity(1.0F).setScale(8F));
+
+        // Phase 3:
+        this.tasks.addTask(this.nextIdleGoalIndex, new SummonMinionsGoal(this).setMinionInfo("archvile").setSummonRate(20 * 10).setSummonCap(1).setPerPlayer(true).setSizeScale(2)
+                .setConditions(new GoalConditions().setBattlePhase(2)));
 
         super.initEntityAI();
     }
@@ -459,7 +461,7 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
     //                      Attacks
     // ==================================================
     public boolean canAttackEntity(EntityLivingBase targetEntity) {
-        if(targetEntity instanceof EntityBelph || targetEntity instanceof EntityBehemoth || targetEntity instanceof EntityWraith) {
+        if(targetEntity instanceof EntityBelph || targetEntity instanceof EntityBehemoth || targetEntity instanceof EntityArchvile || targetEntity instanceof EntityWraith) {
             if(targetEntity instanceof TameableCreatureEntity)
                 return ((TameableCreatureEntity)targetEntity).getOwner() instanceof EntityPlayer;
             else

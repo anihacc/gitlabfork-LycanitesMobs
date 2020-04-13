@@ -1140,17 +1140,20 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 		}
         double z = this.posZ + ((this.width + distance) * Math.sin(angleRadians) + Math.cos(angleRadians));
         minion.setLocationAndAngles(x, y, z, this.rand.nextFloat() * 360.0F, 0.0F);
+		this.getEntityWorld().spawnEntity(minion);
         if(minion instanceof BaseCreatureEntity) {
             ((BaseCreatureEntity)minion).setMinion(true);
-            ((BaseCreatureEntity)minion).applyVariant(this.getVariantIndex());
+            if(!this.isRareVariant()) {
+				((BaseCreatureEntity) minion).applyVariant(this.getVariantIndex());
+			}
             ((BaseCreatureEntity)minion).setSubspecies(this.getSubspeciesIndex());
             ((BaseCreatureEntity)minion).setMasterTarget(this);
             ((BaseCreatureEntity)minion).spawnEventType = this.spawnEventType;
             if(this.isTemporary) {
 				((BaseCreatureEntity)minion).setTemporary(this.temporaryDuration);
 			}
+			((BaseCreatureEntity)minion).onFirstSpawn();
         }
-        this.getEntityWorld().spawnEntity(minion);
         if(this.getAttackTarget() != null) {
 			minion.setRevengeTarget(this.getAttackTarget());
 		}

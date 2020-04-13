@@ -15,6 +15,7 @@ public class SummonMinionsGoal extends BaseGoal {
 	protected CreatureInfo minionInfo;
 	protected boolean perPlayer = false;
 	protected boolean antiFlight = false;
+	protected double sizeScale = 1;
 
 	/**
 	 * Constructor
@@ -74,6 +75,16 @@ public class SummonMinionsGoal extends BaseGoal {
     	return this;
     }
 
+	/**
+	 * Sets the scale to multiple the minion's size by.
+	 * @param sizeScale The scale to multiple the creature's size by.
+	 * @return This goal for chaining.
+	 */
+	public SummonMinionsGoal setSizeScale(double sizeScale) {
+		this.sizeScale = sizeScale;
+		return this;
+	}
+
 	@Override
     public boolean shouldExecute() {
 		return super.shouldExecute() && this.minionInfo != null;
@@ -113,7 +124,9 @@ public class SummonMinionsGoal extends BaseGoal {
 		EntityLivingBase minion = this.minionInfo.createEntity(this.host.getEntityWorld());
 		this.host.summonMinion(minion, this.host.getRNG().nextDouble() * 360, this.host.width + 1);
 		if(minion instanceof BaseCreatureEntity) {
-			((BaseCreatureEntity)minion).setAttackTarget(target);
+			BaseCreatureEntity minionCreature = (BaseCreatureEntity)minion;
+			minionCreature.setAttackTarget(target);
+			minionCreature.setSizeScale(minionCreature.sizeScale * this.sizeScale);
 		}
 	}
 }
