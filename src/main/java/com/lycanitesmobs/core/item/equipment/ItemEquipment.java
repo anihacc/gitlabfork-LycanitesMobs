@@ -521,7 +521,7 @@ public class ItemEquipment extends ItemBase {
 		// Sweeping:
 		List<EntityLivingBase> targets = new ArrayList<>();
 		targets.add(primaryTarget);
-		if(attacker != null && !attacker.getEntityWorld().isRemote && !attacker.isSneaking()) {
+		if(attacker != null && !attacker.getEntityWorld().isRemote && !attacker.isSneaking() && attacker.swingProgress == 0) {
 			double sweepAngle = this.getDamageSweep(itemStack) / 2; // Halved for centering.
 			if(sweepAngle > 0) {
 				float sweepDamage = (float) this.getDamageAmount(itemStack);
