@@ -523,7 +523,7 @@ public class ItemEquipment extends ItemBase {
 		boolean attackOnCooldown = false;
 		if(extendedEntity != null) {
 			int currentCooldown = extendedEntity.getProjectileCooldown(1, "equipment_melee");
-			int weaponCooldown = 10 * (int)this.getDamageCooldown(itemStack);
+			int weaponCooldown = 9 * (int)this.getDamageCooldown(itemStack);
 			attackOnCooldown = currentCooldown > 0;
 			if(currentCooldown < weaponCooldown) {
 				extendedEntity.setProjectileCooldown(1, "equipment_melee", weaponCooldown);
