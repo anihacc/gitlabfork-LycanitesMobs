@@ -559,6 +559,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 			for(ItemEquipmentPart itemEquipmentPart : ItemEquipmentPart.MOB_PART_DROPS.get(this.creatureInfo.getEntityId())) {
 				ItemDrop partDrop = new ItemDrop(itemEquipmentPart.getRegistryName().toString(), 0, itemEquipmentPart.dropChance).setMaxAmount(1);
 				partDrop.bonusAmount = false;
+				partDrop.amountMultiplier = false;
 				this.drops.add(partDrop);
 			}
 		}
