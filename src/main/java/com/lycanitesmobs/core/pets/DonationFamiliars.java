@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.lycanitesmobs.LycanitesMobs;
+import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import net.minecraft.entity.player.EntityPlayer;
 import org.apache.commons.io.IOUtils;
 
@@ -20,48 +21,51 @@ public class DonationFamiliars {
     public long jsonLoadedTime = -1;
     public List<String> familiarBlacklist = new ArrayList<>();
 
-    // ==================================================
-    //                  Read From JSON
-    // ==================================================
-    public void readFromJSON() {
-        this.jsonLoadedTime = System.currentTimeMillis() / 1000;
+	public class DonationLoader implements Runnable {
+		EntityPlayer player;
 
-        // Load JSON File:
-        String jsonString = null;
-		try {
-			URL familiarURL = new URL(LycanitesMobs.websiteAPI + "/familiar");
-			URLConnection urlConnection = familiarURL.openConnection();
-			urlConnection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.89 Safari/537.36");
-			InputStream inputStream = urlConnection.getInputStream();
-			try {
-				jsonString = IOUtils.toString(inputStream, (Charset) null);
-			} catch (Exception e) {
-				throw e;
-			} finally {
-				inputStream.close();
-			}
-			LycanitesMobs.logInfo("", "Online donations file read successfully.");
-		} catch (Throwable e) {
-			LycanitesMobs.logInfo("", "Unable to access the online donations file.");
-			e.printStackTrace();
-//            try {
-//                jsonString = FileUtils.readFileToString(FileUtils.getFile(LycanitesMobs.proxy.getMinecraftDir() + "/assets/lycanitesmobs/familiars.json"));
-//            } catch (IOException e1) {
-//                LycanitesMobs.logWarning("Donations", "There was a problem reading the local copy of the donations file.");
-//                e1.printStackTrace();
-//                return;
-//            }
-			return;
+		public DonationLoader(EntityPlayer player) {
+			this.player = player;
 		}
 
-        // Parse JSON File:
-        this.parseFamiliarJSON(jsonString);
-    }
+		@Override
+		public void run() {
+			this.readFromJSON();
+			if (this.player != null) {
+				ExtendedPlayer extendedPlayer = ExtendedPlayer.getForPlayer(this.player);
+				if (extendedPlayer != null) {
+					extendedPlayer.loadFamiliars();
+				}
+			}
+		}
 
+		private void readFromJSON() {
+			// Load JSON File:
+			String jsonString = null;
+			try {
+				URL familiarURL = new URL(LycanitesMobs.websiteAPI + "/familiar");
+				URLConnection urlConnection = familiarURL.openConnection();
+				urlConnection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.89 Safari/537.36");
+				InputStream inputStream = urlConnection.getInputStream();
+				try {
+					jsonString = IOUtils.toString(inputStream, (Charset) null);
+				} catch (Exception e) {
+					throw e;
+				} finally {
+					inputStream.close();
+				}
+				LycanitesMobs.logInfo("", "Online donations file read successfully.");
+			} catch (Throwable e) {
+				LycanitesMobs.logInfo("", "Unable to access the online donations file.");
+				e.printStackTrace();
+				return;
+			}
 
-    // ==================================================
-    //                 Parse Familiar JSON
-    // ==================================================
+			// Parse JSON File:
+			DonationFamiliars.instance.parseFamiliarJSON(jsonString);
+		}
+	}
+
     // Parses JSON to Familiars, returns false if the JSON is invalid.
     public boolean parseFamiliarJSON(String jsonString) {
         try {
@@ -117,14 +121,14 @@ public class DonationFamiliars {
         return true;
     }
 
-
-    // ==================================================
-    //              Get Familiars For Player
-    // ==================================================
     public Map<UUID, PetEntry> getFamiliarsForPlayer(EntityPlayer player) {
         long currentTime = System.currentTimeMillis() / 1000;
-        if(this.jsonLoadedTime < 0 || currentTime - this.jsonLoadedTime > 60 * 60 || true)
-            this.readFromJSON();
+        if(this.jsonLoadedTime < 0 || currentTime - this.jsonLoadedTime > 60 * 60) {
+			this.jsonLoadedTime = System.currentTimeMillis() / 1000;
+			DonationLoader donationLoader = new DonationLoader(player);
+			Thread thread = new Thread(donationLoader);
+			thread.start();
+		}
 
 		Map<UUID, PetEntry> playerFamiliarEntries = new HashMap<>();
         if(this.playerFamiliars.containsKey(player.getUniqueID())) {
