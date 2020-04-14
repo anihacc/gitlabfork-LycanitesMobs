@@ -25,6 +25,8 @@ public class ItemDrop {
 	public int minAmount = 1;
 	public int maxAmount = 1;
 	public boolean bonusAmount = true;
+
+	/* Set to false to prevent this drop from using drop multipliers. */
 	public boolean amountMultiplier = true;
 
 	public float chance = 0;
