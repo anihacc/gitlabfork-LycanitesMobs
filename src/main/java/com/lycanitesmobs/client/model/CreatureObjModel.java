@@ -38,7 +38,7 @@ public class CreatureObjModel extends CreatureModel {
     public static float MODEL_OFFSET_POS_Y = -1.5F;
 
 	// Model:
-    /** An INSTANCE of the model, the model should only be set once and not during every tick or things will get very laggy! **/
+	/** An INSTANCE of the model, the model should only be set once and not during every tick or things will get very laggy! **/
     public ObjModel objModel;
 
     /** A list of all parts that belong to this model's wavefront obj. **/
@@ -106,7 +106,7 @@ public class CreatureObjModel extends CreatureModel {
 	 * @return This model instance.
 	 */
 	public CreatureObjModel initModel(String name, ModInfo modInfo, String path) {
-    	// Check If Enabled:
+		// Check If Enabled:
 		CreatureInfo creatureInfo = CreatureManager.getInstance().getCreature(name);
 		if(creatureInfo != null && !creatureInfo.enabled) {
 			return this;
@@ -178,7 +178,7 @@ public class CreatureObjModel extends CreatureModel {
 	 */
 	public void addAnimationPart(AnimationPart animationPart) {
         if(this.animationParts.containsKey(animationPart.name)) {
-            LycanitesMobs.logWarning("", "Tried to add an animation part that already exists: " + animationPart.name + ".");
+            //LycanitesMobs.logWarning("", "Tried to add an animation part that already exists: " + animationPart.name + ".");
             return;
         }
         if(animationPart.parentName != null) {

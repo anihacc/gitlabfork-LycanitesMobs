@@ -91,6 +91,9 @@ public class SummonMinionsGoal extends BaseGoal {
 
 	@Override
     public boolean shouldExecute() {
+		if(this.host.isPetType("familiar")) {
+			return false;
+		}
 		return super.shouldExecute() && this.minionInfo != null;
 	}
 

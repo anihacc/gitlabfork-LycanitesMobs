@@ -11,7 +11,7 @@
   },
   {
     "name": "TipA",
-    "parent": "",
+    "parent": "Base",
     "centerX": "0.0",
     "centerY": "0.0",
     "centerZ": "0.01",
