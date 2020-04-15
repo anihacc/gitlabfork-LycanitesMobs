@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.item.equipment.features;
 
 import com.google.common.collect.Sets;
 import com.google.gson.JsonObject;
-import com.lycanitesmobs.LycanitesMobs;
+import com.lycanitesmobs.client.localisation.LanguageManager;
 import com.lycanitesmobs.core.helpers.JSONHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDirt;
@@ -13,12 +13,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
-import com.lycanitesmobs.client.localisation.LanguageManager;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -256,7 +254,6 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 			selectionRanges[vert][max] = new Vec3i(0, this.harvestRange.getY() + vertOffset, 0);
 		}
 		else {
-			LycanitesMobs.logDebug("", "Y Range: " + this.harvestRange.getY());
 			selectionRanges[vert][min] = new Vec3i(
 					this.harvestRange.getY() * -Math.abs(facingH.getFrontOffsetX()) * 0.5F,
 					this.harvestRange.getY() * -Math.abs(facingH.getFrontOffsetY()) * 0.5F,

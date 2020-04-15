@@ -129,7 +129,7 @@ public class AssetManager {
 			return null;
 		}
 
-		// Subpsecies Model:
+		// Subspecies Model:
 		if(entityCreature.getSubspecies() != null && entityCreature.getSubspecies().modelClass != null) {
 			if(models.containsKey(entityCreature.getSubspecies().modelClass.toString())) {
 				return models.get(entityCreature.getSubspecies().modelClass.toString());

@@ -6,6 +6,9 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.ExtendedPlayer;
+import com.lycanitesmobs.core.info.CreatureInfo;
+import com.lycanitesmobs.core.info.CreatureManager;
+import com.lycanitesmobs.core.info.Variant;
 import net.minecraft.entity.player.EntityPlayer;
 import org.apache.commons.io.IOUtils;
 
@@ -84,11 +87,19 @@ public class DonationFamiliars {
                     UUID familiar_uuid = UUID.fromString(familiarJson.get("familiar_uuid").getAsString());
 
                     String familiar_species = familiarJson.get("familiar_species").getAsString();
+					CreatureInfo creatureInfo = CreatureManager.getInstance().getCreature(familiar_species);
                     int familiar_subspecies = familiarJson.get("familiar_subspecies_index").getAsInt();
                     int familiar_variant = familiarJson.get("familiar_variant_index").getAsInt();
+					Variant creatureVariant = creatureInfo != null ? creatureInfo.getSubspecies(familiar_subspecies).getVariant(familiar_variant) : null;
                     String familiar_name = familiarJson.get("familiar_name").getAsString();
                     String familiar_color = familiarJson.get("familiar_color").getAsString();
                     double familiar_size = familiarJson.get("familiar_size").getAsDouble();
+                    if(familiar_size <= 0) {
+                    	familiar_size = 0.5D;
+						if(creatureVariant != null && creatureVariant.scale != 1) {
+							familiar_size *= 1 / creatureVariant.scale;
+						}
+					}
 
                     PetEntryFamiliar familiarEntry = new PetEntryFamiliar(familiar_uuid, null, familiar_species.toLowerCase());
                     familiarEntry.setEntitySubspecies(familiar_subspecies);

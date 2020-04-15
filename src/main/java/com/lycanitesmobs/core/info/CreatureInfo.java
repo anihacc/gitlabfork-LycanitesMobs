@@ -386,7 +386,6 @@ public class CreatureInfo {
 		if(this.dummy) {
 			return;
 		}
-		LycanitesMobs.logDebug("", "Loading: " + this.getName());
 
 		// Add Stats:
 		ItemStack achievementStack = new ItemStack(ObjectManager.getItem("mobtoken"));

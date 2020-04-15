@@ -31,8 +31,6 @@ public class EquipmentInfuserBlock extends BlockBase implements ITileEntityProvi
 
 	public EquipmentInfuserBlock(ModInfo group) {
 		super(Material.IRON);
-		this.setCreativeTab(LycanitesMobs.blocksTab);
-		this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
 		
 		// Properties:
 		this.group = group;
@@ -45,6 +43,9 @@ public class EquipmentInfuserBlock extends BlockBase implements ITileEntityProvi
 
 		// Tile Entity:
 		this.hasTileEntity = true;
+
+		this.setCreativeTab(LycanitesMobs.blocksTab);
+		this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
 	}
 
 	@Override
