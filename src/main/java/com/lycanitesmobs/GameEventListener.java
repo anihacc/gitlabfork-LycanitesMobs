@@ -12,7 +12,6 @@ import com.lycanitesmobs.core.item.equipment.ItemEquipment;
 import com.lycanitesmobs.core.network.MessagePlayerLeftClick;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
