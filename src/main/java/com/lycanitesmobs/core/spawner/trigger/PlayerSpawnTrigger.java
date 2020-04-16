@@ -61,7 +61,7 @@ public class PlayerSpawnTrigger extends SpawnTrigger {
 	/** Called every player tick. **/
 	public void onTick(PlayerEntity player, long ticks) {
 		// Creative:
-		if(!SpawnerEventListener.testOnCreative && (!this.creative && player.isCreative())) {
+		if(!SpawnerEventListener.testOnCreative && (!this.creative && (player.isCreative() || player.isSpectator()))) {
 			return;
 		}
 

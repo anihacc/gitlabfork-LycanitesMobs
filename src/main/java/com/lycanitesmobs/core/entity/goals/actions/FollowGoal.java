@@ -3,6 +3,7 @@ package com.lycanitesmobs.core.entity.goals.actions;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 
 import java.util.EnumSet;
@@ -126,8 +127,13 @@ public abstract class FollowGoal extends Goal {
 	@Override
     public void tick() {
         if(this.updateRate-- <= 0) {
-			this.updateRate = 60;
             Entity target = this.getTarget();
+			if(target instanceof PlayerEntity) {
+				this.updateRate = 10;
+			}
+			else {
+				this.updateRate = 60;
+			}
         	if(!this.host.useDirectNavigator()) {
         		if(this.behindDistance == 0 || !(target instanceof BaseCreatureEntity)) {
                     this.host.getNavigator().tryMoveToEntityLiving(target, this.speed);
