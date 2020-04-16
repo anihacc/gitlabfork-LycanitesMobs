@@ -2,7 +2,8 @@
     "name": "sylph",
     "creatureType": "elemental",
     "groups": [
-        "guardian"
+        "guardian",
+        "light"
     ],
     "entityClass": "com.lycanitesmobs.core.entity.creature.EntitySylph",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelSylph",

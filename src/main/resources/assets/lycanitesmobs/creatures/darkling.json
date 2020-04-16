@@ -2,7 +2,8 @@
     "name": "darkling",
     "creatureType": "arthropod",
     "groups": [
-        "predator"
+        "predator",
+        "dark"
     ],
     "entityClass": "com.lycanitesmobs.core.entity.creature.EntityDarkling",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelDarkling",
