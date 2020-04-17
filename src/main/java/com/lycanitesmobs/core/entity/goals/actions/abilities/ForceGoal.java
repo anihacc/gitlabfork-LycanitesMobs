@@ -171,9 +171,9 @@ public class ForceGoal extends Goal {
 			}
 			if (entity.getMotion().getX() < motionCap && entity.getMotion().getX() > -motionCap && entity.getMotion().getZ() < motionCap && entity.getMotion().getZ() > -motionCap) {
 				entity.addVelocity(
-						xDist / xzDist * factor + entity.getMotion().getX() * factor,
-						yDist * factor + entity.getMotion().getY() * factor,
-						zDist / xzDist * factor + entity.getMotion().getZ() * factor
+						((xDist / xzDist) * factor) + (entity.getMotion().getX() * factor),
+						(yDist * factor * 0.25D) + (entity.getMotion().getY() * factor * 0.25D),
+						((zDist / xzDist) * factor) + (entity.getMotion().getZ() * factor)
 				);
 			}
 			if(this.dismountTargets && entity.getRidingEntity() != null) {

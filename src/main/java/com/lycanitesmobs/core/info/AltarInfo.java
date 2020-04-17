@@ -102,6 +102,9 @@ public class AltarInfo {
 
         AltarInfo royalArchvileAltar = new AltarInfoRoyalArchvile("RoyalArchvile");
         addAltar(royalArchvileAltar);
+
+        AltarInfo phosphorescentChupacabraAltar = new AltarInfoPhosphorescentChupacabra("PhosphorescentChupacabra");
+        addAltar(phosphorescentChupacabraAltar);
     }
 
 

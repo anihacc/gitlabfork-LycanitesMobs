@@ -2,6 +2,7 @@ package com.lycanitesmobs.core.entity.goals.actions.abilities;
 
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
+import com.lycanitesmobs.core.entity.goals.BaseGoal;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.player.PlayerEntity;
@@ -9,10 +10,7 @@ import net.minecraft.util.math.Vec3d;
 
 import java.util.EnumSet;
 
-public class FireProjectilesGoal extends Goal {
-	BaseCreatureEntity host;
-
-    // Properties:
+public class FireProjectilesGoal extends BaseGoal {
 	protected String projectileName;
 	protected Class<? extends BaseProjectileEntity> projectileClass;
 	protected float velocity = 0.6F;
@@ -34,7 +32,7 @@ public class FireProjectilesGoal extends Goal {
 	 * @param setHost The creature using this goal.
 	 */
 	public FireProjectilesGoal(BaseCreatureEntity setHost) {
-        this.host = setHost;
+		super(setHost);
 		this.setMutexFlags(EnumSet.noneOf(Flag.class));
     }
 
@@ -150,7 +148,10 @@ public class FireProjectilesGoal extends Goal {
 
 	@Override
     public boolean shouldExecute() {
-		if(!this.host.isAlive() || (this.projectileName == null && this.projectileClass == null)) {
+		if(!super.shouldExecute()) {
+			return false;
+		}
+		if(this.projectileName == null && this.projectileClass == null) {
 			return false;
 		}
 

@@ -59,32 +59,32 @@
 		{
 			"mobId": "lycanitesmobs:geken",
 			"weight": 14,
-			"dungeonLevelMin": "2"
+			"dungeonLevelMin": 2
 		},
 		{
 			"mobId": "lycanitesmobs:lurker",
 			"weight": 6,
-			"dungeonLevelMin": "2"
+			"dungeonLevelMin": 2
 		},
 		{
 			"mobId": "lycanitesmobs:spriggan",
 			"weight": 8,
-			"dungeonLevelMin": "3"
+			"dungeonLevelMin": 3
 		},
 		{
 			"mobId": "lycanitesmobs:sylph",
 			"weight": 4,
-			"dungeonLevelMin": "3"
+			"dungeonLevelMin": 3
 		},
 		{
 			"mobId": "lycanitesmobs:aglebemu",
 			"weight": 4,
-			"dungeonLevelMin": "4"
+			"dungeonLevelMin": 4
 		},
 		{
 			"mobId": "lycanitesmobs:eyewig",
 			"weight": 4,
-			"dungeonLevelMin": "5"
+			"dungeonLevelMin": 5
 		},
 		{
 			"mobId": "lycanitesmobs:conba",
@@ -95,8 +95,8 @@
 			"naturalDespawn": "false",
 			"mobLevel": 100,
 			"spawnAsBoss": true,
-			"dungeonLevelMin": "0",
-			"dungeonLevelMax": "2",
+			"dungeonLevelMin": 0,
+			"dungeonLevelMax": 2,
 			"dungeonBoss": true,
 			"mobDrops": [
 				{
@@ -118,8 +118,8 @@
 			"naturalDespawn": "false",
 			"mobLevel": 100,
 			"spawnAsBoss": true,
-			"dungeonLevelMin": "3",
-			"dungeonLevelMax": "4",
+			"dungeonLevelMin": 3,
+			"dungeonLevelMax": 4,
 			"dungeonBoss": true,
 			"mobDrops": [
 				{
@@ -142,7 +142,7 @@
 			"naturalDespawn": "false",
 			"mobLevel": 100,
 			"spawnAsBoss": true,
-			"dungeonLevelMin": "5",
+			"dungeonLevelMin": 5,
 			"dungeonBoss": true,
 			"mobDrops": [
 				{

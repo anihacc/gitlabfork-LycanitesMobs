@@ -332,11 +332,11 @@ public class ExtendedPlayer implements IExtendedPlayer {
 
 	public void loadFamiliars() {
 		Map<UUID, PetEntry> playerFamiliars = DonationFamiliars.instance.getFamiliarsForPlayer(this.player);
-		if (playerFamiliars != null) {
+		if (!playerFamiliars.isEmpty()) {
 			for (PetEntry petEntry : playerFamiliars.values()) {
 				if (this.petManager.hasEntry(petEntry)) {
-					PetEntry familiarEntry = this.petManager.getEntry(petEntry.petEntryID);
-					familiarEntry.copy(petEntry);
+					PetEntry currentFamiliarEntry = this.petManager.getEntry(petEntry.petEntryID);
+					currentFamiliarEntry.copy(petEntry);
 				}
 				else {
 					this.petManager.addEntry(petEntry);

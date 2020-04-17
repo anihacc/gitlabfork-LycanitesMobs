@@ -2633,6 +2633,9 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	}
 
 	public boolean shouldCreatureGroupFlee(LivingEntity target) {
+		if(this.isBoss() || this.isRareVariant()) {
+			return false;
+		}
 		boolean shouldFlee = false;
 		boolean shouldPackHunt = false;
 		for(CreatureGroup group : this.creatureInfo.getGroups()) {

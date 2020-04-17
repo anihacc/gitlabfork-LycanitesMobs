@@ -57,17 +57,17 @@
 		{
 			"mobId": "lycanitesmobs:behemoth",
 			"weight": 4,
-			"dungeonLevelMin": "1"
+			"dungeonLevelMin": 1
 		},
 		{
 			"mobId": "lycanitesmobs:pinky",
 			"weight": 4,
-			"dungeonLevelMin": "2"
+			"dungeonLevelMin": 2
 		},
 		{
 			"mobId": "lycanitesmobs:cacodemon",
 			"weight": 1,
-			"dungeonLevelMin": "3"
+			"dungeonLevelMin": 3
 		},
 		{
 			"mobId": "lycanitesmobs:behemoth",
@@ -78,8 +78,8 @@
 			"naturalDespawn": "false",
 			"mobLevel": 30,
 			"spawnAsBoss": true,
-			"dungeonLevelMin": "0",
-			"dungeonLevelMax": "2",
+			"dungeonLevelMin": 0,
+			"dungeonLevelMax": 2,
 			"dungeonBoss": true,
 			"mobDrops": [
 				{
@@ -101,8 +101,8 @@
 			"naturalDespawn": "false",
 			"mobLevel": 50,
 			"spawnAsBoss": true,
-			"dungeonLevelMin": "3",
-			"dungeonLevelMax": "4",
+			"dungeonLevelMin": 3,
+			"dungeonLevelMax": 4,
 			"dungeonBoss": true,
 			"mobDrops": [
 				{
@@ -125,7 +125,7 @@
 			"naturalDespawn": "false",
 			"mobLevel": 10,
 			"spawnAsBoss": true,
-			"dungeonLevelMin": "5",
+			"dungeonLevelMin": 5,
 			"dungeonBoss": true,
 			"mobDrops": [
 				{
@@ -152,7 +152,7 @@
 			"naturalDespawn": "false",
 			"mobLevel": 10,
 			"spawnAsBoss": true,
-			"dungeonLevelMin": "5",
+			"dungeonLevelMin": 5,
 			"dungeonBoss": true,
 			"mobDrops": [
 				{
