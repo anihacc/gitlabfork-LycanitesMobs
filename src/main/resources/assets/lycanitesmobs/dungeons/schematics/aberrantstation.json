@@ -59,33 +59,33 @@
 		{
 			"mobId": "lycanitesmobs:wraamon",
 			"weight": 4,
-			"dungeonLevelMin": "1"
+			"dungeonLevelMin": 1
 		},
 		{
 			"mobId": "lycanitesmobs:chupacabra",
 			"weight": 4,
-			"dungeonLevelMin": "2"
+			"dungeonLevelMin": 2
 		},
 		{
 			"mobId": "lycanitesmobs:darkling",
 			"weight": 14,
-			"dungeonLevelMin": "3"
+			"dungeonLevelMin": 3
 		},
 		{
 			"mobId": "lycanitesmobs:astaroth",
 			"weight": 1,
-			"dungeonLevelMin": "4"
+			"dungeonLevelMin": 4
 		},
 		{
 			"mobId": "lycanitesmobs:trite",
 			"weight": 14,
 			"subspecies": 1,
-			"dungeonLevelMin": "4"
+			"dungeonLevelMin": 4
 		},
 		{
 			"mobId": "lycanitesmobs:beholder",
 			"weight": 1,
-			"dungeonLevelMin": "5"
+			"dungeonLevelMin": 5
 		},
 		{
 			"mobId": "lycanitesmobs:wraamon",
@@ -97,7 +97,7 @@
 			"mobLevel": 100,
 			"spawnAsBoss": true,
 			"dungeonLevelMin": "0",
-			"dungeonLevelMax": "2",
+			"dungeonLevelMax": 2,
 			"dungeonBoss": true,
 			"mobDrops": [
 				{
@@ -119,8 +119,8 @@
 			"naturalDespawn": "false",
 			"mobLevel": 125,
 			"spawnAsBoss": true,
-			"dungeonLevelMin": "3",
-			"dungeonLevelMax": "4",
+			"dungeonLevelMin": 3,
+			"dungeonLevelMax": 3,
 			"dungeonBoss": true,
 			"mobDrops": [
 				{
@@ -139,6 +139,35 @@
 			]
 		},
 		{
+			"mobId": "lycanitesmobs:chupacabra",
+			"weight": 1,
+			"variant": 3,
+			"mobNameTag": "Anarchical Hound",
+			"mobSizeScale": 2,
+			"naturalDespawn": "false",
+			"mobLevel": 5,
+			"spawnAsBoss": true,
+			"dungeonLevelMin": 4,
+			"dungeonLevelMax": 4,
+			"dungeonBoss": true,
+			"mobDrops": [
+				{
+					"item": "lycanitesmobs:bloodleechscepter",
+					"amountMultiplier": false
+				},
+				{
+					"item": "lycanitesmobs:soulstone_beast",
+					"amountMultiplier": false
+				},
+				{
+					"item": "lycanitesmobs:chaosorbcharge",
+					"amountMultiplier": false,
+					"minAmount": 10,
+					"maxAmount": 20
+				}
+			]
+		},
+		{
 			"mobId": "lycanitesmobs:astaroth",
 			"weight": 1,
 			"subspecies": 1,
@@ -147,7 +176,7 @@
 			"naturalDespawn": "false",
 			"mobLevel": 250,
 			"spawnAsBoss": true,
-			"dungeonLevelMin": "5",
+			"dungeonLevelMin": 5,
 			"dungeonBoss": true,
 			"mobDrops": [
 				{

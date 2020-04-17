@@ -670,7 +670,7 @@ public class Spawner {
 		// Pick Random Spawn Using Weights:
 		int randomWeight = 1;
 		if(totalWeights > 1) {
-			randomWeight = world.rand.nextInt(totalWeights - 1) + 1;
+			randomWeight = world.rand.nextInt(totalWeights);
 		}
 		int searchWeight = 0;
 		MobSpawn chosenMobSpawn = null;

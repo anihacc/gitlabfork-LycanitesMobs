@@ -2,15 +2,13 @@ package com.lycanitesmobs.core.entity.goals.actions.abilities;
 
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
+import com.lycanitesmobs.core.entity.goals.BaseGoal;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.Vec3d;
 
-public class FireProjectilesGoal extends EntityAIBase {
-	BaseCreatureEntity host;
-
-    // Properties:
+public class FireProjectilesGoal extends BaseGoal {
 	protected String projectileName;
 	protected Class<? extends BaseProjectileEntity> projectileClass;
 	protected float velocity = 1.6F;
@@ -32,7 +30,7 @@ public class FireProjectilesGoal extends EntityAIBase {
 	 * @param setHost The creature using this goal.
 	 */
 	public FireProjectilesGoal(BaseCreatureEntity setHost) {
-        this.host = setHost;
+        super(setHost);
     }
 
 	/**
@@ -147,7 +145,10 @@ public class FireProjectilesGoal extends EntityAIBase {
 
 	@Override
     public boolean shouldExecute() {
-		if(!this.host.isEntityAlive() || (this.projectileName == null && this.projectileClass == null)) {
+		if(!super.shouldExecute()) {
+			return false;
+		}
+		if(this.projectileName == null && this.projectileClass == null) {
 			return false;
 		}
 

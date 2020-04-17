@@ -171,9 +171,9 @@ public class ForceGoal extends EntityAIBase {
 			}
 			if (entity.motionX < motionCap && entity.motionX > -motionCap && entity.motionZ < motionCap && entity.motionZ > -motionCap) {
 				entity.addVelocity(
-						xDist / xzDist * factor + entity.motionX * factor,
-						yDist * factor + entity.motionY * factor,
-						zDist / xzDist * factor + entity.motionZ * factor
+						((xDist / xzDist) * factor) + (entity.motionX * factor),
+						(yDist * factor * 0.25D) + (entity.motionY * factor * 0.25D),
+						((zDist / xzDist) * factor) + (entity.motionZ * factor)
 				);
 			}
 			if(this.dismountTargets && entity.getRidingEntity() != null) {

@@ -229,7 +229,6 @@ public class PetEntry {
         this.setEntityVariant(copyEntry.variantIndex);
         this.setEntitySize(copyEntry.entitySize);
         this.setColor(copyEntry.color);
-        this.setSpawningActive(copyEntry.spawningActive);
         if(copyEntry.summonSet != null)
             this.summonSet.setSummonType(copyEntry.summonSet.summonType);
     }

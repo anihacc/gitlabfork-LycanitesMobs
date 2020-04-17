@@ -828,6 +828,7 @@ public class TameableCreatureEntity extends AgeableCreatureEntity implements IEn
 		this.setAggressive(false);
 		this.setPVP(true);
 		this.playTameSound();
+		this.spawnEventType = "";
 	}
 
 	@Override

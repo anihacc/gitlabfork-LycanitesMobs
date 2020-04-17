@@ -61,6 +61,12 @@
                     "index": 2,
                     "name": "verdant",
                     "type": "uncommon"
+                },
+                {
+                    "index": 3,
+                    "name": "phosphorescent",
+                    "type": "rare",
+                    "scale": 2
                 }
             ]
         }

@@ -82,7 +82,6 @@ public class LycanitesMobs {
 	// Instance:
 	@Mod.Instance(modid)
 	public static LycanitesMobs instance;
-	
 	// Proxy:
 	@SidedProxy(clientSide="com.lycanitesmobs.client.ClientProxy", serverSide="com.lycanitesmobs.CommonProxy")
 	public static CommonProxy proxy;

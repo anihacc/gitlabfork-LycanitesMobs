@@ -59,47 +59,49 @@
 		{
 			"mobId": "lycanitesmobs:shade",
 			"weight": 4,
-			"dungeonLevelMin": "1"
+			"dungeonLevelMin": 1
 		},
 		{
 			"mobId": "lycanitesmobs:gnekk",
 			"weight": 4,
-			"dungeonLevelMin": "3"
+			"dungeonLevelMin": 3
 		},
 		{
 			"mobId": "lycanitesmobs:darkling",
 			"weight": 14,
-			"dungeonLevelMin": "4"
+			"dungeonLevelMin": 4
 		},
 		{
 			"mobId": "lycanitesmobs:epion",
 			"weight": 1,
-			"dungeonLevelMin": "5"
+			"dungeonLevelMin": 5
 		},
 		{
 			"mobId": "lycanitesmobs:reaper",
 			"weight": 1,
-			"dungeonLevelMin": "5"
+			"dungeonLevelMin": 5
 		},
 		{
-			"mobId": "lycanitesmobs:chupacabra",
+			"mobId": "lycanitesmobs:gnekk",
 			"weight": 1,
 			"variant": 1,
-			"mobNameTag": "Shadow Hound",
+			"mobNameTag": "Precious",
 			"mobSizeScale": 2,
 			"naturalDespawn": "false",
 			"mobLevel": 50,
 			"spawnAsBoss": true,
 			"dungeonLevelMin": "0",
-			"dungeonLevelMax": "2",
+			"dungeonLevelMax": 2,
 			"dungeonBoss": true,
 			"mobDrops": [
 				{
-					"item": "lycanitesmobs:bloodleechscepter",
+					"item": "minecraft:venomshotcharge",
+					"minAmount": 10,
+					"maxAmount": 20,
 					"amountMultiplier": false
 				},
 				{
-					"item": "lycanitesmobs:soulstone_beast",
+					"item": "lycanitesmobs:soulstone_imp",
 					"amountMultiplier": false
 				}
 			]
@@ -113,8 +115,8 @@
 			"naturalDespawn": "false",
 			"mobLevel": 20,
 			"spawnAsBoss": true,
-			"dungeonLevelMin": "3",
-			"dungeonLevelMax": "4",
+			"dungeonLevelMin": 3,
+			"dungeonLevelMax": 4,
 			"dungeonBoss": true,
 			"mobDrops": [
 				{
@@ -141,7 +143,7 @@
 			"naturalDespawn": "false",
 			"mobLevel": 10,
 			"spawnAsBoss": true,
-			"dungeonLevelMin": "5",
+			"dungeonLevelMin": 5,
 			"dungeonBoss": true,
 			"mobDrops": [
 				{
