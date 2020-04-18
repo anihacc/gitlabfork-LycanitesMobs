@@ -18,6 +18,7 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.nbt.NBTTagCompound;
@@ -42,7 +43,6 @@ public class EntityYale extends AgeableCreatureEntity implements IShearable {
 	 * Simulates a crafting instance between two dyes and uses the result dye as a mixed color, used for babies with different colored parents.
 	 */
 	private final InventoryCrafting colorMixer = new InventoryCrafting(new Container() {
-		private static final String __OBFID = "CL_00001649";
 		public boolean canInteractWith(EntityPlayer par1EntityPlayer) {
 			return false;
 		}
@@ -64,12 +64,9 @@ public class EntityYale extends AgeableCreatureEntity implements IShearable {
         this.isAggressiveByDefault = false;
         this.setupMob();
 
-		// Load Shear Drop From Config:
 		this.woolDrop = new ItemDrop(Blocks.WOOL.getRegistryName().toString(), 0, 1).setMinAmount(1).setMaxAmount(3);
-		this.woolDrop = ConfigBase.getConfig(this.creatureInfo.modInfo, "general").getItemDrop("Features", "Yale Shear Drop", this.woolDrop, "The item dropped by Yales when sheared. Format is: itemid,metadata,quantitymin,quantitymax,chance");
 	}
 
-    // ========== Init AI ==========
     @Override
     protected void initEntityAI() {
 		this.tasks.addTask(this.nextIdleGoalIndex++, new EatBlockGoal(this).setBlocks(Blocks.GRASS).setReplaceBlock(Blocks.DIRT));
@@ -77,8 +74,7 @@ public class EntityYale extends AgeableCreatureEntity implements IShearable {
 		this.tasks.addTask(this.nextDistractionGoalIndex++, new TemptGoal(this).setIncludeDiet(true));
 		this.tasks.addTask(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(false));
     }
-	
-	// ========== Init ==========
+
     @Override
     protected void entityInit() {
         super.entityInit();
@@ -216,16 +212,26 @@ public class EntityYale extends AgeableCreatureEntity implements IShearable {
     // ==================================================
    	//                      Drops
    	// ==================================================
-	// ========== Drop Items ==========
 	@Override
-	protected void dropFewItems(boolean playerKill, int lootLevel) {
-		if(!this.hasFur())
-			this.woolDrop.setMinAmount(0).setMaxAmount(0);
-		super.dropFewItems(playerKill, lootLevel);
+	public boolean canDropItem(ItemDrop itemDrop) {
+    	if(!super.canDropItem(itemDrop)) {
+    		return false;
+		}
+    	if(itemDrop.getItemStack().getItem() instanceof ItemBlock && ((ItemBlock)itemDrop.getItemStack().getItem()).getBlock() == Blocks.WOOL) {
+			return this.hasFur();
+		}
+    	return true;
 	}
-    
-    
-    // ==================================================
+
+	@Override
+	public void dropItem(ItemStack itemStack) {
+		if(this.woolDrop != null && itemStack.getItem() instanceof ItemBlock && ((ItemBlock)itemStack.getItem()).getBlock() == Blocks.WOOL) {
+			itemStack = new ItemStack(itemStack.getItem(), itemStack.getCount(), this.woolDrop.getItemStack().getMetadata());
+		}
+		super.dropItem(itemStack);
+	}
+
+	// ==================================================
     //                     Breeding
     // ==================================================
     // ========== Create Child ==========

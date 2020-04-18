@@ -83,7 +83,7 @@ public class DungeonManager extends JSONLoader {
 				e.printStackTrace();
 			}
 		}
-		LycanitesMobs.logDebug("", "Complete! " + this.themes.size() + " JSON Dungeon Structures Loaded In Total.");
+		LycanitesMobs.logDebug("", "Complete! " + this.structures.size() + " JSON Dungeon Structures Loaded In Total.");
 
 
 		// Sectors:
@@ -106,7 +106,7 @@ public class DungeonManager extends JSONLoader {
 				e.printStackTrace();
 			}
 		}
-		LycanitesMobs.logDebug("", "Complete! " + this.themes.size() + " JSON Dungeon Sectors Loaded In Total.");
+		LycanitesMobs.logDebug("", "Complete! " + this.sectors.size() + " JSON Dungeon Sectors Loaded In Total.");
 
 
 		// Schematics:
@@ -129,7 +129,7 @@ public class DungeonManager extends JSONLoader {
 				e.printStackTrace();
 			}
 		}
-		LycanitesMobs.logDebug("", "Complete! " + this.themes.size() + " JSON Dungeon Schematics Loaded In Total.");
+		LycanitesMobs.logDebug("", "Complete! " + this.schematics.size() + " JSON Dungeon Schematics Loaded In Total.");
 	}
 
 

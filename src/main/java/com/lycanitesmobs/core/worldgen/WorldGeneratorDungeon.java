@@ -26,7 +26,7 @@ public class WorldGeneratorDungeon implements IWorldGenerator {
     public WorldGeneratorDungeon() {
 		ConfigBase config = ConfigBase.getConfig(LycanitesMobs.modInfo, "general");
 		this.enabled = config.getBool("Dungeons", "Dungeons Enabled", this.enabled, "If false, all Lycanites Mobs Dungeons are disabled, set to true to enable the Dungeon System. (The JSON files are still loaded but don't do anything.)");
-		DUNGEON_DISTANCE = config.getInt("Dungeons", "Dungeon Distance", this.DUNGEON_DISTANCE, "The average distance in chunks that dungeons are spaced apart from each other.");
+		DUNGEON_DISTANCE = config.getInt("Dungeons", "Dungeon Distance", DUNGEON_DISTANCE, "The average distance in chunks that dungeons are spaced apart from each other.");
 		TOWER_CHANCE = config.getDouble("Dungeons", "Tower Chance", TOWER_CHANCE, "The chance of a dungeon generating a tower on top (0.25 by default).");
 	}
 
@@ -47,7 +47,7 @@ public class WorldGeneratorDungeon implements IWorldGenerator {
 
 		try {
 			ChunkPos chunkPos = new ChunkPos(chunkX, chunkZ);
-			int dungeonSizeMax = this.DUNGEON_DISTANCE;
+			int dungeonSizeMax = DUNGEON_DISTANCE;
 			List<DungeonInstance> nearbyDungeons = extendedWorld.getNearbyDungeonInstances(chunkPos, dungeonSizeMax * 2);
 
 			// Create New Instances:
