@@ -8,7 +8,7 @@
 	"conditions": [
 		{
 			"type": "world",
-			"dimensionIds": [0, 1],
+			"dimensionIds": ["minecraft:overworld", "midnight:midnight"],
 			"dimensionListType": "whitelist",
 			"biomeTags": ["spooky", "mountain", "swamp", "nether", "end"],
 			"biomeTagListType": "whitelist"

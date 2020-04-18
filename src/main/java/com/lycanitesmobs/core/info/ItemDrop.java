@@ -107,6 +107,20 @@ public class ItemDrop {
 		this.read(nbtTagCompound);
 	}
 
+	public ItemDrop(ItemDrop copyDrop) {
+		this.itemId = copyDrop.itemId;
+		this.minAmount = copyDrop.minAmount;
+		this.maxAmount = copyDrop.maxAmount;
+		this.bonusAmount = copyDrop.bonusAmount;
+		this.amountMultiplier = copyDrop.amountMultiplier;
+		this.chance = copyDrop.chance;
+		this.subspeciesIndex = copyDrop.subspeciesIndex;
+		this.variantIndex = copyDrop.variantIndex;
+		this.adultOnly = copyDrop.adultOnly;
+		this.burningItemId = copyDrop.burningItemId;
+		this.effectItemIds = copyDrop.effectItemIds;
+	}
+
 	public void loadFromJSON(JsonObject json) {
 		if(json.has("minAmount"))
 			this.minAmount = json.get("minAmount").getAsInt();
@@ -275,10 +289,7 @@ public class ItemDrop {
 			}
 		}
 		
-		if(itemStack != null) {
-			itemStack.setCount(quantity);
-		}
-
+		itemStack.setCount(quantity);
 		return itemStack;
 	}
 

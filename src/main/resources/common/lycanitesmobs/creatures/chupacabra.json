@@ -15,7 +15,7 @@
         ],
         "disableSubspecies": false,
         "dimensionIds": [
-            "minecraft:the_nether"
+            "minecraft:the_nether", "minecraft:the_end"
         ],
         "dimensionListType": "blacklist",
         "ignoreBiome": true,
@@ -97,6 +97,13 @@
             "minAmount": 1,
             "maxAmount": 3,
             "chance": 0.75
+        },
+        {
+            "item": "lycanitesmobs:soulstone_beast",
+            "minAmount": 1,
+            "maxAmount": 1,
+            "chance": 1,
+            "variant": 3
         }
     ],
     "sizeScale": 1,

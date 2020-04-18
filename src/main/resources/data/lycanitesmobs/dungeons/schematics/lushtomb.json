@@ -8,7 +8,7 @@
 	"conditions": [
 		{
 			"type": "world",
-			"dimensionIds": [0],
+			"dimensionIds": ["minecraft:overworld"],
 			"dimensionListType": "whitelist",
 			"biomeTags": ["forest", "jungle", "swamp"],
 			"biomeTagListType": "whitelist"

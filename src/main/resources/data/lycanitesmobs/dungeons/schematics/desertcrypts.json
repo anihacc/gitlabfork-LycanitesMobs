@@ -8,7 +8,7 @@
 	"conditions": [
 		{
 			"type": "world",
-			"dimensionIds": [0],
+			"dimensionIds": ["minecraft:overworld"],
 			"dimensionListType": "whitelist",
 			"biomeTags": ["sandy", "wasteland", "mesa", "-cold"],
 			"biomeTagListType": "whitelist"

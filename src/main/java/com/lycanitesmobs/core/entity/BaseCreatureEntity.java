@@ -1248,8 +1248,8 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	// ========== Get Random Subspecies ==========
 	public void getRandomSubspecies() {
 		if(!this.isMinion()) {
-			Subspecies randomSubspecies = this.creatureInfo.getRandomSubspecies(this);
-			LycanitesMobs.logDebug("Subspecies", "Setting " + this.getSpeciesName() + " subspecies to " + randomSubspecies.getTitle());
+			this.subspecies = this.creatureInfo.getRandomSubspecies(this);
+			LycanitesMobs.logDebug("Subspecies", "Setting " + this.getSpeciesName().getFormattedText() + " subspecies to " + this.subspecies.getTitle().getFormattedText());
 		}
 	}
 
@@ -1258,11 +1258,11 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		if(!this.isMinion()) {
     		Variant randomVariant = this.getSubspecies().getRandomVariant(this, this.spawnedRare);
     		if(randomVariant != null) {
-				LycanitesMobs.logDebug("Subspecies", "Setting " + this.getSpeciesName() + " to " + randomVariant.getTitle());
+				LycanitesMobs.logDebug("Subspecies", "Setting " + this.getSpeciesName().getFormattedText() + " to " + randomVariant.getTitle().getFormattedText());
 				this.applyVariant(randomVariant.index);
 			}
     		else {
-				LycanitesMobs.logDebug("Subspecies", "Setting " + this.getSpeciesName() + " to base variant.");
+				LycanitesMobs.logDebug("Subspecies", "Setting " + this.getSpeciesName().getFormattedText() + " to base variant.");
 				this.applyVariant(0);
 			}
     	}
@@ -3874,7 +3874,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		else if(this.getVariant() != null && "uncommon".equals(this.getVariant().rarity))
 			variantScale = Variant.UNCOMMON_DROP_SCALE;
 
-    	for(ItemDrop itemDrop : this.drops) {
+		for(ItemDrop itemDrop : this.drops) {
 			if(!this.canDropItem(itemDrop)) {
 				continue;
 			}

@@ -8,8 +8,8 @@
 	"conditions": [
 		{
 			"type": "world",
-			"dimensionIds": [0, 1, -1],
-			"dimensionListType": "whitelist",
+			"dimensionIds": [],
+			"dimensionListType": "blacklist",
 			"biomeTags": ["spooky", "mountain", "cold", "nether", "end"],
 			"biomeTagListType": "whitelist"
 		}

@@ -48,10 +48,10 @@ public class SectorConnector {
 
 
 	/**
-	 * Returns true if this connector can be connected to.
+	 * Returns true if this connector can be connected to by the sector instance, checks for sector collisions.
 	 * @param dungeonLayout The dungeon layout using this connector.
 	 * @param sectorInstance If set, the specific sector instance to connect to, if null then collision checks are ignored.
-	 * @return
+	 * @return True if the sector instance can connect to this connector.
 	 */
 	public boolean canConnect(DungeonLayout dungeonLayout, SectorInstance sectorInstance) {
 		if(this.closed) {

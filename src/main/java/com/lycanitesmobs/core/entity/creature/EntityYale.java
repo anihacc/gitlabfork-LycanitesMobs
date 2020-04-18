@@ -3,6 +3,7 @@ package com.lycanitesmobs.core.entity.creature;
 import com.google.common.collect.Maps;
 import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.CustomItemEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import com.lycanitesmobs.core.entity.goals.actions.EatBlockGoal;
 import com.lycanitesmobs.core.entity.goals.actions.TemptGoal;
@@ -16,10 +17,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.container.Container;
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.DyeItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.*;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
@@ -86,7 +84,6 @@ public class EntityYale extends AgeableCreatureEntity implements IShearable {
         this.isAggressiveByDefault = false;
         this.setupMob();
 
-        // Load Shear Drop From Config:
 		this.woolDrop = new ItemDrop(Blocks.WHITE_WOOL.getRegistryName().toString(), 1).setMinAmount(1).setMaxAmount(3);
     }
 
@@ -265,14 +262,24 @@ public class EntityYale extends AgeableCreatureEntity implements IShearable {
     // ==================================================
    	//                      Drops
    	// ==================================================
-    // ========== Drop Items ==========
-    /** Cycles through all of this entity's DropRates and drops random loot, usually called on death. If this mob is a minion, this method is cancelled. **/
-    @Override
-    protected void spawnDrops(DamageSource damageSource) {
-    	if(!this.hasFur())
-    		this.woolDrop.setMinAmount(0).setMaxAmount(0);
-    	super.spawnDrops(damageSource);
-    }
+	@Override
+	public boolean canDropItem(ItemDrop itemDrop) {
+		if(!super.canDropItem(itemDrop)) {
+			return false;
+		}
+		if(itemDrop.getItemStack().getItem() instanceof BlockItem && ((BlockItem)itemDrop.getItemStack().getItem()).getBlock().getRegistryName().toString().contains("_wool")) {
+			return this.hasFur();
+		}
+		return true;
+	}
+
+	@Override
+	public void dropItem(ItemStack itemStack) {
+		if(this.woolDrop != null && itemStack.getItem() instanceof BlockItem && ((BlockItem)itemStack.getItem()).getBlock().getRegistryName().toString().contains("_wool")) {
+			itemStack = new ItemStack(this.woolDrop.getItemStack().getItem(), itemStack.getCount());
+		}
+		super.dropItem(itemStack);
+	}
     
     
     // ==================================================

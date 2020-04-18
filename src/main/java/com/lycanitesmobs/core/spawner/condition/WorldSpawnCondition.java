@@ -2,6 +2,7 @@ package com.lycanitesmobs.core.spawner.condition;
 
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.ExtendedWorld;
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.helpers.JSONHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
