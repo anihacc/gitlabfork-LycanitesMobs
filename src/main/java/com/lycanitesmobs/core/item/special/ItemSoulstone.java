@@ -50,7 +50,7 @@ public class ItemSoulstone extends BaseItem {
 
 	@Override
 	public boolean itemInteractionForEntity(ItemStack stack, PlayerEntity player, LivingEntity entity, Hand hand) {
-    	if(this.creatureType == null && this.applySoulstoneToEntity(player, entity)) {
+    	if(this.applySoulstoneToEntity(player, entity)) {
 			// Consume Soulstone:
 			if (!player.abilities.isCreativeMode)
 				stack.setCount(Math.max(0, stack.getCount() - 1));
