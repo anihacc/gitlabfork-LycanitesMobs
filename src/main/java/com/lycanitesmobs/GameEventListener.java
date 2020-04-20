@@ -520,7 +520,11 @@ public class GameEventListener {
 		if(!event.isDismounting() || !(event.getEntityMounting() instanceof EntityPlayer) || !(event.getEntityBeingMounted() instanceof RideableCreatureEntity)) {
 			return;
 		}
-		event.setCanceled(event.getEntityMounting().isSneaking());
+		ExtendedPlayer extendedPlayer = ExtendedPlayer.getForPlayer((EntityPlayer)event.getEntityMounting());
+		if(extendedPlayer == null) {
+			return;
+		}
+		event.setCanceled(event.getEntityMounting().isSneaking() && !extendedPlayer.isControlActive(ExtendedPlayer.CONTROL_ID.MOUNT_DISMOUNT));
 	}
 
 
