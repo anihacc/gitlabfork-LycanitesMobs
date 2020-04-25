@@ -2401,7 +2401,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 	public boolean rollWanderChance() {
 		/*if(this.canBreatheAir() && !this.isStrongSwimmer() && !this.isFlying() && this.isInWater())
 			return true;*/
-		return this.getRNG().nextDouble() <= 0.008D;
+		return this.getRNG().nextDouble() <= 0.05D;
 	}
     
     // ========== Leash ==========

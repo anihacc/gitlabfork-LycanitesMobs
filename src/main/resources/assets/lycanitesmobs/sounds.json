@@ -1256,6 +1256,34 @@
         "category": "hostile",
         "sounds": [{"name": "lycanitesmobs:entity/vapula/tame", "stream": false}]
     },
+    "entity.vorach.say": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/vorach/say", "stream": false}]
+    },
+    "entity.vorach.hurt": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/vorach/hurt", "stream": false}]
+    },
+    "entity.vorach.death": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/vorach/death", "stream": false}]
+    },
+    "entity.vorach.attack": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/vorach/attack", "stream": false}]
+    },
+    "entity.vorach.beg": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/vorach/beg", "stream": false}]
+    },
+    "entity.vorach.tame": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/vorach/tame", "stream": false}]
+    },
+    "entity.vorach.step": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/vorach/step", "stream": false}]
+    },
     "entity.banshee.say": {
         "category": "hostile",
         "sounds":
@@ -3415,6 +3443,10 @@
     "projectile.venomshot": {
         "category": "ambient",
         "sounds": [{"name": "lycanitesmobs:projectile/venomshot", "stream": false}]
+    },
+    "projectile.vorebolt": {
+        "category": "ambient",
+        "sounds": [{"name": "lycanitesmobs:projectile/vorebolt", "stream": false}]
     },
     "projectile.waterjet": {
         "category": "ambient",
