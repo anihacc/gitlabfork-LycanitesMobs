@@ -5,11 +5,11 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.ProjectileObjModel;
 import com.lycanitesmobs.client.renderer.layer.LayerProjectileBase;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
-import net.minecraft.client.renderer.Vector4f;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.client.util.math.Vector4f;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 
-@OnlyIn(Dist.CLIENT)
+@Environment(EnvType.CLIENT)
 public class CrystalShardModel extends ProjectileObjModel {
     public CrystalShardModel() {
         this(1.0F);

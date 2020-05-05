@@ -14,8 +14,8 @@ import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 
 public class EntityCephignis extends AgeableCreatureEntity {
 
@@ -28,7 +28,7 @@ public class EntityCephignis extends AgeableCreatureEntity {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEFINED;
+        this.entityGroup = CreatureAttribute.UNDEFINED;
         this.spawnsOnLand = false;
         this.spawnsInWater = true;
         this.isLavaCreature = true;
@@ -153,7 +153,7 @@ public class EntityCephignis extends AgeableCreatureEntity {
         return 1.0F;
     }
     
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public int getBrightnessForRender() {
         return 15728880;
     }

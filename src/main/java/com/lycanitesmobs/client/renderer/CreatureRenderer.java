@@ -5,8 +5,8 @@ import com.lycanitesmobs.client.model.CreatureModel;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.info.CreatureManager;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
@@ -15,12 +15,12 @@ import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.Pose;
 import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 
-@OnlyIn(Dist.CLIENT)
+@Environment(EnvType.CLIENT)
 public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, CreatureModel> {
     public CreatureRenderer(String entityID, EntityRendererManager renderManager, float shadowSize) {
     	super(renderManager, ModelManager.getInstance().getCreatureModel(CreatureManager.getInstance().getCreature(entityID), null), shadowSize);
@@ -57,7 +57,7 @@ public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, CreatureMo
 		float scale = 1;
 		boolean shouldSit = entity.isPassenger() && (entity.getRidingEntity() != null && entity.getRidingEntity().shouldRiderSit());
 		this.entityModel.isSitting = shouldSit;
-		this.entityModel.isChild = entity.isChild();
+		this.entityModel.isChild = entity.isBaby();
 		float renderYaw = MathHelper.clamp(yaw, entity.prevRenderYawOffset, entity.renderYawOffset);
 		float renderYawHead = MathHelper.clamp(yaw, entity.prevRotationYawHead, entity.rotationYawHead);
 
@@ -106,7 +106,7 @@ public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, CreatureMo
 		if (!shouldSit && entity.isAlive()) {
 			distance = MathHelper.lerp(yaw, entity.prevLimbSwingAmount, entity.limbSwingAmount);
 			time = entity.limbSwing - entity.limbSwingAmount * (1.0F - yaw);
-			if (entity.isChild()) {
+			if (entity.isBaby()) {
 				time *= 3.0F;
 			}
 
@@ -123,7 +123,7 @@ public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, CreatureMo
 
 		// Entity Visibility:
 		boolean invisible = !this.isVisible(entity);
-		boolean allyInvisible = invisible && !entity.isInvisibleToPlayer(Minecraft.getInstance().player);
+		boolean allyInvisible = invisible && !entity.isInvisibleToPlayer(MinecraftClient.getInstance().player);
 
 		// Render Model Layers:
 		this.getMainModel().generateAnimationFrames(entity, time, distance, loop, lookYaw, lookPitch, 1, brightness);
@@ -160,7 +160,7 @@ public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, CreatureMo
 	 * @param allyInvisible If true, the entity has invisibility or some form of stealth but is allied to the player so should be translucent, etc.
 	 */
 	protected void renderModel(BaseCreatureEntity entity, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, LayerCreatureBase layer, float time, float distance, float loop, float lookY, float lookX, float scale, int brightness, int fade, boolean invisible, boolean allyInvisible) {
-		ResourceLocation texture = this.getEntityTexture(entity, layer);
+		Identifier texture = this.getEntityTexture(entity, layer);
 		RenderType rendertype;
 		if (invisible && !allyInvisible) {
 			rendertype = CustomRenderStates.getObjOutlineRenderType(texture);
@@ -186,16 +186,16 @@ public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, CreatureMo
 	 * @param layer The layer to get the texture for.
 	 * @return The texture to bind.
 	 */
-	public ResourceLocation getEntityTexture(BaseCreatureEntity entity, LayerCreatureBase layer) {
+	public Identifier getEntityTexture(BaseCreatureEntity entity, LayerCreatureBase layer) {
     	if(layer == null) {
 			return this.getEntityTexture(entity);
 		}
-    	ResourceLocation layerTexture = layer.getLayerTexture(entity);
+    	Identifier layerTexture = layer.getLayerTexture(entity);
 		return layerTexture != null ? layerTexture : this.getEntityTexture(entity);
 	}
 
 	@Override
-	public ResourceLocation getEntityTexture(BaseCreatureEntity entity) {
+	public Identifier getEntityTexture(BaseCreatureEntity entity) {
 		return entity.getTexture();
 	}
 
@@ -204,7 +204,7 @@ public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, CreatureMo
     protected boolean canRenderName(BaseCreatureEntity entity) {
         if(!Minecraft.isGuiEnabled()) return false;
     	//if(entity == this.renderManager.pointedEntity) return false; // This was renderViewEntity not pointedEntity, perhaps for hiding name in inventory/beastiary view?
-    	if(entity.isInvisibleToPlayer(Minecraft.getInstance().player)) return false;
+    	if(entity.isInvisibleToPlayer(MinecraftClient.getInstance().player)) return false;
     	if(entity.getControllingPassenger() != null) return false;
     	
     	if(entity.getAlwaysRenderNameTagForRender()) {

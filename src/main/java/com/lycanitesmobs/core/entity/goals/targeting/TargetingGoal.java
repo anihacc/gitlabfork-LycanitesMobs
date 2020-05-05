@@ -11,7 +11,7 @@ import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathPoint;
-import net.minecraft.potion.Effects;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.util.math.MathHelper;
 
 import java.util.Collections;
@@ -247,7 +247,7 @@ public abstract class TargetingGoal extends Goal {
             return false;
         
         // Sight Check:
-        if(this.shouldCheckSight() && !checkTarget.isPotionActive(Effects.GLOWING) && !this.host.getEntitySenses().canSee(checkTarget)) // Glowing
+        if(this.shouldCheckSight() && !checkTarget.isPotionActive(StatusEffects.GLOWING) && !this.host.getEntitySenses().canSee(checkTarget)) // Glowing
             return false;
         
         // Nearby Check:

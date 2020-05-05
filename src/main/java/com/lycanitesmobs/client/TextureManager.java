@@ -1,7 +1,7 @@
 package com.lycanitesmobs.client;
 
 import com.lycanitesmobs.core.info.ModInfo;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,8 +16,8 @@ public class TextureManager {
 	}
 	
 	// Maps:
-	public static Map<String, ResourceLocation> textures = new HashMap<>();
-	public static Map<String, ResourceLocation[]> textureGroups = new HashMap<>();
+	public static Map<String, Identifier> textures = new HashMap<>();
+	public static Map<String, Identifier[]> textureGroups = new HashMap<>();
 
 	/**
 	 * Registers GUI and misc textures.
@@ -43,10 +43,10 @@ public class TextureManager {
 
 	public static void addTexture(String name, ModInfo modInfo, String path) {
 		name = name.toLowerCase();
-		textures.put(name, new ResourceLocation(modInfo.modid, path));
+		textures.put(name, new Identifier(modInfo.modid, path));
 	}
 
-	public static ResourceLocation getTexture(String name) {
+	public static Identifier getTexture(String name) {
 		name = name.toLowerCase();
 		if(!textures.containsKey(name))
 			return null;

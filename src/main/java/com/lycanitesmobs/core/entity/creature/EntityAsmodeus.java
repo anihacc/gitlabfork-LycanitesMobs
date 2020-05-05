@@ -34,8 +34,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,7 +88,7 @@ public class EntityAsmodeus extends BaseCreatureEntity implements IMob, IGroupHe
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEFINED;
+        this.entityGroup = CreatureAttribute.UNDEFINED;
         this.hasAttackSound = false;
         this.setAttackCooldownMax(30);
         this.hasJumpSound = true;
@@ -132,7 +132,7 @@ public class EntityAsmodeus extends BaseCreatureEntity implements IMob, IGroupHe
 
     // ========== Rendering Distance ==========
     /** Returns a larger bounding box for rendering this large entity. **/
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public AxisAlignedBB getRenderBoundingBox() {
         return this.getBoundingBox().grow(200, 50, 200).offset(0, -25, 0);
     }
@@ -598,7 +598,7 @@ public class EntityAsmodeus extends BaseCreatureEntity implements IMob, IGroupHe
         return 1.0F;
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public int getBrightnessForRender() {
         return 15728880;
     }

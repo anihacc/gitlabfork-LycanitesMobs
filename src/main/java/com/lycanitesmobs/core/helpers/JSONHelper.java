@@ -5,9 +5,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.LycanitesMobs;
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
+import net.minecraft.block.Material;
 import net.minecraft.item.Item;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.biome.Biome;
@@ -73,7 +73,7 @@ public class JSONHelper {
 		List<Block> blocks = new ArrayList<>();
 		Iterator<JsonElement> jsonIterator = jsonArray.iterator();
 		while (jsonIterator.hasNext()) {
-			Block block = GameRegistry.findRegistry(Block.class).getValue(new ResourceLocation(jsonIterator.next().getAsString()));
+			Block block = GameRegistry.findRegistry(Block.class).getValue(new Identifier(jsonIterator.next().getAsString()));
 			if(block != null) {
 				blocks.add(block);
 			}
@@ -85,7 +85,7 @@ public class JSONHelper {
 		List<Item> items = new ArrayList<>();
 		Iterator<JsonElement> jsonIterator = jsonArray.iterator();
 		while (jsonIterator.hasNext()) {
-			Item item = GameRegistry.findRegistry(Item.class).getValue(new ResourceLocation(jsonIterator.next().getAsString()));
+			Item item = GameRegistry.findRegistry(Item.class).getValue(new Identifier(jsonIterator.next().getAsString()));
 			if(item != null) {
 				items.add(item);
 			}
@@ -221,7 +221,7 @@ public class JSONHelper {
 	public static List<Biome> getBiomes(List<String> biomeIds) {
 		List<Biome> biomes = new ArrayList<>();
 		for(String biomeId : biomeIds) {
-			Biome biome = GameRegistry.findRegistry(Biome.class).getValue(new ResourceLocation(biomeId));
+			Biome biome = GameRegistry.findRegistry(Biome.class).getValue(new Identifier(biomeId));
 			if(biome != null) {
 				biomes.add(biome);
 			}

@@ -10,7 +10,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.pathfinding.GroundPathNavigator;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 
 public class EntityJabberwock extends TameableCreatureEntity implements IMob {
@@ -22,7 +22,7 @@ public class EntityJabberwock extends TameableCreatureEntity implements IMob {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEFINED;
+        this.entityGroup = CreatureAttribute.UNDEFINED;
         this.hasAttackSound = true;
 
         this.canGrow = false;
@@ -85,7 +85,7 @@ public class EntityJabberwock extends TameableCreatureEntity implements IMob {
     //                       Visuals
     // ==================================================
     /** Returns this creature's main texture. Also checks for for subspecies. **/
-    public ResourceLocation getTexture() {
+    public Identifier getTexture() {
         if(!this.hasCustomName() || !"Rudolph".equals(this.getCustomName().getFormattedText()))
             return super.getTexture();
 

@@ -6,7 +6,7 @@ import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import net.minecraft.entity.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
@@ -26,7 +26,7 @@ public class EntityMaug extends RideableCreatureEntity {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEFINED;
+        this.entityGroup = CreatureAttribute.UNDEFINED;
         this.hasAttackSound = true;
         this.spreadFire = false;
 
@@ -94,7 +94,7 @@ public class EntityMaug extends RideableCreatureEntity {
                         }
                     }
                     if(doDamage) {
-                        possibleTarget.addPotionEffect(new EffectInstance(Effects.SLOWNESS, 10 * 20, 0));
+                        possibleTarget.addPotionEffect(new EffectInstance(StatusEffects.SLOWNESS, 10 * 20, 0));
                     }
                 }
             }
@@ -103,10 +103,10 @@ public class EntityMaug extends RideableCreatureEntity {
     }
     
     public void riderEffects(LivingEntity rider) {
-    	if(rider.isPotionActive(Effects.SLOWNESS))
-    		rider.removePotionEffect(Effects.SLOWNESS);
-        if(rider.isPotionActive(Effects.HUNGER))
-            rider.removePotionEffect(Effects.HUNGER);
+    	if(rider.isPotionActive(StatusEffects.SLOWNESS))
+    		rider.removePotionEffect(StatusEffects.SLOWNESS);
+        if(rider.isPotionActive(StatusEffects.HUNGER))
+            rider.removePotionEffect(StatusEffects.HUNGER);
     }
 
 	

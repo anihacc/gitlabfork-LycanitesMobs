@@ -6,7 +6,7 @@ import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import com.lycanitesmobs.core.entity.goals.actions.TemptGoal;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.material.Material;
+import net.minecraft.block.Material;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
@@ -22,7 +22,7 @@ public class EntityArisaur extends AgeableCreatureEntity implements IGroupHeavy 
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEFINED;
+        this.entityGroup = CreatureAttribute.UNDEFINED;
         this.hasAttackSound = false;
 
         this.canGrow = true;

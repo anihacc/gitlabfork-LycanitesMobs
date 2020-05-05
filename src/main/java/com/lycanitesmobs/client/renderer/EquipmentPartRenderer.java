@@ -6,15 +6,15 @@ import com.lycanitesmobs.client.model.ItemObjModel;
 import com.lycanitesmobs.client.renderer.layer.LayerItem;
 import com.lycanitesmobs.client.renderer.layer.LayerItemDye;
 import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.Vector3f;
+import net.minecraft.client.util.math.Vector3f;
 import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,14 +39,14 @@ public class EquipmentPartRenderer extends ItemStackTileEntityRenderer implement
 		itemObjModel.addCustomLayers(this);
 
 		float loop = 0;
-		if(Minecraft.getInstance().player != null) {
-			loop = Minecraft.getInstance().player.ticksExisted;
+		if(MinecraftClient.getInstance().player != null) {
+			loop = MinecraftClient.getInstance().player.ticksExisted;
 		}
 
 		matrixStack.translate(0.6F, 0.35F, 0.5F); // translate
-		matrixStack.rotate(new Vector3f(1.0F, 0.0F, 0.0F).rotationDegrees(190));
-		matrixStack.rotate(new Vector3f(0.0F, 1.0F, 0.0F).rotationDegrees(-45));
-		matrixStack.rotate(new Vector3f(0.0F, 0.0F, 1.0F).rotationDegrees(10));
+		matrixStack.multiply(new Vector3f(1.0F, 0.0F, 0.0F).getDegreesQuaternion(190));
+		matrixStack.multiply(new Vector3f(0.0F, 1.0F, 0.0F).getDegreesQuaternion(-45));
+		matrixStack.multiply(new Vector3f(0.0F, 0.0F, 1.0F).getDegreesQuaternion(10));
 		matrixStack.translate(0F, -1.7F, 0F);
 
 		matrixStack.push();
@@ -79,7 +79,7 @@ public class EquipmentPartRenderer extends ItemStackTileEntityRenderer implement
 	 * @param brightness The brightness of the mob based on block location, etc.
 	 */
 	protected void renderModel(ItemObjModel model, ItemStack itemStack, Hand hand, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, LayerItem layer, AnimationPart offsetObjPart, float loop, int brightness) {
-		ResourceLocation texture = model.getTexture(itemStack, layer);
+		Identifier texture = model.getTexture(itemStack, layer);
 		RenderType renderType = CustomRenderStates.getObjRenderType(texture, model.getBlending(itemStack, layer), model.getGlow(itemStack, layer));
 //		if(layer instanceof LayerItemDye) {
 //			renderType = CustomRenderStates.getObjColorOnlyRenderType(texture, model.getBlending(itemStack, layer), model.getGlow(itemStack, layer));
@@ -88,11 +88,11 @@ public class EquipmentPartRenderer extends ItemStackTileEntityRenderer implement
 	}
 
 	@Override
-	public void bindItemTexture(ResourceLocation location) {
+	public void bindItemTexture(Identifier location) {
 		if(location == null) {
 			return;
 		}
-		Minecraft.getInstance().getTextureManager().bindTexture(location);
+		MinecraftClient.getInstance().getTextureManager().bindTexture(location);
 	}
 
 	@Override

@@ -5,7 +5,7 @@ import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 
 public class CustomProjectileModelEntity extends CustomProjectileEntity {
@@ -40,7 +40,7 @@ public class CustomProjectileModelEntity extends CustomProjectileEntity {
 	}
 
 	@Override
-	public ResourceLocation getTexture() {
+	public Identifier getTexture() {
 		if("projectile".equals(this.getTextureName()))
 			return null;
 		if(TextureManager.getTexture(this.getTextureName()) == null)

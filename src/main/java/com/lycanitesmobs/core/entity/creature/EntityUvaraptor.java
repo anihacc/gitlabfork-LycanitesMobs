@@ -18,7 +18,7 @@ public class EntityUvaraptor extends RideableCreatureEntity {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEFINED;
+        this.entityGroup = CreatureAttribute.UNDEFINED;
         this.spawnsUnderground = false;
         this.hasAttackSound = true;
         this.hasJumpSound = true;

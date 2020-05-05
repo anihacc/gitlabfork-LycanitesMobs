@@ -1,6 +1,6 @@
 package com.lycanitesmobs.client.gui.buttons;
 
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -18,7 +18,7 @@ public class ButtonBase extends Button {
     public ButtonBase(int buttonId, int x, int y, int width, int height, String text, Button.IPressable pressable) {
         super(x, y, width, height, text, pressable);
         this.buttonId = buttonId;
-        this.fontRenderer = Minecraft.getInstance().fontRenderer;
+        this.fontRenderer = MinecraftClient.getInstance().fontRenderer;
     }
 
 

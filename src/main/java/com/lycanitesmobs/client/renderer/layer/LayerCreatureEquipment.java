@@ -2,11 +2,11 @@ package com.lycanitesmobs.client.renderer.layer;
 
 import com.lycanitesmobs.client.renderer.CreatureRenderer;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.util.Identifier;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 
-@OnlyIn(Dist.CLIENT)
+@Environment(EnvType.CLIENT)
 public class LayerCreatureEquipment extends LayerCreatureBase {
     public String equipmentSlot;
 
@@ -23,7 +23,7 @@ public class LayerCreatureEquipment extends LayerCreatureBase {
     }
 
     @Override
-    public ResourceLocation getLayerTexture(BaseCreatureEntity entity) {
+    public Identifier getLayerTexture(BaseCreatureEntity entity) {
         return entity.getEquipmentTexture(entity.getEquipmentName(this.equipmentSlot));
     }
 }

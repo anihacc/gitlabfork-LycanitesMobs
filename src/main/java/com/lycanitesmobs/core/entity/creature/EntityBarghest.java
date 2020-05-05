@@ -6,7 +6,7 @@ import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import net.minecraft.entity.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
@@ -25,7 +25,7 @@ public class EntityBarghest extends RideableCreatureEntity {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEFINED;
+        this.entityGroup = CreatureAttribute.UNDEFINED;
         this.hasAttackSound = true;
         this.spreadFire = false;
 
@@ -93,7 +93,7 @@ public class EntityBarghest extends RideableCreatureEntity {
                         if (ObjectManager.getEffect("weight") != null)
                             possibleTarget.addPotionEffect(new EffectInstance(ObjectManager.getEffect("weight"), this.getEffectDuration(5), 1));
                         else
-                            possibleTarget.addPotionEffect(new EffectInstance(Effects.SLOWNESS, 10 * 20, 0));
+                            possibleTarget.addPotionEffect(new EffectInstance(StatusEffects.SLOWNESS, 10 * 20, 0));
                     }
                 }
             }
@@ -102,8 +102,8 @@ public class EntityBarghest extends RideableCreatureEntity {
     }
     
     public void riderEffects(LivingEntity rider) {
-    	if(rider.isPotionActive(Effects.SLOWNESS))
-    		rider.removePotionEffect(Effects.SLOWNESS);
+    	if(rider.isPotionActive(StatusEffects.SLOWNESS))
+    		rider.removePotionEffect(StatusEffects.SLOWNESS);
     	if(rider.isPotionActive(ObjectManager.getEffect("weight")))
     		rider.removePotionEffect(ObjectManager.getEffect("weight"));
     }

@@ -3,10 +3,10 @@ package com.lycanitesmobs.client.model.creature;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.template.ModelTemplateElemental;
 import net.minecraft.entity.LivingEntity;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 
-@OnlyIn(Dist.CLIENT)
+@Environment(EnvType.CLIENT)
 public class ModelSpriggan extends ModelTemplateElemental {
 
 	// ==================================================

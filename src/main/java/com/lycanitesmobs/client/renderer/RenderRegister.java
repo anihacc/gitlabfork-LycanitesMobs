@@ -17,7 +17,7 @@ import net.minecraftforge.fml.client.registry.RenderingRegistry;
 public class RenderRegister {
 
     public void registerModelLoaders() {
-        //ModelLoaderRegistry.registerLoader(new ResourceLocation(LycanitesMobs.MODID), new ModelLoader()); Not needed.
+        //ModelLoaderRegistry.registerLoader(new Identifier(LycanitesMobs.MODID), new ModelLoader()); Not needed.
     }
 
     public void registerRenderFactories() {

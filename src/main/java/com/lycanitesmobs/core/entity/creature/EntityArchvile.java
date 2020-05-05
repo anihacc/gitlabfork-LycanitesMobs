@@ -13,7 +13,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Pose;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.particles.ParticleTypes;
-import net.minecraft.potion.Effects;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.world.World;
 
 public class EntityArchvile extends TameableCreatureEntity implements IMob {
@@ -24,7 +24,7 @@ public class EntityArchvile extends TameableCreatureEntity implements IMob {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEAD;
+        this.entityGroup = CreatureAttribute.UNDEAD;
         this.hasAttackSound = false;
         this.setupMob();
     }
@@ -37,11 +37,11 @@ public class EntityArchvile extends TameableCreatureEntity implements IMob {
         this.goalSelector.addGoal(this.nextIdleGoalIndex, new FaceTargetGoal(this));
         this.goalSelector.addGoal(this.nextCombatGoalIndex, new ChaseGoal(this).setMinDistance(16F).setMaxDistance(64F).setSpeed(1));
         this.goalSelector.addGoal(this.nextCombatGoalIndex, new BuildAroundTargetGoal(this).setBlock(ObjectManager.getBlock("doomfire")).setTickRate(40).setRange(3).setEnclose(true).setTargetBit(TARGET_BITS.ATTACK));
-        this.goalSelector.addGoal(this.nextCombatGoalIndex, new EffectAuraGoal(this).setEffect(Effects.STRENGTH).setAmplifier(2).setEffectSeconds(2).setRange(32).setCheckSight(false)
+        this.goalSelector.addGoal(this.nextCombatGoalIndex, new EffectAuraGoal(this).setEffect(StatusEffects.STRENGTH).setAmplifier(2).setEffectSeconds(2).setRange(32).setCheckSight(false)
                 .setTargetTypes(TARGET_TYPES.ALLY.id).setTargetCreatureType("demon"));
-        this.goalSelector.addGoal(this.nextCombatGoalIndex, new EffectAuraGoal(this).setEffect(Effects.SPEED).setAmplifier(2).setEffectSeconds(2).setRange(32).setCheckSight(false)
+        this.goalSelector.addGoal(this.nextCombatGoalIndex, new EffectAuraGoal(this).setEffect(StatusEffects.SPEED).setAmplifier(2).setEffectSeconds(2).setRange(32).setCheckSight(false)
                 .setTargetTypes(TARGET_TYPES.ALLY.id).setTargetCreatureType("demon"));
-        this.goalSelector.addGoal(this.nextCombatGoalIndex, new EffectAuraGoal(this).setEffect(Effects.RESISTANCE).setAmplifier(2).setEffectSeconds(2).setRange(32).setCheckSight(false)
+        this.goalSelector.addGoal(this.nextCombatGoalIndex, new EffectAuraGoal(this).setEffect(StatusEffects.RESISTANCE).setAmplifier(2).setEffectSeconds(2).setRange(32).setCheckSight(false)
                 .setTargetTypes(TARGET_TYPES.ALLY.id).setTargetCreatureType("demon"));
         this.goalSelector.addGoal(this.nextCombatGoalIndex, new SummonMinionsGoal(this).setMinionInfo("belph").setSummonCap(2)
                 .setConditions(new GoalConditions().setRareVariantOnly(true)));

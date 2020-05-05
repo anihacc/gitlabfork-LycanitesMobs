@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.entity;
 import com.lycanitesmobs.client.TextureManager;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 
 public class ModelProjectileEntity extends BaseProjectileEntity {
@@ -25,7 +25,7 @@ public class ModelProjectileEntity extends BaseProjectileEntity {
 	}
 
 	@Override
-	public ResourceLocation getTexture() {
+	public Identifier getTexture() {
 		if(TextureManager.getTexture(this.getTextureName()) == null)
 			TextureManager.addTexture(this.getTextureName(), this.modInfo, "textures/projectile/" + this.getTextureName() + ".png");
 		return TextureManager.getTexture(this.getTextureName());

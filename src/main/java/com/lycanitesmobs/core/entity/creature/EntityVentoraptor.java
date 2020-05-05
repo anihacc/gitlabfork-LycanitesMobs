@@ -7,7 +7,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.potion.Effects;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.world.World;
 
 public class EntityVentoraptor extends RideableCreatureEntity {
@@ -19,7 +19,7 @@ public class EntityVentoraptor extends RideableCreatureEntity {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEFINED;
+        this.entityGroup = CreatureAttribute.UNDEFINED;
         this.spawnsUnderground = false;
         this.hasAttackSound = true;
         this.hasJumpSound = true;
@@ -65,10 +65,10 @@ public class EntityVentoraptor extends RideableCreatureEntity {
 
     @Override
     public void riderEffects(LivingEntity rider) {
-        if(rider.isPotionActive(Effects.WEAKNESS))
-            rider.removePotionEffect(Effects.WEAKNESS);
-        if(rider.isPotionActive(Effects.SLOWNESS))
-            rider.removePotionEffect(Effects.SLOWNESS);
+        if(rider.isPotionActive(StatusEffects.WEAKNESS))
+            rider.removePotionEffect(StatusEffects.WEAKNESS);
+        if(rider.isPotionActive(StatusEffects.SLOWNESS))
+            rider.removePotionEffect(StatusEffects.SLOWNESS);
     }
 
 	

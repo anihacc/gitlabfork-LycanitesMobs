@@ -17,10 +17,10 @@ import net.minecraft.item.*;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 
 public class ItemStaffSummoning extends BaseItem {
 	protected float damageScale = 1.0F;
@@ -34,8 +34,8 @@ public class ItemStaffSummoning extends BaseItem {
         this.itemName = itemName;
         this.setup();
 
-        this.addPropertyOverride(new ResourceLocation("using"), new IItemPropertyGetter() {
-            @OnlyIn(Dist.CLIENT)
+        this.addPropertyOverride(new Identifier("using"), new IItemPropertyGetter() {
+            @Environment(EnvType.CLIENT)
             public float call(ItemStack itemStack, World world, LivingEntity entity) {
                 return entity != null && entity.isHandActive() && entity.getActiveItemStack() == itemStack ? 1.0F : 0.0F;
             }

@@ -7,14 +7,14 @@ import com.lycanitesmobs.client.renderer.CreatureRenderer;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureEffect;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import net.minecraft.client.renderer.Vector4f;
+import net.minecraft.client.util.math.Vector4f;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 
-@OnlyIn(Dist.CLIENT)
+@Environment(EnvType.CLIENT)
 public class ModelNymph extends ModelTemplateElemental {
 
 	// ==================================================

@@ -5,7 +5,7 @@ import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.info.ElementInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
@@ -55,7 +55,7 @@ public class ChargeItem extends BaseItem {
     @Override
     public void addInformation(ItemStack itemStack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag tooltipFlag) {
         super.addInformation(itemStack, world, tooltip, tooltipFlag);
-        FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
+        FontRenderer fontRenderer = MinecraftClient.getInstance().fontRenderer;
         for(ITextComponent description : this.getAdditionalDescriptions(itemStack, world, tooltipFlag)) {
             List<String> formattedDescriptionList = fontRenderer.listFormattedStringToWidth("-------------------\n" + description.getFormattedText(), DESCRIPTION_WIDTH + 100);
             for (String formattedDescription : formattedDescriptionList) {

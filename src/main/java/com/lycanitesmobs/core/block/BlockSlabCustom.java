@@ -6,14 +6,14 @@ import net.minecraft.block.SlabBlock;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -28,7 +28,7 @@ public class BlockSlabCustom extends SlabBlock {
 	public BlockSlabCustom(Block.Properties properties, BlockBase block) {
 		super(properties);
         String slabName = "_slab";
-        this.setRegistryName(new ResourceLocation(block.group.modid, block.blockName + slabName));
+        this.setRegistryName(new Identifier(block.group.modid, block.blockName + slabName));
 	}
 
     @Override
@@ -41,7 +41,7 @@ public class BlockSlabCustom extends SlabBlock {
         return new TranslationTextComponent(this.getTranslationKey());
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     @Override
     public void addInformation(ItemStack stack, @Nullable IBlockReader world, List<ITextComponent> tooltip, ITooltipFlag flag) {
         tooltip.add(this.getDescription(stack, world));

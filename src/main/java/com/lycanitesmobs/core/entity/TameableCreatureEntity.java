@@ -29,7 +29,7 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.IParticleData;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
@@ -38,8 +38,8 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 
 import javax.annotation.Nonnull;
 import java.util.HashMap;
@@ -227,7 +227,7 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
 	public void ownerEffects() {
 		// Protect Owner from Effects:
 		if(!this.canBurn()) {
-			this.getPlayerOwner().addPotionEffect(new EffectInstance(Effects.FIRE_RESISTANCE, (5 * 20) + 5, 1));
+			this.getPlayerOwner().addPotionEffect(new EffectInstance(StatusEffects.FIRE_RESISTANCE, (5 * 20) + 5, 1));
 		}
 		for(Object possibleEffect : this.getPlayerOwner().getActivePotionEffects().toArray(new Object[0])) {
 			if(possibleEffect instanceof EffectInstance) {
@@ -323,7 +323,7 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
 			}
     		
     		// Equipment:
-    		if(this.isTamed() && !this.isChild() && this.canEquip() && player == this.getPlayerOwner()) {
+    		if(this.isTamed() && !this.isBaby() && this.canEquip() && player == this.getPlayerOwner()) {
 	    		String equipSlot = this.inventory.getSlotForEquipment(itemStack);
 	    		if(equipSlot != null && (this.inventory.getEquipmentStack(equipSlot) == null || this.inventory.getEquipmentStack(equipSlot).getItem() != itemStack.getItem()))
 	    			commands.put(COMMAND_PIORITIES.EQUIPPING.id, "Equip Item");
@@ -838,7 +838,7 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
 	}
     
 
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void handleStatusUpdate(byte status) {
         if(status == 7)
             this.playTameEffect(true);

@@ -5,7 +5,7 @@ import com.lycanitesmobs.client.gui.widgets.BaseList;
 import com.lycanitesmobs.client.gui.widgets.BaseListEntry;
 import com.lycanitesmobs.core.info.ElementInfo;
 import net.minecraft.potion.Effect;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -68,11 +68,11 @@ public class ElementDescriptionList extends BaseList {
 			.appendSibling(new TranslationTextComponent("gui.beastiary.elements.buffs"))
 			.appendText(": " + "\u00A7r");
 		for(String buff : this.elementInfo.buffs) {
-			Effect effect = GameRegistry.findRegistry(Effect.class).getValue(new ResourceLocation(buff));
+			Effect effect = GameRegistry.findRegistry(Effect.class).getValue(new Identifier(buff));
 			if(effect == null) {
 				continue;
 			}
-			ResourceLocation effectResource = new ResourceLocation(buff);
+			Identifier effectResource = new Identifier(buff);
 			text.appendText("\n")
 					.appendSibling(effect.getDisplayName())
 					.appendText(": ")
@@ -91,11 +91,11 @@ public class ElementDescriptionList extends BaseList {
 				.appendSibling(new TranslationTextComponent("effect.burning.description"));
 				continue;
 			}
-			Effect effect = GameRegistry.findRegistry(Effect.class).getValue(new ResourceLocation(debuff));
+			Effect effect = GameRegistry.findRegistry(Effect.class).getValue(new Identifier(debuff));
 			if(effect == null) {
 				continue;
 			}
-			ResourceLocation effectResource = new ResourceLocation(debuff);
+			Identifier effectResource = new Identifier(debuff);
 			text.appendText("\n")
 				.appendSibling(effect.getDisplayName())
 				.appendText(": ")

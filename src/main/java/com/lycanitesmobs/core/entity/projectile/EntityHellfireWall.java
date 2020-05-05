@@ -16,8 +16,8 @@ import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 
 import java.util.List;
 
@@ -146,7 +146,7 @@ public class EntityHellfireWall extends BaseProjectileEntity {
         return 1.0F;
     }
     
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public int getBrightnessForRender() {
         return 15728880;
     }

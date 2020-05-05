@@ -233,7 +233,7 @@ public class TemptGoal extends Goal {
         this.retemptTime = this.retemptTimeMax;
         if(this.host instanceof AgeableCreatureEntity) {
             AgeableCreatureEntity ageable = (AgeableCreatureEntity)this.host;
-            if(!ageable.isChild() && !ageable.canBreed()) {
+            if(!ageable.isBaby() && !ageable.canBreed()) {
                 Math.max(this.retemptTime *= 10, 100);
             }
         }

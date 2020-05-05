@@ -77,7 +77,7 @@ public class FindParentGoal extends TargetingGoal {
         if(this.targetClass != null && !this.targetClass.isAssignableFrom(target.getClass()))
             return false;
 
-		if(target.isChild()) {
+		if(target.isBaby()) {
 			return false;
 		}
         

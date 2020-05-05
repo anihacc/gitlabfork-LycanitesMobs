@@ -6,16 +6,16 @@ import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.client.gui.overlays.BaseOverlay;
 import com.lycanitesmobs.core.MobEventSound;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.audio.SimpleSound;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 import org.lwjgl.opengl.GL11;
 
 public class MobEventPlayerClient {
@@ -70,7 +70,7 @@ public class MobEventPlayerClient {
             return;
         }
         this.sound = new MobEventSound(ObjectManager.getSound("mobevent_" + this.mobEvent.title.toLowerCase()), SoundCategory.RECORDS, ClientManager.getInstance().getClientPlayer(), 1.0F, 1.0F);
-        Minecraft.getInstance().getSoundHandler().play(this.sound);
+        MinecraftClient.getInstance().getSoundHandler().play(this.sound);
     }
 	
 	
@@ -98,7 +98,7 @@ public class MobEventPlayerClient {
     // ==================================================
     //                       GUI
     // ==================================================
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void onGUIUpdate(BaseOverlay gui, int sWidth, int sHeight) {
     	PlayerEntity player = ClientManager.getInstance().getClientPlayer();
         if(player.abilities.isCreativeMode && !MobEventPlayerServer.testOnCreative && "world".equalsIgnoreCase(this.mobEvent.channel)) {
@@ -134,8 +134,8 @@ public class MobEventPlayerClient {
 		}
     }
 
-    @OnlyIn(Dist.CLIENT)
-    public ResourceLocation getTexture() {
+    @Environment(EnvType.CLIENT)
+    public Identifier getTexture() {
         if(TextureManager.getTexture("guimobevent" + this.mobEvent.title) == null)
             TextureManager.addTexture("guimobevent" + this.mobEvent.title, LycanitesMobs.modInfo, "textures/mobevents/" + this.mobEvent.title.toLowerCase() + ".png");
         return TextureManager.getTexture("guimobevent" + this.mobEvent.title);

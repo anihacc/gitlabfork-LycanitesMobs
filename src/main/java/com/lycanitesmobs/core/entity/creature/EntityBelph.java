@@ -34,7 +34,7 @@ public class EntityBelph extends TameableCreatureEntity implements IMob {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEAD;
+        this.entityGroup = CreatureAttribute.UNDEAD;
         this.hasAttackSound = false;
         this.setupMob();
     }

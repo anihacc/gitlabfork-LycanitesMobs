@@ -1,6 +1,6 @@
 package com.lycanitesmobs.client.obj;
 
-import net.minecraft.client.renderer.Vector3f;
+import net.minecraft.client.util.math.Vector3f;
 
 public class Material
 {

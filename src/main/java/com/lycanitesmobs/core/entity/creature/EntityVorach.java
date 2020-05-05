@@ -13,7 +13,7 @@ public class EntityVorach extends TameableCreatureEntity implements IMob {
 
 	public EntityVorach(EntityType<? extends EntityBehemoth> entityType, World world) {
 		super(entityType, world);
-		this.attribute = CreatureAttribute.UNDEAD;
+		this.entityGroup = CreatureAttribute.UNDEAD;
 		this.setupMob();
 	}
 

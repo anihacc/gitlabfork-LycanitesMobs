@@ -4,12 +4,12 @@ import com.lycanitesmobs.client.renderer.CreatureRenderer;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.creature.EntityRoa;
-import net.minecraft.client.renderer.Vector4f;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.client.util.math.Vector4f;
+import net.minecraft.util.Identifier;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 
-@OnlyIn(Dist.CLIENT)
+@Environment(EnvType.CLIENT)
 public class LayerRoa extends LayerCreatureBase {
 
     // ==================================================
@@ -47,7 +47,7 @@ public class LayerRoa extends LayerCreatureBase {
     }
 
     @Override
-    public ResourceLocation getLayerTexture(BaseCreatureEntity entity) {
+    public Identifier getLayerTexture(BaseCreatureEntity entity) {
         return entity.getSubTexture("effect");
     }
 }

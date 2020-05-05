@@ -2,7 +2,7 @@ package com.lycanitesmobs.client;
 
 import com.lycanitesmobs.ClientManager;
 import com.lycanitesmobs.core.IProxy;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -15,11 +15,11 @@ public class ClientProxy implements IProxy {
 
 	@Override
 	public World getWorld() {
-		return Minecraft.getInstance().world;
+		return MinecraftClient.getInstance().world;
 	}
 
 	@Override
 	public void addEntityToWorld(int entityId, Entity entity) {
-		Minecraft.getInstance().world.addEntity(entityId, entity);
+		MinecraftClient.getInstance().world.addEntity(entityId, entity);
 	}
 }

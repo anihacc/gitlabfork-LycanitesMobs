@@ -7,7 +7,7 @@ import com.lycanitesmobs.client.gui.buttons.CreatureButton;
 import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.network.MessageSummonSetSelection;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.text.TranslationTextComponent;
 import org.lwjgl.opengl.GL11;
@@ -109,8 +109,8 @@ public class MinionSelectionOverlay extends BaseScreen {
 	
 	@Override
 	public boolean keyPressed(int par1, int par2, int par3) {
-		if(par2 == 1 || par2 == Minecraft.getInstance().gameSettings.keyBindInventory.getKey().getKeyCode())
-        	 Minecraft.getInstance().player.closeScreen();
+		if(par2 == 1 || par2 == MinecraftClient.getInstance().gameSettings.keyBindInventory.getKey().getKeyCode())
+        	 MinecraftClient.getInstance().player.closeScreen();
 		return super.keyPressed(par1, par2, par3);
 	}
 }

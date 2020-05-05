@@ -3,8 +3,8 @@ package com.lycanitesmobs.client.model.animation;
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.client.model.IAnimationModel;
 import com.lycanitesmobs.core.helpers.JSONHelper;
-import net.minecraft.client.renderer.Vector3f;
-import net.minecraft.client.renderer.Vector4f;
+import net.minecraft.client.util.math.Vector3f;
+import net.minecraft.client.util.math.Vector4f;
 import net.minecraft.entity.LivingEntity;
 
 import java.util.ArrayList;

@@ -23,7 +23,7 @@ import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -305,8 +305,8 @@ public class ProjectileInfo {
 	 * Returns the resource location for this projectile.
 	 * @return Projectile resource location.
 	 */
-	public ResourceLocation getResourceLocation() {
-		return new ResourceLocation(this.modInfo.modid, this.getName());
+	public Identifier getIdentifier() {
+		return new Identifier(this.modInfo.modid, this.getName());
 	}
 
 	/**

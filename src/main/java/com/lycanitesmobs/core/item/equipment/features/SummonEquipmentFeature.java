@@ -10,7 +10,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -108,7 +108,7 @@ public class SummonEquipmentFeature extends EquipmentFeature {
 			entityType = creatureInfo.getEntityType();
 		}
 		else {
-			Object entityTypeObj = GameRegistry.findRegistry(EntityType.class).getValue(new ResourceLocation(this.summonMobId));
+			Object entityTypeObj = GameRegistry.findRegistry(EntityType.class).getValue(new Identifier(this.summonMobId));
 			if(entityTypeObj instanceof EntityType) {
 				entityType = (EntityType)entityTypeObj;
 			}

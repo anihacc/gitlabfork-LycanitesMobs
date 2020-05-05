@@ -11,7 +11,7 @@ import net.minecraft.entity.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -29,7 +29,7 @@ public class EntityBeholder extends RideableCreatureEntity {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEFINED;
+        this.entityGroup = CreatureAttribute.UNDEFINED;
         this.hasAttackSound = false;
         
         this.setAttackCooldownMax(20);
@@ -56,8 +56,8 @@ public class EntityBeholder extends RideableCreatureEntity {
     // ==================================================
     @Override
     public void riderEffects(LivingEntity rider) {
-        if(rider.isPotionActive(Effects.MINING_FATIGUE))
-            rider.removePotionEffect(Effects.MINING_FATIGUE);
+        if(rider.isPotionActive(StatusEffects.MINING_FATIGUE))
+            rider.removePotionEffect(StatusEffects.MINING_FATIGUE);
         if(rider.isPotionActive(ObjectManager.getEffect("weight")))
             rider.removePotionEffect(ObjectManager.getEffect("weight"));
     }

@@ -9,8 +9,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 
@@ -80,7 +80,7 @@ public class EntityHellLaser extends LaserProjectileEntity {
     	boolean damageDealt = super.updateDamage(target);
         if(this.getThrower() != null && damageDealt) {
         	if(target instanceof LivingEntity)
-    			((LivingEntity)target).addPotionEffect(new EffectInstance(Effects.WITHER, this.getEffectDuration(5), 0));
+    			((LivingEntity)target).addPotionEffect(new EffectInstance(StatusEffects.WITHER, this.getEffectDuration(5), 0));
         }
         return damageDealt;
     }
@@ -90,7 +90,7 @@ public class EntityHellLaser extends LaserProjectileEntity {
  	//                      Visuals
  	// ==================================================
     @Override
-    public ResourceLocation getBeamTexture() {
+    public Identifier getBeamTexture() {
     	if(TextureManager.getTexture(this.entityName + "Beam") == null)
     		TextureManager.addTexture(this.entityName + "Beam", this.modInfo, "textures/item/" + this.entityName.toLowerCase() + "beam.png");
     	return TextureManager.getTexture(this.entityName + "Beam");

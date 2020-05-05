@@ -5,7 +5,7 @@ import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.helpers.JSONHelper;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -34,11 +34,11 @@ public class ProjectileBehaviourCatch extends ProjectileBehaviour {
 		if(projectile.getEntityWorld().isRemote || target == projectile.getThrower()) {
 			return canDamage;
 		}
-		ResourceLocation entityResourceLocation = target.getType().getRegistryName();
-		if(entityResourceLocation == null) {
+		Identifier entityIdentifier = target.getType().getRegistryName();
+		if(entityIdentifier == null) {
 			return canDamage;
 		}
-		String entityId = entityResourceLocation.toString();
+		String entityId = entityIdentifier.toString();
 		if(!this.catchEntityIds.contains(entityId)) {
 			return canDamage;
 		}

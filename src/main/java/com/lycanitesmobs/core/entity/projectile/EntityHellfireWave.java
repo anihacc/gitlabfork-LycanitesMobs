@@ -8,11 +8,11 @@ import com.lycanitesmobs.core.entity.creature.EntityRahovart;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 
 public class EntityHellfireWave extends BaseProjectileEntity {
 
@@ -150,7 +150,7 @@ public class EntityHellfireWave extends BaseProjectileEntity {
         return 1.0F;
     }
     
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public int getBrightnessForRender() {
         return 15728880;
     }
@@ -159,7 +159,7 @@ public class EntityHellfireWave extends BaseProjectileEntity {
     // ==================================================
     //                      Visuals
     // ==================================================
-    public ResourceLocation getTexture() {
+    public Identifier getTexture() {
         if(TextureManager.getTexture("hellfirewall") == null)
             TextureManager.addTexture("hellfirewall", this.modInfo, "textures/items/hellfirewall" + ".png");
         return TextureManager.getTexture("hellfirewall");

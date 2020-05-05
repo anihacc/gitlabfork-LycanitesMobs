@@ -1,19 +1,23 @@
 package com.lycanitesmobs.client.gui;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.client.renderer.*;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.render.BufferBuilder;
+import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.render.VertexFormats;
+import net.minecraft.client.render.entity.EntityRenderDispatcher;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.util.math.Vector3f;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.text.Text;
+import net.minecraft.util.math.Quaternion;
 
-public class BaseGui extends AbstractGui {
+public class BaseGui extends DrawableHelper {
     public int zLevel = 0;
 
-    public BaseGui(ITextComponent screenName) {
+    public BaseGui(Text screenName) {
         super();
     }
 
@@ -26,15 +30,15 @@ public class BaseGui extends AbstractGui {
         float scaleY = scaleX;
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder vertexbuffer = tessellator.getBuffer();
-        vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
-        vertexbuffer.pos((double)(x + 0), (double)(y + height), (double)this.zLevel) // pos()
-                .tex(((float)(u + 0) * scaleX), ((float)(v + height) * scaleY)).endVertex(); // tex()
-        vertexbuffer.pos((double)(x + width), (double)(y + height), (double)this.zLevel)
-                .tex(((float)(u + width) * scaleX), ((float)(v + height) * scaleY)).endVertex();
-        vertexbuffer.pos((double)(x + width), (double)(y + 0), (double)this.zLevel)
-                .tex(((float)(u + width) * scaleX), ((float)(v + 0) * scaleY)).endVertex();
-        vertexbuffer.pos((double)(x + 0), (double)(y + 0), (double)this.zLevel)
-                .tex(((float)(u + 0) * scaleX), ((float)(v + 0) * scaleY)).endVertex();
+        vertexbuffer.begin(7, VertexFormats.POSITION_TEXTURE);
+        vertexbuffer.vertex((double)(x + 0), (double)(y + height), (double)this.zLevel) // pos()
+                .texture(((float)(u + 0) * scaleX), ((float)(v + height) * scaleY)).next(); // tex()
+        vertexbuffer.vertex((double)(x + width), (double)(y + height), (double)this.zLevel)
+                .texture(((float)(u + width) * scaleX), ((float)(v + height) * scaleY)).next();
+        vertexbuffer.vertex((double)(x + width), (double)(y + 0), (double)this.zLevel)
+                .texture(((float)(u + width) * scaleX), ((float)(v + 0) * scaleY)).next();
+        vertexbuffer.vertex((double)(x + 0), (double)(y + 0), (double)this.zLevel)
+                .texture(((float)(u + 0) * scaleX), ((float)(v + 0) * scaleY)).next();
         tessellator.draw();
     }
 
@@ -47,34 +51,34 @@ public class BaseGui extends AbstractGui {
         MatrixStack matrixStack = new MatrixStack();
         matrixStack.translate(0.0D, 0.0D, 1000.0D);
         matrixStack.scale(scale, scale, scale);
-        Quaternion modelRotationRoll = Vector3f.ZP.rotationDegrees(180.0F);
-        Quaternion modelRotationPitch = Vector3f.XP.rotationDegrees(lookYRot * 20.0F);
-        modelRotationRoll.multiply(modelRotationPitch);
-        matrixStack.rotate(modelRotationRoll);
-        matrixStack.rotate(Vector3f.YN.rotationDegrees(180.0F));
-        float renderYawOffset = entity.renderYawOffset;
-        float rotationYaw = entity.rotationYaw;
-        float rotationPitch = entity.rotationPitch;
-        float prevRotationYawHead = entity.prevRotationYawHead;
-        float rotationYawHead = entity.rotationYawHead;
-        entity.renderYawOffset = lookXRot * 20.0F;
-        entity.rotationYaw = lookXRot * 40.0F;
-        entity.rotationPitch = -lookYRot * 20.0F;
-        entity.rotationYawHead = entity.rotationYaw;
-        entity.prevRotationYawHead = entity.rotationYaw;
-        EntityRendererManager renderManager = Minecraft.getInstance().getRenderManager();
+        Quaternion modelRotationRoll = Vector3f.POSITIVE_Z.getDegreesQuaternion(180.0F);
+        Quaternion modelRotationPitch = Vector3f.POSITIVE_X.getDegreesQuaternion(lookYRot * 20.0F);
+        modelRotationRoll.hamiltonProduct(modelRotationPitch);
+        matrixStack.multiply(modelRotationRoll);
+        matrixStack.multiply(Vector3f.NEGATIVE_Y.getDegreesQuaternion(180.0F));
+        float renderYawOffset = entity.bodyYaw;
+        float rotationYaw = entity.yaw;
+        float rotationPitch = entity.pitch;
+        float prevRotationYawHead = entity.prevHeadYaw;
+        float rotationYawHead = entity.headYaw;
+        entity.bodyYaw = lookXRot * 20.0F;
+        entity.yaw = lookXRot * 40.0F;
+        entity.pitch = -lookYRot * 20.0F;
+        entity.prevHeadYaw = entity.yaw;
+        entity.headYaw = entity.yaw;
+        EntityRenderDispatcher renderManager = MinecraftClient.getInstance().getEntityRenderManager();
         modelRotationPitch.conjugate();
-        renderManager.setCameraOrientation(modelRotationPitch);
-        renderManager.setRenderShadow(false);
-        IRenderTypeBuffer.Impl renderTypeBuffer = Minecraft.getInstance().getRenderTypeBuffers().getBufferSource();
-        renderManager.renderEntityStatic(entity, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, matrixStack, renderTypeBuffer, 15728880);
-        renderTypeBuffer.finish();
-        renderManager.setRenderShadow(true);
-        entity.renderYawOffset = renderYawOffset;
-        entity.rotationYaw = rotationYaw;
-        entity.rotationPitch = rotationPitch;
-        entity.prevRotationYawHead = prevRotationYawHead;
-        entity.rotationYawHead = rotationYawHead;
+        renderManager.setRotation(modelRotationPitch);
+        renderManager.setRenderShadows(false);
+        VertexConsumerProvider.Immediate immediate = MinecraftClient.getInstance().getBufferBuilders().getEntityVertexConsumers();
+        renderManager.render(entity, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, matrixStack, immediate, 15728880);
+        immediate.draw();
+        renderManager.setRenderShadows(true);
+        entity.bodyYaw = renderYawOffset;
+        entity.yaw = rotationYaw;
+        entity.pitch = rotationPitch;
+        entity.prevHeadYaw = prevRotationYawHead;
+        entity.headYaw = rotationYawHead;
         RenderSystem.popMatrix();
     }
 }

@@ -5,7 +5,7 @@ import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import net.minecraft.entity.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
@@ -24,7 +24,7 @@ public class EntityFeradon extends RideableCreatureEntity {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEFINED;
+        this.entityGroup = CreatureAttribute.UNDEFINED;
         this.hasAttackSound = true;
         this.spreadFire = false;
 
@@ -89,7 +89,7 @@ public class EntityFeradon extends RideableCreatureEntity {
                         }
                     }
                     if(doDamage) {
-                        possibleTarget.addPotionEffect(new EffectInstance(Effects.WEAKNESS, 10 * 20, 0));
+                        possibleTarget.addPotionEffect(new EffectInstance(StatusEffects.WEAKNESS, 10 * 20, 0));
                     }
                 }
             }
@@ -99,10 +99,10 @@ public class EntityFeradon extends RideableCreatureEntity {
 
     @Override
     public void riderEffects(LivingEntity rider) {
-        if(rider.isPotionActive(Effects.WEAKNESS))
-            rider.removePotionEffect(Effects.WEAKNESS);
-        if(rider.isPotionActive(Effects.MINING_FATIGUE))
-            rider.removePotionEffect(Effects.MINING_FATIGUE);
+        if(rider.isPotionActive(StatusEffects.WEAKNESS))
+            rider.removePotionEffect(StatusEffects.WEAKNESS);
+        if(rider.isPotionActive(StatusEffects.MINING_FATIGUE))
+            rider.removePotionEffect(StatusEffects.MINING_FATIGUE);
     }
 
 	

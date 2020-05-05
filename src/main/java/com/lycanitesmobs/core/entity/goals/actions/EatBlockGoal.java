@@ -4,7 +4,7 @@ import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.material.Material;
+import net.minecraft.block.Material;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -60,7 +60,7 @@ public class EatBlockGoal extends Goal {
   	// ==================================================
  	@Override
     public boolean shouldExecute() {
-    	 if(this.host.getRNG().nextInt(this.host.isChild() ? 50 : 1000) != 0)
+    	 if(this.host.getRNG().nextInt(this.host.isBaby() ? 50 : 1000) != 0)
              return false;
     	 
     	 int i = MathHelper.floor(this.host.getPositionVec().getX());

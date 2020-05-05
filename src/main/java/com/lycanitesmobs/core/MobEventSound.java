@@ -5,10 +5,10 @@ import net.minecraft.client.audio.SimpleSound;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 
-@OnlyIn(Dist.CLIENT)
+@Environment(EnvType.CLIENT)
 public class MobEventSound extends SimpleSound implements ITickableSound {
     protected final Entity entity;
     protected boolean donePlaying;

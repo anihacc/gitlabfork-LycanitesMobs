@@ -9,11 +9,11 @@ import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.pets.SummonSet;
 import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.widget.list.ExtendedList;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import org.lwjgl.opengl.GL11;
@@ -109,7 +109,7 @@ public class SummoningPedestalScreen extends BaseContainerScreen<SummoningPedest
     @Override
     protected void renderBackground(int mouseX, int mouseY, float partialTicks) {
         GL11.glColor4f(255, 255, 255, 1.0F);
-        Minecraft.getInstance().getTextureManager().bindTexture(this.getTexture());
+        MinecraftClient.getInstance().getTextureManager().bindTexture(this.getTexture());
 
         this.drawTexturedModalRect(this.windowX, this.windowY, 0, 0, this.windowWidth, this.windowHeight);
         this.drawTexturedModalRect(this.windowX + 40, this.windowY + this.windowHeight, 40, 224, this.windowWidth - 80, 29);
@@ -169,7 +169,7 @@ public class SummoningPedestalScreen extends BaseContainerScreen<SummoningPedest
     @Override
     protected void renderForeground(int mouseX, int mouseY, float partialTicks) {
         GL11.glColor4f(255, 255, 255, 1.0F);
-        Minecraft.getInstance().getTextureManager().bindTexture(this.getTexture());
+        MinecraftClient.getInstance().getTextureManager().bindTexture(this.getTexture());
 
         // No Pets:
         if (!this.hasPets()) {
@@ -293,7 +293,7 @@ public class SummoningPedestalScreen extends BaseContainerScreen<SummoningPedest
         return this.hasPets() && this.summonSet != null && !this.summonSet.summonType.equals("");
     }
 
-    protected ResourceLocation getTexture() {
+    protected Identifier getTexture() {
         return TextureManager.getTexture("GUISummoningPedestal");
     }
 }

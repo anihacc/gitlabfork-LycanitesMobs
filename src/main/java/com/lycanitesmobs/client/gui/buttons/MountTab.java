@@ -2,12 +2,12 @@ package com.lycanitesmobs.client.gui.buttons;
 
 import com.lycanitesmobs.client.KeyHandler;
 import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 
 public class MountTab extends Tab {
 	
 	public MountTab(int id, IPressable pressable) {
-        super(id, Tab.startX, Tab.startY, new ResourceLocation("textures/items/saddle.png"), pressable);
+        super(id, Tab.startX, Tab.startY, new Identifier("textures/items/saddle.png"), pressable);
     }
 
     @Override

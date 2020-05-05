@@ -7,7 +7,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.entity.*;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.potion.Effects;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -23,7 +23,7 @@ public class EntityMorock extends RideableCreatureEntity implements IMob, IGroup
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEFINED;
+        this.entityGroup = CreatureAttribute.UNDEFINED;
         this.hasAttackSound = true;
         this.flySoundSpeed = 20;
         this.setupMob();
@@ -91,10 +91,10 @@ public class EntityMorock extends RideableCreatureEntity implements IMob, IGroup
 
     @Override
     public void riderEffects(LivingEntity rider) {
-        if(rider.isPotionActive(Effects.WEAKNESS))
-            rider.removePotionEffect(Effects.WEAKNESS);
-        if(rider.isPotionActive(Effects.MINING_FATIGUE))
-            rider.removePotionEffect(Effects.MINING_FATIGUE);
+        if(rider.isPotionActive(StatusEffects.WEAKNESS))
+            rider.removePotionEffect(StatusEffects.WEAKNESS);
+        if(rider.isPotionActive(StatusEffects.MINING_FATIGUE))
+            rider.removePotionEffect(StatusEffects.MINING_FATIGUE);
     }
 
 

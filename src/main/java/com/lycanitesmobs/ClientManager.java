@@ -18,7 +18,7 @@ import com.lycanitesmobs.core.container.SummoningPedestalContainer;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.CreatureType;
 import com.lycanitesmobs.core.item.ItemColorCustomSpawnEgg;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.entity.player.PlayerEntity;
@@ -67,10 +67,10 @@ public class ClientManager {
 	 */
 	public void registerEvents() {
 		// Event Listeners:
-		MinecraftForge.EVENT_BUS.register(new KeyHandler(Minecraft.getInstance()));
-		MinecraftForge.EVENT_BUS.register(new BaseOverlay(Minecraft.getInstance()));
+		MinecraftForge.EVENT_BUS.register(new KeyHandler(MinecraftClient.getInstance()));
+		MinecraftForge.EVENT_BUS.register(new BaseOverlay(MinecraftClient.getInstance()));
 		MinecraftForge.EVENT_BUS.register(new ClientEventListener());
-		IResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
+		IResourceManager resourceManager = MinecraftClient.getInstance().getResourceManager();
 		if(resourceManager instanceof IReloadableResourceManager) {
 			((IReloadableResourceManager)resourceManager).addReloadListener(LanguageLoader.getInstance());
 		}
@@ -91,7 +91,7 @@ public class ClientManager {
 	 * @return Client player entity.
 	 */
 	public PlayerEntity getClientPlayer() {
-		return Minecraft.getInstance().player;
+		return MinecraftClient.getInstance().player;
 	}
 
 	/**
@@ -99,7 +99,7 @@ public class ClientManager {
 	 */
 	public void displayGuiScreen(String screenName, PlayerEntity player) {
 		if("beastiary".equals(screenName)) {
-			Minecraft.getInstance().displayGuiScreen(new SummoningBeastiaryScreen(player));
+			MinecraftClient.getInstance().displayGuiScreen(new SummoningBeastiaryScreen(player));
 		}
 	}
 
@@ -108,10 +108,10 @@ public class ClientManager {
 	 * @return A sexy Font Renderer, thanks for the heads up CedKilleur!
 	 */
     public FontRenderer getFontRenderer() {
-    	return Minecraft.getInstance().fontRenderer;
+    	return MinecraftClient.getInstance().fontRenderer;
 		/*if(this.fontRenderer == null) {
-			ResourceLocation fontResource = new ResourceLocation(LycanitesMobs.MODID, "fonts/diavlo_light.otf");
-			this.fontRenderer = new FontRenderer(Minecraft.getInstance().getTextureManager(), new Font(Minecraft.getInstance().getTextureManager(), fontResource));
+			Identifier fontResource = new Identifier(LycanitesMobs.MODID, "fonts/diavlo_light.otf");
+			this.fontRenderer = new FontRenderer(MinecraftClient.getInstance().getTextureManager(), new Font(MinecraftClient.getInstance().getTextureManager(), fontResource));
 		}
 		return this.fontRenderer;*/
 	}

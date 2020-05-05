@@ -8,7 +8,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.client.renderer.vertex.VertexFormatElement;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
@@ -45,7 +45,7 @@ public class CustomRenderStates extends RenderState {
 		super(p_i225973_1_, p_i225973_2_, p_i225973_3_);
 	}
 
-	public static RenderType getObjRenderType(ResourceLocation texture, int blending, boolean glow) {
+	public static RenderType getObjRenderType(Identifier texture, int blending, boolean glow) {
 		if(POS_COL_TEX_LIGHT_FADE_NORMAL == null) {
 			List<VertexFormatElement> vertexFormatValues = new ArrayList<>();
 			vertexFormatValues.add(DefaultVertexFormats.POSITION_3F);
@@ -81,7 +81,7 @@ public class CustomRenderStates extends RenderState {
 		return RenderType.get("lm_obj_translucent_no_cull", POS_COL_TEX_LIGHT_FADE_NORMAL, GL11.GL_TRIANGLES, 256, true, false, renderTypeState);
 	}
 
-	public static RenderType getObjColorOnlyRenderType(ResourceLocation texture, int blending, boolean glow) {
+	public static RenderType getObjColorOnlyRenderType(Identifier texture, int blending, boolean glow) {
 		if(POS_COL_TEX_LIGHT_FADE_NORMAL == null) {
 			List<VertexFormatElement> vertexFormatValues = new ArrayList<>();
 			vertexFormatValues.add(DefaultVertexFormats.POSITION_3F);
@@ -114,7 +114,7 @@ public class CustomRenderStates extends RenderState {
 		return RenderType.get("lm_obj_translucent_no_cull", POS_COL_TEX_LIGHT_FADE_NORMAL, GL11.GL_TRIANGLES, 256, true, false, renderTypeState);
 	}
 
-	public static RenderType getObjOutlineRenderType(ResourceLocation texture) {
+	public static RenderType getObjOutlineRenderType(Identifier texture) {
 		if(POS_COL_TEX_LIGHT_FADE_NORMAL == null) {
 			List<VertexFormatElement> vertexFormatValues = new ArrayList<>();
 			vertexFormatValues.add(DefaultVertexFormats.POSITION_3F);
@@ -139,7 +139,7 @@ public class CustomRenderStates extends RenderState {
 		return RenderType.get("lm_obj_outline_no_cull", POS_COL_TEX_LIGHT_FADE_NORMAL, GL11.GL_TRIANGLES, 256, true, false, renderTypeState);
 	}
 
-	public static RenderType getSpriteRenderType(ResourceLocation texture) {
+	public static RenderType getSpriteRenderType(Identifier texture) {
 		if(POS_COL_TEX_NORMAL == null) {
 			List<VertexFormatElement> vertexFormatValues = new ArrayList<>();
 			vertexFormatValues.add(DefaultVertexFormats.POSITION_3F);

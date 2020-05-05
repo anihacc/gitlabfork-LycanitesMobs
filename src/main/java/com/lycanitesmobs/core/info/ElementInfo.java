@@ -5,7 +5,7 @@ import com.lycanitesmobs.core.helpers.JSONHelper;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -137,7 +137,7 @@ public class ElementInfo {
 		}
 		duration = Math.round((float)duration * (float)this.buffDurationMultiplier);
 		for(String buff : this.buffs) {
-			Effect effect = GameRegistry.findRegistry(Effect.class).getValue(new ResourceLocation(buff));
+			Effect effect = GameRegistry.findRegistry(Effect.class).getValue(new Identifier(buff));
 			if(effect != null) {
 				targetEntity.addPotionEffect(new EffectInstance(effect, duration, amplifier));
 			}
@@ -161,7 +161,7 @@ public class ElementInfo {
 				targetEntity.setFire(duration / 20);
 				continue;
 			}
-			Effect effect = GameRegistry.findRegistry(Effect.class).getValue(new ResourceLocation(debuff));
+			Effect effect = GameRegistry.findRegistry(Effect.class).getValue(new Identifier(debuff));
 			if(effect != null) {
 				targetEntity.addPotionEffect(new EffectInstance(effect, duration, amplifier));
 			}

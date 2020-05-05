@@ -13,14 +13,14 @@ import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 
 public class EntityTreant extends BaseCreatureEntity implements IMob, IGroupHeavy {
     
@@ -31,7 +31,7 @@ public class EntityTreant extends BaseCreatureEntity implements IMob, IGroupHeav
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEFINED;
+        this.entityGroup = CreatureAttribute.UNDEFINED;
         this.spawnsUnderground = false;
         this.hasAttackSound = true;
         this.spreadFire = true;
@@ -62,9 +62,9 @@ public class EntityTreant extends BaseCreatureEntity implements IMob, IGroupHeav
         // Water Healing:
 		if(this.getAir() >= 0) {
 			if (this.isInWater())
-				this.addPotionEffect(new EffectInstance(Effects.REGENERATION, 3 * 20, 1));
+				this.addPotionEffect(new EffectInstance(StatusEffects.REGENERATION, 3 * 20, 1));
 			else if (this.isInWaterRainOrBubbleColumn())
-				this.addPotionEffect(new EffectInstance(Effects.REGENERATION, 3 * 20, 0));
+				this.addPotionEffect(new EffectInstance(StatusEffects.REGENERATION, 3 * 20, 0));
 		}
     }
     
@@ -134,7 +134,7 @@ public class EntityTreant extends BaseCreatureEntity implements IMob, IGroupHeav
 	//                       Visuals
 	// ==================================================
 	/** Returns this creature's main texture. Also checks for for subspecies. **/
-	public ResourceLocation getTexture() {
+	public Identifier getTexture() {
 		if(this.hasCustomName() && "Wicked Treant".equals(this.getCustomName().getFormattedText())) {
 			String textureName = this.getTextureName() + "_wicked";
 			if (TextureManager.getTexture(textureName) == null)
@@ -154,7 +154,7 @@ public class EntityTreant extends BaseCreatureEntity implements IMob, IGroupHeav
 
     // ========== Rendering Distance ==========
     /** Returns a larger bounding box for rendering this large entity. **/
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public AxisAlignedBB getRenderBoundingBox() {
         return this.getBoundingBox().grow(50, 20, 50).offset(0, -10, 0);
     }

@@ -18,7 +18,7 @@ public class EntityManticore extends TameableCreatureEntity implements IMob {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEFINED;
+        this.entityGroup = CreatureAttribute.UNDEFINED;
         this.hasAttackSound = true;
         this.flySoundSpeed = 20;
         this.setupMob();

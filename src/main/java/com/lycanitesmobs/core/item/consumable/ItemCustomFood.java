@@ -6,7 +6,7 @@ import com.lycanitesmobs.core.item.BaseItem;
 import net.minecraft.item.Food;
 import net.minecraft.item.Item;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
+import net.minecraft.entity.effect.StatusEffects;
 
 public class ItemCustomFood extends BaseItem {
 
@@ -45,7 +45,7 @@ public class ItemCustomFood extends BaseItem {
 		foodBuilder.hunger(feed);
 		foodBuilder.saturation(saturation);
 		foodBuilder.setAlwaysEdible();
-		foodBuilder.effect(new EffectInstance(Effects.INSTANT_HEALTH, 1 * 20, 0, false, false), 1.0F); // Additive Effects, float is chance.
+		foodBuilder.effect(new EffectInstance(StatusEffects.INSTANT_HEALTH, 1 * 20, 0, false, false), 1.0F); // Additive Effects, float is chance.
 		properties.food(foodBuilder.build());
 	}
 

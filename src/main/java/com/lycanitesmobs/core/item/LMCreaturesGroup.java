@@ -4,8 +4,8 @@ import com.lycanitesmobs.ObjectManager;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 
 public class LMCreaturesGroup extends ItemGroup {
 	private ItemStack iconStack = ItemStack.EMPTY;
@@ -16,7 +16,7 @@ public class LMCreaturesGroup extends ItemGroup {
 	}
 
 	@Override
-	@OnlyIn(Dist.CLIENT)
+	@Environment(EnvType.CLIENT)
 	public ItemStack createIcon() {
 		this.fallbackIcon = false;
 		if(ObjectManager.getItem("beastspawn") != null)
@@ -32,7 +32,7 @@ public class LMCreaturesGroup extends ItemGroup {
 		return new ItemStack(Items.CREEPER_SPAWN_EGG);
 	}
 
-	@OnlyIn(Dist.CLIENT)
+	@Environment(EnvType.CLIENT)
 	public ItemStack getIcon() {
 		if (this.iconStack.isEmpty() || this.fallbackIcon) {
 			this.iconStack = this.createIcon();

@@ -13,7 +13,7 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -21,17 +21,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EntityGrue extends TameableCreatureEntity implements IMob {
-    
 	private int teleportTime = 60;
-	
-    // ==================================================
- 	//                    Constructor
- 	// ==================================================
+
     public EntityGrue(EntityType<? extends EntityGrue> entityType, World world) {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEFINED;
+        this.entityGroup = CreatureAttribute.UNDEFINED;
         this.hasAttackSound = true;
         this.spawnsInWater = true;
         this.setupMob();
@@ -39,19 +35,13 @@ public class EntityGrue extends TameableCreatureEntity implements IMob {
         this.stepHeight = 1.0F;
     }
 
-    // ========== Init AI ==========
     @Override
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(this.nextPriorityGoalIndex++, new StealthGoal(this).setStealthTime(20).setStealthAttack(true).setStealthMove(true));
         this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(true));
     }
-	
-	
-    // ==================================================
-    //                      Updates
-    // ==================================================
-	// ========== Living Update ==========
+
 	@Override
     public void livingTick() {
         super.livingTick();
@@ -88,11 +78,7 @@ public class EntityGrue extends TameableCreatureEntity implements IMob {
 		}
         return true;
     }
-    
-    
-    // ==================================================
-   	//                     Stealth
-   	// ==================================================
+
     @Override
     public boolean canStealth() {
     	if(this.getEntityWorld().isRemote) return false;
@@ -112,12 +98,7 @@ public class EntityGrue extends TameableCreatureEntity implements IMob {
         }
     	super.startStealth();
     }
-    
-    
-    // ==================================================
-    //                      Attacks
-    // ==================================================
-    // ========== Melee Attack ==========
+
     @Override
     public boolean attackMelee(Entity target, double damageScale) {
     	if(!super.attackMelee(target, damageScale))
@@ -143,27 +124,13 @@ public class EntityGrue extends TameableCreatureEntity implements IMob {
         
         return true;
     }
-    
-    
-    // ==================================================
-  	//                     Abilities
-  	// ==================================================
+
     @Override
     public boolean isFlying() { return true; }
 
     @Override
     public boolean isStrongSwimmer() { return true; }
-    
-    
-    // ==================================================
-    //                     Pet Control
-    // ==================================================
-    public boolean petControlsEnabled() { return true; }
-    
-    
-    // ==================================================
-   	//                     Immunities
-   	// ==================================================
+
     @Override
     public boolean isVulnerableTo(String type, DamageSource source, float damage) {
         if(type.equals("inWall")) return false;
@@ -180,12 +147,8 @@ public class EntityGrue extends TameableCreatureEntity implements IMob {
         return true;
     }
 
-
-    // ==================================================
-    //                       Visuals
-    // ==================================================
     @Override
-    public ResourceLocation getTexture(String suffix) {
+    public Identifier getTexture(String suffix) {
         if(!this.hasCustomName() || !"Shadow Clown".equals(this.getCustomName().getFormattedText()))
             return super.getTexture(suffix);
 

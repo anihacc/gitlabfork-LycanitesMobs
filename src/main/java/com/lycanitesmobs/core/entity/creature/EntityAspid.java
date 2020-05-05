@@ -7,7 +7,7 @@ import com.lycanitesmobs.core.entity.goals.actions.TemptGoal;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.material.Material;
+import net.minecraft.block.Material;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
@@ -23,7 +23,7 @@ public class EntityAspid extends AgeableCreatureEntity {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEFINED;
+        this.entityGroup = CreatureAttribute.UNDEFINED;
         this.hasAttackSound = true;
 
         this.canGrow = true;
@@ -58,7 +58,7 @@ public class EntityAspid extends AgeableCreatureEntity {
         // Trail:
         if(!this.getEntityWorld().isRemote && (this.ticksExisted % 10 == 0 || this.isMoving() && this.ticksExisted % 5 == 0)) {
         	int trailHeight = 2;
-        	if(this.isChild())
+        	if(this.isBaby())
         		trailHeight = 1;
         	for(int y = 0; y < trailHeight; y++) {
         		Block block = this.getEntityWorld().getBlockState(this.getPosition().add(0, y, 0)).getBlock();

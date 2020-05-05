@@ -6,7 +6,7 @@ import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import net.minecraft.entity.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
@@ -23,7 +23,7 @@ public class EntityShade extends RideableCreatureEntity {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEFINED;
+        this.entityGroup = CreatureAttribute.UNDEFINED;
         this.hasAttackSound = true;
         this.hasJumpSound = true;
         this.canGrow = false;
@@ -131,7 +131,7 @@ public class EntityShade extends RideableCreatureEntity {
                     if (ObjectManager.getEffect("fear") != null)
                         possibleTarget.addPotionEffect(new EffectInstance(ObjectManager.getEffect("fear"), this.getEffectDuration(5), 1));
                     else
-                        possibleTarget.addPotionEffect(new EffectInstance(Effects.WEAKNESS, 10 * 20, 0));
+                        possibleTarget.addPotionEffect(new EffectInstance(StatusEffects.WEAKNESS, 10 * 20, 0));
                 }
             }
         }

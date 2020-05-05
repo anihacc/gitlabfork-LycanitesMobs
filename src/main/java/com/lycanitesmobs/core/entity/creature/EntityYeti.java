@@ -7,7 +7,7 @@ import com.lycanitesmobs.core.entity.goals.actions.TemptGoal;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.material.Material;
+import net.minecraft.block.Material;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Pose;
@@ -16,7 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -32,7 +32,7 @@ public class EntityYeti extends AgeableCreatureEntity {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEFINED;
+        this.entityGroup = CreatureAttribute.UNDEFINED;
         this.hasAttackSound = false;
         this.fleeHealthPercent = 1.0F;
         this.isAggressiveByDefault = false;
@@ -59,7 +59,7 @@ public class EntityYeti extends AgeableCreatureEntity {
         // Trail:
         if(!this.getEntityWorld().isRemote && (this.ticksExisted % 10 == 0 || this.isMoving() && this.ticksExisted % 5 == 0)) {
             int trailHeight = 2;
-            if(this.isChild())
+            if(this.isBaby())
                 trailHeight = 1;
             for(int y = 0; y < trailHeight; y++) {
                 Block block = this.getEntityWorld().getBlockState(this.getPosition().add(0, y, 0)).getBlock();

@@ -10,14 +10,14 @@ import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.render.BufferBuilder;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.util.JsonHelper;
+import net.minecraft.util.Identifier;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 import org.apache.commons.io.IOUtils;
 
 import java.io.BufferedReader;
@@ -28,7 +28,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-@OnlyIn(Dist.CLIENT)
+@Environment(EnvType.CLIENT)
 public class ProjectileObjModel extends ProjectileModel {
     // Global:
     /** An initial x rotation applied to make Blender models match Minecraft. **/
@@ -82,7 +82,7 @@ public class ProjectileObjModel extends ProjectileModel {
 		}
 
         // Load Obj Model:
-        this.wavefrontObject = new ObjModel(new ResourceLocation(modInfo.modid, "models/" + path + ".obj"));
+        this.wavefrontObject = new ObjModel(new Identifier(modInfo.modid, "models/" + path + ".obj"));
         this.objParts = this.wavefrontObject.objParts;
         if(this.objParts.isEmpty())
             LycanitesMobs.logWarning("", "Unable to load any parts for the " + name + " model!");
@@ -91,13 +91,13 @@ public class ProjectileObjModel extends ProjectileModel {
 		this.animator = new Animator(this);
 
         // Load Model Parts:
-        ResourceLocation modelPartsLocation = new ResourceLocation(modInfo.modid, "models/" + path + "_parts.json");
+        Identifier modelPartsLocation = new Identifier(modInfo.modid, "models/" + path + "_parts.json");
         try {
 			Gson gson = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
-            InputStream in = Minecraft.getInstance().getResourceManager().getResource(modelPartsLocation).getInputStream();
+            InputStream in = MinecraftClient.getInstance().getResourceManager().getResource(modelPartsLocation).getInputStream();
             BufferedReader reader = new BufferedReader(new InputStreamReader(in));
             try {
-				JsonArray jsonArray = JSONUtils.fromJson(gson, reader, JsonArray.class, false);
+				JsonArray jsonArray = JsonHelper.deserialize(gson, reader, JsonArray.class, false);
                 Iterator<JsonElement> jsonIterator = jsonArray.iterator();
                 while (jsonIterator.hasNext()) {
                     JsonObject partJson = jsonIterator.next().getAsJsonObject();
@@ -121,13 +121,13 @@ public class ProjectileObjModel extends ProjectileModel {
         }
 
 		// Load Animations:
-		ResourceLocation animationLocation = new ResourceLocation(modInfo.modid, "models/" + path + "_animation.json");
+		Identifier animationLocation = new Identifier(modInfo.modid, "models/" + path + "_animation.json");
 		try {
 			Gson gson = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
-			InputStream in = Minecraft.getInstance().getResourceManager().getResource(animationLocation).getInputStream();
+			InputStream in = MinecraftClient.getInstance().getResourceManager().getResource(animationLocation).getInputStream();
 			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 			try {
-				JsonObject json = JSONUtils.fromJson(gson, reader, JsonObject.class, false);
+				JsonObject json = JsonHelper.deserialize(gson, reader, JsonObject.class, false);
 				this.animation = new ModelAnimation();
 				this.animation.loadFromJson(json);
 			}
@@ -211,7 +211,7 @@ public class ProjectileObjModel extends ProjectileModel {
 	}
 
 	@Override
-	public void render(BaseProjectileEntity entity, MatrixStack matrixStack, IVertexBuilder vertexBuilder, LayerProjectileBase layer, float time, float distance, float loop, float lookY, float lookX, float scale, int brightness) {
+	public void render(BaseProjectileEntity entity, MatrixStack matrixStack, BufferBuilder vertexBuilder, LayerProjectileBase layer, float time, float distance, float loop, float lookY, float lookX, float scale, int brightness) {
 		this.matrixStack = matrixStack;
 
 		// Assess Scale:
@@ -252,7 +252,7 @@ public class ProjectileObjModel extends ProjectileModel {
 			this.currentAnimationPart.applyAnimationFrames(this.animator);
 
 			// Render Part:
-			this.wavefrontObject.renderPart(vertexBuilder, matrixStack.getLast().getNormalMatrix(), matrixStack.getLast().getPositionMatrix(), this.getBrightness(partName, layer, entity, brightness), 0, part, this.getPartColor(partName, entity, layer, loop), this.getPartTextureOffset(partName, entity, layer, loop));
+			this.wavefrontObject.renderPart(vertexBuilder, matrixStack.peek().getNormal(), matrixStack.peek().getModel(), this.getBrightness(partName, layer, entity, brightness), 0, part, this.getPartColor(partName, entity, layer, loop), this.getPartTextureOffset(partName, entity, layer, loop));
 			matrixStack.pop();
 		}
 	}

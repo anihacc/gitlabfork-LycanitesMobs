@@ -3,11 +3,11 @@ package com.lycanitesmobs.client.renderer.layer;
 import com.lycanitesmobs.client.renderer.CreatureRenderer;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.RideableCreatureEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.util.Identifier;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 
-@OnlyIn(Dist.CLIENT)
+@Environment(EnvType.CLIENT)
 public class LayerCreatureSaddle extends LayerCreatureBase {
     public LayerCreatureSaddle(CreatureRenderer renderer) {
         super(renderer);
@@ -21,7 +21,7 @@ public class LayerCreatureSaddle extends LayerCreatureBase {
     }
 
     @Override
-    public ResourceLocation getLayerTexture(BaseCreatureEntity entity) {
+    public Identifier getLayerTexture(BaseCreatureEntity entity) {
         return entity.getEquipmentTexture("saddle");
     }
 }

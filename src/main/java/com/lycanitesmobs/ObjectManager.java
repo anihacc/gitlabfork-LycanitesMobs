@@ -13,22 +13,18 @@ import com.lycanitesmobs.core.tileentity.EquipmentInfuserTileEntity;
 import com.lycanitesmobs.core.tileentity.TileEntityEquipmentForge;
 import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
 import net.minecraft.block.Block;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityClassification;
+import net.minecraft.entity.EntityCategory;
 import net.minecraft.entity.EntityType;
-import net.minecraft.fluid.FlowingFluid;
-import net.minecraft.inventory.container.ContainerType;
+import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
-import net.minecraft.potion.Effect;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraft.sound.SoundEvent;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
@@ -47,7 +43,7 @@ public class ObjectManager {
 	public static Map<String, Block> blocks = new HashMap<>();
     public static Map<String, Item> items = new HashMap<>();
     public static Map<Item, ModInfo> itemGroups = new HashMap<>();
-	public static Map<String, RegistryObject<FlowingFluid>> fluids = new HashMap<>();
+	public static Map<String, Fluid> fluids = new HashMap<>();
     public static Map<Block, Item> buckets = new HashMap<>();
     public static Map<String, Class> tileEntities = new HashMap<>();
 	public static Map<String, EffectBase> effects = new HashMap<>();
@@ -57,7 +53,7 @@ public class ObjectManager {
 	public static Map<String, Class<? extends Entity>> specialEntities = new HashMap<>();
 	public static Map<Class<? extends Entity>, Constructor<? extends Entity>> specialEntityConstructors = new HashMap<>();
 	public static Map<Class<? extends Entity>, EntityType<? extends Entity>> specialEntityTypes = new HashMap<>();
-	public static Map<Class<? extends TileEntity>, TileEntityType<? extends TileEntity>> tileEntityTypes = new HashMap<>();
+	public static Map<Class<? extends BlockEntity>, BlockEntityType<? extends BlockEntity>> tileEntityTypes = new HashMap<>();
 
     public static Map<String, DamageSource> damageSources = new HashMap<>();
 
@@ -94,7 +90,7 @@ public class ObjectManager {
 	}
 
 	// ========== Fluid ==========
-	public static RegistryObject<FlowingFluid> addFluid(String name, RegistryObject<FlowingFluid> fluid) {
+	public static Fluid addFluid(String name, Fluid fluid) {
         fluids.put(name, fluid);
         return fluid;
 	}
@@ -138,9 +134,8 @@ public class ObjectManager {
 	// ========== Sound ==========
 	public static void addSound(String name, ModInfo modInfo, String path) {
 		name = name.toLowerCase();
-		ResourceLocation resourceLocation = new ResourceLocation(modInfo.modid, path);
+		Identifier resourceLocation = new Identifier(modInfo.modid, path);
 		SoundEvent soundEvent = new SoundEvent(resourceLocation);
-		soundEvent.setRegistryName(resourceLocation);
 		sounds.put(name, soundEvent);
 	}
 	
@@ -165,7 +160,7 @@ public class ObjectManager {
 	}
 
 	// ========== Fluid ==========
-	public static RegistryObject<FlowingFluid> getFluid(String name) {
+	public static Fluid getFluid(String name) {
 		name = name.toLowerCase();
 		if(!fluids.containsKey(name))
 			return null;
@@ -203,113 +198,96 @@ public class ObjectManager {
 
 
     // ==================================================
-    //                  Registry Events
+    //                     Registry
     // ==================================================
     // ========== Blocks ==========
-	@SubscribeEvent
-    public void registerBlocks(RegistryEvent.Register<Block> event) {
+    public void registerBlocks() {
 		for(Block block : blocks.values()) {
-			LycanitesMobs.logDebug("Item", "Registering block: " + block.getRegistryName());
-            if(block.getRegistryName() == null) {
+			LycanitesMobs.logDebug("Item", "Registering block: " + block.getTranslationKey());
+            if(block.getTranslationKey() == null) {
                 LycanitesMobs.logWarning("", "Block: " + block + " has no Registry Name!");
             }
-			event.getRegistry().register(block);
+			Registry.register(Registry.BLOCK, new Identifier(LycanitesMobs.MOD_ID, block.getTranslationKey()), block);
         }
     }
 
     // ========== Items ==========
-	@SubscribeEvent
-    public void registerItems(RegistryEvent.Register<Item> event) {
+    public void registerItems() {
 		for(Item item : items.values()) {
-	    	LycanitesMobs.logDebug("Item", "Registering item: " + item.getRegistryName());
-	        if(item.getRegistryName() == null) {
+	    	LycanitesMobs.logDebug("Item", "Registering item: " + item.getTranslationKey());
+	        if(item.getTranslationKey() == null) {
 	            LycanitesMobs.logWarning("", "Item: " + item + " has no Registry Name!");
             }
-            event.getRegistry().register(item);
+			Registry.register(Registry.ITEM, new Identifier(LycanitesMobs.MOD_ID, item.getTranslationKey()), item);
         }
 
-	    Item.Properties blockItemProperties = new Item.Properties().group(ItemManager.getInstance().blocksGroup);
+	    Item.Settings blockItemSettings = new Item.Settings().group(ItemManager.getInstance().blocksGroup);
 		for(Block block : blocks.values()) {
-			BlockItem blockItem = new BlockItem(block, blockItemProperties);
-			blockItem.setRegistryName(block.getRegistryName());
-			LycanitesMobs.logDebug("Item", "Registering item block: " + blockItem.getRegistryName());
-			if(block.getRegistryName() == null) {
-				LycanitesMobs.logWarning("", "Block Item: " + blockItem + " has no Registry Name!");
-			}
-			event.getRegistry().register(blockItem);
+			BlockItem blockItem = new BlockItem(block, blockItemSettings);
+			LycanitesMobs.logDebug("Item", "Registering item block: " + blockItem.getTranslationKey());
+			Registry.register(Registry.ITEM, new Identifier(LycanitesMobs.MOD_ID, blockItem.getTranslationKey()), blockItem);
 		}
     }
 
     // ========== Potions ==========
-	@SubscribeEvent
-    public void registerEffects(RegistryEvent.Register<Effect> event) {
+    public void registerEffects() {
 		for(EffectBase effect : effects.values()) {
-        	event.getRegistry().register(effect);
+			Registry.register(Registry.STATUS_EFFECT, new Identifier(LycanitesMobs.MOD_ID, effect.getName()), effect);
 		}
     }
 
 	// ========== Entities ==========
-	@SubscribeEvent
-	public void registerEntities(RegistryEvent.Register<EntityType<?>> event) {
+	public void registerEntities() {
 		for(String entityName : specialEntities.keySet()) {
-			EntityType.Builder entityTypeBuilder = EntityType.Builder.create(EntityFactory.getInstance(), EntityClassification.MISC);
-			entityTypeBuilder.setTrackingRange(10);
-			entityTypeBuilder.setUpdateInterval(3);
-			entityTypeBuilder.setShouldReceiveVelocityUpdates(true);
-			entityTypeBuilder.disableSummoning();
+			EntityType.Builder entityTypeBuilder = EntityType.Builder.create(EntityFactory.getInstance(), EntityCategory.MISC);
+//			entityTypeBuilder.setTrackingRange(10);
+//			entityTypeBuilder.setUpdateInterval(3);
+//			entityTypeBuilder.setShouldReceiveVelocityUpdates(true);
+			entityTypeBuilder.disableSummon();
 
 			EntityType entityType = entityTypeBuilder.build(entityName);
-			entityType.setRegistryName(LycanitesMobs.MODID, entityName);
+//			entityType.setRegistryName(LycanitesMobs.MODID, entityName);
 			EntityFactory.getInstance().addEntityType(entityType, specialEntityConstructors.get(specialEntities.get(entityName)), entityName);
 			specialEntityTypes.put(specialEntities.get(entityName), entityType);
-			event.getRegistry().register(entityType);
+			Registry.register(Registry.ENTITY_TYPE, new Identifier(LycanitesMobs.MOD_ID, entityName), entityType);
 		}
 	}
 
 	// ========== Sounds ==========
-	@SubscribeEvent
-	public void registerSounds(RegistryEvent.Register<SoundEvent> event) {
+	public void registerSounds() {
 		for(SoundEvent soundEvent : sounds.values()) {
-			if(soundEvent.getRegistryName() == null) {
-				LycanitesMobs.logWarning("", "Sound: " + soundEvent + " has no Registry Name!");
-			}
-			event.getRegistry().register(soundEvent);
+			Registry.register(Registry.SOUND_EVENT, soundEvent.getId(), soundEvent);
 		}
 	}
 
 	// ========== Containers ==========
-	@SubscribeEvent
-	public void registerContainers(RegistryEvent.Register<ContainerType<?>> event) {
-		event.getRegistry().register(CreatureContainer.TYPE);
-		event.getRegistry().register(SummoningPedestalContainer.TYPE);
-		event.getRegistry().register(EquipmentForgeContainer.TYPE);
-		event.getRegistry().register(EquipmentInfuserContainer.TYPE);
+	public void registerContainers() {
+		Registry.register(Registry.CONTAINER, CreatureContainer.NAME, CreatureContainer.TYPE);
+		Registry.register(Registry.CONTAINER, SummoningPedestalContainer.NAME, SummoningPedestalContainer.TYPE);
+		Registry.register(Registry.CONTAINER, EquipmentForgeContainer.NAME, EquipmentForgeContainer.TYPE);
+		Registry.register(Registry.CONTAINER, EquipmentInfuserContainer.NAME, EquipmentInfuserContainer.TYPE);
 	}
 
-	// ========== Tile Entities ==========
-	@SubscribeEvent
-	public void registerTileEntities(RegistryEvent.Register<TileEntityType<?>> event) {
-		TileEntityType<TileEntity> summoningPedestalType = TileEntityType.Builder.create((Supplier<TileEntity>) TileEntitySummoningPedestal::new,
+	// ========== Block Entities ==========
+	public void registerBlockEntities() {
+		BlockEntityType<BlockEntity> summoningPedestalType = BlockEntityType.Builder.create((Supplier<BlockEntity>) TileEntitySummoningPedestal::new,
 				getBlock("summoningpedestal")
 		).build(null);
-		summoningPedestalType.setRegistryName(LycanitesMobs.MODID, "summoningpedestal");
-		event.getRegistry().register(summoningPedestalType);
+		Registry.register(Registry.BLOCK_ENTITY_TYPE, "summoningpedestal", summoningPedestalType);
 		tileEntityTypes.put(TileEntitySummoningPedestal.class, summoningPedestalType);
 
-		TileEntityType<TileEntity> equipmentForgeType = TileEntityType.Builder.create((Supplier<TileEntity>) TileEntityEquipmentForge::new,
+		BlockEntityType<BlockEntity> equipmentForgeType = BlockEntityType.Builder.create((Supplier<BlockEntity>) TileEntityEquipmentForge::new,
 				getBlock("equipmentforge_lesser"),
 				getBlock("equipmentforge_greater"),
 				getBlock("equipmentforge_master")
 		).build(null);
-		equipmentForgeType.setRegistryName(LycanitesMobs.MODID, "equipmentforge");
-		event.getRegistry().register(equipmentForgeType);
+		Registry.register(Registry.BLOCK_ENTITY_TYPE, "equipmentforge", equipmentForgeType);
 		tileEntityTypes.put(TileEntityEquipmentForge.class, equipmentForgeType);
 
-		TileEntityType<TileEntity> equipmentInfuserType = TileEntityType.Builder.create((Supplier<TileEntity>) EquipmentInfuserTileEntity::new,
+		BlockEntityType<BlockEntity> equipmentInfuserType = BlockEntityType.Builder.create((Supplier<BlockEntity>) EquipmentInfuserTileEntity::new,
 				getBlock("equipment_infuser")
 		).build(null);
-		equipmentInfuserType.setRegistryName(LycanitesMobs.MODID, "equipment_infuser");
-		event.getRegistry().register(equipmentInfuserType);
+		Registry.register(Registry.BLOCK_ENTITY_TYPE, "equipment_infuser", equipmentInfuserType);
 		tileEntityTypes.put(EquipmentInfuserTileEntity.class, equipmentInfuserType);
 	}
 }

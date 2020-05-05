@@ -22,7 +22,7 @@ public class EntityAbtu extends TameableCreatureEntity implements IMob {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEFINED;
+        this.entityGroup = CreatureAttribute.UNDEFINED;
         this.spawnsOnLand = false;
         this.spawnsInWater = true;
         this.hasAttackSound = true;
@@ -57,7 +57,7 @@ public class EntityAbtu extends TameableCreatureEntity implements IMob {
 
         // Random Leaping:
         if(!this.getEntityWorld().isRemote) {
-            if(this.hasAttackTarget() && this.isChild() && (this.isInWater() || this.onGround)) {
+            if(this.hasAttackTarget() && this.isBaby() && (this.isInWater() || this.onGround)) {
                 if(this.getRNG().nextInt(10) == 0)
                     this.leap(4.0F, 0.6D, this.getAttackTarget());
             }
@@ -68,7 +68,7 @@ public class EntityAbtu extends TameableCreatureEntity implements IMob {
     
     // ========== Spawn Minions ==========
 	public void allyUpdate() {
-		if(this.getEntityWorld().isRemote || this.isChild())
+		if(this.getEntityWorld().isRemote || this.isBaby())
 			return;
 		
 		// Spawn Minions:

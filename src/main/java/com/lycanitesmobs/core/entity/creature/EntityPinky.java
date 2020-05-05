@@ -13,7 +13,7 @@ import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
@@ -31,7 +31,7 @@ public class EntityPinky extends RideableCreatureEntity {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEAD;
+        this.entityGroup = CreatureAttribute.UNDEAD;
         this.hasAttackSound = true;
         this.spreadFire = true;
         this.setupMob();
@@ -71,8 +71,8 @@ public class EntityPinky extends RideableCreatureEntity {
     }
     
     public void riderEffects(LivingEntity rider) {
-    	if(rider.isPotionActive(Effects.WITHER))
-    		rider.removePotionEffect(Effects.WITHER);
+    	if(rider.isPotionActive(StatusEffects.WITHER))
+    		rider.removePotionEffect(StatusEffects.WITHER);
         if(rider.isBurning())
             rider.setFire(0);
     }
@@ -146,7 +146,7 @@ public class EntityPinky extends RideableCreatureEntity {
                     }
                 }
                 if(doDamage) {
-                    possibleTarget.addPotionEffect(new EffectInstance(Effects.WITHER, 10 * 20, 0));
+                    possibleTarget.addPotionEffect(new EffectInstance(StatusEffects.WITHER, 10 * 20, 0));
                 }
             }
         }
@@ -159,7 +159,7 @@ public class EntityPinky extends RideableCreatureEntity {
    	//                     Abilities
    	// ==================================================
     public boolean canBeTempted() {
-    	return this.isChild();
+    	return this.isBaby();
     }
 
 

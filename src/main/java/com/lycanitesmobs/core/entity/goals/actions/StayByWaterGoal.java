@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.entity.goals.actions;
 
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import net.minecraft.block.material.Material;
+import net.minecraft.block.Material;
 import net.minecraft.entity.Pose;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.fluid.IFluidState;

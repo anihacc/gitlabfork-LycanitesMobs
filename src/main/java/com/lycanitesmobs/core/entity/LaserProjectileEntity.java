@@ -8,7 +8,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.EntityRayTraceResult;
@@ -506,7 +506,7 @@ public class LaserProjectileEntity extends BaseProjectileEntity {
     // ==================================================
  	//                      Visuals
  	// ==================================================
-    public ResourceLocation getBeamTexture() {
+    public Identifier getBeamTexture() {
     	return null;
     }
     

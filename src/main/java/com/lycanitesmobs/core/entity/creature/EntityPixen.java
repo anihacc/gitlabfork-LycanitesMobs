@@ -1,9 +1,7 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
-import com.lycanitesmobs.core.entity.goals.actions.FollowMasterGoal;
 import com.lycanitesmobs.core.entity.goals.actions.TemptGoal;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.*;
@@ -11,9 +9,9 @@ import net.minecraft.entity.monster.IMob;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -45,7 +43,7 @@ public class EntityPixen extends TameableCreatureEntity implements IMob {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEFINED;
+        this.entityGroup = CreatureAttribute.UNDEFINED;
         this.spawnsOnLand = true;
         this.spawnsInWater = true;
         this.hasAttackSound = false;
@@ -108,7 +106,7 @@ public class EntityPixen extends TameableCreatureEntity implements IMob {
                     LivingEntity target = (LivingEntity) entityObj;
                     if (target != this && !(target instanceof EntityPixen) && target != this.getAttackTarget() && target != this.getAvoidTarget()) {
                         int randomIndex = this.getRNG().nextInt(this.auraEffects.size());
-                        Effect effect = GameRegistry.findRegistry(Effect.class).getValue(new ResourceLocation(this.auraEffects.get(randomIndex)));
+                        Effect effect = GameRegistry.findRegistry(Effect.class).getValue(new Identifier(this.auraEffects.get(randomIndex)));
                         if(effect != null) {
                             target.addPotionEffect(new EffectInstance(effect, this.auraDuration, this.auraAmplifier));
                         }

@@ -79,7 +79,7 @@ public class ItemSlabCustom extends BlockItem
         return ActionResultType.FAIL;
     }
 
-    /*@OnlyIn(Dist.CLIENT)
+    /*@Environment(EnvType.CLIENT)
     public boolean canPlaceBlockOnSide(World worldIn, BlockPos pos, EnumFacing side, PlayerEntity player, ItemStack stack) {
         BlockPos blockpos = pos;
         IProperty<?> iproperty = this.singleSlab.getVariantProperty();

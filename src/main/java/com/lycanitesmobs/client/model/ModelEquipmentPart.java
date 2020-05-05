@@ -3,9 +3,9 @@ package com.lycanitesmobs.client.model;
 import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.client.renderer.layer.LayerItem;
 import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
-import net.minecraft.client.renderer.Vector4f;
+import net.minecraft.client.util.math.Vector4f;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
 
 public class ModelEquipmentPart extends ItemObjModel {
@@ -24,7 +24,7 @@ public class ModelEquipmentPart extends ItemObjModel {
 	 * @return The texture to render.
 	 */
 	@Override
-	public ResourceLocation getTexture(ItemStack itemStack, LayerItem layer) {
+	public Identifier getTexture(ItemStack itemStack, LayerItem layer) {
 		if(!(itemStack.getItem() instanceof ItemEquipmentPart)) {
 			return null;
 		}

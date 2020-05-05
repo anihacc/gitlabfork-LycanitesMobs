@@ -15,7 +15,7 @@ import net.minecraft.entity.monster.IMob;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
@@ -37,7 +37,7 @@ public class EntityBehemoth extends TameableCreatureEntity implements IMob {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEAD;
+        this.entityGroup = CreatureAttribute.UNDEAD;
         this.hasAttackSound = false;
         this.setupMob();
     }
@@ -140,7 +140,7 @@ public class EntityBehemoth extends TameableCreatureEntity implements IMob {
     //                       Visuals
     // ==================================================
     /** Returns this creature's main texture. Also checks for for subspecies. **/
-    public ResourceLocation getTexture() {
+    public Identifier getTexture() {
         if(!this.hasCustomName() || !"Krampus".equals(this.getCustomName().getFormattedText()))
             return super.getTexture();
 

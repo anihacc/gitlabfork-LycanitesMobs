@@ -7,10 +7,10 @@ import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
 import com.lycanitesmobs.client.renderer.layer.specific.LayerDjinn;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.Vec2f;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 
-@OnlyIn(Dist.CLIENT)
+@Environment(EnvType.CLIENT)
 public class ModelDjinn extends ModelTemplateElemental {
 
 	// ==================================================

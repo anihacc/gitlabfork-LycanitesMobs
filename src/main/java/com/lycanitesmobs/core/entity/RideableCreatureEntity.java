@@ -10,7 +10,7 @@ import net.minecraft.entity.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
@@ -77,7 +77,7 @@ public class RideableCreatureEntity extends TameableCreatureEntity {
 
 				// Protect Rider from Effects:
 				if(!this.canBurn()) {
-					riderLiving.addPotionEffect(new EffectInstance(Effects.FIRE_RESISTANCE, (5 * 20) + 5, 1));
+					riderLiving.addPotionEffect(new EffectInstance(StatusEffects.FIRE_RESISTANCE, (5 * 20) + 5, 1));
 				}
 				for(Object possibleEffect : riderLiving.getActivePotionEffects().toArray(new Object[0])) {
 					if(possibleEffect instanceof EffectInstance) {
@@ -242,8 +242,8 @@ public class RideableCreatureEntity extends TameableCreatureEntity {
             // Jumping Behaviour:
             if (this.getJumpPower() > 0.0F && !this.isMountJumping() && this.canPassengerSteer()) {
                 this.setMotion(this.getMotion().add(0, this.getMountJumpHeight() * (double) this.getJumpPower(), 0));
-                if (this.isPotionActive(Effects.JUMP_BOOST))
-					this.setMotion(this.getMotion().add(0, ((float) (this.getActivePotionEffect(Effects.JUMP_BOOST).getAmplifier() + 1) * 0.1F), 0));
+                if (this.isPotionActive(StatusEffects.JUMP_BOOST))
+					this.setMotion(this.getMotion().add(0, ((float) (this.getActivePotionEffect(StatusEffects.JUMP_BOOST).getAmplifier() + 1) * 0.1F), 0));
                 this.setMountJumping(true);
                 this.isAirBorne = true;
                 if (forward > 0.0F) {
@@ -462,12 +462,12 @@ public class RideableCreatureEntity extends TameableCreatureEntity {
     	if(this.isTamed() && entity instanceof PlayerEntity) {
     		PlayerEntity player = (PlayerEntity)entity;
     		if(player == this.getOwner())
-    			return this.hasSaddle() && !this.isChild();
+    			return this.hasSaddle() && !this.isBaby();
     	}
     	
     	// Can Be Mounted By Mobs:
     	else if(!this.isTamed() && !(entity instanceof PlayerEntity)) {
-    		return !this.isChild();
+    		return !this.isBaby();
     	}
     	
     	return false;

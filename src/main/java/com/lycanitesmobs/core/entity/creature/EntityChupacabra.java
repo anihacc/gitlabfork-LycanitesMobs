@@ -19,7 +19,7 @@ public class EntityChupacabra extends TameableCreatureEntity {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEFINED;
+        this.entityGroup = CreatureAttribute.UNDEFINED;
         this.hasAttackSound = true;
         this.setupMob();
     }
@@ -64,7 +64,7 @@ public class EntityChupacabra extends TameableCreatureEntity {
    	//                     Abilities
    	// ==================================================
     public boolean canBeTempted() {
-    	return this.isChild();
+    	return this.isBaby();
     }
 
 

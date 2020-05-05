@@ -9,7 +9,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.ThrowableEntity;
 import net.minecraft.network.IPacket;
 import net.minecraft.network.play.server.SSpawnObjectPacket;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
@@ -214,7 +214,7 @@ public class RapidFireProjectileEntity extends BaseProjectileEntity {
  	//                      Visuals
  	// ==================================================
     @Override
-    public ResourceLocation getTexture() {
+    public Identifier getTexture() {
     	return null;
     }
 }

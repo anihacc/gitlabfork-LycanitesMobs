@@ -1,10 +1,10 @@
 package com.lycanitesmobs.client.gui.buttons;
 
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 
 public abstract class Tab extends ButtonBase {
-	public ResourceLocation texture = new ResourceLocation("textures/gui/container/creative_inventory/tabs.png");
-    public ResourceLocation icon = null;
+	public Identifier texture = new Identifier("textures/gui/container/creative_inventory/tabs.png");
+    public Identifier icon = null;
     public static int startX = 0;
     public static int startY = 0;
     public static int tabWidth = 28;
@@ -12,7 +12,7 @@ public abstract class Tab extends ButtonBase {
 
     public int tabID = 0;
 
-    public Tab(int id, int posX, int posY, ResourceLocation icon, IPressable pressable) {
+    public Tab(int id, int posX, int posY, Identifier icon, IPressable pressable) {
         super(550 + id, posX, posY, tabWidth, tabHeight, "", pressable);
         this.icon = icon;
         this.tabID = id;

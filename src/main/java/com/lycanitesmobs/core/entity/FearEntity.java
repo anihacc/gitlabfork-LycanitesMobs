@@ -9,12 +9,12 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 
 public class FearEntity extends BaseCreatureEntity {
     public LivingEntity fearedEntity;
@@ -113,9 +113,9 @@ public class FearEntity extends BaseCreatureEntity {
 
         // Copy Movement Debuffs:
 		if(this.fearedEntity != null) {
-			if (fearedEntity.isPotionActive(Effects.LEVITATION)) {
-				EffectInstance activeDebuff = fearedEntity.getActivePotionEffect(Effects.LEVITATION);
-				this.addPotionEffect(new EffectInstance(Effects.LEVITATION, activeDebuff.getDuration(), activeDebuff.getAmplifier()));
+			if (fearedEntity.isPotionActive(StatusEffects.LEVITATION)) {
+				EffectInstance activeDebuff = fearedEntity.getActivePotionEffect(StatusEffects.LEVITATION);
+				this.addPotionEffect(new EffectInstance(StatusEffects.LEVITATION, activeDebuff.getDuration(), activeDebuff.getAmplifier()));
 			}
 
 			Effect instability = ObjectManager.getEffect("instability");
@@ -184,7 +184,7 @@ public class FearEntity extends BaseCreatureEntity {
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public boolean isInvisibleToPlayer(PlayerEntity player) {
         return true;
     }

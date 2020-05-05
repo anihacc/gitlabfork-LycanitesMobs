@@ -5,7 +5,7 @@ import com.lycanitesmobs.core.info.ModInfo;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.projectile.ThrowableEntity;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
@@ -90,7 +90,7 @@ public class ParticleEntity extends ThrowableEntity {
     // ==================================================
     //                      Visuals
     // ==================================================
-    public ResourceLocation getTexture() {
+    public Identifier getTexture() {
     	if(TextureManager.getTexture(this.texture) == null)
     		TextureManager.addTexture(this.texture, this.group, "textures/particles/" + this.texture.toLowerCase() + ".png");
     	return TextureManager.getTexture(this.texture);

@@ -3,7 +3,6 @@ package com.lycanitesmobs.core.entity.creature;
 import com.google.common.collect.Maps;
 import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.core.entity.CustomItemEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import com.lycanitesmobs.core.entity.goals.actions.EatBlockGoal;
 import com.lycanitesmobs.core.entity.goals.actions.TemptGoal;
@@ -11,7 +10,7 @@ import com.lycanitesmobs.core.info.ItemDrop;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.material.Material;
+import net.minecraft.block.Material;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
@@ -75,7 +74,7 @@ public class EntityYale extends AgeableCreatureEntity implements IShearable {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEFINED;
+        this.entityGroup = CreatureAttribute.UNDEFINED;
         this.hasAttackSound = false;
 
         this.canGrow = true;
@@ -110,7 +109,7 @@ public class EntityYale extends AgeableCreatureEntity implements IShearable {
 	// ========== On Spawn ==========
 	@Override
 	public void onFirstSpawn() {
-		if(!this.isChild())
+		if(!this.isBaby())
 			this.setColor(this.getRandomFurColor(this.getRNG()));
 		super.onFirstSpawn();
 	}
@@ -122,7 +121,7 @@ public class EntityYale extends AgeableCreatureEntity implements IShearable {
 	// ========== IShearable ==========
 	@Override
 	public boolean isShearable(@Nonnull ItemStack item, IWorldReader world, BlockPos pos) {
-		return this.hasFur() && !this.isChild();
+		return this.hasFur() && !this.isBaby();
 	}
 	
 	@Override

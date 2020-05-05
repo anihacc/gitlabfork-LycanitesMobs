@@ -1,13 +1,13 @@
 package com.lycanitesmobs.client.obj;
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.Matrix3f;
-import net.minecraft.client.renderer.Matrix4f;
-import net.minecraft.client.renderer.Vector3f;
-import net.minecraft.client.renderer.Vector4f;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.render.BufferBuilder;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.util.math.Matrix3f;
+import net.minecraft.client.util.math.Matrix4f;
+import net.minecraft.client.util.math.Vector3f;
+import net.minecraft.client.util.math.Vector4f;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
 import org.apache.commons.io.output.ByteArrayOutputStream;
@@ -20,11 +20,11 @@ public class ObjModel {
 	public String filename;
 	public List<ObjPart> objParts = new ArrayList<>();
 
-    public ObjModel(ResourceLocation resourceLocation) {
+    public ObjModel(Identifier resourceLocation) {
 		this.filename = resourceLocation.getPath();
         String path = resourceLocation.toString();
         try {
-			InputStream inputStream = Minecraft.getInstance().getResourceManager().getResource(resourceLocation).getInputStream();
+			InputStream inputStream = MinecraftClient.getInstance().getResourceManager().getResource(resourceLocation).getInputStream();
             String content = new String(read(inputStream), "UTF-8");
             String startPath = path.substring(0, path.lastIndexOf('/') + 1);
             HashMap<ObjPart, IndexedModel> map = new OBJLoader().loadModel(startPath, content);
@@ -76,9 +76,9 @@ public class ObjModel {
 		return output;
 	}
 
-    public void renderAll(IVertexBuilder vertexBuilder, Matrix3f matrix3f, Matrix4f matrix4f, int brightness, int fade, Vector4f color, Vec2f textureOffset) {
+    public void renderAll(BufferBuilder vertexBuilder, Matrix3f matrix3f, Matrix4f matrix4f, int brightness, int fade, Vector4f color, Vec2f textureOffset) {
         Collections.sort(this.objParts, (a, b) -> {
-			Vec3d v = Minecraft.getInstance().getRenderViewEntity().getPositionVector();
+			Vec3d v = MinecraftClient.getInstance().getCameraEntity().getPosVector();
 			double aDist = v.distanceTo(new Vec3d(a.center.getX(), a.center.getY(), a.center.getZ()));
 			double bDist = v.distanceTo(new Vec3d(b.center.getX(), b.center.getY(), b.center.getZ()));
 			return Double.compare(aDist, bDist);
@@ -88,7 +88,7 @@ public class ObjModel {
         }
     }
 
-    public void renderPartGroup(IVertexBuilder vertexBuilder, Matrix3f matrix3f, Matrix4f matrix4f, int brightness, int fade, Vector4f color, Vec2f textureOffset, String group) {
+    public void renderPartGroup(BufferBuilder vertexBuilder, Matrix3f matrix3f, Matrix4f matrix4f, int brightness, int fade, Vector4f color, Vec2f textureOffset, String group) {
         for(ObjPart objPart : this.objParts) {
             if(objPart.getName().equals(group)) {
                 renderPart(vertexBuilder, matrix3f, matrix4f, brightness, fade, objPart, color, textureOffset);
@@ -96,7 +96,7 @@ public class ObjModel {
         }
     }
 
-    public void renderPart(IVertexBuilder vertexBuilder, Matrix3f matrix3f, Matrix4f matrix4f, int brightness, int fade, ObjPart objPart, Vector4f color, Vec2f textureOffset) {
+    public void renderPart(BufferBuilder vertexBuilder, Matrix3f matrix3f, Matrix4f matrix4f, int brightness, int fade, ObjPart objPart, Vector4f color, Vec2f textureOffset) {
 		// Mesh data:
 		if(objPart.mesh == null) {
 			return;

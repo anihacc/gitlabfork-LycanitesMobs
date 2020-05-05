@@ -28,7 +28,7 @@ public class EntityAfrit extends TameableCreatureEntity implements IMob {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEFINED;
+        this.entityGroup = CreatureAttribute.UNDEFINED;
         this.spawnsOnLand = true;
         this.spawnsInWater = true;
         this.isLavaCreature = true;

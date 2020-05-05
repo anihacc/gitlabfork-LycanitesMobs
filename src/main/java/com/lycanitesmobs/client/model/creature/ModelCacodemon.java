@@ -6,10 +6,10 @@ import com.lycanitesmobs.client.renderer.CreatureRenderer;
 import com.lycanitesmobs.client.renderer.CustomRenderStates;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureEffect;
 import net.minecraft.entity.LivingEntity;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 
-@OnlyIn(Dist.CLIENT)
+@Environment(EnvType.CLIENT)
 public class ModelCacodemon extends ModelTemplateBiped {
 
     public ModelCacodemon() {

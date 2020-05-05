@@ -4,13 +4,13 @@ import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.client.renderer.CreatureRenderer;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import net.minecraft.client.renderer.Vector4f;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.util.math.Vector4f;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec2f;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 
-@OnlyIn(Dist.CLIENT)
+@Environment(EnvType.CLIENT)
 public class LayerDjinn extends LayerCreatureBase {
 
     // ==================================================
@@ -30,7 +30,7 @@ public class LayerDjinn extends LayerCreatureBase {
     }
 
     @Override
-    public ResourceLocation getLayerTexture(BaseCreatureEntity entity) {
+    public Identifier getLayerTexture(BaseCreatureEntity entity) {
 		String textureName = entity.getTextureName();
 		if(entity.getVariant() != null) {
 			textureName += "_" + entity.getVariant().color;

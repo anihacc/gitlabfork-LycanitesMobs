@@ -14,7 +14,7 @@ import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -28,7 +28,7 @@ public class EntityReaper extends TameableCreatureEntity implements IMob {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEAD;
+        this.entityGroup = CreatureAttribute.UNDEAD;
         this.hasAttackSound = false;
         this.setupMob();
         
@@ -135,7 +135,7 @@ public class EntityReaper extends TameableCreatureEntity implements IMob {
     // ==================================================
     /** Returns this creature's main texture. Also checks for for subspecies. **/
     @Override
-    public ResourceLocation getTexture(String suffix) {
+    public Identifier getTexture(String suffix) {
         if(!this.hasCustomName() || !"Satan Claws".equals(this.getCustomName().getFormattedText()))
             return super.getTexture(suffix);
 

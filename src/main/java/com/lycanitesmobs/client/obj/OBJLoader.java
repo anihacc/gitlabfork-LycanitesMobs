@@ -1,6 +1,6 @@
 package com.lycanitesmobs.client.obj;
 
-import net.minecraft.client.renderer.Vector3f;
+import net.minecraft.client.util.math.Vector3f;
 import net.minecraft.util.math.Vec2f;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 
@@ -124,7 +124,7 @@ public class OBJLoader
                         // No need to load textures here.
                         /*String path = startPath+parts[1];
                         MtlMaterialLib material = new MtlMaterialLib(path);
-                        ResourceLocation resourceLocation = new ResourceLocation(path);
+                        Identifier resourceLocation = new Identifier(path);
                         InputStream inputStream = Minecraft.getMinecraft().getResourceManager().getResource(resourceLocation).getInputStream();
                         material.parse(read(inputStream));
                         materials.addAll(material.getMaterials());*/

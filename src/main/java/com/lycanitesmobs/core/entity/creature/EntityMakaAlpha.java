@@ -8,14 +8,14 @@ import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.material.Material;
+import net.minecraft.block.Material;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -29,7 +29,7 @@ public class EntityMakaAlpha extends AgeableCreatureEntity {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEFINED;
+        this.entityGroup = CreatureAttribute.UNDEFINED;
         this.hasAttackSound = true;
         this.attackCooldownMax = 10;
         this.setupMob();
@@ -118,9 +118,9 @@ public class EntityMakaAlpha extends AgeableCreatureEntity {
     public void setAttackTarget(LivingEntity entity) {
     	if(entity == null && this.getAttackTarget() instanceof EntityMakaAlpha) {
     		this.heal((this.getMaxHealth() - this.getHealth()) / 2);
-    		this.addPotionEffect(new EffectInstance(Effects.REGENERATION, 20 * 20, 2, false, false));
+    		this.addPotionEffect(new EffectInstance(StatusEffects.REGENERATION, 20 * 20, 2, false, false));
 			this.getAttackTarget().heal((this.getMaxHealth() - this.getHealth()) / 2);
-			this.getAttackTarget().addPotionEffect(new EffectInstance(Effects.REGENERATION, 20 * 20, 2, false, false));
+			this.getAttackTarget().addPotionEffect(new EffectInstance(StatusEffects.REGENERATION, 20 * 20, 2, false, false));
     	}
     	super.setAttackTarget(entity);
     }

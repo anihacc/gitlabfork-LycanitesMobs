@@ -21,7 +21,7 @@ public class EntityEyewig extends RideableCreatureEntity {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.ARTHROPOD;
+        this.entityGroup = CreatureAttribute.ARTHROPOD;
         this.hasAttackSound = true;
         this.setupMob();
         this.stepHeight = 1.0F;

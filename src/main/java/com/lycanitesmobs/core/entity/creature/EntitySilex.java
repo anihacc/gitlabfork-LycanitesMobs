@@ -20,7 +20,7 @@ public class EntitySilex extends AgeableCreatureEntity {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEFINED;
+        this.entityGroup = CreatureAttribute.UNDEFINED;
         this.spawnsOnLand = false;
         this.spawnsInWater = true;
         this.hasAttackSound = false;

@@ -6,7 +6,7 @@ import com.google.gson.JsonObject;
 import com.lycanitesmobs.core.spawner.Spawner;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -102,11 +102,11 @@ public abstract class EntitySpawnTrigger extends SpawnTrigger {
 
 		// Check Entity Id:
 		if(!this.entityIds.isEmpty()) {
-			ResourceLocation entityResourceLocation = killedEntity.getType().getRegistryName();
-			if(entityResourceLocation == null) {
+			Identifier entityIdentifier = killedEntity.getType().getRegistryName();
+			if(entityIdentifier == null) {
 				return false;
 			}
-			String entityId = entityResourceLocation.toString();
+			String entityId = entityIdentifier.toString();
 			if (this.entityIds.contains(entityId)) {
 				if ("blacklist".equalsIgnoreCase(this.entityIdsListType)) {
 					return false;

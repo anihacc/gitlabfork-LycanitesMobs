@@ -9,7 +9,7 @@ import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.item.BaseItem;
 import com.lycanitesmobs.core.item.equipment.features.*;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
@@ -31,8 +31,8 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 import net.minecraftforge.common.ToolType;
 
 import javax.annotation.Nonnull;
@@ -62,7 +62,7 @@ public class ItemEquipment extends BaseItem {
 	@Override
 	public void addInformation(ItemStack itemStack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag tooltipFlag) {
 		super.addInformation(itemStack, world, tooltip, tooltipFlag);
-		FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
+		FontRenderer fontRenderer = MinecraftClient.getInstance().fontRenderer;
 		for(ITextComponent description : this.getAdditionalDescriptions(itemStack, world, tooltipFlag)) {
 			List<String> formattedDescriptionList = fontRenderer.listFormattedStringToWidth(description.getFormattedText(), DESCRIPTION_WIDTH + 100);
 			for (String formattedDescription : formattedDescriptionList) {
@@ -175,7 +175,7 @@ public class ItemEquipment extends BaseItem {
 		return new CompoundNBT();
 	}
 
-	@OnlyIn(Dist.CLIENT)
+	@Environment(EnvType.CLIENT)
 	@Nullable
 	@Override
 	public net.minecraft.client.gui.FontRenderer getFontRenderer(ItemStack stack) {
@@ -739,7 +739,7 @@ public class ItemEquipment extends BaseItem {
 	//                      Visuals
 	// ==================================================
 	/** Returns the texture to use for the provided ItemStack. **/
-	public ResourceLocation getTexture(ItemStack itemStack) {
+	public Identifier getTexture(ItemStack itemStack) {
 		return TextureManager.getTexture(this.itemName);
 	}
 }

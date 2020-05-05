@@ -4,7 +4,7 @@ import com.lycanitesmobs.ClientManager;
 import com.lycanitesmobs.client.gui.buttons.ButtonBase;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.widget.button.Button;
@@ -13,7 +13,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.text.ITextComponent;
 
 public abstract class BaseContainerScreen<T extends Container> extends ContainerScreen<T> implements Button.IPressable {
@@ -22,7 +22,7 @@ public abstract class BaseContainerScreen<T extends Container> extends Container
 
     public BaseContainerScreen(T container, PlayerInventory playerInventory, ITextComponent name) {
         super(container, playerInventory, name);
-        this.fontRenderer = Minecraft.getInstance().fontRenderer;
+        this.fontRenderer = MinecraftClient.getInstance().fontRenderer;
     }
 
     @Override
@@ -121,7 +121,7 @@ public abstract class BaseContainerScreen<T extends Container> extends Container
      * @param segments How many segments to draw.
      * @param segmentLimit How many segments to draw up to before squishing them. If negative the bar is draw backwards.
      */
-    public void drawBar(ResourceLocation texture, int x, int y, float z, float width, float height, int segments, int segmentLimit) {
+    public void drawBar(Identifier texture, int x, int y, float z, float width, float height, int segments, int segmentLimit) {
         boolean reverse = segmentLimit < 0;
         if(reverse) {
             segmentLimit = -segmentLimit;
@@ -147,7 +147,7 @@ public abstract class BaseContainerScreen<T extends Container> extends Container
      * @param width The width of the texture.
      * @param height The height of the texture.
      */
-    public void drawTexture(ResourceLocation texture, float x, float y, float z, float u, float v, float width, float height) {
+    public void drawTexture(Identifier texture, float x, float y, float z, float u, float v, float width, float height) {
         RenderSystem.enableBlend();
         RenderSystem.disableDepthTest();
         RenderSystem.depthMask(false);

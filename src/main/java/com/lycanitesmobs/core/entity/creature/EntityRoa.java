@@ -12,7 +12,7 @@ import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.play.server.SEntityVelocityPacket;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -33,7 +33,7 @@ public class EntityRoa extends RideableCreatureEntity implements IMob {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEFINED;
+        this.entityGroup = CreatureAttribute.UNDEFINED;
         this.spawnsOnLand = false;
         this.spawnsInWater = true;
         this.hasAttackSound = true;
@@ -113,7 +113,7 @@ public class EntityRoa extends RideableCreatureEntity implements IMob {
 
     @Override
     public void riderEffects(LivingEntity rider) {
-        rider.addPotionEffect(new EffectInstance(Effects.WATER_BREATHING, (5 * 20) + 5, 1));
+        rider.addPotionEffect(new EffectInstance(StatusEffects.WATER_BREATHING, (5 * 20) + 5, 1));
         super.riderEffects(rider);
     }
 
@@ -252,7 +252,7 @@ public class EntityRoa extends RideableCreatureEntity implements IMob {
     public void onDismounted(Entity entity) {
         super.onDismounted(entity);
         if(entity != null && entity instanceof LivingEntity) {
-            ((LivingEntity)entity).addPotionEffect(new EffectInstance(Effects.WATER_BREATHING, 5 * 20, 1));
+            ((LivingEntity)entity).addPotionEffect(new EffectInstance(StatusEffects.WATER_BREATHING, 5 * 20, 1));
         }
     }
 

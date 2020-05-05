@@ -14,8 +14,8 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +31,7 @@ public class EntityCinder extends TameableCreatureEntity implements IMob, IFusab
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEFINED;
+        this.entityGroup = CreatureAttribute.UNDEFINED;
         this.spawnsInBlock = false;
         this.hasAttackSound = false;
         this.setupMob();
@@ -208,7 +208,7 @@ public class EntityCinder extends TameableCreatureEntity implements IMob, IFusab
         return 1.0F;
     }
     
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public int getBrightnessForRender() {
         return 15728880;
     }

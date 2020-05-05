@@ -6,17 +6,18 @@ import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureEquipment;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureSaddle;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.client.renderer.Vector3f;
-import net.minecraft.client.renderer.Vector4f;
-import net.minecraft.client.renderer.entity.model.EntityModel;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.client.render.BufferBuilder;
+import net.minecraft.client.render.VertexConsumer;
+import net.minecraft.client.render.entity.model.EntityModel;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.util.math.Vector3f;
+import net.minecraft.client.util.math.Vector4f;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.Vec2f;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
-@OnlyIn(Dist.CLIENT)
+@Environment(EnvType.CLIENT)
 public abstract class CreatureModel extends EntityModel<BaseCreatureEntity> implements IAnimationModel {
 
 	// Matrix:
@@ -33,10 +34,10 @@ public abstract class CreatureModel extends EntityModel<BaseCreatureEntity> impl
     }
 
     @Override
-    public void render(BaseCreatureEntity entity, float time, float distance, float loop, float lookY, float lookX) {}
+    public void setAngles(BaseCreatureEntity entity, float time, float distance, float loop, float lookY, float lookX) {}
 
 	@Override
-	public void render(MatrixStack matrixStack, IVertexBuilder vertexBuilder, int someIntA, int someIntB, float someFloatA, float someFloatB, float someFloatC, float someFloatD) {}
+	public void render(MatrixStack matrixStack, VertexConsumer vertexConsumer, int light, int overlay, float red, float green, float blue, float alpha) {}
 
 	/**
 	 * Generates all animation frames for a render tick.
@@ -71,7 +72,7 @@ public abstract class CreatureModel extends EntityModel<BaseCreatureEntity> impl
 	 * @param brightness The brightness of the mob based on block location, etc.
 	 * @param fade The damage fade to render (red flash when damaged).
 	 */
-	public abstract void render(BaseCreatureEntity entity, MatrixStack matrixStack, IVertexBuilder vertexBuilder, LayerCreatureBase layer, float time, float distance, float loop, float lookY, float lookX, float scale, int brightness, int fade);
+	public abstract void render(BaseCreatureEntity entity, MatrixStack matrixStack, BufferBuilder vertexBuilder, LayerCreatureBase layer, float time, float distance, float loop, float lookY, float lookX, float scale, int brightness, int fade);
 
 	/**
 	 * Called by the renderer to add custom layers to it.
@@ -218,14 +219,14 @@ public abstract class CreatureModel extends EntityModel<BaseCreatureEntity> impl
 
 	@Override
 	public void doRotate(float rotX, float rotY, float rotZ) {
-		this.matrixStack.rotate(new Vector3f(1F, 0F, 0F).rotationDegrees(rotX));
-		this.matrixStack.rotate(new Vector3f(0F, 1F, 0F).rotationDegrees(rotY));
-		this.matrixStack.rotate(new Vector3f(0F, 0F, 1F).rotationDegrees(rotZ));
+		this.matrixStack.multiply(new Vector3f(1F, 0F, 0F).getDegreesQuaternion(rotX));
+		this.matrixStack.multiply(new Vector3f(0F, 1F, 0F).getDegreesQuaternion(rotY));
+		this.matrixStack.multiply(new Vector3f(0F, 0F, 1F).getDegreesQuaternion(rotZ));
 	}
 
 	@Override
 	public void doAngle(float rotation, float angleX, float angleY, float angleZ) {
-		this.matrixStack.rotate(new Vector3f(angleX, angleY, angleZ).rotationDegrees(rotation));
+		this.matrixStack.multiply(new Vector3f(angleX, angleY, angleZ).getDegreesQuaternion(rotation));
 	}
 
 	@Override

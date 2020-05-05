@@ -5,7 +5,7 @@ import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FlowingFluidBlock;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -39,7 +39,7 @@ public class ProjectileBehaviourPlaceBlocks extends ProjectileBehaviour {
 
 	@Override
 	public void onProjectileImpact(BaseProjectileEntity projectile, World world, BlockPos pos) {
-		Block block = GameRegistry.findRegistry(Block.class).getValue(new ResourceLocation(this.blockName));
+		Block block = GameRegistry.findRegistry(Block.class).getValue(new Identifier(this.blockName));
 		if(block == null) {
 			return;
 		}

@@ -24,7 +24,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
+import net.minecraft.block.Material;
 import net.minecraft.fluid.FlowingFluid;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.BucketItem;
@@ -32,7 +32,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.Items;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.FluidAttributes;
@@ -240,7 +240,7 @@ public class ItemManager extends JSONLoader {
 	}
 
 	public void addFluid(String fluidName, int fluidColor, int density, int viscosity, int temperature, int luminosity, boolean multiply) {
-		FluidAttributes.Builder fluidBuilder = FluidAttributes.builder(new ResourceLocation(LycanitesMobs.MODID, "block/" + fluidName + "_still"), new ResourceLocation(LycanitesMobs.MODID, "block/" + fluidName + "_flowing"));
+		FluidAttributes.Builder fluidBuilder = FluidAttributes.builder(new Identifier(LycanitesMobs.MODID, "block/" + fluidName + "_still"), new Identifier(LycanitesMobs.MODID, "block/" + fluidName + "_flowing"));
 		fluidBuilder.color(fluidColor);
 		fluidBuilder.density(density);
 		fluidBuilder.viscosity(viscosity);

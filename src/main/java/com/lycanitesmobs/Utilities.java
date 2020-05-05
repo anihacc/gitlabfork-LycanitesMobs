@@ -1,7 +1,10 @@
 package com.lycanitesmobs;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.util.hit.EntityHitResult;
+import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.*;
+import net.minecraft.world.RayTraceContext;
 import net.minecraft.world.World;
 
 import java.time.temporal.ChronoUnit;
@@ -12,7 +15,7 @@ public class Utilities {
   	//                      Raytrace
   	// ==================================================
 	// ========== Raytrace All ==========
-    public static RayTraceResult raytrace(World world, double x, double y, double z, double tx, double ty, double tz, float borderSize, Entity entity, HashSet<Entity> excluded) {
+    public static HitResult raytrace(World world, double x, double y, double z, double tx, double ty, double tz, float borderSize, Entity entity, HashSet<Entity> excluded) {
 		Vec3d startVec = new Vec3d(x, y, z);
         Vec3d lookVec = new Vec3d(tx - x, ty - y, tz - z);
         Vec3d endVec = new Vec3d(tx, ty, tz);
@@ -24,18 +27,18 @@ public class Utilities {
 		float maxZ = (float)(z > tz ? z : tz);
 
 		// Get Block Collision:
-        RayTraceResult collision = world.rayTraceBlocks(new RayTraceContext(startVec, endVec, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, entity));
+		HitResult collision = world.rayTrace(new RayTraceContext(startVec, endVec, RayTraceContext.ShapeType.COLLIDER, RayTraceContext.FluidHandling.NONE, entity));
 		startVec = new Vec3d(x, y, z);
 
 		// Get Entity Collision:
 		if(excluded != null) {
-			AxisAlignedBB bb = new AxisAlignedBB(minX, minY, minZ, maxX, maxY, maxZ).expand(borderSize, borderSize, borderSize);
-			List<Entity> allHitEntities = world.getEntitiesWithinAABBExcludingEntity(null, bb);
+			Box bb = new Box(minX, minY, minZ, maxX, maxY, maxZ).expand(borderSize, borderSize, borderSize);
+			List<Entity> allHitEntities = world.getEntities(null, bb);
 			Entity closestHitEntity = null;
 			double closestEntDistance = Float.POSITIVE_INFINITY;
 			for(Entity hitEntity : allHitEntities) {
-				if(hitEntity.canBeCollidedWith() && !excluded.contains(hitEntity)) {
-					double entDistance = startVec.distanceTo(hitEntity.getPositionVec());
+				if(hitEntity.collides() && !excluded.contains(hitEntity)) {
+					double entDistance = startVec.distanceTo(hitEntity.getPos());
 					if(entDistance < closestEntDistance) {
 						closestEntDistance = entDistance;
 						closestHitEntity = hitEntity;
@@ -43,7 +46,7 @@ public class Utilities {
 				}
 			}
 			if(closestHitEntity != null) {
-				collision = new EntityRayTraceResult(closestHitEntity);
+				collision = new EntityHitResult(closestHitEntity);
 			}
 		}
 		

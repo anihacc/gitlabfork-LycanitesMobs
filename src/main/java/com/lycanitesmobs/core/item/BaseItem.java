@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.item;
 import com.google.common.collect.Multimap;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.info.ModInfo;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -63,7 +63,7 @@ public class BaseItem extends Item {
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flag) {
 		ITextComponent description = this.getDescription(stack, worldIn, tooltip, flag);
     	if(!"".equalsIgnoreCase(description.getFormattedText())) {
-    		FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
+    		FontRenderer fontRenderer = MinecraftClient.getInstance().fontRenderer;
     		List<String> formattedDescriptionList = fontRenderer.listFormattedStringToWidth(description.getFormattedText(), DESCRIPTION_WIDTH);
     		for(String formattedDescription : formattedDescriptionList) {
     			tooltip.add(new StringTextComponent(formattedDescription));

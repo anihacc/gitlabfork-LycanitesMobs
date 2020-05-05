@@ -29,16 +29,19 @@ import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.material.Material;
+import net.minecraft.block.Material;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraft.entity.ai.controller.MovementController;
 import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.attribute.ClampedEntityAttribute;
+import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.item.BoatEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.item.minecart.MinecartEntity;
+import net.minecraft.entity.mob.MobEntityWithAi;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.projectile.ThrowableEntity;
@@ -55,7 +58,7 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.*;
 import net.minecraft.util.math.*;
@@ -65,17 +68,17 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.*;
 import net.minecraft.world.server.ServerBossInfo;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
-public abstract class BaseCreatureEntity extends CreatureEntity {
-	public static final IAttribute DEFENSE = (new RangedAttribute(null, "generic.defense", 4.0D, 0.0D, 1024.0D)).setDescription("Defense").setShouldWatch(true);
-	public static final IAttribute RANGED_SPEED = (new RangedAttribute(null, "generic.rangedSpeed", 4.0D, 0.0D, 1024.0D)).setDescription("Ranged Speed").setShouldWatch(true);
+public abstract class BaseCreatureEntity extends MobEntityWithAi {
+	public static final EntityAttribute DEFENSE = (new ClampedEntityAttribute(null, "generic.defense", 4.0D, 0.0D, 1024.0D)).setName("Defense").setTracked(true);
+	public static final EntityAttribute RANGED_SPEED = (new ClampedEntityAttribute(null, "generic.rangedSpeed", 4.0D, 0.0D, 1024.0D)).setName("Ranged Speed").setTracked(true);
 
 	// Core:
 	/** The Creature Info used by this creature. **/
@@ -87,7 +90,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	/** The Variant of this creature, if null this creature is the default common variant. **/
 	public Variant variant = null;
 	/** What attribute is this creature, used for effects such as Bane of Arthropods. **/
-	public CreatureAttribute attribute = CreatureAttribute.UNDEAD;
+	public EntityGroup entityGroup = EntityGroup.UNDEAD;
 	/** A class that opens up extra stats and behaviours for NBT based customization.**/
 	public ExtraMobBehaviour extraMobBehaviour;
 
@@ -1784,7 +1787,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     	if(!this.getEntityWorld().isRemote) {
 	        if(this.isStealthed() && !this.isInvisible())
 	        	this.setInvisible(true);
-	        else if(!this.isStealthed() && this.isInvisible() && !this.isPotionActive(Effects.INVISIBILITY))
+	        else if(!this.isStealthed() && this.isInvisible() && !this.isPotionActive(StatusEffects.INVISIBILITY))
                 this.setInvisible(false);
     	}
         if(this.isStealthed()) {
@@ -1792,7 +1795,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
                 this.startStealth();
             this.onStealth();
         }
-        else if(this.isInvisible() && !this.isPotionActive(Effects.INVISIBILITY) && !this.getEntityWorld().isRemote) {
+        else if(this.isInvisible() && !this.isPotionActive(StatusEffects.INVISIBILITY) && !this.getEntityWorld().isRemote) {
             this.setInvisible(false);
         }
         this.stealthPrev = this.isStealthed();
@@ -4110,7 +4113,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
 	// ========== Get Render Name Tag ==========
 	/** Gets whether this mob should always display its nametag client side. **/
-	@OnlyIn(Dist.CLIENT)
+	@Environment(EnvType.CLIENT)
 	@Override
 	public boolean getAlwaysRenderNameTagForRender() {
 		if(this.getVariant() != null && !this.hasCustomName())
@@ -4568,7 +4571,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     // ========== Creature Attribute ==========
     /** Returns this creature's attribute. **/
    	@Override
-    public CreatureAttribute getCreatureAttribute() { return this.attribute; }
+    public CreatureAttribute getCreatureAttribute() { return this.entityGroup; }
 
     // ========== Mounted Y Offset ==========
     /** An X Offset used to position the mob that is riding this mob. **/
@@ -4899,12 +4902,12 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     //                       Visuals
     // ==================================================
     /** Returns this creature's main texture. Also checks for for subspecies. **/
-    public ResourceLocation getTexture() {
+    public Identifier getTexture() {
         return this.getTexture("");
     }
 
 	/** Returns this creature's main texture. Also checks for for subspecies. **/
-	public ResourceLocation getTexture(String suffix) {
+	public Identifier getTexture(String suffix) {
 		String textureName = this.getTextureName();
 		if(this.getSubspecies().name != null) {
 			textureName += "_" + this.getSubspecies().name;
@@ -4921,7 +4924,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	}
 
     /** Returns this creature's equipment texture. **/
-    public ResourceLocation getEquipmentTexture(String equipmentName) {
+    public Identifier getEquipmentTexture(String equipmentName) {
         if(!this.canEquip())
             return this.getTexture();
 		if(this.getSubspecies() != null && this.getSubspecies().name != null) {
@@ -4931,7 +4934,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     }
 
     /** Returns this creature's equipment texture. **/
-    public ResourceLocation getSubTexture(String subName) {
+    public Identifier getSubTexture(String subName) {
         subName = subName.toLowerCase();
         String textureName = this.getTextureName();
         textureName += "_" + subName;

@@ -6,10 +6,10 @@ import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 
-@OnlyIn(Dist.CLIENT)
+@Environment(EnvType.CLIENT)
 public class ModelJoust extends CreatureObjModelOld {
 	
 	// ==================================================
@@ -123,7 +123,7 @@ public class ModelJoust extends CreatureObjModelOld {
 		float bob = MathHelper.cos(time * 0.6662F + (float)Math.PI) * walkSwing * distance;
 		if(bob < 0) bob += -bob * 2;
     	if(partName.equals("head") || partName.equals("mouth"))
-    		if(entity instanceof AgeableCreatureEntity && ((AgeableCreatureEntity)entity).isChild())
+    		if(entity instanceof AgeableCreatureEntity && ((AgeableCreatureEntity)entity).isBaby())
     			bob /= 2;
 		posY += bob;
 		

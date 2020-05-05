@@ -6,7 +6,7 @@ import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import com.lycanitesmobs.core.entity.goals.actions.abilities.StealthGoal;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.material.Material;
+import net.minecraft.block.Material;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
@@ -22,7 +22,7 @@ public class EntityCrusk extends TameableCreatureEntity implements IGroupHeavy {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.ARTHROPOD;
+        this.entityGroup = CreatureAttribute.ARTHROPOD;
         this.hasAttackSound = true;
         this.babySpawnChance = 0.25D;
         this.growthTime = -120000;
@@ -67,7 +67,7 @@ public class EntityCrusk extends TameableCreatureEntity implements IGroupHeavy {
    	//                     Abilities
    	// ==================================================
     public boolean canBeTempted() {
-    	return this.isChild();
+    	return this.isBaby();
     }
     
     

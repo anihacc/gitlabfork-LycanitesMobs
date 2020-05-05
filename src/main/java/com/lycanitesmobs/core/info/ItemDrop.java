@@ -8,7 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import javax.annotation.Nonnull;
@@ -228,7 +228,7 @@ public class ItemDrop {
 			return ItemStack.EMPTY;
 		}
 
-		Item item = GameRegistry.findRegistry(Item.class).getValue(new ResourceLocation(this.itemId));
+		Item item = GameRegistry.findRegistry(Item.class).getValue(new Identifier(this.itemId));
 		if(item != null) {
 			return new ItemStack(item, 1);
 		}
@@ -246,7 +246,7 @@ public class ItemDrop {
 			return this.getItemStack();
 		}
 
-		Item item = GameRegistry.findRegistry(Item.class).getValue(new ResourceLocation(this.burningItemId));
+		Item item = GameRegistry.findRegistry(Item.class).getValue(new Identifier(this.burningItemId));
 		if(item != null) {
 			return new ItemStack(item, 1);
 		}
@@ -263,7 +263,7 @@ public class ItemDrop {
 		if(!this.effectItemIds.containsKey(effectId)) {
 			return ItemStack.EMPTY;
 		}
-		Item item = GameRegistry.findRegistry(Item.class).getValue(new ResourceLocation(this.effectItemIds.get(effectId)));
+		Item item = GameRegistry.findRegistry(Item.class).getValue(new Identifier(this.effectItemIds.get(effectId)));
 		if(item != null) {
 			return new ItemStack(item, 1);
 		}

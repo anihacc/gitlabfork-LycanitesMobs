@@ -12,7 +12,7 @@ import com.lycanitesmobs.core.pets.SummonSet;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -96,7 +96,7 @@ public class ProjectileBehaviourSummon extends ProjectileBehaviour {
 				entityType = creatureInfo.getEntityType();
 			}
 			else {
-				Object entityTypeObj = GameRegistry.findRegistry(EntityType.class).getValue(new ResourceLocation(this.summonMobId));
+				Object entityTypeObj = GameRegistry.findRegistry(EntityType.class).getValue(new Identifier(this.summonMobId));
 				if (entityTypeObj instanceof EntityType) {
 					entityType = (EntityType) entityTypeObj;
 				}

@@ -11,7 +11,7 @@ import net.minecraft.entity.*;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
@@ -33,7 +33,7 @@ public class EntityCockatrice extends RideableCreatureEntity implements IMob {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEFINED;
+        this.entityGroup = CreatureAttribute.UNDEFINED;
         this.hasAttackSound = true;
         this.flySoundSpeed = 20;
         this.setupMob();
@@ -175,7 +175,7 @@ public class EntityCockatrice extends RideableCreatureEntity implements IMob {
 					if (ObjectManager.getEffect("aphagia") != null)
 						possibleTarget.addPotionEffect(new EffectInstance(ObjectManager.getEffect("aphagia"), this.getEffectDuration(5), 1));
 					else
-						possibleTarget.addPotionEffect(new EffectInstance(Effects.WEAKNESS, 10 * 20, 0));
+						possibleTarget.addPotionEffect(new EffectInstance(StatusEffects.WEAKNESS, 10 * 20, 0));
 				}
 			}
 		}

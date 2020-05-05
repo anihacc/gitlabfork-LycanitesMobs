@@ -10,7 +10,7 @@ import com.lycanitesmobs.core.info.ItemDrop;
 import com.lycanitesmobs.core.spawner.MobSpawn;
 import com.lycanitesmobs.core.spawner.condition.SpawnCondition;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -450,7 +450,7 @@ public class DungeonSchematic {
 	 * @param random The instance of random to use.
 	 * @return A loot table.
 	 */
-	public ResourceLocation getRandomLootTable(int level, Random random) {
+	public Identifier getRandomLootTable(int level, Random random) {
 		if(level < 0) {
 			level = -level * 2;
 		}
@@ -470,10 +470,10 @@ public class DungeonSchematic {
 			return null;
 		}
 		if(possibleLootTables.size() == 1) {
-			return new ResourceLocation(possibleLootTables.get(0));
+			return new Identifier(possibleLootTables.get(0));
 		}
 
-		return new ResourceLocation(possibleLootTables.get(random.nextInt(possibleLootTables.size())));
+		return new Identifier(possibleLootTables.get(random.nextInt(possibleLootTables.size())));
 	}
 
 

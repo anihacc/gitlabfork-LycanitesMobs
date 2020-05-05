@@ -13,8 +13,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.particles.IParticleData;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 
 public class EntityLurker extends TameableCreatureEntity {
     
@@ -25,7 +25,7 @@ public class EntityLurker extends TameableCreatureEntity {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.ARTHROPOD;
+        this.entityGroup = CreatureAttribute.ARTHROPOD;
         this.hasAttackSound = true;
         this.setupMob();
     }
@@ -135,7 +135,7 @@ public class EntityLurker extends TameableCreatureEntity {
     // ==================================================
     //                       Visuals
     // ==================================================
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     @Override
     public boolean isInvisibleToPlayer(PlayerEntity player) {
     	if(this.isTamed() && this.getOwner() == player)

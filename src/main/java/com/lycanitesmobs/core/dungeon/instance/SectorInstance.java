@@ -15,7 +15,7 @@ import net.minecraft.tileentity.ChestTileEntity;
 import net.minecraft.tileentity.MobSpawnerTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Vec3i;
@@ -617,7 +617,7 @@ public class SectorInstance {
 
 				// Apply Loot Table:
 				ChestTileEntity chest = (ChestTileEntity)tileEntity;
-				ResourceLocation lootTable = this.layout.dungeonInstance.schematic.getRandomLootTable(this.parentConnector.level, random);
+				Identifier lootTable = this.layout.dungeonInstance.schematic.getRandomLootTable(this.parentConnector.level, random);
 				if(lootTable != null) {
 					chest.setLootTable(lootTable, random.nextLong());
 				}

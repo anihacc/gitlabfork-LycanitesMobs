@@ -10,7 +10,7 @@ import com.lycanitesmobs.core.info.ItemConfig;
 import com.lycanitesmobs.core.item.equipment.ItemEquipment;
 import com.lycanitesmobs.core.network.MessagePlayerLeftClick;
 import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
@@ -18,14 +18,14 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.Effects;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.util.EntityDamageSource;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.*;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
@@ -68,11 +68,11 @@ public class GameEventListener {
     @SubscribeEvent
     public void onAttachCapabilities(AttachCapabilitiesEvent<Entity> event) {
         if(event.getObject() instanceof LivingEntity) {
-            event.addCapability(new ResourceLocation(LycanitesMobs.MODID, "entity"), new CapabilityProviderEntity());
+            event.addCapability(new Identifier(LycanitesMobs.MODID, "entity"), new CapabilityProviderEntity());
         }
 
         if(event.getObject() instanceof PlayerEntity) {
-            event.addCapability(new ResourceLocation(LycanitesMobs.MODID, "player"), new CapabilityProviderPlayer());
+            event.addCapability(new Identifier(LycanitesMobs.MODID, "player"), new CapabilityProviderPlayer());
         }
     }
 
@@ -221,7 +221,7 @@ public class GameEventListener {
 		}
 
 		// Better Invisibility:
-		if(!event.getEntityLiving().isPotionActive(Effects.INVISIBILITY)) {
+		if(!event.getEntityLiving().isPotionActive(StatusEffects.INVISIBILITY)) {
 			if(targetEntity.isInvisible()) {
 				if(event.isCancelable())
 					event.setCanceled(true);
@@ -464,21 +464,21 @@ public class GameEventListener {
 	// ==================================================
 	//                 Debug Overlay
 	// ==================================================
-	@OnlyIn(Dist.CLIENT)
+	@Environment(EnvType.CLIENT)
 	@SubscribeEvent
 	public void onGameOverlay(RenderGameOverlayEvent.Text event) {
 		if(!ConfigDebug.INSTANCE.creatureOverlay.get())
 			return;
 
 		// Entity:
-		RayTraceResult mouseOver = Minecraft.getInstance().objectMouseOver;
+		RayTraceResult mouseOver = MinecraftClient.getInstance().objectMouseOver;
 		if(mouseOver instanceof EntityRayTraceResult) {
 			Entity mouseOverEntity = ((EntityRayTraceResult)mouseOver).getEntity();
 			if(mouseOverEntity instanceof BaseCreatureEntity) {
 				BaseCreatureEntity mouseOverCreature = (BaseCreatureEntity)mouseOverEntity;
 				event.getLeft().add("");
 				event.getLeft().add("Target Creature: " + mouseOverCreature.getName().getFormattedText());
-				event.getLeft().add("Distance To player: " + mouseOverCreature.getDistance(Minecraft.getInstance().player));
+				event.getLeft().add("Distance To player: " + mouseOverCreature.getDistance(MinecraftClient.getInstance().player));
 				event.getLeft().add("Elements: " + mouseOverCreature.creatureInfo.getElementNames(mouseOverCreature.getSubspecies()).getFormattedText());
 				event.getLeft().add("Subspecies: " + mouseOverCreature.getSubspeciesIndex());
 				event.getLeft().add("Variant: " + mouseOverCreature.getVariantIndex());

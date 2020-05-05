@@ -19,7 +19,7 @@ public class EntityZoataur extends RideableCreatureEntity implements IMob {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEFINED;
+        this.entityGroup = CreatureAttribute.UNDEFINED;
         this.spawnsUnderground = true;
         this.hasAttackSound = true;
         this.spreadFire = true;

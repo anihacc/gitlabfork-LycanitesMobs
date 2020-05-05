@@ -3,14 +3,14 @@ package com.lycanitesmobs.client.gui.widgets;
 import com.lycanitesmobs.ClientManager;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.IGuiEventListener;
 import net.minecraft.client.gui.widget.list.AbstractOptionList;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -97,7 +97,7 @@ public abstract class BaseListEntry extends AbstractOptionList.Entry<BaseListEnt
 	 * @param width The width of the texture.
 	 * @param height The height of the texture.
 	 */
-	public void drawTexture(ResourceLocation texture, float x, float y, float z, float u, float v, float width, float height) {
+	public void drawTexture(Identifier texture, float x, float y, float z, float u, float v, float width, float height) {
 		RenderSystem.enableBlend();
 		RenderSystem.disableDepthTest();
 		RenderSystem.depthMask(false);
@@ -105,7 +105,7 @@ public abstract class BaseListEntry extends AbstractOptionList.Entry<BaseListEnt
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		RenderSystem.disableAlphaTest();
 
-		Minecraft.getInstance().getTextureManager().bindTexture(texture);
+		MinecraftClient.getInstance().getTextureManager().bindTexture(texture);
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder buffer = tessellator.getBuffer();
 		buffer.begin(7, DefaultVertexFormats.POSITION_TEX);

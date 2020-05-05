@@ -4,7 +4,7 @@ import com.lycanitesmobs.LycanitesMobs;
 import net.minecraft.stats.IStatFormatter;
 import net.minecraft.stats.Stat;
 import net.minecraft.stats.StatType;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.SimpleRegistry;
 import net.minecraftforge.event.RegistryEvent;
@@ -23,7 +23,7 @@ public class StatManager {
 		return INSTANCE;
 	}
 
-	public Map<String, StatType<ResourceLocation>> statTypes = new HashMap<>();
+	public Map<String, StatType<Identifier>> statTypes = new HashMap<>();
 
 	/**
 	 * Creates all base Stat Types.
@@ -38,8 +38,8 @@ public class StatManager {
 	 * @param name The unique name of the stat type.
 	 */
 	public void addStatType(String name) {
-		Registry<ResourceLocation> statRegistry = new SimpleRegistry<>();
-		StatType<ResourceLocation> statType = new StatType<>(statRegistry);
+		Registry<Identifier> statRegistry = new SimpleRegistry<>();
+		StatType<Identifier> statType = new StatType<>(statRegistry);
 		statType.setRegistryName(LycanitesMobs.modInfo.modid, name);
 		this.statTypes.put(name, statType);
 	}
@@ -55,7 +55,7 @@ public class StatManager {
 		if(!this.statTypes.containsKey(typeName)) {
 			return null;
 		}
-		return this.statTypes.get(typeName).get(new ResourceLocation(LycanitesMobs.modInfo.modid, name), IStatFormatter.DEFAULT);
+		return this.statTypes.get(typeName).get(new Identifier(LycanitesMobs.modInfo.modid, name), IStatFormatter.DEFAULT);
 	}
 
 	@SubscribeEvent

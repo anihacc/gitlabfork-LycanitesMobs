@@ -45,14 +45,14 @@ public class ModelTemplateAquatic extends CreatureObjModel {
         }
 
         // Walking:
-        if(entity == null || entity.isInWater()) {
+        if(entity == null || entity.isSubmergedInWater()) {
             if(partName.equals("body")) {
                 rotY += (float)-Math.toDegrees(MathHelper.cos(time * 0.1F) * 0.2F);
             }
         }
 
         // Jumping/Flying:
-        if(entity != null && !entity.onGround && !entity.isInWater()) {
+        if(entity != null && !entity.onGround && !entity.isSubmergedInWater()) {
             if(partName.equals("wingleft")) {
                 rotX = 20;
                 rotX -= Math.toDegrees(MathHelper.sin(loop * 0.4F) * 0.6F);

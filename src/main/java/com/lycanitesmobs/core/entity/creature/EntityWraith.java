@@ -25,7 +25,7 @@ public class EntityWraith extends TameableCreatureEntity implements IMob {
         super(entityType, world);
         
         // Setup:
-		this.attribute = CreatureAttribute.UNDEFINED;
+		this.entityGroup = CreatureAttribute.UNDEFINED;
         this.hasAttackSound = true;
         this.setupMob();
 

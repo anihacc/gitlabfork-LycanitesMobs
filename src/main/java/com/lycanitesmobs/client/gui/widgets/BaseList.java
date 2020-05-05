@@ -2,7 +2,7 @@ package com.lycanitesmobs.client.gui.widgets;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.widget.list.ExtendedList;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
@@ -14,7 +14,7 @@ public abstract class BaseList<S> extends ExtendedList<BaseListEntry> {
 	public S screen;
 
 	public BaseList(S screen, int width, int height, int top, int bottom, int left, int slotHeight) {
-		super(Minecraft.getInstance(), width, height, top, bottom, slotHeight);
+		super(MinecraftClient.getInstance(), width, height, top, bottom, slotHeight);
 		this.setLeftPos(left);
 		this.screen = screen;
 		this.createEntries();
@@ -59,10 +59,10 @@ public abstract class BaseList<S> extends ExtendedList<BaseListEntry> {
 
 		// Scissor Start:
 		GL11.glEnable(GL11.GL_SCISSOR_TEST);
-		double scaleFactor = Minecraft.getInstance().getMainWindow().getGuiScaleFactor();
+		double scaleFactor = MinecraftClient.getInstance().getMainWindow().getGuiScaleFactor();
 		int scissorX = (int)((double)this.getLeft() * scaleFactor);
-		int scissorTop = Minecraft.getInstance().getMainWindow().getHeight() - (int)((double)this.getTop() * scaleFactor);
-		int scissorBottom = Minecraft.getInstance().getMainWindow().getHeight() - (int)((double)this.getBottom() * scaleFactor);
+		int scissorTop = MinecraftClient.getInstance().getMainWindow().getHeight() - (int)((double)this.getTop() * scaleFactor);
+		int scissorBottom = MinecraftClient.getInstance().getMainWindow().getHeight() - (int)((double)this.getBottom() * scaleFactor);
 		int scissorWidth = (int)((double)this.getWidth() * scaleFactor);
 		int scissorHeight = scissorTop - scissorBottom;
 		GL11.glScissor(scissorX, scissorBottom, scissorWidth, scissorHeight); // Scissor starts at bottom right.

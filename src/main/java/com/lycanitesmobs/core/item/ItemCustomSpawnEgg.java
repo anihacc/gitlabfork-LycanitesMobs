@@ -6,8 +6,8 @@ import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.CreatureType;
 import net.minecraft.block.*;
-import net.minecraft.block.material.Material;
-import net.minecraft.client.Minecraft;
+import net.minecraft.block.Material;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
@@ -75,7 +75,7 @@ public class ItemCustomSpawnEgg extends BaseItem {
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flag) {
 		ITextComponent description = this.getDescription(stack, worldIn, tooltip, flag);
         if(!"".equalsIgnoreCase(description.getFormattedText()) && !("item." + this.itemName + ".description").equals(description.getUnformattedComponentText())) {
-            FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
+            FontRenderer fontRenderer = MinecraftClient.getInstance().fontRenderer;
             List formattedDescriptionList = fontRenderer.listFormattedStringToWidth(description.getFormattedText(), BaseItem.DESCRIPTION_WIDTH);
             for(Object formattedDescription : formattedDescriptionList) {
                 if(formattedDescription instanceof String)

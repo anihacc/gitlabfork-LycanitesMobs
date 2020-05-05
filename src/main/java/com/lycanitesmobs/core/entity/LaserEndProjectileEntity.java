@@ -5,7 +5,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
@@ -159,7 +159,7 @@ public class LaserEndProjectileEntity extends BaseProjectileEntity {
  	//                      Visuals
  	// ==================================================
     @Override
-    public ResourceLocation getTexture() {
+    public Identifier getTexture() {
     	return null;
     }
 }

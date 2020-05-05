@@ -29,7 +29,7 @@ public class EntityAbaia extends TameableCreatureEntity implements IMob {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEFINED;
+        this.entityGroup = CreatureAttribute.UNDEFINED;
         this.spawnsOnLand = false;
         this.spawnsInWater = true;
         this.hasAttackSound = true;

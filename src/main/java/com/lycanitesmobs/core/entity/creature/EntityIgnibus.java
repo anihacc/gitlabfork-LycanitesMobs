@@ -11,7 +11,7 @@ import net.minecraft.entity.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -32,7 +32,7 @@ public class EntityIgnibus extends RideableCreatureEntity implements IGroupHeavy
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEFINED;
+        this.entityGroup = CreatureAttribute.UNDEFINED;
         this.spawnsOnLand = true;
         this.spawnsInWater = true;
         this.isLavaCreature = true;
@@ -104,7 +104,7 @@ public class EntityIgnibus extends RideableCreatureEntity implements IGroupHeavy
 
     @Override
     public void riderEffects(LivingEntity rider) {
-        rider.addPotionEffect(new EffectInstance(Effects.FIRE_RESISTANCE, (5 * 20) + 5, 1));
+        rider.addPotionEffect(new EffectInstance(StatusEffects.FIRE_RESISTANCE, (5 * 20) + 5, 1));
         super.riderEffects(rider);
     }
 

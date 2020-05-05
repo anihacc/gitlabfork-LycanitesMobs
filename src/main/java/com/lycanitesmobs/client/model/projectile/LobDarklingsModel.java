@@ -3,10 +3,10 @@ package com.lycanitesmobs.client.model.projectile;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.ProjectileObjModel;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 
-@OnlyIn(Dist.CLIENT)
+@Environment(EnvType.CLIENT)
 public class LobDarklingsModel extends ProjectileObjModel {
 
 	// ==================================================

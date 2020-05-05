@@ -11,7 +11,7 @@ import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
@@ -25,7 +25,7 @@ public class EntityShambler extends TameableCreatureEntity implements IMob {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEFINED;
+        this.entityGroup = CreatureAttribute.UNDEFINED;
         this.spawnsUnderground = true;
         this.hasAttackSound = true;
         this.spreadFire = true;
@@ -55,9 +55,9 @@ public class EntityShambler extends TameableCreatureEntity implements IMob {
         // Water Healing:
         if(this.getAir() >= 0) {
             if (this.isInWater())
-                this.addPotionEffect(new EffectInstance(Effects.REGENERATION, 3 * 20, 2));
+                this.addPotionEffect(new EffectInstance(StatusEffects.REGENERATION, 3 * 20, 2));
             else if (this.isInWaterRainOrBubbleColumn())
-                this.addPotionEffect(new EffectInstance(Effects.REGENERATION, 3 * 20, 1));
+                this.addPotionEffect(new EffectInstance(StatusEffects.REGENERATION, 3 * 20, 1));
         }
     }
 

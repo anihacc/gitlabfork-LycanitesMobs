@@ -8,8 +8,8 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.particles.RedstoneParticleData;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 
 public class EntityHellShield extends BaseProjectileEntity {
 
@@ -95,7 +95,7 @@ public class EntityHellShield extends BaseProjectileEntity {
         return 1.0F;
     }
     
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public int getBrightnessForRender() {
         return 15728880;
     }

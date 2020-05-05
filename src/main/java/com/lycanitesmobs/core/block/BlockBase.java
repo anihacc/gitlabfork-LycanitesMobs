@@ -20,8 +20,8 @@ import net.minecraft.world.IWorldReader;
 import net.minecraft.world.TickPriority;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -78,7 +78,7 @@ public class BlockBase extends Block {
     	return new TranslationTextComponent(this.getTranslationKey());
 	}
 
-	@OnlyIn(Dist.CLIENT)
+	@Environment(EnvType.CLIENT)
 	@Override
     public void addInformation(ItemStack stack, @Nullable IBlockReader world, List<ITextComponent> tooltip, ITooltipFlag flag) {
         tooltip.add(this.getDescription(stack, world));

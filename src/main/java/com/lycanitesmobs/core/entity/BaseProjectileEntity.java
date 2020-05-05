@@ -8,7 +8,7 @@ import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.TallGrassBlock;
-import net.minecraft.block.material.Material;
+import net.minecraft.block.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -21,7 +21,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
@@ -605,7 +605,7 @@ public class BaseProjectileEntity extends ThrowableEntity {
 	   return this.entityName.toLowerCase();
     }
 
-	public ResourceLocation getTexture() {
+	public Identifier getTexture() {
 		if(TextureManager.getTexture(this.getTextureName()) == null)
 			TextureManager.addTexture(this.getTextureName(), this.modInfo, "textures/item/" + this.getTextureName() + ".png");
 		return TextureManager.getTexture(this.getTextureName());

@@ -4,8 +4,8 @@ import com.lycanitesmobs.ObjectManager;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 
 public class LMChargesGroup extends ItemGroup {
 
@@ -16,7 +16,7 @@ public class LMChargesGroup extends ItemGroup {
 
 
 	// ========== Tab Icon ==========
-	@OnlyIn(Dist.CLIENT)
+	@Environment(EnvType.CLIENT)
 	@Override
 	public ItemStack createIcon() {
 		if(ObjectManager.getItem("hellfireballcharge") != null)

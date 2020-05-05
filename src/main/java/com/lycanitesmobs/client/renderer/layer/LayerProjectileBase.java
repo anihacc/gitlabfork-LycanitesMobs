@@ -3,16 +3,16 @@ package com.lycanitesmobs.client.renderer.layer;
 import com.lycanitesmobs.client.model.ProjectileModel;
 import com.lycanitesmobs.client.renderer.ProjectileModelRenderer;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.Vector4f;
+import net.minecraft.client.util.math.Vector4f;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec2f;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 
-@OnlyIn(Dist.CLIENT)
+@Environment(EnvType.CLIENT)
 public class LayerProjectileBase extends LayerRenderer<BaseProjectileEntity, ProjectileModel> {
     public ProjectileModelRenderer renderer;
     public String name;
@@ -35,7 +35,7 @@ public class LayerProjectileBase extends LayerRenderer<BaseProjectileEntity, Pro
         return true;
     }
 
-    public ResourceLocation getLayerTexture(BaseProjectileEntity entity) {
+    public Identifier getLayerTexture(BaseProjectileEntity entity) {
         return null;
     }
 

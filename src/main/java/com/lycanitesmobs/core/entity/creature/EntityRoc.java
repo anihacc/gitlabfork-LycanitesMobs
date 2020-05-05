@@ -11,7 +11,7 @@ import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.monster.CreeperEntity;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.potion.Effects;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -30,7 +30,7 @@ public class EntityRoc extends RideableCreatureEntity implements IMob {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEFINED;
+        this.entityGroup = CreatureAttribute.UNDEFINED;
         this.hasAttackSound = true;
         this.flySoundSpeed = 20;
 
@@ -124,10 +124,10 @@ public class EntityRoc extends RideableCreatureEntity implements IMob {
 
     @Override
     public void riderEffects(LivingEntity rider) {
-        if(rider.isPotionActive(Effects.WEAKNESS))
-            rider.removePotionEffect(Effects.WEAKNESS);
-        if(rider.isPotionActive(Effects.MINING_FATIGUE))
-            rider.removePotionEffect(Effects.MINING_FATIGUE);
+        if(rider.isPotionActive(StatusEffects.WEAKNESS))
+            rider.removePotionEffect(StatusEffects.WEAKNESS);
+        if(rider.isPotionActive(StatusEffects.MINING_FATIGUE))
+            rider.removePotionEffect(StatusEffects.MINING_FATIGUE);
     }
 
 

@@ -11,8 +11,8 @@ import net.minecraft.state.StateContainer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 
 import java.util.Random;
 
@@ -80,7 +80,7 @@ public class BlockFrostweb extends BlockBase {
 	//                      Particles
 	// ==================================================
     @Override
-	@OnlyIn(Dist.CLIENT)
+	@Environment(EnvType.CLIENT)
 	public void animateTick(BlockState state, World world, BlockPos pos, Random random) {
 		double x = pos.getX();
 		double y = pos.getY();

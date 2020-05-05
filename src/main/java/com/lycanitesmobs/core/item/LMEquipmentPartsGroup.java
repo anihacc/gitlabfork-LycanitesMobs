@@ -4,8 +4,8 @@ import com.lycanitesmobs.ObjectManager;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 
 public class LMEquipmentPartsGroup extends ItemGroup {
 	private ItemStack iconStack = ItemStack.EMPTY;
@@ -16,7 +16,7 @@ public class LMEquipmentPartsGroup extends ItemGroup {
 	}
 
 	@Override
-	@OnlyIn(Dist.CLIENT)
+	@Environment(EnvType.CLIENT)
 	public ItemStack createIcon() {
 		this.fallbackIcon = false;
 		if(ObjectManager.getItem("equipmentpart_eechetikarm") != null)
@@ -36,7 +36,7 @@ public class LMEquipmentPartsGroup extends ItemGroup {
 		return new ItemStack(Items.BONE);
 	}
 
-	@OnlyIn(Dist.CLIENT)
+	@Environment(EnvType.CLIENT)
 	public ItemStack getIcon() {
 		if (this.iconStack.isEmpty() || this.fallbackIcon) {
 			this.iconStack = this.createIcon();

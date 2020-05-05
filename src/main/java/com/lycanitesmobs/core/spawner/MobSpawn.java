@@ -14,7 +14,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.World;
@@ -112,7 +112,7 @@ public class MobSpawn {
 				mobSpawn.loadFromJSON(json);
 			}
 			else {
-				Object entityTypeObj = GameRegistry.findRegistry(EntityType.class).getValue(new ResourceLocation(mobId));
+				Object entityTypeObj = GameRegistry.findRegistry(EntityType.class).getValue(new Identifier(mobId));
 				if(entityTypeObj instanceof EntityType) {
 					EntityType entityType = (EntityType) entityTypeObj;
 					mobSpawn = new MobSpawn(entityType);

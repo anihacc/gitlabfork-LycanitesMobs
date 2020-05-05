@@ -14,15 +14,15 @@ import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Direction;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 
 import java.util.Random;
 
@@ -94,7 +94,7 @@ public class BlockShadowfire extends BlockFireBase {
 					livingEntity.addPotionEffect(effect);
 			}
 
-			EffectInstance blindness = new EffectInstance(Effects.BLINDNESS, 5 * 20, 0);
+			EffectInstance blindness = new EffectInstance(StatusEffects.BLINDNESS, 5 * 20, 0);
 			if(this.blindness && livingEntity.isPotionApplicable(blindness)) {
 				livingEntity.addPotionEffect(blindness);
 			}
@@ -111,7 +111,7 @@ public class BlockShadowfire extends BlockFireBase {
 	//                      Particles
 	// ==================================================
     @Override
-	@OnlyIn(Dist.CLIENT)
+	@Environment(EnvType.CLIENT)
 	public void animateTick(BlockState state, World world, BlockPos pos, Random random) {
 		double x = pos.getX();
 		double y = pos.getY();

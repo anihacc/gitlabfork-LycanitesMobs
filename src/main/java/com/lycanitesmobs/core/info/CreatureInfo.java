@@ -15,7 +15,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.Tag;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
@@ -486,8 +486,8 @@ public class CreatureInfo {
 	 * Returns the resource location for this creature.
 	 * @return Creature resource location.
 	 */
-	public ResourceLocation getResourceLocation() {
-		return new ResourceLocation(this.modInfo.modid, this.getName());
+	public Identifier getIdentifier() {
+		return new Identifier(this.modInfo.modid, this.getName());
 	}
 
 
@@ -663,8 +663,8 @@ public class CreatureInfo {
 	 * Returns the resource location for the GUI icon of this creature.
 	 * @return Creature icon resource location.
 	 */
-	public ResourceLocation getIcon() {
-		ResourceLocation texture = TextureManager.getTexture(this.getName() + "_icon");
+	public Identifier getIcon() {
+		Identifier texture = TextureManager.getTexture(this.getName() + "_icon");
 		if(texture == null) {
 			TextureManager.addTexture(this.getName() + "_icon", this.modInfo, "textures/guis/creatures/" + this.getName() + "_icon.png");
 			texture = TextureManager.getTexture(this.getName() + "_icon");
@@ -796,7 +796,7 @@ public class CreatureInfo {
 			return false;
 		}
 		for(String diet : this.diets) {
-			ResourceLocation dietTagId = new ResourceLocation(LycanitesMobs.MODID, "diet_" + diet);
+			Identifier dietTagId = new Identifier(LycanitesMobs.MODID, "diet_" + diet);
 			Tag<Item> dietTag = ItemTags.getCollection().get(dietTagId);
 			if(dietTag == null) {
 				LycanitesMobs.logWarning("", "[Creature] Cannot find diet: " + dietTagId);

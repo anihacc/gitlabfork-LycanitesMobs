@@ -6,8 +6,8 @@ import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.client.gui.IGuiEventListener;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 
 import java.util.List;
 
@@ -36,7 +36,7 @@ public class SummoningPedestalList extends BaseList<SummoningPedestalScreen> {
 		return this.screen.getSelectedMinionName() != null && this.screen.getSelectedMinionName().equals(((SummoningPedestalEntry)this.getEntry(index)).minionName);
 	}
 
-	@OnlyIn(Dist.CLIENT)
+	@Environment(EnvType.CLIENT)
 	public class SummoningPedestalEntry extends BaseListEntry {
 		SummoningPedestalList parentGUI;
 		String minionName;

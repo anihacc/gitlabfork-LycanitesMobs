@@ -6,14 +6,14 @@ import com.lycanitesmobs.client.gui.buttons.ButtonBase;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MainWindow;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
 import net.minecraft.util.text.ITextComponent;
 import org.lwjgl.opengl.GL11;
@@ -190,7 +190,7 @@ public abstract class BaseScreen extends Screen implements Button.IPressable {
 	 * @param width The width of the texture.
 	 * @param height The height of the texture.
 	 */
-    public void drawTexture(ResourceLocation texture, float x, float y, float z, float u, float v, float width, float height) {
+    public void drawTexture(Identifier texture, float x, float y, float z, float u, float v, float width, float height) {
 		RenderSystem.enableBlend();
 		RenderSystem.disableDepthTest();
 		RenderSystem.depthMask(false);
@@ -226,7 +226,7 @@ public abstract class BaseScreen extends Screen implements Button.IPressable {
 	 * @param height The height of the texture.
 	 * @param resolution The resolution (width or height) of the texture.
 	 */
-	public void drawTexturedTiled(ResourceLocation texture, float x, float y, float z, float u, float v, float width, float height, float resolution) {
+	public void drawTexturedTiled(Identifier texture, float x, float y, float z, float u, float v, float width, float height, float resolution) {
 		RenderSystem.enableBlend();
 		RenderSystem.disableDepthTest();
 		RenderSystem.depthMask(false);
@@ -262,7 +262,7 @@ public abstract class BaseScreen extends Screen implements Button.IPressable {
 	 * @param segments How many segments to draw.
 	 * @param segmentLimit How many segments to draw up to before squishing them. If negative the bar is draw backwards.
 	 */
-	public void drawBar(ResourceLocation texture, int x, int y, float z, float width, float height, int segments, int segmentLimit) {
+	public void drawBar(Identifier texture, int x, int y, float z, float width, float height, int segments, int segmentLimit) {
 		boolean reverse = segmentLimit < 0;
 		if(reverse) {
 			segmentLimit = -segmentLimit;

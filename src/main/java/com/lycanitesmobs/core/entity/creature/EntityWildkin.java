@@ -8,7 +8,7 @@ import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.pathfinding.GroundPathNavigator;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 
 public class EntityWildkin extends TameableCreatureEntity implements IMob {
@@ -20,7 +20,7 @@ public class EntityWildkin extends TameableCreatureEntity implements IMob {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEFINED;
+        this.entityGroup = CreatureAttribute.UNDEFINED;
         this.hasAttackSound = true;
 
         this.canGrow = true;
@@ -78,7 +78,7 @@ public class EntityWildkin extends TameableCreatureEntity implements IMob {
     //                       Visuals
     // ==================================================
     /** Returns this creature's main texture. Also checks for for subspecies. **/
-    public ResourceLocation getTsaexture() {
+    public Identifier getTsaexture() {
         if(!this.hasCustomName() || !"Gooderness".equals(this.getCustomName().getFormattedText()))
             return super.getTexture();
 

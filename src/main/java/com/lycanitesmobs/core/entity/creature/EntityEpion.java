@@ -13,7 +13,7 @@ import net.minecraft.entity.Pose;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.GameRules;
@@ -30,7 +30,7 @@ public class EntityEpion extends RideableCreatureEntity implements IMob {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEAD;
+        this.entityGroup = CreatureAttribute.UNDEAD;
         this.hasAttackSound = false;
         this.flySoundSpeed = 20;
         
@@ -180,7 +180,7 @@ public class EntityEpion extends RideableCreatureEntity implements IMob {
 	//                       Visuals
 	// ==================================================
 	/** Returns this creature's main texture. Also checks for for subspecies. **/
-	public ResourceLocation getTexture() {
+	public Identifier getTexture() {
 		if(!this.hasCustomName() || !"Vampire Bat".equals(this.getCustomName().getFormattedText()))
 			return super.getTexture();
 

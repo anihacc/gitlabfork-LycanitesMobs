@@ -6,11 +6,10 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.info.ModInfo;
-import net.minecraft.util.JSONUtils;
+import net.minecraft.util.JsonHelper;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 
-import javax.annotation.Nullable;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -35,7 +34,7 @@ public abstract class JSONLoader {
 	 * @param fileLoader The file loader to get paths from.
 	 * @param streamLoader The stream loader to get jar files from.
 	 */
-	public void loadAllJson(ModInfo modInfo, String loadGroup, String dataPath, String mapKey, boolean loadCustom, @Nullable String jsonType, FileLoader fileLoader, StreamLoader streamLoader) {
+	public void loadAllJson(ModInfo modInfo, String loadGroup, String dataPath, String mapKey, boolean loadCustom, String jsonType, FileLoader fileLoader, StreamLoader streamLoader) {
 		LycanitesMobs.logDebug(loadGroup, "Loading JSON " + loadGroup + "...");
 		Gson gson = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
 		Map<String, JsonObject> jsons = new HashMap<>();
@@ -132,7 +131,7 @@ public abstract class JSONLoader {
 			JsonObject json;
 			BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 			try {
-				json = JSONUtils.fromJson(gson, reader, JsonObject.class, false);
+				json = JsonHelper.deserialize(gson, reader, JsonObject.class, false);
 			}
 			finally {
 				IOUtils.closeQuietly(reader);
@@ -174,7 +173,7 @@ public abstract class JSONLoader {
 				try {
 					try {
 						reader = Files.newBufferedReader(filePath);
-						JsonObject json = JSONUtils.fromJson(gson, reader, JsonObject.class, false);
+						JsonObject json = JsonHelper.deserialize(gson, reader, JsonObject.class, false);
 						boolean validJSON = true;
 						if(jsonType != null) {
 							if(!json.has("type")) {
@@ -223,7 +222,7 @@ public abstract class JSONLoader {
 			try {
 				try {
 					reader = Files.newBufferedReader(path);
-					JsonObject json = JSONUtils.fromJson(gson, reader, JsonObject.class, false);
+					JsonObject json = JsonHelper.deserialize(gson, reader, JsonObject.class, false);
 					return json;
 				}
 				catch (JsonParseException e) {

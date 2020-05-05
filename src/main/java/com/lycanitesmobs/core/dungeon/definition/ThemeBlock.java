@@ -5,7 +5,7 @@ import com.lycanitesmobs.LycanitesMobs;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class ThemeBlock {
@@ -38,7 +38,7 @@ public class ThemeBlock {
 
 	public Block getBlock() {
 		if(this.block == null) {
-			this.block = GameRegistry.findRegistry(Block.class).getValue(new ResourceLocation(this.blockId));
+			this.block = GameRegistry.findRegistry(Block.class).getValue(new Identifier(this.blockId));
 		}
 		if(this.block == null) {
 			return Blocks.CAVE_AIR;

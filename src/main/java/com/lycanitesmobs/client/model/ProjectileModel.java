@@ -4,16 +4,16 @@ import com.lycanitesmobs.client.renderer.CustomRenderStates;
 import com.lycanitesmobs.client.renderer.ProjectileModelRenderer;
 import com.lycanitesmobs.client.renderer.layer.LayerProjectileBase;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.client.renderer.Vector3f;
-import net.minecraft.client.renderer.Vector4f;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.render.BufferBuilder;
+import net.minecraft.client.util.math.Vector3f;
+import net.minecraft.client.util.math.Vector4f;
 import net.minecraft.client.renderer.entity.model.EntityModel;
 import net.minecraft.util.math.Vec2f;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 
-@OnlyIn(Dist.CLIENT)
+@Environment(EnvType.CLIENT)
 public class ProjectileModel extends EntityModel<BaseProjectileEntity> implements IAnimationModel {
 	public MatrixStack matrixStack;
 
@@ -30,7 +30,7 @@ public class ProjectileModel extends EntityModel<BaseProjectileEntity> implement
 	public void render(BaseProjectileEntity entity, float time, float distance, float loop, float lookY, float lookX) {}
 
 	@Override
-	public void render(MatrixStack matrixStack, IVertexBuilder iVertexBuilder, int i, int i1, float v, float v1, float v2, float v3) {}
+	public void render(MatrixStack matrixStack, BufferBuilder iVertexBuilder, int i, int i1, float v, float v1, float v2, float v3) {}
 
 	/**
 	 * Called by the renderer to add custom layers to it.
@@ -70,7 +70,7 @@ public class ProjectileModel extends EntityModel<BaseProjectileEntity> implement
 	 * @param scale The base scale to render the model at, usually just 0.0625F which scales 1m unit in Blender to a 1m block unit in Minecraft.
 	 * @param brightness The brightness of the mob based on block location, etc.
 	 */
-	public void render(BaseProjectileEntity entity, MatrixStack matrixStack, IVertexBuilder vertexBuilder, LayerProjectileBase layer, float time, float distance, float loop, float lookY, float lookX, float scale, int brightness) {
+	public void render(BaseProjectileEntity entity, MatrixStack matrixStack, BufferBuilder vertexBuilder, LayerProjectileBase layer, float time, float distance, float loop, float lookY, float lookX, float scale, int brightness) {
 		this.matrixStack = matrixStack;
 		float sizeScale = 1F;
 		if(entity != null) {
@@ -173,14 +173,14 @@ public class ProjectileModel extends EntityModel<BaseProjectileEntity> implement
 
 	@Override
 	public void doRotate(float rotX, float rotY, float rotZ) {
-		this.matrixStack.rotate(new Vector3f(1F, 0F, 0F).rotationDegrees(rotX));
-		this.matrixStack.rotate(new Vector3f(0F, 1F, 0F).rotationDegrees(rotY));
-		this.matrixStack.rotate(new Vector3f(0F, 0F, 1F).rotationDegrees(rotZ));
+		this.matrixStack.multiply(new Vector3f(1F, 0F, 0F).getDegreesQuaternion(rotX));
+		this.matrixStack.multiply(new Vector3f(0F, 1F, 0F).getDegreesQuaternion(rotY));
+		this.matrixStack.multiply(new Vector3f(0F, 0F, 1F).getDegreesQuaternion(rotZ));
 	}
 
 	@Override
 	public void doAngle(float rotation, float angleX, float angleY, float angleZ) {
-		this.matrixStack.rotate(new Vector3f(angleX, angleY, angleZ).rotationDegrees(rotation));
+		this.matrixStack.multiply(new Vector3f(angleX, angleY, angleZ).getDegreesQuaternion(rotation));
 	}
 
 	@Override

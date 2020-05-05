@@ -4,14 +4,14 @@ import com.lycanitesmobs.client.ModelManager;
 import com.lycanitesmobs.client.model.EquipmentModel;
 import com.lycanitesmobs.client.renderer.layer.LayerItem;
 import com.lycanitesmobs.core.item.equipment.ItemEquipment;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.Vector3f;
+import net.minecraft.client.util.math.Vector3f;
 import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,14 +29,14 @@ public class EquipmentRenderer extends ItemStackTileEntityRenderer implements II
 		// Position:
 		matrixStack.push();
 		matrixStack.translate(0.5F, 0.35F, 0.6F); // translate
-		matrixStack.rotate(new Vector3f(1.0F, 0.0F, 0.0F).rotationDegrees(90)); // rotate
-		matrixStack.rotate(new Vector3f(0.0F, 0.0F, 1.0F).rotationDegrees(-100)); // rotate
+		matrixStack.multiply(new Vector3f(1.0F, 0.0F, 0.0F).getDegreesQuaternion(90)); // rotate
+		matrixStack.multiply(new Vector3f(0.0F, 0.0F, 1.0F).getDegreesQuaternion(-100)); // rotate
 		matrixStack.translate(0F, -1.5F, 0F);
 		EquipmentModel equipmentModel = ModelManager.getInstance().getEquipmentModel();
 
 		float loop = 0;
-		if(Minecraft.getInstance().player != null) {
-			loop = Minecraft.getInstance().player.ticksExisted;
+		if(MinecraftClient.getInstance().player != null) {
+			loop = MinecraftClient.getInstance().player.ticksExisted;
 		}
 		equipmentModel.render(itemStack, hand, matrixStack, renderTypeBuffer, this, loop, brightness);
 
@@ -44,11 +44,11 @@ public class EquipmentRenderer extends ItemStackTileEntityRenderer implements II
 	}
 
 	@Override
-	public void bindItemTexture(ResourceLocation location) {
+	public void bindItemTexture(Identifier location) {
 		if(location == null) {
 			return;
 		}
-		Minecraft.getInstance().getTextureManager().bindTexture(location);
+		MinecraftClient.getInstance().getTextureManager().bindTexture(location);
 	}
 
 	@Override

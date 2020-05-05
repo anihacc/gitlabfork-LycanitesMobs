@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core;
 
 import com.lycanitesmobs.LycanitesMobs;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
@@ -118,14 +118,14 @@ public class FileLoader {
 	}
 
 	/**
-	 * Returns a list of ResourceLocations for every file in the provided Path instance.
+	 * Returns a list of Identifiers for every file in the provided Path instance.
 	 * @param subPath The sub directory or file path to load, ex: "creatures", "textures/blocks"
 	 * @param fileType The file extension to use. Ex: "png"
-	 * @return A list of ResourceLocations found.
+	 * @return A list of Identifiers found.
 	 */
-	public List<ResourceLocation> getPathResourceLocations(String subPath, String fileType) {
+	public List<Identifier> getPathIdentifiers(String subPath, String fileType) {
 		Path path = this.getPath(subPath);
-		List<ResourceLocation> resourceLocations = new ArrayList<>();
+		List<Identifier> resourceLocations = new ArrayList<>();
 		try {
 			Iterator<Path> iterator = Files.walk(path).iterator();
 			while(iterator.hasNext()) {
@@ -133,13 +133,13 @@ public class FileLoader {
 				if (fileType == null || fileType.equals(FilenameUtils.getExtension(filePath.toString()))) {
 					Path relativePath = path.relativize(filePath);
 					String resourceLocationPath = FilenameUtils.removeExtension(relativePath.toString()).replaceAll("\\\\", "/");
-					ResourceLocation resourceLocation = new ResourceLocation(this.domain, resourceLocationPath);
+					Identifier resourceLocation = new Identifier(this.domain, resourceLocationPath);
 					resourceLocations.add(resourceLocation);
 				}
 			}
 		}
 		catch (Exception e) {
-			LycanitesMobs.logWarning("", "There was a problem getting ResourceLocations for: " + path + ", " + fileType + ", " + " \n" + e.toString());
+			LycanitesMobs.logWarning("", "There was a problem getting Identifiers for: " + path + ", " + fileType + ", " + " \n" + e.toString());
 		}
 
 		return resourceLocations;

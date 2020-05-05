@@ -9,7 +9,7 @@ import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.material.Material;
+import net.minecraft.block.Material;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -31,7 +31,7 @@ public class EntitySerpix extends TameableCreatureEntity implements IGroupHeavy 
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.ARTHROPOD;
+        this.entityGroup = CreatureAttribute.ARTHROPOD;
         this.spawnsOnLand = true;
         this.spawnsInWater = true;
         this.hasAttackSound = false;
@@ -167,7 +167,7 @@ public class EntitySerpix extends TameableCreatureEntity implements IGroupHeavy 
    	//                     Abilities
    	// ==================================================
     public boolean canBeTempted() {
-    	return this.isChild();
+    	return this.isBaby();
     }
 
     @Override

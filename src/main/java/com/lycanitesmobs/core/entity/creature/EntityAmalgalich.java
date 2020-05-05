@@ -24,8 +24,8 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 
 public class EntityAmalgalich extends BaseCreatureEntity implements IMob, IGroupHeavy, IGroupBoss {
     private ForceGoal consumptionGoalP0;
@@ -38,7 +38,7 @@ public class EntityAmalgalich extends BaseCreatureEntity implements IMob, IGroup
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEAD;
+        this.entityGroup = CreatureAttribute.UNDEAD;
         this.hasAttackSound = true;
         this.setAttackCooldownMax(30);
         this.hasJumpSound = false;
@@ -95,7 +95,7 @@ public class EntityAmalgalich extends BaseCreatureEntity implements IMob, IGroup
     }
 
     /** Returns a larger bounding box for rendering this large entity. **/
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public AxisAlignedBB getRenderBoundingBox() {
         return this.getBoundingBox().grow(200, 50, 200).offset(0, -25, 0);
     }
@@ -347,7 +347,7 @@ public class EntityAmalgalich extends BaseCreatureEntity implements IMob, IGroup
         return 1.0F;
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public int getBrightnessForRender() {
         return 15728880;
     }

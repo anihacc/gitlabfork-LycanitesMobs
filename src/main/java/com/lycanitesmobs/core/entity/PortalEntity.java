@@ -15,7 +15,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -334,7 +334,7 @@ public class PortalEntity extends BaseProjectileEntity {
  	//                      Visuals
  	// ==================================================
     @Override
-    public ResourceLocation getTexture() {
+    public Identifier getTexture() {
     	if(TextureManager.getTexture(this.entityName) == null) {
 			TextureManager.addTexture(this.entityName, LycanitesMobs.modInfo, "textures/particles/" + this.entityName.toLowerCase() + ".png");
 		}

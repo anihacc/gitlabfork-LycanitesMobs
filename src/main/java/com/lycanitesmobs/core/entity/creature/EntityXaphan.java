@@ -14,8 +14,8 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 
 import java.util.HashMap;
 
@@ -29,7 +29,7 @@ public class EntityXaphan extends TameableCreatureEntity implements IMob {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEFINED;
+        this.entityGroup = CreatureAttribute.UNDEFINED;
         this.spawnsInWater = true;
         this.hasAttackSound = false;
         this.setupMob();
@@ -158,7 +158,7 @@ public class EntityXaphan extends TameableCreatureEntity implements IMob {
 		return 1.0F;
 	}
 
-	@OnlyIn(Dist.CLIENT)
+	@Environment(EnvType.CLIENT)
 	public int getBrightnessForRender() {
 		return 15728880;
 	}

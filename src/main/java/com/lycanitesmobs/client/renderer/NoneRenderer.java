@@ -1,15 +1,15 @@
 package com.lycanitesmobs.client.renderer;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.util.Identifier;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 
-@OnlyIn(Dist.CLIENT)
+@Environment(EnvType.CLIENT)
 public class NoneRenderer extends EntityRenderer<Entity> {
     
     // ==================================================
@@ -34,7 +34,7 @@ public class NoneRenderer extends EntityRenderer<Entity> {
     // ==================================================
     // ========== Get Texture ==========
     @Override
-	public ResourceLocation getEntityTexture(Entity entity) {
+	public Identifier getEntityTexture(Entity entity) {
     	return null;
     }
 }

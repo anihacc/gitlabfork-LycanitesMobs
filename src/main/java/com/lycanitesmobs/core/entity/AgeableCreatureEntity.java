@@ -91,7 +91,7 @@ public abstract class AgeableCreatureEntity extends BaseCreatureEntity {
     // ========== Name ==========
     @Override
     public ITextComponent getAgeName() {
-    	if(this.isChild())
+    	if(this.isBaby())
     		return new TranslationTextComponent("entity.baby");
     	else
     		return super.getAgeName();
@@ -116,14 +116,14 @@ public abstract class AgeableCreatureEntity extends BaseCreatureEntity {
     // ========== Get Random Subspecies ==========
 	@Override
 	public void getRandomSubspecies() {
-		if(this.isChild())
+		if(this.isBaby())
 			return;
 		super.getRandomSubspecies();
 	}
 
     @Override
     public void getRandomVariant() {
-    	if(this.isChild())
+    	if(this.isBaby())
     		return;
     	super.getRandomVariant();
     }
@@ -139,7 +139,7 @@ public abstract class AgeableCreatureEntity extends BaseCreatureEntity {
 
         // Growing:
         if(this.getEntityWorld().isRemote)
-            this.setScaleForAge(this.isChild());
+            this.setScaleForAge(this.isBaby());
         else if(this.canGrow) {
             int age = this.getGrowingAge();
             if(age < 0) {
@@ -186,7 +186,7 @@ public abstract class AgeableCreatureEntity extends BaseCreatureEntity {
 
 	@Override
 	public boolean canDropItem(ItemDrop itemDrop) {
-		if(itemDrop.adultOnly && this.isChild()) {
+		if(itemDrop.adultOnly && this.isBaby()) {
 			return false;
 		}
 		return super.canDropItem(itemDrop);
@@ -267,7 +267,7 @@ public abstract class AgeableCreatureEntity extends BaseCreatureEntity {
 	
 	public void setGrowingAge(int age) {
 		this.dataManager.set(AGE, age);
-        this.setScaleForAge(this.isChild());
+        this.setScaleForAge(this.isBaby());
     }
 	
 	public void addGrowth(int growth) {
@@ -288,7 +288,7 @@ public abstract class AgeableCreatureEntity extends BaseCreatureEntity {
 	 * @return Returns true if parents should be searched for and followed.
 	 */
 	public boolean shouldFollowParent() {
-		return this.isChild();
+		return this.isBaby();
 	}
 
 	/**
@@ -296,7 +296,7 @@ public abstract class AgeableCreatureEntity extends BaseCreatureEntity {
 	 * @return True if this creature should actively seek parents.
 	 */
 	public boolean shouldFindParent() {
-		return this.isChild();
+		return this.isBaby();
 	}
 
 	

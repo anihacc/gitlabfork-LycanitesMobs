@@ -1,17 +1,13 @@
 package com.lycanitesmobs.client.model;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.model.BakedQuad;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.model.ItemOverrideList;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.util.Direction;
+import net.minecraft.client.render.model.BakedModel;
+import net.minecraft.client.render.model.BakedQuad;
 
 import javax.annotation.Nullable;
-import java.util.List;
 import java.util.Random;
 
-public class EquipmentPartModel implements IBakedModel {
+public class EquipmentPartModel implements BakedModel {
 	@Override
 	public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, Random rand) {
 		return null;

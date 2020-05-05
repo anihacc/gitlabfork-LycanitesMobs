@@ -8,7 +8,7 @@ import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.material.Material;
+import net.minecraft.block.Material;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -31,7 +31,7 @@ public class EntityConcapedeHead extends AgeableCreatureEntity {
         super(entityType, world);
 
         // Setup:
-        this.attribute = CreatureAttribute.ARTHROPOD;
+        this.entityGroup = CreatureAttribute.ARTHROPOD;
         this.hasAttackSound = true;
 
         this.canGrow = true;

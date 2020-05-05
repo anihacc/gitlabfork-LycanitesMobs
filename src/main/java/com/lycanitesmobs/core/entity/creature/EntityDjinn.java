@@ -24,7 +24,7 @@ public class EntityDjinn extends TameableCreatureEntity implements IMob, IFusabl
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEFINED;
+        this.entityGroup = CreatureAttribute.UNDEFINED;
         this.hasAttackSound = false;
         this.setupMob();
 

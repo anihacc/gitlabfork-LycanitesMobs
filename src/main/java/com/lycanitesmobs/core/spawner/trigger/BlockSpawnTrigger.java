@@ -5,7 +5,7 @@ import com.lycanitesmobs.core.helpers.JSONHelper;
 import com.lycanitesmobs.core.spawner.Spawner;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.material.Material;
+import net.minecraft.block.Material;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;

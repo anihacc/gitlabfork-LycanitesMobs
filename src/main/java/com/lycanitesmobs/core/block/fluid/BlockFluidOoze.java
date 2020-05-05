@@ -13,11 +13,11 @@ import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.fluid.FlowingFluid;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 
 import java.util.Random;
 import java.util.function.Supplier;
@@ -89,7 +89,7 @@ public class BlockFluidOoze extends FlowingFluidBlock {
 
         // Effects:
         if(entity instanceof LivingEntity) {
-            ((LivingEntity)entity).addPotionEffect(new EffectInstance(Effects.SLOWNESS, 5 * 20, 0));
+            ((LivingEntity)entity).addPotionEffect(new EffectInstance(StatusEffects.SLOWNESS, 5 * 20, 0));
         }
 
         super.onEntityCollision(blockState, world, pos, entity);
@@ -108,7 +108,7 @@ public class BlockFluidOoze extends FlowingFluidBlock {
 	// ==================================================
 	//                      Particles
 	// ==================================================
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void animateTick(BlockState state, World world, BlockPos pos, Random random) {
         float f; 
         float f1;

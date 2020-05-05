@@ -6,13 +6,13 @@ import com.lycanitesmobs.client.renderer.IItemModelRenderer;
 import com.lycanitesmobs.client.renderer.layer.LayerItem;
 import com.lycanitesmobs.core.item.equipment.ItemEquipment;
 import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -133,7 +133,7 @@ public class EquipmentModel implements IItemModelRenderer {
 		this.renderLayers.clear();
 		itemObjModel.addCustomLayers(this);
 		itemObjModel.generateAnimationFrames(partStack, null, loop, offsetPart);
-		ResourceLocation texture = itemObjModel.getTexture(partStack, null);
+		Identifier texture = itemObjModel.getTexture(partStack, null);
 		RenderType renderType = CustomRenderStates.getObjRenderType(texture, itemObjModel.getBlending(partStack, null), itemObjModel.getGlow(partStack, null));
 		itemObjModel.render(partStack, hand, matrixStack, renderTypeBuffer.getBuffer(renderType), renderer, offsetPart, null, loop, brightness);
 		for(LayerItem layer : this.renderLayers) {
@@ -148,7 +148,7 @@ public class EquipmentModel implements IItemModelRenderer {
 
 
 	@Override
-	public void bindItemTexture(ResourceLocation location) {}
+	public void bindItemTexture(Identifier location) {}
 
 
 	@Override

@@ -10,7 +10,7 @@ import com.lycanitesmobs.client.gui.buttons.TabManager;
 import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.network.MessagePlayerAttack;
 import com.lycanitesmobs.core.network.MessagePlayerControl;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.inventory.InventoryScreen;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
@@ -128,7 +128,7 @@ public class KeyHandler {
 				controlStates += ExtendedPlayer.CONTROL_ID.MOUNT_ABILITY.id;
 
             // Attack Key Pressed:
-            if(Minecraft.getInstance().gameSettings.keyBindAttack.isKeyDown()) {
+            if(MinecraftClient.getInstance().gameSettings.keyBindAttack.isKeyDown()) {
                 controlStates += ExtendedPlayer.CONTROL_ID.ATTACK.id;
             }
 		}

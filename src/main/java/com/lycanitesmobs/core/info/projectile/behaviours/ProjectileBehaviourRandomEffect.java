@@ -6,7 +6,7 @@ import com.lycanitesmobs.core.helpers.JSONHelper;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
@@ -40,7 +40,7 @@ public class ProjectileBehaviourRandomEffect extends ProjectileBehaviour {
 		}
 
 		int randomIndex = world.rand.nextInt(this.effects.size());
-		Effect effect = GameRegistry.findRegistry(Effect.class).getValue(new ResourceLocation(this.effects.get(randomIndex)));
+		Effect effect = GameRegistry.findRegistry(Effect.class).getValue(new Identifier(this.effects.get(randomIndex)));
 		if(effect != null) {
 			target.addPotionEffect(new EffectInstance(effect, this.duration, this.amplifier));
 		}

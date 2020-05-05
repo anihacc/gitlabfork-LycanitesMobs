@@ -5,7 +5,7 @@ import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.info.ModInfo;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
+import net.minecraft.block.Material;
 
 public class BlockMaker {
     // ==================================================

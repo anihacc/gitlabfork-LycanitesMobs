@@ -13,7 +13,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -28,7 +28,7 @@ public class EntityStrider extends RideableCreatureEntity implements IGroupHeavy
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEFINED;
+        this.entityGroup = CreatureAttribute.UNDEFINED;
         this.spawnsOnLand = true;
         this.spawnsInWater = true;
         this.hasAttackSound = true;
@@ -71,7 +71,7 @@ public class EntityStrider extends RideableCreatureEntity implements IGroupHeavy
                     extendedEntity.setPickedUpByEntity(this);
 
                 if(this.isTamed() && !this.canAttack(this.getPickupEntity())) {
-                    this.getPickupEntity().addPotionEffect(new EffectInstance(Effects.WATER_BREATHING, this.getEffectDuration(5), 1));
+                    this.getPickupEntity().addPotionEffect(new EffectInstance(StatusEffects.WATER_BREATHING, this.getEffectDuration(5), 1));
                 }
 
                 else if(this.pickupTime++ % 40 == 0) {

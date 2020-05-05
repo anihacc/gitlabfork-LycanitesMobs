@@ -2,13 +2,13 @@ package com.lycanitesmobs.client.renderer.layer;
 
 import com.lycanitesmobs.client.renderer.CreatureRenderer;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import net.minecraft.client.renderer.Vector4f;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.util.math.Vector4f;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec2f;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 
-@OnlyIn(Dist.CLIENT)
+@Environment(EnvType.CLIENT)
 public class LayerCreatureEffect extends LayerCreatureBase {
 	public String textureSuffix;
 	public boolean subspecies = true;
@@ -48,7 +48,7 @@ public class LayerCreatureEffect extends LayerCreatureBase {
     }
 
     @Override
-    public ResourceLocation getLayerTexture(BaseCreatureEntity entity) {
+    public Identifier getLayerTexture(BaseCreatureEntity entity) {
 		return entity.getTexture(this.textureSuffix);
     }
 

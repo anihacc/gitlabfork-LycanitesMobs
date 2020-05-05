@@ -5,10 +5,9 @@ import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.*;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.Effects;
-import net.minecraftforge.common.ToolType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,8 +18,8 @@ public class ObjectLists {
 	// Maps:
 	public static Map<String, List<ItemStack>> itemLists = new HashMap<>();
 	public static Map<String, List<EntityType>> entityLists = new HashMap<>();
-	public static Map<String, List<Effect>> effectLists = new HashMap<>();
-	public static Map<String, Effect> allEffects = new HashMap<>();
+	public static Map<String, List<StatusEffect>> effectLists = new HashMap<>();
+	public static Map<String, StatusEffect> allEffects = new HashMap<>();
 	
 	
     // ==================================================
@@ -70,7 +69,7 @@ public class ObjectLists {
 		}
 	}
 
-	public static void addEffect(String list, Effect effect, String effectName) {
+	public static void addEffect(String list, StatusEffect effect, String effectName) {
 		if(effect == null)
 			return;
 		allEffects.put(effectName, effect);
@@ -98,7 +97,7 @@ public class ObjectLists {
 		return entityLists.get(list);
 	}
 
-	public static List<Effect> getEffects(String list) {
+	public static List<StatusEffect> getEffects(String list) {
 		list = list.toLowerCase();
 		if(!effectLists.containsKey(list))
 			return new ArrayList<>();
@@ -129,7 +128,7 @@ public class ObjectLists {
 		return false;
 	}
 
-	public static boolean inEffectList(String list, Effect effect) {
+	public static boolean inEffectList(String list, StatusEffect effect) {
 		list = list.toLowerCase();
 		if(!effectLists.containsKey(list))
 			return false;
@@ -205,36 +204,36 @@ public class ObjectLists {
 		
 		// ========== Effects ==========
 		// Buffs:
-		ObjectLists.addEffect("buffs", Effects.STRENGTH, "strength");
-		ObjectLists.addEffect("buffs", Effects.HASTE, "haste");
-		ObjectLists.addEffect("buffs", Effects.FIRE_RESISTANCE, "fire_resistance");
-		ObjectLists.addEffect("buffs", Effects.INSTANT_HEALTH, "instant_health");
-		ObjectLists.addEffect("buffs", Effects.INVISIBILITY, "invisibility");
-		ObjectLists.addEffect("buffs", Effects.JUMP_BOOST, "jump_boost");
-		ObjectLists.addEffect("buffs", Effects.SPEED, "speed");
-		ObjectLists.addEffect("buffs", Effects.NIGHT_VISION, "night_vision");
-		ObjectLists.addEffect("buffs", Effects.REGENERATION, "regeneration");
-		ObjectLists.addEffect("buffs", Effects.RESISTANCE, "resistance");
-		ObjectLists.addEffect("buffs", Effects.WATER_BREATHING, "water_breathing");
-		ObjectLists.addEffect("buffs", Effects.HEALTH_BOOST, "health_boost");
-		ObjectLists.addEffect("buffs", Effects.ABSORPTION, "absorption");
-		ObjectLists.addEffect("buffs", Effects.SATURATION, "saturation");
-        ObjectLists.addEffect("buffs", Effects.GLOWING, "glowing");
-        ObjectLists.addEffect("buffs", Effects.LEVITATION, "levitation");
-        ObjectLists.addEffect("buffs", Effects.LUCK, "luck");
-        ObjectLists.addEffect("buffs", Effects.DOLPHINS_GRACE, "dolphins_grace");
+		ObjectLists.addEffect("buffs", StatusEffects.STRENGTH, "strength");
+		ObjectLists.addEffect("buffs", StatusEffects.HASTE, "haste");
+		ObjectLists.addEffect("buffs", StatusEffects.FIRE_RESISTANCE, "fire_resistance");
+		ObjectLists.addEffect("buffs", StatusEffects.INSTANT_HEALTH, "instant_health");
+		ObjectLists.addEffect("buffs", StatusEffects.INVISIBILITY, "invisibility");
+		ObjectLists.addEffect("buffs", StatusEffects.JUMP_BOOST, "jump_boost");
+		ObjectLists.addEffect("buffs", StatusEffects.SPEED, "speed");
+		ObjectLists.addEffect("buffs", StatusEffects.NIGHT_VISION, "night_vision");
+		ObjectLists.addEffect("buffs", StatusEffects.REGENERATION, "regeneration");
+		ObjectLists.addEffect("buffs", StatusEffects.RESISTANCE, "resistance");
+		ObjectLists.addEffect("buffs", StatusEffects.WATER_BREATHING, "water_breathing");
+		ObjectLists.addEffect("buffs", StatusEffects.HEALTH_BOOST, "health_boost");
+		ObjectLists.addEffect("buffs", StatusEffects.ABSORPTION, "absorption");
+		ObjectLists.addEffect("buffs", StatusEffects.SATURATION, "saturation");
+        ObjectLists.addEffect("buffs", StatusEffects.GLOWING, "glowing");
+        ObjectLists.addEffect("buffs", StatusEffects.LEVITATION, "levitation");
+        ObjectLists.addEffect("buffs", StatusEffects.LUCK, "luck");
+        ObjectLists.addEffect("buffs", StatusEffects.DOLPHINS_GRACE, "dolphins_grace");
 
 		// Debuffs:
-        ObjectLists.addEffect("debuffs", Effects.BLINDNESS, "blindness");
-        ObjectLists.addEffect("debuffs", Effects.NAUSEA, "nausea");
-        ObjectLists.addEffect("debuffs", Effects.MINING_FATIGUE, "mining_fatigue");
-        ObjectLists.addEffect("debuffs", Effects.INSTANT_DAMAGE, "instant_damage");
-        ObjectLists.addEffect("debuffs", Effects.HUNGER, "hunger");
-        ObjectLists.addEffect("debuffs", Effects.SLOWNESS, "slowness");
-        ObjectLists.addEffect("debuffs", Effects.POISON, "poison");
-        ObjectLists.addEffect("debuffs", Effects.WEAKNESS, "weakness");
-        ObjectLists.addEffect("debuffs", Effects.WITHER, "wither");
-        ObjectLists.addEffect("debuffs", Effects.UNLUCK, "unluck");
+        ObjectLists.addEffect("debuffs", StatusEffects.BLINDNESS, "blindness");
+        ObjectLists.addEffect("debuffs", StatusEffects.NAUSEA, "nausea");
+        ObjectLists.addEffect("debuffs", StatusEffects.MINING_FATIGUE, "mining_fatigue");
+        ObjectLists.addEffect("debuffs", StatusEffects.INSTANT_DAMAGE, "instant_damage");
+        ObjectLists.addEffect("debuffs", StatusEffects.HUNGER, "hunger");
+        ObjectLists.addEffect("debuffs", StatusEffects.SLOWNESS, "slowness");
+        ObjectLists.addEffect("debuffs", StatusEffects.POISON, "poison");
+        ObjectLists.addEffect("debuffs", StatusEffects.WEAKNESS, "weakness");
+        ObjectLists.addEffect("debuffs", StatusEffects.WITHER, "wither");
+        ObjectLists.addEffect("debuffs", StatusEffects.UNLUCK, "unluck");
 	}
 	
 	// ========== Add From Config Value ==========
@@ -272,7 +271,7 @@ public class ObjectLists {
 		if(itemStack.getItem() instanceof ShovelItem) {
 			return true;
 		}
-		if(itemStack.getHarvestLevel(ToolType.PICKAXE, null, null) != -1) {
+		if(itemStack.getItem().getMiningSpeed(itemStack, null) != -1) {
 			return true;
 		}
 		return false;
@@ -286,7 +285,7 @@ public class ObjectLists {
 		if(itemStack.getItem() instanceof AxeItem) {
 			return true;
 		}
-		if(itemStack.getHarvestLevel(ToolType.AXE, null, null) != -1) {
+		if(itemStack.getItem().getMiningSpeed(itemStack, null) != -1) {
 			return true;
 		}
         return false;
@@ -300,7 +299,7 @@ public class ObjectLists {
 		if(itemStack.getItem() instanceof ShovelItem) {
 			return true;
 		}
-		if(itemStack.getHarvestLevel(ToolType.SHOVEL, null, null) != -1) {
+		if(itemStack.getItem().getMiningSpeed(itemStack, null) != -1) {
 			return true;
 		}
 		return false;

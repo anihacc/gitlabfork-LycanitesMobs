@@ -5,7 +5,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -83,7 +83,7 @@ public class EffectEquipmentFeature extends EquipmentFeature {
 		if("burning".equals(this.effectType)) {
 			return new TranslationTextComponent("effect.burning");
 		}
-		Effect effect = GameRegistry.findRegistry(Effect.class).getValue(new ResourceLocation(this.effectType));
+		Effect effect = GameRegistry.findRegistry(Effect.class).getValue(new Identifier(this.effectType));
 		if(effect == null) {
 			return new StringTextComponent(this.effectType);
 		}
@@ -113,7 +113,7 @@ public class EffectEquipmentFeature extends EquipmentFeature {
 		}
 
 		// Potion Effects:
-		Effect effect = GameRegistry.findRegistry(Effect.class).getValue(new ResourceLocation(this.effectType));
+		Effect effect = GameRegistry.findRegistry(Effect.class).getValue(new Identifier(this.effectType));
 		if(effect != null && this.effectStrength > 0) {
 			effectTarget.addPotionEffect(new EffectInstance(effect, this.effectDuration, this.effectStrength - 1));
 		}

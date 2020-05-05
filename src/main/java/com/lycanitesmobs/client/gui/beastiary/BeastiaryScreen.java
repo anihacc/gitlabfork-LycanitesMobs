@@ -11,10 +11,10 @@ import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.text.ITextComponent;
@@ -73,7 +73,7 @@ public abstract class BeastiaryScreen extends BaseScreen {
 		this.player = player;
 		this.playerExt = ExtendedPlayer.getForPlayer(player);
 
-		this.mc = Minecraft.getInstance();
+		this.mc = MinecraftClient.getInstance();
 		/*if(this.mc.gameSettings.guiScale != 2 || GUI_ACTIVE) {
 			OPENED_GUI_SCALE = this.mc.gameSettings.guiScale;
 			this.mc.mainWindow.func_216521_a(this.mc.gameSettings.guiScale, this.mc.getForceUnicodeFont());
@@ -181,19 +181,19 @@ public abstract class BeastiaryScreen extends BaseScreen {
 	@Override
 	public void actionPerformed(int buttonId) {
 		if(buttonId == Page.INDEX.id) {
-			this.mc.displayGuiScreen(new IndexBeastiaryScreen(Minecraft.getInstance().player));
+			this.mc.displayGuiScreen(new IndexBeastiaryScreen(MinecraftClient.getInstance().player));
 		}
 		if(buttonId == Page.CREATURES.id) {
-			this.mc.displayGuiScreen(new CreaturesBeastiaryScreen(Minecraft.getInstance().player));
+			this.mc.displayGuiScreen(new CreaturesBeastiaryScreen(MinecraftClient.getInstance().player));
 		}
 		if(buttonId == Page.PETS.id) {
-			this.mc.displayGuiScreen(new PetsBeastiaryScreen(Minecraft.getInstance().player));
+			this.mc.displayGuiScreen(new PetsBeastiaryScreen(MinecraftClient.getInstance().player));
 		}
 		if(buttonId == Page.SUMMONING.id) {
-			this.mc.displayGuiScreen(new SummoningBeastiaryScreen(Minecraft.getInstance().player));
+			this.mc.displayGuiScreen(new SummoningBeastiaryScreen(MinecraftClient.getInstance().player));
 		}
 		if(buttonId == Page.ELEMENTS.id) {
-			this.mc.displayGuiScreen(new ElementsBeastiaryScreen(Minecraft.getInstance().player));
+			this.mc.displayGuiScreen(new ElementsBeastiaryScreen(MinecraftClient.getInstance().player));
 		}
 	}
 
@@ -223,7 +223,7 @@ public abstract class BeastiaryScreen extends BaseScreen {
 	 * @param x The x position to draw from.
 	 * @param y The y position to draw from.
 	 */
-	public void drawLevel(CreatureInfo creatureInfo, ResourceLocation texture, int x, int y) {
+	public void drawLevel(CreatureInfo creatureInfo, Identifier texture, int x, int y) {
 		int level = creatureInfo.summonCost;
 		if(level <= 10) {
 			this.drawBar(texture, x, y, 0, 9, 9, level, 10);

@@ -9,21 +9,21 @@ import com.lycanitesmobs.client.renderer.layer.LayerProjectileBase;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.Vector3f;
+import net.minecraft.client.util.math.Vector3f;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.IEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.util.Identifier;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 
 import java.util.List;
 
-@OnlyIn(Dist.CLIENT)
+@Environment(EnvType.CLIENT)
 public class ProjectileModelRenderer extends EntityRenderer<BaseProjectileEntity> implements IEntityRenderer<BaseProjectileEntity, ProjectileModel> {
 	protected ProjectileModel renderModel;
 	protected ProjectileModel defaultModel;
@@ -69,13 +69,13 @@ public class ProjectileModelRenderer extends EntityRenderer<BaseProjectileEntity
 		try {
 			matrixStack.translate(0, -0.25F, 0); // translate
 			matrixStack.scale(0.25F, 0.25F, 0.25F); // scale
-			matrixStack.rotate(new Vector3f(0.0F, 1.0F, 0.0F).rotationDegrees(entity.rotationYaw)); // rotate
+			matrixStack.multiply(new Vector3f(0.0F, 1.0F, 0.0F).getDegreesQuaternion(entity.rotationYaw)); // rotate
 
 			if(this.getEntityModel() == null) {
 				LycanitesMobs.logWarning("", "Missing Projectile Model: " + entity);
 			}
 			else if (!(this.getEntityModel() instanceof ProjectileObjModel)) {
-				ResourceLocation texture = this.getEntityTexture(entity);
+				Identifier texture = this.getEntityTexture(entity);
 				if(texture == null) {
 					return;
 				}
@@ -121,7 +121,7 @@ public class ProjectileModelRenderer extends EntityRenderer<BaseProjectileEntity
 	 * @param allyInvisible If true, the entity has invisibility or some form of stealth but is allied to the player so should be translucent, etc.
 	 */
 	protected void renderModel(BaseProjectileEntity entity, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, LayerProjectileBase layer, float time, float distance, float loop, float lookY, float lookX, float scale, int brightness, boolean invisible, boolean allyInvisible) {
-		ResourceLocation texture = this.getEntityTexture(entity, layer);
+		Identifier texture = this.getEntityTexture(entity, layer);
 		if(texture == null) {
 			return;
 		}
@@ -153,16 +153,16 @@ public class ProjectileModelRenderer extends EntityRenderer<BaseProjectileEntity
 	 * @param layer The layer to get the texture for.
 	 * @return The texture to bind.
 	 */
-	public ResourceLocation getEntityTexture(BaseProjectileEntity entity, LayerProjectileBase layer) {
+	public Identifier getEntityTexture(BaseProjectileEntity entity, LayerProjectileBase layer) {
 		if(layer == null) {
 			return this.getEntityTexture(entity);
 		}
-		ResourceLocation layerTexture = layer.getLayerTexture(entity);
+		Identifier layerTexture = layer.getLayerTexture(entity);
 		return layerTexture != null ? layerTexture : this.getEntityTexture(entity);
 	}
 
 	@Override
-	public ResourceLocation getEntityTexture(BaseProjectileEntity entity) {
+	public Identifier getEntityTexture(BaseProjectileEntity entity) {
 		return entity.getTexture();
 	}
 }

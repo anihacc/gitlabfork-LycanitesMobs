@@ -14,12 +14,12 @@ import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 
 import java.util.List;
 
@@ -96,7 +96,7 @@ public class EntityShadowfireBarrier extends BaseProjectileEntity {
                 livingEntity.addPotionEffect(effect);
         }
 
-        EffectInstance blindness = new EffectInstance(Effects.BLINDNESS, 5 * 20, 0);
+        EffectInstance blindness = new EffectInstance(StatusEffects.BLINDNESS, 5 * 20, 0);
         if(livingEntity.isPotionApplicable(blindness)) {
             livingEntity.addPotionEffect(blindness);
         }
@@ -157,7 +157,7 @@ public class EntityShadowfireBarrier extends BaseProjectileEntity {
         return 1.0F;
     }
     
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public int getBrightnessForRender() {
         return 15728880;
     }

@@ -10,15 +10,15 @@ import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ModInfo;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.client.Minecraft;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.render.BufferBuilder;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.JsonHelper;
 import org.apache.commons.io.IOUtils;
 
 import java.io.BufferedReader;
@@ -29,7 +29,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-@OnlyIn(Dist.CLIENT)
+@Environment(EnvType.CLIENT)
 public class CreatureObjModel extends CreatureModel {
     // Global:
     /** An initial x rotation applied to make Blender models match Minecraft. **/
@@ -113,7 +113,7 @@ public class CreatureObjModel extends CreatureModel {
 		}
 
         // Load Obj Model:
-        this.objModel = new ObjModel(new ResourceLocation(modInfo.modid, "models/" + path + ".obj"));
+        this.objModel = new ObjModel(new Identifier(modInfo.modid, "models/" + path + ".obj"));
         this.objParts = this.objModel.objParts;
         if(this.objParts.isEmpty())
 			LycanitesMobs.logWarning("", "Unable to load model obj for: " + name + "");
@@ -122,13 +122,13 @@ public class CreatureObjModel extends CreatureModel {
 		this.animator = new Animator(this);
 
         // Load Model Parts:
-        ResourceLocation modelPartsLocation = new ResourceLocation(modInfo.modid, "models/" + path + "_parts.json");
+        Identifier modelPartsLocation = new Identifier(modInfo.modid, "models/" + path + "_parts.json");
         try {
 			Gson gson = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
-            InputStream in = Minecraft.getInstance().getResourceManager().getResource(modelPartsLocation).getInputStream();
+            InputStream in = MinecraftClient.getInstance().getResourceManager().getResource(modelPartsLocation).getInputStream();
             BufferedReader reader = new BufferedReader(new InputStreamReader(in));
             try {
-				JsonArray jsonArray = JSONUtils.fromJson(gson, reader, JsonArray.class, false);
+				JsonArray jsonArray = JsonHelper.deserialize(gson, reader, JsonArray.class, false);
                 Iterator<JsonElement> jsonIterator = jsonArray.iterator();
                 while (jsonIterator.hasNext()) {
                     JsonObject partJson = jsonIterator.next().getAsJsonObject();
@@ -151,13 +151,13 @@ public class CreatureObjModel extends CreatureModel {
         }
 
 		// Load Animations:
-		ResourceLocation animationLocation = new ResourceLocation(modInfo.modid, "models/" + path + "_animation.json");
+		Identifier animationLocation = new Identifier(modInfo.modid, "models/" + path + "_animation.json");
 		try {
 			Gson gson = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
-			InputStream in = Minecraft.getInstance().getResourceManager().getResource(animationLocation).getInputStream();
+			InputStream in = MinecraftClient.getInstance().getResourceManager().getResource(animationLocation).getInputStream();
 			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 			try {
-				JsonObject json = JSONUtils.fromJson(gson, reader, JsonObject.class, false);
+				JsonObject json = JsonHelper.deserialize(gson, reader, JsonObject.class, false);
 				this.animation = new ModelAnimation();
 				this.animation.loadFromJson(json);
 			}
@@ -200,9 +200,9 @@ public class CreatureObjModel extends CreatureModel {
 	public void generateAnimationFrames(BaseCreatureEntity entity, float time, float distance, float loop, float lookY, float lookX, float scale, int brightness) {
 		// Assess Scale and Check if Trophy:
 		boolean renderAsTrophy = false;
-		this.isChild = false;
+		this.child = false;
 		if(entity != null) {
-			this.isChild = entity.isChild();
+			this.child = entity.isBaby();
 		}
 		if(scale < 0) {
 			renderAsTrophy = true;
@@ -296,14 +296,14 @@ public class CreatureObjModel extends CreatureModel {
 	}
 
     @Override
-	public void render(BaseCreatureEntity entity, MatrixStack matrixStack, IVertexBuilder vertexBuilder, LayerCreatureBase layer, float time, float distance, float loop, float lookY, float lookX, float scale, int brightness, int fade) {
+	public void render(BaseCreatureEntity entity, MatrixStack matrixStack, BufferBuilder vertexBuilder, LayerCreatureBase layer, float time, float distance, float loop, float lookY, float lookX, float scale, int brightness, int fade) {
     	this.matrixStack = matrixStack;
 
 		// Assess Scale and Check if Trophy:
 		boolean renderAsTrophy = false;
-		this.isChild = false;
+		this.child = false;
 		if(entity != null) {
-			this.isChild = entity.isChild();
+			this.child = entity.isBaby();
 		}
 		if(scale < 0) {
 			renderAsTrophy = true;
@@ -334,7 +334,7 @@ public class CreatureObjModel extends CreatureModel {
 			this.doTranslate(0F, MODEL_OFFSET_POS_Y, 0F);
 
 			// Child Scaling:
-			if(this.isChild && !renderAsTrophy) {
+			if(this.child && !renderAsTrophy) {
 				this.childScale(partName);
 				if(this.bigChildHead && (partName.contains("head") || partName.contains("mouth")))
 					this.doTranslate(-(this.currentAnimationPart.centerX / 2), -(this.currentAnimationPart.centerY / 2), -(this.currentAnimationPart.centerZ / 2));
@@ -351,7 +351,7 @@ public class CreatureObjModel extends CreatureModel {
 			this.currentAnimationPart.applyAnimationFrames(this.animator);
 
 			// Render Part:
-			this.objModel.renderPart(vertexBuilder, matrixStack.getLast().getNormalMatrix(), matrixStack.getLast().getPositionMatrix(), this.getBrightness(partName, layer, entity, brightness), fade, part, this.getPartColor(partName, entity, layer, renderAsTrophy, loop), this.getPartTextureOffset(partName, entity, layer, renderAsTrophy, loop));
+			this.objModel.renderPart(vertexBuilder, matrixStack.peek().getNormal(), matrixStack.peek().getModel(), this.getBrightness(partName, layer, entity, brightness), fade, part, this.getPartColor(partName, entity, layer, renderAsTrophy, loop), this.getPartTextureOffset(partName, entity, layer, renderAsTrophy, loop));
 			matrixStack.pop();
 		}
     }

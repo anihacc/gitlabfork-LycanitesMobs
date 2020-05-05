@@ -12,8 +12,8 @@ import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 
 import java.util.Random;
 import java.util.function.Supplier;
@@ -93,7 +93,7 @@ public class BlockFluidPoison extends FlowingFluidBlock {
 	// ==================================================
 	//                      Particles
 	// ==================================================
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void animateTick(BlockState state, World world, BlockPos pos, Random random) {
         float f; 
         float f1;

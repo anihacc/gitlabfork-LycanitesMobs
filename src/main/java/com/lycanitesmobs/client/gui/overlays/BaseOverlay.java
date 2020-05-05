@@ -11,7 +11,7 @@ import com.lycanitesmobs.core.item.summoningstaff.ItemStaffSummoning;
 import com.lycanitesmobs.core.mobevent.MobEventPlayerClient;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Hand;
@@ -33,7 +33,7 @@ public class BaseOverlay extends BaseGui {
     // ==================================================
 	public BaseOverlay(Minecraft minecraft) {
 		super(new TranslationTextComponent("gui.overlay"));
-		this.mc = Minecraft.getInstance();
+		this.mc = MinecraftClient.getInstance();
 	}
 	
 	
@@ -55,8 +55,8 @@ public class BaseOverlay extends BaseGui {
 		RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
-		int sWidth = Minecraft.getInstance().getMainWindow().getScaledWidth(); // getMainWindow()
-        int sHeight = Minecraft.getInstance().getMainWindow().getScaledHeight();
+		int sWidth = MinecraftClient.getInstance().getMainWindow().getScaledWidth(); // getMainWindow()
+        int sHeight = MinecraftClient.getInstance().getMainWindow().getScaledHeight();
 
         // ========== Mob/World Events Title ==========
         ExtendedWorld worldExt = ExtendedWorld.getForWorld(player.getEntityWorld());

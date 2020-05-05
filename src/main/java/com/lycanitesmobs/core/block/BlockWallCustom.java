@@ -4,12 +4,12 @@ import net.minecraft.block.Block;
 import net.minecraft.block.WallBlock;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -22,7 +22,7 @@ public class BlockWallCustom extends WallBlock {
 	// ==================================================
 	public BlockWallCustom(Block.Properties properties, BlockBase block) {
 		super(properties);
-        this.setRegistryName(new ResourceLocation(block.group.modid, block.blockName + "_wall"));
+        this.setRegistryName(new Identifier(block.group.modid, block.blockName + "_wall"));
 	}
 
 	@Override
@@ -30,7 +30,7 @@ public class BlockWallCustom extends WallBlock {
 		return new TranslationTextComponent(this.getTranslationKey());
 	}
 
-	@OnlyIn(Dist.CLIENT)
+	@Environment(EnvType.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, @Nullable IBlockReader world, List<ITextComponent> tooltip, ITooltipFlag flag) {
 		tooltip.add(this.getDescription(stack, world));

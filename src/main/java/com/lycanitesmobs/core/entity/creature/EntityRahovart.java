@@ -4,7 +4,6 @@ import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.api.IGroupBoss;
 import com.lycanitesmobs.api.IGroupHeavy;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.GoalConditions;
 import com.lycanitesmobs.core.entity.goals.actions.FindNearbyPlayersGoal;
@@ -16,7 +15,6 @@ import com.lycanitesmobs.core.entity.projectile.EntityHellfireBarrier;
 import com.lycanitesmobs.core.entity.projectile.EntityHellfireOrb;
 import com.lycanitesmobs.core.entity.projectile.EntityHellfireWave;
 import com.lycanitesmobs.core.info.CreatureManager;
-import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
@@ -30,15 +28,15 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,7 +72,7 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEAD;
+        this.entityGroup = CreatureAttribute.UNDEAD;
         this.hasAttackSound = false;
         this.setAttackCooldownMax(40);
         this.solidCollision = true;
@@ -116,7 +114,7 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
 
     // ========== Rendering Distance ==========
     /** Returns a larger bounding box for rendering this large entity. **/
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public AxisAlignedBB getRenderBoundingBox() {
         return this.getBoundingBox().grow(200, 50, 200).offset(0, -25, 0);
     }
@@ -747,7 +745,7 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
         return 1.0F;
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public int getBrightnessForRender() {
         return 15728880;
     }

@@ -8,7 +8,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -216,11 +216,11 @@ public class CreatureGroup {
 			return true;
 		}
 
-		ResourceLocation entityResourceLocation = entity.getType().getRegistryName();
-		if(entityResourceLocation == null) {
+		Identifier entityIdentifier = entity.getType().getRegistryName();
+		if(entityIdentifier == null) {
 			return false;
 		}
-		String entityId = entityResourceLocation.toString();
+		String entityId = entityIdentifier.toString();
 		if(this.entityIds.contains(entityId)) {
 			return true;
 		}

@@ -33,7 +33,7 @@ public class EntityGeist extends AgeableCreatureEntity implements IMob {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEAD;
+        this.entityGroup = CreatureAttribute.UNDEAD;
         this.hasAttackSound = true;
         this.spreadFire = true;
 
@@ -85,7 +85,7 @@ public class EntityGeist extends AgeableCreatureEntity implements IMob {
             zombievillagerentity.func_213792_a(villagerentity.getVillagerData());
             zombievillagerentity.func_213790_g(villagerentity.getOffers().write());
             zombievillagerentity.func_213789_a(villagerentity.getXp());
-            zombievillagerentity.setChild(villagerentity.isChild());
+            zombievillagerentity.setChild(villagerentity.isBaby());
             zombievillagerentity.setNoAI(villagerentity.isAIDisabled());
 
             if (villagerentity.hasCustomName()) {
@@ -140,6 +140,6 @@ public class EntityGeist extends AgeableCreatureEntity implements IMob {
    	// ==================================================
     @Override
     public boolean daylightBurns() {
-        return !this.isChild() && !this.isMinion();
+        return !this.isBaby() && !this.isMinion();
     }
 }

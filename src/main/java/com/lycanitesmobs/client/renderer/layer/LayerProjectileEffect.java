@@ -2,13 +2,13 @@ package com.lycanitesmobs.client.renderer.layer;
 
 import com.lycanitesmobs.client.renderer.ProjectileModelRenderer;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
-import net.minecraft.client.renderer.Vector4f;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.util.math.Vector4f;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec2f;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 
-@OnlyIn(Dist.CLIENT)
+@Environment(EnvType.CLIENT)
 public class LayerProjectileEffect extends LayerProjectileBase {
 
 	public String textureSuffix;
@@ -37,7 +37,7 @@ public class LayerProjectileEffect extends LayerProjectileBase {
     }
 
     @Override
-    public ResourceLocation getLayerTexture(BaseProjectileEntity entity) {
+    public Identifier getLayerTexture(BaseProjectileEntity entity) {
 		return super.getLayerTexture(entity);
     }
 

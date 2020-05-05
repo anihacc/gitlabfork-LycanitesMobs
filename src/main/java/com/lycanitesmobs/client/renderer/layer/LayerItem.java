@@ -1,14 +1,14 @@
 package com.lycanitesmobs.client.renderer.layer;
 
 import com.lycanitesmobs.client.renderer.IItemModelRenderer;
-import net.minecraft.client.renderer.Vector4f;
+import net.minecraft.client.util.math.Vector4f;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec2f;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 
-@OnlyIn(Dist.CLIENT)
+@Environment(EnvType.CLIENT)
 public class LayerItem {
 	public IItemModelRenderer renderer;
 	public String name;
@@ -78,7 +78,7 @@ public class LayerItem {
         return new Vector4f(1, 1, 1, 1);
     }
 
-    public ResourceLocation getLayerTexture(ItemStack itemStack) {
+    public Identifier getLayerTexture(ItemStack itemStack) {
 		return null;
     }
 

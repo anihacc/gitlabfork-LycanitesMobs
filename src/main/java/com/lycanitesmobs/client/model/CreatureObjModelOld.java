@@ -8,18 +8,18 @@ import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ModInfo;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.client.render.BufferBuilder;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.util.Identifier;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@OnlyIn(Dist.CLIENT)
+@Environment(EnvType.CLIENT)
 public class CreatureObjModelOld extends CreatureModel {
     // Global:
     /** An initial x rotation applied to make Blender models match Minecraft. **/
@@ -83,7 +83,7 @@ public class CreatureObjModelOld extends CreatureModel {
 			return this;
 		}
 
-		this.objModel = new ObjModel(new ResourceLocation(modInfo.modid, "models/" + path + ".obj"));
+		this.objModel = new ObjModel(new Identifier(modInfo.modid, "models/" + path + ".obj"));
         this.wavefrontParts = this.objModel.objParts;
         if(this.wavefrontParts.isEmpty())
 			LycanitesMobs.logWarning("", "Unable to load (old format) model obj for: " + name + "");
@@ -92,12 +92,12 @@ public class CreatureObjModelOld extends CreatureModel {
     }
     
     @Override
-	public void render(BaseCreatureEntity entity, MatrixStack matrixStack, IVertexBuilder vertexBuilder, LayerCreatureBase layer, float time, float distance, float loop, float lookY, float lookX, float scale, int brightness, int fade) {
+	public void render(BaseCreatureEntity entity, MatrixStack matrixStack, BufferBuilder vertexBuilder, LayerCreatureBase layer, float time, float distance, float loop, float lookY, float lookX, float scale, int brightness, int fade) {
     	this.matrixStack = matrixStack;
 
     	boolean isChild = false;
 		if(entity != null) {
-			isChild = entity.isChild();
+			isChild = entity.isBaby();
 		}
 
         // Assess Scale and Check if Trophy:
@@ -185,7 +185,7 @@ public class CreatureObjModelOld extends CreatureModel {
 
             // Render:
             this.uncenterPart(partName);
-			this.objModel.renderPart(vertexBuilder, matrixStack.getLast().getNormalMatrix(), matrixStack.getLast().getPositionMatrix(), this.getBrightness(partName, layer, entity, brightness), fade, part, this.getPartColor(partName, entity, layer, trophyModel, loop), this.getPartTextureOffset(partName, entity, layer, trophyModel, loop));
+			this.objModel.renderPart(vertexBuilder, matrixStack.peek().getNormal(), matrixStack.peek().getModel(), this.getBrightness(partName, layer, entity, brightness), fade, part, this.getPartColor(partName, entity, layer, trophyModel, loop), this.getPartTextureOffset(partName, entity, layer, trophyModel, loop));
 			matrixStack.pop();
 		}
 	}

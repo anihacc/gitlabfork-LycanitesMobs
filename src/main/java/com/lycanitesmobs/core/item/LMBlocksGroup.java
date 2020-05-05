@@ -5,8 +5,8 @@ import net.minecraft.block.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 
 public class LMBlocksGroup extends ItemGroup {
 
@@ -17,7 +17,7 @@ public class LMBlocksGroup extends ItemGroup {
 	
 	// ========== Tab Icon ==========
 	@Override
-	@OnlyIn(Dist.CLIENT)
+	@Environment(EnvType.CLIENT)
 	public ItemStack createIcon() {
 		if(ObjectManager.getBlock("shadowcrystal") != null)
 			return new ItemStack(Item.getItemFromBlock(ObjectManager.getBlock("shadowcrystal")));

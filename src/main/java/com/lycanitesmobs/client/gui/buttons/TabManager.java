@@ -3,7 +3,7 @@ package com.lycanitesmobs.client.gui.buttons;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.gui.InventorySnooperScreen;
 import com.lycanitesmobs.core.config.ConfigClient;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.inventory.InventoryScreen;
 
@@ -39,7 +39,7 @@ public class TabManager {
         }
     }
 
-    private static Minecraft mc = Minecraft.getInstance();
+    private static Minecraft mc = MinecraftClient.getInstance();
 
     public static void openInventoryGui () {
 		InventoryScreen inventory = new InventoryScreen(mc.player);

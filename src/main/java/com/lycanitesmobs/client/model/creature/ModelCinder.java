@@ -9,10 +9,10 @@ import com.lycanitesmobs.client.renderer.layer.LayerCreatureEffect;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.Vec2f;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 
-@OnlyIn(Dist.CLIENT)
+@Environment(EnvType.CLIENT)
 public class ModelCinder extends ModelTemplateElemental {
     public ModelCinder() {
         this(1.0F);

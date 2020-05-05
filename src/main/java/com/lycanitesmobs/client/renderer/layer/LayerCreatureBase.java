@@ -3,17 +3,17 @@ package com.lycanitesmobs.client.renderer.layer;
 import com.lycanitesmobs.client.model.CreatureModel;
 import com.lycanitesmobs.client.renderer.CreatureRenderer;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.Vector4f;
+import net.minecraft.client.util.math.Vector4f;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec2f;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 
-@OnlyIn(Dist.CLIENT)
+@Environment(EnvType.CLIENT)
 public class LayerCreatureBase extends LayerRenderer<BaseCreatureEntity, CreatureModel> {
     public CreatureRenderer renderer;
     public String name;
@@ -47,7 +47,7 @@ public class LayerCreatureBase extends LayerRenderer<BaseCreatureEntity, Creatur
     public boolean canRenderLayer(BaseCreatureEntity entity, float scale) {
         if(entity == null)
             return false;
-        if(entity.isInvisible() && entity.isInvisibleToPlayer(Minecraft.getInstance().player))
+        if(entity.isInvisible() && entity.isInvisibleToPlayer(MinecraftClient.getInstance().player))
             return false;
         return true;
     }
@@ -57,7 +57,7 @@ public class LayerCreatureBase extends LayerRenderer<BaseCreatureEntity, Creatur
      * @param entity The entity to get the texture for.
      * @return The layer specific texture or null if the base texture should be used.
      */
-    public ResourceLocation getLayerTexture(BaseCreatureEntity entity) {
+    public Identifier getLayerTexture(BaseCreatureEntity entity) {
         return null;
     }
 

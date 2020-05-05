@@ -3,7 +3,7 @@ package com.lycanitesmobs.client.gui.buttons;
 import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.info.CreatureInfo;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.widget.button.Button;
 import org.lwjgl.opengl.GL11;
 
@@ -30,22 +30,22 @@ public class CreatureButton extends ButtonBase {
 
 		int buttonX = this.x;
 		int buttonY = this.y;
-		Minecraft.getInstance().getTextureManager().bindTexture(TextureManager.getTexture("GUIInventoryCreature"));
+		MinecraftClient.getInstance().getTextureManager().bindTexture(TextureManager.getTexture("GUIInventoryCreature"));
 		int stateVOffset = 0;
 		if(this.isHovered()) {
 			stateVOffset = 64;
 		}
-		ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(Minecraft.getInstance().player);
+		ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(MinecraftClient.getInstance().player);
 		if(playerExt != null && playerExt.selectedSummonSet == this.summonSetId) {
 			stateVOffset = 32;
 		}
 		this.drawTexturedModalRect(buttonX, buttonY, 193, 187 -stateVOffset, this.width, this.height);
 		if(this.creatureInfo != null) {
-			Minecraft.getInstance().getTextureManager().bindTexture(creatureInfo.getIcon());
+			MinecraftClient.getInstance().getTextureManager().bindTexture(creatureInfo.getIcon());
 			this.drawTexturedModalRect(buttonX + 8, buttonY + 8, 0, 0, 16, 16, 16);
 		}
 
-		//this.mouseDragged(Minecraft.getInstance(), mouseX, mouseY);
+		//this.mouseDragged(MinecraftClient.getInstance(), mouseX, mouseY);
 		int textColor = 14737632;
 
 		if(!this.active) {

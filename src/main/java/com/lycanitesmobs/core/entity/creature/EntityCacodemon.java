@@ -9,7 +9,7 @@ import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.entity.*;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.potion.Effects;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -24,7 +24,7 @@ public class EntityCacodemon extends RideableCreatureEntity {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEAD;
+        this.entityGroup = CreatureAttribute.UNDEAD;
         this.hasAttackSound = false;
 
         this.setupMob();
@@ -61,8 +61,8 @@ public class EntityCacodemon extends RideableCreatureEntity {
 
     @Override
     public void riderEffects(LivingEntity rider) {
-        if(rider.isPotionActive(Effects.WITHER))
-            rider.removePotionEffect(Effects.WITHER);
+        if(rider.isPotionActive(StatusEffects.WITHER))
+            rider.removePotionEffect(StatusEffects.WITHER);
         if(rider.isBurning())
             rider.extinguish();
     }
