@@ -10,6 +10,7 @@ public class ModelTemplateBiped extends ModelCreatureObj {
     protected float tailScaleY = 1F;
     protected float flightBobScale = 1F;
     protected float mouthScale = 1F;
+    protected float mouthRate = 1F;
     protected float wingScale = 1F;
 
     // ==================================================
@@ -35,16 +36,16 @@ public class ModelTemplateBiped extends ModelCreatureObj {
 
         // Idle:
         if (partName.equals("mouth") || partName.contains("mouthbottom")) {
-            this.rotate((float)-Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.1F - 0.1F) * this.mouthScale, 0.0F, 0.0F);
+            this.rotate((float)-Math.toDegrees(MathHelper.cos(loop * this.mouthRate * 0.09F) * 0.1F - 0.1F) * this.mouthScale, 0.0F, 0.0F);
         }
         if (partName.contains("mouthtop")) {
-            this.rotate((float)Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.1F - 0.1F) * this.mouthScale, 0.0F, 0.0F);
+            this.rotate((float)Math.toDegrees(MathHelper.cos(loop * this.mouthRate * 0.09F) * 0.1F - 0.1F) * this.mouthScale, 0.0F, 0.0F);
         }
         if (partName.contains("mouthleft")) {
-            this.rotate(0.0F, (float)-Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.1F - 0.1F) * this.mouthScale, 0.0F);
+            this.rotate(0.0F, (float)-Math.toDegrees(MathHelper.cos(loop * this.mouthRate * 0.09F) * 0.1F - 0.1F) * this.mouthScale, 0.0F);
         }
         if (partName.contains("mouthright")) {
-            this.rotate(0.0F, (float)Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.1F - 0.1F) * this.mouthScale, 0.0F);
+            this.rotate(0.0F, (float)Math.toDegrees(MathHelper.cos(loop * this.mouthRate * 0.09F) * 0.1F - 0.1F) * this.mouthScale, 0.0F);
         }
         if(partName.equals("neck")) {
             this.rotate((float) -Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.1F - 0.05F), 0.0F, 0.0F);

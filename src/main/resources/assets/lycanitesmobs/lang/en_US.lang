@@ -962,6 +962,11 @@ entity.lycanitesmobs.gorger.description=Huge magma worms that swim through molte
 entity.lycanitesmobs.gorger.habitat=These creatures can be found in large bodies of lava.
 entity.lycanitesmobs.gorger.combat=Gorgers attack by release several balls of lava everywhere, while these attacks are powerful, they are inaccurate leaving them open.
 # ========================================================================
+entity.lycanitesmobs.grigori.name=Grigori
+entity.lycanitesmobs.grigori.description=Aggressive lumps of flesh with bonecrushing teeth that float through the sky. Grigori are known to travel in large swarms and hunt using taste and smell.
+entity.lycanitesmobs.grigori.habitat=These creatures can be found floating through the skies of the Nether.
+entity.lycanitesmobs.grigori.combat=Grigori have a devastating bite that cause their victims to bleed, they are simple minded creatures that attack on instinct.
+# ========================================================================
 entity.lycanitesmobs.gorgomite.name=Gorgomite
 entity.lycanitesmobs.gorgomite.description=Small rock beetles, they are known to be quite aggressive but are scared of Manticores.
 entity.lycanitesmobs.gorgomite.habitat=Gorgomites are often found in the desert where they come out at night.

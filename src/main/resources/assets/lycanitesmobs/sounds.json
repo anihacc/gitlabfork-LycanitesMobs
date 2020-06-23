@@ -1887,6 +1887,30 @@
         "category": "hostile",
         "sounds": [{"name": "lycanitesmobs:entity/gorger/eat", "stream": false}]
     },
+    "entity.grigori.say": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/grigori/say", "stream": false}]
+    },
+    "entity.grigori.hurt": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/grigori/hurt", "stream": false}]
+    },
+    "entity.grigori.death": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/grigori/death", "stream": false}]
+    },
+    "entity.grigori.attack": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/grigori/attack", "stream": false}]
+    },
+    "entity.grigori.beg": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/grigori/beg", "stream": false}]
+    },
+    "entity.grigori.tame": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/grigori/tame", "stream": false}]
+    },
     "entity.ignibus.say": {
         "category": "hostile",
         "sounds": [{"name": "lycanitesmobs:entity/ignibus/say", "stream": false}]
