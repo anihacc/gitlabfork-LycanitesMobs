@@ -288,7 +288,7 @@ public class RideableCreatureEntity extends TameableCreatureEntity {
 
         // Apply Movement:
         if(this.canPassengerSteer()) {
-            this.setAIMoveSpeed((float)this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getValue());
+            this.setAIMoveSpeed((float)this.getAttribute(Attributes.MOVEMENT_SPEED).getValue());
             if(!this.useDirectNavigator()) {
                 if(this.isFlying() && !this.isInWater() && !this.isInLava()) {
                     this.moveRelative(0.1F, new Vec3d(strafe, 0, forward));

@@ -27,7 +27,7 @@ import com.lycanitesmobs.core.network.PacketHandler;
 import com.lycanitesmobs.core.spawner.SpawnerEventListener;
 import com.lycanitesmobs.core.spawner.SpawnerManager;
 import com.lycanitesmobs.core.worldgen.WorldGenManager;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
@@ -54,8 +54,8 @@ public class LycanitesMobs {
 
 	public static final String MODID = "lycanitesmobs";
 	public static final String name = "Lycanites Mobs";
-	public static final String versionNumber = "2.2.3.2";
-	public static final String versionMC = "1.15.2";
+	public static final String versionNumber = "2.3.0.0";
+	public static final String versionMC = "1.16.1";
 	public static final String version = versionNumber + " - MC " + versionMC;
 	public static final String website = "https://lycanitesmobs.com";
 	public static final String websiteAPI = "https://api.lycanitesmobs.com";
@@ -174,7 +174,7 @@ public class LycanitesMobs {
 		CapabilityManager.INSTANCE.register(IExtendedEntity.class, new ExtendedEntityStorage(), ExtendedEntity::new);
 
 		// Change Health Limit:
-		LMReflectionHelper.setPrivateFinalValue(RangedAttribute.class, (RangedAttribute)SharedMonsterAttributes.MAX_HEALTH, 100000, "maximumValue");
+		LMReflectionHelper.setPrivateFinalValue(RangedAttribute.class, (RangedAttribute) Attributes.field_233818_a_, Double.MAX_VALUE, "maximumValue"); // MAX_HEALTH
 
 		// Mod Support:
 		DLDungeons.init();

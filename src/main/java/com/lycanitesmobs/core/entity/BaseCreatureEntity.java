@@ -478,8 +478,8 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
 		super.registerAttributes();
 		this.getAttributes().registerAttribute(DEFENSE);
-		this.getAttributes().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
-		this.getAttributes().registerAttribute(SharedMonsterAttributes.ATTACK_SPEED);
+		this.getAttributes().registerAttribute(Attributes.ATTACK_DAMAGE);
+		this.getAttributes().registerAttribute(Attributes.ATTACK_SPEED);
 		this.getAttributes().registerAttribute(RANGED_SPEED);
 
 		this.applyDynamicAttributes();
@@ -489,14 +489,14 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	 * Loads this entity's dynamic attributes.
 	 */
 	public void applyDynamicAttributes() {
-		this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(this.creatureStats.getHealth());
+		this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(this.creatureStats.getHealth());
 		this.getAttribute(DEFENSE).setBaseValue(this.creatureStats.getDefense());
-		this.getAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(this.creatureStats.getArmor());
-		this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(this.creatureStats.getSpeed());
-		this.getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(this.creatureStats.getKnockbackResistance());
-		this.getAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(this.creatureStats.getSight());
-		this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(this.creatureStats.getDamage());
-		this.getAttribute(SharedMonsterAttributes.ATTACK_SPEED).setBaseValue(this.creatureStats.getAttackSpeed());
+		this.getAttribute(Attributes.ARMOR).setBaseValue(this.creatureStats.getArmor());
+		this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(this.creatureStats.getSpeed());
+		this.getAttribute(Attributes.KNOCKBACK_RESISTANCE).setBaseValue(this.creatureStats.getKnockbackResistance());
+		this.getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(this.creatureStats.getSight());
+		this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(this.creatureStats.getDamage());
+		this.getAttribute(Attributes.ATTACK_SPEED).setBaseValue(this.creatureStats.getAttackSpeed());
 		this.getAttribute(RANGED_SPEED).setBaseValue(this.creatureStats.getRangedSpeed());
 	}
 
@@ -1422,7 +1422,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	 * @return Melee attack cooldown ticks.
 	 */
 	public int getMeleeCooldown() {
-		return Math.round((float)(1.0D / this.getAttribute(SharedMonsterAttributes.ATTACK_SPEED).getValue() * 20.0D));
+		return Math.round((float)(1.0D / this.getAttribute(Attributes.ATTACK_SPEED).getValue() * 20.0D));
 	}
 
 	/**
@@ -2860,7 +2860,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
 		// TODO Enchanted Weapon Damage and Knockback
         //if(target instanceof LivingEntity) {
-        	//damage += EnchantmentHelper.getModifierForCreature(this.getHeldItemMainhand(), this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE));
+        	//damage += EnchantmentHelper.getModifierForCreature(this.getHeldItemMainhand(), this.getAttribute(Attributes.ATTACK_DAMAGE));
             //i += EnchantmentHelper.getKnockbackModifier(this, (LivingEntity)target);
         //}
 
@@ -2919,7 +2919,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     // ========== Get Attack Damage ==========
     /** Returns how much attack damage this mob does. **/
     public float getAttackDamage(double damageScale) {
-    	float damage = (float)this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue();
+    	float damage = (float)this.getAttribute(Attributes.ATTACK_DAMAGE).getValue();
         damage *= damageScale;
         return damage;
     }

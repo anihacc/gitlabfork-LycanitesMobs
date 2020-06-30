@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.entity.goals.targeting;
 import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.passive.AnimalEntity;
 
@@ -98,7 +98,7 @@ public class FindMasterGoal extends TargetingGoal {
     protected double getTargetDistance() {
     	if(this.targetingRange > 0)
     		return this.targetingRange;
-    	IAttributeInstance attributeinstance = this.host.getAttribute(SharedMonsterAttributes.FOLLOW_RANGE);
+    	IAttributeInstance attributeinstance = this.host.getAttribute(Attributes.FOLLOW_RANGE);
         return attributeinstance.getValue();
     }
     

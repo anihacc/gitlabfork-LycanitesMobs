@@ -7,7 +7,7 @@ import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.entity.CustomProjectileEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.*;
 import net.minecraft.world.World;
@@ -155,8 +155,8 @@ public class ProjectileBehaviourLaser extends ProjectileBehaviour {
 		if(projectile.knockbackChance < 1) {
 			if(projectile.knockbackChance <= 0 || projectile.getEntityWorld().getRandom().nextDouble() <= projectile.knockbackChance) {
 				if(target instanceof LivingEntity) {
-					targetKnockbackResistance = ((LivingEntity)target).getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).getValue();
-					((LivingEntity)target).getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1);
+					targetKnockbackResistance = ((LivingEntity)target).getAttribute(Attributes.KNOCKBACK_RESISTANCE).getValue();
+					((LivingEntity)target).getAttribute(Attributes.KNOCKBACK_RESISTANCE).setBaseValue(1);
 				}
 			}
 		}
@@ -187,7 +187,7 @@ public class ProjectileBehaviourLaser extends ProjectileBehaviour {
 		if(projectile.knockbackChance < 1) {
 			if(projectile.knockbackChance <= 0 || projectile.getEntityWorld().getRandom().nextDouble() <= projectile.knockbackChance) {
 				if(target instanceof LivingEntity)
-					((LivingEntity)target).getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(targetKnockbackResistance);
+					((LivingEntity)target).getAttribute(Attributes.KNOCKBACK_RESISTANCE).setBaseValue(targetKnockbackResistance);
 			}
 		}
 

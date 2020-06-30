@@ -54,8 +54,8 @@ public class EntityWraamon extends TameableCreatureEntity implements IMob {
         // Disable Knockback:
         double targetKnockbackResistance = 0;
         if(target instanceof LivingEntity) {
-            targetKnockbackResistance = ((LivingEntity)target).getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).getValue();
-            ((LivingEntity)target).getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1);
+            targetKnockbackResistance = ((LivingEntity)target).getAttribute(Attributes.KNOCKBACK_RESISTANCE).getValue();
+            ((LivingEntity)target).getAttribute(Attributes.KNOCKBACK_RESISTANCE).setBaseValue(1);
         }
 
         // Melee Attack:
@@ -64,7 +64,7 @@ public class EntityWraamon extends TameableCreatureEntity implements IMob {
 
         // Restore Knockback:
         if(target instanceof LivingEntity)
-            ((LivingEntity)target).getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(targetKnockbackResistance);
+            ((LivingEntity)target).getAttribute(Attributes.KNOCKBACK_RESISTANCE).setBaseValue(targetKnockbackResistance);
         
         return true;
     }

@@ -444,8 +444,8 @@ public class LaserProjectileEntity extends BaseProjectileEntity {
 		if(this.knockbackChance < 1) {
 			if(this.knockbackChance <= 0 || this.rand.nextDouble() <= this.knockbackChance) {
 				if(target instanceof LivingEntity) {
-					targetKnockbackResistance = ((LivingEntity)target).getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).getValue();
-					((LivingEntity)target).getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1);
+					targetKnockbackResistance = ((LivingEntity)target).getAttribute(Attributes.KNOCKBACK_RESISTANCE).getValue();
+					((LivingEntity)target).getAttribute(Attributes.KNOCKBACK_RESISTANCE).setBaseValue(1);
 				}
 			}
 		}
@@ -475,7 +475,7 @@ public class LaserProjectileEntity extends BaseProjectileEntity {
         if(this.knockbackChance < 1) {
             if(this.knockbackChance <= 0 || this.rand.nextDouble() <= this.knockbackChance) {
                 if(target instanceof LivingEntity)
-                    ((LivingEntity)target).getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(targetKnockbackResistance);
+                    ((LivingEntity)target).getAttribute(Attributes.KNOCKBACK_RESISTANCE).setBaseValue(targetKnockbackResistance);
             }
         }
 

@@ -12,7 +12,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ThrowableEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -252,8 +252,8 @@ public class BaseProjectileEntity extends ThrowableEntity {
 						if (this.knockbackChance < 1) {
 							if (this.knockbackChance <= 0 || this.rand.nextDouble() <= this.knockbackChance) {
 								if (target instanceof LivingEntity) {
-									targetKnockbackResistance = target.getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).getValue();
-									target.getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1);
+									targetKnockbackResistance = target.getAttribute(Attributes.KNOCKBACK_RESISTANCE).getValue();
+									target.getAttribute(Attributes.KNOCKBACK_RESISTANCE).setBaseValue(1);
 									stopKnockback = true;
 								}
 							}
@@ -285,7 +285,7 @@ public class BaseProjectileEntity extends ThrowableEntity {
 
 						// Restore Knockback:
 						if (stopKnockback) {
-							target.getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(targetKnockbackResistance);
+							target.getAttribute(Attributes.KNOCKBACK_RESISTANCE).setBaseValue(targetKnockbackResistance);
 						}
 					}
  				}

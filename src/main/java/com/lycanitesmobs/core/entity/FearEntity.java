@@ -5,7 +5,7 @@ import com.lycanitesmobs.core.inventory.InventoryCreature;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.FlyingEntity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
@@ -143,7 +143,7 @@ public class FearEntity extends BaseCreatureEntity {
 		this.setLocationAndAngles(feared.getPositionVec().getX(), feared.getPositionVec().getY(), feared.getPositionVec().getZ(), feared.rotationYaw, feared.rotationPitch);
 		
         if(!(feared instanceof PlayerEntity)) {
-	        this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(feared.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getBaseValue());
+	        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(feared.getAttribute(Attributes.MOVEMENT_SPEED).getBaseValue());
         }
     }
 	
