@@ -67,6 +67,11 @@
         }
     ],
     "element": "fae",
+    "diets": [
+        "carnivore",
+        "piscivore",
+        "insectivore"
+    ],
     "peaceful": false,
     "summonable": true,
     "tameable": false,

@@ -1,20 +1,18 @@
 {
-    "name": "vorach",
-    "creatureType": "demon",
+    "name": "grell",
+    "creatureType": "aberration",
     "groups": [
         "monster"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityVorach",
-    "modelClass": "com.lycanitesmobs.client.model.creature.ModelVorach",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityGrell",
+    "modelClass": "com.lycanitesmobs.client.model.creature.ModelGrell",
     "loadDefault": true,
     "enabled": true,
     "spawning": {
         "enabled": true,
         "spawners": [
-            "monster",
-            "beast",
-            "portal",
-            "nether"
+            "nethersky",
+            "portal"
         ],
         "disableSubspecies": false,
         "dimensionIds": [
@@ -25,7 +23,7 @@
         "biomeTags": [
             "nether"
         ],
-        "spawnWeight": 2,
+        "spawnWeight": 4,
         "dungeonWeight": 200,
         "spawnAreaLimit": 5,
         "spawnGroupMin": 1,
@@ -36,66 +34,63 @@
         "despawnNatural": true,
         "despawnForced": false
     },
-    "width": 1.5,
-    "height": 3.5,
+    "width": 2.5,
+    "height": 2.5,
     "experience": 10,
-    "health": 40,
-    "defense": 2,
+    "health": 20,
+    "defense": 1,
     "armor": 0,
     "speed": 24,
-    "damage": 2,
+    "damage": 3,
     "attackSpeed": 1,
-    "rangedSpeed": 0.5,
+    "rangedSpeed": 1,
     "effectDuration": 5,
     "effectAmplifier": 0,
     "pierce": 1,
-    "sight": 24,
-    "knockbackResistance": 0.25,
-    "eggBackColor": "#4E5567",
-    "eggForeColor": "#49005C",
+    "sight": 32,
+    "knockbackResistance": 0,
+    "eggBackColor": "#FF0000",
+    "eggForeColor": "#000099",
     "subspecies": [
         {
             "index": 0,
             "variants": [
                 {
                     "index": 1,
-                    "name": "keppel",
+                    "name": "scarlet",
                     "type": "uncommon"
                 },
                 {
                     "index": 2,
-                    "name": "lux",
+                    "name": "ashen",
                     "type": "uncommon"
                 }
             ]
         }
     ],
-    "elements": [
-        "quake",
-        "void"
-    ],
+    "element": "nether",
     "diets": [
         "carnivore",
         "piscivore",
         "insectivore"
     ],
     "peaceful": false,
-    "summonable": true,
-    "tameable": false,
-    "mountable": false,
-    "summonCost": 6,
-    "dungeonLevel": 2,
+    "summonable": false,
+    "tameable": true,
+    "mountable": true,
+    "summonCost": 2,
+    "dungeonLevel": 3,
     "drops": [
         {
-            "item": "minecraft:soul_sand",
-            "minAmount": 3,
-            "maxAmount": 5,
+            "item": "minecraft:ghast_tear",
+            "minAmount": 1,
+            "maxAmount": 3,
             "chance": 1
         },
         {
-            "item": "lycanitesmobs:hellfireballcharge",
-            "minAmount": 1,
-            "maxAmount": 3,
+            "item": "lycanitesmobs:acidglobcharge",
+            "minAmount": 3,
+            "maxAmount": 6,
             "chance": 1
         }
     ],

@@ -1887,6 +1887,34 @@
         "category": "hostile",
         "sounds": [{"name": "lycanitesmobs:entity/gorger/eat", "stream": false}]
     },
+    "entity.grell.say": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/grell/say", "stream": false}]
+    },
+    "entity.grell.hurt": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/grell/hurt", "stream": false}]
+    },
+    "entity.grell.death": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/grell/death", "stream": false}]
+    },
+    "entity.grell.attack": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/grell/attack", "stream": false}]
+    },
+    "entity.grell.beg": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/grell/beg", "stream": false}]
+    },
+    "entity.grell.tame": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/grell/tame", "stream": false}]
+    },
+    "entity.grell.eat": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/grell/eat", "stream": false}]
+    },
     "entity.grigori.say": {
         "category": "hostile",
         "sounds": [{"name": "lycanitesmobs:entity/grigori/say", "stream": false}]
@@ -3399,6 +3427,10 @@
     "projectile.acidsplash.impact": {
         "category": "ambient",
         "sounds": [{"name": "lycanitesmobs:projectile/acidsplash_impact", "stream": false}]
+    },
+    "projectile.acidglob": {
+        "category": "ambient",
+        "sounds": [{"name": "lycanitesmobs:projectile/acidglob", "stream": false}]
     },
     "projectile.lifedrain": {
         "category": "ambient",

@@ -962,6 +962,11 @@ entity.lycanitesmobs.gorger.description=Huge magma worms that swim through molte
 entity.lycanitesmobs.gorger.habitat=These creatures can be found in large bodies of lava.
 entity.lycanitesmobs.gorger.combat=Gorgers attack by release several balls of lava everywhere, while these attacks are powerful, they are inaccurate leaving them open.
 # ========================================================================
+entity.lycanitesmobs.grell.name=Grell
+entity.lycanitesmobs.grell.description=Strange floating creatures of writhing flesh that produce a deadly acid.
+entity.lycanitesmobs.grell.habitat=These creatures inhabit the fleshscapes of the Nether.
+entity.lycanitesmobs.grell.combat=Grell fire a deadly glob of acid, have a wicked bite and let off pheromones to control nearby Grigori.
+# ========================================================================
 entity.lycanitesmobs.grigori.name=Grigori
 entity.lycanitesmobs.grigori.description=Aggressive lumps of flesh with bonecrushing teeth that float through the sky. Grigori are known to travel in large swarms and hunt using taste and smell.
 entity.lycanitesmobs.grigori.habitat=These creatures can be found floating through the skies of the Nether.
