@@ -143,7 +143,7 @@ public class FearEntity extends BaseCreatureEntity {
 		this.setLocationAndAngles(feared.getPositionVec().getX(), feared.getPositionVec().getY(), feared.getPositionVec().getZ(), feared.rotationYaw, feared.rotationPitch);
 		
         if(!(feared instanceof PlayerEntity)) {
-	        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(feared.getAttribute(Attributes.MOVEMENT_SPEED).getBaseValue());
+	        this.getAttribute(Attributes.field_233821_d_).setBaseValue(feared.getAttribute(Attributes.field_233821_d_).getBaseValue());
         }
     }
 	

@@ -4,7 +4,7 @@ import com.lycanitesmobs.client.renderer.IItemModelRenderer;
 import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
 import net.minecraft.client.renderer.Vector4f;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -21,7 +21,7 @@ public class LayerItemDye extends LayerItem {
 			return super.getPartColor(partName, itemStack, loop);
 		}
 		ItemEquipmentPart itemEquipmentPart = (ItemEquipmentPart)itemStack.getItem();
-		Vec3d partColor = itemEquipmentPart.getColor(itemStack);
+		Vector3d partColor = itemEquipmentPart.getColor(itemStack);
 		return new Vector4f((float)partColor.getX(), (float)partColor.getY(), (float)partColor.getZ(), 1);
 	}
 }

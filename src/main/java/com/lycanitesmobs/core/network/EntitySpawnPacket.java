@@ -11,7 +11,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.network.IPacket;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -22,7 +22,7 @@ public class EntitySpawnPacket implements IPacket<ClientPlayNetHandler> {
 	public UUID uuid;
 	public float pitch;
 	public float yaw;
-	public Vec3d pos;
+	public Vector3d pos;
 	public double y;
 	public double z;
 
@@ -46,7 +46,7 @@ public class EntitySpawnPacket implements IPacket<ClientPlayNetHandler> {
 		this.uuid = packet.readUniqueId();
 		this.pitch = packet.readFloat();
 		this.yaw = packet.readFloat();
-		this.pos = new Vec3d(packet.readDouble(), packet.readDouble(), packet.readDouble());
+		this.pos = new Vector3d(packet.readDouble(), packet.readDouble(), packet.readDouble());
 	}
 
 	@Override

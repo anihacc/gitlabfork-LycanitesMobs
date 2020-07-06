@@ -11,7 +11,7 @@ import net.minecraft.entity.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
 public class EntityCacodemon extends RideableCreatureEntity {
@@ -130,7 +130,7 @@ public class EntityCacodemon extends RideableCreatureEntity {
 	// ========== Ranged Attack ==========
     @Override
     public void attackRanged(Entity target, float range) {
-        this.fireProjectile("demonicblast", target, range, 0, new Vec3d(0, 0, 0), 0.6f, 2f, 1F);
+        this.fireProjectile("demonicblast", target, range, 0, new Vector3d(0, 0, 0), 0.6f, 2f, 1F);
         super.attackRanged(target, range);
     }
     

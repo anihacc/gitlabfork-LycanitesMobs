@@ -7,7 +7,7 @@ import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.fluid.IFluidState;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 
 import java.util.EnumSet;
 
@@ -95,7 +95,7 @@ public class StayByWaterGoal extends Goal {
 	    					BlockPos searchPos = new BlockPos(searchX, searchY, searchZ);
 
 	    					// If the block is closer than the last valid location...
-	    					double searchDistance = this.host.getDistanceSq(new Vec3d(searchPos));
+	    					double searchDistance = this.host.getDistanceSq(new Vector3d(searchPos));
     		    			if(!this.hasWaterPos || searchDistance < closestDistance) {
 		    					
     		    				// And it is a valid water position...
@@ -197,6 +197,6 @@ public class StayByWaterGoal extends Goal {
     public double getDistanceFromWater() {
         if(!this.hasWaterPos)
             return 0;
-    	return this.host.getDistanceSq(new Vec3d(this.waterPos));
+    	return this.host.getDistanceSq(new Vector3d(this.waterPos));
     }
 }

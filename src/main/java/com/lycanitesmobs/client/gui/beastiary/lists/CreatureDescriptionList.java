@@ -210,6 +210,6 @@ public class CreatureDescriptionList extends BaseList {
 					.appendText(" " + 2);
 		}
 
-		return text.getFormattedText();
+		return text.getString();
 	}
 }

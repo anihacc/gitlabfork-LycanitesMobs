@@ -55,7 +55,7 @@ public class CreatureInventoryScreen extends BaseContainerScreen<CreatureContain
 		int buttonX = backX + this.xSize;
 		int buttonY = backY;
 
-		String buttonText = new TranslationTextComponent("gui.pet.follow").getFormattedText();
+		String buttonText = new TranslationTextComponent("gui.pet.follow").getString();
 		buttonY += buttonSpacing;
 		Button button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.FOLLOW.id, buttonX + buttonSpacing, buttonY, buttonWidth, buttonHeight, buttonText, this);
 		if(pet.isFollowing() && !pet.isSitting()) {
@@ -63,7 +63,7 @@ public class CreatureInventoryScreen extends BaseContainerScreen<CreatureContain
 		}
 		this.addButton(button);
 
-		buttonText = new TranslationTextComponent("gui.pet.wander").getFormattedText();
+		buttonText = new TranslationTextComponent("gui.pet.wander").getString();
 		buttonY += buttonHeight + (buttonSpacing * 2);
 		button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.WANDER.id, buttonX + buttonSpacing, buttonY, buttonWidth, buttonHeight, buttonText, this);
 		if(!pet.isFollowing() && !pet.isSitting()) {
@@ -71,7 +71,7 @@ public class CreatureInventoryScreen extends BaseContainerScreen<CreatureContain
 		}
 		this.addButton(button);
 
-		buttonText = new TranslationTextComponent("gui.pet.sit").getFormattedText();
+		buttonText = new TranslationTextComponent("gui.pet.sit").getString();
 		buttonY += buttonHeight + (buttonSpacing * 2);
 		button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.SIT.id, buttonX + buttonSpacing, buttonY, buttonWidth, buttonHeight, buttonText, this);
 		if(!pet.isFollowing() && pet.isSitting()) {
@@ -79,7 +79,7 @@ public class CreatureInventoryScreen extends BaseContainerScreen<CreatureContain
 		}
 		this.addButton(button);
 
-		buttonText = new TranslationTextComponent("gui.pet.passive").getFormattedText();
+		buttonText = new TranslationTextComponent("gui.pet.passive").getString();
 		buttonY += buttonHeight + (buttonSpacing * 2);
 		button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.PASSIVE.id, buttonX + buttonSpacing, buttonY, buttonWidth, buttonHeight, buttonText, this);
 		if(pet.isPassive()) {
@@ -87,7 +87,7 @@ public class CreatureInventoryScreen extends BaseContainerScreen<CreatureContain
 		}
 		this.addButton(button);
 
-		buttonText = new TranslationTextComponent("gui.pet.defensive").getFormattedText();
+		buttonText = new TranslationTextComponent("gui.pet.defensive").getString();
 		buttonY += buttonHeight + (buttonSpacing * 2);
 		button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.DEFENSIVE.id, buttonX + buttonSpacing, buttonY, buttonWidth, buttonHeight, buttonText, this);
 		if(!pet.isPassive() && !pet.isAssisting() && !pet.isAggressive()) {
@@ -95,7 +95,7 @@ public class CreatureInventoryScreen extends BaseContainerScreen<CreatureContain
 		}
 		this.addButton(button);
 
-		buttonText = new TranslationTextComponent("gui.pet.assist").getFormattedText();
+		buttonText = new TranslationTextComponent("gui.pet.assist").getString();
 		buttonY += buttonHeight + (buttonSpacing * 2);
 		button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.ASSIST.id, buttonX + buttonSpacing, buttonY, buttonWidth, buttonHeight, buttonText, this);
 		if(!pet.isPassive() && pet.isAssisting() && !pet.isAggressive()) {
@@ -103,7 +103,7 @@ public class CreatureInventoryScreen extends BaseContainerScreen<CreatureContain
 		}
 		this.addButton(button);
 
-		buttonText = new TranslationTextComponent("gui.pet.aggressive").getFormattedText();
+		buttonText = new TranslationTextComponent("gui.pet.aggressive").getString();
 		buttonY += buttonHeight + (buttonSpacing * 2);
 		button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.AGGRESSIVE.id, buttonX + buttonSpacing, buttonY, buttonWidth, buttonHeight, buttonText, this);
 		if(!pet.isPassive() && pet.isAggressive()) {
@@ -111,7 +111,7 @@ public class CreatureInventoryScreen extends BaseContainerScreen<CreatureContain
 		}
 		this.addButton(button);
 
-		buttonText = new TranslationTextComponent("gui.pet.pvp").appendText(": ").appendSibling(pet.isPVP() ? new TranslationTextComponent("common.yes") : new TranslationTextComponent("common.no")).getFormattedText();
+		buttonText = new TranslationTextComponent("gui.pet.pvp").appendText(": ").appendSibling(pet.isPVP() ? new TranslationTextComponent("common.yes") : new TranslationTextComponent("common.no")).getString();
 		buttonY += buttonHeight + (buttonSpacing * 2);
 		this.addButton(new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.PVP.id, buttonX + buttonSpacing, buttonY, buttonWidth, buttonHeight, buttonText, this));
 	}
@@ -119,7 +119,7 @@ public class CreatureInventoryScreen extends BaseContainerScreen<CreatureContain
 	@Override
 	protected void renderForeground(int mouseX, int mouseY, float partialTicks) {
 		this.fontRenderer.drawString(this.creatureInventory.getName(), this.guiLeft + 8, this.guiTop + 6, 4210752);
-        this.fontRenderer.drawString(this.playerInventory.getName().getFormattedText(), this.guiLeft + 8, this.guiTop + this.ySize - 96 + 2, 4210752);
+        this.fontRenderer.drawString(this.playerInventory.getName().getString(), this.guiLeft + 8, this.guiTop + this.ySize - 96 + 2, 4210752);
 		int backX = (this.width - this.xSize) / 2;
 		int backY = (this.height - this.ySize) / 2;
 		this.drawBars(backX, backY);
@@ -134,14 +134,14 @@ public class CreatureInventoryScreen extends BaseContainerScreen<CreatureContain
 		this.drawTexture(TextureManager.getTexture("GUIPetBarEmpty"), barX, barY, 0, 1, 1, barWidth, barHeight);
 		float healthNormal = Math.min(1, this.creature.getHealth() / this.creature.getMaxHealth());
 		this.drawTexture(TextureManager.getTexture("GUIPetBarHealth"), barX, barY, 0, healthNormal, 1, barWidth * healthNormal, barHeight);
-		String healthText = new TranslationTextComponent("entity.health").getFormattedText() + ": " + String.format("%.0f", this.creature.getHealth()) + "/" + String.format("%.0f", this.creature.getMaxHealth());
+		String healthText = new TranslationTextComponent("entity.health").getString() + ": " + String.format("%.0f", this.creature.getHealth()) + "/" + String.format("%.0f", this.creature.getMaxHealth());
 		this.fontRenderer.drawString(healthText, barCenter - (this.fontRenderer.getStringWidth(healthText) / 2), barY + 2, 0xFFFFFF);
 
 		barY += barHeight + 1;
 		this.drawTexture(TextureManager.getTexture("GUIPetBarEmpty"), barX, barY, 0, 1, 1, barWidth, barHeight);
 		float experienceNormal = Math.min(1, (float)this.creature.getExperience() / this.creature.creatureStats.getExperienceForNextLevel());
 		this.drawTexture(TextureManager.getTexture("GUIBarExperience"), barX, barY, 0, experienceNormal, 1, barWidth * experienceNormal, barHeight);
-		String experienceText = new TranslationTextComponent("entity.experience").getFormattedText() + ": " + this.creature.getExperience() + "/" + this.creature.creatureStats.getExperienceForNextLevel();
+		String experienceText = new TranslationTextComponent("entity.experience").getString() + ": " + this.creature.getExperience() + "/" + this.creature.creatureStats.getExperienceForNextLevel();
 		this.fontRenderer.drawString(experienceText, barCenter - (this.fontRenderer.getStringWidth(experienceText) / 2), barY + 2, 0xFFFFFF);
 	}
 

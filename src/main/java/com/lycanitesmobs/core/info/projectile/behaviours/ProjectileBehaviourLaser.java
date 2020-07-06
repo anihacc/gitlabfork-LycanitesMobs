@@ -44,8 +44,8 @@ public class ProjectileBehaviourLaser extends ProjectileBehaviour {
 		((CustomProjectileEntity)projectile).laserWidth = this.width;
 
 		// Follow Thrower/Parent Projectile:
-		if(projectile.getThrower() != null) {
-			Entity entityToFollow = projectile.getThrower();
+		if(projectile.func_234616_v_() != null) {
+			Entity entityToFollow = projectile.func_234616_v_();
 			if(((CustomProjectileEntity)projectile).getParent() != null) {
 				entityToFollow = ((CustomProjectileEntity)projectile).getParent();
 			}
@@ -84,9 +84,9 @@ public class ProjectileBehaviourLaser extends ProjectileBehaviour {
 			targetY = target[1] + (((MathHelper.cos((projectile.updateTick + ((CustomProjectileEntity)projectile).laserAngle) * 0.25F) * 1.0F) - 0.5F) * 10);
 			targetZ = target[2] + ((MathHelper.cos((projectile.updateTick + ((CustomProjectileEntity)projectile).laserAngle) * 0.25F) * 1.0F) - 0.5F);
 		}
-		else if(projectile.getThrower() != null) {
-			if(projectile.getThrower() instanceof BaseCreatureEntity && ((BaseCreatureEntity)projectile.getThrower()).getAttackTarget() != null) {
-				((CustomProjectileEntity)projectile).setTarget(((BaseCreatureEntity) projectile.getThrower()).getAttackTarget());
+		else if(projectile.func_234616_v_() != null) {
+			if(projectile.func_234616_v_() instanceof BaseCreatureEntity && ((BaseCreatureEntity)projectile.func_234616_v_()).getAttackTarget() != null) {
+				((CustomProjectileEntity)projectile).setTarget(((BaseCreatureEntity) projectile.func_234616_v_()).getAttackTarget());
 			}
 			Entity attackTarget = ((CustomProjectileEntity)projectile).getTarget();
 			if(attackTarget != null) {
@@ -96,20 +96,20 @@ public class ProjectileBehaviourLaser extends ProjectileBehaviour {
 				lockedLaser = true;
 			}
 			else {
-				Vec3d lookDirection = projectile.getThrower().getLookVec();
-				targetX = projectile.getThrower().getPositionVec().getX() + (lookDirection.x * this.range);
-				targetY = projectile.getThrower().getPositionVec().getY() + projectile.getThrower().getEyeHeight() + (lookDirection.y * this.range);
-				targetZ = projectile.getThrower().getPositionVec().getZ() + (lookDirection.z * this.range);
+				Vector3d lookDirection = projectile.func_234616_v_().getLookVec();
+				targetX = projectile.func_234616_v_().getPositionVec().getX() + (lookDirection.x * this.range);
+				targetY = projectile.func_234616_v_().getPositionVec().getY() + projectile.func_234616_v_().getEyeHeight() + (lookDirection.y * this.range);
+				targetZ = projectile.func_234616_v_().getPositionVec().getZ() + (lookDirection.z * this.range);
 			}
 		}
 
 		// Raytracing:
 		HashSet<Entity> excludedEntities = new HashSet<>();
 		excludedEntities.add(projectile);
-		if(projectile.getThrower() != null) {
-			excludedEntities.add(projectile.getThrower());
-			if(projectile.getThrower().getControllingPassenger() != null) {
-				excludedEntities.add(projectile.getThrower().getControllingPassenger());
+		if(projectile.func_234616_v_() != null) {
+			excludedEntities.add(projectile.func_234616_v_());
+			if(projectile.func_234616_v_().getControllingPassenger() != null) {
+				excludedEntities.add(projectile.func_234616_v_().getControllingPassenger());
 			}
 		}
 		RayTraceResult rayTraceResult = Utilities.raytrace(projectile.getEntityWorld(), projectile.getPositionVec().getX(), projectile.getPositionVec().getY(), projectile.getPositionVec().getZ(), targetX, targetY, targetZ, this.width, projectile, excludedEntities);
@@ -125,7 +125,7 @@ public class ProjectileBehaviourLaser extends ProjectileBehaviour {
 			}
 		}
 
-		((CustomProjectileEntity)projectile).setLaserEnd(new Vec3d(targetX, targetY, targetZ));
+		((CustomProjectileEntity)projectile).setLaserEnd(new Vector3d(targetX, targetY, targetZ));
 
 		// Laser Damage:
 		if(projectile.updateTick % 10 == 0 && projectile.isAlive() && rayTraceResult instanceof EntityRayTraceResult) {
@@ -162,20 +162,20 @@ public class ProjectileBehaviourLaser extends ProjectileBehaviour {
 		}
 
 		// Deal Damage:
-		if(projectile.getThrower() instanceof BaseCreatureEntity) {
-			BaseCreatureEntity creatureThrower = (BaseCreatureEntity)projectile.getThrower();
+		if(projectile.func_234616_v_() instanceof BaseCreatureEntity) {
+			BaseCreatureEntity creatureThrower = (BaseCreatureEntity)projectile.func_234616_v_();
 			attackSuccess = creatureThrower.doRangedDamage(target, projectile, damage);
 		}
 		else {
 			double pierceDamage = 1;
 			if(damage <= pierceDamage)
-				attackSuccess = target.attackEntityFrom(DamageSource.causeThrownDamage(projectile, projectile.getThrower()).setDamageBypassesArmor().setDamageIsAbsolute(), damage);
+				attackSuccess = target.attackEntityFrom(DamageSource.causeThrownDamage(projectile, projectile.func_234616_v_()).setDamageBypassesArmor().setDamageIsAbsolute(), damage);
 			else {
 				int hurtResistantTimeBefore = target.hurtResistantTime;
-				target.attackEntityFrom(DamageSource.causeThrownDamage(projectile, projectile.getThrower()).setDamageBypassesArmor().setDamageIsAbsolute(), (float)pierceDamage);
+				target.attackEntityFrom(DamageSource.causeThrownDamage(projectile, projectile.func_234616_v_()).setDamageBypassesArmor().setDamageIsAbsolute(), (float)pierceDamage);
 				target.hurtResistantTime = hurtResistantTimeBefore;
 				damage -= pierceDamage;
-				attackSuccess = target.attackEntityFrom(DamageSource.causeThrownDamage(projectile, projectile.getThrower()), damage);
+				attackSuccess = target.attackEntityFrom(DamageSource.causeThrownDamage(projectile, projectile.func_234616_v_()), damage);
 			}
 		}
 

@@ -6,7 +6,7 @@ import com.lycanitesmobs.core.entity.goals.BaseGoal;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 
 import java.util.EnumSet;
 
@@ -17,7 +17,7 @@ public class FireProjectilesGoal extends BaseGoal {
 	protected float inaccuracy = 0F;
 	protected float scale = 1F;
 	protected float angle = 0F;
-	protected Vec3d offset = Vec3d.ZERO;
+	protected Vector3d offset = Vector3d.ZERO;
 	protected int fireRate = 60;
 	protected boolean allPlayers = false;
 	protected int randomCount = 0;
@@ -121,7 +121,7 @@ public class FireProjectilesGoal extends BaseGoal {
 	 * @param offset The firing angle offset.
 	 * @return This goal for chaining.
 	 */
-	public FireProjectilesGoal setOffset(Vec3d offset) {
+	public FireProjectilesGoal setOffset(Vector3d offset) {
 		this.offset = offset;
 		return this;
 	}

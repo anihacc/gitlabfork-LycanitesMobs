@@ -101,7 +101,7 @@ public class InventoryCreature implements IInventory {
   	//                     Details
   	// ==================================================
     public String getName() {
-        return this.inventoryName + new TranslationTextComponent("entity.level").getFormattedText() + " " + this.creature.getLevel();
+        return this.inventoryName + new TranslationTextComponent("entity.level").getString() + " " + this.creature.getLevel();
     }
 
     public ITextComponent getDisplayName() {

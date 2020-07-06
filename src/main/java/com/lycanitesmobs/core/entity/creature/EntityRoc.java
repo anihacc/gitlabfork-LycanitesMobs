@@ -13,7 +13,7 @@ import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
 public class EntityRoc extends RideableCreatureEntity implements IMob {
@@ -79,7 +79,7 @@ public class EntityRoc extends RideableCreatureEntity implements IMob {
 
                 // Drop Creeper On Target:
                 if(this.getPickupEntity() instanceof CreeperEntity && this.hasAttackTarget() && !(this.getAttackTarget() instanceof CreeperEntity)) {
-                    double distance = new Vec3d(this.getPositionVec().getX(), 0, this.getPositionVec().getZ()).distanceTo(new Vec3d(this.getAttackTarget().getPositionVec().getX(), 0, this.getAttackTarget().getPositionVec().getZ()));
+                    double distance = new Vector3d(this.getPositionVec().getX(), 0, this.getPositionVec().getZ()).distanceTo(new Vector3d(this.getAttackTarget().getPositionVec().getX(), 0, this.getAttackTarget().getPositionVec().getZ()));
                     if(distance <= 2D && this.getPositionVec().getY() > this.getAttackTarget().getPositionVec().getY()) {
                         this.getPickupEntity().setRevengeTarget(this.getAttackTarget());
                         this.dropPickupEntity();

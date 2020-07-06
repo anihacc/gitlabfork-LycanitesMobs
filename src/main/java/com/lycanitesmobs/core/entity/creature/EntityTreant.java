@@ -135,14 +135,14 @@ public class EntityTreant extends BaseCreatureEntity implements IMob, IGroupHeav
 	// ==================================================
 	/** Returns this creature's main texture. Also checks for for subspecies. **/
 	public ResourceLocation getTexture() {
-		if(this.hasCustomName() && "Wicked Treant".equals(this.getCustomName().getFormattedText())) {
+		if(this.hasCustomName() && "Wicked Treant".equals(this.getCustomName().getString())) {
 			String textureName = this.getTextureName() + "_wicked";
 			if (TextureManager.getTexture(textureName) == null)
 				TextureManager.addTexture(textureName, this.creatureInfo.modInfo, "textures/entity/" + textureName.toLowerCase() + ".png");
 			return TextureManager.getTexture(textureName);
 		}
 
-		if(this.hasCustomName() && "Salty Tree".equals(this.getCustomName().getFormattedText())) {
+		if(this.hasCustomName() && "Salty Tree".equals(this.getCustomName().getString())) {
 			String textureName = this.getTextureName() + "_saltytree";
 			if (TextureManager.getTexture(textureName) == null)
 				TextureManager.addTexture(textureName, this.creatureInfo.modInfo, "textures/entity/" + textureName.toLowerCase() + ".png");

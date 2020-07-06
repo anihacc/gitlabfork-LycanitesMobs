@@ -15,7 +15,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
 import java.util.Iterator;
@@ -130,11 +130,11 @@ public class EntityConcapedeSegment extends AgeableCreatureEntity {
         		this.faceEntity(this.getParentTarget(), 360, 360);
         		
         		double segmentDistance = 0.65D;
-        		Vec3d pos;
+        		Vector3d pos;
         		if(this.getParentTarget() instanceof BaseCreatureEntity)
         			pos = ((BaseCreatureEntity)this.getParentTarget()).getFacingPositionDouble(this.getParentTarget().getPositionVec().getX(), this.getParentTarget().getPositionVec().getY(), this.getParentTarget().getPositionVec().getZ(), -0.25D, 0);
         		else
-					pos = new Vec3d(this.getParentTarget().getPositionVec().getX(), this.getParentTarget().getPositionVec().getY(), this.getParentTarget().getPositionVec().getZ());
+					pos = new Vector3d(this.getParentTarget().getPositionVec().getX(), this.getParentTarget().getPositionVec().getY(), this.getParentTarget().getPositionVec().getZ());
 
         		double followX = this.getPositionVec().getX();
         		double followY = this.getPositionVec().getY();

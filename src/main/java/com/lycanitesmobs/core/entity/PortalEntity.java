@@ -17,7 +17,7 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
 import java.util.Optional;
@@ -289,7 +289,7 @@ public class PortalEntity extends BaseProjectileEntity {
     public void moveToTarget() {
     	if(this.shootingEntity != null && this.summoningPedestal == null) {
     		// Get Look Target
-	        Vec3d lookDirection = this.shootingEntity.getLookVec();
+	        Vector3d lookDirection = this.shootingEntity.getLookVec();
 			this.targetX = this.shootingEntity.getPositionVec().getX() + (lookDirection.x * this.portalRange);
 			this.targetY = this.shootingEntity.getPositionVec().getY() + (lookDirection.y * this.portalRange);
 			this.targetZ = this.shootingEntity.getPositionVec().getZ() + (lookDirection.z * this.portalRange);

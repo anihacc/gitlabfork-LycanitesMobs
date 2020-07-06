@@ -10,7 +10,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
 import java.util.HashMap;
@@ -63,7 +63,7 @@ public class EntityJengu extends TameableCreatureEntity implements IMob, IFusabl
     // ========== Ranged Attack ==========
     @Override
     public void attackRanged(Entity target, float range) {
-        this.fireProjectile("aquapulse", target, range, 0, new Vec3d(0, 0, 0), 0.6f, 2f, 1F);
+        this.fireProjectile("aquapulse", target, range, 0, new Vector3d(0, 0, 0), 0.6f, 2f, 1F);
         super.attackRanged(target, range);
     }
     

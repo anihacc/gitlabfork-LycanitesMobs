@@ -64,7 +64,7 @@ public class ItemEquipment extends BaseItem {
 		super.addInformation(itemStack, world, tooltip, tooltipFlag);
 		FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
 		for(ITextComponent description : this.getAdditionalDescriptions(itemStack, world, tooltipFlag)) {
-			List<String> formattedDescriptionList = fontRenderer.listFormattedStringToWidth(description.getFormattedText(), DESCRIPTION_WIDTH + 100);
+			List<String> formattedDescriptionList = fontRenderer.listFormattedStringToWidth(description.getString(), DESCRIPTION_WIDTH + 100);
 			for (String formattedDescription : formattedDescriptionList) {
 				tooltip.add(new StringTextComponent(formattedDescription));
 			}
@@ -111,29 +111,29 @@ public class ItemEquipment extends BaseItem {
 		ITextComponent effectSummaries = this.getFeatureSummaries(itemStack, "effect");
 		ITextComponent projectileSummaries = this.getFeatureSummaries(itemStack, "projectile");
 		ITextComponent summonSummaries = this.getFeatureSummaries(itemStack, "summon");
-		if(!"".equals(harvestSummaries.getFormattedText()) || !"".equals(effectSummaries.getFormattedText()) || !"".equals(projectileSummaries.getFormattedText()) || !"".equals(summonSummaries.getFormattedText())) {
+		if(!"".equals(harvestSummaries.getString()) || !"".equals(effectSummaries.getString()) || !"".equals(projectileSummaries.getString()) || !"".equals(summonSummaries.getString())) {
 			descriptions.add(new StringTextComponent("-------------------\n"));
 
 			// Harvest:
-			if (!"".equals(harvestSummaries.getFormattedText())) {
+			if (!"".equals(harvestSummaries.getString())) {
 				descriptions.add(new TranslationTextComponent("equipment.feature.harvest")
 						.appendText(" ").appendSibling(harvestSummaries));
 			}
 
 			// Effect:
-			if (!"".equals(effectSummaries.getFormattedText())) {
+			if (!"".equals(effectSummaries.getString())) {
 				descriptions.add(new TranslationTextComponent("equipment.feature.effect")
 						.appendText(" ").appendSibling(effectSummaries));
 			}
 
 			// Projectile:
-			if (!"".equals(projectileSummaries.getFormattedText())) {
+			if (!"".equals(projectileSummaries.getString())) {
 				descriptions.add(new TranslationTextComponent("equipment.feature.projectile")
 						.appendText(" ").appendSibling(projectileSummaries));
 			}
 
 			// Summon:
-			if (!"".equals(summonSummaries.getFormattedText())) {
+			if (!"".equals(summonSummaries.getString())) {
 				descriptions.add(new TranslationTextComponent("equipment.feature.summon")
 						.appendText(" ").appendSibling(summonSummaries));
 			}
@@ -649,7 +649,7 @@ public class ItemEquipment extends BaseItem {
 	public Multimap<String, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack itemStack) {
 		Multimap<String, AttributeModifier> multimap = super.getAttributeModifiers(slot, itemStack);
 		if (slot == EquipmentSlotType.MAINHAND) {
-			multimap.put(Attributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", this.getDamageAmount(itemStack), AttributeModifier.Operation.ADDITION));
+			multimap.put(Attributes.field_233823_f_.getName(), new AttributeModifier(field_233823_f__MODIFIER, "Weapon modifier", this.getDamageAmount(itemStack), AttributeModifier.Operation.ADDITION));
 			multimap.put(Attributes.ATTACK_SPEED.getName(), new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", -this.getDamageCooldown(itemStack), AttributeModifier.Operation.ADDITION));
 		}
 

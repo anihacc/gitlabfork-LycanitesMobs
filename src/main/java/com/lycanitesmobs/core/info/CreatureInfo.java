@@ -16,7 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.Tag;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -161,7 +161,7 @@ public class CreatureInfo {
 	public double hitboxScale = 1;
 
 	/** The offset relative to this creatures width and height that riding entities should be offset by. **/
-	public Vec3d mountOffset = new Vec3d(0.0D, 1.0D, 0.0D);
+	public Vector3d mountOffset = new Vector3d(0.0D, 1.0D, 0.0D);
 
 
 	// Flags:
@@ -247,7 +247,7 @@ public class CreatureInfo {
 			this.sizeScale = json.get("sizeScale").getAsDouble();
 		if(json.has("hitboxScale"))
 			this.hitboxScale = json.get("hitboxScale").getAsDouble();
-		this.mountOffset = JSONHelper.getVec3d(json, "mountOffset", this.mountOffset);
+		this.mountOffset = JSONHelper.getVector3d(json, "mountOffset", this.mountOffset);
 
 		// Stats:
 		if(json.has("experience"))

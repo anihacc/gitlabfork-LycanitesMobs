@@ -25,6 +25,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -385,7 +386,7 @@ public class GameEventListener {
 		if(event.getPlayer() != null && !event.getPlayer().isCreative()) {
 			if (event.getWorld() instanceof World) {
 				ExtendedWorld extendedWorld = ExtendedWorld.getForWorld((World) event.getWorld());
-				if (!(event.getState().getBlock() instanceof BlockFireBase) && extendedWorld.isBossNearby(new Vec3d(event.getPos()))) {
+				if (!(event.getState().getBlock() instanceof BlockFireBase) && extendedWorld.isBossNearby(Vector3d.func_237491_b_(event.getPos()))) {
 					event.setCanceled(true);
 					event.setResult(Event.Result.DENY);
 					event.getPlayer().sendStatusMessage(new TranslationTextComponent("boss.block.protection.break"), true);
@@ -417,7 +418,7 @@ public class GameEventListener {
 		if(event.getEntity() instanceof PlayerEntity && !((PlayerEntity)event.getEntity()).isCreative()) {
 			if (event.getWorld() instanceof World) {
 				ExtendedWorld extendedWorld = ExtendedWorld.getForWorld((World) event.getWorld());
-				if (extendedWorld.isBossNearby(new Vec3d(event.getPos()))) {
+				if (extendedWorld.isBossNearby(Vector3d.func_237491_b_(event.getPos()))) {
 					event.setCanceled(true);
 					event.setResult(Event.Result.DENY);
 					((PlayerEntity)event.getEntity()).sendStatusMessage(new TranslationTextComponent("boss.block.protection.place"), true);
@@ -460,7 +461,7 @@ public class GameEventListener {
 		if(extendedPlayer == null) {
 			return;
 		}
-		event.setCanceled(event.getEntityMounting().isShiftKeyDown() && !extendedPlayer.isControlActive(ExtendedPlayer.CONTROL_ID.MOUNT_DISMOUNT));
+		event.setCanceled(event.getEntityMounting().isSneaking() && !extendedPlayer.isControlActive(ExtendedPlayer.CONTROL_ID.MOUNT_DISMOUNT));
 	}
 
 
@@ -480,9 +481,9 @@ public class GameEventListener {
 			if(mouseOverEntity instanceof BaseCreatureEntity) {
 				BaseCreatureEntity mouseOverCreature = (BaseCreatureEntity)mouseOverEntity;
 				event.getLeft().add("");
-				event.getLeft().add("Target Creature: " + mouseOverCreature.getName().getFormattedText());
+				event.getLeft().add("Target Creature: " + mouseOverCreature.getName().getString());
 				event.getLeft().add("Distance To player: " + mouseOverCreature.getDistance(Minecraft.getInstance().player));
-				event.getLeft().add("Elements: " + mouseOverCreature.creatureInfo.getElementNames(mouseOverCreature.getSubspecies()).getFormattedText());
+				event.getLeft().add("Elements: " + mouseOverCreature.creatureInfo.getElementNames(mouseOverCreature.getSubspecies()).getString());
 				event.getLeft().add("Subspecies: " + mouseOverCreature.getSubspeciesIndex());
 				event.getLeft().add("Variant: " + mouseOverCreature.getVariantIndex());
 				event.getLeft().add("Level: " + mouseOverCreature.getLevel());
@@ -490,7 +491,7 @@ public class GameEventListener {
 				event.getLeft().add("Size: " + mouseOverCreature.sizeScale);
 				event.getLeft().add("");
 				event.getLeft().add("Health: " + mouseOverCreature.getHealth() + "/" + mouseOverCreature.getMaxHealth() + " Fresh: " + mouseOverCreature.creatureStats.getHealth());
-				event.getLeft().add("Speed: " + mouseOverCreature.getAttribute(Attributes.MOVEMENT_SPEED).getValue() + "/" + mouseOverCreature.creatureStats.getSpeed());
+				event.getLeft().add("Speed: " + mouseOverCreature.getAttribute(Attributes.field_233821_d_).getValue() + "/" + mouseOverCreature.creatureStats.getSpeed());
 				event.getLeft().add("");
 				event.getLeft().add("Defense: " + mouseOverCreature.creatureStats.getDefense());
 				event.getLeft().add("Armor: " + mouseOverCreature.getTotalArmorValue());
@@ -512,7 +513,7 @@ public class GameEventListener {
 					TameableCreatureEntity mouseOverTameable = (TameableCreatureEntity)mouseOverCreature;
 					event.getLeft().add("");
 					event.getLeft().add("Owner ID: " + (mouseOverTameable.getOwnerId() != null ? mouseOverTameable.getOwnerId().toString() : "None"));
-					event.getLeft().add("Owner Name: " + mouseOverTameable.getOwnerName().getFormattedText());
+					event.getLeft().add("Owner Name: " + mouseOverTameable.getOwnerName().getString());
 				}
 			}
 		}

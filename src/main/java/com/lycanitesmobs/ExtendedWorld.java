@@ -14,7 +14,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.WorldSavedData;
@@ -425,7 +425,7 @@ public class ExtendedWorld extends WorldSavedData {
 	 * @param pos The position to search around.
 	 * @return True if a boss is present.
 	 */
-	public boolean isBossNearby(Vec3d pos) {
+	public boolean isBossNearby(Vector3d pos) {
 		for(BossEntry bossEntry : this.bosses.values()) {
 			if(bossEntry == null || bossEntry.entity == null || !bossEntry.entity.isAlive()) {
 				continue;

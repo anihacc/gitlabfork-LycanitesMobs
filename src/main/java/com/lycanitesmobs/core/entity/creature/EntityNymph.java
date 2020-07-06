@@ -7,7 +7,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -105,7 +105,7 @@ public class EntityNymph extends TameableCreatureEntity {
     // ========== Ranged Attack ==========
     @Override
     public void attackRanged(Entity target, float range) {
-		this.fireProjectile("faebolt", target, range, 0, new Vec3d(0, 0, 0), 0.75f, 1f, 1F);
+		this.fireProjectile("faebolt", target, range, 0, new Vector3d(0, 0, 0), 0.75f, 1f, 1F);
 		super.attackRanged(target, range);
     }
 

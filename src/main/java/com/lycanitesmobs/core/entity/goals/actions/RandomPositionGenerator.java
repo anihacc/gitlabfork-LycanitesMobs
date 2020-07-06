@@ -4,45 +4,45 @@ import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.gen.Heightmap;
 
 import java.util.Random;
 
 public class RandomPositionGenerator {
-	private static Vec3d staticVector = new Vec3d(0.0D, 0.0D, 0.0D);
+	private static Vector3d staticVector = new Vector3d(0.0D, 0.0D, 0.0D);
 
     // ==================================================
  	//                 Find Random Target
  	// ==================================================
-    public static Vec3d findRandomTarget(BaseCreatureEntity entity, int range, int height) {
+    public static Vector3d findRandomTarget(BaseCreatureEntity entity, int range, int height) {
         return findRandomTarget(entity, range, height, 0);
     }
-    public static Vec3d findRandomTarget(BaseCreatureEntity entity, int range, int height, int heightLevel) {
-        return getTargetBlock(entity, range, height, (Vec3d)null, heightLevel);
+    public static Vector3d findRandomTarget(BaseCreatureEntity entity, int range, int height, int heightLevel) {
+        return getTargetBlock(entity, range, height, (Vector3d)null, heightLevel);
     }
 
     // ========== Find Random Waypoint to Target ==========
-    public static Vec3d findRandomTargetTowards(BaseCreatureEntity entity, int range, int height, Vec3d par3Vec3d) {
-        staticVector = new Vec3d(par3Vec3d.x - entity.getPositionVec().getX(), par3Vec3d.y - entity.getPositionVec().getY(), par3Vec3d.z - entity.getPositionVec().getZ());
+    public static Vector3d findRandomTargetTowards(BaseCreatureEntity entity, int range, int height, Vector3d par3Vector3d) {
+        staticVector = new Vector3d(par3Vector3d.x - entity.getPositionVec().getX(), par3Vector3d.y - entity.getPositionVec().getY(), par3Vector3d.z - entity.getPositionVec().getZ());
         return findRandomTargetTowards(entity, range, height, staticVector, 0);
     }
-    public static Vec3d findRandomTargetTowards(BaseCreatureEntity entity, int range, int height, Vec3d par3Vec3d, int heightLevel) {
-        staticVector = new Vec3d(par3Vec3d.x - entity.getPositionVec().getX(), par3Vec3d.y - entity.getPositionVec().getY(), par3Vec3d.z - entity.getPositionVec().getZ());
+    public static Vector3d findRandomTargetTowards(BaseCreatureEntity entity, int range, int height, Vector3d par3Vector3d, int heightLevel) {
+        staticVector = new Vector3d(par3Vector3d.x - entity.getPositionVec().getX(), par3Vector3d.y - entity.getPositionVec().getY(), par3Vector3d.z - entity.getPositionVec().getZ());
         return getTargetBlock(entity, range, height, staticVector, heightLevel);
     }
 
     // ========== Find Random Waypoint from Target ==========
-    public static Vec3d findRandomTargetAwayFrom(BaseCreatureEntity entity, int range, int height, Vec3d avoidTarget) {
+    public static Vector3d findRandomTargetAwayFrom(BaseCreatureEntity entity, int range, int height, Vector3d avoidTarget) {
         return findRandomTargetAwayFrom(entity, range, height, avoidTarget, 0);
     }
-    public static Vec3d findRandomTargetAwayFrom(BaseCreatureEntity entity, int range, int height, Vec3d avoidTarget, int heightLevel) {
-        staticVector = new Vec3d(entity.getPositionVec().getX(), entity.getPositionVec().getY(), entity.getPositionVec().getZ()).subtract(avoidTarget);
+    public static Vector3d findRandomTargetAwayFrom(BaseCreatureEntity entity, int range, int height, Vector3d avoidTarget, int heightLevel) {
+        staticVector = new Vector3d(entity.getPositionVec().getX(), entity.getPositionVec().getY(), entity.getPositionVec().getZ()).subtract(avoidTarget);
         return getTargetBlock(entity, range, height, staticVector, heightLevel);
     }
 
     // ========== Get Target Block ==========
-    private static Vec3d getTargetBlock(BaseCreatureEntity entity, int range, int height, Vec3d target, int heightLevel) {
+    private static Vector3d getTargetBlock(BaseCreatureEntity entity, int range, int height, Vector3d target, int heightLevel) {
         PathNavigator pathNavigate = entity.getNavigator();
         Random random = entity.getRNG();
         boolean validTarget = false;
@@ -93,7 +93,7 @@ public class RandomPositionGenerator {
         }
 
         if(validTarget)
-            return new Vec3d((double)targetX, (double)targetY, (double)targetZ);
+            return new Vector3d((double)targetX, (double)targetY, (double)targetZ);
         else
         	return null;
     }

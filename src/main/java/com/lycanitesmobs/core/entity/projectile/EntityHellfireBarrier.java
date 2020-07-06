@@ -77,12 +77,12 @@ public class EntityHellfireBarrier extends BaseProjectileEntity {
             hellfireWalls = new EntityHellfireWall[this.hellfireHeight][this.hellfireWidth];
             for(int row = 0; row < this.hellfireHeight; row++) {
                 for(int col = 0; col < this.hellfireWidth; col++) {
-                    if(this.getThrower() != null) {
+                    if(this.func_234616_v_() != null) {
                         if(this.wall) {
-                            hellfireWalls[row][col] = new EntityHellfireWall(ProjectileManager.getInstance().oldProjectileTypes.get(EntityHellfireWall.class), this.getEntityWorld(), this.getThrower());
+                            hellfireWalls[row][col] = new EntityHellfireWall(ProjectileManager.getInstance().oldProjectileTypes.get(EntityHellfireWall.class), this.getEntityWorld(), this.func_234616_v_());
                         }
                         else {
-                            hellfireWalls[row][col] = new EntityHellfireBarrierPart(ProjectileManager.getInstance().oldProjectileTypes.get(EntityHellfireBarrierPart.class), this.getEntityWorld(), this.getThrower());
+                            hellfireWalls[row][col] = new EntityHellfireBarrierPart(ProjectileManager.getInstance().oldProjectileTypes.get(EntityHellfireBarrierPart.class), this.getEntityWorld(), this.func_234616_v_());
                         }
                     }
                     else {
@@ -144,7 +144,7 @@ public class EntityHellfireBarrier extends BaseProjectileEntity {
 
     //========== Do Damage Check ==========
     public boolean canDamage(LivingEntity targetEntity) {
-        LivingEntity owner = this.getThrower();
+        LivingEntity owner = this.func_234616_v_();
         if(owner == null) {
             if(targetEntity instanceof EntityRahovart)
                 return false;

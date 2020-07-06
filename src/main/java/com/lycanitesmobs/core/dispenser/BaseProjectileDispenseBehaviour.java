@@ -8,8 +8,7 @@ import net.minecraft.block.DispenserBlock;
 import net.minecraft.dispenser.IBlockSource;
 import net.minecraft.dispenser.IPosition;
 import net.minecraft.dispenser.ProjectileDispenseBehavior;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.IProjectile;
+import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 import net.minecraft.util.SoundCategory;
@@ -46,20 +45,20 @@ public class BaseProjectileDispenseBehaviour extends ProjectileDispenseBehavior 
         World world = blockSource.getWorld();
         IPosition position = DispenserBlock.getDispensePosition(blockSource);
         Direction facing = blockSource.getBlockState().get(DispenserBlock.FACING);
-        
-        IProjectile iprojectile = this.getProjectileEntity(world, position, stack);
-        if(iprojectile == null)
+
+		ProjectileEntity projectile = this.getProjectileEntity(world, position, stack);
+        if(projectile == null)
         	return stack;
         
-        iprojectile.shoot((double)facing.getXOffset(), (double)facing.getYOffset(), (double)facing.getZOffset(), this.getProjectileVelocity(), this.getProjectileInaccuracy());
-        world.addEntity((Entity)iprojectile);
+        projectile.shoot((double)facing.getXOffset(), (double)facing.getYOffset(), (double)facing.getZOffset(), this.getProjectileVelocity(), this.getProjectileInaccuracy());
+        world.addEntity(projectile);
         stack.split(1);
         
         return stack;
     }
     
 	@Override
-    protected IProjectile getProjectileEntity(World world, IPosition pos, ItemStack stack) {
+    protected ProjectileEntity getProjectileEntity(World world, IPosition pos, ItemStack stack) {
 		if(this.projectileInfo != null) {
 			return this.projectileInfo.createProjectile(world, pos.getX(), pos.getY(), pos.getZ());
 		}

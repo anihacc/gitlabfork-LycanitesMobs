@@ -9,7 +9,7 @@ import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.Vector4f;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec2f;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 
 import java.io.IOException;
@@ -78,9 +78,9 @@ public class ObjModel {
 
     public void renderAll(IVertexBuilder vertexBuilder, Matrix3f matrix3f, Matrix4f matrix4f, int brightness, int fade, Vector4f color, Vec2f textureOffset) {
         Collections.sort(this.objParts, (a, b) -> {
-			Vec3d v = Minecraft.getInstance().getRenderViewEntity().getPositionVector();
-			double aDist = v.distanceTo(new Vec3d(a.center.getX(), a.center.getY(), a.center.getZ()));
-			double bDist = v.distanceTo(new Vec3d(b.center.getX(), b.center.getY(), b.center.getZ()));
+			Vector3d v = Minecraft.getInstance().getRenderViewEntity().getPositionVector();
+			double aDist = v.distanceTo(new Vector3d(a.center.getX(), a.center.getY(), a.center.getZ()));
+			double bDist = v.distanceTo(new Vector3d(b.center.getX(), b.center.getY(), b.center.getZ()));
 			return Double.compare(aDist, bDist);
 		});
         for(ObjPart objPart : this.objParts) {

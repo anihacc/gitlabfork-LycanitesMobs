@@ -8,7 +8,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
 public class EntitySylph extends TameableCreatureEntity implements IMob {
@@ -57,7 +57,7 @@ public class EntitySylph extends TameableCreatureEntity implements IMob {
     public void attackRanged(Entity target, float range) {
     	int projectileCount = 10;
     	for(int i = 0; i < projectileCount; i++) {
-    		this.fireProjectile("aetherwave", target, range, (360 / projectileCount) * i, new Vec3d(0, 0, 0), 0.6f, 2f, 1F);
+    		this.fireProjectile("aetherwave", target, range, (360 / projectileCount) * i, new Vector3d(0, 0, 0), 0.6f, 2f, 1F);
 		}
         super.attackRanged(target, range);
     }

@@ -224,8 +224,8 @@ public class BaseProjectileEntity extends ThrowableEntity {
 			entityHit = ((EntityRayTraceResult)rayTraceResult).getEntity();
 		}
 		if(entityHit != null) {
-			if(this.getThrower() != null) {
-				if(entityHit == this.getThrower()) {
+			if(this.func_234616_v_() != null) {
+				if(entityHit == this.func_234616_v_()) {
 					return;
 				}
 			}
@@ -233,7 +233,7 @@ public class BaseProjectileEntity extends ThrowableEntity {
  				doDamage = this.canDamage((LivingEntity)entityHit);
  			}
  			if(!this.getEntityWorld().isRemote) {
-				if (this.getThrower() == null || entityHit != this.getThrower()) {
+				if (this.func_234616_v_() == null || entityHit != this.func_234616_v_()) {
 					this.onEntityCollision(entityHit);
 				}
 			}
@@ -260,20 +260,20 @@ public class BaseProjectileEntity extends ThrowableEntity {
 						}
 
 						// Deal Damage:
-						if (this.getThrower() instanceof BaseCreatureEntity) {
-							BaseCreatureEntity creatureThrower = (BaseCreatureEntity) this.getThrower();
+						if (this.func_234616_v_() instanceof BaseCreatureEntity) {
+							BaseCreatureEntity creatureThrower = (BaseCreatureEntity) this.func_234616_v_();
 							attackSuccess = creatureThrower.doRangedDamage(target, this, damage);
 						}
 						else {
 							double pierceDamage = this.pierce;
 							if (damage <= pierceDamage)
-								attackSuccess = target.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()).setDamageBypassesArmor().setDamageIsAbsolute(), damage);
+								attackSuccess = target.attackEntityFrom(DamageSource.causeThrownDamage(this, this.func_234616_v_()).setDamageBypassesArmor().setDamageIsAbsolute(), damage);
 							else {
 								int hurtResistantTimeBefore = target.hurtResistantTime;
-								target.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()).setDamageBypassesArmor().setDamageIsAbsolute(), (float) pierceDamage);
+								target.attackEntityFrom(DamageSource.causeThrownDamage(this, this.func_234616_v_()).setDamageBypassesArmor().setDamageIsAbsolute(), (float) pierceDamage);
 								target.hurtResistantTime = hurtResistantTimeBefore;
 								damage -= pierceDamage;
-								attackSuccess = target.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), damage);
+								attackSuccess = target.attackEntityFrom(DamageSource.causeThrownDamage(this, this.func_234616_v_()), damage);
 							}
 						}
 
@@ -379,7 +379,7 @@ public class BaseProjectileEntity extends ThrowableEntity {
 		if(this.getEntityWorld().isRemote)
 			return false;
 
-		LivingEntity owner = this.getThrower();
+		LivingEntity owner = this.func_234616_v_();
 		if(owner != null) {
 			if(owner instanceof BaseCreatureEntity) {
 				BaseCreatureEntity ownerCreature = (BaseCreatureEntity) owner;
@@ -487,8 +487,8 @@ public class BaseProjectileEntity extends ThrowableEntity {
 	    //this.getSize(Pose.STANDING).setSize(scale, scale); TODO Move to EntityType
 	    if(this.getEntityWorld().isRemote && !this.clientOnly)
 		   return;
-	    if(this.getThrower() != null && this.getThrower() instanceof BaseCreatureEntity)
-		   this.projectileScale *= ((BaseCreatureEntity)this.getThrower()).sizeScale;
+	    if(this.func_234616_v_() != null && this.func_234616_v_() instanceof BaseCreatureEntity)
+		   this.projectileScale *= ((BaseCreatureEntity)this.func_234616_v_()).sizeScale;
 	    this.dataManager.set(SCALE, this.projectileScale);
 	}
 	
@@ -510,9 +510,9 @@ public class BaseProjectileEntity extends ThrowableEntity {
 
 	public float getDamage(Entity entity) {
 		float damage = (float)this.damage + this.bonusDamage;
-		if(this.getThrower() != null) {
+		if(this.func_234616_v_() != null) {
 			// 20% Extra Damage From Players vs Entities
-			if((this.getThrower() instanceof PlayerEntity  || this.getThrower().getControllingPassenger() instanceof PlayerEntity) && !(entity instanceof PlayerEntity))
+			if((this.func_234616_v_() instanceof PlayerEntity  || this.func_234616_v_().getControllingPassenger() instanceof PlayerEntity) && !(entity instanceof PlayerEntity))
 				damage *= 1.2f;
 		}
 		return damage;
@@ -530,8 +530,8 @@ public class BaseProjectileEntity extends ThrowableEntity {
 	 * seconds - The base duration in seconds that this effect should last for.
 	**/
 	public int getEffectDuration(int seconds) {
-    	 if(this.getThrower() != null && this.getThrower() instanceof BaseCreatureEntity)
-    		 return Math.round((float)((BaseCreatureEntity)this.getThrower()).getEffectDuration(seconds) / 5);
+    	 if(this.func_234616_v_() != null && this.func_234616_v_() instanceof BaseCreatureEntity)
+    		 return Math.round((float)((BaseCreatureEntity)this.func_234616_v_()).getEffectDuration(seconds) / 5);
     	 return seconds * 20;
 	}
 
@@ -539,8 +539,8 @@ public class BaseProjectileEntity extends ThrowableEntity {
 	* value - The base effect strength.
 	**/
     public float getEffectStrength(float value) {
-	   if(this.getThrower() != null && this.getThrower() instanceof BaseCreatureEntity)
-		  return ((BaseCreatureEntity)this.getThrower()).getEffectStrength(value);
+	   if(this.func_234616_v_() != null && this.func_234616_v_() instanceof BaseCreatureEntity)
+		  return ((BaseCreatureEntity)this.func_234616_v_()).getEffectStrength(value);
 	   return value;
     }
 

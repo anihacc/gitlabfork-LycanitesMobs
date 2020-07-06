@@ -14,7 +14,7 @@ import net.minecraft.potion.Effects;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
@@ -170,7 +170,7 @@ public class RideableCreatureEntity extends TameableCreatureEntity {
         	if(zOffset == 0) {
         		zOffset = 0.00001D;
 			}
-			Vec3d mountOffset = this.getFacingPositionDouble(0, 0, 0, zOffset, this.rotationYaw);
+			Vector3d mountOffset = this.getFacingPositionDouble(0, 0, 0, zOffset, this.rotationYaw);
             this.getControllingPassenger().setPosition(this.getPositionVec().getX() + mountOffset.x, this.getPositionVec().getY() + this.getMountedYOffset() + passenger.getYOffset(), this.getPositionVec().getZ() + mountOffset.z);
         }
     }
@@ -188,7 +188,7 @@ public class RideableCreatureEntity extends TameableCreatureEntity {
     
     // ========== Move with Heading ==========
     @Override
-    public void travel(Vec3d direction) {
+    public void travel(Vector3d direction) {
         // Check if Mounted:
         if (!this.isTamed() || !this.hasSaddle() || !this.hasRiderTarget() || !(this.getControllingPassenger() instanceof LivingEntity) || !this.riderControl()) {
             super.travel(direction);
@@ -288,11 +288,11 @@ public class RideableCreatureEntity extends TameableCreatureEntity {
 
         // Apply Movement:
         if(this.canPassengerSteer()) {
-            this.setAIMoveSpeed((float)this.getAttribute(Attributes.MOVEMENT_SPEED).getValue());
+            this.setAIMoveSpeed((float)this.getAttribute(Attributes.field_233821_d_).getValue());
             if(!this.useDirectNavigator()) {
                 if(this.isFlying() && !this.isInWater() && !this.isInLava()) {
-                    this.moveRelative(0.1F, new Vec3d(strafe, 0, forward));
-                    this.move(MoverType.SELF, new Vec3d(this.getMotion().x, verticalMotion / 16, this.getMotion().z));
+                    this.moveRelative(0.1F, new Vector3d(strafe, 0, forward));
+                    this.move(MoverType.SELF, new Vector3d(this.getMotion().x, verticalMotion / 16, this.getMotion().z));
                     this.setMotion(this.getMotion().mul(0.8999999761581421D, 0.8999999761581421D, 0.8999999761581421D));
                 }
 				else if(this.isInWater()) {
@@ -301,7 +301,7 @@ public class RideableCreatureEntity extends TameableCreatureEntity {
 						strafe *= 0.25f;
 						forward *= 0.25f;
 					}
-					this.moveRelative(0.1F, new Vec3d(strafe, 0, forward));
+					this.moveRelative(0.1F, new Vector3d(strafe, 0, forward));
 					this.move(MoverType.SELF, this.getMotion().add(0, verticalMotion / 16, 0));
 					this.setMotion(this.getMotion().mul(0.8999999761581421D, 0.8999999761581421D, 0.8999999761581421D));
 				}
@@ -311,12 +311,12 @@ public class RideableCreatureEntity extends TameableCreatureEntity {
 						strafe *= 0.25f;
 						forward *= 0.25f;
 					}
-					this.moveRelative(0.1F, new Vec3d(strafe, 0, forward));
+					this.moveRelative(0.1F, new Vector3d(strafe, 0, forward));
 					this.move(MoverType.SELF, this.getMotion().add(0, verticalMotion / 16, 0));
 					this.setMotion(this.getMotion().mul(0.8999999761581421D, 0.8999999761581421D, 0.8999999761581421D));
 				}
                 else
-                    super.travel(new Vec3d(strafe, up, forward));
+                    super.travel(new Vector3d(strafe, up, forward));
             }
             else
                 this.directNavigator.flightMovement(strafe, forward);

@@ -102,6 +102,6 @@ public class ElementDescriptionList extends BaseList {
 				.appendSibling(new TranslationTextComponent("effect." + effectResource.getPath() + ".description"));
 		}
 
-		return text.getFormattedText();
+		return text.getString();
 	}
 }

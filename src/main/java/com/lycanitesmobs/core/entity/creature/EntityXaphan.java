@@ -12,7 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -54,7 +54,7 @@ public class EntityXaphan extends TameableCreatureEntity implements IMob {
         super.livingTick();
 
 		if(!this.getEntityWorld().isRemote && this.updateTick % this.nextSplash == 0) {
-			this.fireProjectile("acidsplash", null, 0, 0, new Vec3d(0.5D - this.getRNG().nextDouble(), 0, 0.5D - this.getRNG().nextDouble()), 0f, (float)this.nextSplash / 20, 1F);
+			this.fireProjectile("acidsplash", null, 0, 0, new Vector3d(0.5D - this.getRNG().nextDouble(), 0, 0.5D - this.getRNG().nextDouble()), 0f, (float)this.nextSplash / 20, 1F);
 			this.nextSplash = 20 + this.getRNG().nextInt(20);
 		}
 
@@ -83,7 +83,7 @@ public class EntityXaphan extends TameableCreatureEntity implements IMob {
         for(int row = -1; row <= 1; row++) {
 			int projectileCount = 10;
 			for (int i = 0; i < projectileCount; i++) {
-				this.fireProjectile("acidsplash", target, range, (90 / projectileCount) * i, new Vec3d(0, 3 * row, 0), 0.6f, 2f, 1F);
+				this.fireProjectile("acidsplash", target, range, (90 / projectileCount) * i, new Vector3d(0, 3 * row, 0), 0.6f, 2f, 1F);
 			}
 		}
         super.attackRanged(target, range);

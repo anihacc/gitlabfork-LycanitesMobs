@@ -49,7 +49,7 @@ public class ElementsBeastiaryScreen extends BeastiaryScreen {
 		super.renderForeground(x, y, partialTicks);
 
 		if(this.elementInfo == null) {
-			String info = new TranslationTextComponent("gui.beastiary.elements.about").getFormattedText();
+			String info = new TranslationTextComponent("gui.beastiary.elements.about").getString();
 			this.drawSplitString(info, colRightX + 1, colRightY + 12 + 1, colRightWidth, 0xFFFFFF, true);
 		}
 	}

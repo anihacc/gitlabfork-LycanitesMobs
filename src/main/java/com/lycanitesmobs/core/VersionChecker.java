@@ -74,20 +74,20 @@ public class VersionChecker {
 		}
 
 		public String getUpdateNotes() {
-			String content = "\u00A7l\u00A7n" + new TranslationTextComponent("gui.beastiary.index.changes").getFormattedText() + "\u00A7r";
-			content += "\n\u00A7l" + new TranslationTextComponent("gui.beastiary.index.changes.name").getFormattedText() + ":\u00A7r " + this.name;
+			String content = "\u00A7l\u00A7n" + new TranslationTextComponent("gui.beastiary.index.changes").getString() + "\u00A7r";
+			content += "\n\u00A7l" + new TranslationTextComponent("gui.beastiary.index.changes.name").getString() + ":\u00A7r " + this.name;
 			if(this.newFeatures.length() > 0)
-				content += "\n\n\u00A7l" + new TranslationTextComponent("gui.beastiary.index.changes.new").getFormattedText() + ":\u00A7r\n" + this.newFeatures;
+				content += "\n\n\u00A7l" + new TranslationTextComponent("gui.beastiary.index.changes.new").getString() + ":\u00A7r\n" + this.newFeatures;
 			if(this.configChanges.length() > 0)
-				content += "\n\n\u00A7l" + new TranslationTextComponent("gui.beastiary.index.changes.config").getFormattedText() + ":\u00A7r\n" + this.configChanges;
+				content += "\n\n\u00A7l" + new TranslationTextComponent("gui.beastiary.index.changes.config").getString() + ":\u00A7r\n" + this.configChanges;
 			if(this.majorFixes.length() > 0)
-				content += "\n\n\u00A7l" + new TranslationTextComponent("gui.beastiary.index.changes.major").getFormattedText() + ":\u00A7r\n" + this.majorFixes;
+				content += "\n\n\u00A7l" + new TranslationTextComponent("gui.beastiary.index.changes.major").getString() + ":\u00A7r\n" + this.majorFixes;
 			if(this.changes.length() > 0)
-				content += "\n\n\u00A7l" + new TranslationTextComponent("gui.beastiary.index.changes.gameplay").getFormattedText() + ":\u00A7r\n" + this.changes;
+				content += "\n\n\u00A7l" + new TranslationTextComponent("gui.beastiary.index.changes.gameplay").getString() + ":\u00A7r\n" + this.changes;
 			if(this.balancing.length() > 0)
-				content += "\n\n\u00A7l" + new TranslationTextComponent("gui.beastiary.index.changes.balancing").getFormattedText() + ":\u00A7r\n" + this.balancing;
+				content += "\n\n\u00A7l" + new TranslationTextComponent("gui.beastiary.index.changes.balancing").getString() + ":\u00A7r\n" + this.balancing;
 			if(this.minorFixes.length() > 0)
-				content += "\n\n\u00A7l" + new TranslationTextComponent("gui.beastiary.index.changes.minor").getFormattedText() + ":\u00A7r\n" + this.minorFixes;
+				content += "\n\n\u00A7l" + new TranslationTextComponent("gui.beastiary.index.changes.minor").getString() + ":\u00A7r\n" + this.minorFixes;
 
 			return content;
 		}

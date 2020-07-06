@@ -10,7 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.pathfinding.GroundPathNavigator;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 
@@ -113,7 +113,7 @@ public class EntityTroll extends TameableCreatureEntity implements IMob {
 	// ========== Ranged Attack ==========
 	@Override
 	public void attackRanged(Entity target, float range) {
-		this.fireProjectile("boulderblast", target, range, 0, new Vec3d(0, 0, 0), 1.2f, 2f, 1F);
+		this.fireProjectile("boulderblast", target, range, 0, new Vector3d(0, 0, 0), 1.2f, 2f, 1F);
 		super.attackRanged(target, range);
 	}
     

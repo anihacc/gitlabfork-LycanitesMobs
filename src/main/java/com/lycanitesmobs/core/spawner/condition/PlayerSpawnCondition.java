@@ -6,7 +6,7 @@ import com.lycanitesmobs.core.helpers.JSONHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
@@ -162,10 +162,10 @@ public class PlayerSpawnCondition extends SpawnCondition {
 		}
 
 		// Check Spawn Distance:
-		if(this.spawnDistanceMin >= 0 && player.getDistanceSq(new Vec3d(world.getSpawnPoint())) < this.spawnDistanceMin) {
+		if(this.spawnDistanceMin >= 0 && player.getDistanceSq(new Vector3d(world.getSpawnPoint())) < this.spawnDistanceMin) {
 			return false;
 		}
-		if(this.spawnDistanceMax >= 0 && player.getDistanceSq(new Vec3d(world.getSpawnPoint())) > this.spawnDistanceMax) {
+		if(this.spawnDistanceMax >= 0 && player.getDistanceSq(new Vector3d(world.getSpawnPoint())) > this.spawnDistanceMax) {
 			return false;
 		}
 

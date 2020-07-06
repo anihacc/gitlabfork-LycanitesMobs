@@ -9,7 +9,7 @@ import net.minecraft.entity.Pose;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
 public class EntityReiver extends TameableCreatureEntity implements IMob {
@@ -58,7 +58,7 @@ public class EntityReiver extends TameableCreatureEntity implements IMob {
     // ========== Ranged Attack ==========
     @Override
     public void attackRanged(Entity target, float range) {
-    	this.fireProjectile("frostbolt", target, range, 0, new Vec3d(0, 0, 0), 1.2f, 2f, 1F);
+    	this.fireProjectile("frostbolt", target, range, 0, new Vector3d(0, 0, 0), 1.2f, 2f, 1F);
         super.attackRanged(target, range);
     }
     

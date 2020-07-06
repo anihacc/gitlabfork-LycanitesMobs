@@ -9,7 +9,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.state.StateContainer;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -72,7 +72,7 @@ public class BlockFrostweb extends BlockBase {
 	@Override
 	public void onEntityCollision(BlockState blockState, World world, BlockPos pos, Entity entity) {
 		super.onEntityCollision(blockState, world, pos, entity);
-		entity.setMotionMultiplier(blockState, new Vec3d(0.25D, (double)0.05F, 0.25D));
+		entity.setMotionMultiplier(blockState, new Vector3d(0.25D, (double)0.05F, 0.25D));
 	}
     
     

@@ -6,7 +6,7 @@ import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
 public class EntityVorach extends TameableCreatureEntity implements IMob {
@@ -25,7 +25,7 @@ public class EntityVorach extends TameableCreatureEntity implements IMob {
 
 	@Override
 	public void attackRanged(Entity target, float range) {
-		this.fireProjectile("hellfireball", target, range, 0, new Vec3d(0, 0, 0), 1.2f, 2f, 1F);
+		this.fireProjectile("hellfireball", target, range, 0, new Vector3d(0, 0, 0), 1.2f, 2f, 1F);
 		super.attackRanged(target, range);
 	}
 

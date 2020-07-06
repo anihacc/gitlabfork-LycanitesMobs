@@ -8,7 +8,7 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.helpers.JSONHelper;
 import com.lycanitesmobs.core.spawner.condition.SpawnCondition;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -41,7 +41,7 @@ public class Subspecies {
     public List<SpawnCondition> spawnConditions = new ArrayList<>();
 
 	/** The offset relative to this subspecies width and height that riding entities should be offset by. **/
-	public Vec3d mountOffset = new Vec3d(0.0D, 1.0D, 0.0D);
+	public Vector3d mountOffset = new Vector3d(0.0D, 1.0D, 0.0D);
 
 
     public static Subspecies createFromJSON(CreatureInfo creatureInfo, JsonObject json) {
@@ -102,7 +102,7 @@ public class Subspecies {
 		}
 
 		// Mount Offset:
-		subspecies.mountOffset = JSONHelper.getVec3d(json, "mountOffset", null);
+		subspecies.mountOffset = JSONHelper.getVector3d(json, "mountOffset", null);
 
 		return subspecies;
 	}

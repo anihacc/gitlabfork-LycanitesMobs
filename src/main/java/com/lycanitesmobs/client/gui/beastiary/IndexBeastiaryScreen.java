@@ -69,7 +69,7 @@ public class IndexBeastiaryScreen extends BeastiaryScreen {
 		super.renderForeground(mouseX, mouseY, partialTicks);
 
 		int yOffset = this.colRightY + 13;
-		String info = new TranslationTextComponent("gui.beastiary.index.description").getFormattedText();
+		String info = new TranslationTextComponent("gui.beastiary.index.description").getString();
 		this.drawSplitString(info, this.colRightX + 1, yOffset, this.colRightWidth, 0xFFFFFF, true);
 		yOffset += this.getFontRenderer().getWordWrappedHeight(info, this.colRightWidth);
 
@@ -77,13 +77,13 @@ public class IndexBeastiaryScreen extends BeastiaryScreen {
 			return;
 
 		// Check Mod Version:
-		String version = "\n\u00A7l" + new TranslationTextComponent("gui.beastiary.index.version").getFormattedText() + ": \u00A7r";
+		String version = "\n\u00A7l" + new TranslationTextComponent("gui.beastiary.index.version").getString() + ": \u00A7r";
 		if(this.versionInfo.isNewer) {
 			version += "\u00A74";
 		}
 		version += LycanitesMobs.versionNumber + "\u00A7r";
 		if(this.versionInfo.isNewer) {
-			version += " \u00A7l" + new TranslationTextComponent("gui.beastiary.index.version.newer").getFormattedText() + ": \u00A7r\u00A72" + this.versionInfo.versionNumber + "\u00A7r";
+			version += " \u00A7l" + new TranslationTextComponent("gui.beastiary.index.version.newer").getString() + ": \u00A7r\u00A72" + this.versionInfo.versionNumber + "\u00A7r";
 		}
 		this.drawSplitString(version, this.colRightX + 1, yOffset, this.colRightWidth, 0xFFFFFF, true);
 	}

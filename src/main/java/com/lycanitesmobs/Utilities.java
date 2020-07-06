@@ -13,9 +13,9 @@ public class Utilities {
   	// ==================================================
 	// ========== Raytrace All ==========
     public static RayTraceResult raytrace(World world, double x, double y, double z, double tx, double ty, double tz, float borderSize, Entity entity, HashSet<Entity> excluded) {
-		Vec3d startVec = new Vec3d(x, y, z);
-        Vec3d lookVec = new Vec3d(tx - x, ty - y, tz - z);
-        Vec3d endVec = new Vec3d(tx, ty, tz);
+		Vector3d startVec = new Vector3d(x, y, z);
+        Vector3d lookVec = new Vector3d(tx - x, ty - y, tz - z);
+        Vector3d endVec = new Vector3d(tx, ty, tz);
 		float minX = (float)(x < tx ? x : tx);
 		float minY = (float)(y < ty ? y : ty);
 		float minZ = (float)(z < tz ? z : tz);
@@ -25,7 +25,7 @@ public class Utilities {
 
 		// Get Block Collision:
         RayTraceResult collision = world.rayTraceBlocks(new RayTraceContext(startVec, endVec, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, entity));
-		startVec = new Vec3d(x, y, z);
+		startVec = new Vector3d(x, y, z);
 
 		// Get Entity Collision:
 		if(excluded != null) {

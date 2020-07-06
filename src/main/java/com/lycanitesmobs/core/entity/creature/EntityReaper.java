@@ -16,7 +16,7 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
 public class EntityReaper extends TameableCreatureEntity implements IMob {
@@ -69,7 +69,7 @@ public class EntityReaper extends TameableCreatureEntity implements IMob {
     // ========== Ranged Attack ==========
     @Override
     public void attackRanged(Entity target, float range) {
-        this.fireProjectile("spectralbolt", target, range, 0, new Vec3d(0, 0, 0), 1.2f, 2f, 1F);
+        this.fireProjectile("spectralbolt", target, range, 0, new Vector3d(0, 0, 0), 1.2f, 2f, 1F);
         super.attackRanged(target, range);
     }
     
@@ -123,7 +123,7 @@ public class EntityReaper extends TameableCreatureEntity implements IMob {
     				return ObjectManager.getSound(this.creatureInfo.getName() + "_say_jon");
     	}
         if(this.isTamed() && this.getOwner() != null) {
-            if("jbams".equalsIgnoreCase(this.getOwnerName().getFormattedText()))
+            if("jbams".equalsIgnoreCase(this.getOwnerName().getString()))
                 return ObjectManager.getSound(this.creatureInfo.getName() + "_say_jon");
         }
     	return super.getAmbientSound();
@@ -136,7 +136,7 @@ public class EntityReaper extends TameableCreatureEntity implements IMob {
     /** Returns this creature's main texture. Also checks for for subspecies. **/
     @Override
     public ResourceLocation getTexture(String suffix) {
-        if(!this.hasCustomName() || !"Satan Claws".equals(this.getCustomName().getFormattedText()))
+        if(!this.hasCustomName() || !"Satan Claws".equals(this.getCustomName().getString()))
             return super.getTexture(suffix);
 
         String textureName = this.getTextureName() + "_satanclaws";

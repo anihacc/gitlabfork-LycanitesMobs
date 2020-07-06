@@ -14,7 +14,7 @@ import net.minecraft.entity.monster.IMob;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
 public class EntityWendigo extends BaseCreatureEntity implements IMob {
@@ -135,7 +135,7 @@ public class EntityWendigo extends BaseCreatureEntity implements IMob {
     // ========== Ranged Attack ==========
     @Override
     public void attackRanged(Entity target, float range) {
-        this.fireProjectile("tundra", target, range, 0, new Vec3d(0, 0, 0), 1.2f, 2f, 1F);
+        this.fireProjectile("tundra", target, range, 0, new Vector3d(0, 0, 0), 1.2f, 2f, 1F);
         super.attackRanged(target, range);
     }
     

@@ -14,7 +14,7 @@ import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
@@ -100,7 +100,7 @@ public class EntityEpion extends RideableCreatureEntity implements IMob {
     // ========== Ranged Attack ==========
 	@Override
 	public void attackRanged(Entity target, float range) {
-		this.fireProjectile("bloodleech", target, range, 0, new Vec3d(0, 0, 0), 1.2f, 2f, 1F);
+		this.fireProjectile("bloodleech", target, range, 0, new Vector3d(0, 0, 0), 1.2f, 2f, 1F);
 		super.attackRanged(target, range);
 	}
     
@@ -181,7 +181,7 @@ public class EntityEpion extends RideableCreatureEntity implements IMob {
 	// ==================================================
 	/** Returns this creature's main texture. Also checks for for subspecies. **/
 	public ResourceLocation getTexture() {
-		if(!this.hasCustomName() || !"Vampire Bat".equals(this.getCustomName().getFormattedText()))
+		if(!this.hasCustomName() || !"Vampire Bat".equals(this.getCustomName().getString()))
 			return super.getTexture();
 
 		String textureName = this.getTextureName() + "_vampirebat";

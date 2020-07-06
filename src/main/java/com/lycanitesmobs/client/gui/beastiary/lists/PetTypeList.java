@@ -109,7 +109,7 @@ public class PetTypeList extends CreatureFilterList {
 
 		@Override
 		public void render(int index, int top, int left, int bottom, int right, int mouseX, int mouseY, boolean focus, float partialTicks) {
-			this.parentList.screen.getFontRenderer().drawString(new TranslationTextComponent(this.petTypeKey).getFormattedText(), left + 2 , top + 4, 0xFFFFFF);
+			this.parentList.screen.getFontRenderer().drawString(new TranslationTextComponent(this.petTypeKey).getString(), left + 2 , top + 4, 0xFFFFFF);
 		}
 	}
 }

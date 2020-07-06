@@ -56,12 +56,12 @@ public class MobEventPlayerServer {
         this.startedWorldTime = world.getGameTime();
         this.ticks = 0;
 
-        LycanitesMobs.logInfo("", "Mob Event " + (this.extended ? "Extended" : "Started") + ": " + this.mobEvent.getTitle().getFormattedText() + " In Dimension: " + this.world.getDimension() + " Duration: " + (this.mobEvent.duration / 20) + "secs");
+        LycanitesMobs.logInfo("", "Mob Event " + (this.extended ? "Extended" : "Started") + ": " + this.mobEvent.getTitle().getString() + " In Dimension: " + this.world.getDimension() + " Duration: " + (this.mobEvent.duration / 20) + "secs");
     }
 
     public void changeStartedWorldTime(long newStartedTime) {
         this.startedWorldTime = newStartedTime;
-        LycanitesMobs.logInfo("", "Mob Event Start Time Changed: " + this.mobEvent.getTitle().getFormattedText() + " In Dimension: " + this.world.getDimension() + " Duration: " + (this.mobEvent.duration / 20) + "secs" + " Time Remaining: " + ((this.mobEvent.duration - (this.world.getGameTime() - this.startedWorldTime)) / 20) + "secs");
+        LycanitesMobs.logInfo("", "Mob Event Start Time Changed: " + this.mobEvent.getTitle().getString() + " In Dimension: " + this.world.getDimension() + " Duration: " + (this.mobEvent.duration / 20) + "secs" + " Time Remaining: " + ((this.mobEvent.duration - (this.world.getGameTime() - this.startedWorldTime)) / 20) + "secs");
     }
 
 
@@ -69,7 +69,7 @@ public class MobEventPlayerServer {
     //                      Finish
     // ==================================================
     public void onFinish() {
-        LycanitesMobs.logInfo("", "Mob Event Finished: " + this.mobEvent.getTitle().getFormattedText());
+        LycanitesMobs.logInfo("", "Mob Event Finished: " + this.mobEvent.getTitle().getString());
     }
 
 

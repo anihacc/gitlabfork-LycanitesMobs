@@ -10,7 +10,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraftforge.event.TickEvent;
@@ -180,7 +180,7 @@ public class SpawnerEventListener {
 			}
 			boolean nearOtherPlayers = false;
 			for(BlockPos triggerPosition : triggerPositions) {
-				if(player.getDistanceSq(new Vec3d(triggerPosition)) <= 100 * 100) {
+				if(player.getDistanceSq(new Vector3d(triggerPosition)) <= 100 * 100) {
 					nearOtherPlayers = true;
 				}
 			}
@@ -501,7 +501,7 @@ public class SpawnerEventListener {
 
 		// Only If Players Are Nearby (Big Performance Saving):
 		boolean playerNearby = false;
-		Vec3d posVec = new Vec3d(event.getPos());
+		Vector3d posVec = new Vector3d(event.getPos());
 		for(PlayerEntity playerEntity : world.getPlayers()) {
 			if(playerEntity.getDistanceSq(posVec) <= 20 * 20) {
 				playerNearby = true;

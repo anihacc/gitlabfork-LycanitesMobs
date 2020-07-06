@@ -45,10 +45,10 @@ public class EquipmentForgeScreen extends BaseContainerScreen<EquipmentForgeCont
 
 		String buttonText = "";
 		if("construct".equals(this.currentMode)) {
-			buttonText = new TranslationTextComponent("gui.equipmentforge.forge").getFormattedText();
+			buttonText = new TranslationTextComponent("gui.equipmentforge.forge").getString();
 		}
 		else if("deconstruct".equals(this.currentMode)) {
-			buttonText = new TranslationTextComponent("gui.equipmentforge.deconstruct").getFormattedText();
+			buttonText = new TranslationTextComponent("gui.equipmentforge.deconstruct").getString();
 		}
 		buttonY += buttonSpacing;
 		//this.addButton(new ButtonBase(1, buttonX + buttonSpacing, buttonY, buttonWidth, buttonHeight, buttonText, this));
@@ -119,8 +119,8 @@ public class EquipmentForgeScreen extends BaseContainerScreen<EquipmentForgeCont
 
 	@Override
 	protected void renderForeground(int mouseX, int mouseY, float partialTicks) {
-		this.fontRenderer.drawString(this.equipmentForge.getName().getFormattedText(), this.guiLeft + 8, this.guiTop + 6, 4210752);
-        this.fontRenderer.drawString(this.playerInventory.getName().getFormattedText(), this.guiLeft + 8, this.guiTop + this.ySize - 96 + 2, 4210752);
+		this.fontRenderer.drawString(this.equipmentForge.getName().getString(), this.guiLeft + 8, this.guiTop + 6, 4210752);
+        this.fontRenderer.drawString(this.playerInventory.getName().getString(), this.guiLeft + 8, this.guiTop + this.ySize - 96 + 2, 4210752);
     }
     
 	@Override

@@ -5,7 +5,7 @@ import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.pathfinding.Path;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 
 import java.util.EnumSet;
 
@@ -84,7 +84,7 @@ public class AvoidGoal extends Goal {
         	return false;
 		}
 
-        Vec3d avoidVector = RandomPositionGenerator.findRandomTargetAwayFrom(this.host, (int)Math.sqrt(this.farDistance), 7, new Vec3d(this.avoidTarget.getPositionVec().getX(), this.avoidTarget.getPositionVec().getY(), this.avoidTarget.getPositionVec().getZ()));
+        Vector3d avoidVector = RandomPositionGenerator.findRandomTargetAwayFrom(this.host, (int)Math.sqrt(this.farDistance), 7, new Vector3d(this.avoidTarget.getPositionVec().getX(), this.avoidTarget.getPositionVec().getY(), this.avoidTarget.getPositionVec().getZ()));
 		if(avoidVector == null) {
 			this.findRandomTargetAwayFromCooldown = this.findRandomTargetAwayFromCooldownMax;
 			return false;

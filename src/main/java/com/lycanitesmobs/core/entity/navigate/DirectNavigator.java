@@ -6,7 +6,7 @@ import net.minecraft.entity.Pose;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 
 public class DirectNavigator {
 	// Targets:
@@ -87,7 +87,7 @@ public class DirectNavigator {
 	// ========== Is At Target Position ==========
 	public boolean atTargetPosition(){
 		if(targetPosition != null) {
-			double speed = this.host.getAttribute(Attributes.MOVEMENT_SPEED).getValue() * 2;
+			double speed = this.host.getAttribute(Attributes.field_233821_d_).getValue() * 2;
 			return this.distanceToTargetPosition() <= (this.host.getSize(Pose.STANDING).width + speed);
 		}
 		return true;
@@ -106,7 +106,7 @@ public class DirectNavigator {
             this.randomStrafeAngle = this.host.getRNG().nextBoolean() ? 90D : -90D;
         if(this.randomStrafeAngle > 0)
             this.randomStrafeAngle -= 0.5D;*/
-		double speed = this.host.getAttribute(Attributes.MOVEMENT_SPEED).getValue() * 2;
+		double speed = this.host.getAttribute(Attributes.field_233821_d_).getValue() * 2;
 
 		BlockPos pos = this.host.getFacingPosition(this.targetPosition.getX(), this.targetPosition.getY(), this.targetPosition.getZ(), 1.0D, this.randomStrafeAngle);
 		//double dirX = (double)this.targetPosition.getX() + 0.5D - this.host.getPositionVec().getX();
@@ -133,13 +133,13 @@ public class DirectNavigator {
   	// ==================================================
 	public void flightMovement(double moveStrafe, double moveForward) {
 		if(this.host.canSwim()) {
-            this.host.travelSwimming(new Vec3d(moveStrafe, 0, moveForward));
+            this.host.travelSwimming(new Vector3d(moveStrafe, 0, moveForward));
         }
         else if(this.host.lavaContact()) {
-            this.host.travelSwimming(new Vec3d(moveStrafe, 0, moveForward));
+            this.host.travelSwimming(new Vector3d(moveStrafe, 0, moveForward));
         }
         else {
-            this.host.travelFlying(new Vec3d(moveStrafe, 0, moveForward));
+            this.host.travelFlying(new Vector3d(moveStrafe, 0, moveForward));
         }
         this.host.updateLimbSwing();
 	}

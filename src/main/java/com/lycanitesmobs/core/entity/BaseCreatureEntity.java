@@ -32,7 +32,8 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
-import net.minecraft.entity.ai.attributes.IAttribute;
+import net.minecraft.entity.ai.attributes.Attribute;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraft.entity.ai.controller.MovementController;
 import net.minecraft.entity.ai.goal.Goal;
@@ -58,8 +59,12 @@ import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.*;
-import net.minecraft.util.math.*;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.shapes.VoxelShapes;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -74,8 +79,8 @@ import javax.annotation.Nullable;
 import java.util.*;
 
 public abstract class BaseCreatureEntity extends CreatureEntity {
-	public static final IAttribute DEFENSE = (new RangedAttribute(null, "generic.defense", 4.0D, 0.0D, 1024.0D)).setDescription("Defense").setShouldWatch(true);
-	public static final IAttribute RANGED_SPEED = (new RangedAttribute(null, "generic.rangedSpeed", 4.0D, 0.0D, 1024.0D)).setDescription("Ranged Speed").setShouldWatch(true);
+	public static final Attribute DEFENSE = (new RangedAttribute("generic.defense", 4.0D, 0.0D, 1024.0D)).setRegistryName(LycanitesMobs.MODID, "defense").func_233753_a_(true); // setShouldWatch
+	public static final Attribute RANGED_SPEED = (new RangedAttribute("generic.rangedSpeed", 4.0D, 0.0D, 1024.0D)).setRegistryName(LycanitesMobs.MODID, "ranged_speed").func_233753_a_(true);
 
 	// Core:
 	/** The Creature Info used by this creature. **/
@@ -457,7 +462,9 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	 * Creates and sets all the entity attributes with default values.
 	 */
 	@Override
-	protected void registerAttributes() {
+	protected void registerData() {
+		super.registerData();
+
 		this.loadCreatureFlags();
 		this.creatureSize = new EntitySize((float)this.creatureInfo.width, (float)this.creatureInfo.height, false);
 
@@ -476,11 +483,10 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		this.nextSpecialTargetIndex = 30;
 		this.nextFindTargetIndex = 50;
 
-		super.registerAttributes();
-		this.getAttributes().registerAttribute(DEFENSE);
-		this.getAttributes().registerAttribute(Attributes.ATTACK_DAMAGE);
-		this.getAttributes().registerAttribute(Attributes.ATTACK_SPEED);
-		this.getAttributes().registerAttribute(RANGED_SPEED);
+//		this.getAttributes().registerAttribute(DEFENSE); Move to creature type, perhaps in forge registry now?
+//		this.getAttributes().registerAttribute(Attributes.field_233823_f_);
+//		this.getAttributes().registerAttribute(Attributes.ATTACK_SPEED);
+//		this.getAttributes().registerAttribute(RANGED_SPEED);
 
 		this.applyDynamicAttributes();
 	}
@@ -492,10 +498,10 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(this.creatureStats.getHealth());
 		this.getAttribute(DEFENSE).setBaseValue(this.creatureStats.getDefense());
 		this.getAttribute(Attributes.ARMOR).setBaseValue(this.creatureStats.getArmor());
-		this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(this.creatureStats.getSpeed());
+		this.getAttribute(Attributes.field_233821_d_).setBaseValue(this.creatureStats.getSpeed());
 		this.getAttribute(Attributes.KNOCKBACK_RESISTANCE).setBaseValue(this.creatureStats.getKnockbackResistance());
 		this.getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(this.creatureStats.getSight());
-		this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(this.creatureStats.getDamage());
+		this.getAttribute(Attributes.field_233823_f_).setBaseValue(this.creatureStats.getDamage());
 		this.getAttribute(Attributes.ATTACK_SPEED).setBaseValue(this.creatureStats.getAttackSpeed());
 		this.getAttribute(RANGED_SPEED).setBaseValue(this.creatureStats.getRangedSpeed());
 	}
@@ -555,7 +561,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     public void setupMob() {
         // Stats:
         this.stepHeight = 0.5F;
-        this.inventory = new InventoryCreature(this.getName().getFormattedText(), this);
+        this.inventory = new InventoryCreature(this.getName().getString(), this);
 
         // Drops:
         this.loadItemDrops();
@@ -612,11 +618,11 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     public ITextComponent getTitle() {
 		ITextComponent name = new StringTextComponent("");
 
-    	if(!"".equals(this.getAgeName().getFormattedText())) {
+    	if(!"".equals(this.getAgeName().getString())) {
 			name.appendSibling(this.getAgeName()).appendText(" ");
 		}
 
-    	if(!"".equals(this.getSubspeciesTitle().getFormattedText())) {
+    	if(!"".equals(this.getSubspeciesTitle().getString())) {
 			name.appendSibling(this.getSubspeciesTitle()).appendText(" ");
 		}
 
@@ -1249,7 +1255,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	public void getRandomSubspecies() {
 		if(!this.isMinion()) {
 			this.subspecies = this.creatureInfo.getRandomSubspecies(this);
-			LycanitesMobs.logDebug("Subspecies", "Setting " + this.getSpeciesName().getFormattedText() + " subspecies to " + this.subspecies.getTitle().getFormattedText());
+			LycanitesMobs.logDebug("Subspecies", "Setting " + this.getSpeciesName().getString() + " subspecies to " + this.subspecies.getTitle().getString());
 		}
 	}
 
@@ -1258,11 +1264,11 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		if(!this.isMinion()) {
     		Variant randomVariant = this.getSubspecies().getRandomVariant(this, this.spawnedRare);
     		if(randomVariant != null) {
-				LycanitesMobs.logDebug("Subspecies", "Setting " + this.getSpeciesName().getFormattedText() + " to " + randomVariant.getTitle().getFormattedText());
+				LycanitesMobs.logDebug("Subspecies", "Setting " + this.getSpeciesName().getString() + " to " + randomVariant.getTitle().getString());
 				this.applyVariant(randomVariant.index);
 			}
     		else {
-				LycanitesMobs.logDebug("Subspecies", "Setting " + this.getSpeciesName().getFormattedText() + " to base variant.");
+				LycanitesMobs.logDebug("Subspecies", "Setting " + this.getSpeciesName().getString() + " to base variant.");
 				this.applyVariant(0);
 			}
     	}
@@ -1600,7 +1606,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		if(perchTarget != null) {
 			ExtendedEntity perchEntityExt = ExtendedEntity.getForEntity(this.getPerchTarget());
 			if(perchEntityExt != null) {
-				Vec3d perchPosition = perchEntityExt.getPerchPosition();
+				Vector3d perchPosition = perchEntityExt.getPerchPosition();
 				this.setPosition(perchPosition.x, perchPosition.y, perchPosition.z);
 				this.setMotion(perchTarget.getMotion());
 				this.rotationYaw = perchTarget.rotationYaw;
@@ -2026,17 +2032,17 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     }
 
 	@Override
-	public void move(MoverType type, Vec3d pos) {
+	public void move(MoverType type, Vector3d pos) {
 		double x = Math.max(Math.min(pos.getX(), 10), -10);
 		double y = Math.max(Math.min(pos.getY(), 10), -10);
 		double z = Math.max(Math.min(pos.getZ(), 10), -10);
-		super.move(type, new Vec3d(x, y, z));
+		super.move(type, new Vector3d(x, y, z));
 	}
 
     // ========== Move with Heading ==========
     /** Moves the entity, redirects to the direct navigator if this mob should use that instead. **/
     @Override
-    public void travel(Vec3d direction) {
+    public void travel(Vector3d direction) {
 		if(this.useDirectNavigator()) {
 			this.directNavigator.flightMovement(direction.getX(), direction.getZ());
 			this.updateLimbSwing();
@@ -2054,7 +2060,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		}
     }
 
-    public void travelFlying(Vec3d direction) {
+    public void travelFlying(Vector3d direction) {
     	double flightDampening = 0.91F;
 		if (this.onGround) {
 			BlockState groundState = this.getEntityWorld().getBlockState(this.getPosition().down());
@@ -2066,7 +2072,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		this.updateLimbSwing();
 	}
 
-	public void travelSwimming(Vec3d direction) {
+	public void travelSwimming(Vector3d direction) {
 		super.moveRelative(0.1F, direction);
 		this.move(MoverType.SELF, this.getMotion());
 		this.setMotion(this.getMotion().scale(0.9D));
@@ -2274,7 +2280,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     public void leap(float range, double leapHeight, Entity target) {
         if(target == null)
             return;
-        this.leap(range, leapHeight, target.getPosition());
+        this.leap(range, leapHeight, target.func_233580_cy_()); // getPosition
     }
 
 	/**
@@ -2290,10 +2296,10 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		if(!this.isFlying()) {
 			this.playJumpSound();
 		}
-		double distance = targetPos.distanceSq(this.getPosition());
+		double distance = targetPos.distanceSq(this.func_233580_cy_());
 		if(distance > 2.0F * 2.0F && distance <= range * range) {
-			double xDist = targetPos.getX() - this.getPosition().getX();
-			double zDist = targetPos.getZ() - this.getPosition().getZ();
+			double xDist = targetPos.getX() - this.func_233580_cy_().getX();
+			double zDist = targetPos.getZ() - this.func_233580_cy_().getZ();
 			if(xDist == 0) {
 				xDist = 0.05D;
 			}
@@ -2388,12 +2394,12 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     /** Returns the distance that the specified XYZ position is from the home position. **/
     public double getDistanceFromHome(int x, int y, int z) {
     	if(!hasHome()) return 0;
-    	return this.homePosition.distanceSq(new Vec3i(x, y, z));
+    	return this.homePosition.distanceSq(new Vector3i(x, y, z));
     }
 
     /** Returns the distance that the entity's position is from the home position. **/
     public double getDistanceFromHome() {
-    	return this.homePosition.distanceSq(this.getPosition());
+    	return this.homePosition.distanceSq(this.func_233580_cy_());
     }
 
     // ========== Arena Center ==========
@@ -2453,7 +2459,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     /** Returns the Y position of the highest air block from the starting x, y, z position until either a solid block is hit or the sky is accessible. **/
     public int getAirY(BlockPos pos) {
         int y = pos.getY();
-        int yMax = this.getEntityWorld().getActualHeight() - 1;
+        int yMax = this.getEntityWorld().getHeight() - 1;
         if(y >= yMax)
             return yMax;
         if(this.getEntityWorld().canBlockSeeSky(pos))
@@ -2480,7 +2486,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
         int y = pos.getY();
         if(y <= 0)
             return 0;
-        int yMax = this.getEntityWorld().getActualHeight() - 1;
+        int yMax = this.getEntityWorld().getHeight() - 1;
         if(y >= yMax)
             return yMax;
         int yLimit = 24;
@@ -2754,7 +2760,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	 * @param inaccuracy How inaccurate the projectile aiming is.
 	 * @return The newly created projectile.
 	 */
-	public BaseProjectileEntity fireProjectile(String projectileName, Entity target, float range, float angle, Vec3d offset, float velocity, float scale, float inaccuracy) {
+	public BaseProjectileEntity fireProjectile(String projectileName, Entity target, float range, float angle, Vector3d offset, float velocity, float scale, float inaccuracy) {
 		ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile(projectileName);
 		if(projectileInfo == null) {
 			return null;
@@ -2774,7 +2780,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	 * @param inaccuracy How inaccurate the projectile aiming is.
 	 * @return The newly created projectile.
 	 */
-	public BaseProjectileEntity fireProjectile(Class<? extends BaseProjectileEntity> projectileClass, Entity target, float range, float angle, Vec3d offset, float velocity, float scale, float inaccuracy) {
+	public BaseProjectileEntity fireProjectile(Class<? extends BaseProjectileEntity> projectileClass, Entity target, float range, float angle, Vector3d offset, float velocity, float scale, float inaccuracy) {
 		BaseProjectileEntity projectile = ProjectileManager.getInstance().createOldProjectile(projectileClass, this.getEntityWorld(), this);
 		return this.fireProjectile(projectile, target, range, angle, offset, velocity, scale, inaccuracy);
 	}
@@ -2791,7 +2797,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	 * @param inaccuracy How inaccurate the projectile aiming is.
 	 * @return The fired created projectile.
 	 */
-	public BaseProjectileEntity fireProjectile(BaseProjectileEntity projectile, Entity target, float range, float angle, Vec3d offset, float velocity, float scale, float inaccuracy) {
+	public BaseProjectileEntity fireProjectile(BaseProjectileEntity projectile, Entity target, float range, float angle, Vector3d offset, float velocity, float scale, float inaccuracy) {
 		if(projectile == null) {
 			return null;
 		}
@@ -2803,7 +2809,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		);
 		projectile.setProjectileScale(scale);
 
-		Vec3d facing = this.getFacingPositionDouble(this.getPositionVec().getX(), this.getPositionVec().getY(), this.getPositionVec().getZ(), range, angle);
+		Vector3d facing = this.getFacingPositionDouble(this.getPositionVec().getX(), this.getPositionVec().getY(), this.getPositionVec().getZ(), range, angle);
 		double distanceX = facing.x - this.getPositionVec().getX();
 		double distanceZ = facing.z - this.getPositionVec().getZ();
 		double distanceXZ = MathHelper.sqrt(distanceX * distanceX + distanceZ * distanceZ) * 0.1D;
@@ -2860,7 +2866,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
 		// TODO Enchanted Weapon Damage and Knockback
         //if(target instanceof LivingEntity) {
-        	//damage += EnchantmentHelper.getModifierForCreature(this.getHeldItemMainhand(), this.getAttribute(Attributes.ATTACK_DAMAGE));
+        	//damage += EnchantmentHelper.getModifierForCreature(this.getHeldItemMainhand(), this.getAttribute(Attributes.field_233823_f_));
             //i += EnchantmentHelper.getKnockbackModifier(this, (LivingEntity)target);
         //}
 
@@ -2919,7 +2925,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     // ========== Get Attack Damage ==========
     /** Returns how much attack damage this mob does. **/
     public float getAttackDamage(double damageScale) {
-    	float damage = (float)this.getAttribute(Attributes.ATTACK_DAMAGE).getValue();
+    	float damage = (float)this.getAttribute(Attributes.field_233823_f_).getValue();
         damage *= damageScale;
         return damage;
     }
@@ -3003,7 +3009,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
         	this.onDamage(damageSrc, damageAmount);
             Entity entity = damageSrc.getImmediateSource();
             if(entity instanceof ThrowableEntity)
-            	entity = ((ThrowableEntity)entity).getThrower();
+            	entity = ((ThrowableEntity)entity).func_234616_v_();
             
             if(entity instanceof LivingEntity && this.getRider() != entity && this.getRidingEntity() != entity) {
                 if(entity != this)
@@ -3317,14 +3323,14 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     }
 
     /** Returns the XYZ in front or behind the provided XYZ coords with the given distance and angle (in degrees), use a negative distance for behind. **/
-    public Vec3d getFacingPositionDouble(double x, double y, double z, double distance, double angle) {
+    public Vector3d getFacingPositionDouble(double x, double y, double z, double distance, double angle) {
     	if(distance == 0) {
 			distance = 1;
 		}
         angle = Math.toRadians(angle);
         double xAmount = -Math.sin(angle);
         double zAmount = Math.cos(angle);
-        return new Vec3d(x + (distance * xAmount), y, z + (distance * zAmount));
+        return new Vector3d(x + (distance * xAmount), y, z + (distance * zAmount));
     }
 
 
@@ -3582,9 +3588,9 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     public boolean isSafeToLand() {
         if(this.onGround)
             return true;
-        if(this.getEntityWorld().getBlockState(this.getPosition().down()).getMaterial().isSolid())
+        if(this.getEntityWorld().getBlockState(this.func_233580_cy_().down()).getMaterial().isSolid())
             return true;
-        if(this.getEntityWorld().getBlockState(this.getPosition().down(2)).getMaterial().isSolid())
+        if(this.getEntityWorld().getBlockState(this.func_233580_cy_().down(2)).getMaterial().isSolid())
             return true;
         return false;
     }
@@ -3892,7 +3898,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 			this.dropItem(itemDrop.getEntityDropItemStack(this, quantity));
     	}
 
-		this.func_226294_cV_(); // Drop XP
+		this.dropExperience();
     }
 
 	public boolean canDropItem(ItemDrop itemDrop) {
@@ -4016,13 +4022,14 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
     /** The main interact method that is called when a player right clicks this entity. **/
     @Override
-    public boolean processInteract(PlayerEntity player, Hand hand) {
+    public ActionResultType processInitialInteract(PlayerEntity player, Hand hand) {
 		if(this.hasPerchTarget()) {
-			return false;
+			return ActionResultType.FAIL;
 		}
-	    if(this.assessInteractCommand(getInteractCommands(player, player.getHeldItem(hand)), player, player.getHeldItem(hand)))
-	    	return true;
-	    return super.processInteract(player, hand);
+	    if(this.assessInteractCommand(getInteractCommands(player, player.getHeldItem(hand)), player, player.getHeldItem(hand))) {
+			return ActionResultType.SUCCESS;
+		}
+	    return super.processInitialInteract(player, hand);
     }
 
     // ========== Assess Interact Command ==========
@@ -4360,15 +4367,6 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		super.setFire(seconds);
 	}
 
-    /** Deals fire damage to this entity if it is burning. **/
-    @Override
-	protected void dealFireDamage(int amount) {
-		if(!this.canBurn()) {
-			return;
-		}
-		super.dealFireDamage(amount);
-	}
-
     /** Returns whether or not the specified potion effect can be applied to this entity. **/
     @Override
     public boolean isPotionApplicable(EffectInstance effectInstance) {
@@ -4414,7 +4412,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     public boolean webProof() { return false; }
 
     @Override
-    public void setMotionMultiplier(BlockState blockState, Vec3d motionMultiplier) {
+    public void setMotionMultiplier(BlockState blockState, Vector3d motionMultiplier) {
     	if(blockState.getBlock() == Blocks.COBWEB && webProof()) {
     		return;
 		}
@@ -4530,7 +4528,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
      * Light enough for spawnsInLight: 2 = Light, 3 = Bright
     **/
     public byte testLightLevel() {
-    	return testLightLevel(this.getPosition());
+    	return testLightLevel(this.func_233580_cy_());
     }
 
     /** Returns a light rating for the light level the specified XYZ position.

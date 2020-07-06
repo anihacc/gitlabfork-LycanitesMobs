@@ -10,7 +10,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
 public class EntityDjinn extends TameableCreatureEntity implements IMob, IFusable {
@@ -71,7 +71,7 @@ public class EntityDjinn extends TameableCreatureEntity implements IMob, IFusabl
     public void attackRanged(Entity target, float range) {
     	int projectileCount = 10;
     	for(int i = 0; i < projectileCount; i++) {
-    		this.fireProjectile("whirlwind", target, range, (360 / projectileCount) * i, new Vec3d(0, 0, 0), 0.6f, 2f, 1F);
+    		this.fireProjectile("whirlwind", target, range, (360 / projectileCount) * i, new Vector3d(0, 0, 0), 0.6f, 2f, 1F);
 		}
         super.attackRanged(target, range);
     }

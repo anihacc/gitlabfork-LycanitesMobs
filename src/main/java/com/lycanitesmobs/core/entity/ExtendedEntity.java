@@ -12,7 +12,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.Effect;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 
 import java.util.HashMap;
 import java.util.List;
@@ -32,7 +32,7 @@ public class ExtendedEntity implements IExtendedEntity {
 
     // Safe Position:
     /** The last coordinates the entity was at where it wasn't inside an opaque block. (Helps prevent suffocation). **/
-    Vec3d lastSafePos;
+    Vector3d lastSafePos;
     private boolean playerAllowFlyingSnapshot;
     private boolean playerIsFlyingSnapshot;
 
@@ -153,10 +153,10 @@ public class ExtendedEntity implements IExtendedEntity {
 
         // Safe Position:
 		if (this.lastSafePos == null) {
-			this.lastSafePos = new Vec3d(this.entity.getPositionVec().getX(), this.entity.getPositionVec().getY(), this.entity.getPositionVec().getZ());
+			this.lastSafePos = new Vector3d(this.entity.getPositionVec().getX(), this.entity.getPositionVec().getY(), this.entity.getPositionVec().getZ());
 		}
 		if (!this.entity.getEntityWorld().getBlockState(this.entity.getPosition()).getMaterial().isSolid()) {
-			this.lastSafePos = new Vec3d(Math.floor(this.entity.getPositionVec().getX()) + 0.5D, this.entity.getPosition().getY(), Math.floor(this.entity.getPositionVec().getZ()) + 0.5D);
+			this.lastSafePos = new Vector3d(Math.floor(this.entity.getPositionVec().getX()) + 0.5D, this.entity.getPosition().getY(), Math.floor(this.entity.getPositionVec().getZ()) + 0.5D);
 		}
 
         // Fear Entity:
@@ -336,7 +336,7 @@ public class ExtendedEntity implements IExtendedEntity {
 	 * Returns the xyz position that an entity should perch on this entity at.
 	 * @return The perch position.
 	 */
-	public Vec3d getPerchPosition() {
+	public Vector3d getPerchPosition() {
 		double entityWidth = this.entity.getSize(this.entity.getPose()).width;
 		double entityHeight = this.entity.getSize(this.entity.getPose()).height;
 
@@ -349,7 +349,7 @@ public class ExtendedEntity implements IExtendedEntity {
 			zPerchPos += distance * Math.cos(angle);
 		}
 
-		return new Vec3d(
+		return new Vector3d(
 				xPerchPos,
 				this.entity.getPositionVec().getY() + entityHeight * 0.78D,
 				zPerchPos
@@ -362,7 +362,7 @@ public class ExtendedEntity implements IExtendedEntity {
 	public void updatedPerchedByEntity() {
 		Entity perchedByEntity = this.getPerchedByEntity();
 		if(perchedByEntity != null) {
-			Vec3d perchPosition = this.getPerchPosition();
+			Vector3d perchPosition = this.getPerchPosition();
 			perchedByEntity.setPosition(perchPosition.getX(), perchPosition.getY(), perchPosition.getZ());
 			perchedByEntity.setMotion(this.entity.getMotion());
 			perchedByEntity.rotationYaw = this.entity.rotationYaw;

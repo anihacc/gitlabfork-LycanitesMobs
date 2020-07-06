@@ -32,13 +32,13 @@ public class ProjectileBehaviourDrainHealth extends ProjectileBehaviour {
 
 	@Override
 	public void onProjectileDamage(BaseProjectileEntity projectile, World world, LivingEntity target, float damage) {
-		if(projectile.getThrower() == null) {
+		if(projectile.func_234616_v_() == null) {
 			return;
 		}
 
-		projectile.getThrower().heal(damage * this.rate);
-		if(projectile.getThrower().getRidingEntity() instanceof LivingEntity) {
-			((LivingEntity)projectile.getThrower().getRidingEntity()).heal(damage * this.mountRate);
+		projectile.func_234616_v_().heal(damage * this.rate);
+		if(projectile.func_234616_v_().getRidingEntity() instanceof LivingEntity) {
+			((LivingEntity)projectile.func_234616_v_().getRidingEntity()).heal(damage * this.mountRate);
 		}
 	}
 }

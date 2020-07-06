@@ -90,7 +90,7 @@ public class PetEntry {
         CreatureInfo creatureInfo = entity.creatureInfo;
         PetEntry petEntry = new PetEntry(UUID.randomUUID(), petType, player, creatureInfo.getName());
         if(entity.hasCustomName()) {
-			petEntry.setEntityName(entity.getCustomName().getFormattedText());
+			petEntry.setEntityName(entity.getCustomName().getString());
 		}
         petEntry.setEntitySubspecies(entity.getSubspeciesIndex());
         petEntry.setEntityVariant(entity.getVariantIndex());
@@ -250,7 +250,7 @@ public class PetEntry {
     }
 
     public String getDisplayNameString() {
-        return this.getDisplayName().getFormattedText();
+        return this.getDisplayName().getString();
     }
 
 
@@ -346,7 +346,7 @@ public class PetEntry {
                 }
 
                 if(entity.hasCustomName()) {
-                	this.entityName = this.entity.getCustomName().getFormattedText();
+                	this.entityName = this.entity.getCustomName().getString();
 				}
             }
         }
@@ -649,7 +649,7 @@ public class PetEntry {
 
             // Update Pet Name:
             if(this.entity.hasCustomName()) {
-                this.entityName = this.entity.getCustomName().getFormattedText();
+                this.entityName = this.entity.getCustomName().getString();
             }
 
             this.entity.writeWithoutTypeId(this.entityNBT);

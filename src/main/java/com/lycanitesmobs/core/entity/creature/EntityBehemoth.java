@@ -16,7 +16,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -118,7 +118,7 @@ public class EntityBehemoth extends TameableCreatureEntity implements IMob {
     // ========== Ranged Attack ==========
     @Override
     public void attackRanged(Entity target, float range) {
-        this.fireProjectile("hellfireball", target, range, 0, new Vec3d(0, 0, 0), 1.2f, 2f, 1F);
+        this.fireProjectile("hellfireball", target, range, 0, new Vector3d(0, 0, 0), 1.2f, 2f, 1F);
         super.attackRanged(target, range);
     }
     
@@ -141,7 +141,7 @@ public class EntityBehemoth extends TameableCreatureEntity implements IMob {
     // ==================================================
     /** Returns this creature's main texture. Also checks for for subspecies. **/
     public ResourceLocation getTexture() {
-        if(!this.hasCustomName() || !"Krampus".equals(this.getCustomName().getFormattedText()))
+        if(!this.hasCustomName() || !"Krampus".equals(this.getCustomName().getString()))
             return super.getTexture();
 
         String textureName = this.getTextureName() + "_krampus";

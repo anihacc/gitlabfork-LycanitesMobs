@@ -63,7 +63,7 @@ public class ElementList extends BaseList<ElementsBeastiaryScreen> {
 			if(elementInfo == null) {
 				return;
 			}
-			this.parentList.screen.getFontRenderer().drawString(elementInfo.getTitle().getFormattedText(), left + 4, top + 4, 0xFFFFFF);
+			this.parentList.screen.getFontRenderer().drawString(elementInfo.getTitle().getString(), left + 4, top + 4, 0xFFFFFF);
 
 			// Icon:
 			//if (elementInfo.getIcon() != null) {

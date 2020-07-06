@@ -60,7 +60,7 @@ public class SummoningPedestalList extends BaseList<SummoningPedestalScreen> {
 				this.parentGUI.screen.drawBar(TextureManager.getTexture("GUIPetLevel"), levelBarX, levelBarY, 0, levelBarWidth, levelBarHeight, level, 10);
 			}
 
-			this.parentGUI.screen.getFontRenderer().drawString(creatureInfo.getTitle().getFormattedText(), left + 20 , top + 4, 0xFFFFFF);
+			this.parentGUI.screen.getFontRenderer().drawString(creatureInfo.getTitle().getString(), left + 20 , top + 4, 0xFFFFFF);
 			this.parentGUI.screen.drawTexture(creatureInfo.getIcon(), left + 2, top + 4, 0, 1, 1, 16, 16);
 		}
 

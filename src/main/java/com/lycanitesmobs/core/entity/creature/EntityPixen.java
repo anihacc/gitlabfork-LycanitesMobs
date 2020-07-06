@@ -15,7 +15,7 @@ import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
@@ -149,7 +149,7 @@ public class EntityPixen extends TameableCreatureEntity implements IMob {
     // ========== Ranged Attack ==========
     @Override
     public void attackRanged(Entity target, float range) {
-        this.fireProjectile("tricksterflare", target, range, 0, new Vec3d(0, 0, 0), 0.75f, 1f, 1F);
+        this.fireProjectile("tricksterflare", target, range, 0, new Vector3d(0, 0, 0), 0.75f, 1f, 1F);
         super.attackRanged(target, range);
     }
     

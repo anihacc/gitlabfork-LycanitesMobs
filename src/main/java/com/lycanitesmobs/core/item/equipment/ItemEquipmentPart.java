@@ -24,7 +24,7 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -107,7 +107,7 @@ public class ItemEquipmentPart extends BaseItem {
 		for(String elementName : elementNames) {
 			ElementInfo element = ElementManager.getInstance().getElement(elementName);
 			if (element == null) {
-				throw new RuntimeException("[Equipment] Unable to initialise Equipment Part " + this.getName().getFormattedText() + " as the element " + elementName + " cannot be found.");
+				throw new RuntimeException("[Equipment] Unable to initialise Equipment Part " + this.getName().getString() + " as the element " + elementName + " cannot be found.");
 			}
 			this.elements.add(element);
 		}
@@ -144,7 +144,7 @@ public class ItemEquipmentPart extends BaseItem {
 		super.addInformation(itemStack, world, tooltip, tooltipFlag);
 		FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
 		for(ITextComponent description : this.getAdditionalDescriptions(itemStack, world, tooltipFlag)) {
-			List<String> formattedDescriptionList = fontRenderer.listFormattedStringToWidth(description.getFormattedText(), DESCRIPTION_WIDTH + 100);
+			List<String> formattedDescriptionList = fontRenderer.listFormattedStringToWidth(description.getString(), DESCRIPTION_WIDTH + 100);
 			for (String formattedDescription : formattedDescriptionList) {
 				tooltip.add(new StringTextComponent(formattedDescription));
 			}
@@ -183,7 +183,7 @@ public class ItemEquipmentPart extends BaseItem {
 
 		for(EquipmentFeature feature : this.features) {
 			ITextComponent featureDescription = feature.getDescription(itemStack, level);
-			if(featureDescription != null && !"".equals(featureDescription.getFormattedText())) {
+			if(featureDescription != null && !"".equals(featureDescription.getString())) {
 				descriptions.add(featureDescription);
 			}
 		}
@@ -335,7 +335,7 @@ public class ItemEquipmentPart extends BaseItem {
 	}
 
 	/** Returns the dyed color for the provided ItemStack. **/
-	public Vec3d getColor(ItemStack itemStack) {
+	public Vector3d getColor(ItemStack itemStack) {
 		CompoundNBT nbt = this.getTagCompound(itemStack);
 		double r = 1;
 		double g = 1;
@@ -349,7 +349,7 @@ public class ItemEquipmentPart extends BaseItem {
 		if(nbt.contains("equipmentColorB")) {
 			b = nbt.getFloat("equipmentColorB");
 		}
-		return new Vec3d(r, g, b);
+		return new Vector3d(r, g, b);
 	}
 
 	/** Set the dyed color for the provided ItemStack. **/

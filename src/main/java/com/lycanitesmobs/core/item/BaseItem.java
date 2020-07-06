@@ -62,9 +62,9 @@ public class BaseItem extends Item {
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flag) {
 		ITextComponent description = this.getDescription(stack, worldIn, tooltip, flag);
-    	if(!"".equalsIgnoreCase(description.getFormattedText())) {
+    	if(!"".equalsIgnoreCase(description.getString())) {
     		FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
-    		List<String> formattedDescriptionList = fontRenderer.listFormattedStringToWidth(description.getFormattedText(), DESCRIPTION_WIDTH);
+    		List<String> formattedDescriptionList = fontRenderer.listFormattedStringToWidth(description.getString(), DESCRIPTION_WIDTH);
     		for(String formattedDescription : formattedDescriptionList) {
     			tooltip.add(new StringTextComponent(formattedDescription));
     		}

@@ -86,7 +86,7 @@ public class EntityJabberwock extends TameableCreatureEntity implements IMob {
     // ==================================================
     /** Returns this creature's main texture. Also checks for for subspecies. **/
     public ResourceLocation getTexture() {
-        if(!this.hasCustomName() || !"Rudolph".equals(this.getCustomName().getFormattedText()))
+        if(!this.hasCustomName() || !"Rudolph".equals(this.getCustomName().getString()))
             return super.getTexture();
 
         String textureName = this.getTextureName() + "_rudolph";

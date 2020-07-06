@@ -203,7 +203,7 @@ public class CreatureList extends BaseList<BeastiaryScreen> {
 				if (this.parentList.listType == Type.SUMMONABLE) {
 					nameY = top + 2;
 				}
-				this.parentList.screen.getFontRenderer().drawString(this.creatureInfo.getTitle().getFormattedText(), left + 20, nameY, 0xFFFFFF);
+				this.parentList.screen.getFontRenderer().drawString(this.creatureInfo.getTitle().getString(), left + 20, nameY, 0xFFFFFF);
 
 				// Level:
 				if (this.parentList.listType == Type.SUMMONABLE) {
@@ -227,7 +227,7 @@ public class CreatureList extends BaseList<BeastiaryScreen> {
 				if (this.parentList.listType == Type.PET || this.parentList.listType == Type.MOUNT) {
 					nameY = top + 2;
 				}
-				this.parentList.screen.getFontRenderer().drawString(this.petEntry.getDisplayName().getFormattedText(), left + 20, nameY, 0xFFFFFF);
+				this.parentList.screen.getFontRenderer().drawString(this.petEntry.getDisplayName().getString(), left + 20, nameY, 0xFFFFFF);
 
 				// Level:
 				if (this.parentList.listType == Type.PET || this.parentList.listType == Type.MOUNT) {

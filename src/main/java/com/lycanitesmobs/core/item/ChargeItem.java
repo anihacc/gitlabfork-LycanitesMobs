@@ -57,7 +57,7 @@ public class ChargeItem extends BaseItem {
         super.addInformation(itemStack, world, tooltip, tooltipFlag);
         FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
         for(ITextComponent description : this.getAdditionalDescriptions(itemStack, world, tooltipFlag)) {
-            List<String> formattedDescriptionList = fontRenderer.listFormattedStringToWidth("-------------------\n" + description.getFormattedText(), DESCRIPTION_WIDTH + 100);
+            List<String> formattedDescriptionList = fontRenderer.listFormattedStringToWidth("-------------------\n" + description.getString(), DESCRIPTION_WIDTH + 100);
             for (String formattedDescription : formattedDescriptionList) {
                 tooltip.add(new StringTextComponent(formattedDescription));
             }

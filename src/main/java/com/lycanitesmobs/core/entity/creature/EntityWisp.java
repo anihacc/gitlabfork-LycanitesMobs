@@ -9,7 +9,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.monster.SkeletonEntity;
 import net.minecraft.entity.monster.ZombieEntity;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -153,7 +153,7 @@ public class EntityWisp extends TameableCreatureEntity {
     // ========== Ranged Attack ==========
     @Override
     public void attackRanged(Entity target, float range) {
-		this.fireProjectile("lightball", target, range, 0, new Vec3d(0, 0, 0), 0.5f, 1f, 1F);
+		this.fireProjectile("lightball", target, range, 0, new Vector3d(0, 0, 0), 0.5f, 1f, 1F);
 		super.attackRanged(target, range);
     }
 

@@ -6,7 +6,7 @@ import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.SectionPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.server.ServerWorld;
 
@@ -61,7 +61,7 @@ public class MoveVillageGoal extends Goal {
             if (!serverWorld.func_217471_a(blockPos, 6)) {
                 return false;
             } else {
-                Vec3d lvt_3_1_ = RandomPositionGenerator.func_221024_a(this.host, 15, 7, (p_220755_1_) -> {
+                Vector3d lvt_3_1_ = RandomPositionGenerator.func_221024_a(this.host, 15, 7, (p_220755_1_) -> {
                     return (double)(-serverWorld.func_217486_a(SectionPos.from(p_220755_1_)));
                 });
                 this.blockPos = lvt_3_1_ == null ? null : new BlockPos(lvt_3_1_);
@@ -88,11 +88,11 @@ public class MoveVillageGoal extends Goal {
         if (this.blockPos != null) {
             PathNavigator lvt_1_1_ = this.host.getNavigator();
             if (lvt_1_1_.noPath() && !this.blockPos.withinDistance(this.host.getPositionVec(), 10.0D)) {
-                Vec3d lvt_2_1_ = new Vec3d(this.blockPos);
-                Vec3d lvt_3_1_ = new Vec3d(this.host.getPositionVec().getX(), this.host.getPositionVec().getY(), this.host.getPositionVec().getZ());
-                Vec3d lvt_4_1_ = lvt_3_1_.subtract(lvt_2_1_);
+                Vector3d lvt_2_1_ = new Vector3d(this.blockPos);
+                Vector3d lvt_3_1_ = new Vector3d(this.host.getPositionVec().getX(), this.host.getPositionVec().getY(), this.host.getPositionVec().getZ());
+                Vector3d lvt_4_1_ = lvt_3_1_.subtract(lvt_2_1_);
                 lvt_2_1_ = lvt_4_1_.scale(0.4D).add(lvt_2_1_);
-                Vec3d lvt_5_1_ = lvt_2_1_.subtract(lvt_3_1_).normalize().scale(10.0D).add(lvt_3_1_);
+                Vector3d lvt_5_1_ = lvt_2_1_.subtract(lvt_3_1_).normalize().scale(10.0D).add(lvt_3_1_);
                 BlockPos lvt_6_1_ = new BlockPos(lvt_5_1_);
                 lvt_6_1_ = this.host.world.getHeight(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, lvt_6_1_);
                 if (!lvt_1_1_.tryMoveToXYZ((double) lvt_6_1_.getX(), (double) lvt_6_1_.getY(), (double) lvt_6_1_.getZ(), 1.0D)) {

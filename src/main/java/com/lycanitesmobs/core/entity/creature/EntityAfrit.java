@@ -13,7 +13,7 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
 public class EntityAfrit extends TameableCreatureEntity implements IMob {
@@ -128,7 +128,7 @@ public class EntityAfrit extends TameableCreatureEntity implements IMob {
     // ========== Ranged Attack ==========
     @Override
     public void attackRanged(Entity target, float range) {
-        this.fireProjectile("scorchfireball", target, range, 0, new Vec3d(0, 0, 0), 0.8f, 2f, 6F);
+        this.fireProjectile("scorchfireball", target, range, 0, new Vector3d(0, 0, 0), 0.8f, 2f, 6F);
         super.attackRanged(target, range);
     }
     

@@ -11,7 +11,7 @@ import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -109,7 +109,7 @@ public class ProjectileSpriteRenderer extends EntityRenderer<BaseProjectileEntit
 		}
 		ResourceLocation texture = this.getEntityTexture(entity);
 		RenderType rendertype = CustomRenderStates.getSpriteRenderType(texture);
-		Vec3d direction = entity.getLaserEnd().subtract(entity.getPositionVec()).normalize();
+		Vector3d direction = entity.getLaserEnd().subtract(entity.getPositionVec()).normalize();
 		for(float segment = 0; segment <= laserSize; segment += factor) {
 			matrixStack.push();
 			matrixStack.translate(segment * direction.getX() * spacing, segment * direction.getY() * spacing, segment * direction.getZ() * spacing);

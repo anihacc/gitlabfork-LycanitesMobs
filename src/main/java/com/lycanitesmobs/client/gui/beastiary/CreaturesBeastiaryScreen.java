@@ -91,7 +91,7 @@ public class CreaturesBeastiaryScreen extends BeastiaryScreen {
 		// No Creatures:
 		if(this.playerExt.getBeastiary().creatureKnowledgeList.isEmpty()) {
 			nextY += this.getFontRenderer().getWordWrappedHeight("AAAAAAAAAAAAAAAAAAAAAAAAAAAAA", this.colRightWidth) + 2;
-			String text = new TranslationTextComponent("gui.beastiary.creatures.empty.info").getFormattedText();
+			String text = new TranslationTextComponent("gui.beastiary.creatures.empty.info").getString();
 			this.drawSplitString(text, this.colRightX, nextY, this.colRightWidth, 0xFFFFFF, true);
 			return;
 		}
@@ -105,19 +105,19 @@ public class CreaturesBeastiaryScreen extends BeastiaryScreen {
 			CreatureKnowledge creatureKnowledge = this.playerExt.beastiary.getCreatureKnowledge(this.playerExt.selectedCreature.getName());
 
 			// Element:
-			String text = "\u00A7l" + new TranslationTextComponent("creature.stat.element").getFormattedText() + ": " + "\u00A7r";
-			text += creatureInfo.elements != null ? creatureInfo.getElementNames(subspecies).getFormattedText() : "None";
+			String text = "\u00A7l" + new TranslationTextComponent("creature.stat.element").getString() + ": " + "\u00A7r";
+			text += creatureInfo.elements != null ? creatureInfo.getElementNames(subspecies).getString() : "None";
 			this.getFontRenderer().drawSplitString(text, nextX, nextY, width, 0xFFFFFF);
 
 			// Level:
 			nextY += 2 + this.getFontRenderer().getWordWrappedHeight(text, width);
-			text = "\u00A7l" + new TranslationTextComponent("creature.stat.cost").getFormattedText() + ": " + "\u00A7r";
+			text = "\u00A7l" + new TranslationTextComponent("creature.stat.cost").getString() + ": " + "\u00A7r";
 			this.getFontRenderer().drawSplitString(text, nextX, nextY, width, 0xFFFFFF);
 			this.drawLevel(creatureInfo, TextureManager.getTexture("GUIPetLevel"),nextX + this.getFontRenderer().getStringWidth(text), nextY);
 
 			// Knowledge Rank:
 			nextY += 2 + this.getFontRenderer().getWordWrappedHeight(text, width);
-			text = "\u00A7l" + new TranslationTextComponent("creature.stat.knowledge").getFormattedText() + ": " + "\u00A7r";
+			text = "\u00A7l" + new TranslationTextComponent("creature.stat.knowledge").getString() + ": " + "\u00A7r";
 			this.getFontRenderer().drawSplitString(text, nextX, nextY, width, 0xFFFFFF);
 			this.drawBar(TextureManager.getTexture("GUIPetSpiritEmpty"), nextX + this.getFontRenderer().getStringWidth(text), nextY, 0, 9, 9, 3, 10);
 			if(creatureKnowledge != null) {
@@ -129,12 +129,12 @@ public class CreaturesBeastiaryScreen extends BeastiaryScreen {
 		else if(this.playerExt.selectedCreatureType != null) {
 			// Description:
 			nextY += this.getFontRenderer().getWordWrappedHeight("AAAAAAAAAAAAAAAAAAAAAAAAAAAAA", this.colRightWidth) + 2;
-			String text = this.playerExt.selectedCreatureType.getTitle().getFormattedText();
+			String text = this.playerExt.selectedCreatureType.getTitle().getString();
 			this.drawSplitString(text, nextX, nextY, width, 0xFFFFFF, true);
 
 			// Descovered:
 			nextY += 12 + this.getFontRenderer().getWordWrappedHeight(text, colRightWidth);
-			text = new TranslationTextComponent("gui.beastiary.creatures.descovered").getFormattedText() + ": ";
+			text = new TranslationTextComponent("gui.beastiary.creatures.descovered").getString() + ": ";
 			text += this.playerExt.getBeastiary().getCreaturesDescovered(this.playerExt.selectedCreatureType);
 			text += "/" + this.playerExt.selectedCreatureType.creatures.size();
 			this.getFontRenderer().drawStringWithShadow(text, nextX, nextY, 0xFFFFFF);
@@ -143,7 +143,7 @@ public class CreaturesBeastiaryScreen extends BeastiaryScreen {
 		// Base Display:
 		else {
 			nextY += this.getFontRenderer().getWordWrappedHeight("AAAAAAAAAAAAAAAAAAAAAAAAAAAAA", this.colRightWidth) + 2;
-			String text = new TranslationTextComponent("gui.beastiary.creatures.select").getFormattedText();
+			String text = new TranslationTextComponent("gui.beastiary.creatures.select").getString();
 			this.drawSplitString(text, this.colRightX, nextY, this.colRightWidth, 0xFFFFFF, true);
 		}
 	}

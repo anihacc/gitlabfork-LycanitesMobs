@@ -12,7 +12,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
@@ -229,15 +229,15 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 
 		World world = shooter.getEntityWorld();
 		BaseProjectileEntity mainProjectile = null;
-		Vec3d firePos = new Vec3d(shooter.getPositionVec().getX(), shooter.getPositionVec().getY() + (shooter.getSize(Pose.STANDING).height * 0.65), shooter.getPositionVec().getZ());
+		Vector3d firePos = new Vector3d(shooter.getPositionVec().getX(), shooter.getPositionVec().getY() + (shooter.getSize(Pose.STANDING).height * 0.65), shooter.getPositionVec().getZ());
 		double offsetX = 0;
 		/*if(shooter.isHandActive()) {
 			offsetX = 0.75D;
 			if(shooter.getActiveHand() == EnumHand.OFF_HAND) {
 				offsetX = -offsetX;
 			}
-			Vec3d playerFirePos = this.getFacingPosition(shooter, offsetX, shooter.rotationYaw + 90);
-			firePos = new Vec3d(playerFirePos.x, firePos.y, playerFirePos.z);
+			Vector3d playerFirePos = this.getFacingPosition(shooter, offsetX, shooter.rotationYaw + 90);
+			firePos = new Vector3d(playerFirePos.x, firePos.y, playerFirePos.z);
 		}*/
 
 		// Patterns:
@@ -293,10 +293,10 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 	}
 
 	/** Returns the Vec3f in front or behind the provided entity's position coords with the given distance and angle (in degrees), use a negative distance for behind. **/
-	public Vec3d getFacingPosition(LivingEntity entity, double distance, double angle) {
+	public Vector3d getFacingPosition(LivingEntity entity, double distance, double angle) {
 		angle = Math.toRadians(angle);
 		double xAmount = -Math.sin(angle);
 		double zAmount = Math.cos(angle);
-		return new Vec3d(entity.getPositionVec().getX() + (distance * xAmount), entity.getPositionVec().getY(), entity.getPositionVec().getZ() + (distance * zAmount));
+		return new Vector3d(entity.getPositionVec().getX() + (distance * xAmount), entity.getPositionVec().getY(), entity.getPositionVec().getZ() + (distance * zAmount));
 	}
 }

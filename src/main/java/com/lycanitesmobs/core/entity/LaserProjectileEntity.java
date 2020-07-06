@@ -13,7 +13,7 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
 import java.lang.reflect.Constructor;
@@ -265,7 +265,7 @@ public class LaserProjectileEntity extends BaseProjectileEntity {
 					lockedLaser = true;
 				}
 				else {
-					Vec3d lookDirection = this.shootingEntity.getLookVec();
+					Vector3d lookDirection = this.shootingEntity.getLookVec();
 					this.targetX = this.shootingEntity.getPositionVec().getX() + (lookDirection.x * this.laserRange);
 					this.targetY = this.shootingEntity.getPositionVec().getY() + this.shootingEntity.getEyeHeight() + (lookDirection.y * this.laserRange);
 					this.targetZ = this.shootingEntity.getPositionVec().getZ() + (lookDirection.z * this.laserRange);
@@ -451,20 +451,20 @@ public class LaserProjectileEntity extends BaseProjectileEntity {
 		}
 
 		// Deal Damage:
-		if(this.getThrower() instanceof BaseCreatureEntity) {
-			BaseCreatureEntity creatureThrower = (BaseCreatureEntity)this.getThrower();
+		if(this.func_234616_v_() instanceof BaseCreatureEntity) {
+			BaseCreatureEntity creatureThrower = (BaseCreatureEntity)this.func_234616_v_();
 			attackSuccess = creatureThrower.doRangedDamage(target, this, damage);
 		}
         else {
 			double pierceDamage = 1;
 			if(damage <= pierceDamage)
-                attackSuccess = target.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()).setDamageBypassesArmor().setDamageIsAbsolute(), damage);
+                attackSuccess = target.attackEntityFrom(DamageSource.causeThrownDamage(this, this.func_234616_v_()).setDamageBypassesArmor().setDamageIsAbsolute(), damage);
             else {
                 int hurtResistantTimeBefore = target.hurtResistantTime;
-                target.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()).setDamageBypassesArmor().setDamageIsAbsolute(), (float)pierceDamage);
+                target.attackEntityFrom(DamageSource.causeThrownDamage(this, this.func_234616_v_()).setDamageBypassesArmor().setDamageIsAbsolute(), (float)pierceDamage);
                 target.hurtResistantTime = hurtResistantTimeBefore;
                 damage -= pierceDamage;
-                attackSuccess = target.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), damage);
+                attackSuccess = target.attackEntityFrom(DamageSource.causeThrownDamage(this, this.func_234616_v_()), damage);
             }
         }
         

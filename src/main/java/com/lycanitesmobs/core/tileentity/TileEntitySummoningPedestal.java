@@ -28,7 +28,7 @@ import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -198,7 +198,7 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
         // Sync To Client:
         if(this.updateTick % 20 == 0) {
             MessageSummoningPedestalStats message = new MessageSummoningPedestalStats(this.capacity, this.summonProgress, this.summoningFuel, this.summoningFuelMax, this.getPos().getX(), this.getPos().getY(), this.getPos().getZ());
-            LycanitesMobs.packetHandler.sendToAllAround(message, this.getWorld(), new Vec3d(this.getPos()), 5);
+            LycanitesMobs.packetHandler.sendToAllAround(message, this.getWorld(), new Vector3d(this.getPos()), 5);
         }
 
         this.updateTick++;

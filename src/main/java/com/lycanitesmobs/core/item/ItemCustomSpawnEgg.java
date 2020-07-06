@@ -74,9 +74,9 @@ public class ItemCustomSpawnEgg extends BaseItem {
     @Override
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flag) {
 		ITextComponent description = this.getDescription(stack, worldIn, tooltip, flag);
-        if(!"".equalsIgnoreCase(description.getFormattedText()) && !("item." + this.itemName + ".description").equals(description.getUnformattedComponentText())) {
+        if(!"".equalsIgnoreCase(description.getString()) && !("item." + this.itemName + ".description").equals(description.getUnformattedComponentText())) {
             FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
-            List formattedDescriptionList = fontRenderer.listFormattedStringToWidth(description.getFormattedText(), BaseItem.DESCRIPTION_WIDTH);
+            List formattedDescriptionList = fontRenderer.listFormattedStringToWidth(description.getString(), BaseItem.DESCRIPTION_WIDTH);
             for(Object formattedDescription : formattedDescriptionList) {
                 if(formattedDescription instanceof String)
                     tooltip.add(new TranslationTextComponent((String)formattedDescription));

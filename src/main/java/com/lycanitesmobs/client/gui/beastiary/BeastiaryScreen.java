@@ -150,15 +150,15 @@ public abstract class BeastiaryScreen extends BaseScreen {
 		ButtonBase button;
 
 		// Top Menu:
-		button = new ButtonBase(Page.INDEX.id, buttonX + (buttonWidthPadded * this.buttons.size()), menuY, buttonWidth, buttonHeight, new TranslationTextComponent("gui.beastiary.index.title").getFormattedText(), this);
+		button = new ButtonBase(Page.INDEX.id, buttonX + (buttonWidthPadded * this.buttons.size()), menuY, buttonWidth, buttonHeight, new TranslationTextComponent("gui.beastiary.index.title").getString(), this);
 		this.addButton(button);
-		button = new ButtonBase(Page.CREATURES.id, buttonX + (buttonWidthPadded * this.buttons.size()), menuY, buttonWidth, buttonHeight, new TranslationTextComponent("gui.beastiary.creatures").getFormattedText(), this);
+		button = new ButtonBase(Page.CREATURES.id, buttonX + (buttonWidthPadded * this.buttons.size()), menuY, buttonWidth, buttonHeight, new TranslationTextComponent("gui.beastiary.creatures").getString(), this);
 		this.addButton(button);
-		button = new ButtonBase(Page.PETS.id, buttonX + (buttonWidthPadded * this.buttons.size()), menuY, buttonWidth, buttonHeight, new TranslationTextComponent("gui.beastiary.pets").getFormattedText(), this);
+		button = new ButtonBase(Page.PETS.id, buttonX + (buttonWidthPadded * this.buttons.size()), menuY, buttonWidth, buttonHeight, new TranslationTextComponent("gui.beastiary.pets").getString(), this);
 		this.addButton(button);
-		button = new ButtonBase(Page.SUMMONING.id, buttonX + (buttonWidthPadded * this.buttons.size()), menuY, buttonWidth, buttonHeight, new TranslationTextComponent("gui.beastiary.summoning").getFormattedText(), this);
+		button = new ButtonBase(Page.SUMMONING.id, buttonX + (buttonWidthPadded * this.buttons.size()), menuY, buttonWidth, buttonHeight, new TranslationTextComponent("gui.beastiary.summoning").getString(), this);
 		this.addButton(button);
-		button = new ButtonBase(Page.ELEMENTS.id, buttonX + (buttonWidthPadded * this.buttons.size()), menuY, buttonWidth, buttonHeight, new TranslationTextComponent("gui.beastiary.elements").getFormattedText(), this);
+		button = new ButtonBase(Page.ELEMENTS.id, buttonX + (buttonWidthPadded * this.buttons.size()), menuY, buttonWidth, buttonHeight, new TranslationTextComponent("gui.beastiary.elements").getString(), this);
 		this.addButton(button);
 	}
 
@@ -170,8 +170,8 @@ public abstract class BeastiaryScreen extends BaseScreen {
 	@Override
 	public void renderForeground(int mouseX, int mouseY, float partialTicks) {
 		ITextComponent title = new StringTextComponent("\u00A7l\u00A7n").appendSibling(this.getTitle());
-		float width = this.getFontRenderer().getStringWidth(title.getFormattedText());
-		this.getFontRenderer().drawStringWithShadow(title.getFormattedText(), this.colRightCenterX - Math.round(width / 2), this.colRightY, 0xFFFFFF);
+		float width = this.getFontRenderer().getStringWidth(title.getString());
+		this.getFontRenderer().drawStringWithShadow(title.getString(), this.colRightCenterX - Math.round(width / 2), this.colRightY, 0xFFFFFF);
 	}
 
 	/**

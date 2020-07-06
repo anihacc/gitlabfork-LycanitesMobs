@@ -31,7 +31,7 @@ public class ProjectileBehaviourRandomEffect extends ProjectileBehaviour {
 
 	@Override
 	public void onProjectileDamage(BaseProjectileEntity projectile, World world, LivingEntity target, float damage) {
-		if(projectile.getThrower() == null || damage <= 0) {
+		if(projectile.func_234616_v_() == null || damage <= 0) {
 			return;
 		}
 

@@ -6,7 +6,7 @@ import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
 import net.minecraft.client.renderer.Vector4f;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 
 public class ModelEquipmentPart extends ItemObjModel {
 	/**

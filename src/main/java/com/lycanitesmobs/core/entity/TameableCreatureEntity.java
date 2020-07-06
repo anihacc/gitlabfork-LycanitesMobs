@@ -124,7 +124,7 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
 
 		ITextComponent ownerName = this.getOwnerName();
     	String ownerSuffix = "'s ";
-    	String ownerFormatted = ownerName.getFormattedText();
+    	String ownerFormatted = ownerName.getString();
         if(ownerFormatted.length() > 0) {
             if ("s".equalsIgnoreCase(ownerFormatted.substring(ownerFormatted.length() - 1)))
                 ownerSuffix = "' ";
@@ -134,7 +134,7 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
 			ownedName.appendText(")");
 		}
 
-        //LycanitesMobs.logDebug("", "Translated pet name: " + ownedName.getFormattedText());
+        //LycanitesMobs.logDebug("", "Translated pet name: " + ownedName.getString());
     	return ownedName;
     }
     
@@ -626,7 +626,7 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
 
             Entity entity = damageSrc.getImmediateSource();
             if(entity instanceof ThrowableEntity)
-            	entity = ((ThrowableEntity)entity).getThrower();
+            	entity = ((ThrowableEntity)entity).func_234616_v_();
             
             if(this.isTamed() && this.getOwner() == entity)
             	return false;

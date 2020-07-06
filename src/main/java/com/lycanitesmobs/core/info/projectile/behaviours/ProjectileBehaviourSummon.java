@@ -73,10 +73,10 @@ public class ProjectileBehaviourSummon extends ProjectileBehaviour {
 		// Summon Minion:
 		SummonSet summonSet = null;
 		if(this.summonMinion) {
-			if(!(projectile.getThrower() instanceof PlayerEntity)) {
+			if(!(projectile.func_234616_v_() instanceof PlayerEntity)) {
 				return;
 			}
-			PlayerEntity player = (PlayerEntity)projectile.getThrower();
+			PlayerEntity player = (PlayerEntity)projectile.func_234616_v_();
 			ExtendedPlayer extendedPlayer = ExtendedPlayer.getForPlayer(player);
 			if(extendedPlayer == null) {
 				return;
@@ -122,9 +122,9 @@ public class ProjectileBehaviourSummon extends ProjectileBehaviour {
 						entityCreature.setTemporary(this.summonDuration);
 						entityCreature.setSizeScale(this.sizeScale);
 
-						if (projectile.getThrower() instanceof PlayerEntity && entityCreature instanceof TameableCreatureEntity) {
+						if (projectile.func_234616_v_() instanceof PlayerEntity && entityCreature instanceof TameableCreatureEntity) {
 							TameableCreatureEntity entityTameable = (TameableCreatureEntity) entityCreature;
-							entityTameable.setPlayerOwner((PlayerEntity) projectile.getThrower());
+							entityTameable.setPlayerOwner((PlayerEntity) projectile.func_234616_v_());
 							entityTameable.setSitting(false);
 							entityTameable.setFollowing(true);
 							entityTameable.setPassive(false);

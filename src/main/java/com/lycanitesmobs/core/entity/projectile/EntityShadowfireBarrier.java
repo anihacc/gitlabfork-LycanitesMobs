@@ -106,7 +106,7 @@ public class EntityShadowfireBarrier extends BaseProjectileEntity {
     //========== Do Damage Check ==========
     @Override
     public boolean canDamage(LivingEntity targetEntity) {
-        LivingEntity owner = this.getThrower();
+        LivingEntity owner = this.func_234616_v_();
         if(owner == null) {
             if(targetEntity instanceof EntityRahovart)
                 return false;

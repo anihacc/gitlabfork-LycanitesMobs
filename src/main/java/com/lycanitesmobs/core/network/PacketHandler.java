@@ -4,7 +4,7 @@ import com.lycanitesmobs.LycanitesMobs;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkRegistry;
@@ -75,7 +75,7 @@ public class PacketHandler {
 	 * @param pos The position to find players from.
 	 * @param range The range to find players within.
 	 */
-	public <MSG> void sendToAllAround(MSG message, World world, Vec3d pos, double range) {
+	public <MSG> void sendToAllAround(MSG message, World world, Vector3d pos, double range) {
 		for(PlayerEntity player : world.getPlayers()) {
 			if(player instanceof ServerPlayerEntity && player.getDistanceSq(pos) <= (range * range)) {
 				ServerPlayerEntity serverPlayer = (ServerPlayerEntity) player;

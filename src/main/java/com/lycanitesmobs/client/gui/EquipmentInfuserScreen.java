@@ -80,8 +80,8 @@ public class EquipmentInfuserScreen extends BaseContainerScreen<EquipmentInfuser
 
 	@Override
 	protected void renderForeground(int mouseX, int mouseY, float partialTicks) {
-		this.fontRenderer.drawString(this.equipmentInfuser.getName().getFormattedText(), this.guiLeft + 8, this.guiTop + 6, 4210752);
-        this.fontRenderer.drawString(this.playerInventory.getName().getFormattedText(), this.guiLeft + 8, this.guiTop + this.ySize - 96 + 2, 4210752);
+		this.fontRenderer.drawString(this.equipmentInfuser.getName().getString(), this.guiLeft + 8, this.guiTop + 6, 4210752);
+        this.fontRenderer.drawString(this.playerInventory.getName().getString(), this.guiLeft + 8, this.guiTop + this.ySize - 96 + 2, 4210752);
 		int backX = (this.width - this.xSize) / 2;
 		int backY = (this.height - this.ySize) / 2;
 		this.drawBars(backX, backY);
@@ -106,7 +106,7 @@ public class EquipmentInfuserScreen extends BaseContainerScreen<EquipmentInfuser
 		int experienceMax = partItem.getExperienceForNextLevel(partStack);
 		float experienceNormal = (float)experience / experienceMax;
 		this.drawTexture(TextureManager.getTexture("GUIBarExperience"), barX, barY, 0, experienceNormal, 1, barWidth * experienceNormal, barHeight);
-		String experienceText = new TranslationTextComponent("entity.experience").getFormattedText() + ": " + experience + "/" + experienceMax;
+		String experienceText = new TranslationTextComponent("entity.experience").getString() + ": " + experience + "/" + experienceMax;
 		this.fontRenderer.drawString(experienceText, barCenter - (this.fontRenderer.getStringWidth(experienceText) / 2), barY + 2, 0xFFFFFF);
 	}
     

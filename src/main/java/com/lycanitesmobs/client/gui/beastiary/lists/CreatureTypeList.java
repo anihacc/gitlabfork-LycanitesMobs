@@ -78,7 +78,7 @@ public class CreatureTypeList extends CreatureFilterList {
 
 		@Override
 		public void render(int index, int top, int left, int bottom, int right, int mouseX, int mouseY, boolean focus, float partialTicks) {
-			this.parentList.screen.getFontRenderer().drawString(this.creatureType.getTitle().getFormattedText(), left + 4 , top + 2, 0xFFFFFF);
+			this.parentList.screen.getFontRenderer().drawString(this.creatureType.getTitle().getString(), left + 4 , top + 2, 0xFFFFFF);
 		}
 	}
 }

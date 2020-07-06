@@ -14,7 +14,7 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.particles.RedstoneParticleData;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
 public class EntityDarkling extends TameableCreatureEntity implements IMob {
@@ -78,7 +78,7 @@ public class EntityDarkling extends TameableCreatureEntity implements IMob {
             this.noClip = true;
 
             // Movement:
-            Vec3d latchPos = this.getFacingPositionDouble(this.getLatchTarget().getPositionVec().getX(), this.getLatchTarget().getPositionVec().getY() + (this.getLatchTarget().getSize(Pose.STANDING).height * this.latchHeight), this.getLatchTarget().getPositionVec().getZ(), this.getLatchTarget().getSize(Pose.STANDING).width * 0.5D, this.latchAngle);
+            Vector3d latchPos = this.getFacingPositionDouble(this.getLatchTarget().getPositionVec().getX(), this.getLatchTarget().getPositionVec().getY() + (this.getLatchTarget().getSize(Pose.STANDING).height * this.latchHeight), this.getLatchTarget().getPositionVec().getZ(), this.getLatchTarget().getSize(Pose.STANDING).width * 0.5D, this.latchAngle);
             this.setPosition(latchPos.x, latchPos.y, latchPos.z);
             double distanceX = this.getLatchTarget().getPositionVec().getX() - this.getPositionVec().getX();
             double distanceZ = this.getLatchTarget().getPositionVec().getZ() - this.getPositionVec().getZ();
