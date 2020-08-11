@@ -1,10 +1,10 @@
 package com.lycanitesmobs.client.renderer.layer;
 
 import com.lycanitesmobs.client.renderer.IItemModelRenderer;
-import net.minecraft.client.renderer.Vector4f;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.Vec2f;
+import net.minecraft.util.math.vector.Vector2f;
+import net.minecraft.util.math.vector.Vector4f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -25,7 +25,7 @@ public class LayerItem {
 	}
 	public int blending = 0;
 
-	public Vec2f scrollSpeed;
+	public Vector2f scrollSpeed;
 
 	public Vector4f colorFadeSpeed;
 
@@ -82,11 +82,11 @@ public class LayerItem {
 		return null;
     }
 
-	public Vec2f getTextureOffset(String partName, ItemStack itemStack, float loop) {
+	public Vector2f getTextureOffset(String partName, ItemStack itemStack, float loop) {
 		if(this.scrollSpeed == null) {
-			this.scrollSpeed = new Vec2f(0, 0);
+			this.scrollSpeed = new Vector2f(0, 0);
 		}
-		return new Vec2f(loop * this.scrollSpeed.x, loop * this.scrollSpeed.y);
+		return new Vector2f(loop * this.scrollSpeed.x, loop * this.scrollSpeed.y);
 	}
 
 	/**

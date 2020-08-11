@@ -36,7 +36,7 @@ public class ModelTemplateDragon extends CreatureObjModel {
         }
 
         // Walking:
-        if(entity != null && entity.onGround) {
+        if(entity != null && entity.func_233570_aj_()) {
             float walkLoop = MathHelper.cos(time * 0.3F);
             float walkLoopRev = MathHelper.cos(time * 0.3F + (float)Math.PI);
             float walkIdle = MathHelper.sin(loop * 0.1F);
@@ -101,7 +101,7 @@ public class ModelTemplateDragon extends CreatureObjModel {
         }
 
         // Jumping/Flying:
-        if(entity != null && !entity.onGround) {
+        if(entity != null && !entity.func_233570_aj_()) {
             float flightLoop = MathHelper.sin(loop * 0.4F);
             float flightLoopRev = MathHelper.sin(loop * 0.4F + (float)Math.PI);
             if(partName.equals("body")) {

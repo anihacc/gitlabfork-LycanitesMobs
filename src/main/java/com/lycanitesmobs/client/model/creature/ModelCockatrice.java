@@ -50,7 +50,7 @@ public class ModelCockatrice extends ModelTemplateDragon {
 			rotY += (float) -Math.toDegrees(MathHelper.cos(loop * 0.1F) * 0.4F - 0.2F);
 		}
 
-        if(entity != null && !entity.onGround) {
+        if(entity != null && !entity.func_233570_aj_()) {
 			float flightLoop = MathHelper.sin(loop * 0.4F);
 			float flightLoopRev = MathHelper.sin(loop * 0.4F + (float)Math.PI);
 

@@ -30,7 +30,7 @@ public abstract class BaseScreen extends Screen implements Button.IPressable {
 
     @Override
 	public void init(Minecraft minecraft, int width, int height) {
-    	this.minecraft = minecraft;
+    	this.field_230706_i_ = minecraft;
     	super.init(minecraft, width, height);
 		this.initWidgets();
 	}
@@ -115,7 +115,7 @@ public abstract class BaseScreen extends Screen implements Button.IPressable {
 	 */
 	public int getScaledX(float x) {
 		if(this.scaledResolution == null) {
-			this.scaledResolution = this.minecraft.getMainWindow();
+			this.scaledResolution = this.field_230706_i_.getMainWindow();
 		}
 
 		// Aspect Ratio:

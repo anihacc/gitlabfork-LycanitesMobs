@@ -55,7 +55,7 @@ public class ModelTemplateQuadruped extends CreatureObjModel {
             rotX += Math.toDegrees(MathHelper.cos(time * 0.6662F) * walkSwing * distance);
 
         // Jumping/Flying:
-        if(entity != null && !entity.onGround && !entity.isInWater()) {
+        if(entity != null && !entity.func_233570_aj_() && !entity.isInWater()) {
             if(partName.equals("wingleft")) {
                 rotX = 20;
                 rotX -= Math.toDegrees(MathHelper.sin(loop * 0.4F) * 0.6F);

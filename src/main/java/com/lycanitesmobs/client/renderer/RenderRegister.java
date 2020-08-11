@@ -60,7 +60,7 @@ public class RenderRegister {
 
     public void registerBlockRenderLayers() {
         for(Block block : ItemManager.getInstance().cutoutBlocks) {
-            RenderTypeLookup.setRenderLayer(block, RenderType.cutout());
+            RenderTypeLookup.setRenderLayer(block, RenderType.getCutout());
         }
     }
 }

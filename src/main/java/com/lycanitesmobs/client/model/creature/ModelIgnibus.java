@@ -37,7 +37,7 @@ public class ModelIgnibus extends ModelTemplateDragon {
         super.animatePart(partName, entity, time, distance, loop, lookY, lookX, scale);
 
         // Jumping/Flying:
-        if(entity != null && !entity.onGround) {
+        if(entity != null && !entity.func_233570_aj_()) {
             if (partName.equals("body")) {
                 this.rotate(-20, 0,0);
             }

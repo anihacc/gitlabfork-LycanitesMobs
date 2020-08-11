@@ -90,7 +90,7 @@ public class ModelWarg extends CreatureObjModelOld {
     		rotX += Math.toDegrees(MathHelper.cos(time * 0.6662F) * walkSwing * distance);
 
         // Jump:
-        if(entity != null && !entity.onGround && !entity.isInWater()) {
+        if(entity != null && !entity.func_233570_aj_() && !entity.isInWater()) {
             if(partName.equals("legleftback") || partName.equals("legrightback"))
                 rotX += 25;
             if(partName.equals("legleftfront") || partName.equals("legrightfront"))

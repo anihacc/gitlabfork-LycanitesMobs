@@ -26,7 +26,7 @@ public class ModelVorach extends ModelTemplateBiped {
         super.animatePart(partName, entity, time, distance, loop, lookY, lookX, scale);
 
         // Walking:
-        if(entity == null || entity.onGround || entity.isInWater()) {
+        if(entity == null || entity.func_233570_aj_() || entity.isInWater()) {
             if(partName.equals("legback"))
                 this.rotate((float)Math.toDegrees(MathHelper.cos(time * 0.4F + (float)Math.PI) * 1.4F * distance), 0, 0);
         }

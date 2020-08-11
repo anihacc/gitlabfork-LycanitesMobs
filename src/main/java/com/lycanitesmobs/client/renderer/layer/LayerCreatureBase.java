@@ -6,10 +6,10 @@ import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.Vector4f;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.Vec2f;
+import net.minecraft.util.math.vector.Vector2f;
+import net.minecraft.util.math.vector.Vector4f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -93,8 +93,8 @@ public class LayerCreatureBase extends LayerRenderer<BaseCreatureEntity, Creatur
      * @param trophy If true, the entity is being rendered as a trophy block, etc.
      * @return The part texture offset.
      */
-    public Vec2f getTextureOffset(String partName, BaseCreatureEntity entity, boolean trophy, float loop) {
-        return new Vec2f(0, 0);
+    public Vector2f getTextureOffset(String partName, BaseCreatureEntity entity, boolean trophy, float loop) {
+        return new Vector2f(0, 0);
     }
 
     /**

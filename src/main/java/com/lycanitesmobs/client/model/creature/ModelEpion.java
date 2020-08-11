@@ -60,7 +60,7 @@ public class ModelEpion extends CreatureObjModel {
 		}
 
 		// Walking:
-		if(entity.onGround || entity.isInWater()) {
+		if(entity.func_233570_aj_() || entity.isInWater()) {
 			float walkSwing = 0.6F;
 			if(partName.equals("wingleft01")) {
 				rotZ -= 29;

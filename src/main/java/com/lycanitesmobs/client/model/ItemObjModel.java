@@ -8,18 +8,17 @@ import com.lycanitesmobs.client.obj.ObjPart;
 import com.lycanitesmobs.client.renderer.CustomRenderStates;
 import com.lycanitesmobs.client.renderer.IItemModelRenderer;
 import com.lycanitesmobs.client.renderer.layer.LayerItem;
-import com.lycanitesmobs.client.renderer.layer.LayerItemDye;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.Vector3f;
-import net.minecraft.client.renderer.Vector4f;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.Vec2f;
+import net.minecraft.util.math.vector.Vector2f;
+import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.util.math.vector.Vector4f;
 import org.apache.commons.io.IOUtils;
 
 import java.io.BufferedReader;
@@ -195,7 +194,7 @@ public abstract class ItemObjModel implements IAnimationModel {
 			this.currentAnimationPart.applyAnimationFrames(this.animator);
 
 			// Render Part:
-			this.objModel.renderPart(vertexBuilder, matrixStack.getLast().getNormalMatrix(), matrixStack.getLast().getPositionMatrix(), this.getBrightness(partName, layer, itemStack, brightness), 0, part, this.getPartColor(partName, itemStack, layer, loop), this.getPartTextureOffset(partName, itemStack, layer, loop));
+			this.objModel.renderPart(vertexBuilder, matrixStack.getLast().getNormal(), matrixStack.getLast().getMatrix(), this.getBrightness(partName, layer, itemStack, brightness), 0, part, this.getPartColor(partName, itemStack, layer, loop), this.getPartTextureOffset(partName, itemStack, layer, loop));
 			matrixStack.pop();
 		}
 	}
@@ -308,12 +307,12 @@ public abstract class ItemObjModel implements IAnimationModel {
 	}
 
 	/** Returns the texture offset to be used for this part and layer. **/
-	public Vec2f getPartTextureOffset(String partName, ItemStack itemStack, LayerItem layer, float loop) {
+	public Vector2f getPartTextureOffset(String partName, ItemStack itemStack, LayerItem layer, float loop) {
 		if(layer != null) {
 			return layer.getTextureOffset(partName, itemStack, loop);
 		}
 
-		return new Vec2f(0, 0);
+		return new Vector2f(0, 0);
 	}
 
 	@Override

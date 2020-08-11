@@ -84,7 +84,7 @@ public class ModelLobber extends CreatureObjModelOld {
     	}
     	
     	// Walking:
-    	if(entity == null || entity.onGround || entity.isInWater()) {
+    	if(entity == null || entity.func_233570_aj_() || entity.isInWater()) {
 	    	float walkSwing = 0.6F;
 	    	if(partName.equals("leftarm")) {
 	    		rotX += Math.toDegrees(MathHelper.cos(time * walkSwing) * 1.0F * distance * 0.5F);

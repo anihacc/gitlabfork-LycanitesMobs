@@ -5,10 +5,10 @@ import com.lycanitesmobs.client.renderer.ProjectileModelRenderer;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.Vector4f;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.Vec2f;
+import net.minecraft.util.math.vector.Vector2f;
+import net.minecraft.util.math.vector.Vector4f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -68,8 +68,8 @@ public class LayerProjectileBase extends LayerRenderer<BaseProjectileEntity, Pro
      * @param entity The entity to render.
      * @return The part texture offset.
      */
-    public Vec2f getTextureOffset(String partName, BaseProjectileEntity entity, float loop) {
-        return new Vec2f(0, 0);
+    public Vector2f getTextureOffset(String partName, BaseProjectileEntity entity, float loop) {
+        return new Vector2f(0, 0);
     }
 
     /**

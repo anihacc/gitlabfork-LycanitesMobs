@@ -27,7 +27,7 @@ public abstract class BaseContainerScreen<T extends Container> extends Container
 
     @Override
     public void init(Minecraft minecraft, int width, int height) {
-        this.minecraft = minecraft;
+        this.field_230706_i_ = minecraft;
         super.init(minecraft, width, height);
         this.initWidgets();
     }

@@ -1,17 +1,19 @@
 package com.lycanitesmobs.client.renderer;
 
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.entity.CustomProjectileEntity;
 import com.lycanitesmobs.core.entity.LaserEndProjectileEntity;
 import com.lycanitesmobs.core.entity.LaserProjectileEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.client.renderer.*;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.math.vector.Vector3f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -72,7 +74,7 @@ public class ProjectileSpriteRenderer extends EntityRenderer<BaseProjectileEntit
 			textureHeight *= scale;
 		}
 
-		Matrix4f matrix4f = matrixStack.getLast().getPositionMatrix();
+		Matrix4f matrix4f = matrixStack.getLast().getMatrix();
 		IVertexBuilder vertexBuilder = renderTypeBuffer.getBuffer(rendertype);
 		vertexBuilder
 				.pos(matrix4f, -textureWidth, -textureHeight + (textureHeight / 2), 0.0F) // pos

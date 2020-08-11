@@ -2,9 +2,9 @@ package com.lycanitesmobs.client.renderer.layer;
 
 import com.lycanitesmobs.client.renderer.CreatureRenderer;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import net.minecraft.client.renderer.Vector4f;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.Vec2f;
+import net.minecraft.util.math.vector.Vector2f;
+import net.minecraft.util.math.vector.Vector4f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -12,7 +12,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class LayerCreatureEffect extends LayerCreatureBase {
 	public String textureSuffix;
 	public boolean subspecies = true;
-	public Vec2f scrollSpeed;
+	public Vector2f scrollSpeed;
 
 
     // ==================================================
@@ -53,11 +53,11 @@ public class LayerCreatureEffect extends LayerCreatureBase {
     }
 
 	@Override
-	public Vec2f getTextureOffset(String partName, BaseCreatureEntity entity, boolean trophy, float loop) {
+	public Vector2f getTextureOffset(String partName, BaseCreatureEntity entity, boolean trophy, float loop) {
     	if(this.scrollSpeed == null) {
-			this.scrollSpeed = new Vec2f(0, 0);
+			this.scrollSpeed = new Vector2f(0, 0);
 		}
-		return new Vec2f(loop * this.scrollSpeed.x, loop * this.scrollSpeed.y);
+		return new Vector2f(loop * this.scrollSpeed.x, loop * this.scrollSpeed.y);
 	}
 
 	@Override

@@ -6,10 +6,10 @@ import com.lycanitesmobs.client.renderer.layer.LayerProjectileBase;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.client.renderer.Vector3f;
-import net.minecraft.client.renderer.Vector4f;
 import net.minecraft.client.renderer.entity.model.EntityModel;
-import net.minecraft.util.math.Vec2f;
+import net.minecraft.util.math.vector.Vector2f;
+import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.util.math.vector.Vector4f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -27,7 +27,7 @@ public class ProjectileModel extends EntityModel<BaseProjectileEntity> implement
     }
 
 	@Override
-	public void render(BaseProjectileEntity entity, float time, float distance, float loop, float lookY, float lookX) {}
+	public void setRotationAngles(BaseProjectileEntity entity, float time, float distance, float loop, float lookY, float lookX) {}
 
 	@Override
 	public void render(MatrixStack matrixStack, IVertexBuilder iVertexBuilder, int i, int i1, float v, float v1, float v2, float v3) {}
@@ -107,15 +107,15 @@ public class ProjectileModel extends EntityModel<BaseProjectileEntity> implement
     }
 
 	/** Returns the texture offset to be used for this part and layer. **/
-	public Vec2f getPartTextureOffset(String partName, BaseProjectileEntity entity, LayerProjectileBase layer, float loop) {
+	public Vector2f getPartTextureOffset(String partName, BaseProjectileEntity entity, LayerProjectileBase layer, float loop) {
 		if(layer == null || !(entity instanceof BaseProjectileEntity))
 			return this.getBaseTextureOffset(partName, entity, loop);
 		return layer.getTextureOffset(partName, entity, loop);
 	}
 
 	/** Returns the texture offset to be used for this part on the base layer (for scrolling, etc). **/
-	public Vec2f getBaseTextureOffset(String partName, BaseProjectileEntity entity, float loop) {
-		return new Vec2f(0, 0);
+	public Vector2f getBaseTextureOffset(String partName, BaseProjectileEntity entity, float loop) {
+		return new Vector2f(0, 0);
 	}
 
 	/**

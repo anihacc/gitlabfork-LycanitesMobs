@@ -8,11 +8,11 @@ import com.lycanitesmobs.client.renderer.layer.LayerCreatureSaddle;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.client.renderer.Vector3f;
-import net.minecraft.client.renderer.Vector4f;
 import net.minecraft.client.renderer.entity.model.EntityModel;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.math.Vec2f;
+import net.minecraft.util.math.vector.Vector2f;
+import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.util.math.vector.Vector4f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -33,7 +33,7 @@ public abstract class CreatureModel extends EntityModel<BaseCreatureEntity> impl
     }
 
     @Override
-    public void render(BaseCreatureEntity entity, float time, float distance, float loop, float lookY, float lookX) {}
+    public void setRotationAngles(BaseCreatureEntity entity, float time, float distance, float loop, float lookY, float lookX) {}
 
 	@Override
 	public void render(MatrixStack matrixStack, IVertexBuilder vertexBuilder, int someIntA, int someIntB, float someFloatA, float someFloatB, float someFloatC, float someFloatD) {}
@@ -145,7 +145,7 @@ public abstract class CreatureModel extends EntityModel<BaseCreatureEntity> impl
 	 * @param loop The animation tick for looping effects.
 	 * @return The texture offset to render the part at.
 	 */
-	public Vec2f getPartTextureOffset(String partName, Entity entity, LayerCreatureBase layer, boolean trophy, float loop) {
+	public Vector2f getPartTextureOffset(String partName, Entity entity, LayerCreatureBase layer, boolean trophy, float loop) {
 		if(layer == null || !(entity instanceof BaseCreatureEntity))
 			return this.getBaseTextureOffset(partName, entity, trophy, loop);
 		return layer.getTextureOffset(partName, (BaseCreatureEntity)entity, trophy, loop);
@@ -159,8 +159,8 @@ public abstract class CreatureModel extends EntityModel<BaseCreatureEntity> impl
 	 * @param loop The animation tick for looping effects.
 	 * @return The texture offset to render the part at.
 	 */
-	public Vec2f getBaseTextureOffset(String partName, Entity entity, boolean trophy, float loop) {
-		return new Vec2f(0, 0);
+	public Vector2f getBaseTextureOffset(String partName, Entity entity, boolean trophy, float loop) {
+		return new Vector2f(0, 0);
 	}
 
 	/**
