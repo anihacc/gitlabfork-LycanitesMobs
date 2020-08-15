@@ -17,6 +17,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -67,7 +68,7 @@ public class BlockFrostfire extends BlockFireBase {
     }
 
     @Override
-    public boolean isBlockFireSource(BlockState state, IBlockReader world, BlockPos pos, Direction side) {
+    public boolean isBlockFireSource(BlockState state, IWorldReader world, BlockPos pos, Direction side) {
         if(state.getBlock() == Blocks.SNOW || state.getBlock() == Blocks.SNOW_BLOCK)
             return true;
         return false;

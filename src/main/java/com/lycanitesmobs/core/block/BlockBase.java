@@ -13,6 +13,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
+import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
@@ -74,7 +75,7 @@ public class BlockBase extends Block {
 	}
 
 	@Override
-	public ITextComponent getNameTextComponent() {
+	public IFormattableTextComponent func_235333_g_() {
     	return new TranslationTextComponent(this.getTranslationKey());
 	}
 
@@ -105,7 +106,6 @@ public class BlockBase extends Block {
 	//                     Ticking
 	// ==================================================
     // ========== Tick Rate ==========
-    @Override
     public int tickRate(IWorldReader world) {
     	return this.tickRate;
     }
@@ -145,7 +145,7 @@ public class BlockBase extends Block {
 
 	@Override
 	public VoxelShape getCollisionShape(BlockState blockState, IBlockReader world, BlockPos blockPos, ISelectionContext selectionContext) {
-		return this.blocksMovement ? blockState.getShape(world, blockPos) : VoxelShapes.empty();
+		return this.field_235688_at_ ? blockState.getShape(world, blockPos) : VoxelShapes.empty(); // blocksMovement
 	}
     
     

@@ -6,6 +6,7 @@ import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.fluid.FlowingFluid;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
@@ -29,7 +30,7 @@ public class BlockFluidBase extends FlowingFluidBlock {
     }
 
     @Override
-    public ITextComponent getNameTextComponent() {
+    public IFormattableTextComponent func_235333_g_() {
         return new TranslationTextComponent(this.getTranslationKey());
     }
 

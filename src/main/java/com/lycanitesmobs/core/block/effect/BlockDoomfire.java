@@ -69,7 +69,7 @@ public class BlockDoomfire extends BlockFireBase {
             if(((ItemEntity)entity).getItem().getItem() == ObjectManager.getItem("hellfirecharge"))
                 return;
 
-        if(entity.isImmuneToFire() || entity.isInvulnerableTo(DamageSource.IN_FIRE))
+        if(entity.isInvulnerableTo(DamageSource.IN_FIRE))
             return;
 
         entity.attackEntityFrom(DamageSource.IN_FIRE, 1);

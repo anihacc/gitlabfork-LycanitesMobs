@@ -17,6 +17,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -72,7 +73,7 @@ public class BlockHellfire extends BlockFireBase {
             if(((ItemEntity)entity).getItem().getItem() == ObjectManager.getItem("doomfirecharge"))
                 return;
 
-        if(entity.isImmuneToFire() || entity.isInvulnerableTo(DamageSource.IN_FIRE))
+        if(entity.isInvulnerableTo(DamageSource.IN_FIRE))
             return;
 
         entity.attackEntityFrom(DamageSource.IN_FIRE, 2);
@@ -84,7 +85,7 @@ public class BlockHellfire extends BlockFireBase {
     //                        Fire
     // ==================================================
     @Override
-    public boolean isBlockFireSource(BlockState state, IBlockReader world, BlockPos pos, Direction side) {
+    public boolean isBlockFireSource(BlockState state, IWorldReader world, BlockPos pos, Direction side) {
         if(state.getBlock() == Blocks.OBSIDIAN)
             return true;
         return false;

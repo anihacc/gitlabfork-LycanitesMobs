@@ -3,7 +3,10 @@ package com.lycanitesmobs.core.block;
 
 import com.lycanitesmobs.core.info.ItemManager;
 import com.lycanitesmobs.core.info.ModInfo;
-import net.minecraft.block.*;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.SixWayBlock;
+import net.minecraft.block.TNTBlock;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
@@ -298,7 +301,7 @@ public class BlockFireBase extends BlockBase {
     }
 
     /** Checks if the provided block is a fire source, can be overridden for custom sources. **/
-    public boolean isBlockFireSource(BlockState state, IBlockReader world, BlockPos pos, Direction side) {
+    public boolean isBlockFireSource(BlockState state, IWorldReader world, BlockPos pos, Direction side) {
         return state.isFireSource(world, pos, side);
     }
 
