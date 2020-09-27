@@ -63,10 +63,10 @@ public class EntityConba extends TameableCreatureEntity implements IMob {
 			String entityName = this.creatureInfo.getName();
 	    	if(entityName != null) {
 				infection = new TranslationTextComponent("entity." + this.creatureInfo.modInfo.modid + "." + entityName + ".infected");
-				infection.appendText(" ");
+				infection.func_240702_b_(" ");
 			}
 		}
-    	return infection.appendSibling(super.getSpeciesName());
+    	return infection.func_230529_a_(super.getSpeciesName());
     }
     
     public String getTextureName() {

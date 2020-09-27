@@ -2,7 +2,6 @@ package com.lycanitesmobs.core.info;
 
 import com.lycanitesmobs.core.config.ConfigCreatureSpawning;
 import net.minecraft.world.World;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import java.util.ArrayList;
@@ -21,7 +20,7 @@ public class CreatureSpawnConfig {
 	public boolean controlVanillaSpawns = false;
 
 	/** A global list of dimension ids that overrides every other spawn setting in both the configs and json spawners. **/
-	public int[] dimensionList;
+	public String[] dimensionList;
 
 	/** If set to true the dimension list acts as a whitelist, otherwise it is a blacklist. **/
 	public boolean dimensionListWhitelist = false;
@@ -42,13 +41,13 @@ public class CreatureSpawnConfig {
 
 		// Master Dimension List:
 		String dimensionListValue = ConfigCreatureSpawning.INSTANCE.globalDimensionList.get();
-		List<Integer> dimensionEntries = new ArrayList<>();
+		List<String> dimensionEntries = new ArrayList<>();
 		for(String dimensionEntry : dimensionListValue.replace(" ", "").split(",")) {
 			if(NumberUtils.isCreatable(dimensionEntry)) {
-				dimensionEntries.add(Integer.parseInt(dimensionEntry));
+				dimensionEntries.add(dimensionEntry);
 			}
 		}
-		this.dimensionList = ArrayUtils.toPrimitive(dimensionEntries.toArray(new Integer[dimensionEntries.size()]));
+		this.dimensionList = dimensionEntries.toArray(new String[dimensionEntries.size()]);
 		this.dimensionListWhitelist = ConfigCreatureSpawning.INSTANCE.globalDimensionWhitelist.get();
 
 		this.disableDungeonSpawners = ConfigCreatureSpawning.INSTANCE.disableDungeonSpawners.get();
@@ -63,8 +62,8 @@ public class CreatureSpawnConfig {
 
 		if(this.dimensionList.length > 0) {
 			boolean inDimensionList = false;
-			for (int dimensionId : this.dimensionList) {
-				if (dimensionId == world.getDimension().getType().getId()) {
+			for (String dimensionId : this.dimensionList) {
+				if (dimensionId.equals(world.func_234922_V_().func_240901_a_().toString())) {
 					inDimensionList = true;
 					break;
 				}

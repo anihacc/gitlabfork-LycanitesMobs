@@ -36,10 +36,10 @@ public class RahovartStructureBuilder extends StructureBuilder {
 		int height = 40;
 		if(originY < 5)
 			originY = 5;
-		if(world.getActualHeight() <= height)
+		if(world.getHeight() <= height)
 			originY = 5;
-		else if(originY + height >= world.getActualHeight())
-			originY = Math.max(5, world.getActualHeight() - height - 1);
+		else if(originY + height >= world.getHeight())
+			originY = Math.max(5, world.getHeight() - height - 1);
 
 		// Effects:
 		if(ticks == 1) {
@@ -112,7 +112,7 @@ public class RahovartStructureBuilder extends StructureBuilder {
 				world.setBlockState(new BlockPos(x, y - 1, z), buildBlock.getDefaultState(), 2);
 				world.setBlockState(new BlockPos(x, y - 2, z), buildBlock.getDefaultState(), 2);
 				y++;
-				while(y <= originY + height && y < world.getActualHeight()) {
+				while(y <= originY + height && y < world.getHeight()) {
 					world.setBlockState(new BlockPos(x, y, z), Blocks.AIR.getDefaultState(), 2);
 					y++;
 				}

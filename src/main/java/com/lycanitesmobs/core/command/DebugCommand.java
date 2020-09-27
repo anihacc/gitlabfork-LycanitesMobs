@@ -41,7 +41,7 @@ public class DebugCommand {
 		ConfigDebug.INSTANCE.enabled.set(enabledLogs);
 		ConfigDebug.INSTANCE.enabled.save();
 
-		context.getSource().sendFeedback(new TranslationTextComponent("lyc.command.debug.log").appendText(" " + category), true);
+		context.getSource().sendFeedback(new TranslationTextComponent("lyc.command.debug.log").func_240702_b_(" " + category), true);
 		return 0;
 	}
 

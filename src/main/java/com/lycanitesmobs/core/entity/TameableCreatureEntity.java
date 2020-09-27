@@ -119,7 +119,7 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
 		ITextComponent ownedName = new StringTextComponent("");
     	boolean customName = this.hasCustomName();
 		if(customName) {
-			ownedName.appendSibling(super.getName()).appendText(" (");
+			ownedName.func_230529_a_(super.getName()).func_240702_b_(" (");
 		}
 
 		ITextComponent ownerName = this.getOwnerName();
@@ -129,9 +129,9 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
             if ("s".equalsIgnoreCase(ownerFormatted.substring(ownerFormatted.length() - 1)))
                 ownerSuffix = "' ";
         }
-		ownedName.appendSibling(ownerName).appendText(ownerSuffix).appendSibling(this.getTitle());
+		ownedName.func_230529_a_(ownerName).func_240702_b_(ownerSuffix).func_230529_a_(this.getTitle());
         if(customName) {
-			ownedName.appendText(")");
+			ownedName.func_240702_b_(")");
 		}
 
         //LycanitesMobs.logDebug("", "Translated pet name: " + ownedName.getString());
@@ -781,10 +781,10 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
 				this.onTamedByPlayer();
 				this.unsetTemporary();
 				ITextComponent tameMessage = new TranslationTextComponent("message.pet.tamed.prefix")
-						.appendText(" ")
-						.appendSibling(this.getSpeciesName())
-						.appendText(" ")
-						.appendSibling(new TranslationTextComponent("message.pet.tamed.suffix"));
+						.func_240702_b_(" ")
+						.func_230529_a_(this.getSpeciesName())
+						.func_240702_b_(" ")
+						.func_230529_a_(new TranslationTextComponent("message.pet.tamed.suffix"));
 				player.sendMessage(tameMessage);
 				this.playTameEffect(this.isTamed());
 				//player.addStat(ObjectManager.getStat(this.creatureInfo.getName() + ".tame"), 1); TODO Player Stats
@@ -798,10 +798,10 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
 			}
 			else {
 				ITextComponent tameMessage = new TranslationTextComponent("message.pet.tamefail.prefix")
-						.appendText(" ")
-						.appendSibling(this.getSpeciesName())
-						.appendText(" ")
-						.appendSibling(new TranslationTextComponent("message.pet.tamefail.suffix"));
+						.func_240702_b_(" ")
+						.func_230529_a_(this.getSpeciesName())
+						.func_240702_b_(" ")
+						.func_230529_a_(new TranslationTextComponent("message.pet.tamefail.suffix"));
 				player.sendMessage(tameMessage);
 				this.playTameEffect(this.isTamed());
 			}

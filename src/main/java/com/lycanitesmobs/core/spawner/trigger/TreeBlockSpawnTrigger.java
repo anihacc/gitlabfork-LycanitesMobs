@@ -43,7 +43,7 @@ public class TreeBlockSpawnTrigger extends BlockSpawnTrigger {
 			int z = pos.getZ();
 			for(int searchX = x - 1; searchX <= x + 1; searchX++) {
 				for(int searchZ = z - 1; searchZ <= z + 1; searchZ++) {
-					for(int searchY = y; searchY <= Math.min(world.getActualHeight(), y + 32); searchY++) {
+					for(int searchY = y; searchY <= Math.min(world.getHeight(), y + 32); searchY++) {
 						if(this.isLeaves(world.getBlockState(new BlockPos(searchX, searchY, searchZ))))
 							return true;
 						if(!world.isAirBlock(new BlockPos(x, searchY, z)))

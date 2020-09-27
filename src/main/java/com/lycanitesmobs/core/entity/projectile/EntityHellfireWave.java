@@ -118,7 +118,7 @@ public class EntityHellfireWave extends BaseProjectileEntity {
     //========== Entity Living Collision ==========
     @Override
     public boolean onEntityLivingDamage(LivingEntity entityLiving) {
-    	if(!entityLiving.isImmuneToFire())
+    	if(!entityLiving.isInvulnerableTo(DamageSource.ON_FIRE))
     		entityLiving.setFire(this.getEffectDuration(10) / 20);
     	return true;
     }

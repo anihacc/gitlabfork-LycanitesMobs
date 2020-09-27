@@ -12,6 +12,7 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.util.Util;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
@@ -64,9 +65,9 @@ public class Beastiary {
 
 
 	/**
-	 * Attemtp to add Creature Knowledge to this Beastiary based on the provided entity and sends feedback to the player.
-	 * @param entity The entity being descovered.
-	 * @param rank The Knowledge rank being descovered.
+	 * Attempt to add Creature Knowledge to this Beastiary based on the provided entity and sends feedback to the player.
+	 * @param entity The entity being discovered.
+	 * @param rank The Knowledge rank being discovered.
 	 * @param knownMessage If true, if the creature is already known at the same or higher rank a message will be sent to the player.
 	 * @return True if new knowledge is gained and false if not.
 	 */
@@ -74,7 +75,7 @@ public class Beastiary {
 		// Invalid Entity:
 		if(!(entity instanceof BaseCreatureEntity)) {
 			if (!this.extendedPlayer.player.getEntityWorld().isRemote) {
-				this.extendedPlayer.player.sendMessage(new TranslationTextComponent("message.beastiary.unknown"));
+				this.extendedPlayer.player.sendMessage(new TranslationTextComponent("message.beastiary.unknown"), Util.field_240973_b_);
 			}
 			return false;
 		}
@@ -121,39 +122,39 @@ public class Beastiary {
 		}
 		CreatureInfo creatureInfo = creatureKnowledge.getCreatureInfo();
 		ITextComponent message = new TranslationTextComponent("message.beastiary.new.prefix")
-				.appendText(" " + creatureKnowledge.rank + " ")
-				.appendSibling(new TranslationTextComponent("message.beastiary.new.of"))
-				.appendText(" ")
-				.appendSibling(creatureInfo.getTitle())
-				.appendText(" ")
-				.appendSibling(new TranslationTextComponent("message.beastiary.new.suffix"));
-		this.extendedPlayer.player.sendMessage(message);
+				.func_240702_b_(" " + creatureKnowledge.rank + " ")
+				.func_230529_a_(new TranslationTextComponent("message.beastiary.new.of"))
+				.func_240702_b_(" ")
+				.func_230529_a_(creatureInfo.getTitle())
+				.func_240702_b_(" ")
+				.func_230529_a_(new TranslationTextComponent("message.beastiary.new.suffix"));
+		this.extendedPlayer.player.sendMessage(message, Util.field_240973_b_);
 
 		if(creatureInfo.isSummonable()) {
 
 			ITextComponent summonMessage = new TranslationTextComponent("message.beastiary.summonable.prefix")
-					.appendText(" ")
-					.appendSibling(creatureInfo.getTitle())
-					.appendText(" ")
-					.appendSibling(new TranslationTextComponent("message.beastiary.summonable.suffix"));
+					.func_240702_b_(" ")
+					.func_230529_a_(creatureInfo.getTitle())
+					.func_240702_b_(" ")
+					.func_230529_a_(new TranslationTextComponent("message.beastiary.summonable.suffix"));
 
 			if(creatureKnowledge.rank >= 3) {
 				summonMessage = new TranslationTextComponent("message.beastiary.summonable.skins.prefix")
-						.appendText(" ")
-						.appendSibling(creatureInfo.getTitle())
-						.appendText(" ")
-						.appendSibling(new TranslationTextComponent("message.beastiary.summonable.skins.suffix"));
+						.func_240702_b_(" ")
+						.func_230529_a_(creatureInfo.getTitle())
+						.func_240702_b_(" ")
+						.func_230529_a_(new TranslationTextComponent("message.beastiary.summonable.skins.suffix"));
 			}
 
 			else if(creatureKnowledge.rank == 2) {
 				summonMessage = new TranslationTextComponent("message.beastiary.summonable.colors.prefix")
-						.appendText(" ")
-						.appendSibling(creatureInfo.getTitle())
-						.appendText(" ")
-						.appendSibling(new TranslationTextComponent("message.beastiary.summonable.colors.suffix"));
+						.func_240702_b_(" ")
+						.func_230529_a_(creatureInfo.getTitle())
+						.func_240702_b_(" ")
+						.func_230529_a_(new TranslationTextComponent("message.beastiary.summonable.colors.suffix"));
 			}
 
-			this.extendedPlayer.player.sendMessage(summonMessage);
+			this.extendedPlayer.player.sendMessage(summonMessage, Util.field_240973_b_);
 		}
 	}
 
@@ -169,13 +170,13 @@ public class Beastiary {
 		CreatureInfo creatureInfo = creatureKnowledge.getCreatureInfo();
 		CreatureKnowledge currentKnowledge = this.extendedPlayer.getBeastiary().getCreatureKnowledge(creatureInfo.getName());
 		ITextComponent message = new TranslationTextComponent("message.beastiary.known.prefix")
-				.appendText(" " + currentKnowledge.rank + " ")
-				.appendSibling(new TranslationTextComponent("message.beastiary.known.of"))
-				.appendText(" ")
-				.appendSibling(creatureInfo.getTitle())
-				.appendText(" ")
-				.appendSibling(new TranslationTextComponent("message.beastiary.known.suffix"));
-		this.extendedPlayer.player.sendMessage(message);
+				.func_240702_b_(" " + currentKnowledge.rank + " ")
+				.func_230529_a_(new TranslationTextComponent("message.beastiary.known.of"))
+				.func_240702_b_(" ")
+				.func_230529_a_(creatureInfo.getTitle())
+				.func_240702_b_(" ")
+				.func_230529_a_(new TranslationTextComponent("message.beastiary.known.suffix"));
+		this.extendedPlayer.player.sendMessage(message, Util.field_240973_b_);
 	}
 
 

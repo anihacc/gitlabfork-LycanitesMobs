@@ -13,6 +13,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.EffectInstance;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.world.World;
@@ -23,12 +24,13 @@ import java.util.List;
 
 public class EntityHellfireWall extends BaseProjectileEntity {
 
-	// Properties:
-	public Entity shootingEntity;
-
     // ==================================================
  	//                   Constructors
  	// ==================================================
+    public EntityHellfireWall(World world) {
+        super(world);
+    }
+
     public EntityHellfireWall(EntityType<? extends BaseProjectileEntity> entityType, World world) {
         super(entityType, world);
     }
@@ -79,15 +81,10 @@ public class EntityHellfireWall extends BaseProjectileEntity {
         }
     }
 
-    @Override
-    public boolean handleWaterMovement() {
-        return false;
-    }
-
     //========== Entity Living Collision ==========
     @Override
     public boolean onEntityLivingDamage(LivingEntity entityLiving) {
-    	if(!entityLiving.isImmuneToFire())
+    	if(!entityLiving.isInvulnerableTo(DamageSource.ON_FIRE))
     		entityLiving.setFire(this.getEffectDuration(10) / 20);
     	return true;
     }
@@ -95,7 +92,7 @@ public class EntityHellfireWall extends BaseProjectileEntity {
     //========== Do Damage Check ==========
     @Override
     public boolean canDamage(LivingEntity targetEntity) {
-        LivingEntity owner = this.func_234616_v_();
+        Entity owner = this.getShooter();
         if(owner == null) {
             if(targetEntity instanceof EntityRahovart)
                 return false;

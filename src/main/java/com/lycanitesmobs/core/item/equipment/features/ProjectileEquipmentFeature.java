@@ -101,25 +101,25 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 		}
 
 		ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile(this.projectileName);
-		ITextComponent description = new TranslationTextComponent("equipment.feature." + this.featureType).appendText(" ")
-				.appendSibling(projectileInfo.getTitle());
+		ITextComponent description = new TranslationTextComponent("equipment.feature." + this.featureType).func_240702_b_(" ")
+				.func_230529_a_(projectileInfo.getTitle());
 
 		if(this.bonusDamage != 0) {
-			description.appendText(" +" + this.bonusDamage);
+			description.func_240702_b_(" +" + this.bonusDamage);
 		}
 
 		if(!"simple".equals(this.projectilePattern)) {
-			description.appendText(" ")
-					.appendSibling(new TranslationTextComponent("equipment.feature.projectile.pattern." + this.projectilePattern));
+			description.func_240702_b_(" ")
+					.func_230529_a_(new TranslationTextComponent("equipment.feature.projectile.pattern." + this.projectilePattern));
 		}
 
-		description.appendText(" ")
-				.appendSibling( new TranslationTextComponent("equipment.feature.projectile.trigger." + this.projectileTrigger));
+		description.func_240702_b_(" ")
+				.func_230529_a_( new TranslationTextComponent("equipment.feature.projectile.trigger." + this.projectileTrigger));
 		if("hit".equals(this.projectileTrigger)) {
-			description.appendText(" " + String.format("%.0f", this.hitChance * 100) + "%");
+			description.func_240702_b_(" " + String.format("%.0f", this.hitChance * 100) + "%");
 		}
 		else {
-			description.appendText(" " + String.format("%.1f", (float)this.cooldown / 20) + "s");
+			description.func_240702_b_(" " + String.format("%.1f", (float)this.cooldown / 20) + "s");
 		}
 
 		return description;
@@ -133,7 +133,7 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 		ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile(this.projectileName);
 		ITextComponent summary = projectileInfo.getTitle();
 		if(this.bonusDamage != 0) {
-			summary.appendText(" +" + this.bonusDamage);
+			summary.func_240702_b_(" +" + this.bonusDamage);
 		}
 		return summary;
 	}

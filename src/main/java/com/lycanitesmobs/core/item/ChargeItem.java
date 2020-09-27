@@ -49,7 +49,7 @@ public class ChargeItem extends BaseItem {
 
     @Override
     public ITextComponent getDisplayName(ItemStack itemStack) {
-        return this.getProjectileName().appendText(" ").appendSibling(new TranslationTextComponent("item.lycanitesmobs.charge"));
+        return this.getProjectileName().func_240702_b_(" ").func_230529_a_(new TranslationTextComponent("item.lycanitesmobs.charge"));
     }
 
     @Override
@@ -74,12 +74,12 @@ public class ChargeItem extends BaseItem {
 
         if(!this.getElements().isEmpty()) {
             ITextComponent elements = new TranslationTextComponent("item.lycanitesmobs.charge.elements")
-                    .appendText(" ").appendSibling(this.getElementNames());
+                    .func_240702_b_(" ").func_230529_a_(this.getElementNames());
             descriptions.add(elements);
         }
 
         ITextComponent projectile = new TranslationTextComponent("item.lycanitesmobs.charge.projectile")
-                .appendText(" ").appendSibling(this.getProjectileName());
+                .func_240702_b_(" ").func_230529_a_(this.getProjectileName());
         descriptions.add(projectile);
 
         return descriptions;
@@ -147,10 +147,10 @@ public class ChargeItem extends BaseItem {
         boolean firstElement = true;
         for(ElementInfo element : this.getElements()) {
             if(!firstElement) {
-                elementNames.appendText(", ");
+                elementNames.func_240702_b_(", ");
             }
             firstElement = false;
-            elementNames.appendSibling(element.getTitle());
+            elementNames.func_230529_a_(element.getTitle());
         }
         return elementNames;
     }

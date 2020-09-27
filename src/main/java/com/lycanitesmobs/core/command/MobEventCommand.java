@@ -10,10 +10,9 @@ import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
-import net.minecraftforge.common.DimensionManager;
 
 public class MobEventCommand {
 	public static ArgumentBuilder<CommandSource, ?> register() {
@@ -57,7 +56,7 @@ public class MobEventCommand {
 			return 0;
 		}
 		if(context.getSource().getEntity() instanceof PlayerEntity) {
-			extendedWorld.startMobEvent(eventName, (PlayerEntity)context.getSource().getEntity(), context.getSource().getEntity().getPosition(), level, subspecies);
+			extendedWorld.startMobEvent(eventName, (PlayerEntity)context.getSource().getEntity(), new BlockPos(context.getSource().getEntity().getPositionVec()), level, subspecies);
 		}
 		context.getSource().sendFeedback(new TranslationTextComponent("lyc.command.mobevent.start"), true);
 		return 0;
@@ -74,13 +73,14 @@ public class MobEventCommand {
 			return 0;
 		}
 
-		World world = DimensionManager.getWorld(context.getSource().getServer(), DimensionType.getById(worldId), false, false);
+//		World world = DimensionManager.getWorld(context.getSource().getServer(), DimensionType.getById(worldId), false, false); TODO Get world from id instead!
+		World world = context.getSource().getWorld();
 		ExtendedWorld extendedWorld = ExtendedWorld.getForWorld(world);
 		if(extendedWorld == null) {
 			return 0;
 		}
 		if(context.getSource().getEntity() instanceof PlayerEntity) {
-			extendedWorld.startMobEvent(eventName, (PlayerEntity)context.getSource().getEntity(), context.getSource().getEntity().getPosition(), level, subspecies);
+			extendedWorld.startMobEvent(eventName, (PlayerEntity)context.getSource().getEntity(), new BlockPos(context.getSource().getEntity().getPositionVec()), level, subspecies);
 		}
 		context.getSource().sendFeedback(new TranslationTextComponent("lyc.command.mobevent.start"), true);
 		return 0;
@@ -104,7 +104,8 @@ public class MobEventCommand {
 		int level = Math.max(1, IntegerArgumentType.getInteger(context, "level"));
 		int worldId = IntegerArgumentType.getInteger(context, "world");
 
-		World world = DimensionManager.getWorld(context.getSource().getServer(), DimensionType.getById(worldId), false, false);
+//		World world = DimensionManager.getWorld(context.getSource().getServer(), DimensionType.getById(worldId), false, false); TODO Get world from id instead!
+		World world = context.getSource().getWorld();
 		ExtendedWorld extendedWorld = ExtendedWorld.getForWorld(world);
 		if(extendedWorld == null) {
 			return 0;
@@ -128,7 +129,8 @@ public class MobEventCommand {
 
 	public static int stopWorld(final CommandContext<CommandSource> context) {
 		int worldId = IntegerArgumentType.getInteger(context, "world");
-		World world = DimensionManager.getWorld(context.getSource().getServer(), DimensionType.getById(worldId), false, false);
+//		World world = DimensionManager.getWorld(context.getSource().getServer(), DimensionType.getById(worldId), false, false); TODO Get world from id instead!
+		World world = context.getSource().getWorld();
 		ExtendedWorld extendedWorld = ExtendedWorld.getForWorld(world);
 		if(extendedWorld == null) {
 			return 0;

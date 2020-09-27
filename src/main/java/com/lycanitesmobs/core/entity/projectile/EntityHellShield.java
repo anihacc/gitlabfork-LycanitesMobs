@@ -48,7 +48,7 @@ public class EntityHellShield extends BaseProjectileEntity {
     @Override
     public void tick() {
     	super.tick();
-    	if(this.getPositionVec().getY() > this.getEntityWorld().getActualHeight() + 20)
+    	if(this.getPositionVec().getY() > this.getEntityWorld().getHeight() + 20)
     		this.remove();
     }
 	

@@ -4,7 +4,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
@@ -109,10 +109,10 @@ public class SectorConnector {
 		}
 
 		// Get Position and Size:
-		Vec3i size = sectorInstance.getRoomSize();
+		Vector3i size = sectorInstance.getRoomSize();
 		if(this.childSector != null && sectorInstance != this.childSector) {
-			Vec3i childSize = this.childSector.getRoomSize();
-			size = new Vec3i(Math.min(size.getX(), childSize.getX()), Math.min(size.getY(), childSize.getY()), Math.min(size.getZ(), childSize.getZ()));
+			Vector3i childSize = this.childSector.getRoomSize();
+			size = new Vector3i(Math.min(size.getX(), childSize.getX()), Math.min(size.getY(), childSize.getY()), Math.min(size.getZ(), childSize.getZ()));
 		}
 		int entranceHeight = 2;
 		int entranceRadius = 1;
@@ -120,7 +120,7 @@ public class SectorConnector {
 		int startX = this.position.getX();
 		int stopX = this.position.getX();
 		int startY = Math.max(1, this.position.getY() + 1);
-		int stopY = Math.min(world.getActualHeight() - 1, this.position.getY() + 1 + entranceHeight);
+		int stopY = Math.min(world.getHeight() - 1, this.position.getY() + 1 + entranceHeight);
 		int startZ = this.position.getZ();
 		int stopZ = this.position.getZ();
 

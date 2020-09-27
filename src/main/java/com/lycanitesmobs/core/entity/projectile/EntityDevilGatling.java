@@ -55,7 +55,7 @@ public class EntityDevilGatling extends BaseProjectileEntity {
     public void tick() {
     	super.tick();
 
-    	if(this.getPositionVec().getY() > this.getEntityWorld().getActualHeight() + 20)
+    	if(this.getPositionVec().getY() > this.getEntityWorld().getHeight() + 20)
     		this.remove();
     	
     	if(this.ticksExisted >= this.expireTime * 20)

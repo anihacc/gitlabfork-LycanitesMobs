@@ -46,16 +46,16 @@ public class EffectEquipmentFeature extends EquipmentFeature {
 			return null;
 		}
 
-		ITextComponent description = new TranslationTextComponent("equipment.feature." + this.featureType).appendText(" ").appendSibling(
+		ITextComponent description = new TranslationTextComponent("equipment.feature." + this.featureType).func_240702_b_(" ").func_230529_a_(
 				this.getEffectTypeName());
 		if(this.effectStrength > 0) {
-			description.appendText(" ").appendSibling(new TranslationTextComponent("entity.level")).appendText(" " + this.effectStrength);
+			description.func_240702_b_(" ").func_230529_a_(new TranslationTextComponent("entity.level")).func_240702_b_(" " + this.effectStrength);
 		}
 		if(!"self".equals(this.effectTarget) && this.effectDuration > 0) {
-			description.appendText(" " + ((float)this.effectDuration / 20) + "s");
+			description.func_240702_b_(" " + ((float)this.effectDuration / 20) + "s");
 		}
 
-		description.appendText(" (" + this.effectTarget + ")");
+		description.func_240702_b_(" (" + this.effectTarget + ")");
 
 		return description;
 	}
@@ -68,13 +68,13 @@ public class EffectEquipmentFeature extends EquipmentFeature {
 
 		ITextComponent summary = this.getEffectTypeName();
 		if(this.effectStrength > 0) {
-			summary.appendText(" ").appendSibling(new TranslationTextComponent("entity.level")).appendText(" " + this.effectStrength);
+			summary.func_240702_b_(" ").func_230529_a_(new TranslationTextComponent("entity.level")).func_240702_b_(" " + this.effectStrength);
 		}
 		if(!"self".equals(this.effectTarget) && this.effectDuration > 0) {
-			summary.appendText(" " + ((float)this.effectDuration / 20) + "s");
+			summary.func_240702_b_(" " + ((float)this.effectDuration / 20) + "s");
 		}
 
-		summary.appendText(" (" + this.effectTarget + ")");
+		summary.func_240702_b_(" (" + this.effectTarget + ")");
 
 		return summary;
 	}

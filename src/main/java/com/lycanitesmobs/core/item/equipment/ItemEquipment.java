@@ -91,19 +91,19 @@ public class ItemEquipment extends BaseItem {
 
 		// Damage:
 		ITextComponent damageDescription = new TranslationTextComponent("equipment.feature.damage")
-				.appendText(" " + String.format("%.0f", this.getDamageAmount(itemStack) + 1));
-		damageDescription.appendText("\n")
-				.appendSibling(new TranslationTextComponent("equipment.feature.damage.cooldown"))
-				.appendText(" " + String.format("%.1f", this.getDamageCooldown(itemStack)));
-		damageDescription.appendText("\n")
-				.appendSibling(new TranslationTextComponent("equipment.feature.damage.knockback"))
-				.appendText(" " + String.format("%.0f", this.getDamageKnockback(itemStack)));
-		damageDescription.appendText("\n")
-				.appendSibling(new TranslationTextComponent("equipment.feature.damage.range"))
-				.appendText(" " + String.format("%.1f", this.getDamageRange(itemStack)));
-		damageDescription.appendText("\n")
-				.appendSibling(new TranslationTextComponent("equipment.feature.damage.sweep"))
-				.appendText(" " + String.format("%.0f", Math.min(this.getDamageSweep(itemStack), 360)));
+				.func_240702_b_(" " + String.format("%.0f", this.getDamageAmount(itemStack) + 1));
+		damageDescription.func_240702_b_("\n")
+				.func_230529_a_(new TranslationTextComponent("equipment.feature.damage.cooldown"))
+				.func_240702_b_(" " + String.format("%.1f", this.getDamageCooldown(itemStack)));
+		damageDescription.func_240702_b_("\n")
+				.func_230529_a_(new TranslationTextComponent("equipment.feature.damage.knockback"))
+				.func_240702_b_(" " + String.format("%.0f", this.getDamageKnockback(itemStack)));
+		damageDescription.func_240702_b_("\n")
+				.func_230529_a_(new TranslationTextComponent("equipment.feature.damage.range"))
+				.func_240702_b_(" " + String.format("%.1f", this.getDamageRange(itemStack)));
+		damageDescription.func_240702_b_("\n")
+				.func_230529_a_(new TranslationTextComponent("equipment.feature.damage.sweep"))
+				.func_240702_b_(" " + String.format("%.0f", Math.min(this.getDamageSweep(itemStack), 360)));
 		descriptions.add(damageDescription);
 
 		// Summaries:
@@ -117,25 +117,25 @@ public class ItemEquipment extends BaseItem {
 			// Harvest:
 			if (!"".equals(harvestSummaries.getString())) {
 				descriptions.add(new TranslationTextComponent("equipment.feature.harvest")
-						.appendText(" ").appendSibling(harvestSummaries));
+						.func_240702_b_(" ").func_230529_a_(harvestSummaries));
 			}
 
 			// Effect:
 			if (!"".equals(effectSummaries.getString())) {
 				descriptions.add(new TranslationTextComponent("equipment.feature.effect")
-						.appendText(" ").appendSibling(effectSummaries));
+						.func_240702_b_(" ").func_230529_a_(effectSummaries));
 			}
 
 			// Projectile:
 			if (!"".equals(projectileSummaries.getString())) {
 				descriptions.add(new TranslationTextComponent("equipment.feature.projectile")
-						.appendText(" ").appendSibling(projectileSummaries));
+						.func_240702_b_(" ").func_230529_a_(projectileSummaries));
 			}
 
 			// Summon:
 			if (!"".equals(summonSummaries.getString())) {
 				descriptions.add(new TranslationTextComponent("equipment.feature.summon")
-						.appendText(" ").appendSibling(summonSummaries));
+						.func_240702_b_(" ").func_230529_a_(summonSummaries));
 			}
 		}
 
@@ -155,12 +155,12 @@ public class ItemEquipment extends BaseItem {
 		boolean first = true;
 		for (EquipmentFeature equipmentFeature : effectFeatures.keySet()) {
 			if(!first) {
-				featureSummaries.appendText(", ");
+				featureSummaries.func_240702_b_(", ");
 			}
 			first = false;
 			ITextComponent featureSummary = equipmentFeature.getSummary(effectFeatures.get(equipmentFeature), this.getPartLevel(effectFeatures.get(equipmentFeature)));
 			if(featureSummary != null) {
-				featureSummaries.appendSibling(featureSummary);
+				featureSummaries.func_230529_a_(featureSummary);
 			}
 		}
 		return featureSummaries;

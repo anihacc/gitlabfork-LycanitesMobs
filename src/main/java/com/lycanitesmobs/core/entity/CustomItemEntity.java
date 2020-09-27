@@ -29,7 +29,7 @@ public class CustomItemEntity extends ItemEntity {
    	//                   Taking Damage
    	// ==================================================
     public boolean attackEntityFrom(DamageSource damageSource, float damageAmount) {
-    	if(this.isImmuneToFire() || !this.canBurn) {
+    	if(this.isInvulnerableTo(DamageSource.ON_FIRE) || !this.canBurn) {
     		if(damageSource.isFireDamage() || "inFire".equalsIgnoreCase(damageSource.damageType)) {
     			return false;
     		}
@@ -52,7 +52,7 @@ public class CustomItemEntity extends ItemEntity {
    	//                  Network Flags
    	// ==================================================
     protected void setFlag(int flagID, boolean value) {
-    	if(flagID == 0 && this.isImmuneToFire())
+    	if(flagID == 0 && this.isInvulnerableTo(DamageSource.ON_FIRE))
     		value = false;
         super.setFlag(flagID, value);
     }

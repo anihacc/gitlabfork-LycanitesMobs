@@ -552,10 +552,10 @@ public class CreatureInfo {
 		boolean firstElement = true;
 		for(ElementInfo element : elements) {
 			if(!firstElement) {
-				elementNames.appendText(", ");
+				elementNames.func_240702_b_(", ");
 			}
 			firstElement = false;
-			elementNames.appendSibling(element.getTitle());
+			elementNames.func_230529_a_(element.getTitle());
 		}
 		return elementNames;
 	}
@@ -573,10 +573,10 @@ public class CreatureInfo {
 		boolean firstDiet = true;
 		for(String diet : this.diets) {
 			if(!firstDiet) {
-				dietNames.appendText(", ");
+				dietNames.func_240702_b_(", ");
 			}
 			firstDiet = false;
-			dietNames.appendSibling(new TranslationTextComponent("diet." + diet));
+			dietNames.func_230529_a_(new TranslationTextComponent("diet." + diet));
 		}
 		return dietNames;
 	}
@@ -599,10 +599,10 @@ public class CreatureInfo {
 		boolean firstBiome = true;
 		for(Biome biome : biomes) {
 			if(!firstBiome) {
-				biomeNames.appendText(", ");
+				biomeNames.func_240702_b_(", ");
 			}
 			firstBiome = false;
-			biomeNames.appendSibling(biome.getDisplayName());
+			biomeNames.func_230529_a_(biome.getDisplayName());
 		}
 		return biomeNames;
 	}
@@ -620,40 +620,40 @@ public class CreatureInfo {
 		boolean firstDrop = true;
 		for(ItemDrop drop : this.drops) {
 			if(!firstDrop) {
-				dropNames.appendText("\n");
+				dropNames.func_240702_b_("\n");
 			}
 			firstDrop = false;
-			dropNames.appendSibling(drop.getItemStack().getDisplayName());
-			dropNames.appendText(" (");
+			dropNames.func_230529_a_(drop.getItemStack().getDisplayName());
+			dropNames.func_240702_b_(" (");
 
 			if(drop.maxAmount > drop.minAmount)
-				dropNames.appendText(drop.minAmount + "-" + drop.maxAmount + "X");
+				dropNames.func_240702_b_(drop.minAmount + "-" + drop.maxAmount + "X");
 			else
-				dropNames.appendText(drop.minAmount + "X");
+				dropNames.func_240702_b_(drop.minAmount + "X");
 
-			dropNames.appendText(" " + (drop.chance * 100) + "%");
+			dropNames.func_240702_b_(" " + (drop.chance * 100) + "%");
 
 			Subspecies subspecies = this.getSubspecies(0);
 			if(drop.subspeciesIndex > 0) {
 				subspecies = this.getSubspecies(drop.subspeciesIndex);
 				if(subspecies.name != null) {
-					dropNames.appendText(" ");
-					dropNames.appendSibling(subspecies.getTitle());
+					dropNames.func_240702_b_(" ");
+					dropNames.func_230529_a_(subspecies.getTitle());
 				}
 			}
 
 			if(drop.variantIndex >= 0) {
-				dropNames.appendText(" ");
+				dropNames.func_240702_b_(" ");
 				Variant variant = subspecies.getVariant(drop.variantIndex);
 				if(variant == null) {
-					dropNames.appendSibling(new TranslationTextComponent("subspecies.normal"));
+					dropNames.func_230529_a_(new TranslationTextComponent("subspecies.normal"));
 				}
 				else {
-					dropNames.appendSibling(variant.getTitle());
+					dropNames.func_230529_a_(variant.getTitle());
 				}
 			}
 
-			dropNames.appendText(")");
+			dropNames.func_240702_b_(")");
 		}
 		return dropNames;
 	}

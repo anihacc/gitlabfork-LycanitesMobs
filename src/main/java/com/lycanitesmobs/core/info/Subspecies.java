@@ -8,6 +8,7 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.helpers.JSONHelper;
 import com.lycanitesmobs.core.spawner.condition.SpawnCondition;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
@@ -152,7 +153,7 @@ public class Subspecies {
 
 			// Check Conditions:
 			for(SpawnCondition condition : this.spawnConditions) {
-				if(!condition.isMet(world, null, entityLiving.getPosition())) {
+				if(!condition.isMet(world, null, new BlockPos(entityLiving.getPositionVec()))) {
 					return false;
 				}
 			}

@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.gson.JsonObject;
-import com.lycanitesmobs.core.entity.ExtendedEntity;
 import com.lycanitesmobs.core.helpers.JSONHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -12,12 +11,13 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.HoeItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
-import net.minecraft.util.*;
+import net.minecraft.util.Direction;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -48,7 +48,7 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 	public int harvestLevel = 3;
 
 	/** The additional block range of the harvest shape, relative to the harvesting direction, the central block is not affected by this. X = number of blocks both sides laterally (sideways). Y = Number of blocks vertically. Z = Number of blocks forwards. **/
-	public Vec3i harvestRange = new Vec3i(0, 0, 0);
+	public Vector3i harvestRange = new Vector3i(0, 0, 0);
 
 
 	// ==================================================
@@ -72,7 +72,7 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 		if(json.has("harvestShape"))
 			this.harvestShape = json.get("harvestShape").getAsString();
 
-		this.harvestRange = JSONHelper.getVec3i(json, "harvestRange");
+		this.harvestRange = JSONHelper.getVector3i(json, "harvestRange");
 	}
 
 	@Override
@@ -80,8 +80,8 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 		if(!this.isActive(itemStack, level)) {
 			return null;
 		}
-		return new TranslationTextComponent("equipment.feature." + this.featureType).appendText(" ")
-				.appendSibling(this.getSummary(itemStack, level));
+		return new TranslationTextComponent("equipment.feature." + this.featureType).func_240702_b_(" ")
+				.func_230529_a_(this.getSummary(itemStack, level));
 	}
 
 	@Override
@@ -89,11 +89,11 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 		if(!this.isActive(itemStack, level)) {
 			return null;
 		}
-		ITextComponent summary = new StringTextComponent(this.harvestType);
+		StringTextComponent summary = new StringTextComponent(this.harvestType);
 		if(this.harvestRange.distanceSq(0, 0, 0, false) > 0) {
-			summary.appendText(" (" + this.harvestShape);
-			summary.appendText(" " + this.getHarvestRangeString(level));
-			summary.appendText(")");
+			summary.func_240702_b_(" (" + this.harvestShape);
+			summary.func_240702_b_(" " + this.getHarvestRangeString(level));
+			summary.func_240702_b_(")");
 		}
 		return summary;
 	}
@@ -211,7 +211,7 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 	 * @param livingEntity The entity that destroyed the block.
 	 */
 	public void onBlockDestroyed(World world, BlockState harvestedBlockState, BlockPos harvestedPos, LivingEntity livingEntity) {
-		if(livingEntity == null || livingEntity.isShiftKeyDown()) { // isSneaking()
+		if(livingEntity == null || livingEntity.isSneaking()) {
 			return;
 		}
 
@@ -225,7 +225,7 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 		else if(livingEntity.rotationPitch < -45) {
 			facing = Direction.UP;
 		}
-		Vec3i[][] selectionRanges = new Vec3i[3][2];
+		Vector3i[][] selectionRanges = new Vector3i[3][2];
 		int lon = 0;
 		int lat = 1;
 		int vert = 2;
@@ -233,24 +233,24 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 		int max = 1;
 
 		// Get Longitudinal (Z):
-		selectionRanges[lon][min] = new Vec3i(
+		selectionRanges[lon][min] = new Vector3i(
 				Math.min(0, this.harvestRange.getZ() * facing.getXOffset()),
 				Math.min(0, this.harvestRange.getZ() * facing.getYOffset()),
 				Math.min(0, this.harvestRange.getZ() * facing.getZOffset())
 		);
-		selectionRanges[lon][max] = new Vec3i(
+		selectionRanges[lon][max] = new Vector3i(
 				Math.max(0, this.harvestRange.getZ() * facing.getXOffset()),
 				Math.max(0, this.harvestRange.getZ() * facing.getYOffset()),
 				Math.max(0, this.harvestRange.getZ() * facing.getZOffset())
 		);
 
 		// Get Lateral (X):
-		selectionRanges[lat][min] = new Vec3i(
+		selectionRanges[lat][min] = new Vector3i(
 				this.harvestRange.getX() * -Math.abs(facingLat.getXOffset()),
 				this.harvestRange.getX() * -Math.abs(facingLat.getYOffset()),
 				this.harvestRange.getX() * -Math.abs(facingLat.getZOffset())
 		);
-		selectionRanges[lat][max] = new Vec3i(
+		selectionRanges[lat][max] = new Vector3i(
 				this.harvestRange.getX() * Math.abs(facingLat.getXOffset()),
 				this.harvestRange.getX() * Math.abs(facingLat.getYOffset()),
 				this.harvestRange.getX() * Math.abs(facingLat.getZOffset())
@@ -259,16 +259,16 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 		// Get Vertical (Y):
 		if(facing != Direction.DOWN && facing != Direction.UP) {
 			int vertOffset = this.harvestRange.getY() != 0 ? -1 : 0;
-			selectionRanges[vert][min] = new Vec3i(0, vertOffset, 0);
-			selectionRanges[vert][max] = new Vec3i(0, this.harvestRange.getY() + vertOffset, 0);
+			selectionRanges[vert][min] = new Vector3i(0, vertOffset, 0);
+			selectionRanges[vert][max] = new Vector3i(0, this.harvestRange.getY() + vertOffset, 0);
 		}
 		else {
-			selectionRanges[vert][min] = new Vec3i(
+			selectionRanges[vert][min] = new Vector3i(
 					this.harvestRange.getY() * -Math.abs(facingH.getXOffset()) * 0.5F,
 					this.harvestRange.getY() * -Math.abs(facingH.getYOffset()) * 0.5F,
 					this.harvestRange.getY() * -Math.abs(facingH.getZOffset()) * 0.5F
 			);
-			selectionRanges[vert][max] = new Vec3i(
+			selectionRanges[vert][max] = new Vector3i(
 					this.harvestRange.getY() * Math.abs(facingH.getXOffset()) * 0.5F,
 					this.harvestRange.getY() * Math.abs(facingH.getYOffset()) * 0.5F,
 					this.harvestRange.getY() * Math.abs(facingH.getZOffset()) * 0.5F
@@ -410,16 +410,16 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 			return false;
 		}
 
-		if (entity instanceof net.minecraftforge.common.IShearable) {
-			net.minecraftforge.common.IShearable target = (net.minecraftforge.common.IShearable)entity;
+		if (entity instanceof net.minecraftforge.common.IForgeShearable) {
+			net.minecraftforge.common.IForgeShearable target = (net.minecraftforge.common.IForgeShearable)entity;
 			BlockPos pos = new BlockPos(entity.getPosX(), entity.getPosY(), entity.getPosZ());
 			if (target.isShearable(itemStack, entity.world, pos)) {
-				java.util.List<ItemStack> drops = target.onSheared(itemStack, entity.world, pos,
+				java.util.List<ItemStack> drops = target.onSheared(player, itemStack, entity.world, pos,
 						net.minecraft.enchantment.EnchantmentHelper.getEnchantmentLevel(net.minecraft.enchantment.Enchantments.FORTUNE, itemStack));
 				java.util.Random rand = new java.util.Random();
 				drops.forEach(d -> {
 					net.minecraft.entity.item.ItemEntity ent = entity.entityDropItem(d, 1.0F);
-					ent.setMotion(ent.getMotion().add((double)((rand.nextFloat() - rand.nextFloat()) * 0.1F), (double)(rand.nextFloat() * 0.05F), (double)((rand.nextFloat() - rand.nextFloat()) * 0.1F)));
+					ent.setMotion(ent.getMotion().add((rand.nextFloat() - rand.nextFloat()) * 0.1F, rand.nextFloat() * 0.05F, (rand.nextFloat() - rand.nextFloat()) * 0.1F));
 				});
 			}
 			return true;

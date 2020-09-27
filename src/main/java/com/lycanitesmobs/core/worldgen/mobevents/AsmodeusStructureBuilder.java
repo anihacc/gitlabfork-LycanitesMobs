@@ -34,10 +34,10 @@ public class AsmodeusStructureBuilder extends StructureBuilder {
 		int height = 40;
 		if(originY < 5)
 			originY = 5;
-		if(world.getActualHeight() <= height)
+		if(world.getHeight() <= height)
 			originY = 5;
-		else if(originY + height >= world.getActualHeight())
-			originY = Math.max(5, world.getActualHeight() - height - 1);
+		else if(originY + height >= world.getHeight())
+			originY = Math.max(5, world.getHeight() - height - 1);
 
 		// Effects:
 		if(ticks == 1) {

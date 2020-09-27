@@ -36,6 +36,7 @@ public class BaseProjectileEntity extends ThrowableEntity {
 	public String entityName = "projectile";
 	public ModInfo modInfo;
 	public long updateTick;
+	protected Entity owner;
 	
 	// Properties:
     public boolean movement = true;
@@ -72,6 +73,11 @@ public class BaseProjectileEntity extends ThrowableEntity {
 	// ==================================================
  	//			    Constructors
  	// ==================================================
+	public BaseProjectileEntity(World world) {
+		super(null, world);
+		this.setup();
+	}
+
     public BaseProjectileEntity(EntityType<? extends BaseProjectileEntity> entityType, World world) {
 	   super(entityType, world);
 	   this.setup();
@@ -123,6 +129,16 @@ public class BaseProjectileEntity extends ThrowableEntity {
 		this.dataManager.register(SCALE, this.projectileScale);
 		this.setProjectileScale(this.projectileScale);
 	}
+
+	@Override
+	public void setShooter(Entity entity) {
+		super.setShooter(entity);
+		this.owner = entity;
+	}
+
+	public Entity getShooter() {
+		return this.owner;
+	}
 	
     
     // ==================================================
@@ -133,7 +149,7 @@ public class BaseProjectileEntity extends ThrowableEntity {
 		this.updateTick++;
 
 	   if(!this.movement) {
-		  this.inGround = false;
+		  this.onGround = false;
 		  this.timeUntilPortal = this.getPortalCooldown();
 	   }
 	   double initX = this.getPositionVec().getX();
@@ -196,13 +212,13 @@ public class BaseProjectileEntity extends ThrowableEntity {
     	return (float)this.weight * 0.03F;
     }
 
-    @Override
-	public void spawnRunningParticles() {}
+//    @Override
+//	public void spawnRunningParticles() {} TODO See what this was changed to...
 
-	@Override
-	public boolean handleWaterMovement() {
-		return this.inWater;
-	}
+//	@Override
+//	public boolean handleWaterMovement() {
+//		return this.inWater;
+//	}
     
     
     // ==================================================
@@ -216,7 +232,7 @@ public class BaseProjectileEntity extends ThrowableEntity {
 	    boolean entityCollision = false;
 		boolean doDamage = true;
 		boolean blockCollision = false;
-		BlockPos impactPos = this.getPosition();
+		BlockPos impactPos = new BlockPos(this.getPositionVec());
 
 		// Entity Hit:
 		Entity entityHit = null;

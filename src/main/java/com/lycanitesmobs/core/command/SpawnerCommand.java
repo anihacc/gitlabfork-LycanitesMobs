@@ -34,7 +34,7 @@ public class SpawnerCommand {
 		BlockPos pos = BlockPos.ZERO;
 		if(context.getSource().getEntity() instanceof PlayerEntity) {
 			player = (PlayerEntity)context.getSource().getEntity();
-			pos = player.getPosition();
+			pos = new BlockPos(player.getPositionVec());
 		}
 
 		SpawnerManager.getInstance().spawners.get(spawnerName).trigger(world, player, null, pos, level, 1, 0);
@@ -53,10 +53,10 @@ public class SpawnerCommand {
 		else if(brightness < 1) level = 2;
 		String results = " Level: " + level + " Brightness: " + brightness;
 		if(level <= 1) {
-			context.getSource().sendFeedback(new TranslationTextComponent("lyc.command.spawner.lighttest.dark").appendText(results), true);
+			context.getSource().sendFeedback(new TranslationTextComponent("lyc.command.spawner.lighttest.dark").func_240702_b_(results), true);
 		}
 		else {
-			context.getSource().sendFeedback(new TranslationTextComponent("lyc.command.spawner.lighttest.light").appendText(results), true);
+			context.getSource().sendFeedback(new TranslationTextComponent("lyc.command.spawner.lighttest.light").func_240702_b_(results), true);
 		}
 		return 0;
 	}

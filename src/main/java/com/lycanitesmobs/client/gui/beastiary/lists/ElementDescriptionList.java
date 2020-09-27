@@ -59,36 +59,36 @@ public class ElementDescriptionList extends BaseList {
 
 		// Summary:
 		ITextComponent text = new StringTextComponent("\u00A7l")
-				.appendSibling(elementInfo.getTitle())
-				.appendText(": " + "\u00A7r\n")
-				.appendSibling(elementInfo.getDescription());
+				.func_230529_a_(elementInfo.getTitle())
+				.func_240702_b_(": " + "\u00A7r\n")
+				.func_230529_a_(elementInfo.getDescription());
 
 		// Buffs:
-		text.appendText("\n\n\u00A7l")
-			.appendSibling(new TranslationTextComponent("gui.beastiary.elements.buffs"))
-			.appendText(": " + "\u00A7r");
+		text.func_240702_b_("\n\n\u00A7l")
+			.func_230529_a_(new TranslationTextComponent("gui.beastiary.elements.buffs"))
+			.func_240702_b_(": " + "\u00A7r");
 		for(String buff : this.elementInfo.buffs) {
 			Effect effect = GameRegistry.findRegistry(Effect.class).getValue(new ResourceLocation(buff));
 			if(effect == null) {
 				continue;
 			}
 			ResourceLocation effectResource = new ResourceLocation(buff);
-			text.appendText("\n")
-					.appendSibling(effect.getDisplayName())
-					.appendText(": ")
-					.appendSibling(new TranslationTextComponent("effect." + effectResource.getPath() + ".description"));
+			text.func_240702_b_("\n")
+					.func_230529_a_(effect.getDisplayName())
+					.func_240702_b_(": ")
+					.func_230529_a_(new TranslationTextComponent("effect." + effectResource.getPath() + ".description"));
 		}
 
 		// Debuffs:
-		text.appendText("\n\n\u00A7l")
-				.appendSibling(new TranslationTextComponent("gui.beastiary.elements.debuffs"))
-				.appendText(": " + "\u00A7r");
+		text.func_240702_b_("\n\n\u00A7l")
+				.func_230529_a_(new TranslationTextComponent("gui.beastiary.elements.debuffs"))
+				.func_240702_b_(": " + "\u00A7r");
 		for(String debuff : this.elementInfo.debuffs) {
 			if("burning".equals(debuff)) {
-				text.appendText("\n")
-				.appendSibling(new TranslationTextComponent("effect.burning"))
-				.appendText(": ")
-				.appendSibling(new TranslationTextComponent("effect.burning.description"));
+				text.func_240702_b_("\n")
+				.func_230529_a_(new TranslationTextComponent("effect.burning"))
+				.func_240702_b_(": ")
+				.func_230529_a_(new TranslationTextComponent("effect.burning.description"));
 				continue;
 			}
 			Effect effect = GameRegistry.findRegistry(Effect.class).getValue(new ResourceLocation(debuff));
@@ -96,10 +96,10 @@ public class ElementDescriptionList extends BaseList {
 				continue;
 			}
 			ResourceLocation effectResource = new ResourceLocation(debuff);
-			text.appendText("\n")
-				.appendSibling(effect.getDisplayName())
-				.appendText(": ")
-				.appendSibling(new TranslationTextComponent("effect." + effectResource.getPath() + ".description"));
+			text.func_240702_b_("\n")
+				.func_230529_a_(effect.getDisplayName())
+				.func_240702_b_(": ")
+				.func_230529_a_(new TranslationTextComponent("effect." + effectResource.getPath() + ".description"));
 		}
 
 		return text.getString();

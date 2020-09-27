@@ -61,9 +61,9 @@ public class SpawnLocation {
 
     /** Loads this Spawn Location from the provided JSON data. **/
     public void loadFromJSON(JsonObject json) {
-		this.rangeMin = JSONHelper.getVec3i(json, "rangeMin");
+		this.rangeMin = JSONHelper.getVector3i(json, "rangeMin");
 
-		this.rangeMax = JSONHelper.getVec3i(json, "rangeMax");
+		this.rangeMax = JSONHelper.getVector3i(json, "rangeMax");
 
 		if(json.has("yMin"))
 			this.yMin = json.get("yMin").getAsInt();

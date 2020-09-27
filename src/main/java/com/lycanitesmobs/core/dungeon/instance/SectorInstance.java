@@ -18,7 +18,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
@@ -42,10 +42,10 @@ public class SectorInstance {
 	public List<SectorConnector> connectors = new ArrayList<>();
 
 	/** The room size of this Sector Instance, this includes the inside and inner floor, walls and ceiling. Used for building and sector to sector collision. **/
-	protected Vec3i roomSize;
+	protected Vector3i roomSize;
 
 	/** The occupied size of this Sector Instance, includes the room size plus additional space taken up by sector layers, structures, padding, etc. **/
-	protected Vec3i occupiedSize;
+	protected Vector3i occupiedSize;
 
 	/** The theme this Sector Instance is using. **/
 	public DungeonTheme theme;
@@ -78,7 +78,7 @@ public class SectorInstance {
 
 		// Size:
 		this.roomSize = this.dungeonSector.getRandomSize(random);
-		this.occupiedSize = new Vec3i(
+		this.occupiedSize = new Vector3i(
 				this.roomSize.getX() + Math.max(1, this.dungeonSector.padding.getX()),
 				this.roomSize.getY() + this.dungeonSector.padding.getY(),
 				this.roomSize.getZ() + Math.max(1, this.dungeonSector.padding.getZ())
@@ -127,7 +127,7 @@ public class SectorInstance {
 		// Create Child Connectors:
 		BlockPos boundsMin = this.getRoomBoundsMin();
 		BlockPos boundsMax = this.getRoomBoundsMax();
-		Vec3i size = this.getRoomSize();
+		Vector3i size = this.getRoomSize();
 		int centerX = boundsMin.getX() + Math.round((float)size.getX() / 2);
 		int centerZ = boundsMin.getZ() + Math.round((float)size.getZ() / 2);
 
@@ -371,9 +371,9 @@ public class SectorInstance {
 	 * Used for building this sector.
 	 * @return A vector of the room size.
 	 */
-	public Vec3i getRoomSize() {
+	public Vector3i getRoomSize() {
 		if(this.parentConnector.facing == Direction.EAST || this.parentConnector.facing == Direction.WEST) {
-			return new Vec3i(this.roomSize.getZ(), this.roomSize.getY(), this.roomSize.getX());
+			return new Vector3i(this.roomSize.getZ(), this.roomSize.getY(), this.roomSize.getX());
 		}
 		return this.roomSize;
 	}
@@ -385,9 +385,9 @@ public class SectorInstance {
 	 * Used for detecting what chunks this sector needs to generate in and sector collision detection.
 	 * @return A vector of the collision size.
 	 */
-	public Vec3i getOccupiedSize() {
+	public Vector3i getOccupiedSize() {
 		if(this.parentConnector.facing == Direction.EAST || this.parentConnector.facing == Direction.WEST) {
-			return new Vec3i(this.occupiedSize.getZ(), this.occupiedSize.getY(), this.occupiedSize.getX());
+			return new Vector3i(this.occupiedSize.getZ(), this.occupiedSize.getY(), this.occupiedSize.getX());
 		}
 		return this.occupiedSize;
 	}
@@ -398,7 +398,7 @@ public class SectorInstance {
 	 * @param boundsSize The xyz size to use when calculating bounds.
 	 * @return The minimum bounds position (corner).
 	 */
-	public BlockPos getBoundsMin(Vec3i boundsSize) {
+	public BlockPos getBoundsMin(Vector3i boundsSize) {
 		BlockPos bounds = new BlockPos(this.parentConnector.position);
 		if(this.parentConnector.facing == Direction.UP) {
 			bounds = bounds.add(
@@ -445,7 +445,7 @@ public class SectorInstance {
 	 * @param boundsSize The xyz size to use when calculating bounds.
 	 * @return The maximum bounds position (corner).
 	 */
-	public BlockPos getBoundsMax(Vec3i boundsSize) {
+	public BlockPos getBoundsMax(Vector3i boundsSize) {
 		BlockPos bounds = new BlockPos(this.parentConnector.position);
 		if(this.parentConnector.facing == Direction.UP) {
 			bounds = bounds.add(
@@ -493,7 +493,7 @@ public class SectorInstance {
 	public BlockPos getOccupiedBoundsMin() {
 		BlockPos occupiedBoundsMin = this.getBoundsMin(this.getOccupiedSize());
 		if("stairs".equals(this.dungeonSector.type)) {
-			occupiedBoundsMin = occupiedBoundsMin.subtract(new Vec3i(0, this.getRoomSize().getY() * 2, 0));
+			occupiedBoundsMin = occupiedBoundsMin.subtract(new Vector3i(0, this.getRoomSize().getY() * 2, 0));
 		}
 		return occupiedBoundsMin;
 	}
@@ -534,7 +534,7 @@ public class SectorInstance {
 		BlockPos startPos = this.getRoomBoundsMin();
 		BlockPos stopPos = this.getRoomBoundsMax();
 
-		Vec3i size = this.getRoomSize();
+		Vector3i size = this.getRoomSize();
 		int centerX = startPos.getX() + Math.round((float)size.getX() / 2);
 		int centerZ = startPos.getZ() + Math.round((float)size.getZ() / 2);
 
@@ -711,7 +711,7 @@ public class SectorInstance {
 
 		for(int layerIndex : this.dungeonSector.floor.layers.keySet()) {
 			int y = startY + layerIndex;
-			if(y <= 0 || y >= world.getActualHeight()) {
+			if(y <= 0 || y >= world.getHeight()) {
 				continue;
 			}
 			SectorLayer layer = this.dungeonSector.floor.layers.get(layerIndex);
@@ -741,7 +741,7 @@ public class SectorInstance {
 		BlockPos startPos = this.getRoomBoundsMin();
 		BlockPos stopPos = this.getRoomBoundsMax();
 
-		Vec3i size = this.getRoomSize();
+		Vector3i size = this.getRoomSize();
 		int startX = Math.min(startPos.getX(), stopPos.getX());
 		int stopX = Math.max(startPos.getX(), stopPos.getX());
 		int startY = Math.min(startPos.getY() + 1, stopPos.getY());
@@ -757,7 +757,7 @@ public class SectorInstance {
 			SectorLayer layer = this.dungeonSector.wall.layers.get(layerIndex);
 			for(int y = startY; y <= stopY; y++) {
 				// Y Limit:
-				if(y <= 0 || y >= world.getActualHeight()) {
+				if(y <= 0 || y >= world.getHeight()) {
 					continue;
 				}
 
@@ -810,7 +810,7 @@ public class SectorInstance {
 
 		for(int layerIndex : this.dungeonSector.ceiling.layers.keySet()) {
 			int y = stopY + layerIndex;
-			if(y <= 0 || y >= world.getActualHeight()) {
+			if(y <= 0 || y >= world.getHeight()) {
 				continue;
 			}
 			SectorLayer layer = this.dungeonSector.ceiling.layers.get(layerIndex);
@@ -852,7 +852,7 @@ public class SectorInstance {
 		BlockPos startPos = this.getRoomBoundsMin();
 		BlockPos stopPos = this.getRoomBoundsMax();
 
-		Vec3i size = this.getRoomSize();
+		Vector3i size = this.getRoomSize();
 		int centerX = startPos.getX() + Math.round((float)size.getX() / 2);
 		int centerZ = startPos.getZ() + Math.round((float)size.getZ() / 2);
 
@@ -941,7 +941,7 @@ public class SectorInstance {
 		if(blockPos.getX() < chunkPos.getXStart() + chunkOffset || blockPos.getX() > chunkPos.getXEnd() + chunkOffset) {
 			return;
 		}
-		if(blockPos.getY() <= 0 || blockPos.getY() >= world.getActualHeight()) {
+		if(blockPos.getY() <= 0 || blockPos.getY() >= world.getHeight()) {
 			return;
 		}
 		if(blockPos.getZ() < chunkPos.getZStart() + chunkOffset || blockPos.getZ() > chunkPos.getZEnd() + chunkOffset) {

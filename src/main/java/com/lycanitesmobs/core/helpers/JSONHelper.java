@@ -9,7 +9,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -21,7 +21,7 @@ import java.util.Set;
 
 public class JSONHelper {
 
-	public static Vec3i getVec3i(JsonObject json, String memberName) {
+	public static Vector3i getVector3i(JsonObject json, String memberName) {
 		if(json.has(memberName)) {
 			JsonArray jsonArray = json.get(memberName).getAsJsonArray();
 			Iterator<JsonElement> jsonIterator = jsonArray.iterator();
@@ -31,9 +31,9 @@ public class JSONHelper {
 				coords[i] = jsonIterator.next().getAsInt();
 				i++;
 			}
-			return new Vec3i(coords[0], coords[1], coords[2]);
+			return new Vector3i(coords[0], coords[1], coords[2]);
 		}
-		return new Vec3i(0, 0, 0);
+		return new Vector3i(0, 0, 0);
 	}
 
 	public static Vector3d getVector3d(JsonObject json, String memberName, Vector3d defaultVec) {

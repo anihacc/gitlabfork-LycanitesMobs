@@ -395,11 +395,11 @@ public class PetsBeastiaryScreen extends BeastiaryScreen {
 	public ITextComponent getTitle() {
 		if(this.playerExt.selectedPet != null) {
 			ITextComponent title = this.playerExt.selectedPet.getDisplayName()
-					.appendText(" ")
-					.appendSibling(new TranslationTextComponent("creature.stat.level"))
-					.appendText(" " + this.playerExt.selectedPet.getLevel());
+					.func_240702_b_(" ")
+					.func_230529_a_(new TranslationTextComponent("creature.stat.level"))
+					.func_240702_b_(" " + this.playerExt.selectedPet.getLevel());
 			if(this.playerExt.selectedPet.releaseEntity) {
-				title = new TranslationTextComponent("gui.pet.release").appendText(" ").appendSibling(title);
+				title = new TranslationTextComponent("gui.pet.release").func_240702_b_(" ").func_230529_a_(title);
 			}
 			return title;
 		}

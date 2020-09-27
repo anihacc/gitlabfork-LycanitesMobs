@@ -151,7 +151,7 @@ public class RandomSpawnLocation extends BlockSpawnLocation {
 		if(this.yMin >= 0) {
 			minY = Math.max(minY, this.yMin);
 		}
-		int maxY = Math.min(originY + rangeMaxY, world.getActualHeight() - 1); // Search up to this y pos
+		int maxY = Math.min(originY + rangeMaxY, world.getHeight() - 1); // Search up to this y pos
 		if(this.yMax >= 0) {
 			maxY = Math.min(maxY, this.yMax);
 		}

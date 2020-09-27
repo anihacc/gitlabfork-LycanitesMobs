@@ -149,7 +149,7 @@ public class StayByWaterGoal extends Goal {
             if(this.host.getEntityWorld().getBlockState(pos).getMaterial() == Material.WATER)
                 return true;
         }
-        if(this.host.isImmuneToFire() || this.host.isLavaCreature) {
+        if(this.host.isInvulnerableTo(DamageSource.ON_FIRE) || this.host.isLavaCreature) {
             if(this.host.getEntityWorld().getBlockState(pos).getMaterial() == Material.LAVA)
                 return true;
         }

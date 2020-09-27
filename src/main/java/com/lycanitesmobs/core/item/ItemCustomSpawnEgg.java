@@ -56,14 +56,14 @@ public class ItemCustomSpawnEgg extends BaseItem {
     @Override
     public ITextComponent getDisplayName(ItemStack itemStack) {
 		ITextComponent displayName = new TranslationTextComponent("creaturetype.spawn")
-				.appendText(" ")
-				.appendSibling(this.creatureType.getTitle())
-				.appendText(": ");
+				.func_240702_b_(" ")
+				.func_230529_a_(this.creatureType.getTitle())
+				.func_240702_b_(": ");
 		CreatureInfo creatureInfo = this.getCreatureInfo(itemStack);
 		if(creatureInfo != null)
-			displayName.appendSibling(creatureInfo.getTitle());
+			displayName.func_230529_a_(creatureInfo.getTitle());
 		else
-			displayName.appendText("Missing Creature NBT");
+			displayName.func_240702_b_("Missing Creature NBT");
         return displayName;
     }
     

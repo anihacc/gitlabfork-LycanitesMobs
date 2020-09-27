@@ -72,7 +72,7 @@ public class BlockSpawnLocation extends SpawnLocation {
             if (y < yMin) {
             	y = yMin;
 			}
-			int yMax = world.getActualHeight();
+			int yMax = world.getHeight();
 			if(this.yMax >= 0) {
 				yMax = Math.min(this.yMax, yMax);
 			}

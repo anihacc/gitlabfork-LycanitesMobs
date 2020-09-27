@@ -48,26 +48,26 @@ public class DamageEquipmentFeature extends EquipmentFeature {
 			return null;
 		}
 		ITextComponent description = new TranslationTextComponent("equipment.feature." + this.featureType)
-			.appendText(" " + this.damageAmount);
+			.func_240702_b_(" " + this.damageAmount);
 		if(this.damageCooldown > 0) {
-			description.appendText("\n")
-					.appendSibling(new TranslationTextComponent("equipment.feature.damage.cooldown"))
-					.appendText(" " + String.format("%.1f", this.damageCooldown));
+			description.func_240702_b_("\n")
+					.func_230529_a_(new TranslationTextComponent("equipment.feature.damage.cooldown"))
+					.func_240702_b_(" " + String.format("%.1f", this.damageCooldown));
 		}
 		if(this.damageKnockback > 0) {
-			description.appendText("\n")
-					.appendSibling(new TranslationTextComponent("equipment.feature.damage.knockback"))
-					.appendText(" " + String.format("%.0f", this.damageKnockback));
+			description.func_240702_b_("\n")
+					.func_230529_a_(new TranslationTextComponent("equipment.feature.damage.knockback"))
+					.func_240702_b_(" " + String.format("%.0f", this.damageKnockback));
 		}
 		if(this.damageRange > 0) {
-			description.appendText("\n")
-					.appendSibling(new TranslationTextComponent("equipment.feature.damage.range"))
-					.appendText(" " + String.format("%.1f", this.damageRange));
+			description.func_240702_b_("\n")
+					.func_230529_a_(new TranslationTextComponent("equipment.feature.damage.range"))
+					.func_240702_b_(" " + String.format("%.1f", this.damageRange));
 		}
 		if(this.damageSweep > 0) {
-			description.appendText("\n")
-					.appendSibling(new TranslationTextComponent("equipment.feature.damage.sweep"))
-					.appendText(" " + String.format("%.0f", this.damageSweep));
+			description.func_240702_b_("\n")
+					.func_230529_a_(new TranslationTextComponent("equipment.feature.damage.sweep"))
+					.func_240702_b_(" " + String.format("%.0f", this.damageSweep));
 		}
 		return description;
 	}

@@ -5,9 +5,9 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.helpers.JSONHelper;
 import com.lycanitesmobs.core.spawner.SpawnerMobRegistry;
 import net.minecraft.entity.EntityClassification;
+import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.DungeonHooks;
 
 import java.util.ArrayList;
@@ -219,7 +219,7 @@ public class CreatureSpawn {
 		}
 
 		// Check IDs:
-		String targetDimensionId = world.getDimension().getType().getRegistryName().toString();
+		String targetDimensionId = world.func_234922_V_().func_240901_a_().toString();
 		for(String dimensionId : this.dimensionIds) {
 			if(dimensionId.equals(targetDimensionId)) {
 				return this.dimensionListType.equalsIgnoreCase("whitelist");

@@ -63,151 +63,151 @@ public class CreatureDescriptionList extends BaseList {
 		if(creatureInfo.creatureType != null) {
 			// Taming:
 			if(creatureInfo.isTameable() && creatureInfo.creatureType.getTreatItem() != null) {
-				text.appendText("\u00A7l")
-						.appendSibling(new TranslationTextComponent("gui.beastiary.tameable"))
-						.appendText(": " + "\u00A7r")
-						.appendSibling(creatureInfo.creatureType.getTreatItem().getName())
-						.appendText("\n\n");
+				text.func_240702_b_("\u00A7l")
+						.func_230529_a_(new TranslationTextComponent("gui.beastiary.tameable"))
+						.func_240702_b_(": " + "\u00A7r")
+						.func_230529_a_(creatureInfo.creatureType.getTreatItem().getName())
+						.func_240702_b_("\n\n");
 
 				// Mounting:
 				if(creatureInfo.isMountable()) {
-					text.appendText("\u00A7l")
-							.appendSibling(new TranslationTextComponent("gui.beastiary.mountable"))
-							.appendText("\u00A7r\n\n");
+					text.func_240702_b_("\u00A7l")
+							.func_230529_a_(new TranslationTextComponent("gui.beastiary.mountable"))
+							.func_240702_b_("\u00A7r\n\n");
 				}
 			}
 
 			// Summoning:
 			if(creatureInfo.isSummonable()) {
-				text.appendText("\u00A7l")
-						.appendSibling(new TranslationTextComponent("gui.beastiary.summonable"))
-						.appendText("\u00A7r\n\n");
+				text.func_240702_b_("\u00A7l")
+						.func_230529_a_(new TranslationTextComponent("gui.beastiary.summonable"))
+						.func_240702_b_("\u00A7r\n\n");
 			}
 
 			// Perching:
 			if((creatureInfo.isTameable() || creatureInfo.isSummonable()) && creatureInfo.isPerchable()) {
-				text.appendText("\u00A7l")
-						.appendSibling(new TranslationTextComponent("gui.beastiary.perchable"))
-						.appendText("\u00A7r\n\n");
+				text.func_240702_b_("\u00A7l")
+						.func_230529_a_(new TranslationTextComponent("gui.beastiary.perchable"))
+						.func_240702_b_("\u00A7r\n\n");
 			}
 		}
 
 		// Diet:
-		text.appendText("\n\n\u00A7l")
-				.appendSibling(new TranslationTextComponent("gui.beastiary.diet"))
-				.appendText(": " + "\u00A7r")
-				.appendText("\n").appendSibling(creatureInfo.getDietNames());
+		text.func_240702_b_("\n\n\u00A7l")
+				.func_230529_a_(new TranslationTextComponent("gui.beastiary.diet"))
+				.func_240702_b_(": " + "\u00A7r")
+				.func_240702_b_("\n").func_230529_a_(creatureInfo.getDietNames());
 
 		// Summary:
-		text.appendText("\n\n\u00A7l")
-				.appendSibling(new TranslationTextComponent("gui.beastiary.summary"))
-				.appendText(": " + "\u00A7r")
-				.appendText("\n")
-				.appendSibling(creatureInfo.getDescription());
+		text.func_240702_b_("\n\n\u00A7l")
+				.func_230529_a_(new TranslationTextComponent("gui.beastiary.summary"))
+				.func_240702_b_(": " + "\u00A7r")
+				.func_240702_b_("\n")
+				.func_230529_a_(creatureInfo.getDescription());
 
 		// Stats:
-		text.appendText("\n\n\u00A7l")
-				.appendSibling(new TranslationTextComponent("creature.stat.base"))
-				.appendText(": " + "\u00A7r");
+		text.func_240702_b_("\n\n\u00A7l")
+				.func_230529_a_(new TranslationTextComponent("creature.stat.base"))
+				.func_240702_b_(": " + "\u00A7r");
 
 		if(this.creatureKnowledge.rank >= 2) {
 			// Stats:
 			String statPrefix = "\n" + new TranslationTextComponent("creature.stat.base") + " ";
 
-			text.appendText("\n")
-					.appendSibling(new TranslationTextComponent("creature.stat.health"))
-					.appendText(": " + creatureInfo.health);
-			text.appendText("\n")
-					.appendSibling(new TranslationTextComponent("creature.stat.defense"))
-					.appendText(": " + creatureInfo.defense);
+			text.func_240702_b_("\n")
+					.func_230529_a_(new TranslationTextComponent("creature.stat.health"))
+					.func_240702_b_(": " + creatureInfo.health);
+			text.func_240702_b_("\n")
+					.func_230529_a_(new TranslationTextComponent("creature.stat.defense"))
+					.func_240702_b_(": " + creatureInfo.defense);
 
-			text.appendText("\n")
-					.appendSibling(new TranslationTextComponent("creature.stat.speed"))
-					.appendText(": " + creatureInfo.speed);
-			text.appendText("\n")
-					.appendSibling(new TranslationTextComponent("creature.stat.damage"))
-					.appendText(": " + creatureInfo.damage);
+			text.func_240702_b_("\n")
+					.func_230529_a_(new TranslationTextComponent("creature.stat.speed"))
+					.func_240702_b_(": " + creatureInfo.speed);
+			text.func_240702_b_("\n")
+					.func_230529_a_(new TranslationTextComponent("creature.stat.damage"))
+					.func_240702_b_(": " + creatureInfo.damage);
 
-			text.appendText("\n")
-					.appendSibling(new TranslationTextComponent("creature.stat.pierce"))
-					.appendText(": " + creatureInfo.pierce);
+			text.func_240702_b_("\n")
+					.func_230529_a_(new TranslationTextComponent("creature.stat.pierce"))
+					.func_240702_b_(": " + creatureInfo.pierce);
 			ITextComponent effectText = new StringTextComponent(creatureInfo.effectDuration + "s " + creatureInfo.effectAmplifier + "X");
 			if(creatureInfo.effectDuration <= 0 || creatureInfo.effectAmplifier < 0)
 				effectText = new TranslationTextComponent("common.none");
-			text.appendText("\n")
-					.appendSibling(new TranslationTextComponent("creature.stat.effect"))
-					.appendText(": ")
-					.appendSibling(effectText);
+			text.func_240702_b_("\n")
+					.func_230529_a_(new TranslationTextComponent("creature.stat.effect"))
+					.func_240702_b_(": ")
+					.func_230529_a_(effectText);
 		}
 		else {
-			text.appendText("\n")
-					.appendSibling(new TranslationTextComponent("gui.beastiary.unlockedat"))
-					.appendText(" ")
-					.appendSibling(new TranslationTextComponent("creature.stat.knowledge"))
-					.appendText(" " + 2);
+			text.func_240702_b_("\n")
+					.func_230529_a_(new TranslationTextComponent("gui.beastiary.unlockedat"))
+					.func_240702_b_(" ")
+					.func_230529_a_(new TranslationTextComponent("creature.stat.knowledge"))
+					.func_240702_b_(" " + 2);
 		}
 
 		// Combat:
-		text.appendText("\n\n\u00A7l")
-				.appendSibling(new TranslationTextComponent("gui.beastiary.combat"))
-				.appendText(": " + "\u00A7r");
+		text.func_240702_b_("\n\n\u00A7l")
+				.func_230529_a_(new TranslationTextComponent("gui.beastiary.combat"))
+				.func_240702_b_(": " + "\u00A7r");
 		if(this.creatureKnowledge.rank >= 2) {
-			text.appendText("\n").appendSibling(creatureInfo.getCombatDescription());
+			text.func_240702_b_("\n").func_230529_a_(creatureInfo.getCombatDescription());
 		}
 		else {
-			text.appendText("\n")
-					.appendSibling(new TranslationTextComponent("gui.beastiary.unlockedat"))
-					.appendText(" ")
-					.appendSibling(new TranslationTextComponent("creature.stat.knowledge"))
-					.appendText(" " + 2);
+			text.func_240702_b_("\n")
+					.func_230529_a_(new TranslationTextComponent("gui.beastiary.unlockedat"))
+					.func_240702_b_(" ")
+					.func_230529_a_(new TranslationTextComponent("creature.stat.knowledge"))
+					.func_240702_b_(" " + 2);
 		}
 
 		// Habitat:
-		text.appendText("\n\n\u00A7l")
-				.appendSibling(new TranslationTextComponent("gui.beastiary.habitat"))
-				.appendText(": " + "\u00A7r");
+		text.func_240702_b_("\n\n\u00A7l")
+				.func_230529_a_(new TranslationTextComponent("gui.beastiary.habitat"))
+				.func_240702_b_(": " + "\u00A7r");
 		if(this.creatureKnowledge.rank >= 2) {
-			text.appendText("\n")
-					.appendSibling(creatureInfo.getHabitatDescription());
+			text.func_240702_b_("\n")
+					.func_230529_a_(creatureInfo.getHabitatDescription());
 		}
 		else {
-			text.appendText("\n")
-					.appendSibling(new TranslationTextComponent("gui.beastiary.unlockedat"))
-					.appendText(" ")
-					.appendSibling(new TranslationTextComponent("creature.stat.knowledge"))
-					.appendText(" " + 2);
+			text.func_240702_b_("\n")
+					.func_230529_a_(new TranslationTextComponent("gui.beastiary.unlockedat"))
+					.func_240702_b_(" ")
+					.func_230529_a_(new TranslationTextComponent("creature.stat.knowledge"))
+					.func_240702_b_(" " + 2);
 		}
 
 		// Biomes:
-		text.appendText("\n\n\u00A7l")
-				.appendSibling(new TranslationTextComponent("gui.beastiary.biomes"))
-				.appendText(": " + "\u00A7r");
+		text.func_240702_b_("\n\n\u00A7l")
+				.func_230529_a_(new TranslationTextComponent("gui.beastiary.biomes"))
+				.func_240702_b_(": " + "\u00A7r");
 		if(this.creatureKnowledge.rank >= 2) {
-			text.appendText("\n")
-					.appendSibling(creatureInfo.getBiomeNames());
+			text.func_240702_b_("\n")
+					.func_230529_a_(creatureInfo.getBiomeNames());
 		}
 		else {
-			text.appendText("\n")
-					.appendSibling(new TranslationTextComponent("gui.beastiary.unlockedat"))
-					.appendText(" ")
-					.appendSibling(new TranslationTextComponent("creature.stat.knowledge"))
-					.appendText(" " + 2);
+			text.func_240702_b_("\n")
+					.func_230529_a_(new TranslationTextComponent("gui.beastiary.unlockedat"))
+					.func_240702_b_(" ")
+					.func_230529_a_(new TranslationTextComponent("creature.stat.knowledge"))
+					.func_240702_b_(" " + 2);
 		}
 
 		// Drops:
-		text.appendText("\n\n\u00A7l")
-				.appendSibling(new TranslationTextComponent("gui.beastiary.drops"))
-				.appendText(": " + "\u00A7r");
+		text.func_240702_b_("\n\n\u00A7l")
+				.func_230529_a_(new TranslationTextComponent("gui.beastiary.drops"))
+				.func_240702_b_(": " + "\u00A7r");
 		if(this.creatureKnowledge.rank >= 2) {
-			text.appendText("\n")
-					.appendSibling(creatureInfo.getDropNames());
+			text.func_240702_b_("\n")
+					.func_230529_a_(creatureInfo.getDropNames());
 		}
 		else {
-			text.appendText("\n")
-					.appendSibling(new TranslationTextComponent("gui.beastiary.unlockedat"))
-					.appendText(" ")
-					.appendSibling(new TranslationTextComponent("creature.stat.knowledge"))
-					.appendText(" " + 2);
+			text.func_240702_b_("\n")
+					.func_230529_a_(new TranslationTextComponent("gui.beastiary.unlockedat"))
+					.func_240702_b_(" ")
+					.func_230529_a_(new TranslationTextComponent("creature.stat.knowledge"))
+					.func_240702_b_(" " + 2);
 		}
 
 		return text.getString();

@@ -619,14 +619,14 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		ITextComponent name = new StringTextComponent("");
 
     	if(!"".equals(this.getAgeName().getString())) {
-			name.appendSibling(this.getAgeName()).appendText(" ");
+			name.func_230529_a_(this.getAgeName()).func_240702_b_(" ");
 		}
 
     	if(!"".equals(this.getSubspeciesTitle().getString())) {
-			name.appendSibling(this.getSubspeciesTitle()).appendText(" ");
+			name.func_230529_a_(this.getSubspeciesTitle()).func_240702_b_(" ");
 		}
 
-    	return name.appendSibling(this.getSpeciesName()).appendText(" ").appendSibling(this.getLevelName());
+    	return name.func_230529_a_(this.getSpeciesName()).func_240702_b_(" ").func_230529_a_(this.getLevelName());
     }
     
     /** Returns the species name of this entity. **/
@@ -642,9 +642,9 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		}
 		if(this.getSubspecies() != null) {
 			if(this.getVariant() != null) {
-				subspeciesName.appendText(" ");
+				subspeciesName.func_240702_b_(" ");
 			}
-			subspeciesName.appendSibling(this.getSubspecies().getTitle());
+			subspeciesName.func_230529_a_(this.getSubspecies().getTitle());
 		}
 		return subspeciesName;
     }
@@ -654,7 +654,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		if(this.getLevel() < 2) {
 			return new StringTextComponent("");
 		}
-		return new TranslationTextComponent("entity.level").appendText(" " + this.getLevel());
+		return new TranslationTextComponent("entity.level").func_240702_b_(" " + this.getLevel());
 	}
 
     /** Gets the name of this entity relative to it's age, more useful for EntityCreatureAgeable. **/
@@ -1043,7 +1043,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     public boolean isBlockUnderground(int x, int y, int z) {
     	if(this.getEntityWorld().canBlockSeeSky(new BlockPos(x, y, z)))
     		return false;
-    	for(int j = y; j < this.getEntityWorld().getActualHeight(); j++) {
+    	for(int j = y; j < this.getEntityWorld().getHeight(); j++) {
     		Material blockMaterial = this.getEntityWorld().getBlockState(new BlockPos(x, j, z)).getMaterial();
     		if(blockMaterial != Material.AIR
     				&& blockMaterial != Material.LEAVES
@@ -1073,7 +1073,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     public void createBossInfo(BossInfo.Color color, boolean darkenSky) {
 		ITextComponent name = this.getName();
         if(this.isBossAlways())
-            name.appendText(" (Phase " + (this.getBattlePhase() + 1) + ")");
+            name.func_240702_b_(" (Phase " + (this.getBattlePhase() + 1) + ")");
         this.bossInfo = (ServerBossInfo)(new ServerBossInfo(name, color, BossInfo.Overlay.PROGRESS)).setDarkenSky(darkenSky);
     }
 
@@ -1092,7 +1092,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
         if(this.bossInfo != null) {
 			ITextComponent name = this.getTitle();
 			if(this.isBossAlways())
-				name.appendText(" (Phase " + (this.getBattlePhase() + 1) + ")");
+				name.func_240702_b_(" (Phase " + (this.getBattlePhase() + 1) + ")");
             this.bossInfo.setName(name);
         }
     }
