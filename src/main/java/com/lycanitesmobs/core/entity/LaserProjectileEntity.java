@@ -2,7 +2,11 @@ package com.lycanitesmobs.core.entity;
 
 import com.lycanitesmobs.Utilities;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
-import net.minecraft.entity.*;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.Pose;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;

@@ -91,19 +91,19 @@ public class ItemEquipment extends BaseItem {
 
 		// Damage:
 		ITextComponent damageDescription = new TranslationTextComponent("equipment.feature.damage")
-				.func_240702_b_(" " + String.format("%.0f", this.getDamageAmount(itemStack) + 1));
-		damageDescription.func_240702_b_("\n")
-				.func_230529_a_(new TranslationTextComponent("equipment.feature.damage.cooldown"))
-				.func_240702_b_(" " + String.format("%.1f", this.getDamageCooldown(itemStack)));
-		damageDescription.func_240702_b_("\n")
-				.func_230529_a_(new TranslationTextComponent("equipment.feature.damage.knockback"))
-				.func_240702_b_(" " + String.format("%.0f", this.getDamageKnockback(itemStack)));
-		damageDescription.func_240702_b_("\n")
-				.func_230529_a_(new TranslationTextComponent("equipment.feature.damage.range"))
-				.func_240702_b_(" " + String.format("%.1f", this.getDamageRange(itemStack)));
-		damageDescription.func_240702_b_("\n")
-				.func_230529_a_(new TranslationTextComponent("equipment.feature.damage.sweep"))
-				.func_240702_b_(" " + String.format("%.0f", Math.min(this.getDamageSweep(itemStack), 360)));
+				.appendString(" " + String.format("%.0f", this.getDamageAmount(itemStack) + 1));
+		damageDescription.appendString("\n")
+				.append(new TranslationTextComponent("equipment.feature.damage.cooldown"))
+				.appendString(" " + String.format("%.1f", this.getDamageCooldown(itemStack)));
+		damageDescription.appendString("\n")
+				.append(new TranslationTextComponent("equipment.feature.damage.knockback"))
+				.appendString(" " + String.format("%.0f", this.getDamageKnockback(itemStack)));
+		damageDescription.appendString("\n")
+				.append(new TranslationTextComponent("equipment.feature.damage.range"))
+				.appendString(" " + String.format("%.1f", this.getDamageRange(itemStack)));
+		damageDescription.appendString("\n")
+				.append(new TranslationTextComponent("equipment.feature.damage.sweep"))
+				.appendString(" " + String.format("%.0f", Math.min(this.getDamageSweep(itemStack), 360)));
 		descriptions.add(damageDescription);
 
 		// Summaries:
@@ -117,25 +117,25 @@ public class ItemEquipment extends BaseItem {
 			// Harvest:
 			if (!"".equals(harvestSummaries.getString())) {
 				descriptions.add(new TranslationTextComponent("equipment.feature.harvest")
-						.func_240702_b_(" ").func_230529_a_(harvestSummaries));
+						.appendString(" ").append(harvestSummaries));
 			}
 
 			// Effect:
 			if (!"".equals(effectSummaries.getString())) {
 				descriptions.add(new TranslationTextComponent("equipment.feature.effect")
-						.func_240702_b_(" ").func_230529_a_(effectSummaries));
+						.appendString(" ").append(effectSummaries));
 			}
 
 			// Projectile:
 			if (!"".equals(projectileSummaries.getString())) {
 				descriptions.add(new TranslationTextComponent("equipment.feature.projectile")
-						.func_240702_b_(" ").func_230529_a_(projectileSummaries));
+						.appendString(" ").append(projectileSummaries));
 			}
 
 			// Summon:
 			if (!"".equals(summonSummaries.getString())) {
 				descriptions.add(new TranslationTextComponent("equipment.feature.summon")
-						.func_240702_b_(" ").func_230529_a_(summonSummaries));
+						.appendString(" ").append(summonSummaries));
 			}
 		}
 
@@ -155,12 +155,12 @@ public class ItemEquipment extends BaseItem {
 		boolean first = true;
 		for (EquipmentFeature equipmentFeature : effectFeatures.keySet()) {
 			if(!first) {
-				featureSummaries.func_240702_b_(", ");
+				featureSummaries.appendString(", ");
 			}
 			first = false;
 			ITextComponent featureSummary = equipmentFeature.getSummary(effectFeatures.get(equipmentFeature), this.getPartLevel(effectFeatures.get(equipmentFeature)));
 			if(featureSummary != null) {
-				featureSummaries.func_230529_a_(featureSummary);
+				featureSummaries.append(featureSummary);
 			}
 		}
 		return featureSummaries;
@@ -536,7 +536,7 @@ public class ItemEquipment extends BaseItem {
 		// Sweeping:
 		List<LivingEntity> targets = new ArrayList<>();
 		targets.add(primaryTarget);
-		if(attacker != null && !attacker.getEntityWorld().isRemote && !attacker.isShiftKeyDown() && !attackOnCooldown) {
+		if(attacker != null && !attacker.getEntityWorld().isRemote && !attacker.isSneaking() && !attackOnCooldown) {
 			double sweepAngle = this.getDamageSweep(itemStack);
 			if(sweepAngle > 0) {
 				float sweepDamage = (float) this.getDamageAmount(itemStack);
@@ -649,7 +649,7 @@ public class ItemEquipment extends BaseItem {
 	public Multimap<String, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack itemStack) {
 		Multimap<String, AttributeModifier> multimap = super.getAttributeModifiers(slot, itemStack);
 		if (slot == EquipmentSlotType.MAINHAND) {
-			multimap.put(Attributes.field_233823_f_.getName(), new AttributeModifier(field_233823_f__MODIFIER, "Weapon modifier", this.getDamageAmount(itemStack), AttributeModifier.Operation.ADDITION));
+			multimap.put(Attributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", this.getDamageAmount(itemStack), AttributeModifier.Operation.ADDITION));
 			multimap.put(Attributes.ATTACK_SPEED.getName(), new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", -this.getDamageCooldown(itemStack), AttributeModifier.Operation.ADDITION));
 		}
 

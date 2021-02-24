@@ -80,8 +80,8 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 		if(!this.isActive(itemStack, level)) {
 			return null;
 		}
-		return new TranslationTextComponent("equipment.feature." + this.featureType).func_240702_b_(" ")
-				.func_230529_a_(this.getSummary(itemStack, level));
+		return new TranslationTextComponent("equipment.feature." + this.featureType).appendString(" ")
+				.append(this.getSummary(itemStack, level));
 	}
 
 	@Override
@@ -91,9 +91,9 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 		}
 		StringTextComponent summary = new StringTextComponent(this.harvestType);
 		if(this.harvestRange.distanceSq(0, 0, 0, false) > 0) {
-			summary.func_240702_b_(" (" + this.harvestShape);
-			summary.func_240702_b_(" " + this.getHarvestRangeString(level));
-			summary.func_240702_b_(")");
+			summary.appendString(" (" + this.harvestShape);
+			summary.appendString(" " + this.getHarvestRangeString(level));
+			summary.appendString(")");
 		}
 		return summary;
 	}

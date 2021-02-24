@@ -56,14 +56,14 @@ public class ItemCustomSpawnEgg extends BaseItem {
     @Override
     public ITextComponent getDisplayName(ItemStack itemStack) {
 		ITextComponent displayName = new TranslationTextComponent("creaturetype.spawn")
-				.func_240702_b_(" ")
-				.func_230529_a_(this.creatureType.getTitle())
-				.func_240702_b_(": ");
+				.appendString(" ")
+				.append(this.creatureType.getTitle())
+				.appendString(": ");
 		CreatureInfo creatureInfo = this.getCreatureInfo(itemStack);
 		if(creatureInfo != null)
-			displayName.func_230529_a_(creatureInfo.getTitle());
+			displayName.append(creatureInfo.getTitle());
 		else
-			displayName.func_240702_b_("Missing Creature NBT");
+			displayName.appendString("Missing Creature NBT");
         return displayName;
     }
     
@@ -271,7 +271,7 @@ public class ItemCustomSpawnEgg extends BaseItem {
 
 			if(entity instanceof MobEntity) {
 				MobEntity mobEntity = (MobEntity)entity;
-				mobEntity.onInitialSpawn(world, world.getDifficultyForLocation(new BlockPos(mobEntity)), SpawnReason.SPAWN_EGG, null, null);
+				mobEntity.onInitialSpawn(world, world.getDifficultyForLocation(mobEntity.getPosition()), SpawnReason.SPAWN_EGG, null, null);
 				mobEntity.playAmbientSound();
 			}
 

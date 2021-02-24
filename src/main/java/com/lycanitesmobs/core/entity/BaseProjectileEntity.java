@@ -32,7 +32,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class BaseProjectileEntity extends ThrowableEntity {
+public abstract class BaseProjectileEntity extends ThrowableEntity {
 	public String entityName = "projectile";
 	public ModInfo modInfo;
 	public long updateTick;
@@ -73,11 +73,6 @@ public class BaseProjectileEntity extends ThrowableEntity {
 	// ==================================================
  	//			    Constructors
  	// ==================================================
-	public BaseProjectileEntity(World world) {
-		super(null, world);
-		this.setup();
-	}
-
     public BaseProjectileEntity(EntityType<? extends BaseProjectileEntity> entityType, World world) {
 	   super(entityType, world);
 	   this.setup();
@@ -86,7 +81,7 @@ public class BaseProjectileEntity extends ThrowableEntity {
     public BaseProjectileEntity(EntityType<? extends BaseProjectileEntity> entityType, World world, LivingEntity entityLiving) {
 	   this(entityType, world);
 	   this.setPosition(entityLiving.getPositionVec().getX(), entityLiving.getPositionVec().getY() + entityLiving.getEyeHeight(), entityLiving.getPositionVec().getZ());
-	   this.shoot(entityLiving, entityLiving.rotationPitch, entityLiving.rotationYaw, 0.0F, 1.1F, 1.0F);
+	   this.func_234612_a_(entityLiving, entityLiving.rotationPitch, entityLiving.rotationYaw, 0.0F, 1.1F, 1.0F); // Shoot from entity
 	   this.owner = entityLiving;
 	   this.setup();
     }
@@ -139,6 +134,13 @@ public class BaseProjectileEntity extends ThrowableEntity {
 	public Entity getShooter() {
 		return this.owner;
 	}
+
+	public LivingEntity getOwner() {
+		if(this.owner instanceof LivingEntity) {
+			return (LivingEntity) this.owner;
+		}
+		return null;
+	}
 	
     
     // ==================================================
@@ -150,7 +152,7 @@ public class BaseProjectileEntity extends ThrowableEntity {
 
 	   if(!this.movement) {
 		  this.onGround = false;
-		  this.timeUntilPortal = this.getPortalCooldown();
+		  this.portalCounter = this.getPortalCooldown();
 	   }
 	   double initX = this.getPositionVec().getX();
 	   double initY = this.getPositionVec().getY();
@@ -395,7 +397,7 @@ public class BaseProjectileEntity extends ThrowableEntity {
 		if(this.getEntityWorld().isRemote)
 			return false;
 
-		LivingEntity owner = this.func_234616_v_();
+		LivingEntity owner = this.getOwner();
 		if(owner != null) {
 			if(owner instanceof BaseCreatureEntity) {
 				BaseCreatureEntity ownerCreature = (BaseCreatureEntity) owner;

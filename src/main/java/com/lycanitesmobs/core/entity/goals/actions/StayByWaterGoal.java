@@ -4,8 +4,9 @@ import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Pose;
 import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.fluid.IFluidState;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 
@@ -58,7 +59,7 @@ public class StayByWaterGoal extends Goal {
 
     	// Set home when in water or lava (for lava creatures).
     	if(this.host.isInWater()) {
-    		IFluidState fluidState = this.host.getEntityWorld().getFluidState(this.host.getPosition());
+    		FluidState fluidState = this.host.getEntityWorld().getFluidState(this.host.getPosition());
     		if((!this.host.isLavaCreature && fluidState.isTagged(FluidTags.WATER)) ||
     			(this.host.isLavaCreature && fluidState.isTagged(FluidTags.LAVA))) {
 	    		this.waterPos = this.host.getPosition();
@@ -95,7 +96,7 @@ public class StayByWaterGoal extends Goal {
 	    					BlockPos searchPos = new BlockPos(searchX, searchY, searchZ);
 
 	    					// If the block is closer than the last valid location...
-	    					double searchDistance = this.host.getDistanceSq(new Vector3d(searchPos));
+	    					double searchDistance = this.host.getDistanceSq(Vector3d.copy(searchPos));
     		    			if(!this.hasWaterPos || searchDistance < closestDistance) {
 		    					
     		    				// And it is a valid water position...
@@ -197,6 +198,6 @@ public class StayByWaterGoal extends Goal {
     public double getDistanceFromWater() {
         if(!this.hasWaterPos)
             return 0;
-    	return this.host.getDistanceSq(new Vector3d(this.waterPos));
+    	return this.host.getDistanceSq(Vector3d.copy(this.waterPos));
     }
 }

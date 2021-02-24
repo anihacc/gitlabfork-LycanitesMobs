@@ -219,7 +219,7 @@ public class CreatureSpawn {
 		}
 
 		// Check IDs:
-		String targetDimensionId = world.func_234922_V_().func_240901_a_().toString();
+		String targetDimensionId = world.getDimensionKey().getRegistryName().toString(); // TODO Check if this matches dimension ids!
 		for(String dimensionId : this.dimensionIds) {
 			if(dimensionId.equals(targetDimensionId)) {
 				return this.dimensionListType.equalsIgnoreCase("whitelist");

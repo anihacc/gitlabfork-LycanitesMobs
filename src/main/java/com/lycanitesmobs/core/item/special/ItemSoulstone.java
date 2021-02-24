@@ -111,10 +111,10 @@ public class ItemSoulstone extends BaseItem {
 			}
 
 			ITextComponent message = new TranslationTextComponent("message.soulstone." + petType + ".added.prefix")
-					.func_240702_b_(" ")
-					.func_230529_a_(creatureInfo.getTitle())
-					.func_240702_b_(" ")
-					.func_230529_a_(new TranslationTextComponent("message.soulstone." + petType + ".added.suffix"));
+					.appendString(" ")
+					.append(creatureInfo.getTitle())
+					.appendString(" ")
+					.append(new TranslationTextComponent("message.soulstone." + petType + ".added.suffix"));
 			player.sendMessage(message);
 			//player.addStat(ObjectManager.getStat("soulstone"), 1);
 

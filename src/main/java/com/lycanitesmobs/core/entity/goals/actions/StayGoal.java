@@ -57,14 +57,17 @@ public class StayGoal extends Goal {
         	if(!this.host.canBreatheUnderwater())
         		return false;
 		}
-        else if(!this.host.onGround && !this.host.isFlying())
-            return false;
+        else if(!this.host.isOnGround() && !this.host.isFlying()) {
+			return false;
+		}
 
-        if (!(this.host.getOwner() instanceof LivingEntity))
-            return false;
+        if (!(this.host.getOwner() instanceof LivingEntity)) {
+			return false;
+		}
         LivingEntity owner = (LivingEntity)this.host.getOwner();
-        if(owner != null && this.host.getDistance(owner) < 144.0D && owner.getRevengeTarget() != null && !this.host.isPassive())
-        	return false;
+        if(owner != null && this.host.getDistance(owner) < 144.0D && owner.getRevengeTarget() != null && !this.host.isPassive()) {
+			return false;
+		}
         
         return this.host.isSitting();
     }

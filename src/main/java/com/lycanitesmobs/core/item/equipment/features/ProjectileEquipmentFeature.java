@@ -101,25 +101,25 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 		}
 
 		ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile(this.projectileName);
-		ITextComponent description = new TranslationTextComponent("equipment.feature." + this.featureType).func_240702_b_(" ")
-				.func_230529_a_(projectileInfo.getTitle());
+		ITextComponent description = new TranslationTextComponent("equipment.feature." + this.featureType).appendString(" ")
+				.append(projectileInfo.getTitle());
 
 		if(this.bonusDamage != 0) {
-			description.func_240702_b_(" +" + this.bonusDamage);
+			description.appendString(" +" + this.bonusDamage);
 		}
 
 		if(!"simple".equals(this.projectilePattern)) {
-			description.func_240702_b_(" ")
-					.func_230529_a_(new TranslationTextComponent("equipment.feature.projectile.pattern." + this.projectilePattern));
+			description.appendString(" ")
+					.append(new TranslationTextComponent("equipment.feature.projectile.pattern." + this.projectilePattern));
 		}
 
-		description.func_240702_b_(" ")
-				.func_230529_a_( new TranslationTextComponent("equipment.feature.projectile.trigger." + this.projectileTrigger));
+		description.appendString(" ")
+				.append( new TranslationTextComponent("equipment.feature.projectile.trigger." + this.projectileTrigger));
 		if("hit".equals(this.projectileTrigger)) {
-			description.func_240702_b_(" " + String.format("%.0f", this.hitChance * 100) + "%");
+			description.appendString(" " + String.format("%.0f", this.hitChance * 100) + "%");
 		}
 		else {
-			description.func_240702_b_(" " + String.format("%.1f", (float)this.cooldown / 20) + "s");
+			description.appendString(" " + String.format("%.1f", (float)this.cooldown / 20) + "s");
 		}
 
 		return description;
@@ -133,7 +133,7 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 		ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile(this.projectileName);
 		ITextComponent summary = projectileInfo.getTitle();
 		if(this.bonusDamage != 0) {
-			summary.func_240702_b_(" +" + this.bonusDamage);
+			summary.appendString(" +" + this.bonusDamage);
 		}
 		return summary;
 	}
@@ -197,7 +197,7 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 	 * @param attacker The entity using this item to hit.
 	 */
 	public void onHitEntity(ItemStack itemStack, LivingEntity target, LivingEntity attacker) {
-		if(target == null || attacker == null || attacker.getEntityWorld().isRemote || attacker.isShiftKeyDown() || !"hit".equals(this.projectileTrigger)) { // isSneaking()
+		if(target == null || attacker == null || attacker.getEntityWorld().isRemote || attacker.isSneaking() || !"hit".equals(this.projectileTrigger)) { // isSneaking()
 			return;
 		}
 

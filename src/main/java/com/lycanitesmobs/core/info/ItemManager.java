@@ -20,10 +20,7 @@ import com.lycanitesmobs.core.item.special.ItemSoulgazer;
 import com.lycanitesmobs.core.item.special.ItemSoulkey;
 import com.lycanitesmobs.core.item.special.ItemSoulstone;
 import com.lycanitesmobs.core.item.summoningstaff.*;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.FlowingFluidBlock;
-import net.minecraft.block.SoundType;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.fluid.FlowingFluid;
 import net.minecraft.fluid.Fluid;
@@ -48,7 +45,7 @@ import java.util.function.Supplier;
 
 public class ItemManager extends JSONLoader {
 	public static ItemManager INSTANCE;
-	public static final DeferredRegister<Fluid> FLUIDS = new DeferredRegister<>(ForgeRegistries.FLUIDS, LycanitesMobs.MODID);
+//	public static final DeferredRegister<Fluid> FLUIDS = new DeferredRegister<>(ForgeRegistries.FLUIDS, LycanitesMobs.MODID); TODO Probably moved to a reg event finally...
 
 	public Map<String, ItemInfo> items = new HashMap<>();
 
@@ -212,8 +209,8 @@ public class ItemManager extends JSONLoader {
 
 		// Fluids:
 		Block.Properties waterBlockProperties = Block.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100).noDrops();
-		Block.Properties waterLightBlockProperties = Block.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100).noDrops().lightValue(10);
-		Block.Properties lavaBlockProperties = Block.Properties.create(Material.LAVA).doesNotBlockMovement().hardnessAndResistance(100).noDrops().lightValue(15);
+		Block.Properties waterLightBlockProperties = Block.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100).noDrops().setLightLevel((BlockState blockState) -> { return 10; });
+		Block.Properties lavaBlockProperties = Block.Properties.create(Material.LAVA).doesNotBlockMovement().hardnessAndResistance(100).noDrops().setLightLevel((BlockState blockState) -> { return 15; });
 
 		this.addFluid("ooze", 0x003A9F, 3000, 3000, 0, 10, false);
 		ObjectManager.addBlock("ooze", new BlockFluidOoze(() -> ObjectManager.getFluid("ooze").get(), waterLightBlockProperties, "ooze"));
@@ -254,8 +251,8 @@ public class ItemManager extends JSONLoader {
 		fluidProperties.bucket(() -> ObjectManager.getItem("bucket" + fluidName));
 		fluidProperties.block(() -> (FlowingFluidBlock)ObjectManager.getBlock(fluidName));
 
-		ObjectManager.addFluid(fluidName, FLUIDS.register(fluidName, () -> new ForgeFlowingFluid.Source(fluidProperties)));
-		ObjectManager.addFluid(fluidName + "_flowing", FLUIDS.register(fluidName + "_flowing", () -> new ForgeFlowingFluid.Flowing(fluidProperties)));
+//		ObjectManager.addFluid(fluidName, FLUIDS.register(fluidName, () -> new ForgeFlowingFluid.Source(fluidProperties))); TODO Add fluids!
+//		ObjectManager.addFluid(fluidName + "_flowing", FLUIDS.register(fluidName + "_flowing", () -> new ForgeFlowingFluid.Flowing(fluidProperties)));
 
 		ObjectManager.addSound(fluidName, LycanitesMobs.modInfo, "block." + fluidName);
 

@@ -27,7 +27,7 @@ public class BlockStairsCustom extends StairsBlock {
 	}
 
 	@Override
-	public IFormattableTextComponent func_235333_g_() {
+	public IFormattableTextComponent getTranslatedName() {
 		return new TranslationTextComponent(this.getTranslationKey());
 	}
 

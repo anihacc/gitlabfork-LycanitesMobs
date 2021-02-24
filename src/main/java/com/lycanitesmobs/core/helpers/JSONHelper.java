@@ -7,12 +7,14 @@ import com.lycanitesmobs.LycanitesMobs;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -187,8 +189,13 @@ public class JSONHelper {
 			List<Biome> selectedBiomes = new ArrayList<>();
 			if ("ALL".equalsIgnoreCase(biomeEntry)) {
 				for (BiomeDictionary.Type biomeType : BiomeDictionary.Type.getAll()) {
-					Set<Biome> selectedBiomesSet = BiomeDictionary.getBiomes(biomeType);
-					selectedBiomes.addAll(selectedBiomesSet);
+					Set<RegistryKey<Biome>> selectedBiomesSet = BiomeDictionary.getBiomes(biomeType);
+					for (RegistryKey<Biome> selectedBiomesKey : selectedBiomesSet) {
+						Biome biome = ForgeRegistries.BIOMES.getValue(selectedBiomesKey.getRegistryName());
+						if(biome != null) {
+							selectedBiomes.add(biome);
+						}
+					}
 				}
 			}
 			else if (!"NONE".equalsIgnoreCase(biomeEntry)) {
@@ -199,8 +206,13 @@ public class JSONHelper {
 					LycanitesMobs.logWarning("", "[Spawning] Unknown biome type " + biomeEntry + " this will be ignored and treated as NONE.");
 				}
 				if (biomeType != null) {
-					Set<Biome> selectedBiomesSet = BiomeDictionary.getBiomes(biomeType);
-					selectedBiomes.addAll(selectedBiomesSet);
+					Set<RegistryKey<Biome>> selectedBiomesSet = BiomeDictionary.getBiomes(biomeType);
+					for (RegistryKey<Biome> selectedBiomesKey : selectedBiomesSet) {
+						Biome biome = ForgeRegistries.BIOMES.getValue(selectedBiomesKey.getRegistryName());
+						if(biome != null) {
+							selectedBiomes.add(biome);
+						}
+					}
 				}
 			}
 

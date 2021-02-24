@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.command;
 
 import net.minecraft.command.Commands;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 
@@ -15,8 +16,8 @@ public class CommandManager {
 	}
 
 	@SubscribeEvent
-	public void register(final FMLServerStartingEvent event) {
-		event.getCommandDispatcher().register(
+	public void register(final RegisterCommandsEvent event) {
+		event.getDispatcher().register(
 				Commands.literal("lm")
 						.then(CreaturesCommand.register())
 						.then(BeastiaryCommand.register())

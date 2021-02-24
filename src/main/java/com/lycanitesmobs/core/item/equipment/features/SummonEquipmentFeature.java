@@ -64,19 +64,19 @@ public class SummonEquipmentFeature extends EquipmentFeature {
 			return null;
 		}
 		ITextComponent description = new TranslationTextComponent("equipment.feature." + this.featureType)
-			.func_240702_b_(" ").func_230529_a_(new TranslationTextComponent("entity." + this.summonMobId));
+			.appendString(" ").append(new TranslationTextComponent("entity." + this.summonMobId));
 
 		if(this.summonCountMin != this.summonCountMax) {
-			description.func_240702_b_(" x" + (this.summonCountMin + " - " + this.summonCountMax));
+			description.appendString(" x" + (this.summonCountMin + " - " + this.summonCountMax));
 		}
 		else {
-			description.func_240702_b_(" x" + this.summonCountMax);
+			description.appendString(" x" + this.summonCountMax);
 		}
 
-		description.func_240702_b_(" " + Math.round(this.summonChance * 100) + "%");
+		description.appendString(" " + Math.round(this.summonChance * 100) + "%");
 
 		if(this.summonDuration > 0) {
-			description.func_240702_b_(" " + ((float)this.summonDuration / 20) + "s");
+			description.appendString(" " + ((float)this.summonDuration / 20) + "s");
 		}
 
 		return description;

@@ -7,6 +7,7 @@ import com.lycanitesmobs.core.entity.goals.targeting.RevengeRiderGoal;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.entity.*;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.EffectInstance;
@@ -20,7 +21,7 @@ import net.minecraft.world.World;
 import javax.annotation.Nonnull;
 import java.util.HashMap;
 
-public class RideableCreatureEntity extends TameableCreatureEntity {
+public abstract class RideableCreatureEntity extends TameableCreatureEntity {
 
     public Entity lastRiddenByEntity = null;
 
@@ -34,7 +35,7 @@ public class RideableCreatureEntity extends TameableCreatureEntity {
 	// ==================================================
   	//                    Constructor
   	// ==================================================
-	public RideableCreatureEntity(EntityType<? extends RideableCreatureEntity> entityType, World world) {
+	protected RideableCreatureEntity(EntityType<? extends RideableCreatureEntity> entityType, World world) {
 		super(entityType, world);
 		this.hasJumpSound = true;
 	}
@@ -288,7 +289,7 @@ public class RideableCreatureEntity extends TameableCreatureEntity {
 
         // Apply Movement:
         if(this.canPassengerSteer()) {
-            this.setAIMoveSpeed((float)this.getAttribute(Attributes.field_233821_d_).getValue());
+            this.setAIMoveSpeed((float)this.getAttribute(Attributes.MOVEMENT_SPEED).getValue());
             if(!this.useDirectNavigator()) {
                 if(this.isFlying() && !this.isInWater() && !this.isInLava()) {
                     this.moveRelative(0.1F, new Vector3d(strafe, 0, forward));
@@ -401,7 +402,7 @@ public class RideableCreatureEntity extends TameableCreatureEntity {
         boolean mountingAllowed = CreatureManager.getInstance().config.mountingEnabled;
         if(mountingAllowed && this.isFlying())
             mountingAllowed = CreatureManager.getInstance().config.mountingFlightEnabled;
-    	if(this.canBeMounted(player) && !player.isShiftKeyDown() && !this.getEntityWorld().isRemote && mountingAllowed) // isSneaking()
+    	if(this.canBeMounted(player) && !player.isSneaking() && !this.getEntityWorld().isRemote && mountingAllowed)
     		commands.put(COMMAND_PIORITIES.MAIN.id, "Mount");
     	
     	return commands;

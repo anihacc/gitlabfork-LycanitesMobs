@@ -67,6 +67,7 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.*;
 import net.minecraft.world.server.ServerBossInfo;
@@ -79,8 +80,8 @@ import javax.annotation.Nullable;
 import java.util.*;
 
 public abstract class BaseCreatureEntity extends CreatureEntity {
-	public static final Attribute DEFENSE = (new RangedAttribute("generic.defense", 4.0D, 0.0D, 1024.0D)).setRegistryName(LycanitesMobs.MODID, "defense").func_233753_a_(true); // setShouldWatch
-	public static final Attribute RANGED_SPEED = (new RangedAttribute("generic.rangedSpeed", 4.0D, 0.0D, 1024.0D)).setRegistryName(LycanitesMobs.MODID, "ranged_speed").func_233753_a_(true);
+	public static final Attribute DEFENSE = (new RangedAttribute("generic.defense", 4.0D, 0.0D, 1024.0D)).setRegistryName(LycanitesMobs.MODID, "defense").setShouldWatch(true);
+	public static final Attribute RANGED_SPEED = (new RangedAttribute("generic.rangedSpeed", 4.0D, 0.0D, 1024.0D)).setRegistryName(LycanitesMobs.MODID, "ranged_speed").setShouldWatch(true);
 
 	// Core:
 	/** The Creature Info used by this creature. **/
@@ -391,7 +392,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	 * @param entityType The Entity Type.
 	 * @param world The world the entity is in.
 	 */
-	public BaseCreatureEntity(EntityType<? extends BaseCreatureEntity> entityType, World world) {
+	protected BaseCreatureEntity(EntityType<? extends BaseCreatureEntity> entityType, World world) {
         super(entityType, world);
 
         // Movement:
@@ -456,14 +457,6 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
 		this.dataManager.register(ARENA, Optional.empty());
 		InventoryCreature.registerData(this.dataManager);
-	}
-
-	/**
-	 * Creates and sets all the entity attributes with default values.
-	 */
-	@Override
-	protected void registerData() {
-		super.registerData();
 
 		this.loadCreatureFlags();
 		this.creatureSize = new EntitySize((float)this.creatureInfo.width, (float)this.creatureInfo.height, false);
@@ -484,7 +477,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		this.nextFindTargetIndex = 50;
 
 //		this.getAttributes().registerAttribute(DEFENSE); Move to creature type, perhaps in forge registry now?
-//		this.getAttributes().registerAttribute(Attributes.field_233823_f_);
+//		this.getAttributes().registerAttribute(Attributes.ATTACK_DAMAGE);
 //		this.getAttributes().registerAttribute(Attributes.ATTACK_SPEED);
 //		this.getAttributes().registerAttribute(RANGED_SPEED);
 
@@ -498,10 +491,10 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(this.creatureStats.getHealth());
 		this.getAttribute(DEFENSE).setBaseValue(this.creatureStats.getDefense());
 		this.getAttribute(Attributes.ARMOR).setBaseValue(this.creatureStats.getArmor());
-		this.getAttribute(Attributes.field_233821_d_).setBaseValue(this.creatureStats.getSpeed());
+		this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(this.creatureStats.getSpeed());
 		this.getAttribute(Attributes.KNOCKBACK_RESISTANCE).setBaseValue(this.creatureStats.getKnockbackResistance());
 		this.getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(this.creatureStats.getSight());
-		this.getAttribute(Attributes.field_233823_f_).setBaseValue(this.creatureStats.getDamage());
+		this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(this.creatureStats.getDamage());
 		this.getAttribute(Attributes.ATTACK_SPEED).setBaseValue(this.creatureStats.getAttackSpeed());
 		this.getAttribute(RANGED_SPEED).setBaseValue(this.creatureStats.getRangedSpeed());
 	}
@@ -616,17 +609,17 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
     /** Returns the display title of this entity. **/
     public ITextComponent getTitle() {
-		ITextComponent name = new StringTextComponent("");
+		TextComponent name = new StringTextComponent("");
 
     	if(!"".equals(this.getAgeName().getString())) {
-			name.func_230529_a_(this.getAgeName()).func_240702_b_(" ");
+			name.append(this.getAgeName()).appendString(" ");
 		}
 
     	if(!"".equals(this.getSubspeciesTitle().getString())) {
-			name.func_230529_a_(this.getSubspeciesTitle()).func_240702_b_(" ");
+			name.append(this.getSubspeciesTitle()).appendString(" ");
 		}
 
-    	return name.func_230529_a_(this.getSpeciesName()).func_240702_b_(" ").func_230529_a_(this.getLevelName());
+    	return name.append(this.getSpeciesName()).appendString(" ").append(this.getLevelName());
     }
     
     /** Returns the species name of this entity. **/
@@ -636,29 +629,29 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
     /** Returns the subpsecies title (translated name) of this entity, returns a blank string if this is a base species mob. **/
     public ITextComponent getSubspeciesTitle() {
-		ITextComponent subspeciesName = new StringTextComponent("");
+		TextComponent subspeciesName = new StringTextComponent("");
 		if(this.getVariant() != null) {
 			subspeciesName = this.getVariant().getTitle();
 		}
 		if(this.getSubspecies() != null) {
 			if(this.getVariant() != null) {
-				subspeciesName.func_240702_b_(" ");
+				subspeciesName.appendString(" ");
 			}
-			subspeciesName.func_230529_a_(this.getSubspecies().getTitle());
+			subspeciesName.append(this.getSubspecies().getTitle());
 		}
 		return subspeciesName;
     }
 
 	/** Returns a mobs level to append to the name if above level 1. **/
-	public ITextComponent getLevelName() {
+	public TextComponent getLevelName() {
 		if(this.getLevel() < 2) {
 			return new StringTextComponent("");
 		}
-		return new TranslationTextComponent("entity.level").func_240702_b_(" " + this.getLevel());
+		return (TextComponent) new TranslationTextComponent("entity.level").appendString(" " + this.getLevel());
 	}
 
     /** Gets the name of this entity relative to it's age, more useful for EntityCreatureAgeable. **/
-    public ITextComponent getAgeName() {
+    public TextComponent getAgeName() {
     	return new StringTextComponent("");
     }
 
@@ -959,7 +952,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     // ========== Egg Spawn ==========
     /** Called once this mob is initially spawned. **/
     @Override
-    public ILivingEntityData onInitialSpawn(IWorld world, DifficultyInstance difficultyInstance, SpawnReason spawnReason, @Nullable ILivingEntityData livingEntityData, @Nullable CompoundNBT compoundNBT) {
+    public ILivingEntityData onInitialSpawn(IServerWorld world, DifficultyInstance difficultyInstance, SpawnReason spawnReason, @Nullable ILivingEntityData livingEntityData, @Nullable CompoundNBT compoundNBT) {
 		livingEntityData = super.onInitialSpawn(world, difficultyInstance, spawnReason, livingEntityData, compoundNBT);
         return livingEntityData;
     }
@@ -1071,9 +1064,9 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     }
 
     public void createBossInfo(BossInfo.Color color, boolean darkenSky) {
-		ITextComponent name = this.getName();
+		TextComponent name = (TextComponent)this.getName();
         if(this.isBossAlways())
-            name.func_240702_b_(" (Phase " + (this.getBattlePhase() + 1) + ")");
+            name.appendString(" (Phase " + (this.getBattlePhase() + 1) + ")");
         this.bossInfo = (ServerBossInfo)(new ServerBossInfo(name, color, BossInfo.Overlay.PROGRESS)).setDarkenSky(darkenSky);
     }
 
@@ -1090,9 +1083,9 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     /** Updates the boss name for the health bar. **/
     public void refreshBossHealthName() {
         if(this.bossInfo != null) {
-			ITextComponent name = this.getTitle();
+			TextComponent name = (TextComponent)this.getTitle();
 			if(this.isBossAlways())
-				name.func_240702_b_(" (Phase " + (this.getBattlePhase() + 1) + ")");
+				name.appendString(" (Phase " + (this.getBattlePhase() + 1) + ")");
             this.bossInfo.setName(name);
         }
     }
@@ -1960,16 +1953,10 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
     // ========== Get Collision Bounding Box ==========
     @Override
-    public AxisAlignedBB getCollisionBoundingBox() {
+    public AxisAlignedBB getBoundingBox() {
         if(this.solidCollision)
-            return this.getBoundingBox();
+            return super.getBoundingBox();
         return null;
-    }
-
-    // ========== Get Contact Bounding Box ==========
-    @Override
-    public AxisAlignedBB getCollisionBox(Entity entity) {
-        return super.getCollisionBox(entity);
     }
     
     
@@ -2280,7 +2267,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     public void leap(float range, double leapHeight, Entity target) {
         if(target == null)
             return;
-        this.leap(range, leapHeight, target.func_233580_cy_()); // getPosition
+        this.leap(range, leapHeight, target.getPosition());
     }
 
 	/**
@@ -2296,10 +2283,10 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		if(!this.isFlying()) {
 			this.playJumpSound();
 		}
-		double distance = targetPos.distanceSq(this.func_233580_cy_());
+		double distance = targetPos.distanceSq(this.getPosition());
 		if(distance > 2.0F * 2.0F && distance <= range * range) {
-			double xDist = targetPos.getX() - this.func_233580_cy_().getX();
-			double zDist = targetPos.getZ() - this.func_233580_cy_().getZ();
+			double xDist = targetPos.getX() - this.getPosition().getX();
+			double zDist = targetPos.getZ() - this.getPosition().getZ();
 			if(xDist == 0) {
 				xDist = 0.05D;
 			}
@@ -2399,7 +2386,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
     /** Returns the distance that the entity's position is from the home position. **/
     public double getDistanceFromHome() {
-    	return this.homePosition.distanceSq(this.func_233580_cy_());
+    	return this.homePosition.distanceSq(this.getPosition());
     }
 
     // ========== Arena Center ==========
@@ -2866,7 +2853,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
 		// TODO Enchanted Weapon Damage and Knockback
         //if(target instanceof LivingEntity) {
-        	//damage += EnchantmentHelper.getModifierForCreature(this.getHeldItemMainhand(), this.getAttribute(Attributes.field_233823_f_));
+        	//damage += EnchantmentHelper.getModifierForCreature(this.getHeldItemMainhand(), this.getAttribute(Attributes.ATTACK_DAMAGE));
             //i += EnchantmentHelper.getKnockbackModifier(this, (LivingEntity)target);
         //}
 
@@ -2925,7 +2912,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     // ========== Get Attack Damage ==========
     /** Returns how much attack damage this mob does. **/
     public float getAttackDamage(double damageScale) {
-    	float damage = (float)this.getAttribute(Attributes.field_233823_f_).getValue();
+    	float damage = (float)this.getAttribute(Attributes.ATTACK_DAMAGE).getValue();
         damage *= damageScale;
         return damage;
     }
@@ -3588,9 +3575,9 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     public boolean isSafeToLand() {
         if(this.onGround)
             return true;
-        if(this.getEntityWorld().getBlockState(this.func_233580_cy_().down()).getMaterial().isSolid())
+        if(this.getEntityWorld().getBlockState(this.getPosition().down()).getMaterial().isSolid())
             return true;
-        if(this.getEntityWorld().getBlockState(this.func_233580_cy_().down(2)).getMaterial().isSolid())
+        if(this.getEntityWorld().getBlockState(this.getPosition().down(2)).getMaterial().isSolid())
             return true;
         return false;
     }
@@ -4022,14 +4009,14 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
     /** The main interact method that is called when a player right clicks this entity. **/
     @Override
-    public ActionResultType processInitialInteract(PlayerEntity player, Hand hand) {
+    public ActionResultType func_230254_b_(PlayerEntity player, Hand hand) { // New process interact
 		if(this.hasPerchTarget()) {
 			return ActionResultType.FAIL;
 		}
 	    if(this.assessInteractCommand(getInteractCommands(player, player.getHeldItem(hand)), player, player.getHeldItem(hand))) {
 			return ActionResultType.SUCCESS;
 		}
-	    return super.processInitialInteract(player, hand);
+	    return super.func_230254_b_(player, hand);
     }
 
     // ========== Assess Interact Command ==========
@@ -4528,7 +4515,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
      * Light enough for spawnsInLight: 2 = Light, 3 = Bright
     **/
     public byte testLightLevel() {
-    	return testLightLevel(this.func_233580_cy_());
+    	return testLightLevel(this.getPosition());
     }
 
     /** Returns a light rating for the light level the specified XYZ position.

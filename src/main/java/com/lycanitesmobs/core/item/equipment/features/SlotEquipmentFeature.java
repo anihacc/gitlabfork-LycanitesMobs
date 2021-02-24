@@ -21,7 +21,7 @@ public class SlotEquipmentFeature extends EquipmentFeature {
 		if(!this.isActive(itemStack, level)) {
 			return null;
 		}
-		ITextComponent description = new TranslationTextComponent("equipment.feature." + this.featureType).func_240702_b_(" " + this.slotType);
+		ITextComponent description = new TranslationTextComponent("equipment.feature." + this.featureType).appendString(" " + this.slotType);
 		return description;
 	}
 

@@ -87,7 +87,7 @@ public class DirectNavigator {
 	// ========== Is At Target Position ==========
 	public boolean atTargetPosition(){
 		if(targetPosition != null) {
-			double speed = this.host.getAttribute(Attributes.field_233821_d_).getValue() * 2;
+			double speed = this.host.getAttribute(Attributes.MOVEMENT_SPEED).getValue() * 2;
 			return this.distanceToTargetPosition() <= (this.host.getSize(Pose.STANDING).width + speed);
 		}
 		return true;
@@ -106,7 +106,7 @@ public class DirectNavigator {
             this.randomStrafeAngle = this.host.getRNG().nextBoolean() ? 90D : -90D;
         if(this.randomStrafeAngle > 0)
             this.randomStrafeAngle -= 0.5D;*/
-		double speed = this.host.getAttribute(Attributes.field_233821_d_).getValue() * 2;
+		double speed = this.host.getAttribute(Attributes.MOVEMENT_SPEED).getValue() * 2;
 
 		BlockPos pos = this.host.getFacingPosition(this.targetPosition.getX(), this.targetPosition.getY(), this.targetPosition.getZ(), 1.0D, this.randomStrafeAngle);
 		//double dirX = (double)this.targetPosition.getX() + 0.5D - this.host.getPositionVec().getX();

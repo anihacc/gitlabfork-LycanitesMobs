@@ -34,8 +34,10 @@ import net.minecraft.scoreboard.Team;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.Util;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -46,7 +48,7 @@ import java.util.HashMap;
 import java.util.Optional;
 import java.util.UUID;
 
-public class TameableCreatureEntity extends AgeableCreatureEntity {
+public abstract class TameableCreatureEntity extends AgeableCreatureEntity {
 	// Stats:
 	public float hunger = this.getCreatureHungerMax();
 	public float stamina = this.getStaminaMax();
@@ -75,7 +77,7 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
 	// ==================================================
   	//                    Constructor
   	// ==================================================
-	public TameableCreatureEntity(EntityType<? extends TameableCreatureEntity> entityType, World world) {
+	protected TameableCreatureEntity(EntityType<? extends TameableCreatureEntity> entityType, World world) {
 		super(entityType, world);
 	}
 	
@@ -116,10 +118,10 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
 			return super.getName();
 		}
 
-		ITextComponent ownedName = new StringTextComponent("");
+		TextComponent ownedName = new StringTextComponent("");
     	boolean customName = this.hasCustomName();
 		if(customName) {
-			ownedName.func_230529_a_(super.getName()).func_240702_b_(" (");
+			ownedName.append(super.getName()).appendString(" (");
 		}
 
 		ITextComponent ownerName = this.getOwnerName();
@@ -129,12 +131,11 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
             if ("s".equalsIgnoreCase(ownerFormatted.substring(ownerFormatted.length() - 1)))
                 ownerSuffix = "' ";
         }
-		ownedName.func_230529_a_(ownerName).func_240702_b_(ownerSuffix).func_230529_a_(this.getTitle());
+		ownedName.append(ownerName).appendString(ownerSuffix).append(this.getTitle());
         if(customName) {
-			ownedName.func_240702_b_(")");
+			ownedName.appendString(")");
 		}
 
-        //LycanitesMobs.logDebug("", "Translated pet name: " + ownedName.getString());
     	return ownedName;
     }
     
@@ -291,16 +292,16 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
     	commands.putAll(super.getInteractCommands(player, itemStack));
 
 		// Perch:
-		if(this.canPerch(player) && !player.isShiftKeyDown() && !this.getEntityWorld().isRemote)
+		if(this.canPerch(player) && !player.isSneaking() && !this.getEntityWorld().isRemote)
 			commands.put(COMMAND_PIORITIES.MAIN.id, "Perch");
 		
 		// Open GUI:
-		else if(!this.getEntityWorld().isRemote && this.isTamed() && (itemStack.isEmpty() || player.isShiftKeyDown()) && player == this.getPlayerOwner()) {
+		else if(!this.getEntityWorld().isRemote && this.isTamed() && (itemStack.isEmpty() || player.isSneaking()) && player == this.getPlayerOwner()) {
 			commands.put(COMMAND_PIORITIES.MAIN.id, "GUI");
 		}
     	
     	// Server Item Commands:
-    	if(!this.getEntityWorld().isRemote && !itemStack.isEmpty() && !player.isShiftKeyDown()) {
+    	if(!this.getEntityWorld().isRemote && !itemStack.isEmpty() && !player.isSneaking()) {
     		
     		// Taming:
     		if(!this.isTamed() && isTamingItem(itemStack) && CreatureManager.getInstance().config.tamingEnabled) {
@@ -318,7 +319,7 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
 					commands.put(COMMAND_PIORITIES.ITEM_USE.id, "Charge");
 				}
 				else {
-					player.sendMessage(new TranslationTextComponent("item.lycanitesmobs.charge.creature.invalid"));
+					player.sendMessage(new TranslationTextComponent("item.lycanitesmobs.charge.creature.invalid"), Util.DUMMY_UUID);
 				}
 			}
     		
@@ -781,15 +782,15 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
 				this.onTamedByPlayer();
 				this.unsetTemporary();
 				ITextComponent tameMessage = new TranslationTextComponent("message.pet.tamed.prefix")
-						.func_240702_b_(" ")
-						.func_230529_a_(this.getSpeciesName())
-						.func_240702_b_(" ")
-						.func_230529_a_(new TranslationTextComponent("message.pet.tamed.suffix"));
-				player.sendMessage(tameMessage);
+						.appendString(" ")
+						.append(this.getSpeciesName())
+						.appendString(" ")
+						.append(new TranslationTextComponent("message.pet.tamed.suffix"));
+				player.sendMessage(tameMessage, Util.DUMMY_UUID);
 				this.playTameEffect(this.isTamed());
 				//player.addStat(ObjectManager.getStat(this.creatureInfo.getName() + ".tame"), 1); TODO Player Stats
-				if (this.timeUntilPortal > this.getPortalCooldown()) {
-					this.timeUntilPortal = this.getPortalCooldown();
+				if (this.portalCounter > this.getPortalCooldown()) {
+					this.portalCounter = this.getPortalCooldown();
 				}
 				ExtendedPlayer extendedPlayer = ExtendedPlayer.getForPlayer(player);
 				if(extendedPlayer != null) {
@@ -798,11 +799,11 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
 			}
 			else {
 				ITextComponent tameMessage = new TranslationTextComponent("message.pet.tamefail.prefix")
-						.func_240702_b_(" ")
-						.func_230529_a_(this.getSpeciesName())
-						.func_240702_b_(" ")
-						.func_230529_a_(new TranslationTextComponent("message.pet.tamefail.suffix"));
-				player.sendMessage(tameMessage);
+						.appendString(" ")
+						.append(this.getSpeciesName())
+						.appendString(" ")
+						.append(new TranslationTextComponent("message.pet.tamefail.suffix"));
+				player.sendMessage(tameMessage, Util.DUMMY_UUID);
 				this.playTameEffect(this.isTamed());
 			}
 		}

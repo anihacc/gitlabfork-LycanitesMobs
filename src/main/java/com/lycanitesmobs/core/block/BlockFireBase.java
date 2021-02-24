@@ -81,7 +81,7 @@ public class BlockFireBase extends BlockBase {
     public BlockState getStateForPlacement(IBlockReader world, BlockPos blockPos) {
         BlockPos lowerBlockPos = blockPos.down();
         BlockState lowerBlockState = world.getBlockState(lowerBlockPos);
-        if (!this.canCatchFire(world, blockPos, Direction.UP) && !Block.hasSolidSide(lowerBlockState, world, lowerBlockPos, Direction.UP)) {
+        if (!this.canCatchFire(world, blockPos, Direction.UP) && lowerBlockState.isSolidSide(world, lowerBlockPos, Direction.UP)) {
             BlockState placementState = this.getDefaultState();
 
             for(Direction direction : Direction.values()) {

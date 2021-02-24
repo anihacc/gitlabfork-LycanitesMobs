@@ -4,8 +4,8 @@ import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.IProjectile;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.entity.projectile.ThrowableEntity;
 import net.minecraft.network.IPacket;
 import net.minecraft.network.play.server.SSpawnObjectPacket;
@@ -141,7 +141,7 @@ public class RapidFireProjectileEntity extends BaseProjectileEntity {
     		return;
     	
 		try {
-	        IProjectile projectile;
+	        ProjectileEntity projectile;
 
 	        if(this.shootingEntity == null) {
 				if(this.projectileInfo != null) {

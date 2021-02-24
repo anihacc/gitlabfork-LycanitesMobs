@@ -75,7 +75,7 @@ public class BlockBase extends Block {
 	}
 
 	@Override
-	public IFormattableTextComponent func_235333_g_() {
+	public IFormattableTextComponent getTranslatedName() {
     	return new TranslationTextComponent(this.getTranslationKey());
 	}
 
@@ -145,7 +145,7 @@ public class BlockBase extends Block {
 
 	@Override
 	public VoxelShape getCollisionShape(BlockState blockState, IBlockReader world, BlockPos blockPos, ISelectionContext selectionContext) {
-		return this.field_235688_at_ ? blockState.getShape(world, blockPos) : VoxelShapes.empty(); // blocksMovement
+		return this.canCollide ? blockState.getShape(world, blockPos) : VoxelShapes.empty();
 	}
     
     

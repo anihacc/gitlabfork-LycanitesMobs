@@ -53,10 +53,10 @@ public class SpawnerCommand {
 		else if(brightness < 1) level = 2;
 		String results = " Level: " + level + " Brightness: " + brightness;
 		if(level <= 1) {
-			context.getSource().sendFeedback(new TranslationTextComponent("lyc.command.spawner.lighttest.dark").func_240702_b_(results), true);
+			context.getSource().sendFeedback(new TranslationTextComponent("lyc.command.spawner.lighttest.dark").appendString(results), true);
 		}
 		else {
-			context.getSource().sendFeedback(new TranslationTextComponent("lyc.command.spawner.lighttest.light").func_240702_b_(results), true);
+			context.getSource().sendFeedback(new TranslationTextComponent("lyc.command.spawner.lighttest.light").appendString(results), true);
 		}
 		return 0;
 	}

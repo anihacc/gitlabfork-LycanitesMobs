@@ -75,7 +75,7 @@ public class Beastiary {
 		// Invalid Entity:
 		if(!(entity instanceof BaseCreatureEntity)) {
 			if (!this.extendedPlayer.player.getEntityWorld().isRemote) {
-				this.extendedPlayer.player.sendMessage(new TranslationTextComponent("message.beastiary.unknown"), Util.field_240973_b_);
+				this.extendedPlayer.player.sendMessage(new TranslationTextComponent("message.beastiary.unknown"), Util.DUMMY_UUID);
 			}
 			return false;
 		}
@@ -122,39 +122,39 @@ public class Beastiary {
 		}
 		CreatureInfo creatureInfo = creatureKnowledge.getCreatureInfo();
 		ITextComponent message = new TranslationTextComponent("message.beastiary.new.prefix")
-				.func_240702_b_(" " + creatureKnowledge.rank + " ")
-				.func_230529_a_(new TranslationTextComponent("message.beastiary.new.of"))
-				.func_240702_b_(" ")
-				.func_230529_a_(creatureInfo.getTitle())
-				.func_240702_b_(" ")
-				.func_230529_a_(new TranslationTextComponent("message.beastiary.new.suffix"));
-		this.extendedPlayer.player.sendMessage(message, Util.field_240973_b_);
+				.appendString(" " + creatureKnowledge.rank + " ")
+				.append(new TranslationTextComponent("message.beastiary.new.of"))
+				.appendString(" ")
+				.append(creatureInfo.getTitle())
+				.appendString(" ")
+				.append(new TranslationTextComponent("message.beastiary.new.suffix"));
+		this.extendedPlayer.player.sendMessage(message, Util.DUMMY_UUID);
 
 		if(creatureInfo.isSummonable()) {
 
 			ITextComponent summonMessage = new TranslationTextComponent("message.beastiary.summonable.prefix")
-					.func_240702_b_(" ")
-					.func_230529_a_(creatureInfo.getTitle())
-					.func_240702_b_(" ")
-					.func_230529_a_(new TranslationTextComponent("message.beastiary.summonable.suffix"));
+					.appendString(" ")
+					.append(creatureInfo.getTitle())
+					.appendString(" ")
+					.append(new TranslationTextComponent("message.beastiary.summonable.suffix"));
 
 			if(creatureKnowledge.rank >= 3) {
 				summonMessage = new TranslationTextComponent("message.beastiary.summonable.skins.prefix")
-						.func_240702_b_(" ")
-						.func_230529_a_(creatureInfo.getTitle())
-						.func_240702_b_(" ")
-						.func_230529_a_(new TranslationTextComponent("message.beastiary.summonable.skins.suffix"));
+						.appendString(" ")
+						.append(creatureInfo.getTitle())
+						.appendString(" ")
+						.append(new TranslationTextComponent("message.beastiary.summonable.skins.suffix"));
 			}
 
 			else if(creatureKnowledge.rank == 2) {
 				summonMessage = new TranslationTextComponent("message.beastiary.summonable.colors.prefix")
-						.func_240702_b_(" ")
-						.func_230529_a_(creatureInfo.getTitle())
-						.func_240702_b_(" ")
-						.func_230529_a_(new TranslationTextComponent("message.beastiary.summonable.colors.suffix"));
+						.appendString(" ")
+						.append(creatureInfo.getTitle())
+						.appendString(" ")
+						.append(new TranslationTextComponent("message.beastiary.summonable.colors.suffix"));
 			}
 
-			this.extendedPlayer.player.sendMessage(summonMessage, Util.field_240973_b_);
+			this.extendedPlayer.player.sendMessage(summonMessage, Util.DUMMY_UUID);
 		}
 	}
 
@@ -170,13 +170,13 @@ public class Beastiary {
 		CreatureInfo creatureInfo = creatureKnowledge.getCreatureInfo();
 		CreatureKnowledge currentKnowledge = this.extendedPlayer.getBeastiary().getCreatureKnowledge(creatureInfo.getName());
 		ITextComponent message = new TranslationTextComponent("message.beastiary.known.prefix")
-				.func_240702_b_(" " + currentKnowledge.rank + " ")
-				.func_230529_a_(new TranslationTextComponent("message.beastiary.known.of"))
-				.func_240702_b_(" ")
-				.func_230529_a_(creatureInfo.getTitle())
-				.func_240702_b_(" ")
-				.func_230529_a_(new TranslationTextComponent("message.beastiary.known.suffix"));
-		this.extendedPlayer.player.sendMessage(message, Util.field_240973_b_);
+				.appendString(" " + currentKnowledge.rank + " ")
+				.append(new TranslationTextComponent("message.beastiary.known.of"))
+				.appendString(" ")
+				.append(creatureInfo.getTitle())
+				.appendString(" ")
+				.append(new TranslationTextComponent("message.beastiary.known.suffix"));
+		this.extendedPlayer.player.sendMessage(message, Util.DUMMY_UUID);
 	}
 
 

@@ -5,7 +5,6 @@ import com.lycanitesmobs.core.entity.goals.actions.MateGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.FindParentGoal;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.ItemDrop;
-import com.lycanitesmobs.core.info.Subspecies;
 import com.lycanitesmobs.core.info.Variant;
 import com.lycanitesmobs.core.item.ItemCustomSpawnEgg;
 import net.minecraft.entity.EntityType;
@@ -19,6 +18,7 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.IParticleData;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
@@ -53,7 +53,7 @@ public abstract class AgeableCreatureEntity extends BaseCreatureEntity {
 	// ==================================================
   	//                    Constructor
   	// ==================================================
-	public AgeableCreatureEntity(EntityType<? extends AgeableCreatureEntity> entityType, World world) {
+	protected AgeableCreatureEntity(EntityType<? extends AgeableCreatureEntity> entityType, World world) {
 		super(entityType, world);
 	}
 
@@ -90,7 +90,7 @@ public abstract class AgeableCreatureEntity extends BaseCreatureEntity {
     
     // ========== Name ==========
     @Override
-    public ITextComponent getAgeName() {
+    public TextComponent getAgeName() {
     	if(this.isChild())
     		return new TranslationTextComponent("entity.baby");
     	else
@@ -109,8 +109,8 @@ public abstract class AgeableCreatureEntity extends BaseCreatureEntity {
     
     public void setFarmed() {
     	this.hasBeenFarmed = true;
-        if(this.timeUntilPortal > this.getPortalCooldown())
-            this.timeUntilPortal = this.getPortalCooldown();
+        if(this.portalCounter > this.getPortalCooldown())
+            this.portalCounter = this.getPortalCooldown();
     }
     
     // ========== Get Random Subspecies ==========

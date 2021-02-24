@@ -6,6 +6,7 @@ import com.lycanitesmobs.core.config.ConfigCreatureSubspecies;
 import com.lycanitesmobs.core.entity.CreatureStats;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
@@ -154,7 +155,7 @@ public class Variant {
 	 * Gets the display name of this Subspecies.
 	 * @return The Subspecies title.
 	 */
-	public ITextComponent getTitle() {
+	public TextComponent getTitle() {
 		return new TranslationTextComponent("subspecies." + this.color);
     }
 

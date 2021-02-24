@@ -15,7 +15,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.monster.ZombiePigmanEntity;
+import net.minecraft.entity.monster.ZombifiedPiglinEntity;
 import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -290,7 +290,7 @@ public class EntityAmalgalich extends BaseCreatureEntity implements IMob, IGroup
 
     @Override
     public boolean isVulnerableTo(Entity entity) {
-        if(entity instanceof ZombiePigmanEntity) {
+        if(entity instanceof ZombifiedPiglinEntity) {
             entity.remove();
             return false;
         }

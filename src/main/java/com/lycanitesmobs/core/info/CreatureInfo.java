@@ -13,8 +13,8 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tags.ITag;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.Tag;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
@@ -548,14 +548,14 @@ public class CreatureInfo {
 		if(elements.isEmpty()) {
 			return new TranslationTextComponent("common.none");
 		}
-		ITextComponent elementNames = new StringTextComponent("");
+		StringTextComponent elementNames = new StringTextComponent("");
 		boolean firstElement = true;
 		for(ElementInfo element : elements) {
 			if(!firstElement) {
-				elementNames.func_240702_b_(", ");
+				elementNames.appendString(", ");
 			}
 			firstElement = false;
-			elementNames.func_230529_a_(element.getTitle());
+			elementNames.append(element.getTitle());
 		}
 		return elementNames;
 	}
@@ -569,14 +569,14 @@ public class CreatureInfo {
 		if(this.diets.isEmpty()) {
 			return new TranslationTextComponent("common.none");
 		}
-		ITextComponent dietNames = new StringTextComponent("");
+		StringTextComponent dietNames = new StringTextComponent("");
 		boolean firstDiet = true;
 		for(String diet : this.diets) {
 			if(!firstDiet) {
-				dietNames.func_240702_b_(", ");
+				dietNames.appendString(", ");
 			}
 			firstDiet = false;
-			dietNames.func_230529_a_(new TranslationTextComponent("diet." + diet));
+			dietNames.append(new TranslationTextComponent("diet." + diet));
 		}
 		return dietNames;
 	}
@@ -595,14 +595,14 @@ public class CreatureInfo {
 		if(biomes.isEmpty()) {
 			return new TranslationTextComponent("gui.beastiary.biomes.none");
 		}
-		ITextComponent biomeNames = new StringTextComponent("");
+		StringTextComponent biomeNames = new StringTextComponent("");
 		boolean firstBiome = true;
 		for(Biome biome : biomes) {
 			if(!firstBiome) {
-				biomeNames.func_240702_b_(", ");
+				biomeNames.appendString(", ");
 			}
 			firstBiome = false;
-			biomeNames.func_230529_a_(biome.getDisplayName());
+			biomeNames.append(new StringTextComponent(biome.getRegistryName().toString())); // TODO Figure out how to get biome display names now.
 		}
 		return biomeNames;
 	}
@@ -616,44 +616,44 @@ public class CreatureInfo {
 		if(this.drops.isEmpty()) {
 			return new StringTextComponent("");
 		}
-		ITextComponent dropNames = new StringTextComponent("");
+		StringTextComponent dropNames = new StringTextComponent("");
 		boolean firstDrop = true;
 		for(ItemDrop drop : this.drops) {
 			if(!firstDrop) {
-				dropNames.func_240702_b_("\n");
+				dropNames.appendString("\n");
 			}
 			firstDrop = false;
-			dropNames.func_230529_a_(drop.getItemStack().getDisplayName());
-			dropNames.func_240702_b_(" (");
+			dropNames.append(drop.getItemStack().getDisplayName());
+			dropNames.appendString(" (");
 
 			if(drop.maxAmount > drop.minAmount)
-				dropNames.func_240702_b_(drop.minAmount + "-" + drop.maxAmount + "X");
+				dropNames.appendString(drop.minAmount + "-" + drop.maxAmount + "X");
 			else
-				dropNames.func_240702_b_(drop.minAmount + "X");
+				dropNames.appendString(drop.minAmount + "X");
 
-			dropNames.func_240702_b_(" " + (drop.chance * 100) + "%");
+			dropNames.appendString(" " + (drop.chance * 100) + "%");
 
 			Subspecies subspecies = this.getSubspecies(0);
 			if(drop.subspeciesIndex > 0) {
 				subspecies = this.getSubspecies(drop.subspeciesIndex);
 				if(subspecies.name != null) {
-					dropNames.func_240702_b_(" ");
-					dropNames.func_230529_a_(subspecies.getTitle());
+					dropNames.appendString(" ");
+					dropNames.append(subspecies.getTitle());
 				}
 			}
 
 			if(drop.variantIndex >= 0) {
-				dropNames.func_240702_b_(" ");
+				dropNames.appendString(" ");
 				Variant variant = subspecies.getVariant(drop.variantIndex);
 				if(variant == null) {
-					dropNames.func_230529_a_(new TranslationTextComponent("subspecies.normal"));
+					dropNames.append(new TranslationTextComponent("subspecies.normal"));
 				}
 				else {
-					dropNames.func_230529_a_(variant.getTitle());
+					dropNames.append(variant.getTitle());
 				}
 			}
 
-			dropNames.func_240702_b_(")");
+			dropNames.appendString(")");
 		}
 		return dropNames;
 	}
@@ -797,7 +797,7 @@ public class CreatureInfo {
 		}
 		for(String diet : this.diets) {
 			ResourceLocation dietTagId = new ResourceLocation(LycanitesMobs.MODID, "diet_" + diet);
-			Tag<Item> dietTag = ItemTags.getCollection().get(dietTagId);
+			ITag<Item> dietTag = ItemTags.getCollection().get(dietTagId);
 			if(dietTag == null) {
 				LycanitesMobs.logWarning("", "[Creature] Cannot find diet: " + dietTagId);
 				return false;

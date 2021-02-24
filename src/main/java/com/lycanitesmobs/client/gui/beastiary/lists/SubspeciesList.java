@@ -132,7 +132,7 @@ public class SubspeciesList extends BaseList<BeastiaryScreen> {
 			Subspecies subspecies = this.parentList.creature.getSubspecies(this.subspeciesIndex);
 			ITextComponent subspeciesName = new StringTextComponent("");
 			if(subspecies.name != null) {
-				subspeciesName = new StringTextComponent(" ").func_230529_a_(subspecies.getTitle());
+				subspeciesName = new StringTextComponent(" ").append(subspecies.getTitle());
 			}
 
 			Variant variant = subspecies.getVariant(this.variantIndex);
@@ -142,7 +142,7 @@ public class SubspeciesList extends BaseList<BeastiaryScreen> {
 			}
 
 			int nameY = top + 6;
-			this.parentList.screen.getFontRenderer().drawString(variantName.func_230529_a_(subspeciesName).getString(), left + 10, nameY, 0xFFFFFF);
+			this.parentList.screen.getFontRenderer().drawString(variantName.append(subspeciesName).getString(), left + 10, nameY, 0xFFFFFF);
 		}
 
 		@Override

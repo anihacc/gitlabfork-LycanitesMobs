@@ -7,10 +7,13 @@ import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.ForgeRegistry;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +44,7 @@ public class DebugCommand {
 		ConfigDebug.INSTANCE.enabled.set(enabledLogs);
 		ConfigDebug.INSTANCE.enabled.save();
 
-		context.getSource().sendFeedback(new TranslationTextComponent("lyc.command.debug.log").func_240702_b_(" " + category), true);
+		context.getSource().sendFeedback(new TranslationTextComponent("lyc.command.debug.log").appendString(" " + category), true);
 		return 0;
 	}
 
@@ -65,8 +68,8 @@ public class DebugCommand {
 		if (biomeType == null) {
 			return 0;
 		}
-		for(Biome biome : BiomeDictionary.getBiomes(biomeType)) {
-			context.getSource().sendFeedback(biome.getDisplayName(), true);
+		for(RegistryKey<Biome> biomeKey : BiomeDictionary.getBiomes(biomeType)) {
+			context.getSource().sendFeedback(new StringTextComponent(biomeKey.toString()), true); // TODO Figure out how the hell to get a biome display name now...
 		}
 		return 0;
 	}

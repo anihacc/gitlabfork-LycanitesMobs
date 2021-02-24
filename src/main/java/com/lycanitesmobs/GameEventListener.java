@@ -491,7 +491,7 @@ public class GameEventListener {
 				event.getLeft().add("Size: " + mouseOverCreature.sizeScale);
 				event.getLeft().add("");
 				event.getLeft().add("Health: " + mouseOverCreature.getHealth() + "/" + mouseOverCreature.getMaxHealth() + " Fresh: " + mouseOverCreature.creatureStats.getHealth());
-				event.getLeft().add("Speed: " + mouseOverCreature.getAttribute(Attributes.field_233821_d_).getValue() + "/" + mouseOverCreature.creatureStats.getSpeed());
+				event.getLeft().add("Speed: " + mouseOverCreature.getAttribute(Attributes.MOVEMENT_SPEED).getValue() + "/" + mouseOverCreature.creatureStats.getSpeed());
 				event.getLeft().add("");
 				event.getLeft().add("Defense: " + mouseOverCreature.creatureStats.getDefense());
 				event.getLeft().add("Armor: " + mouseOverCreature.getTotalArmorValue());

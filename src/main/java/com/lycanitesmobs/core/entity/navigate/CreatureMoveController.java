@@ -69,7 +69,7 @@ public class CreatureMoveController extends MovementController {
     public void tickWalking() {
         float moveZ;
         if (this.action == MovementController.Action.STRAFE) {
-            float moveSpeed = (float)this.mob.getAttribute(Attributes.field_233821_d_).getValue();
+            float moveSpeed = (float)this.mob.getAttribute(Attributes.MOVEMENT_SPEED).getValue();
             float scaledSpeed = (float)this.speed * moveSpeed;
             float moveForward = this.moveForward;
             float moveStrafe = this.moveStrafe;
@@ -112,10 +112,10 @@ public class CreatureMoveController extends MovementController {
 
             moveZ = (float)(MathHelper.atan2(distanceZ, distanceX) * 57.2957763671875D) - 90.0F;
             this.mob.rotationYaw = this.limitAngle(this.mob.rotationYaw, moveZ, 90.0F);
-            this.mob.setAIMoveSpeed((float)(this.speed * this.mob.getAttribute(Attributes.field_233821_d_).getValue()));
+            this.mob.setAIMoveSpeed((float)(this.speed * this.mob.getAttribute(Attributes.MOVEMENT_SPEED).getValue()));
 
             // Jumping:
-            BlockPos entityPos = new BlockPos(this.mob);
+            BlockPos entityPos = this.mob.getPosition();
             BlockState blockState = this.mob.world.getBlockState(entityPos);
             VoxelShape collisionShape = blockState.getCollisionShape(this.mob.world, entityPos);
             double jumpRange = (double)Math.max(1.0F, this.mob.getSize(Pose.STANDING).width + 0.25F);
@@ -125,8 +125,8 @@ public class CreatureMoveController extends MovementController {
             }
         }
         else if (this.action == MovementController.Action.JUMPING) {
-            this.mob.setAIMoveSpeed((float)(this.speed * this.mob.getAttribute(Attributes.field_233821_d_).getValue()));
-            if (this.mob.onGround) {
+            this.mob.setAIMoveSpeed((float)(this.speed * this.mob.getAttribute(Attributes.MOVEMENT_SPEED).getValue()));
+            if (this.mob.isOnGround()) {
                 this.action = MovementController.Action.WAIT;
             }
         }
@@ -142,12 +142,12 @@ public class CreatureMoveController extends MovementController {
             double y = this.posY - this.entityCreature.getPositionVec().getY();
             double z = this.posZ - this.entityCreature.getPositionVec().getZ();
             double distance = x * x + y * y + z * z;
-            distance = (double) MathHelper.sqrt(distance);
+            distance = MathHelper.sqrt(distance);
             y = y / distance;
             float f = (float)(MathHelper.atan2(z, x) * (180D / Math.PI)) - 90.0F;
             this.entityCreature.rotationYaw = this.limitAngle(this.entityCreature.rotationYaw, f, 90.0F);
             this.entityCreature.renderYawOffset = this.entityCreature.rotationYaw;
-            float f1 = (float)(this.speed * this.entityCreature.getAttribute(Attributes.field_233821_d_).getValue());
+            float f1 = (float)(this.speed * this.entityCreature.getAttribute(Attributes.MOVEMENT_SPEED).getValue());
             this.entityCreature.setAIMoveSpeed(this.entityCreature.getAIMoveSpeed() + (f1 - this.entityCreature.getAIMoveSpeed()) * 0.125F);
 
             double d4 = Math.sin((double)(this.entityCreature.ticksExisted + this.entityCreature.getEntityId()) * 0.5D) * 0.05D;
@@ -193,7 +193,7 @@ public class CreatureMoveController extends MovementController {
                 this.courseChangeCooldown += this.entityCreature.getRNG().nextInt(5) + 2;
                 distance = (double)MathHelper.sqrt(distance);
                 if(distance >= 1D) {
-                    this.entityCreature.setAIMoveSpeed((float)this.entityCreature.getAttribute(Attributes.field_233821_d_).getValue());
+                    this.entityCreature.setAIMoveSpeed((float)this.entityCreature.getAttribute(Attributes.MOVEMENT_SPEED).getValue());
                     double speed = (this.entityCreature.getAIMoveSpeed() / 2.4D) * this.getSpeed();
                     double motionX = xDistance / distance * speed;
                     double motionY = yDistance / distance * speed;

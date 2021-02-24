@@ -16,6 +16,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
@@ -58,15 +59,15 @@ public class EntityConba extends TameableCreatureEntity implements IMob {
     /** Returns the species name of this entity. **/
 	@Override
     public ITextComponent getSpeciesName() {
-		ITextComponent infection = new StringTextComponent("");
+		TextComponent infection = new StringTextComponent("");
 		if(this.vespidInfection) {
 			String entityName = this.creatureInfo.getName();
 	    	if(entityName != null) {
 				infection = new TranslationTextComponent("entity." + this.creatureInfo.modInfo.modid + "." + entityName + ".infected");
-				infection.func_240702_b_(" ");
+				infection.appendString(" ");
 			}
 		}
-    	return infection.func_230529_a_(super.getSpeciesName());
+    	return infection.append(super.getSpeciesName());
     }
     
     public String getTextureName() {

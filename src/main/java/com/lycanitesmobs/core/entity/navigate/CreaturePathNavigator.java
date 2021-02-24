@@ -9,7 +9,12 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.Pose;
 import net.minecraft.network.DebugPacketSender;
 import net.minecraft.pathfinding.*;
-import net.minecraft.util.math.*;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceContext;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
 
 import java.util.Iterator;
@@ -42,7 +47,7 @@ public class CreaturePathNavigator extends PathNavigator {
         if(this.entityCreature.isInWater()) {
             return this.entityCreature.canWade() || this.entityCreature.isStrongSwimmer();
         }
-        return this.entity.onGround || this.entity.isPassenger();
+        return this.entity.isOnGround() || this.entity.isPassenger();
     }
 
     /** Sets if the creature should navigate as though it can break doors. **/
@@ -76,7 +81,7 @@ public class CreaturePathNavigator extends PathNavigator {
     /** Returns the path to the given EntityLiving. **/
     @Override
     public Path getPathToEntity(Entity entity, int i) {
-        return this.getPathToPos(new BlockPos(entity), i);
+        return this.getPathToPos(entity.getPosition(), i);
     }
 
 
@@ -153,7 +158,7 @@ public class CreaturePathNavigator extends PathNavigator {
 
         // Climbing:
         else if(this.entityCreature.canClimb()) {
-            this.climbTargetPos = new BlockPos(targetEntity);
+            this.climbTargetPos = targetEntity.getPosition();
             this.speed = speedIn;
             return true;
         }
@@ -460,8 +465,8 @@ public class CreaturePathNavigator extends PathNavigator {
 
         // Walking:
         this.maxDistanceToWaypoint = entityWidth > 0.75F ? entityWidth : 0.75F - entityWidth / 2.0F;
-        Vector3d pathTargetPos = this.currentPath.getCurrentPos();
-        if (Math.abs(this.entity.getPositionVec().getX() - (pathTargetPos.x + (entityWidth + 1) / 2D)) < (double)this.maxDistanceToWaypoint && Math.abs(this.entity.getPositionVec().getZ() - (pathTargetPos.z + (entityWidth + 1) / 2D)) < (double)this.maxDistanceToWaypoint && Math.abs(this.entity.getPositionVec().getY() - pathTargetPos.y) < 1.0D) {
+        Vector3i pathTargetPos = this.currentPath.getTarget();
+        if (Math.abs(this.entity.getPositionVec().getX() - (pathTargetPos.getX() + (entityWidth + 1) / 2D)) < (double)this.maxDistanceToWaypoint && Math.abs(this.entity.getPositionVec().getZ() - (pathTargetPos.getZ() + (entityWidth + 1) / 2D)) < (double)this.maxDistanceToWaypoint && Math.abs(this.entity.getPositionVec().getY() - pathTargetPos.getY()) < 1.0D) {
             this.currentPath.setCurrentPathIndex(this.currentPath.getCurrentPathIndex() + 1);
         }
         this.checkForStuck(currentPos);
@@ -482,7 +487,7 @@ public class CreaturePathNavigator extends PathNavigator {
         if (this.noPath() && this.entityCreature.canClimb() && this.climbTargetPos != null) {
             double d0 = (double)(this.entity.getSize(Pose.STANDING).width * this.entity.getSize(Pose.STANDING).width);
 
-            if (this.entity.getDistanceSq(new Vector3d(this.climbTargetPos)) >= d0 && (this.entity.getPositionVec().getY() <= (double)this.climbTargetPos.getY() || this.entity.getDistanceSq(new Vector3d(this.climbTargetPos.getX(), MathHelper.floor(this.entity.getPositionVec().getY()), this.climbTargetPos.getZ())) >= d0)) {
+            if (this.entity.getDistanceSq(Vector3d.copy(this.climbTargetPos)) >= d0 && (this.entity.getPositionVec().getY() <= (double)this.climbTargetPos.getY() || this.entity.getDistanceSq(new Vector3d(this.climbTargetPos.getX(), MathHelper.floor(this.entity.getPositionVec().getY()), this.climbTargetPos.getZ())) >= d0)) {
                 this.entity.getMoveHelper().setMoveTo((double)this.climbTargetPos.getX(), (double)this.climbTargetPos.getY(), (double)this.climbTargetPos.getZ(), this.speed);
             }
             else {
@@ -506,7 +511,7 @@ public class CreaturePathNavigator extends PathNavigator {
             else if (this.currentPath != null && this.currentPath.getCurrentPathIndex() < this.currentPath.getCurrentPathLength()) {
                 Vector3d vec3d = this.getEntityPosition();
                 Vector3d vec3d1 = this.currentPath.getVectorFromIndex(this.entity, this.currentPath.getCurrentPathIndex());
-                if (vec3d.y > vec3d1.y && !this.entity.onGround && MathHelper.floor(vec3d.x) == MathHelper.floor(vec3d1.x) && MathHelper.floor(vec3d.z) == MathHelper.floor(vec3d1.z)) {
+                if (vec3d.y > vec3d1.y && !this.entity.isOnGround() && MathHelper.floor(vec3d.x) == MathHelper.floor(vec3d1.x) && MathHelper.floor(vec3d.z) == MathHelper.floor(vec3d1.z)) {
                     this.currentPath.setCurrentPathIndex(this.currentPath.getCurrentPathIndex() + 1);
                 }
             }

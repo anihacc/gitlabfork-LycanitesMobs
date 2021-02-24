@@ -133,9 +133,9 @@ public class ItemEquipmentPart extends BaseItem {
 	@Override
 	public ITextComponent getDisplayName(ItemStack itemStack) {
 		ITextComponent displayName = new TranslationTextComponent(this.getTranslationKey(itemStack).replace("equipmentpart_", ""));
-		displayName.func_240702_b_(" ")
-			.func_230529_a_(new TranslationTextComponent("equipment.level"))
-			.func_240702_b_(" " + this.getLevel(itemStack));
+		displayName.appendString(" ")
+			.append(new TranslationTextComponent("equipment.level"))
+			.appendString(" " + this.getLevel(itemStack));
 		return displayName;
 	}
 
@@ -164,18 +164,18 @@ public class ItemEquipmentPart extends BaseItem {
 
 		// Base Stats:
 		ITextComponent baseFeature = new TranslationTextComponent("equipment.slottype")
-				.func_240702_b_(" " + this.slotType)
-				.func_240702_b_("\n").func_230529_a_(new TranslationTextComponent("equipment.level"))
-				.func_240702_b_(" " + level + "/" + this.levelMax);
+				.appendString(" " + this.slotType)
+				.appendString("\n").append(new TranslationTextComponent("equipment.level"))
+				.appendString(" " + level + "/" + this.levelMax);
 		if(level < this.levelMax) {
-			baseFeature.func_240702_b_("\n").func_230529_a_(new TranslationTextComponent("entity.experience"))
-					.func_240702_b_(": " + experience + "/" + experienceMax);
+			baseFeature.appendString("\n").append(new TranslationTextComponent("entity.experience"))
+					.appendString(": " + experience + "/" + experienceMax);
 		}
 		descriptions.add(new StringTextComponent("-------------------\n"));
 		descriptions.add(baseFeature);
 		if(!this.elements.isEmpty()) {
 			ITextComponent elementFeature = new TranslationTextComponent("equipment.element")
-					.func_240702_b_(" ").func_230529_a_(this.getElementNames());
+					.appendString(" ").append(this.getElementNames());
 			descriptions.add(elementFeature);
 		}
 		descriptions.add(new StringTextComponent("-------------------\n"));
@@ -392,10 +392,10 @@ public class ItemEquipmentPart extends BaseItem {
 		boolean firstElement = true;
 		for(ElementInfo element : this.elements) {
 			if(!firstElement) {
-				elementNames.func_240702_b_(", ");
+				elementNames.appendString(", ");
 			}
 			firstElement = false;
-			elementNames.func_230529_a_(element.getTitle());
+			elementNames.append(element.getTitle());
 		}
 		return elementNames;
 	}

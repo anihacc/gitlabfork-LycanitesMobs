@@ -51,10 +51,10 @@ public class MobEventPlayerClient {
 			this.ticks = 0;
 		}
 		ITextComponent eventMessage = new TranslationTextComponent("event." + (extended ? "extended" : "started") + ".prefix")
-				.func_240702_b_(" ")
-				.func_230529_a_(this.mobEvent.getTitle())
-				.func_240702_b_(" ")
-				.func_230529_a_(new TranslationTextComponent("event." + (extended ? "extended" : "started") + ".suffix"));
+				.appendString(" ")
+				.append(this.mobEvent.getTitle())
+				.appendString(" ")
+				.append(new TranslationTextComponent("event." + (extended ? "extended" : "started") + ".suffix"));
 		player.sendMessage(eventMessage);
 
 		if(player.abilities.isCreativeMode && !MobEventPlayerServer.testOnCreative && "world".equalsIgnoreCase(this.mobEvent.channel)) {
@@ -79,10 +79,10 @@ public class MobEventPlayerClient {
     // ==================================================
 	public void onFinish(PlayerEntity player) {
 		ITextComponent eventMessage = new TranslationTextComponent("event.finished.prefix")
-				.func_240702_b_(" ")
-				.func_230529_a_(this.mobEvent.getTitle())
-				.func_240702_b_(" ")
-				.func_230529_a_(new TranslationTextComponent("event.finished.suffix"));
+				.appendString(" ")
+				.append(this.mobEvent.getTitle())
+				.appendString(" ")
+				.append(new TranslationTextComponent("event.finished.suffix"));
 		player.sendMessage(eventMessage);
 	}
 

@@ -755,7 +755,7 @@ public class Spawner {
 	 */
 	public void spawnEntity(World world, ExtendedWorld worldExt, LivingEntity entityLiving, int level, MobSpawn mobSpawn, PlayerEntity player, int chain) {
 		// Before Spawn:
-		entityLiving.timeUntilPortal = entityLiving.getPortalCooldown();
+		entityLiving.portalCounter = entityLiving.getPortalCooldown();
 
 		BaseCreatureEntity entityCreature;
 		if(entityLiving instanceof BaseCreatureEntity) {

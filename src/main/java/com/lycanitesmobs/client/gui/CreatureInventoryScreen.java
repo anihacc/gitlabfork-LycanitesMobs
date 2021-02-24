@@ -111,7 +111,7 @@ public class CreatureInventoryScreen extends BaseContainerScreen<CreatureContain
 		}
 		this.addButton(button);
 
-		buttonText = new TranslationTextComponent("gui.pet.pvp").func_240702_b_(": ").func_230529_a_(pet.isPVP() ? new TranslationTextComponent("common.yes") : new TranslationTextComponent("common.no")).getString();
+		buttonText = new TranslationTextComponent("gui.pet.pvp").appendString(": ").append(pet.isPVP() ? new TranslationTextComponent("common.yes") : new TranslationTextComponent("common.no")).getString();
 		buttonY += buttonHeight + (buttonSpacing * 2);
 		this.addButton(new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.PVP.id, buttonX + buttonSpacing, buttonY, buttonWidth, buttonHeight, buttonText, this));
 	}

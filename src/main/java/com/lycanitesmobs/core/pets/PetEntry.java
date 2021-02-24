@@ -243,8 +243,8 @@ public class PetEntry {
         ITextComponent displayName = this.summonSet.getCreatureInfo().getTitle();
         if(this.entityName != null && !"".equals(this.entityName)) {
             displayName = new StringTextComponent(this.entityName + " (")
-                    .func_230529_a_(displayName)
-                    .func_240702_b_(")");
+                    .append(displayName)
+                    .appendString(")");
         }
         return displayName;
     }

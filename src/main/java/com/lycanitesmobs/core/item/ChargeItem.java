@@ -49,7 +49,7 @@ public class ChargeItem extends BaseItem {
 
     @Override
     public ITextComponent getDisplayName(ItemStack itemStack) {
-        return this.getProjectileName().func_240702_b_(" ").func_230529_a_(new TranslationTextComponent("item.lycanitesmobs.charge"));
+        return this.getProjectileName().appendString(" ").append(new TranslationTextComponent("item.lycanitesmobs.charge"));
     }
 
     @Override
@@ -74,12 +74,12 @@ public class ChargeItem extends BaseItem {
 
         if(!this.getElements().isEmpty()) {
             ITextComponent elements = new TranslationTextComponent("item.lycanitesmobs.charge.elements")
-                    .func_240702_b_(" ").func_230529_a_(this.getElementNames());
+                    .appendString(" ").append(this.getElementNames());
             descriptions.add(elements);
         }
 
         ITextComponent projectile = new TranslationTextComponent("item.lycanitesmobs.charge.projectile")
-                .func_240702_b_(" ").func_230529_a_(this.getProjectileName());
+                .appendString(" ").append(this.getProjectileName());
         descriptions.add(projectile);
 
         return descriptions;
@@ -89,7 +89,7 @@ public class ChargeItem extends BaseItem {
     public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
         ItemStack itemStack = player.getHeldItem(hand);
 
-        if(!world.isRemote && player.isShiftKeyDown()) { // isSneaking()
+        if(!world.isRemote && player.isSneaking()) { // isSneaking()
             BaseProjectileEntity projectile = this.createProjectile(itemStack, world, player);
             if(projectile == null) {
                 LycanitesMobs.logWarning("", "Failed to create projectile from Charge Item: " + this.itemName);
@@ -147,10 +147,10 @@ public class ChargeItem extends BaseItem {
         boolean firstElement = true;
         for(ElementInfo element : this.getElements()) {
             if(!firstElement) {
-                elementNames.func_240702_b_(", ");
+                elementNames.appendString(", ");
             }
             firstElement = false;
-            elementNames.func_230529_a_(element.getTitle());
+            elementNames.append(element.getTitle());
         }
         return elementNames;
     }
