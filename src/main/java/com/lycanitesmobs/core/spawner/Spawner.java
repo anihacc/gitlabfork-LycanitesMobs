@@ -17,10 +17,12 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.GameRules;
+import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.event.ForgeEventFactory;
@@ -368,7 +370,7 @@ public class Spawner {
 		if(currentCount != lastCount) {
 			if(this.triggerCountMessages.containsKey(currentCount)) {
 				ITextComponent message = new TranslationTextComponent(this.triggerCountMessages.get(currentCount));
-				player.sendMessage(message);
+				player.sendMessage(message, Util.DUMMY_UUID);
 			}
 		}
 
@@ -534,7 +536,7 @@ public class Spawner {
 			// Call Entity's Initial Spawn:
 			if (entityLiving instanceof MobEntity) {
 				if (!ForgeEventFactory.doSpecialSpawn((MobEntity)entityLiving, world, (float) spawnPos.getX() + 0.5F, (float) spawnPos.getY(), (float) spawnPos.getZ() + 0.5F, null, SpawnReason.NATURAL)) {
-					((MobEntity)entityLiving).onInitialSpawn(world, world.getDifficultyForLocation(spawnPos), SpawnReason.NATURAL, null, null);
+					((MobEntity)entityLiving).onInitialSpawn((IServerWorld) world, world.getDifficultyForLocation(spawnPos), SpawnReason.NATURAL, null, null);
 				}
 			}
 
@@ -755,7 +757,7 @@ public class Spawner {
 	 */
 	public void spawnEntity(World world, ExtendedWorld worldExt, LivingEntity entityLiving, int level, MobSpawn mobSpawn, PlayerEntity player, int chain) {
 		// Before Spawn:
-		entityLiving.portalCounter = entityLiving.getPortalCooldown();
+		entityLiving.func_242279_ag(); // Start Portal Cooldown
 
 		BaseCreatureEntity entityCreature;
 		if(entityLiving instanceof BaseCreatureEntity) {

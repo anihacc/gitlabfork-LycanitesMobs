@@ -10,10 +10,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundCategory;
+import net.minecraft.util.*;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -58,7 +55,7 @@ public class ItemWinterGiftLarge extends BaseItem {
   	// ==================================================
     public void open(ItemStack itemStack, World world, PlayerEntity player) {
         ITextComponent message = new TranslationTextComponent("item.lycanitesmobs." + this.itemName + ".bad");
-		player.sendMessage(message);
+		player.sendMessage(message, Util.DUMMY_UUID);
         this.playSound(world, player.getPosition(), ObjectManager.getSound(this.itemName + "_bad"), SoundCategory.AMBIENT, 5.0F, 1.0F);
 		
 		// Lots of Random Tricks:

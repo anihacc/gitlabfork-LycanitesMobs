@@ -327,7 +327,7 @@ public class PetEntry {
                 try {
                     if (this.teleportEntity) {
                         if (this.entity.getEntityWorld() != this.host.getEntityWorld())
-                            this.entity.changeDimension(this.host.getEntityWorld().getDimension().getType());
+                            this.entity.changeDimension(this.host.getServer().getWorld(this.host.getEntityWorld().getDimensionKey()));
                         this.entity.setPosition(this.host.getPositionVec().getX(), this.host.getPositionVec().getY(), this.host.getPositionVec().getZ());
                     }
                 }

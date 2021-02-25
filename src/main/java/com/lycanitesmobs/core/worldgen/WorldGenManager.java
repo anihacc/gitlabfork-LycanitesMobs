@@ -23,21 +23,20 @@ public class WorldGenManager {
 	}
 	
 	// Placements:
-	public AlwaysPlacement alwaysPlacement = new AlwaysPlacement(NoPlacementConfig::deserialize);
+	public AlwaysPlacement alwaysPlacement = new AlwaysPlacement(NoPlacementConfig.CODEC);
 	
 	// Features:
-	public ChunkSpawnFeature chunkSpawnFeature = new ChunkSpawnFeature(NoFeatureConfig::deserialize);
-	public DungeonFeature dungeonFeature = new DungeonFeature(NoFeatureConfig::deserialize);
-	public DungeonStructure dungeonStructure = new DungeonStructure(NoFeatureConfig::deserialize);
+	public ChunkSpawnFeature chunkSpawnFeature = new ChunkSpawnFeature(NoFeatureConfig.field_236558_a_);
+	public DungeonFeature dungeonFeature = new DungeonFeature(NoFeatureConfig.field_236558_a_);
 
 	public void addToBiomes() {
 		GenerationStage.Decoration spawningStage = GenerationStage.Decoration.TOP_LAYER_MODIFICATION;
 		GenerationStage.Decoration structureStage = GenerationStage.Decoration.UNDERGROUND_STRUCTURES;
 
-		for(Biome biome : Biome.BIOMES) {
-			biome.addFeature(spawningStage, this.chunkSpawnFeature.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).func_227228_a_(this.alwaysPlacement.func_227446_a_(IPlacementConfig.NO_PLACEMENT_CONFIG)));
-			biome.addFeature(structureStage, this.dungeonFeature.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).func_227228_a_(this.alwaysPlacement.func_227446_a_(IPlacementConfig.NO_PLACEMENT_CONFIG)));
-		}
+//		for(Biome biome : Biome.BIOME_CODEC) { // TODO Probably delete all of this shite and start again.
+//			biome.addFeature(spawningStage, this.chunkSpawnFeature.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).func_227228_a_(this.alwaysPlacement.func_227446_a_(IPlacementConfig.NO_PLACEMENT_CONFIG)));
+//			biome.addFeature(structureStage, this.dungeonFeature.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).func_227228_a_(this.alwaysPlacement.func_227446_a_(IPlacementConfig.NO_PLACEMENT_CONFIG)));
+//		}
 
 		// TODO Enable lake generation when fluids are back.
 		for(BiomeManager.BiomeEntry biomeEntry : BiomeManager.getBiomes(BiomeManager.BiomeType.COOL)) { //was createDecoratedFeature(), is now something like a chained set of createConfiguredFeature()
@@ -60,13 +59,13 @@ public class WorldGenManager {
 
 	@SubscribeEvent
 	public void registerPlacements(RegistryEvent.Register<Placement<?>> event) {
-		event.getRegistry().register(this.alwaysPlacement.setRegistryName(LycanitesMobs.modInfo.modid, "always"));
+//		event.getRegistry().register(this.alwaysPlacement.setRegistryName(LycanitesMobs.modInfo.modid, "always"));
 	}
 
 	@SubscribeEvent
 	public void registerFeatures(RegistryEvent.Register<Feature<?>> event) {
-		event.getRegistry().register(this.chunkSpawnFeature.setRegistryName(LycanitesMobs.modInfo.modid, "chunkspawn"));
-		event.getRegistry().register(this.dungeonFeature.setRegistryName(LycanitesMobs.modInfo.modid, "dungeon_temp"));
-		event.getRegistry().register(this.dungeonStructure.setRegistryName(LycanitesMobs.modInfo.modid, "dungeon"));
+//		event.getRegistry().register(this.chunkSpawnFeature.setRegistryName(LycanitesMobs.modInfo.modid, "chunkspawn"));
+//		event.getRegistry().register(this.dungeonFeature.setRegistryName(LycanitesMobs.modInfo.modid, "dungeon_temp"));
+//		event.getRegistry().register(this.dungeonStructure.setRegistryName(LycanitesMobs.modInfo.modid, "dungeon"));
 	}
 }

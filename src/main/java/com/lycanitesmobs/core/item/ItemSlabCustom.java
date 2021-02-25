@@ -7,7 +7,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.state.IProperty;
+import net.minecraft.state.Property;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
@@ -39,7 +39,7 @@ public class ItemSlabCustom extends BlockItem
 
     @Override
     public ITextComponent getDisplayName(ItemStack stack) {
-        return this.singleSlab.getNameTextComponent();
+        return this.singleSlab.getTranslatedName();
     }
 
     /**
@@ -128,7 +128,7 @@ public class ItemSlabCustom extends BlockItem
         return false;
     }*/
 
-    protected <T extends Comparable<T>> BlockState makeState(IProperty<T> p_185055_1_, Comparable<?> p_185055_2_) {
+    protected <T extends Comparable<T>> BlockState makeState(Property<T> p_185055_1_, Comparable<?> p_185055_2_) {
         return this.doubleSlab.getDefaultState();//.withProperty(p_185055_1_, (T)p_185055_2_);
     }
 }

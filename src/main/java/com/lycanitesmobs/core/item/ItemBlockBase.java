@@ -14,6 +14,6 @@ public class ItemBlockBase extends BlockItem {
 
 	@Override
 	public ITextComponent getDisplayName(ItemStack stack) {
-		return this.getBlock().getNameTextComponent();
+		return this.getBlock().getTranslatedName();
 	}
 }

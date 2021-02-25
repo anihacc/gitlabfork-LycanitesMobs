@@ -3,6 +3,7 @@ package com.lycanitesmobs.core.item.equipment.features;
 import com.google.gson.JsonObject;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
 public class DamageEquipmentFeature extends EquipmentFeature {
@@ -47,7 +48,7 @@ public class DamageEquipmentFeature extends EquipmentFeature {
 		if(!this.isActive(itemStack, level)) {
 			return null;
 		}
-		ITextComponent description = new TranslationTextComponent("equipment.feature." + this.featureType)
+		TextComponent description = (TextComponent) new TranslationTextComponent("equipment.feature." + this.featureType)
 			.appendString(" " + this.damageAmount);
 		if(this.damageCooldown > 0) {
 			description.appendString("\n")

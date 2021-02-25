@@ -5,6 +5,8 @@ import com.lycanitesmobs.core.spawner.trigger.*;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FlowingFluidBlock;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -20,7 +22,6 @@ import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.entity.player.ItemFishedEvent;
 import net.minecraftforge.event.entity.player.PlayerSleepInBedEvent;
 import net.minecraftforge.event.world.BlockEvent;
-import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
 import net.minecraftforge.event.world.ExplosionEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -180,7 +181,7 @@ public class SpawnerEventListener {
 			}
 			boolean nearOtherPlayers = false;
 			for(BlockPos triggerPosition : triggerPositions) {
-				if(player.getDistanceSq(new Vector3d(triggerPosition)) <= 100 * 100) {
+				if(player.getDistanceSq(Vector3d.copy(triggerPosition)) <= 100 * 100) {
 					nearOtherPlayers = true;
 				}
 			}
@@ -333,8 +334,8 @@ public class SpawnerEventListener {
 	// ==================================================
 	/** This uses the block harvest drops events to update Block Spawn Triggers. **/
 	@SubscribeEvent
-	public void onHarvestDrops(HarvestDropsEvent event) {
-		PlayerEntity player = event.getHarvester();
+	public void onHarvestDrops(BlockEvent.BlockToolInteractEvent event) {
+		PlayerEntity player = event.getPlayer();
 		if(event.getState() == null || !(event.getWorld() instanceof World) || event.getWorld().isRemote() || event.isCanceled()) {
 			return;
 		}
@@ -346,9 +347,15 @@ public class SpawnerEventListener {
 		// Spawn On Block Harvest:
         BlockPos blockPos = event.getPos();
 		BlockState blockState = event.getState();
+		int bonusLevel = 0;
+		int silklevel = 0;
+		if(player != null) {
+			bonusLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, player.getHeldItemMainhand());
+			silklevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, player.getHeldItemMainhand());
+		}
 
         for(BlockSpawnTrigger spawnTrigger : this.blockSpawnTriggers) {
-            spawnTrigger.onBlockHarvest(world, player, blockPos, blockState, 0, event.getFortuneLevel(), event.isSilkTouching());
+            spawnTrigger.onBlockHarvest(world, player, blockPos, blockState, 0, bonusLevel, silklevel > 0);
         }
 	}
 
@@ -501,7 +508,7 @@ public class SpawnerEventListener {
 
 		// Only If Players Are Nearby (Big Performance Saving):
 		boolean playerNearby = false;
-		Vector3d posVec = new Vector3d(event.getPos());
+		Vector3d posVec = Vector3d.copy(event.getPos());
 		for(PlayerEntity playerEntity : world.getPlayers()) {
 			if(playerEntity.getDistanceSq(posVec) <= 20 * 20) {
 				playerNearby = true;

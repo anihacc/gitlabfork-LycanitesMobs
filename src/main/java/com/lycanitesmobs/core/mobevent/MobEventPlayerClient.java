@@ -11,6 +11,7 @@ import net.minecraft.client.audio.SimpleSound;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.Util;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
@@ -55,7 +56,7 @@ public class MobEventPlayerClient {
 				.append(this.mobEvent.getTitle())
 				.appendString(" ")
 				.append(new TranslationTextComponent("event." + (extended ? "extended" : "started") + ".suffix"));
-		player.sendMessage(eventMessage);
+		player.sendMessage(eventMessage, Util.DUMMY_UUID);
 
 		if(player.abilities.isCreativeMode && !MobEventPlayerServer.testOnCreative && "world".equalsIgnoreCase(this.mobEvent.channel)) {
 			return;
@@ -83,7 +84,7 @@ public class MobEventPlayerClient {
 				.append(this.mobEvent.getTitle())
 				.appendString(" ")
 				.append(new TranslationTextComponent("event.finished.suffix"));
-		player.sendMessage(eventMessage);
+		player.sendMessage(eventMessage, Util.DUMMY_UUID);
 	}
 
 

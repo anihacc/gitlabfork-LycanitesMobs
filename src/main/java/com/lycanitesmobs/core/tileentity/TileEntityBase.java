@@ -1,5 +1,6 @@
 package com.lycanitesmobs.core.tileentity;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
@@ -81,8 +82,8 @@ public abstract class TileEntityBase extends TileEntity implements ITickableTile
      * @param nbtTagCompound The NBT to read from.
      */
     @Override
-    public void read(CompoundNBT nbtTagCompound) {
-        super.read(nbtTagCompound);
+    public void read(BlockState blockState, CompoundNBT nbtTagCompound) {
+        super.read(blockState, nbtTagCompound);
     }
 
     /**

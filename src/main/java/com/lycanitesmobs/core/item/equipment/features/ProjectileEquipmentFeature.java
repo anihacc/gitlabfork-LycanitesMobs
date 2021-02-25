@@ -14,6 +14,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
@@ -101,7 +102,7 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 		}
 
 		ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile(this.projectileName);
-		ITextComponent description = new TranslationTextComponent("equipment.feature." + this.featureType).appendString(" ")
+		TextComponent description = (TextComponent) new TranslationTextComponent("equipment.feature." + this.featureType).appendString(" ")
 				.append(projectileInfo.getTitle());
 
 		if(this.bonusDamage != 0) {
@@ -131,7 +132,7 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 			return null;
 		}
 		ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile(this.projectileName);
-		ITextComponent summary = projectileInfo.getTitle();
+		TextComponent summary = projectileInfo.getTitle();
 		if(this.bonusDamage != 0) {
 			summary.appendString(" +" + this.bonusDamage);
 		}
@@ -251,7 +252,8 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 				ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile(this.projectileName);
 				BaseProjectileEntity projectile = projectileInfo.createProjectile(world, shooter);
 				projectile.setPosition(firePos.x, firePos.y, firePos.z);
-				projectile.shoot(shooter, (float)pitch, (float)yaw - (float)offsetX, 0, (float)projectileInfo.velocity, 0);
+				projectile.func_234612_a_(shooter, (float)pitch, (float)yaw - (float)offsetX, 0, (float)projectileInfo.velocity, 0);
+				projectile.setShooter(shooter);
 				projectile.setBonusDamage(this.bonusDamage);
 				world.addEntity(projectile);
 				mainProjectile = projectile;
@@ -266,7 +268,8 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 				projectile.setPosition(firePos.x, firePos.y, firePos.z);
 				projectile.setBonusDamage(this.bonusDamage);
 				world.addEntity(projectile);
-				projectile.shoot(shooter, shooter.rotationPitch, (float)yaw - (float)offsetX, 0, (float)projectileInfo.velocity, 0);
+				projectile.func_234612_a_(shooter, shooter.rotationPitch, (float)yaw - (float)offsetX, 0, (float)projectileInfo.velocity, 0);
+				projectile.setShooter(shooter);
 				mainProjectile = projectile;
 			}
 		}
@@ -274,7 +277,8 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 			ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile(this.projectileName);
 			mainProjectile = projectileInfo.createProjectile(world, shooter);
 			mainProjectile.setPosition(firePos.x, firePos.y, firePos.z);
-			mainProjectile.shoot(shooter, shooter.rotationPitch, shooter.rotationYaw - (float)offsetX, 0, (float)projectileInfo.velocity, 0);
+			mainProjectile.func_234612_a_(shooter, shooter.rotationPitch, shooter.rotationYaw - (float)offsetX, 0, (float)projectileInfo.velocity, 0);
+			mainProjectile.setShooter(shooter);
 			mainProjectile.setBonusDamage(this.bonusDamage);
 			world.addEntity(mainProjectile);
 		}

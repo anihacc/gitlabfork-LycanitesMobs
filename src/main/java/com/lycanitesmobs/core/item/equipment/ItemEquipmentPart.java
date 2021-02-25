@@ -1,6 +1,5 @@
 package com.lycanitesmobs.core.item.equipment;
 
-import com.google.common.collect.Multimap;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -17,8 +16,6 @@ import com.lycanitesmobs.core.item.equipment.features.EquipmentFeature;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -27,6 +24,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -132,7 +130,7 @@ public class ItemEquipmentPart extends BaseItem {
 
 	@Override
 	public ITextComponent getDisplayName(ItemStack itemStack) {
-		ITextComponent displayName = new TranslationTextComponent(this.getTranslationKey(itemStack).replace("equipmentpart_", ""));
+		TextComponent displayName = new TranslationTextComponent(this.getTranslationKey(itemStack).replace("equipmentpart_", ""));
 		displayName.appendString(" ")
 			.append(new TranslationTextComponent("equipment.level"))
 			.appendString(" " + this.getLevel(itemStack));
@@ -144,10 +142,7 @@ public class ItemEquipmentPart extends BaseItem {
 		super.addInformation(itemStack, world, tooltip, tooltipFlag);
 		FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
 		for(ITextComponent description : this.getAdditionalDescriptions(itemStack, world, tooltipFlag)) {
-			List<String> formattedDescriptionList = fontRenderer.listFormattedStringToWidth(description.getString(), DESCRIPTION_WIDTH + 100);
-			for (String formattedDescription : formattedDescriptionList) {
-				tooltip.add(new StringTextComponent(formattedDescription));
-			}
+			tooltip.add(description);
 		}
 	}
 
@@ -163,7 +158,7 @@ public class ItemEquipmentPart extends BaseItem {
 		int experienceMax = this.getExperienceForNextLevel(itemStack);
 
 		// Base Stats:
-		ITextComponent baseFeature = new TranslationTextComponent("equipment.slottype")
+		TextComponent baseFeature = (TextComponent) new TranslationTextComponent("equipment.slottype")
 				.appendString(" " + this.slotType)
 				.appendString("\n").append(new TranslationTextComponent("equipment.level"))
 				.appendString(" " + level + "/" + this.levelMax);
@@ -188,11 +183,6 @@ public class ItemEquipmentPart extends BaseItem {
 			}
 		}
 		return descriptions;
-	}
-
-	@Override
-	public Multimap<String, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
-		return super.getAttributeModifiers(slot, stack);
 	}
 
 	/** Gets or creates an NBT Compound for the provided itemstack. **/
@@ -388,7 +378,7 @@ public class ItemEquipmentPart extends BaseItem {
 	 * @return The Elements used by this Part.
 	 */
 	public ITextComponent getElementNames() {
-		ITextComponent elementNames = new StringTextComponent("");
+		TextComponent elementNames = new StringTextComponent("");
 		boolean firstElement = true;
 		for(ElementInfo element : this.elements) {
 			if(!firstElement) {

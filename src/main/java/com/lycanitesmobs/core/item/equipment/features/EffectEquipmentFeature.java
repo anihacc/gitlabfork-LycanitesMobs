@@ -8,6 +8,7 @@ import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
@@ -46,7 +47,7 @@ public class EffectEquipmentFeature extends EquipmentFeature {
 			return null;
 		}
 
-		ITextComponent description = new TranslationTextComponent("equipment.feature." + this.featureType).appendString(" ").append(
+		TextComponent description = (TextComponent) new TranslationTextComponent("equipment.feature." + this.featureType).appendString(" ").append(
 				this.getEffectTypeName());
 		if(this.effectStrength > 0) {
 			description.appendString(" ").append(new TranslationTextComponent("entity.level")).appendString(" " + this.effectStrength);
@@ -66,7 +67,7 @@ public class EffectEquipmentFeature extends EquipmentFeature {
 			return null;
 		}
 
-		ITextComponent summary = this.getEffectTypeName();
+		TextComponent summary = this.getEffectTypeName();
 		if(this.effectStrength > 0) {
 			summary.appendString(" ").append(new TranslationTextComponent("entity.level")).appendString(" " + this.effectStrength);
 		}
@@ -79,7 +80,7 @@ public class EffectEquipmentFeature extends EquipmentFeature {
 		return summary;
 	}
 
-	public ITextComponent getEffectTypeName() {
+	public TextComponent getEffectTypeName() {
 		if("burning".equals(this.effectType)) {
 			return new TranslationTextComponent("effect.burning");
 		}
@@ -87,7 +88,7 @@ public class EffectEquipmentFeature extends EquipmentFeature {
 		if(effect == null) {
 			return new StringTextComponent(this.effectType);
 		}
-		return effect.getDisplayName();
+		return (TextComponent) effect.getDisplayName();
 	}
 
 	/**

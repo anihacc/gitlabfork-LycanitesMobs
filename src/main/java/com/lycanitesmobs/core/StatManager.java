@@ -34,14 +34,14 @@ public class StatManager {
 	}
 
 	/**
-	 * Adds a new Stat Type.
+	 * Adds a new Stat Type. TODO Implement stats.
 	 * @param name The unique name of the stat type.
 	 */
 	public void addStatType(String name) {
-		Registry<ResourceLocation> statRegistry = new SimpleRegistry<>();
-		StatType<ResourceLocation> statType = new StatType<>(statRegistry);
-		statType.setRegistryName(LycanitesMobs.modInfo.modid, name);
-		this.statTypes.put(name, statType);
+//		Registry<ResourceLocation> statRegistry = new SimpleRegistry<>();
+//		StatType<ResourceLocation> statType = new StatType<>(statRegistry);
+//		statType.setRegistryName(LycanitesMobs.modInfo.modid, name);
+//		this.statTypes.put(name, statType);
 	}
 
 	/**

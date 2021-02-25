@@ -1,39 +1,34 @@
 package com.lycanitesmobs.core.worldgen;
 
 import com.lycanitesmobs.core.spawner.SpawnerEventListener;
-import com.mojang.datafixers.Dynamic;
+import com.mojang.serialization.Codec;
+import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.world.ISeedReader;
+import net.minecraft.world.IWorldWriter;
+import net.minecraft.world.World;
 import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.GenerationSettings;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Random;
 import java.util.function.Function;
 
 public class ChunkSpawnFeature extends Feature<NoFeatureConfig> {
-	public ChunkSpawnFeature(Function<Dynamic<?>, ? extends NoFeatureConfig> configFactory) {
+	public ChunkSpawnFeature(Codec<NoFeatureConfig> configFactory) {
 		super(configFactory);
 	}
 
 	@Override
-	public boolean place(IWorld worldWriter, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos pos, NoFeatureConfig config) {
-		SpawnerEventListener.getInstance().onChunkGenerate(worldWriter.getWorld(), new ChunkPos(pos));
+	protected void setBlockState(IWorldWriter worldWriter, BlockPos pos, BlockState state) {
+		if(worldWriter instanceof World) {
+			SpawnerEventListener.getInstance().onChunkGenerate((World) worldWriter, new ChunkPos(pos)); // TODO Probably doesn't work, need a proper chunk gen event again for custom mob spawning!
+		}
+	}
+
+	@Override
+	public boolean generate(ISeedReader reader, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config) {
 		return false;
-	}
-
-	@Override
-	public List<Biome.SpawnListEntry> getSpawnList() {
-		return Collections.emptyList();
-	}
-
-	@Override
-	public List<Biome.SpawnListEntry> getCreatureSpawnList() {
-		return Collections.emptyList();
 	}
 }

@@ -13,6 +13,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.passive.TameableEntity;
@@ -29,6 +30,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -64,10 +66,7 @@ public class ItemEquipment extends BaseItem {
 		super.addInformation(itemStack, world, tooltip, tooltipFlag);
 		FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
 		for(ITextComponent description : this.getAdditionalDescriptions(itemStack, world, tooltipFlag)) {
-			List<String> formattedDescriptionList = fontRenderer.listFormattedStringToWidth(description.getString(), DESCRIPTION_WIDTH + 100);
-			for (String formattedDescription : formattedDescriptionList) {
-				tooltip.add(new StringTextComponent(formattedDescription));
-			}
+			tooltip.add(description);
 		}
 	}
 
@@ -90,7 +89,7 @@ public class ItemEquipment extends BaseItem {
 		descriptions.add(new StringTextComponent("-------------------\n"));
 
 		// Damage:
-		ITextComponent damageDescription = new TranslationTextComponent("equipment.feature.damage")
+		TextComponent damageDescription = (TextComponent) new TranslationTextComponent("equipment.feature.damage")
 				.appendString(" " + String.format("%.0f", this.getDamageAmount(itemStack) + 1));
 		damageDescription.appendString("\n")
 				.append(new TranslationTextComponent("equipment.feature.damage.cooldown"))
@@ -151,7 +150,7 @@ public class ItemEquipment extends BaseItem {
 	 */
 	public ITextComponent getFeatureSummaries(ItemStack itemStack, String featureType) {
 		Map<EquipmentFeature, ItemStack> effectFeatures = this.getFeaturesByTypeWithPartStack(itemStack, featureType);
-		ITextComponent featureSummaries = new StringTextComponent("");
+		TextComponent featureSummaries = new StringTextComponent("");
 		boolean first = true;
 		for (EquipmentFeature equipmentFeature : effectFeatures.keySet()) {
 			if(!first) {
@@ -431,7 +430,7 @@ public class ItemEquipment extends BaseItem {
 	}
 
 	@Override
-	public boolean itemInteractionForEntity(ItemStack itemStack, PlayerEntity player, LivingEntity target, Hand hand) {
+	public ActionResultType itemInteractionForEntity(ItemStack itemStack, PlayerEntity player, LivingEntity target, Hand hand) {
 		boolean entityInteraction = false;
 
 		// Harvesting:
@@ -443,8 +442,8 @@ public class ItemEquipment extends BaseItem {
 		}
 
 		if(entityInteraction)
-			return true;
-		return false;
+			return ActionResultType.SUCCESS;
+		return ActionResultType.FAIL;
 	}
 
 
@@ -646,11 +645,11 @@ public class ItemEquipment extends BaseItem {
 	 * @return The Attribute Modifier multimap with changes applied to it.
 	 */
 	@Override
-	public Multimap<String, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack itemStack) {
-		Multimap<String, AttributeModifier> multimap = super.getAttributeModifiers(slot, itemStack);
+	public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack itemStack) {
+		Multimap<Attribute, AttributeModifier> multimap = super.getAttributeModifiers(slot, itemStack);
 		if (slot == EquipmentSlotType.MAINHAND) {
-			multimap.put(Attributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", this.getDamageAmount(itemStack), AttributeModifier.Operation.ADDITION));
-			multimap.put(Attributes.ATTACK_SPEED.getName(), new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", -this.getDamageCooldown(itemStack), AttributeModifier.Operation.ADDITION));
+			multimap.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", this.getDamageAmount(itemStack), AttributeModifier.Operation.ADDITION));
+			multimap.put(Attributes.ATTACK_SPEED, new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", -this.getDamageCooldown(itemStack), AttributeModifier.Operation.ADDITION));
 		}
 
 		return multimap;

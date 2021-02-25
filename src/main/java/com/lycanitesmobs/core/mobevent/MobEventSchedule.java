@@ -9,7 +9,7 @@ public class MobEventSchedule {
 	public MobEvent mobEvent;
 
 	/** The dimension ID of the world. **/
-	public int dimensionId = 0;
+	public String dimensionId = "";
 
 	/** The day of the world. **/
 	public int worldDay = 0;
@@ -39,7 +39,7 @@ public class MobEventSchedule {
 	/** Loads this Mob Event Trigger from the provided JSON data. **/
 	public void loadFromJSON(JsonObject json) {
 		if(json.has("dimensionId"))
-			this.dimensionId = json.get("dimensionId").getAsInt();
+			this.dimensionId = json.get("dimensionId").getAsString();
 
 		if(json.has("worldDay"))
 			this.worldDay = json.get("worldDay").getAsInt();
@@ -58,7 +58,7 @@ public class MobEventSchedule {
 			return false;
 		}
 
-		if(world.getDimension().getType().getId() != this.dimensionId) {
+		if(!world.getDimensionKey().getRegistryName().toString().equals(this.dimensionId)) { // TODO Test dimension keys!
 			return false;
 		}
 

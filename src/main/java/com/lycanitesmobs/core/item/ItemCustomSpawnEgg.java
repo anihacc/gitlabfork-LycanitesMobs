@@ -25,7 +25,9 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.*;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.spawner.AbstractSpawner;
 
@@ -55,7 +57,7 @@ public class ItemCustomSpawnEgg extends BaseItem {
 	// ==================================================
     @Override
     public ITextComponent getDisplayName(ItemStack itemStack) {
-		ITextComponent displayName = new TranslationTextComponent("creaturetype.spawn")
+		TextComponent displayName = (TextComponent)new TranslationTextComponent("creaturetype.spawn")
 				.appendString(" ")
 				.append(this.creatureType.getTitle())
 				.appendString(": ");
@@ -75,12 +77,7 @@ public class ItemCustomSpawnEgg extends BaseItem {
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flag) {
 		ITextComponent description = this.getDescription(stack, worldIn, tooltip, flag);
         if(!"".equalsIgnoreCase(description.getString()) && !("item." + this.itemName + ".description").equals(description.getUnformattedComponentText())) {
-            FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
-            List formattedDescriptionList = fontRenderer.listFormattedStringToWidth(description.getString(), BaseItem.DESCRIPTION_WIDTH);
-            for(Object formattedDescription : formattedDescriptionList) {
-                if(formattedDescription instanceof String)
-                    tooltip.add(new TranslationTextComponent((String)formattedDescription));
-            }
+			tooltip.add(description);
         }
     }
 
@@ -198,7 +195,7 @@ public class ItemCustomSpawnEgg extends BaseItem {
             BlockRayTraceResult blockRayTraceResult = (BlockRayTraceResult)rayTraceResult;
 			BlockPos pos = blockRayTraceResult.getPos();
 
-			if (!world.canMineBlockBody(player, pos)) {
+			if (!world.isBlockModifiable(player, pos)) {
 				return new ActionResult(ActionResultType.FAIL, itemStack);
 			}
 
@@ -260,7 +257,7 @@ public class ItemCustomSpawnEgg extends BaseItem {
 	 */
 	public LivingEntity spawnCreature(World world, ItemStack itemStack, double x, double y, double z) {
 		LivingEntity entity = this.getCreatureInfo(itemStack).createEntity(world);
-		if(entity != null) {
+		if(entity != null && world instanceof IServerWorld) {
 			entity.setLocationAndAngles(x, y, z, MathHelper.wrapDegrees(world.rand.nextFloat() * 360.0F), 0.0F);
 			entity.rotationYawHead = entity.rotationYaw;
 			entity.renderYawOffset = entity.rotationYaw;
@@ -271,7 +268,7 @@ public class ItemCustomSpawnEgg extends BaseItem {
 
 			if(entity instanceof MobEntity) {
 				MobEntity mobEntity = (MobEntity)entity;
-				mobEntity.onInitialSpawn(world, world.getDifficultyForLocation(mobEntity.getPosition()), SpawnReason.SPAWN_EGG, null, null);
+				mobEntity.onInitialSpawn((IServerWorld)world, world.getDifficultyForLocation(mobEntity.getPosition()), SpawnReason.SPAWN_EGG, null, null);
 				mobEntity.playAmbientSound();
 			}
 

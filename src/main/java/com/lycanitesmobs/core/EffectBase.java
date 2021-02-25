@@ -2,6 +2,7 @@ package com.lycanitesmobs.core;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.TextureManager;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.DisplayEffectsScreen;
@@ -40,25 +41,26 @@ public class EffectBase extends Effect {
 	// ==================================================
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void renderInventoryEffect(EffectInstance effect, DisplayEffectsScreen<?> gui, int x, int y, float z) {
+	public void renderInventoryEffect(EffectInstance effect, DisplayEffectsScreen<?> gui, MatrixStack mStack, int x, int y, float z) {
 		ResourceLocation texture = TextureManager.getTexture("effect." + this.name);
 		if(texture == null) {
 			return;
 		}
 
 		Minecraft.getInstance().getTextureManager().bindTexture(texture);
-		gui.blit(x + 6, y + 7, 0, 0, 18, 18, 18, 18);
+		gui.blit(mStack, x + 6, y + 7, 0, 0, 18, 18, 18, 18);
+		super.renderInventoryEffect(effect, gui, mStack, x, y, z);
 	}
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void renderHUDEffect(EffectInstance effect, AbstractGui gui, int x, int y, float z, float alpha) {
+	public void renderHUDEffect(EffectInstance effect, AbstractGui gui, MatrixStack mStack, int x, int y, float z, float alpha) {
 		ResourceLocation texture = TextureManager.getTexture("effect." + this.name);
 		if(texture == null) {
 			return;
 		}
 
 		Minecraft.getInstance().getTextureManager().bindTexture(texture);
-		gui.blit(x + 3, y + 3, 0, 0, 18, 18, 18, 18);
+		gui.blit(mStack, x + 3, y + 3, 0, 0, 18, 18, 18, 18);
 	}
 }

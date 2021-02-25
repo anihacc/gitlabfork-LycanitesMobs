@@ -13,10 +13,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundCategory;
+import net.minecraft.util.*;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -65,7 +62,7 @@ public class ItemHalloweenTreat extends BaseItem {
   	// ==================================================
     public void openGood(ItemStack itemStack, World world, PlayerEntity player) {
 		ITextComponent message = new TranslationTextComponent("item.lycanitesmobs." + this.itemName + ".good");
-		player.sendMessage(message);
+		player.sendMessage(message, Util.DUMMY_UUID);
         this.playSound(world, player.getPositionVec().getX(), player.getPositionVec().getY(), player.getPositionVec().getZ(), ObjectManager.getSound(this.itemName + "_good"), SoundCategory.AMBIENT, 5.0F, 1.0F);
 		
 		// Three Random Treats:
@@ -85,7 +82,7 @@ public class ItemHalloweenTreat extends BaseItem {
   	// ==================================================
     public void openBad(ItemStack itemStack, World world, PlayerEntity player) {
 		ITextComponent message = new TranslationTextComponent("item.lycanitesmobs." + this.itemName + ".bad");
-		player.sendMessage(message);
+		player.sendMessage(message, Util.DUMMY_UUID);
         this.playSound(world, player.getPositionVec().getX(), player.getPositionVec().getY(), player.getPositionVec().getZ(), ObjectManager.getSound(this.itemName + "_bad"), SoundCategory.AMBIENT, 5.0F, 1.0F);
 		
 		// One Random Trick:

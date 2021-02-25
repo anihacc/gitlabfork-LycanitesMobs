@@ -107,7 +107,7 @@ public class LycanitesMobs {
 		modEventBus.register(WorldGenManager.getInstance());
 		//modEventBus.register(StatManager.getInstance()); TODO Stats
 		PROXY.registerEvents();
-		ItemManager.FLUIDS.register(modEventBus);
+		//ItemManager.FLUIDS.register(modEventBus); // TODO Fluids
 
 		// Game Event Listeners:
 		MinecraftForge.EVENT_BUS.register(this);

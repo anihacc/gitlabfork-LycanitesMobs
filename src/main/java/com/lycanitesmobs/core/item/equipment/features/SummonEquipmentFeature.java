@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
@@ -63,7 +64,7 @@ public class SummonEquipmentFeature extends EquipmentFeature {
 		if(!this.isActive(itemStack, level)) {
 			return null;
 		}
-		ITextComponent description = new TranslationTextComponent("equipment.feature." + this.featureType)
+		TextComponent description = (TextComponent) new TranslationTextComponent("equipment.feature." + this.featureType)
 			.appendString(" ").append(new TranslationTextComponent("entity." + this.summonMobId));
 
 		if(this.summonCountMin != this.summonCountMax) {

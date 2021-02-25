@@ -18,6 +18,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
@@ -57,10 +58,7 @@ public class ChargeItem extends BaseItem {
         super.addInformation(itemStack, world, tooltip, tooltipFlag);
         FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
         for(ITextComponent description : this.getAdditionalDescriptions(itemStack, world, tooltipFlag)) {
-            List<String> formattedDescriptionList = fontRenderer.listFormattedStringToWidth("-------------------\n" + description.getString(), DESCRIPTION_WIDTH + 100);
-            for (String formattedDescription : formattedDescriptionList) {
-                tooltip.add(new StringTextComponent(formattedDescription));
-            }
+            tooltip.add(description);
         }
     }
 
@@ -106,9 +104,9 @@ public class ChargeItem extends BaseItem {
     }
 
     @Override
-    public boolean itemInteractionForEntity(ItemStack stack, PlayerEntity player, LivingEntity entity, Hand hand) {
+    public ActionResultType itemInteractionForEntity(ItemStack stack, PlayerEntity player, LivingEntity entity, Hand hand) {
         if(entity instanceof TameableCreatureEntity && ((TameableCreatureEntity)entity).getPlayerOwner() == player) {
-            return true;
+            return ActionResultType.SUCCESS;
         }
         return super.itemInteractionForEntity(stack, player, entity, hand);
     }
@@ -143,7 +141,7 @@ public class ChargeItem extends BaseItem {
      * @return The Elements this Charge contains.
      */
     public ITextComponent getElementNames() {
-        ITextComponent elementNames = new StringTextComponent("");
+        TextComponent elementNames = new StringTextComponent("");
         boolean firstElement = true;
         for(ElementInfo element : this.getElements()) {
             if(!firstElement) {
@@ -159,7 +157,7 @@ public class ChargeItem extends BaseItem {
      * Returns the display name of the projectile fired by this Charge.
      * @return The Projectile this Charge fires.
      */
-    public ITextComponent getProjectileName() {
+    public TextComponent getProjectileName() {
         if(this.projectileInfo != null) {
             return this.projectileInfo.getTitle();
         }

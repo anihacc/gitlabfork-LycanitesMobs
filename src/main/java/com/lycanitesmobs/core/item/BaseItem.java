@@ -63,22 +63,13 @@ public class BaseItem extends Item {
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flag) {
 		ITextComponent description = this.getDescription(stack, worldIn, tooltip, flag);
     	if(!"".equalsIgnoreCase(description.getString())) {
-    		FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
-    		List<String> formattedDescriptionList = fontRenderer.listFormattedStringToWidth(description.getString(), DESCRIPTION_WIDTH);
-    		for(String formattedDescription : formattedDescriptionList) {
-    			tooltip.add(new StringTextComponent(formattedDescription));
-    		}
+			tooltip.add(description);
     	}
     	super.addInformation(stack, worldIn, tooltip, flag);
     }
 
     public ITextComponent getDescription(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flag) {
     	return new TranslationTextComponent(this.getTranslationKey() + ".description");
-    }
-
-    @Override
-    public Multimap<String, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
-        return super.getAttributeModifiers(slot, stack);
     }
 	
     
@@ -111,7 +102,7 @@ public class BaseItem extends Item {
 	}
 
 	@Override
-	public boolean itemInteractionForEntity(ItemStack stack, PlayerEntity player, LivingEntity entity, Hand hand) {
+	public ActionResultType itemInteractionForEntity(ItemStack stack, PlayerEntity player, LivingEntity entity, Hand hand) {
     	return super.itemInteractionForEntity(stack, player, entity, hand);
 	}
 

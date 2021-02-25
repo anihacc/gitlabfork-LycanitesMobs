@@ -12,6 +12,7 @@ import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import com.lycanitesmobs.core.network.MessageSummoningPedestalStats;
 import com.lycanitesmobs.core.network.MessageSummoningPedestalSummonSet;
 import com.lycanitesmobs.core.pets.SummonSet;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -198,7 +199,7 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
         // Sync To Client:
         if(this.updateTick % 20 == 0) {
             MessageSummoningPedestalStats message = new MessageSummoningPedestalStats(this.capacity, this.summonProgress, this.summoningFuel, this.summoningFuelMax, this.getPos().getX(), this.getPos().getY(), this.getPos().getZ());
-            LycanitesMobs.packetHandler.sendToAllAround(message, this.getWorld(), new Vector3d(this.getPos()), 5);
+            LycanitesMobs.packetHandler.sendToAllAround(message, this.getWorld(), Vector3d.copy(this.getPos()), 5);
         }
 
         this.updateTick++;
@@ -451,8 +452,8 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
     // ========================================
     /** Reads from saved NBT data. **/
     @Override
-    public void read(CompoundNBT nbtTagCompound) {
-        super.read(nbtTagCompound);
+    public void read(BlockState blockState, CompoundNBT nbtTagCompound) {
+        super.read(blockState, nbtTagCompound);
 
         if(nbtTagCompound.contains("OwnerUUID")) {
             String uuidString = nbtTagCompound.getString("OwnerUUID");
@@ -509,7 +510,7 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
 			}
 		}
 
-		super.read(nbtTagCompound);
+		super.read(blockState, nbtTagCompound);
     }
 
     /** Writes to NBT data. **/

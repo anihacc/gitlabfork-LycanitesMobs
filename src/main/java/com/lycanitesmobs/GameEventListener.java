@@ -386,7 +386,7 @@ public class GameEventListener {
 		if(event.getPlayer() != null && !event.getPlayer().isCreative()) {
 			if (event.getWorld() instanceof World) {
 				ExtendedWorld extendedWorld = ExtendedWorld.getForWorld((World) event.getWorld());
-				if (!(event.getState().getBlock() instanceof BlockFireBase) && extendedWorld.isBossNearby(Vector3d.func_237491_b_(event.getPos()))) {
+				if (!(event.getState().getBlock() instanceof BlockFireBase) && extendedWorld.isBossNearby(Vector3d.copy(event.getPos()))) {
 					event.setCanceled(true);
 					event.setResult(Event.Result.DENY);
 					event.getPlayer().sendStatusMessage(new TranslationTextComponent("boss.block.protection.break"), true);
@@ -418,7 +418,7 @@ public class GameEventListener {
 		if(event.getEntity() instanceof PlayerEntity && !((PlayerEntity)event.getEntity()).isCreative()) {
 			if (event.getWorld() instanceof World) {
 				ExtendedWorld extendedWorld = ExtendedWorld.getForWorld((World) event.getWorld());
-				if (extendedWorld.isBossNearby(Vector3d.func_237491_b_(event.getPos()))) {
+				if (extendedWorld.isBossNearby(Vector3d.copy(event.getPos()))) {
 					event.setCanceled(true);
 					event.setResult(Event.Result.DENY);
 					((PlayerEntity)event.getEntity()).sendStatusMessage(new TranslationTextComponent("boss.block.protection.place"), true);
@@ -436,9 +436,9 @@ public class GameEventListener {
 	public void onCheckSpawn(LivingSpawnEvent.CheckSpawn event) {
 		if(event.isSpawner()) {
 			LivingEntity entity = event.getEntityLiving();
-			if(entity instanceof BaseCreatureEntity) {
+			if(entity instanceof BaseCreatureEntity && event.getWorld() instanceof World) {
 				BaseCreatureEntity baseCreatureEntity = (BaseCreatureEntity)entity;
-				if(!baseCreatureEntity.checkSpawnGroupLimit(event.getWorld().getWorld(), event.getSpawner().getSpawnerPosition(), 16)) {
+				if(!baseCreatureEntity.checkSpawnGroupLimit((World) event.getWorld(), event.getSpawner().getSpawnerPosition(), 16)) {
 					event.setResult(Event.Result.DENY);
 				}
 			}

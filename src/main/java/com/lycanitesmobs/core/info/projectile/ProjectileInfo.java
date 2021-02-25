@@ -26,6 +26,7 @@ import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
@@ -321,7 +322,7 @@ public class ProjectileInfo {
 	 * Returns a translated title for this projectile. Ex: Chaos Orb
 	 * @return The display name of this projectile.
 	 */
-	public ITextComponent getTitle() {
+	public TextComponent getTitle() {
 		return new TranslationTextComponent("entity." + this.getLocalisationKey());
 	}
 
