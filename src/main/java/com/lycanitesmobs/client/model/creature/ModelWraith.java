@@ -9,11 +9,11 @@ import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureEffect;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureScrolling;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import net.minecraft.client.renderer.Vector4f;
+import net.minecraft.util.math.vector.Vector4f;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec2f;
+import net.minecraft.util.math.vector.Vector2f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -46,7 +46,7 @@ public class ModelWraith extends ModelTemplateElemental {
 		super.addCustomLayers(renderer);
 		renderer.addLayer(new LayerCreatureEffect(renderer, "overlay", true, CustomRenderStates.BLEND.NORMAL.id, true));
 		renderer.addLayer(new LayerCreatureEffect(renderer, "skull", false, CustomRenderStates.BLEND.NORMAL.id, true));
-		renderer.addLayer(new LayerCreatureScrolling(renderer, "", true, CustomRenderStates.BLEND.ADD.id, true, new Vec2f(-8, 0)));
+		renderer.addLayer(new LayerCreatureScrolling(renderer, "", true, CustomRenderStates.BLEND.ADD.id, true, new Vector2f(-8, 0)));
 	}
 
 	@Override
@@ -100,8 +100,8 @@ public class ModelWraith extends ModelTemplateElemental {
 	//              Get Part Texture Offset
 	// ==================================================
 	@Override
-	public Vec2f getBaseTextureOffset(String partName, Entity entity, boolean trophy, float loop) {
-    	return new Vec2f(-loop * 8, 0);
+	public Vector2f getBaseTextureOffset(String partName, Entity entity, boolean trophy, float loop) {
+    	return new Vector2f(-loop * 8, 0);
 	}
 
 

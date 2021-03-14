@@ -28,13 +28,13 @@ public class EquipmentPartModel implements IBakedModel {
 	}
 
 	@Override
-	public boolean isBuiltInRenderer() {
-		return true;
+	public boolean isSideLit() {
+		return false;
 	}
 
 	@Override
-	public boolean func_230044_c_() {
-		return false;
+	public boolean isBuiltInRenderer() {
+		return true;
 	}
 
 	@Override

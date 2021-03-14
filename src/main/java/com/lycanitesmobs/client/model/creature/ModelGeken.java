@@ -71,7 +71,7 @@ public class ModelGeken extends CreatureObjModelOld {
     	}
     	
     	// Walking:
-    	if(entity == null || entity.func_233570_aj_() || entity.isInWater()) {
+    	if(entity == null || entity.isOnGround() || entity.isInWater()) {
 	    	float walkSwing = 0.6F;
 	    	if(partName.equals("leftarm")) {
 	    		rotX += Math.toDegrees(MathHelper.cos(time * walkSwing) * 1.0F * distance * 0.5F);
@@ -96,7 +96,7 @@ public class ModelGeken extends CreatureObjModelOld {
 		}
 		
 		// Jump:
-		if(entity != null && !entity.func_233570_aj_() && !entity.isInWater()) {
+		if(entity != null && !entity.isOnGround() && !entity.isInWater()) {
 	    	if(partName.equals("leftarm")) {
 		        rotZ -= 10;
 		        rotX -= 50;

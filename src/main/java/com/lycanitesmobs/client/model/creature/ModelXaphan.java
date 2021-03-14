@@ -7,11 +7,11 @@ import com.lycanitesmobs.client.renderer.CustomRenderStates;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureEffect;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureScrolling;
-import net.minecraft.client.renderer.Vector4f;
+import net.minecraft.util.math.vector.Vector4f;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec2f;
+import net.minecraft.util.math.vector.Vector2f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -41,7 +41,7 @@ public class ModelXaphan extends ModelTemplateElemental {
 	@Override
 	public void addCustomLayers(CreatureRenderer renderer) {
 		super.addCustomLayers(renderer);
-		renderer.addLayer(new LayerCreatureScrolling(renderer, "ball", true, CustomRenderStates.BLEND.NORMAL.id, true, new Vec2f(0, 4)));
+		renderer.addLayer(new LayerCreatureScrolling(renderer, "ball", true, CustomRenderStates.BLEND.NORMAL.id, true, new Vector2f(0, 4)));
 		renderer.addLayer(new LayerCreatureEffect(renderer, "ring", true, CustomRenderStates.BLEND.ADD.id, true));
 	}
     

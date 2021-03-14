@@ -9,11 +9,11 @@ import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureEffect;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureScrolling;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import net.minecraft.client.renderer.Vector4f;
+import net.minecraft.util.math.vector.Vector4f;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec2f;
+import net.minecraft.util.math.vector.Vector2f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -45,7 +45,7 @@ public class ModelSylph extends ModelTemplateElemental {
 	public void addCustomLayers(CreatureRenderer renderer) {
 		super.addCustomLayers(renderer);
 		renderer.addLayer(new LayerCreatureEffect(renderer, "hood", false, CustomRenderStates.BLEND.NORMAL.id, true));
-		renderer.addLayer(new LayerCreatureScrolling(renderer, "wing", true, CustomRenderStates.BLEND.ADD.id, true, new Vec2f(0, 1)));
+		renderer.addLayer(new LayerCreatureScrolling(renderer, "wing", true, CustomRenderStates.BLEND.ADD.id, true, new Vector2f(0, 1)));
 	}
 
 	@Override

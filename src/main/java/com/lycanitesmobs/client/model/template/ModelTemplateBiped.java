@@ -53,7 +53,7 @@ public class ModelTemplateBiped extends CreatureObjModel {
             rotZ += Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F + 0.05F);
             rotX += Math.toDegrees(MathHelper.sin(loop * 0.067F) * 0.05F);
         }
-        if(entity == null || entity.func_233570_aj_() || entity.isInWater()) {
+        if(entity == null || entity.isOnGround() || entity.isInWater()) {
             if(partName.contains("wingleft")) {
                 rotZ += Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F + 0.05F);
                 rotX += Math.toDegrees(MathHelper.sin(loop * 0.067F) * 0.05F);
@@ -104,7 +104,7 @@ public class ModelTemplateBiped extends CreatureObjModel {
 		}
 
         // Walking:
-        if(entity == null || entity.func_233570_aj_() || entity.isInWater()) {
+        if(entity == null || entity.isOnGround() || entity.isInWater()) {
             float walkSwing = 0.6F;
             if(partName.contains("armleft") || partName.equals("wingright")) {
                 rotX += Math.toDegrees(MathHelper.cos(time * walkSwing) * 1.0F * distance * 0.5F);
@@ -140,7 +140,7 @@ public class ModelTemplateBiped extends CreatureObjModel {
         }
 
         // Jumping/Flying:
-        if(entity != null && !entity.func_233570_aj_() && !entity.isInWater() && (creatureEntity == null || !creatureEntity.hasPerchTarget())) {
+        if(entity != null && !entity.isOnGround() && !entity.isInWater() && (creatureEntity == null || !creatureEntity.hasPerchTarget())) {
             if(partName.contains("wingleft")) {
                 rotX = 20;
                 rotX -= Math.toDegrees(MathHelper.sin(loop * 0.4F * this.wingScale) * 0.6F);

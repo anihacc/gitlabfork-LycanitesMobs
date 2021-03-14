@@ -48,7 +48,7 @@ public class ModelRaiko extends CreatureObjModel {
     	}
 
 		// Walking:
-		if(entity == null || entity.func_233570_aj_()) {
+		if(entity == null || entity.isOnGround()) {
 			if(partName.equals("body")) {
 				posY -= 0.6f;
 			}
@@ -90,7 +90,7 @@ public class ModelRaiko extends CreatureObjModel {
 		}
 
     	// Flying:
-    	if(!entity.isInWater() && !entity.func_233570_aj_()) {
+    	if(!entity.isInWater() && !entity.isOnGround()) {
 			if (partName.equals("wingleft")) {
 				rotX = 20;
 				rotX -= Math.toDegrees(MathHelper.sin(loop * 0.4F) * 0.6F);

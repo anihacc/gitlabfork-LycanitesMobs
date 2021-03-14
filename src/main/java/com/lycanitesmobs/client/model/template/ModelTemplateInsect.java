@@ -59,7 +59,7 @@ public class ModelTemplateInsect extends CreatureObjModel {
         }
 
         // Flying:
-        if(entity != null && !entity.func_233570_aj_() && !entity.isInWater()) {
+        if(entity != null && !entity.isOnGround() && !entity.isInWater()) {
             if(entity instanceof BaseCreatureEntity) {
                 BaseCreatureEntity entityCreature = (BaseCreatureEntity)entity;
                 if(entityCreature.isFlying()) {

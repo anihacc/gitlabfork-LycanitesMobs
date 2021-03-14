@@ -36,7 +36,7 @@ public class ModelMorock extends ModelTemplateDragon {
         float rotZ = 0F;
 
         // Walking:
-        if(entity != null && entity.func_233570_aj_()) {
+        if(entity != null && entity.isOnGround()) {
             float walkIdle = MathHelper.sin(loop * 0.1F);
             if(partName.equals("armleft02")) {
                 rotZ += 160 + Math.toDegrees(walkIdle * 0.05F);

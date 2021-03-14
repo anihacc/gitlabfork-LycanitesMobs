@@ -69,7 +69,7 @@ public class CustomRenderStates extends RenderState {
 		if(glow) {
 			lightingState = DIFFUSE_LIGHTING_DISABLED;
 		}
-		RenderType.State renderTypeState = RenderType.State.builder()
+		RenderType.State renderTypeState = RenderType.State.getBuilder()
 				.texture(new RenderState.TextureState(texture, false, false)) // Texture
 				.transparency(transparencyState)
 				.diffuseLighting(lightingState)
@@ -78,7 +78,7 @@ public class CustomRenderStates extends RenderState {
 				.lightmap(LIGHTMAP_ENABLED)
 				.overlay(OVERLAY_ENABLED)
 				.build(true);
-		return RenderType.get("lm_obj_translucent_no_cull", POS_COL_TEX_LIGHT_FADE_NORMAL, GL11.GL_TRIANGLES, 256, true, false, renderTypeState);
+		return RenderType.makeType("lm_obj_translucent_no_cull", POS_COL_TEX_LIGHT_FADE_NORMAL, GL11.GL_TRIANGLES, 256, true, false, renderTypeState);
 	}
 
 	public static RenderType getObjColorOnlyRenderType(ResourceLocation texture, int blending, boolean glow) {
@@ -102,7 +102,7 @@ public class CustomRenderStates extends RenderState {
 		if(glow) {
 			lightingState = DIFFUSE_LIGHTING_DISABLED;
 		}
-		RenderType.State renderTypeState = RenderType.State.builder()
+		RenderType.State renderTypeState = RenderType.State.getBuilder()
 				.texture(new RenderState.TextureState(texture, false, false)) // Texture
 				.transparency(transparencyState)
 				.diffuseLighting(lightingState)
@@ -111,7 +111,7 @@ public class CustomRenderStates extends RenderState {
 				.lightmap(LIGHTMAP_ENABLED)
 				.overlay(OVERLAY_ENABLED)
 				.build(true);
-		return RenderType.get("lm_obj_translucent_no_cull", POS_COL_TEX_LIGHT_FADE_NORMAL, GL11.GL_TRIANGLES, 256, true, false, renderTypeState);
+		return RenderType.makeType("lm_obj_translucent_no_cull", POS_COL_TEX_LIGHT_FADE_NORMAL, GL11.GL_TRIANGLES, 256, true, false, renderTypeState);
 	}
 
 	public static RenderType getObjOutlineRenderType(ResourceLocation texture) {
@@ -127,7 +127,7 @@ public class CustomRenderStates extends RenderState {
 			POS_COL_TEX_LIGHT_FADE_NORMAL = new VertexFormat(ImmutableList.copyOf(vertexFormatValues));
 		}
 
-		RenderType.State renderTypeState = RenderType.State.builder()
+		RenderType.State renderTypeState = RenderType.State.getBuilder()
 				.texture(new RenderState.TextureState(texture, false, false))
 				.cull(CULL_DISABLED)
 				.depthTest(DEPTH_ALWAYS)
@@ -136,7 +136,7 @@ public class CustomRenderStates extends RenderState {
 				.fog(NO_FOG)
 				.target(OUTLINE_TARGET)
 				.build(false);
-		return RenderType.get("lm_obj_outline_no_cull", POS_COL_TEX_LIGHT_FADE_NORMAL, GL11.GL_TRIANGLES, 256, true, false, renderTypeState);
+		return RenderType.makeType("lm_obj_outline_no_cull", POS_COL_TEX_LIGHT_FADE_NORMAL, GL11.GL_TRIANGLES, 256, true, false, renderTypeState);
 	}
 
 	public static RenderType getSpriteRenderType(ResourceLocation texture) {
@@ -150,10 +150,10 @@ public class CustomRenderStates extends RenderState {
 			POS_COL_TEX_NORMAL = new VertexFormat(ImmutableList.copyOf(vertexFormatValues));
 		}
 
-		RenderType.State renderTypeState = RenderType.State.builder()
+		RenderType.State renderTypeState = RenderType.State.getBuilder()
 				.texture(new RenderState.TextureState(texture, false, false))
 				.alpha(DEFAULT_ALPHA)
 				.build(true);
-		return RenderType.get("lm_sprite", POS_COL_TEX_NORMAL, 7, 256, true, false, renderTypeState);
+		return RenderType.makeType("lm_sprite", POS_COL_TEX_NORMAL, 7, 256, true, false, renderTypeState);
 	}
 }

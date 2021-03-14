@@ -6,10 +6,10 @@ import com.lycanitesmobs.client.renderer.CreatureRenderer;
 import com.lycanitesmobs.client.renderer.CustomRenderStates;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureEffect;
-import net.minecraft.client.renderer.Vector4f;
+import net.minecraft.util.math.vector.Vector4f;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.Vec2f;
+import net.minecraft.util.math.vector.Vector2f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -69,11 +69,11 @@ public class ModelJengu extends ModelTemplateElemental {
 	//              Get Part Texture Offset
 	// ==================================================
 	@Override
-	public Vec2f getBaseTextureOffset(String partName, Entity entity, boolean trophy, float loop) {
+	public Vector2f getBaseTextureOffset(String partName, Entity entity, boolean trophy, float loop) {
 		if(partName.contains("effect")) {
 			return super.getBaseTextureOffset(partName, entity, trophy, loop);
 		}
-		return new Vec2f(0, loop);
+		return new Vector2f(0, loop);
 	}
 
 

@@ -132,7 +132,7 @@ public class ModelAsmodeus extends CreatureObjModelOld {
         }
 
         // Walking:
-        if (entity == null || entity.func_233570_aj_()) {
+        if (entity == null || entity.isOnGround()) {
             // Arms:
             if (partName.equals("armleft")) {
                 rotX += Math.toDegrees(MathHelper.cos(time * 0.6662F) * 2.0F * distance * armSwing);
