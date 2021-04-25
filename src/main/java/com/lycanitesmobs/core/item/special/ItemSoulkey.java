@@ -8,6 +8,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -42,7 +43,7 @@ public class ItemSoulkey extends BaseItem {
 
         if(!AltarInfo.checkAltarsEnabled() && !player.getEntityWorld().isRemote) {
             ITextComponent message = new TranslationTextComponent("message.soulkey.disabled");
-            player.sendMessage(message);
+            player.sendMessage(message, Util.DUMMY_UUID);
             return ActionResultType.FAIL;
         }
 
@@ -57,7 +58,7 @@ public class ItemSoulkey extends BaseItem {
         }
         if(possibleAltars.isEmpty()) {
             ITextComponent message = new TranslationTextComponent("message.soulkey.none");
-            player.sendMessage(message);
+            player.sendMessage(message, Util.DUMMY_UUID);
             return ActionResultType.FAIL;
         }
 
@@ -69,7 +70,7 @@ public class ItemSoulkey extends BaseItem {
                 if(!player.getEntityWorld().isRemote) {
                     if(!altarInfo.activate(player, world, pos, this.variant)) {
                         ITextComponent message = new TranslationTextComponent("message.soulkey.badlocation");
-                        player.sendMessage(message);
+                        player.sendMessage(message, Util.DUMMY_UUID);
                         return ActionResultType.FAIL;
                     }
                     if (!player.abilities.isCreativeMode)
@@ -77,13 +78,13 @@ public class ItemSoulkey extends BaseItem {
                     if (itemStack.getCount() <= 0)
                         player.inventory.setInventorySlotContents(player.inventory.currentItem, ItemStack.EMPTY);
                     ITextComponent message = new TranslationTextComponent("message.soulkey.active");
-                    player.sendMessage(message);
+                    player.sendMessage(message, Util.DUMMY_UUID);
                 }
                 return ActionResultType.SUCCESS;
             }
         }
         ITextComponent message = new TranslationTextComponent("message.soulkey.invalid");
-        player.sendMessage(message);
+        player.sendMessage(message, Util.DUMMY_UUID);
 
         return ActionResultType.FAIL;
     }

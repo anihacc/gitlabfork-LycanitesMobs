@@ -6,6 +6,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 
 public class ItemSoulgazer extends BaseItem {
@@ -25,12 +26,12 @@ public class ItemSoulgazer extends BaseItem {
 	// ==================================================
 	// ========== Entity Interaction ==========
 	@Override
-	public boolean itemInteractionForEntity(ItemStack stack, PlayerEntity player, LivingEntity entity, Hand hand) {
+	public ActionResultType itemInteractionForEntity(ItemStack stack, PlayerEntity player, LivingEntity entity, Hand hand) {
     	ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
     	if(playerExt == null)
-    		return false;
+			return ActionResultType.FAIL;
 
-    	return playerExt.beastiary.discoverCreature(entity, 2, true);
+    	return playerExt.beastiary.discoverCreature(entity, 2, true) ? ActionResultType.SUCCESS : ActionResultType.FAIL;
     }
 
     @Override

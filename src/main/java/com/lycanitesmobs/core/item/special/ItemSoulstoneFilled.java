@@ -55,10 +55,10 @@ public class ItemSoulstoneFilled extends ItemSoulstone {
 
 
     @Override
-    public boolean itemInteractionForEntity(ItemStack stack, PlayerEntity player, LivingEntity entity, Hand hand) {
+    public ActionResultType itemInteractionForEntity(ItemStack stack, PlayerEntity player, LivingEntity entity, Hand hand) {
         if(this.creatureType.tameableCreatures.isEmpty()) {
             return super.itemInteractionForEntity(stack, player, entity, hand);
         }
-        return false;
+        return ActionResultType.FAIL;
     }
 }

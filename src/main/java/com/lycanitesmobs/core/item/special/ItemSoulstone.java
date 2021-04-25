@@ -15,6 +15,7 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Util;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
@@ -49,7 +50,7 @@ public class ItemSoulstone extends BaseItem {
 	}
 
 	@Override
-	public boolean itemInteractionForEntity(ItemStack stack, PlayerEntity player, LivingEntity entity, Hand hand) {
+	public ActionResultType itemInteractionForEntity(ItemStack stack, PlayerEntity player, LivingEntity entity, Hand hand) {
     	if(this.applySoulstoneToEntity(player, entity)) {
 			// Consume Soulstone:
 			if (!player.abilities.isCreativeMode)
@@ -57,7 +58,7 @@ public class ItemSoulstone extends BaseItem {
 			if (stack.getCount() <= 0)
 				player.inventory.setInventorySlotContents(player.inventory.currentItem, ItemStack.EMPTY);
 
-			return true;
+			return ActionResultType.SUCCESS;
 		}
 
     	return super.itemInteractionForEntity(stack, player, entity, hand);
@@ -75,7 +76,7 @@ public class ItemSoulstone extends BaseItem {
 			return false;
 		if(!(entity instanceof TameableCreatureEntity)) {
 			if(!player.getEntityWorld().isRemote)
-				player.sendMessage(new TranslationTextComponent("message.soulstone.invalid"));
+				player.sendMessage(new TranslationTextComponent("message.soulstone.invalid"), Util.DUMMY_UUID);
 			return false;
 		}
 
@@ -83,12 +84,12 @@ public class ItemSoulstone extends BaseItem {
 		CreatureInfo creatureInfo = entityTameable.creatureInfo;
 		if(!creatureInfo.isTameable() || entityTameable.getOwner() != player) {
 			if(!player.getEntityWorld().isRemote)
-				player.sendMessage(new TranslationTextComponent("message.soulstone.untamed"));
+				player.sendMessage(new TranslationTextComponent("message.soulstone.untamed"), Util.DUMMY_UUID);
 			return false;
 		}
 		if(entityTameable.getPetEntry() != null) {
 			if(!player.getEntityWorld().isRemote)
-				player.sendMessage(new TranslationTextComponent("message.soulstone.exists"));
+				player.sendMessage(new TranslationTextComponent("message.soulstone.exists"), Util.DUMMY_UUID);
 			return false;
 		}
 
@@ -115,7 +116,7 @@ public class ItemSoulstone extends BaseItem {
 					.append(creatureInfo.getTitle())
 					.appendString(" ")
 					.append(new TranslationTextComponent("message.soulstone." + petType + ".added.suffix"));
-			player.sendMessage(message);
+			player.sendMessage(message, Util.DUMMY_UUID);
 			//player.addStat(ObjectManager.getStat("soulstone"), 1);
 
 			// Add Pet Entry:
