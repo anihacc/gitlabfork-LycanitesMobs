@@ -1,18 +1,12 @@
 package com.lycanitesmobs.core.spawner.trigger;
 
 import com.google.gson.JsonObject;
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.spawner.Spawner;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.LeavesBlock;
-import net.minecraft.block.LogBlock;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.Item;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.Tag;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -84,7 +78,7 @@ public class TreeBlockSpawnTrigger extends BlockSpawnTrigger {
 
 	public boolean isLog(BlockState blockState) {
 		Block block = blockState.getBlock();
-		if(block instanceof LogBlock || block.isIn(BlockTags.LOGS)) {
+		if(block.isIn(BlockTags.LOGS)) {
 			return true;
 		}
 		return false;

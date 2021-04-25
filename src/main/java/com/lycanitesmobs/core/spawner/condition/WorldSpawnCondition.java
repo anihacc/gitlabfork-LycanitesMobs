@@ -6,9 +6,9 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.helpers.JSONHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.dimension.DimensionType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -186,7 +186,7 @@ public class WorldSpawnCondition extends SpawnCondition {
 		}
 
 		// Check Moon Phase:
-		if(this.moonPhase >= 0 && world.getCurrentMoonPhaseFactor() != this.moonPhase) {
+		if(this.moonPhase >= 0 && world.getMoonPhase() != this.moonPhase) {
 			return false;
 		}
 
@@ -210,12 +210,12 @@ public class WorldSpawnCondition extends SpawnCondition {
 	 * @return True if the biome is allowed, false if not.
 	 */
 	public boolean isAllowedDimension(World world) {
-		DimensionType dimension = world.getDimension().getType();
+		DimensionType dimension = world.getDimensionType();
 
 		// Dimension IDs:
 		if (!this.dimensionIds.isEmpty()) {
 			for(String dimensionId : this.dimensionIds) {
-				if(dimensionId.equals(dimension.getRegistryName().toString())) {
+				if(dimensionId.equals(dimension.toString())) {
 					return !"blacklist".equalsIgnoreCase(this.dimensionListType);
 				}
 			}

@@ -6,7 +6,7 @@ import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.TargetSorterNearest;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.attributes.IAttributeInstance;
+import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.pathfinding.Path;
@@ -174,7 +174,7 @@ public abstract class TargetingGoal extends Goal {
     protected double getTargetDistance() {
         if(this.targetingRange > 0)
             return this.targetingRange;
-    	IAttributeInstance attributeInstance = this.host.getAttribute(Attributes.FOLLOW_RANGE);
+    	ModifiableAttributeInstance attributeInstance = this.host.getAttribute(Attributes.FOLLOW_RANGE);
         return attributeInstance.getValue();
     }
 

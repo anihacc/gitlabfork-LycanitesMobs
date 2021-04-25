@@ -3,7 +3,6 @@ package com.lycanitesmobs.core.entity.creature;
 import com.google.common.collect.Maps;
 import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.core.entity.CustomItemEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import com.lycanitesmobs.core.entity.goals.actions.EatBlockGoal;
 import com.lycanitesmobs.core.entity.goals.actions.TemptGoal;
@@ -23,7 +22,6 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.Util;
@@ -31,7 +29,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
-import net.minecraftforge.common.IShearable;
+import net.minecraftforge.common.IForgeShearable;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -40,7 +38,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-public class EntityYale extends AgeableCreatureEntity implements IShearable {
+public class EntityYale extends AgeableCreatureEntity implements IForgeShearable {
 
 	protected static final DataParameter<Byte> FUR = EntityDataManager.createKey(EntityYale.class, DataSerializers.BYTE);
 
@@ -114,18 +112,18 @@ public class EntityYale extends AgeableCreatureEntity implements IShearable {
 			this.setColor(this.getRandomFurColor(this.getRNG()));
 		super.onFirstSpawn();
 	}
-	
-	
+
+
     // ==================================================
     //                      Abilities
     // ==================================================
 	// ========== IShearable ==========
-	@Override
+
 	public boolean isShearable(@Nonnull ItemStack item, IWorldReader world, BlockPos pos) {
 		return this.hasFur() && !this.isChild();
 	}
-	
-	@Override
+
+
 	public ArrayList<ItemStack> onSheared(@Nonnull ItemStack item, IWorld world, BlockPos pos, int fortune) {
 		ArrayList<ItemStack> dropStacks = new ArrayList<>();
 		if(this.woolDrop == null) {

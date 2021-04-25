@@ -6,7 +6,7 @@ import com.lycanitesmobs.core.spawner.CoordSorterFurthest;
 import com.lycanitesmobs.core.spawner.CoordSorterNearest;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -18,10 +18,10 @@ public class SpawnLocation {
     /** Spawn Locations define where spawns will take place, how these work can vary based on the type of Spawn Trigger. **/
 
     /** The minimum xyz distances in blocks from the central spawn position to spawn from. Required. **/
-    public Vec3i rangeMin = new Vec3i(0, 0, 0);
+    public Vector3i rangeMin = new Vector3i(0, 0, 0);
 
     /** The maximum xyz distances in blocks from the central spawn position to spawn from. Required. **/
-    public Vec3i rangeMax = new Vec3i(0, 0, 0);
+    public Vector3i rangeMax = new Vector3i(0, 0, 0);
 
     /** The minimum allowed y height. **/
     public int yMin = -1;
@@ -81,7 +81,7 @@ public class SpawnLocation {
         List<BlockPos> spawnPositions = new ArrayList<>();
         int yPos = this.getOffset(world.rand, this.rangeMin.getY(), this.rangeMax.getY());
 		if((this.yMax < 0 || yPos <= this.yMax) && (this.yMin < 0 || yPos >= this.yMin)) {
-			Vec3i offset = new Vec3i(
+			Vector3i offset = new Vector3i(
 					this.getOffset(world.rand, this.rangeMin.getX(), this.rangeMax.getX()),
 					yPos,
 					this.getOffset(world.rand, this.rangeMin.getZ(), this.rangeMax.getZ())
