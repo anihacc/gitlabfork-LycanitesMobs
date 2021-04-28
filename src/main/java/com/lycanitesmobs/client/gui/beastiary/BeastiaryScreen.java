@@ -10,6 +10,7 @@ import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.info.CreatureInfo;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.LivingEntity;
@@ -38,6 +39,7 @@ public abstract class BeastiaryScreen extends BaseScreen {
 	public PlayerEntity player;
 	public ExtendedPlayer playerExt;
 	public LivingEntity creaturePreviewEntity;
+	public MatrixStack matrixStack;
 	public float creaturePreviewTicks = 0;
 
 	public int centerX;
@@ -48,6 +50,7 @@ public abstract class BeastiaryScreen extends BaseScreen {
 	public int halfY;
 	public int windowX;
 	public int windowY;
+
 
 	public int colLeftX;
 	public int colLeftY;
@@ -171,7 +174,7 @@ public abstract class BeastiaryScreen extends BaseScreen {
 	public void renderForeground(int mouseX, int mouseY, float partialTicks) {
 		ITextComponent title = new StringTextComponent("\u00A7l\u00A7n").append(this.getTitle());
 		float width = this.getFontRenderer().getStringWidth(title.getString());
-		this.getFontRenderer().drawStringWithShadow(title.getString(), this.colRightCenterX - Math.round(width / 2), this.colRightY, 0xFFFFFF);
+		this.getFontRenderer().drawStringWithShadow(matrixStack, title.getString(), this.colRightCenterX - Math.round(width / 2), this.colRightY, 0xFFFFFF);
 	}
 
 	/**
@@ -250,7 +253,7 @@ public abstract class BeastiaryScreen extends BaseScreen {
 			// Create New:
 			if(this.creaturePreviewEntity == null || this.creaturePreviewEntity.getClass() != creatureInfo.entityClass || !subspeciesMatch) {
 				this.creaturePreviewEntity = creatureInfo.createEntity(this.player.getEntityWorld());
-				this.creaturePreviewEntity.onGround = true;
+				this.creaturePreviewEntity.isOnGround();
 				if (this.creaturePreviewEntity instanceof BaseCreatureEntity) {
 					((BaseCreatureEntity) this.creaturePreviewEntity).setSubspecies(this.getDisplaySubspecies(creatureInfo));
 					((BaseCreatureEntity) this.creaturePreviewEntity).setVariant(this.getDisplayVariant(creatureInfo));

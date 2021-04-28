@@ -9,6 +9,7 @@ import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.inventory.InventoryCreature;
 import com.lycanitesmobs.core.network.MessageEntityGUICommand;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Slot;
@@ -30,6 +31,8 @@ public class CreatureInventoryScreen extends BaseContainerScreen<CreatureContain
 		this.creature = container.creature;
 		this.creatureInventory = container.creature.inventory;
 	}
+
+	public MatrixStack matrixStack;
 
 	@Override
 	public void init() {
@@ -118,8 +121,8 @@ public class CreatureInventoryScreen extends BaseContainerScreen<CreatureContain
 
 	@Override
 	protected void renderForeground(int mouseX, int mouseY, float partialTicks) {
-		this.fontRenderer.drawString(this.creatureInventory.getName(), this.guiLeft + 8, this.guiTop + 6, 4210752);
-        this.fontRenderer.drawString(this.playerInventory.getName().getString(), this.guiLeft + 8, this.guiTop + this.ySize - 96 + 2, 4210752);
+		this.fontRenderer.drawString(matrixStack, this.creatureInventory.getName(), this.guiLeft + 8, this.guiTop + 6, 4210752);
+        this.fontRenderer.drawString(matrixStack, this.playerInventory.getName().getString(), this.guiLeft + 8, this.guiTop + this.ySize - 96 + 2, 4210752);
 		int backX = (this.width - this.xSize) / 2;
 		int backY = (this.height - this.ySize) / 2;
 		this.drawBars(backX, backY);
@@ -135,18 +138,18 @@ public class CreatureInventoryScreen extends BaseContainerScreen<CreatureContain
 		float healthNormal = Math.min(1, this.creature.getHealth() / this.creature.getMaxHealth());
 		this.drawTexture(TextureManager.getTexture("GUIPetBarHealth"), barX, barY, 0, healthNormal, 1, barWidth * healthNormal, barHeight);
 		String healthText = new TranslationTextComponent("entity.health").getString() + ": " + String.format("%.0f", this.creature.getHealth()) + "/" + String.format("%.0f", this.creature.getMaxHealth());
-		this.fontRenderer.drawString(healthText, barCenter - (this.fontRenderer.getStringWidth(healthText) / 2), barY + 2, 0xFFFFFF);
+		this.fontRenderer.drawString(matrixStack, healthText, barCenter - (this.fontRenderer.getStringWidth(healthText) / 2), barY + 2, 0xFFFFFF);
 
 		barY += barHeight + 1;
 		this.drawTexture(TextureManager.getTexture("GUIPetBarEmpty"), barX, barY, 0, 1, 1, barWidth, barHeight);
 		float experienceNormal = Math.min(1, (float)this.creature.getExperience() / this.creature.creatureStats.getExperienceForNextLevel());
 		this.drawTexture(TextureManager.getTexture("GUIBarExperience"), barX, barY, 0, experienceNormal, 1, barWidth * experienceNormal, barHeight);
 		String experienceText = new TranslationTextComponent("entity.experience").getString() + ": " + this.creature.getExperience() + "/" + this.creature.creatureStats.getExperienceForNextLevel();
-		this.fontRenderer.drawString(experienceText, barCenter - (this.fontRenderer.getStringWidth(experienceText) / 2), barY + 2, 0xFFFFFF);
+		this.fontRenderer.drawString(matrixStack, experienceText, barCenter - (this.fontRenderer.getStringWidth(experienceText) / 2), barY + 2, 0xFFFFFF);
 	}
 
 	@Override
-	protected void renderBackground(int mouseX, int mouseY, float partialTicks) {
+	protected void renderBackground(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.getMinecraft().getTextureManager().bindTexture(TextureManager.getTexture("GUIInventoryCreature"));
         this.xSize = 176;

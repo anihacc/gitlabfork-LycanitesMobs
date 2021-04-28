@@ -4,6 +4,7 @@ import com.lycanitesmobs.client.gui.beastiary.BeastiaryScreen;
 import com.lycanitesmobs.client.gui.widgets.BaseList;
 import com.lycanitesmobs.client.gui.widgets.BaseListEntry;
 import com.lycanitesmobs.core.info.ElementInfo;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.potion.Effect;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
@@ -42,9 +43,9 @@ public class ElementDescriptionList extends BaseList {
 		}
 
 		@Override
-		public void render(int index, int top, int left, int bottom, int right, int mouseX, int mouseY, boolean focus, float partialTicks) {
+		public void render(MatrixStack matrixStack, int index, int top, int left, int bottom, int right, int mouseX, int mouseY, boolean focus, float partialTicks) {
 			if(index == 0) {
-				this.drawSplitString(this.parentList.getContent(), left + 6, top, this.parentList.getWidth() - 20, 0xFFFFFF, true);
+				this.drawSplitString(matrixStack, this.parentList.getContent(), left + 6, top, this.parentList.getWidth() - 20, 0xFFFFFF, true);
 			}
 		}
 
@@ -64,7 +65,7 @@ public class ElementDescriptionList extends BaseList {
 				.append(elementInfo.getDescription());
 
 		// Buffs:
-		text.appendString("\n\n\u00A7l")
+		new TranslationTextComponent("\n\n\u00A7l")
 			.append(new TranslationTextComponent("gui.beastiary.elements.buffs"))
 			.appendString(": " + "\u00A7r");
 		for(String buff : this.elementInfo.buffs) {
@@ -73,19 +74,19 @@ public class ElementDescriptionList extends BaseList {
 				continue;
 			}
 			ResourceLocation effectResource = new ResourceLocation(buff);
-			text.appendString("\n")
+			new TranslationTextComponent("\n")
 					.append(effect.getDisplayName())
 					.appendString(": ")
 					.append(new TranslationTextComponent("effect." + effectResource.getPath() + ".description"));
 		}
 
 		// Debuffs:
-		text.appendString("\n\n\u00A7l")
+		new TranslationTextComponent("\n\n\u00A7l")
 				.append(new TranslationTextComponent("gui.beastiary.elements.debuffs"))
 				.appendString(": " + "\u00A7r");
 		for(String debuff : this.elementInfo.debuffs) {
 			if("burning".equals(debuff)) {
-				text.appendString("\n")
+				new TranslationTextComponent("\n")
 				.append(new TranslationTextComponent("effect.burning"))
 				.appendString(": ")
 				.append(new TranslationTextComponent("effect.burning.description"));
@@ -96,7 +97,7 @@ public class ElementDescriptionList extends BaseList {
 				continue;
 			}
 			ResourceLocation effectResource = new ResourceLocation(debuff);
-			text.appendString("\n")
+			new TranslationTextComponent("\n")
 				.append(effect.getDisplayName())
 				.appendString(": ")
 				.append(new TranslationTextComponent("effect." + effectResource.getPath() + ".description"));

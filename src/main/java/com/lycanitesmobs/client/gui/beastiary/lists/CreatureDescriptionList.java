@@ -5,6 +5,7 @@ import com.lycanitesmobs.client.gui.widgets.BaseList;
 import com.lycanitesmobs.client.gui.widgets.BaseListEntry;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureKnowledge;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -40,9 +41,9 @@ public class CreatureDescriptionList extends BaseList {
 		}
 
 		@Override
-		public void render(int index, int top, int left, int bottom, int right, int mouseX, int mouseY, boolean focus, float partialTicks) {
+		public void render(MatrixStack matrixStack, int index, int top, int left, int bottom, int right, int mouseX, int mouseY, boolean focus, float partialTicks) {
 			if(index == 0) {
-				this.drawSplitString(this.parentList.getContent(), left + 6, top, this.parentList.getWidth() - 20, 0xFFFFFF, true);
+				this.drawSplitString(matrixStack, this.parentList.getContent(), left + 6, top, this.parentList.getWidth() - 20, 0xFFFFFF, true);
 			}
 		}
 
@@ -63,7 +64,7 @@ public class CreatureDescriptionList extends BaseList {
 		if(creatureInfo.creatureType != null) {
 			// Taming:
 			if(creatureInfo.isTameable() && creatureInfo.creatureType.getTreatItem() != null) {
-				text.appendString("\u00A7l")
+				new TranslationTextComponent("\u00A7l")
 						.append(new TranslationTextComponent("gui.beastiary.tameable"))
 						.appendString(": " + "\u00A7r")
 						.append(creatureInfo.creatureType.getTreatItem().getName())
@@ -71,7 +72,7 @@ public class CreatureDescriptionList extends BaseList {
 
 				// Mounting:
 				if(creatureInfo.isMountable()) {
-					text.appendString("\u00A7l")
+					new TranslationTextComponent("\u00A7l")
 							.append(new TranslationTextComponent("gui.beastiary.mountable"))
 							.appendString("\u00A7r\n\n");
 				}
@@ -79,34 +80,34 @@ public class CreatureDescriptionList extends BaseList {
 
 			// Summoning:
 			if(creatureInfo.isSummonable()) {
-				text.appendString("\u00A7l")
+				new TranslationTextComponent("\u00A7l")
 						.append(new TranslationTextComponent("gui.beastiary.summonable"))
 						.appendString("\u00A7r\n\n");
 			}
 
 			// Perching:
 			if((creatureInfo.isTameable() || creatureInfo.isSummonable()) && creatureInfo.isPerchable()) {
-				text.appendString("\u00A7l")
+				new TranslationTextComponent("\u00A7l")
 						.append(new TranslationTextComponent("gui.beastiary.perchable"))
 						.appendString("\u00A7r\n\n");
 			}
 		}
 
 		// Diet:
-		text.appendString("\n\n\u00A7l")
+		new TranslationTextComponent("\n\n\u00A7l")
 				.append(new TranslationTextComponent("gui.beastiary.diet"))
 				.appendString(": " + "\u00A7r")
 				.appendString("\n").append(creatureInfo.getDietNames());
 
 		// Summary:
-		text.appendString("\n\n\u00A7l")
+		new TranslationTextComponent("\n\n\u00A7l")
 				.append(new TranslationTextComponent("gui.beastiary.summary"))
 				.appendString(": " + "\u00A7r")
 				.appendString("\n")
 				.append(creatureInfo.getDescription());
 
 		// Stats:
-		text.appendString("\n\n\u00A7l")
+		new TranslationTextComponent("\n\n\u00A7l")
 				.append(new TranslationTextComponent("creature.stat.base"))
 				.appendString(": " + "\u00A7r");
 
@@ -114,33 +115,33 @@ public class CreatureDescriptionList extends BaseList {
 			// Stats:
 			String statPrefix = "\n" + new TranslationTextComponent("creature.stat.base") + " ";
 
-			text.appendString("\n")
+			new TranslationTextComponent("\n")
 					.append(new TranslationTextComponent("creature.stat.health"))
 					.appendString(": " + creatureInfo.health);
-			text.appendString("\n")
+			new TranslationTextComponent("\n")
 					.append(new TranslationTextComponent("creature.stat.defense"))
 					.appendString(": " + creatureInfo.defense);
 
-			text.appendString("\n")
+			new TranslationTextComponent("\n")
 					.append(new TranslationTextComponent("creature.stat.speed"))
 					.appendString(": " + creatureInfo.speed);
-			text.appendString("\n")
+			new TranslationTextComponent("\n")
 					.append(new TranslationTextComponent("creature.stat.damage"))
 					.appendString(": " + creatureInfo.damage);
 
-			text.appendString("\n")
+			new TranslationTextComponent("\n")
 					.append(new TranslationTextComponent("creature.stat.pierce"))
 					.appendString(": " + creatureInfo.pierce);
 			ITextComponent effectText = new StringTextComponent(creatureInfo.effectDuration + "s " + creatureInfo.effectAmplifier + "X");
 			if(creatureInfo.effectDuration <= 0 || creatureInfo.effectAmplifier < 0)
 				effectText = new TranslationTextComponent("common.none");
-			text.appendString("\n")
+			new TranslationTextComponent("\n")
 					.append(new TranslationTextComponent("creature.stat.effect"))
 					.appendString(": ")
 					.append(effectText);
 		}
 		else {
-			text.appendString("\n")
+			new TranslationTextComponent("\n")
 					.append(new TranslationTextComponent("gui.beastiary.unlockedat"))
 					.appendString(" ")
 					.append(new TranslationTextComponent("creature.stat.knowledge"))
@@ -148,14 +149,14 @@ public class CreatureDescriptionList extends BaseList {
 		}
 
 		// Combat:
-		text.appendString("\n\n\u00A7l")
+		new TranslationTextComponent("\n\n\u00A7l")
 				.append(new TranslationTextComponent("gui.beastiary.combat"))
 				.appendString(": " + "\u00A7r");
 		if(this.creatureKnowledge.rank >= 2) {
-			text.appendString("\n").append(creatureInfo.getCombatDescription());
+			new TranslationTextComponent("\n").append(creatureInfo.getCombatDescription());
 		}
 		else {
-			text.appendString("\n")
+			new TranslationTextComponent("\n")
 					.append(new TranslationTextComponent("gui.beastiary.unlockedat"))
 					.appendString(" ")
 					.append(new TranslationTextComponent("creature.stat.knowledge"))
@@ -163,15 +164,15 @@ public class CreatureDescriptionList extends BaseList {
 		}
 
 		// Habitat:
-		text.appendString("\n\n\u00A7l")
+		new TranslationTextComponent("\n\n\u00A7l")
 				.append(new TranslationTextComponent("gui.beastiary.habitat"))
 				.appendString(": " + "\u00A7r");
 		if(this.creatureKnowledge.rank >= 2) {
-			text.appendString("\n")
+			new TranslationTextComponent("\n")
 					.append(creatureInfo.getHabitatDescription());
 		}
 		else {
-			text.appendString("\n")
+			new TranslationTextComponent("\n")
 					.append(new TranslationTextComponent("gui.beastiary.unlockedat"))
 					.appendString(" ")
 					.append(new TranslationTextComponent("creature.stat.knowledge"))
@@ -179,15 +180,15 @@ public class CreatureDescriptionList extends BaseList {
 		}
 
 		// Biomes:
-		text.appendString("\n\n\u00A7l")
+		new TranslationTextComponent("\n\n\u00A7l")
 				.append(new TranslationTextComponent("gui.beastiary.biomes"))
 				.appendString(": " + "\u00A7r");
 		if(this.creatureKnowledge.rank >= 2) {
-			text.appendString("\n")
+			new TranslationTextComponent("\n")
 					.append(creatureInfo.getBiomeNames());
 		}
 		else {
-			text.appendString("\n")
+			new TranslationTextComponent("\n")
 					.append(new TranslationTextComponent("gui.beastiary.unlockedat"))
 					.appendString(" ")
 					.append(new TranslationTextComponent("creature.stat.knowledge"))
@@ -195,15 +196,15 @@ public class CreatureDescriptionList extends BaseList {
 		}
 
 		// Drops:
-		text.appendString("\n\n\u00A7l")
+		new TranslationTextComponent("\n\n\u00A7l")
 				.append(new TranslationTextComponent("gui.beastiary.drops"))
 				.appendString(": " + "\u00A7r");
 		if(this.creatureKnowledge.rank >= 2) {
-			text.appendString("\n")
+			new TranslationTextComponent("\n")
 					.append(creatureInfo.getDropNames());
 		}
 		else {
-			text.appendString("\n")
+			new TranslationTextComponent("\n")
 					.append(new TranslationTextComponent("gui.beastiary.unlockedat"))
 					.appendString(" ")
 					.append(new TranslationTextComponent("creature.stat.knowledge"))

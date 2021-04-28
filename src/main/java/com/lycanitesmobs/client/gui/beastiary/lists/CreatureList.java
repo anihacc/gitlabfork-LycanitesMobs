@@ -11,6 +11,7 @@ import com.lycanitesmobs.core.info.Subspecies;
 import com.lycanitesmobs.core.info.Variant;
 import com.lycanitesmobs.core.network.MessageSummonSetSelection;
 import com.lycanitesmobs.core.pets.PetEntry;
+import com.mojang.blaze3d.matrix.MatrixStack;
 
 import javax.annotation.Nullable;
 import java.text.Collator;
@@ -191,7 +192,7 @@ public class CreatureList extends BaseList<BeastiaryScreen> {
 		}
 
 		@Override
-		public void render(int index, int top, int left, int bottom, int right, int mouseX, int mouseY, boolean focus, float partialTicks) {
+		public void render(MatrixStack matrixStack, int index, int top, int left, int bottom, int right, int mouseX, int mouseY, boolean focus, float partialTicks) {
 			// Knowledge Slot:
 			if(this.parentList.listType == Type.KNOWLEDGE || this.parentList.listType == Type.SUMMONABLE) {
 				if (this.creatureInfo == null) {
@@ -203,7 +204,7 @@ public class CreatureList extends BaseList<BeastiaryScreen> {
 				if (this.parentList.listType == Type.SUMMONABLE) {
 					nameY = top + 2;
 				}
-				this.parentList.screen.getFontRenderer().drawString(this.creatureInfo.getTitle().getString(), left + 20, nameY, 0xFFFFFF);
+				this.parentList.screen.getFontRenderer().drawString(matrixStack, this.creatureInfo.getTitle().getString(), left + 20, nameY, 0xFFFFFF);
 
 				// Level:
 				if (this.parentList.listType == Type.SUMMONABLE) {
@@ -227,7 +228,7 @@ public class CreatureList extends BaseList<BeastiaryScreen> {
 				if (this.parentList.listType == Type.PET || this.parentList.listType == Type.MOUNT) {
 					nameY = top + 2;
 				}
-				this.parentList.screen.getFontRenderer().drawString(this.petEntry.getDisplayName().getString(), left + 20, nameY, 0xFFFFFF);
+				this.parentList.screen.getFontRenderer().drawString(matrixStack, this.petEntry.getDisplayName().getString(), left + 20, nameY, 0xFFFFFF);
 
 				// Level:
 				if (this.parentList.listType == Type.PET || this.parentList.listType == Type.MOUNT) {

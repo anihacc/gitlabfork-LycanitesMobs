@@ -3,15 +3,17 @@ package com.lycanitesmobs.client.gui.buttons;
 import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.info.CreatureInfo;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.widget.button.Button;
+import net.minecraft.util.text.ITextComponent;
 import org.lwjgl.opengl.GL11;
 
 public class CreatureButton extends ButtonBase {
 	public CreatureInfo creatureInfo;
 	public int summonSetId = 0;
 	
-	public CreatureButton(int buttonID, int x, int y, int w, int h, String text, int summonSetId, CreatureInfo creatureInfo, Button.IPressable pressable) {
+	public CreatureButton(int buttonID, int x, int y, int w, int h, ITextComponent text, int summonSetId, CreatureInfo creatureInfo, Button.IPressable pressable) {
         super(buttonID, x, y, w, h, text, pressable);
         this.summonSetId = summonSetId;
         this.creatureInfo = creatureInfo;
@@ -19,11 +21,11 @@ public class CreatureButton extends ButtonBase {
 	
 
 	@Override
-	public void renderButton(int mouseX, int mouseY, float partialTicks) {
+	public void renderButton(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         if(!this.visible) {
 			return;
 		}
-        super.renderButton(mouseX, mouseY, partialTicks);
+        super.renderButton(matrixStack, mouseX, mouseY, partialTicks);
 
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		this.isHovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
@@ -55,6 +57,6 @@ public class CreatureButton extends ButtonBase {
 			textColor = 16777120;
 		}
 
-		this.drawCenteredString(this.fontRenderer, this.getMessage(), buttonX + 5, buttonY + 2, textColor);
+		this.drawCenteredString(matrixStack, this.fontRenderer, this.getMessage(), buttonX + 5, buttonY + 2, textColor);
     }
 }

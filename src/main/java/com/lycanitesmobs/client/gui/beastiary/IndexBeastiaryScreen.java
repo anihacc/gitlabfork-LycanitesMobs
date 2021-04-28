@@ -61,7 +61,7 @@ public class IndexBeastiaryScreen extends BeastiaryScreen {
 	public void renderWidgets(int mouseX, int mouseY, float partialTicks) {
 		super.renderWidgets(mouseX, mouseY, partialTicks);
 		if(this.indexList != null)
-			this.indexList.render(mouseX, mouseY, partialTicks);
+			this.indexList.render(matrixStack, mouseX, mouseY, partialTicks);
 	}
 
 	@Override
@@ -70,7 +70,7 @@ public class IndexBeastiaryScreen extends BeastiaryScreen {
 
 		int yOffset = this.colRightY + 13;
 		String info = new TranslationTextComponent("gui.beastiary.index.description").getString();
-		this.drawSplitString(info, this.colRightX + 1, yOffset, this.colRightWidth, 0xFFFFFF, true);
+		this.drawSplitString(matrixStack, info, this.colRightX + 1, yOffset, this.colRightWidth, 0xFFFFFF, true);
 		yOffset += this.getFontRenderer().getWordWrappedHeight(info, this.colRightWidth);
 
 		if(this.versionInfo == null)
@@ -85,7 +85,7 @@ public class IndexBeastiaryScreen extends BeastiaryScreen {
 		if(this.versionInfo.isNewer) {
 			version += " \u00A7l" + new TranslationTextComponent("gui.beastiary.index.version.newer").getString() + ": \u00A7r\u00A72" + this.versionInfo.versionNumber + "\u00A7r";
 		}
-		this.drawSplitString(version, this.colRightX + 1, yOffset, this.colRightWidth, 0xFFFFFF, true);
+		this.drawSplitString(matrixStack, version, this.colRightX + 1, yOffset, this.colRightWidth, 0xFFFFFF, true);
 	}
 
 	@Override

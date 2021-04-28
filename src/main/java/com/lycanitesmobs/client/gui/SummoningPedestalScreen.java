@@ -9,6 +9,7 @@ import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.pets.SummonSet;
 import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.widget.list.ExtendedList;
 import net.minecraft.entity.player.PlayerEntity;
@@ -23,6 +24,7 @@ public class SummoningPedestalScreen extends BaseContainerScreen<SummoningPedest
     public ExtendedPlayer playerExt;
     public TileEntitySummoningPedestal summoningPedestal;
     public SummonSet summonSet;
+    public MatrixStack matrixStack;
 
     public ExtendedList list;
 
@@ -107,7 +109,7 @@ public class SummoningPedestalScreen extends BaseContainerScreen<SummoningPedest
     }
 
     @Override
-    protected void renderBackground(int mouseX, int mouseY, float partialTicks) {
+    protected void renderBackground(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         GL11.glColor4f(255, 255, 255, 1.0F);
         Minecraft.getInstance().getTextureManager().bindTexture(this.getTexture());
 
@@ -124,7 +126,7 @@ public class SummoningPedestalScreen extends BaseContainerScreen<SummoningPedest
     }
 
     @Override
-    public void renderWidgets(int mouseX, int mouseY, float partialTicks) {
+    public void renderWidgets(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         for(Object buttonObj : this.buttons) {
             if(buttonObj instanceof ButtonBase) {
                 ButtonBase button = (ButtonBase)buttonObj;
@@ -160,10 +162,10 @@ public class SummoningPedestalScreen extends BaseContainerScreen<SummoningPedest
 
         // Pet List:
         if(this.hasPets()) {
-            this.list.render(mouseX, mouseY, partialTicks);
+            this.list.render(matrixStack, mouseX, mouseY, partialTicks);
         }
 
-        super.renderWidgets(mouseX, mouseY, partialTicks);
+        super.renderWidgets(matrixStack, mouseX, mouseY, partialTicks);
     }
 
     @Override
@@ -174,15 +176,15 @@ public class SummoningPedestalScreen extends BaseContainerScreen<SummoningPedest
         // No Pets:
         if (!this.hasPets()) {
             this.getFontRenderer().drawString(new TranslationTextComponent("gui.beastiary.summoning.empty.title").getString(), this.centerX - 96, this.windowY + 6, 0xFFFFFF);
-            this.getFontRenderer().drawSplitString(new TranslationTextComponent("gui.beastiary.summoning.empty.info").getString(), this.windowX + 16, this.windowY + 30, this.windowWidth - 32, 0xFFFFFF);
+            this.drawSplitString(new TranslationTextComponent("gui.beastiary.summoning.empty.info").getString(), this.windowX + 16, this.windowY + 30, this.windowWidth - 32, 0xFFFFFF);
             return;
         }
 
         // Title:
-        this.getFontRenderer().drawString(this.getTitle().getString(), this.centerX - 24, this.windowY + 6, 0xFFFFFF);
+        this.getFontRenderer().drawString(matrixStack, this.getTitle().getString(), this.centerX - 24, this.windowY + 6, 0xFFFFFF);
 
         // Spirit Title:
-        this.getFontRenderer().drawString(this.getEnergyTitle().getString(), this.windowX + 16, this.windowY + 20, 0xFFFFFF);
+        this.getFontRenderer().drawString(matrixStack, this.getEnergyTitle().getString(), this.windowX + 16, this.windowY + 20, 0xFFFFFF);
     }
 
     @Override

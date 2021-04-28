@@ -7,6 +7,7 @@ import com.lycanitesmobs.core.container.EquipmentForgeContainer;
 import com.lycanitesmobs.core.container.EquipmentForgeSlot;
 import com.lycanitesmobs.core.network.MessageTileEntityButton;
 import com.lycanitesmobs.core.tileentity.TileEntityEquipmentForge;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.util.text.ITextComponent;
@@ -19,6 +20,7 @@ public class EquipmentForgeScreen extends BaseContainerScreen<EquipmentForgeCont
 	public TileEntityEquipmentForge equipmentForge;
 	public String currentMode = "empty";
 	public boolean confirmation = false;
+	public MatrixStack matrixStack;
 
 	public EquipmentForgeScreen(EquipmentForgeContainer container, PlayerInventory playerInventory, ITextComponent name) {
 		super(container, playerInventory, name);
@@ -55,7 +57,7 @@ public class EquipmentForgeScreen extends BaseContainerScreen<EquipmentForgeCont
 	}
 
 	@Override
-	protected void renderBackground(int mouseX, int mouseY, float partialTicks) {
+	protected void renderBackground(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		this.getMinecraft().getTextureManager().bindTexture(TextureManager.getTexture("GUIEquipmentForge"));
 		int backX = (this.width - this.xSize) / 2;
@@ -119,8 +121,8 @@ public class EquipmentForgeScreen extends BaseContainerScreen<EquipmentForgeCont
 
 	@Override
 	protected void renderForeground(int mouseX, int mouseY, float partialTicks) {
-		this.fontRenderer.drawString(this.equipmentForge.getName().getString(), this.guiLeft + 8, this.guiTop + 6, 4210752);
-        this.fontRenderer.drawString(this.playerInventory.getName().getString(), this.guiLeft + 8, this.guiTop + this.ySize - 96 + 2, 4210752);
+		this.fontRenderer.drawString(matrixStack, this.equipmentForge.getName().getString(), this.guiLeft + 8, this.guiTop + 6, 4210752);
+        this.fontRenderer.drawString(matrixStack, this.playerInventory.getName().getString(), this.guiLeft + 8, this.guiTop + this.ySize - 96 + 2, 4210752);
     }
     
 	@Override

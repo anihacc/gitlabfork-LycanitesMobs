@@ -8,6 +8,7 @@ import com.lycanitesmobs.core.container.EquipmentInfuserContainer;
 import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
 import com.lycanitesmobs.core.network.MessageTileEntityButton;
 import com.lycanitesmobs.core.tileentity.EquipmentInfuserTileEntity;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
@@ -19,6 +20,7 @@ import java.util.List;
 
 public class EquipmentInfuserScreen extends BaseContainerScreen<EquipmentInfuserContainer> {
 	public EquipmentInfuserTileEntity equipmentInfuser;
+	public MatrixStack matrixStack;
 
 	public EquipmentInfuserScreen(EquipmentInfuserContainer container, PlayerInventory playerInventory, ITextComponent name) {
 		super(container, playerInventory, name);
@@ -38,7 +40,7 @@ public class EquipmentInfuserScreen extends BaseContainerScreen<EquipmentInfuser
 	}
 
 	@Override
-	protected void renderBackground(int mouseX, int mouseY, float partialTicks) {
+	protected void renderBackground(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		this.getMinecraft().getTextureManager().bindTexture(TextureManager.getTexture("GUIEquipmentForge"));
 		this.xSize = 176;
@@ -80,8 +82,8 @@ public class EquipmentInfuserScreen extends BaseContainerScreen<EquipmentInfuser
 
 	@Override
 	protected void renderForeground(int mouseX, int mouseY, float partialTicks) {
-		this.fontRenderer.drawString(this.equipmentInfuser.getName().getString(), this.guiLeft + 8, this.guiTop + 6, 4210752);
-        this.fontRenderer.drawString(this.playerInventory.getName().getString(), this.guiLeft + 8, this.guiTop + this.ySize - 96 + 2, 4210752);
+		this.fontRenderer.drawString(matrixStack, this.equipmentInfuser.getName().getString(), this.guiLeft + 8, this.guiTop + 6, 4210752);
+        this.fontRenderer.drawString(matrixStack, this.playerInventory.getName().getString(), this.guiLeft + 8, this.guiTop + this.ySize - 96 + 2, 4210752);
 		int backX = (this.width - this.xSize) / 2;
 		int backY = (this.height - this.ySize) / 2;
 		this.drawBars(backX, backY);
@@ -107,7 +109,7 @@ public class EquipmentInfuserScreen extends BaseContainerScreen<EquipmentInfuser
 		float experienceNormal = (float)experience / experienceMax;
 		this.drawTexture(TextureManager.getTexture("GUIBarExperience"), barX, barY, 0, experienceNormal, 1, barWidth * experienceNormal, barHeight);
 		String experienceText = new TranslationTextComponent("entity.experience").getString() + ": " + experience + "/" + experienceMax;
-		this.fontRenderer.drawString(experienceText, barCenter - (this.fontRenderer.getStringWidth(experienceText) / 2), barY + 2, 0xFFFFFF);
+		this.fontRenderer.drawString(matrixStack, experienceText, barCenter - (this.fontRenderer.getStringWidth(experienceText) / 2), barY + 2, 0xFFFFFF);
 	}
     
 	@Override

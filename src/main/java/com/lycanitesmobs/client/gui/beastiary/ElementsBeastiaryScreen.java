@@ -36,11 +36,11 @@ public class ElementsBeastiaryScreen extends BeastiaryScreen {
 
 	@Override
 	protected void renderWidgets(int x, int y, float partialTicks) {
-		this.elementList.render(x, y, partialTicks);
+		this.elementList.render(matrixStack, x, y, partialTicks);
 
 		if(this.elementInfo != null) {
 			this.descriptionList.elementInfo = this.elementInfo;
-			this.descriptionList.render(x, y, partialTicks);
+			this.descriptionList.render(matrixStack, x, y, partialTicks);
 		}
 	}
 
@@ -50,7 +50,7 @@ public class ElementsBeastiaryScreen extends BeastiaryScreen {
 
 		if(this.elementInfo == null) {
 			String info = new TranslationTextComponent("gui.beastiary.elements.about").getString();
-			this.drawSplitString(info, colRightX + 1, colRightY + 12 + 1, colRightWidth, 0xFFFFFF, true);
+			this.drawSplitString(matrixStack, info, colRightX + 1, colRightY + 12 + 1, colRightWidth, 0xFFFFFF, true);
 		}
 	}
 

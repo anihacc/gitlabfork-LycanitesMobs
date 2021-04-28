@@ -1,6 +1,7 @@
 package com.lycanitesmobs.client.gui.widgets;
 
 import com.lycanitesmobs.ClientManager;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
@@ -19,7 +20,7 @@ public abstract class BaseListEntry extends AbstractOptionList.Entry<BaseListEnt
 	public int index;
 
 	@Override
-	public void render(int index, int top, int left, int bottom, int right, int mouseX, int mouseY, boolean p_render_8_, float partialTicks) {}
+	public void render(MatrixStack matrixStack, int index, int top, int left, int bottom, int right, int mouseX, int mouseY, boolean p_render_8_, float partialTicks) {}
 
 	/**
 	 * Returns a list of child GUI elements such as buttons that should receive input events, etc.
@@ -77,13 +78,13 @@ public abstract class BaseListEntry extends AbstractOptionList.Entry<BaseListEnt
 	 * @param textColor The color of the text.
 	 * @param shadow If true, a drop shadow wil be drawn under the text.
 	 */
-	public void drawSplitString(String str, int x, int y, int wrapWidth, int textColor, boolean shadow) {
+	public void drawSplitString(MatrixStack matrixStack, String str, int x, int y, int wrapWidth, int textColor, boolean shadow) {
 		if(shadow) {
 			RenderSystem.translatef(0.5f,0.5f, 0);
-			this.getFontRenderer().drawSplitString(str, x, y, wrapWidth, 0x444444);
+			this.drawSplitString(matrixStack, str, x, y, wrapWidth, 0x444444, true);
 			RenderSystem.translatef(-0.5f,-0.5f, 0);
 		}
-		this.getFontRenderer().drawSplitString(str, x,  y, wrapWidth, textColor);
+		this.drawSplitString(matrixStack, str, x,  y, wrapWidth, textColor, true);
 	}
 
 	/**

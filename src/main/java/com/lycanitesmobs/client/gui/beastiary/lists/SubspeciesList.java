@@ -6,8 +6,10 @@ import com.lycanitesmobs.client.gui.widgets.BaseListEntry;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.Subspecies;
 import com.lycanitesmobs.core.info.Variant;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextComponent;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -128,7 +130,7 @@ public class SubspeciesList extends BaseList<BeastiaryScreen> {
 		}
 
 		@Override
-		public void render(int index, int top, int left, int bottom, int right, int mouseX, int mouseY, boolean focus, float partialTicks) {
+		public void render(MatrixStack matrixStack, int index, int top, int left, int bottom, int right, int mouseX, int mouseY, boolean focus, float partialTicks) {
 			Subspecies subspecies = this.parentList.creature.getSubspecies(this.subspeciesIndex);
 			ITextComponent subspeciesName = new StringTextComponent("");
 			if(subspecies.name != null) {
@@ -136,13 +138,13 @@ public class SubspeciesList extends BaseList<BeastiaryScreen> {
 			}
 
 			Variant variant = subspecies.getVariant(this.variantIndex);
-			ITextComponent variantName = new StringTextComponent("Normal");
+			TextComponent variantName = new StringTextComponent("Normal");
 			if(variant != null) {
 				variantName = variant.getTitle();
 			}
 
 			int nameY = top + 6;
-			this.parentList.screen.getFontRenderer().drawString(variantName.append(subspeciesName).getString(), left + 10, nameY, 0xFFFFFF);
+			this.parentList.screen.getFontRenderer().drawString(matrixStack, variantName.append(subspeciesName).getString(), left + 10, nameY, 0xFFFFFF);
 		}
 
 		@Override

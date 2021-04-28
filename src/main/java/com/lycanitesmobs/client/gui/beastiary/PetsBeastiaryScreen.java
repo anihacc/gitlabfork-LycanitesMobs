@@ -128,8 +128,8 @@ public class PetsBeastiaryScreen extends BeastiaryScreen {
 		boolean empty = this.playerExt.petManager.entries.isEmpty();
 
 		if(!empty) {
-			this.petTypeList.render(mouseX, mouseY, partialTicks);
-			this.petList.render(mouseX, mouseY, partialTicks);
+			this.petTypeList.render(matrixStack, mouseX, mouseY, partialTicks);
+			this.petList.render(matrixStack, mouseX, mouseY, partialTicks);
 		}
 
 		// Update Buttons:
@@ -157,7 +157,7 @@ public class PetsBeastiaryScreen extends BeastiaryScreen {
 							button.setMessage(new TranslationTextComponent("gui.pet.pvp").getString() + ": " + new TranslationTextComponent("common.yes").getString());
 						}
 						else {
-							button.setMessage(new TranslationTextComponent("gui.pet.pvp").getString() + ": " + new TranslationTextComponent("common.no").getString());
+							button.setMessage(new TranslationTextComponent("gui.pet.pvp").getString() + ": " + new TranslationTextComponent("common.no").getString()));
 						}
 					}
 
@@ -210,13 +210,13 @@ public class PetsBeastiaryScreen extends BeastiaryScreen {
 		// Empty:
 		if(this.playerExt.petManager.entries.isEmpty()) {
 			String text = new TranslationTextComponent("gui.beastiary.pets.empty.info").getString();
-			this.drawSplitString(text, nextX, nextY, width, 0xFFFFFF, true);
+			this.drawSplitString(matrixStack, text, nextX, nextY, width, 0xFFFFFF, true);
 			return;
 		}
 
 		// Player Spirit:
 		String text = "\u00A7l" + new TranslationTextComponent("gui.beastiary.player.spirit").getString() + ": ";
-		this.getFontRenderer().drawString(text, nextX, nextY, 0xFFFFFF);
+		this.getFontRenderer().drawString(matrixStack, text, nextX, nextY, 0xFFFFFF);
 		int barX = nextX + this.getFontRenderer().getStringWidth(text);
 		int spiritMax = Math.round((float)this.playerExt.spiritMax / this.playerExt.spiritCharge);
 		int spiritReserved = (int)Math.floor((double)this.playerExt.spiritReserved / this.playerExt.spiritCharge);
@@ -234,7 +234,7 @@ public class PetsBeastiaryScreen extends BeastiaryScreen {
 			// Spirit:
 			nextY += 4 + this.getFontRenderer().getWordWrappedHeight(text, colRightWidth);
 			text = "\u00A7l" + new TranslationTextComponent("creature.stat.spirit").getString() + ": ";
-			this.getFontRenderer().drawString(text, nextX, nextY, 0xFFFFFF);
+			this.getFontRenderer().drawString(matrixStack, text, nextX, nextY, 0xFFFFFF);
 			this.drawLevel(this.playerExt.selectedPet.getCreatureInfo(), TextureManager.getTexture("GUIPetLevel"), nextX + this.getFontRenderer().getStringWidth(text), nextY);
 
 			// Health:
@@ -245,7 +245,7 @@ public class PetsBeastiaryScreen extends BeastiaryScreen {
 			else {
 				text = "\u00A7l" + new TranslationTextComponent("creature.stat.respawning").getString() + ": ";
 			}
-			this.getFontRenderer().drawString(text, nextX, nextY, 0xFFFFFF);
+			this.getFontRenderer().drawString(matrixStack, text, nextX, nextY, 0xFFFFFF);
 
 			int barY = nextY - 1;
 			int barWidth = (256 / 4) + 16;
@@ -257,18 +257,18 @@ public class PetsBeastiaryScreen extends BeastiaryScreen {
 				float healthNormal = Math.min(this.playerExt.selectedPet.getHealth() / this.playerExt.selectedPet.getMaxHealth(), 1);
 				this.drawTexture(TextureManager.getTexture("GUIPetBarHealth"), barX, barY, 0, healthNormal, 1, barWidth * healthNormal, barHeight);
 				String healthText = String.format("%.0f", this.playerExt.selectedPet.getHealth()) + "/" + String.format("%.0f", this.playerExt.selectedPet.getMaxHealth());
-				this.getFontRenderer().drawString(healthText, barCenter - (this.getFontRenderer().getStringWidth(healthText) / 2), barY + 2, 0xFFFFFF);
+				this.getFontRenderer().drawString(matrixStack,healthText, barCenter - (this.getFontRenderer().getStringWidth(healthText) / 2), barY + 2, 0xFFFFFF);
 			}
 			else {
 				float respawnNormal = 1.0F - ((float)this.playerExt.selectedPet.respawnTime / this.playerExt.selectedPet.respawnTimeMax);
 				this.drawTexture(TextureManager.getTexture("GUIPetBarRespawn"), barX, barY, 0, respawnNormal, 1, barWidth * respawnNormal, barHeight);
-				this.getFontRenderer().drawString("" + (this.playerExt.selectedPet.respawnTime / 20) + "s", barX + barWidth + 10, nextY, 0xFFFFFF);
+				this.getFontRenderer().drawString(matrixStack, "" + (this.playerExt.selectedPet.respawnTime / 20) + "s", barX + barWidth + 10, nextY, 0xFFFFFF);
 			}
 
 			// Experience:
 			nextY += 4 + this.getFontRenderer().getWordWrappedHeight(text, colRightWidth);
 			text = "\u00A7l" + new TranslationTextComponent("creature.stat.experience").getString() + ": ";
-			this.getFontRenderer().drawString(text, nextX, nextY, 0xFFFFFF);
+			this.getFontRenderer().drawString(matrixStack, text, nextX, nextY, 0xFFFFFF);
 
 			barY = nextY - 1;
 			barWidth = (256 / 4) + 16;
@@ -279,14 +279,14 @@ public class PetsBeastiaryScreen extends BeastiaryScreen {
 			float experienceNormal = (float)this.playerExt.selectedPet.getExperience() / this.playerExt.selectedPet.getMaxExperience();
 			this.drawTexture(TextureManager.getTexture("GUIBarExperience"), barX, barY, 0, experienceNormal, 1, barWidth * experienceNormal, barHeight);
 			String experienceText = this.playerExt.selectedPet.getExperience() + "/" + this.playerExt.selectedPet.getMaxExperience();
-			this.getFontRenderer().drawString(experienceText, barCenter - (this.getFontRenderer().getStringWidth(experienceText) / 2), barY + 2, 0xFFFFFF);
+			this.getFontRenderer().drawString(matrixStack, experienceText, barCenter - (this.getFontRenderer().getStringWidth(experienceText) / 2), barY + 2, 0xFFFFFF);
 		}
 
 		// Base Display:
 		else {
 			nextY += 4 + this.getFontRenderer().getWordWrappedHeight(text, colRightWidth);
 			text = new TranslationTextComponent("gui.beastiary.pets.select").getString();
-			this.drawSplitString(text, nextX, nextY, width, 0xFFFFFF, true);
+			this.drawSplitString(matrixStack, text, nextX, nextY, width, 0xFFFFFF, true);
 		}
 
 		// Button Titles:
@@ -294,11 +294,11 @@ public class PetsBeastiaryScreen extends BeastiaryScreen {
 		int buttonSpacing = 2;
 		int buttonY = this.colRightY + this.colRightHeight - ((buttonHeight + buttonSpacing) * 3);
 		if(this.playerExt.selectedPet != null && !this.playerExt.selectedPet.releaseEntity) {
-			this.getFontRenderer().drawString("\u00A7l" + new TranslationTextComponent("gui.pet.actions").getString(), this.colRightX, buttonY + 6, 0xFFFFFF);
+			this.getFontRenderer().drawString(matrixStack, "\u00A7l" + new TranslationTextComponent("gui.pet.actions").getString(), this.colRightX, buttonY + 6, 0xFFFFFF);
 			buttonY += buttonHeight + buttonSpacing;
-			this.getFontRenderer().drawString("\u00A7l" + new TranslationTextComponent("gui.pet.stance").getString(), this.colRightX, buttonY + 6, 0xFFFFFF);
+			this.getFontRenderer().drawString(matrixStack, "\u00A7l" + new TranslationTextComponent("gui.pet.stance").getString(), this.colRightX, buttonY + 6, 0xFFFFFF);
 			buttonY += buttonHeight + buttonSpacing;
-			this.getFontRenderer().drawString("\u00A7l" + new TranslationTextComponent("gui.pet.movement").getString(), this.colRightX, buttonY + 6, 0xFFFFFF);
+			this.getFontRenderer().drawString(matrixStack, "\u00A7l" + new TranslationTextComponent("gui.pet.movement").getString(), this.colRightX, buttonY + 6, 0xFFFFFF);
 		}
 
 		// Release Confirmation:
@@ -306,7 +306,7 @@ public class PetsBeastiaryScreen extends BeastiaryScreen {
 			text = new TranslationTextComponent("gui.pet.release.confirm").getString();
 			nextX = this.colRightX;
 			nextY = this.colRightY + Math.round((float) this.colRightHeight / 2) - Math.round((float) buttonHeight / 2) - this.getFontRenderer().getWordWrappedHeight(text, this.colRightWidth) - 2;
-			this.drawSplitString(text, nextX, nextY, this.colRightWidth, 0xFFFFFF, true);
+			this.drawSplitString(matrixStack, text, nextX, nextY, this.colRightWidth, 0xFFFFFF, true);
 		}
 	}
 

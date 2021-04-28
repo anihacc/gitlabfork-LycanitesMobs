@@ -6,6 +6,7 @@ import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.util.text.ITextComponent;
 
 public class ButtonBase extends Button {
     public int buttonId;
@@ -15,7 +16,7 @@ public class ButtonBase extends Button {
     // ==================================================
     //                    Constructor
     // ==================================================
-    public ButtonBase(int buttonId, int x, int y, int width, int height, String text, Button.IPressable pressable) {
+    public ButtonBase(int buttonId, int x, int y, int width, int height, ITextComponent text, IPressable pressable) {
         super(x, y, width, height, text, pressable);
         this.buttonId = buttonId;
         this.fontRenderer = Minecraft.getInstance().fontRenderer;

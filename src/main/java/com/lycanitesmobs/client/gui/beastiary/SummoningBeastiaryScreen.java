@@ -119,8 +119,8 @@ public class SummoningBeastiaryScreen extends BeastiaryScreen {
 			return;
 		}
 
-		this.petList.render(mouseX, mouseY, partialTicks);
-		this.subspeciesList.render(mouseX, mouseY, partialTicks);
+		this.petList.render(matrixStack, mouseX, mouseY, partialTicks);
+		this.subspeciesList.render(matrixStack, mouseX, mouseY, partialTicks);
 
 		// Update Buttons:
 		for(Widget buttonWidget : this.buttons) {
@@ -196,7 +196,7 @@ public class SummoningBeastiaryScreen extends BeastiaryScreen {
 		// Empty:
 		if(this.playerExt.beastiary.getSummonableList().isEmpty()) {
 			String text = new TranslationTextComponent("gui.beastiary.summoning.empty.info").getString();
-			this.drawSplitString(text, nextX, nextY, width, 0xFFFFFF, true);
+			this.drawSplitString(matrixStack, text, nextX, nextY, width, 0xFFFFFF, true);
 			return;
 		}
 
@@ -209,7 +209,7 @@ public class SummoningBeastiaryScreen extends BeastiaryScreen {
 
 		// Player Summoning Focus:
 		String text = "\u00A7l" + new TranslationTextComponent("gui.beastiary.player.focus").getString() + ": ";
-		this.getFontRenderer().drawString(text, nextX, nextY, 0xFFFFFF);
+		this.getFontRenderer().drawString(matrixStack, text, nextX, nextY, 0xFFFFFF);
 		int barX = nextX + this.getFontRenderer().getStringWidth(text);
 		int focusMax = Math.round((float)this.playerExt.summonFocusMax / this.playerExt.summonFocusCharge);
 		int focusAvailable = (int)Math.floor((double)this.playerExt.summonFocus / this.playerExt.summonFocusCharge);
@@ -225,7 +225,7 @@ public class SummoningBeastiaryScreen extends BeastiaryScreen {
 			// Focus Cost:
 			nextY += 4 + this.getFontRenderer().getWordWrappedHeight(text, colRightWidth);
 			text = "\u00A7l" + new TranslationTextComponent("creature.stat.focus").getString() + ": ";
-			this.getFontRenderer().drawString(text, nextX, nextY, 0xFFFFFF);
+			this.getFontRenderer().drawString(matrixStack, text, nextX, nextY, 0xFFFFFF);
 			this.drawLevel(selectedCreature, TextureManager.getTexture("GUIPetLevel"), nextX + this.getFontRenderer().getStringWidth(text), nextY);
 		}
 
@@ -233,18 +233,18 @@ public class SummoningBeastiaryScreen extends BeastiaryScreen {
 		else {
 			nextY += 4 + this.getFontRenderer().getWordWrappedHeight(text, colRightWidth);
 			text = new TranslationTextComponent("gui.beastiary.summoning.select").getString();
-			this.drawSplitString(text, nextX, nextY, width, 0xFFFFFF, true);
+			this.drawSplitString(matrixStack, text, nextX, nextY, width, 0xFFFFFF, true);
 		}
 
 		// Button Titles:
 		int buttonHeight = 20;
 		int buttonSpacing = 2;
 		int buttonY = this.colRightY + this.colRightHeight - ((buttonHeight + buttonSpacing) * 3);
-		this.getFontRenderer().drawString("\u00A7l" + new TranslationTextComponent("gui.pet.actions").getString(), this.colRightX, buttonY + 6, 0xFFFFFF);
+		this.getFontRenderer().drawString(matrixStack, "\u00A7l" + new TranslationTextComponent("gui.pet.actions").getString(), this.colRightX, buttonY + 6, 0xFFFFFF);
 		buttonY += buttonHeight + buttonSpacing;
-		this.getFontRenderer().drawString("\u00A7l" + new TranslationTextComponent("gui.pet.stance").getString(), this.colRightX, buttonY + 6, 0xFFFFFF);
+		this.getFontRenderer().drawString(matrixStack, "\u00A7l" + new TranslationTextComponent("gui.pet.stance").getString(), this.colRightX, buttonY + 6, 0xFFFFFF);
 		buttonY += buttonHeight + buttonSpacing;
-		this.getFontRenderer().drawString("\u00A7l" + new TranslationTextComponent("gui.pet.movement").getString(), this.colRightX, buttonY + 6, 0xFFFFFF);
+		this.getFontRenderer().drawString(matrixStack, "\u00A7l" + new TranslationTextComponent("gui.pet.movement").getString(), this.colRightX, buttonY + 6, 0xFFFFFF);
 	}
 
 	@Override

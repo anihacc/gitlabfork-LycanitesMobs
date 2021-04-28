@@ -5,6 +5,7 @@ import com.lycanitesmobs.client.gui.widgets.BaseList;
 import com.lycanitesmobs.client.gui.widgets.BaseListEntry;
 import com.lycanitesmobs.core.info.ElementInfo;
 import com.lycanitesmobs.core.info.ElementManager;
+import com.mojang.blaze3d.matrix.MatrixStack;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ public class ElementList extends BaseList<ElementsBeastiaryScreen> {
 	 * @param bottom The y position that the list stops at.
 	 * @param x The x position of the list.
 	 */
+
 	public ElementList(ElementsBeastiaryScreen parentGui, int width, int height, int top, int bottom, int x) {
 		super(parentGui, width, height, top, bottom, x, 24);
 	}
@@ -58,12 +60,12 @@ public class ElementList extends BaseList<ElementsBeastiaryScreen> {
 		}
 
 		@Override
-		public void render(int index, int top, int left, int bottom, int right, int mouseX, int mouseY, boolean focus, float partialTicks) {
+		public void render(MatrixStack matrixStack, int index, int top, int left, int bottom, int right, int mouseX, int mouseY, boolean focus, float partialTicks) {
 			ElementInfo elementInfo = ElementManager.getInstance().getElement(elementName);
 			if(elementInfo == null) {
 				return;
 			}
-			this.parentList.screen.getFontRenderer().drawString(elementInfo.getTitle().getString(), left + 4, top + 4, 0xFFFFFF);
+			this.parentList.screen.getFontRenderer().drawString(matrixStack, elementInfo.getTitle().getString(), left + 4, top + 4, 0xFFFFFF);
 
 			// Icon:
 			//if (elementInfo.getIcon() != null) {

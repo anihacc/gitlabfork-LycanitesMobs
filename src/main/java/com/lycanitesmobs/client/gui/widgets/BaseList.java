@@ -1,5 +1,6 @@
 package com.lycanitesmobs.client.gui.widgets;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
@@ -54,8 +55,8 @@ public abstract class BaseList<S> extends ExtendedList<BaseListEntry> {
 	}
 
 	@Override
-	public void render(int mouseX, int mouseY, float partialTicks) {
-		this.renderBackground();
+	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+		this.renderBackground(matrixStack);
 
 		// Scissor Start:
 		GL11.glEnable(GL11.GL_SCISSOR_TEST);
@@ -101,9 +102,9 @@ public abstract class BaseList<S> extends ExtendedList<BaseListEntry> {
 		int listLeft = this.getRowLeft();
 		int listTop = this.y0 + 4 - (int)this.getScrollAmount();
 		if (this.renderHeader) {
-			this.renderHeader(listLeft, listTop, tessellator);
+			this.renderHeader(matrixStack, listLeft, listTop, tessellator);
 		}
-		this.renderList(listLeft, listTop, mouseX, mouseY, partialTicks);
+		this.renderList(matrixStack, listLeft, listTop, mouseX, mouseY, partialTicks);
 
 		// Draw Gradients:
 		RenderSystem.disableTexture();
@@ -170,10 +171,10 @@ public abstract class BaseList<S> extends ExtendedList<BaseListEntry> {
 		// Scissor Stop:
 		GL11.glDisable(GL11.GL_SCISSOR_TEST);
 
-		this.renderDecorations(mouseX, mouseY);
+		this.renderDecorations(matrixStack, mouseX, mouseY);
 	}
 
-	private int getMaxScroll() {
+	public int getMaxScroll() {
 		return Math.max(0, this.getMaxPosition() - (this.y1 - this.y0 - 4));
 	}
 }

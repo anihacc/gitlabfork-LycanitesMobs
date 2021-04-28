@@ -2,6 +2,7 @@ package com.lycanitesmobs.client.gui;
 
 import com.lycanitesmobs.ClientManager;
 import com.lycanitesmobs.client.gui.buttons.ButtonBase;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
@@ -27,7 +28,7 @@ public abstract class BaseContainerScreen<T extends Container> extends Container
 
     @Override
     public void init(Minecraft minecraft, int width, int height) {
-        this.field_230706_i_ = minecraft;
+        this.minecraft = minecraft;
         super.init(minecraft, width, height);
         this.initWidgets();
     }
@@ -51,12 +52,12 @@ public abstract class BaseContainerScreen<T extends Container> extends Container
      * @param partialTicks Ticks for animation.
      */
     @Override
-    public void render(int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(mouseX, mouseY, partialTicks);
-        this.renderWidgets(mouseX, mouseY, partialTicks); // Renders buttons.
-        super.render(mouseX, mouseY, partialTicks); // Renders slots.
+    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+        this.renderBackground(matrixStack, mouseX, mouseY, partialTicks);
+        this.renderWidgets(matrixStack, mouseX, mouseY, partialTicks); // Renders buttons.
+        super.render(matrixStack, mouseX, mouseY, partialTicks); // Renders slots.
         this.renderForeground(mouseX, mouseY, partialTicks);
-        this.renderHoveredToolTip(mouseX, mouseY);
+        this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
     }
 
     /**
@@ -65,8 +66,8 @@ public abstract class BaseContainerScreen<T extends Container> extends Container
      * @param mouseY The y position of the mouse cursor.
      * @param partialTicks Ticks for animation.
      */
-    protected abstract void renderBackground(int mouseX, int mouseY, float partialTicks);
-    protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {} // Overridden as required but ignored.
+    protected abstract void renderBackground(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks);
+    protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY) {} // Overridden as required but ignored.
 
     /**
      * Updates widgets like buttons and other controls for this screen. Super renders the button list, called after this.
@@ -74,9 +75,9 @@ public abstract class BaseContainerScreen<T extends Container> extends Container
      * @param mouseY The y position of the mouse cursor.
      * @param partialTicks Ticks for animation.
      */
-    protected void renderWidgets(int mouseX, int mouseY, float partialTicks) {
+    protected void renderWidgets(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         for(int i = 0; i < this.buttons.size(); ++i) {
-            this.buttons.get(i).render(mouseX, mouseY, partialTicks);
+            this.buttons.get(i).render(matrixStack, mouseX, mouseY, partialTicks);
         }
     }
 

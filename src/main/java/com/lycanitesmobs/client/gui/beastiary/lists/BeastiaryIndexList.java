@@ -4,6 +4,7 @@ import com.lycanitesmobs.client.gui.beastiary.BeastiaryScreen;
 import com.lycanitesmobs.client.gui.widgets.BaseList;
 import com.lycanitesmobs.client.gui.widgets.BaseListEntry;
 import com.lycanitesmobs.core.VersionChecker;
+import com.mojang.blaze3d.matrix.MatrixStack;
 
 public class BeastiaryIndexList extends BaseList {
 	protected VersionChecker.VersionInfo versionInfo;
@@ -37,9 +38,9 @@ public class BeastiaryIndexList extends BaseList {
 		}
 
 		@Override
-		public void render(int index, int top, int left, int bottom, int right, int mouseX, int mouseY, boolean focus, float partialTicks) {
+		public void render(MatrixStack matrixStack, int index, int top, int left, int bottom, int right, int mouseX, int mouseY, boolean focus, float partialTicks) {
 			if(index == 0 && this.parentList.versionInfo != null) {
-				this.drawSplitString(this.parentList.versionInfo.getUpdateNotes(), left + 6, top, this.parentList.getWidth() - 20, 0xFFFFFF, true);
+				this.drawSplitString(matrixStack, this.parentList.versionInfo.getUpdateNotes(), left + 6, top, this.parentList.getWidth() - 20, 0xFFFFFF, true);
 			}
 		}
 

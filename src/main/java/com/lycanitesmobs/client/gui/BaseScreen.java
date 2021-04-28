@@ -3,6 +3,7 @@ package com.lycanitesmobs.client.gui;
 import com.lycanitesmobs.ClientManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.gui.buttons.ButtonBase;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MainWindow;
@@ -30,7 +31,7 @@ public abstract class BaseScreen extends Screen implements Button.IPressable {
 
     @Override
 	public void init(Minecraft minecraft, int width, int height) {
-    	this.field_230706_i_ = minecraft;
+    	this.minecraft = minecraft;
     	super.init(minecraft, width, height);
 		this.initWidgets();
 	}
@@ -55,10 +56,10 @@ public abstract class BaseScreen extends Screen implements Button.IPressable {
 	 * @param partialTicks Ticks for animation.
 	 */
 	@Override
-	public void render(int mouseX, int mouseY, float partialTicks) {
+	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
 		this.renderBackground(mouseX, mouseY, partialTicks);
 		this.renderWidgets(mouseX, mouseY, partialTicks);
-		super.render(mouseX, mouseY, partialTicks); // Renders buttons.
+		super.render(matrixStack, mouseX, mouseY, partialTicks); // Renders buttons.
 		this.renderForeground(mouseX, mouseY, partialTicks);
 	}
 
@@ -115,7 +116,7 @@ public abstract class BaseScreen extends Screen implements Button.IPressable {
 	 */
 	public int getScaledX(float x) {
 		if(this.scaledResolution == null) {
-			this.scaledResolution = this.field_230706_i_.getMainWindow();
+			this.scaledResolution = this.minecraft.getMainWindow();
 		}
 
 		// Aspect Ratio:
@@ -163,6 +164,7 @@ public abstract class BaseScreen extends Screen implements Button.IPressable {
 
 	/**
 	 * Draws text that is split onto new lines when it exceeds wrapWidth.
+	 * @param matrixStack
 	 * @param str The string to output.
 	 * @param x The x position.
 	 * @param y The y position.
@@ -170,13 +172,13 @@ public abstract class BaseScreen extends Screen implements Button.IPressable {
 	 * @param textColor The color of the text.
 	 * @param shadow If true, a drop shadow wil be drawn under the text.
 	 */
-    public void drawSplitString(String str, int x, int y, int wrapWidth, int textColor, boolean shadow) {
+    public void drawSplitString(MatrixStack matrixStack, String str, int x, int y, int wrapWidth, int textColor, boolean shadow) {
 		if(shadow) {
 			RenderSystem.translatef(0.5f,0.5f, 0);
-			this.getFontRenderer().drawSplitString(str, x, y, wrapWidth, 0x444444);
+			this.drawSplitString(matrixStack, str, x, y, wrapWidth, 0x444444, true);
 			RenderSystem.translatef(-0.5f,-0.5f, 0);
 		}
-		this.getFontRenderer().drawSplitString(str, x,  y, wrapWidth, textColor);
+		this.drawSplitString(matrixStack, str, x,  y, wrapWidth, textColor, true);
 	}
 
 	/**

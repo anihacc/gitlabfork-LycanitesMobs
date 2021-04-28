@@ -15,6 +15,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Hand;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
@@ -115,7 +116,8 @@ public class BaseOverlay extends BaseGui {
             
             // Mount Controls Message:
             if(this.mountMessageTime > 0) {
-            	String mountMessage = new TranslationTextComponent("gui.mount.controls.prefix").getString();
+            	ITextComponent mountMessage = new TranslationTextComponent("gui.mount.controls.prefix") {
+				}.getString();
 				mountMessage += " " + KeyHandler.instance.mountAbility.getLocalizedName();
 				mountMessage += new TranslationTextComponent("gui.mount.controls.ability").getString();
 				mountMessage += " " + KeyHandler.instance.dismount.getLocalizedName();
