@@ -45,9 +45,4 @@ public class ProjectileBehaviourRandomEffect extends ProjectileBehaviour {
 			target.addPotionEffect(new EffectInstance(effect, this.duration, this.amplifier));
 		}
 	}
-
-	@Override
-	protected LivingEntity getShooter() {
-		return null;
-	}
 }
