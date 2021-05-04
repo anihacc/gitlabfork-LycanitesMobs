@@ -16,7 +16,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public abstract class FearEntity extends BaseCreatureEntity {
+public class FearEntity extends BaseCreatureEntity {
     public LivingEntity fearedEntity;
 	
     // ==================================================

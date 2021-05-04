@@ -89,9 +89,4 @@ public class EntityCryptkeeper extends AgeableCreatureEntity implements IMob {
             this.getEntityWorld().playEvent(null, 1016, zombievillagerentity.getPosition(), 0);
         }
     }
-
-    @Override
-    public boolean getDistanceSq(Vector3f vector3f) {
-        return false;
-    }
 }

@@ -54,10 +54,6 @@ public class EntityDarkling extends TameableCreatureEntity implements IMob {
 
     // ========== Init ==========
 
-    @Override
-    public boolean getDistanceSq(Vector3f vector3f) {
-        return false;
-    }
 
     /** Initiates the entity setting all the values to be watched by the datawatcher. **/
     @Override

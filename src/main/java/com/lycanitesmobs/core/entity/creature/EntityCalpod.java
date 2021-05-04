@@ -36,11 +36,6 @@ public class EntityCalpod extends BaseCreatureEntity implements IMob {
     }
 
 	@Override
-	public boolean getDistanceSq(Vector3f vector3f) {
-		return false;
-	}
-
-	@Override
 	public void loadCreatureFlags() {
 		this.swarmLimit = this.creatureInfo.getFlag("swarmLimit", this.swarmLimit);
 		this.griefing = this.creatureInfo.getFlag("griefing", this.griefing);
