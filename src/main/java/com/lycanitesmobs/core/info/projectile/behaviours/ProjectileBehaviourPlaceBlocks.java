@@ -61,9 +61,4 @@ public class ProjectileBehaviourPlaceBlocks extends ProjectileBehaviour {
 			}
 		}
 	}
-
-	@Override
-	protected LivingEntity getShooter() {
-		return null;
-	}
 }

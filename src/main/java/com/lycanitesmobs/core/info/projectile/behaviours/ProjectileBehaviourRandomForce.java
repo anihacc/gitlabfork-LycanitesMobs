@@ -32,9 +32,4 @@ public class ProjectileBehaviourRandomForce extends ProjectileBehaviour {
 			);
 		}
 	}
-
-	@Override
-	protected LivingEntity getShooter() {
-		return null;
-	}
 }

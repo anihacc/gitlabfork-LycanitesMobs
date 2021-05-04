@@ -10,6 +10,8 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.*;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.world.World;
 
 import java.util.HashSet;
@@ -130,7 +132,7 @@ public class ProjectileBehaviourLaser extends ProjectileBehaviour {
 		// Laser Damage:
 		if(projectile.updateTick % 10 == 0 && projectile.isAlive() && rayTraceResult instanceof EntityRayTraceResult) {
 			EntityRayTraceResult entityRayTraceResult = (EntityRayTraceResult)rayTraceResult;
-			if(((CustomProjectileEntity)projectile).getLaserEnd().distanceTo(entityRayTraceResult.getEntity().getPositionVector()) <= (this.width * 10)) {
+			if(((CustomProjectileEntity)projectile).getLaserEnd().distanceTo(entityRayTraceResult.getEntity().getPositionVec()) <= (this.width * 10)) {
 				boolean doDamage = true;
 				if (entityRayTraceResult.getEntity() instanceof LivingEntity) {
 					doDamage = projectile.canDamage((LivingEntity) entityRayTraceResult.getEntity());
@@ -196,9 +198,4 @@ public class ProjectileBehaviourLaser extends ProjectileBehaviour {
 
 	@Override
 	public void onProjectileImpact(BaseProjectileEntity projectile, World world, BlockPos pos) {}
-
-	@Override
-	protected LivingEntity getShooter() {
-		return null;
-	}
 }

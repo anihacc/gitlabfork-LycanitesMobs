@@ -93,5 +93,4 @@ public abstract class ProjectileBehaviour {
 	 */
 	public void onProjectileDamage(BaseProjectileEntity projectile, World world, LivingEntity target, float damage) {}
 
-	protected abstract LivingEntity getShooter();
 }

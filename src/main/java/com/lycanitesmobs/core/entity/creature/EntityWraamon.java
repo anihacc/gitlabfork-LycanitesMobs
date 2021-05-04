@@ -23,7 +23,7 @@ public class EntityWraamon extends TameableCreatureEntity implements IMob {
         this.hasAttackSound = true;
         this.setupMob();
     }
-    
+
     // ========== Init AI ==========
     @Override
     protected void registerGoals() {

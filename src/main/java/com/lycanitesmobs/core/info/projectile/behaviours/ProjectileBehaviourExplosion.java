@@ -53,9 +53,4 @@ public class ProjectileBehaviourExplosion extends ProjectileBehaviour {
 
 		world.createExplosion(projectile, projectile.getPositionVec().getX(), projectile.getPositionVec().getY(), projectile.getPositionVec().getZ(), explosionRadius, explosionMode);
 	}
-
-	@Override
-	protected LivingEntity getShooter() {
-		return null;
-	}
 }

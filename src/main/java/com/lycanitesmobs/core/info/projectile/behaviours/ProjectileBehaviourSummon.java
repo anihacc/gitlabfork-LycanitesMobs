@@ -153,9 +153,4 @@ public class ProjectileBehaviourSummon extends ProjectileBehaviour {
 			}
 		}
 	}
-
-	@Override
-	protected LivingEntity getShooter() {
-		return null;
-	}
 }
