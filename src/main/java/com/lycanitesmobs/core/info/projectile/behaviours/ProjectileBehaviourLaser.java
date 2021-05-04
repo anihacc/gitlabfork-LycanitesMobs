@@ -196,4 +196,9 @@ public class ProjectileBehaviourLaser extends ProjectileBehaviour {
 
 	@Override
 	public void onProjectileImpact(BaseProjectileEntity projectile, World world, BlockPos pos) {}
+
+	@Override
+	protected LivingEntity getShooter() {
+		return null;
+	}
 }

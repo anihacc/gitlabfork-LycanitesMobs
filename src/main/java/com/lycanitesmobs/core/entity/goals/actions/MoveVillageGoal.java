@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.entity.goals.actions;
 
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import net.minecraft.dispenser.IPosition;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.pathfinding.PathNavigator;
@@ -57,7 +58,7 @@ public class MoveVillageGoal extends Goal {
             return false;
         } else {
             ServerWorld serverWorld = (ServerWorld)this.host.world;
-            BlockPos blockPos = new BlockPos(this.host);
+            BlockPos blockPos = new BlockPos((IPosition) this.host);
             if (!serverWorld.func_217471_a(blockPos, 6)) {
                 return false;
             } else {
@@ -105,7 +106,7 @@ public class MoveVillageGoal extends Goal {
 
     private void func_220754_g() {
         Random lvt_1_1_ = this.host.getRNG();
-        BlockPos lvt_2_1_ = this.host.world.getHeight(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, (new BlockPos(this.host)).add(-8 + lvt_1_1_.nextInt(16), 0, -8 + lvt_1_1_.nextInt(16)));
+        BlockPos lvt_2_1_ = this.host.world.getHeight(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, (new BlockPos((IPosition) this.host)).add(-8 + lvt_1_1_.nextInt(16), 0, -8 + lvt_1_1_.nextInt(16)));
         this.host.getNavigator().tryMoveToXYZ((double)lvt_2_1_.getX(), (double)lvt_2_1_.getY(), (double)lvt_2_1_.getZ(), 1.0D);
     }
 }

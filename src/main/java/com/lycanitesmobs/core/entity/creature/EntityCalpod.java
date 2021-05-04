@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
-import net.minecraft.block.LogBlock;
+import net.minecraft.block.WoodType;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Pose;
@@ -56,7 +56,7 @@ public class EntityCalpod extends BaseCreatureEntity implements IMob {
 			if(this.getAttackTarget() != null && this.getEntityWorld().getGameRules().getBoolean(GameRules.MOB_GRIEFING) && this.griefing) {
 				float distance = this.getAttackTarget().getDistance(this);
 				if(distance <= this.getSize(Pose.STANDING).width + 1.0F)
-					this.destroyAreaBlock((int)this.getPositionVec().getX(), (int)this.getPositionVec().getY(), (int)this.getPositionVec().getZ(), LogBlock.class, true, 0);
+					this.destroyAreaBlock((int)this.getPositionVec().getX(), (int)this.getPositionVec().getY(), (int)this.getPositionVec().getZ(), WoodType.class, true, 0);
 			}
         
         super.livingTick();

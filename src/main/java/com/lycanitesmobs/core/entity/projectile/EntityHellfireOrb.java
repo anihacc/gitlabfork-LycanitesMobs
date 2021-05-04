@@ -6,6 +6,7 @@ import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.entity.creature.EntityRahovart;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -68,7 +69,7 @@ public class EntityHellfireOrb extends BaseProjectileEntity {
 
     //========== Do Damage Check ==========
     public boolean canDamage(LivingEntity targetEntity) {
-        LivingEntity owner = this.func_234616_v_();
+        LivingEntity owner =  (LivingEntity) this.getShooter();
         if(owner == null) {
             if(targetEntity instanceof EntityRahovart)
                 return false;

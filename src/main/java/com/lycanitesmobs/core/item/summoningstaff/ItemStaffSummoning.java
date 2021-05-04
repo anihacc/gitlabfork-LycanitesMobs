@@ -8,6 +8,7 @@ import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import com.lycanitesmobs.core.item.BaseItem;
 import com.lycanitesmobs.core.pets.SummonSet;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -22,6 +23,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import javax.annotation.Nullable;
+
 public class ItemStaffSummoning extends BaseItem {
 	protected float damageScale = 1.0F;
 	protected int weaponFlash = 0;
@@ -35,14 +38,22 @@ public class ItemStaffSummoning extends BaseItem {
         this.setup();
 
         this.addPropertyOverride(new ResourceLocation("using"), new IItemPropertyGetter() {
-            @OnlyIn(Dist.CLIENT)
+			@Override
+			public float call(ItemStack itemStack, @Nullable ClientWorld clientWorld, @Nullable LivingEntity livingEntity) {
+				return 0;
+			}
+
+			@OnlyIn(Dist.CLIENT)
             public float call(ItemStack itemStack, World world, LivingEntity entity) {
                 return entity != null && entity.isHandActive() && entity.getActiveItemStack() == itemStack ? 1.0F : 0.0F;
             }
         });
     }
-	
-    
+
+	private void addPropertyOverride(ResourceLocation using, IItemPropertyGetter iItemPropertyGetter) {
+	}
+
+
 	// ==================================================
 	//                       Use
 	// ==================================================

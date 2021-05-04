@@ -7,6 +7,7 @@ import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.entity.CustomProjectileEntity;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -66,6 +67,11 @@ public class ProjectileBehaviourFireProjectiles extends ProjectileBehaviour {
 		}
 	}
 
+	@Override
+	protected LivingEntity getShooter() {
+		return null;
+	}
+
 	/**
 	 * Fires a new projectile from the given projectile.
 	 * @param projectile The projectile to fire a new projectile from.
@@ -79,7 +85,7 @@ public class ProjectileBehaviourFireProjectiles extends ProjectileBehaviour {
 		BaseProjectileEntity childProjectile;
 
 		if(projectile.func_234616_v_() != null) {
-			childProjectile = projectileInfo.createProjectile(projectile.getEntityWorld(), projectile.func_234616_v_());
+			childProjectile = projectileInfo.createProjectile(projectile.getEntityWorld(), this.getShooter());
 			childProjectile.setPosition(
 					projectile.getPositionVec().getX(),
 					projectile.getPositionVec().getY(),

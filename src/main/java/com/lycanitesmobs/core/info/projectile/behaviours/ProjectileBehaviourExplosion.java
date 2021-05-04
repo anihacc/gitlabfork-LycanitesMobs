@@ -3,6 +3,7 @@ package com.lycanitesmobs.core.info.projectile.behaviours;
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.GameRules;
@@ -51,5 +52,10 @@ public class ProjectileBehaviourExplosion extends ProjectileBehaviour {
 		}
 
 		world.createExplosion(projectile, projectile.getPositionVec().getX(), projectile.getPositionVec().getY(), projectile.getPositionVec().getZ(), explosionRadius, explosionMode);
+	}
+
+	@Override
+	protected LivingEntity getShooter() {
+		return null;
 	}
 }

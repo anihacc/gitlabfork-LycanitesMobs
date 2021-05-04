@@ -49,4 +49,9 @@ public class ProjectileBehaviourCatch extends ProjectileBehaviour {
 		projectile.remove();
 		return !this.preventDamage;
 	}
+
+	@Override
+	protected LivingEntity getShooter() {
+		return null;
+	}
 }

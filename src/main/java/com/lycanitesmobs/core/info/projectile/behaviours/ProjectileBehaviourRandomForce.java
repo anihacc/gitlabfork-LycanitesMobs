@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -30,5 +31,10 @@ public class ProjectileBehaviourRandomForce extends ProjectileBehaviour {
 					(0.5D - projectile.getEntityWorld().getRandom().nextDouble()) * this.force
 			);
 		}
+	}
+
+	@Override
+	protected LivingEntity getShooter() {
+		return null;
 	}
 }

@@ -81,7 +81,6 @@ public class EntityShadowfireBarrier extends BaseProjectileEntity {
         }
     }
 
-    @Override
     public boolean handleWaterMovement() {
         return false;
     }
@@ -106,7 +105,7 @@ public class EntityShadowfireBarrier extends BaseProjectileEntity {
     //========== Do Damage Check ==========
     @Override
     public boolean canDamage(LivingEntity targetEntity) {
-        LivingEntity owner = this.func_234616_v_();
+        LivingEntity owner = (LivingEntity) this.getShooter();
         if(owner == null) {
             if(targetEntity instanceof EntityRahovart)
                 return false;

@@ -11,6 +11,7 @@ import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.pets.SummonSet;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -151,5 +152,10 @@ public class ProjectileBehaviourSummon extends ProjectileBehaviour {
 				}
 			}
 		}
+	}
+
+	@Override
+	protected LivingEntity getShooter() {
+		return null;
 	}
 }

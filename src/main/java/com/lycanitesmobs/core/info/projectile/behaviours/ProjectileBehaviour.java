@@ -92,4 +92,6 @@ public abstract class ProjectileBehaviour {
 	 * @param damage The damage dealt.
 	 */
 	public void onProjectileDamage(BaseProjectileEntity projectile, World world, LivingEntity target, float damage) {}
+
+	protected abstract LivingEntity getShooter();
 }

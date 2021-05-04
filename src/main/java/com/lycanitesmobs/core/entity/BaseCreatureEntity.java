@@ -29,6 +29,7 @@ import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.WoodType;
 import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
@@ -64,6 +65,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
@@ -326,7 +328,12 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	/** Used to sync the Saddle Equipment slot of this creature. **/
 	public static final DataParameter<ItemStack> EQUIPMENT_SADDLE = EntityDataManager.createKey(BaseCreatureEntity.class, DataSerializers.ITEMSTACK);
 
-    /** Used for the TARGET watcher bitmap, bitmaps save on many packets and make network performance better! **/
+	protected void onKillEntity(LivingEntity entityLivingBase) {
+	}
+
+	public abstract boolean getDistanceSq(Vector3f vector3f);
+
+	/** Used for the TARGET watcher bitmap, bitmaps save on many packets and make network performance better! **/
 	public enum TARGET_BITS {
 		ATTACK((byte)1), MASTER((byte)2), PARENT((byte)4), AVOID((byte)8), RIDER((byte)16), PICKUP((byte)32), PERCH((byte)64);
 		public final byte id;
@@ -3807,7 +3814,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 			}
 		}
 	}
-	public void destroyAreaBlock(int x, int y, int z, Class<? extends Block> blockClass, boolean drop, int range) {
+	public void destroyAreaBlock(int x, int y, int z, Class<WoodType> blockClass, boolean drop, int range) {
 		for(int w = -((int)Math.ceil(this.getSize(Pose.STANDING).width) + range); w <= (Math.ceil(this.getSize(Pose.STANDING).width) + range); w++)
 			for(int d = -((int)Math.ceil(this.getSize(Pose.STANDING).width) + range); d <= (Math.ceil(this.getSize(Pose.STANDING).width) + range); d++)
 				for(int h = 0; h <= Math.ceil(this.getSize(Pose.STANDING).height); h++) {

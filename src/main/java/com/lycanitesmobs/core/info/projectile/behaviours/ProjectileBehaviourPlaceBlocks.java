@@ -5,6 +5,7 @@ import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FlowingFluidBlock;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -59,5 +60,10 @@ public class ProjectileBehaviourPlaceBlocks extends ProjectileBehaviour {
 				}
 			}
 		}
+	}
+
+	@Override
+	protected LivingEntity getShooter() {
+		return null;
 	}
 }

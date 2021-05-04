@@ -8,6 +8,7 @@ import com.lycanitesmobs.core.entity.creature.EntityRahovart;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
@@ -79,7 +80,7 @@ public class EntityHellfireWave extends BaseProjectileEntity {
             for(int row = 0; row < this.hellfireHeight; row++) {
                 for(int col = 0; col < this.hellfireWidth; col++) {
                     if(this.func_234616_v_() != null)
-                        this.hellfireWalls[row][col] = new EntityHellfireWavePart(ProjectileManager.getInstance().oldProjectileTypes.get(EntityHellfireWavePart.class), this.getEntityWorld(), this.func_234616_v_());
+                        this.hellfireWalls[row][col] = new EntityHellfireWavePart(ProjectileManager.getInstance().oldProjectileTypes.get(EntityHellfireWavePart.class), this.getEntityWorld(), (LivingEntity) this.getShooter());
                     else
                         this.hellfireWalls[row][col] = new EntityHellfireWavePart(ProjectileManager.getInstance().oldProjectileTypes.get(EntityHellfireWavePart.class), this.getEntityWorld(), this.getPositionVec().getX(), this.getPositionVec().getY() + 5 + (this.hellfireSize * row), this.getPositionVec().getZ());
                     this.hellfireWalls[row][col].setPosition(
@@ -125,7 +126,7 @@ public class EntityHellfireWave extends BaseProjectileEntity {
 
     //========== Do Damage Check ==========
     public boolean canDamage(LivingEntity targetEntity) {
-        LivingEntity owner = this.func_234616_v_();
+        LivingEntity owner = (LivingEntity) this.getShooter();
         if(owner == null) {
             if(targetEntity instanceof EntityRahovart)
                 return false;

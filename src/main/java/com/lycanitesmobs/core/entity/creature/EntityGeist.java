@@ -8,6 +8,7 @@ import com.lycanitesmobs.core.entity.goals.actions.BreakDoorGoal;
 import com.lycanitesmobs.core.entity.goals.actions.MoveVillageGoal;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.dispenser.IPosition;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -20,6 +21,7 @@ import net.minecraft.pathfinding.GroundPathNavigator;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.GameRules;
+import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 
 public class EntityGeist extends AgeableCreatureEntity implements IMob {
@@ -81,10 +83,10 @@ public class EntityGeist extends AgeableCreatureEntity implements IMob {
             ZombieVillagerEntity zombievillagerentity = EntityType.ZOMBIE_VILLAGER.create(this.world);
             zombievillagerentity.copyLocationAndAnglesFrom(villagerentity);
             villagerentity.remove();
-            zombievillagerentity.onInitialSpawn(this.getEntityWorld(), this.getEntityWorld().getDifficultyForLocation(new BlockPos(zombievillagerentity)), SpawnReason.CONVERSION, null, null);
-            zombievillagerentity.func_213792_a(villagerentity.getVillagerData());
-            zombievillagerentity.func_213790_g(villagerentity.getOffers().write());
-            zombievillagerentity.func_213789_a(villagerentity.getXp());
+            zombievillagerentity.onInitialSpawn((IServerWorld) this.getEntityWorld(), this.getEntityWorld().getDifficultyForLocation(new BlockPos((IPosition) zombievillagerentity)),SpawnReason.CONVERSION, null, null);
+            zombievillagerentity.setVillagerData(villagerentity.getVillagerData());
+            zombievillagerentity.setOffers(villagerentity.getOffers().write());
+            zombievillagerentity.setEXP(villagerentity.getXp());
             zombievillagerentity.setChild(villagerentity.isChild());
             zombievillagerentity.setNoAI(villagerentity.isAIDisabled());
 
