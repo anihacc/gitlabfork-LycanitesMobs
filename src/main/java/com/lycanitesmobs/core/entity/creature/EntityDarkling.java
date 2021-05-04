@@ -16,6 +16,7 @@ import net.minecraft.particles.RedstoneParticleData;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.world.World;
 
 public class EntityDarkling extends TameableCreatureEntity implements IMob {
@@ -52,6 +53,12 @@ public class EntityDarkling extends TameableCreatureEntity implements IMob {
     }
 
     // ========== Init ==========
+
+    @Override
+    public boolean getDistanceSq(Vector3f vector3f) {
+        return false;
+    }
+
     /** Initiates the entity setting all the values to be watched by the datawatcher. **/
     @Override
     protected void registerData() {

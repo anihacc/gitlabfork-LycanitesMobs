@@ -9,6 +9,7 @@ import net.minecraft.entity.Pose;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 
@@ -33,6 +34,11 @@ public class EntityCalpod extends BaseCreatureEntity implements IMob {
         super.registerGoals();
         this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(true));
     }
+
+	@Override
+	public boolean getDistanceSq(Vector3f vector3f) {
+		return false;
+	}
 
 	@Override
 	public void loadCreatureFlags() {

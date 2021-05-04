@@ -7,6 +7,7 @@ import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.world.World;
 
 public class EntityWraamon extends TameableCreatureEntity implements IMob {
@@ -21,6 +22,11 @@ public class EntityWraamon extends TameableCreatureEntity implements IMob {
         this.attribute = CreatureAttribute.UNDEFINED;
         this.hasAttackSound = true;
         this.setupMob();
+    }
+
+    @Override
+    public boolean getDistanceSq(Vector3f vector3f) {
+        return false;
     }
 
     // ========== Init AI ==========

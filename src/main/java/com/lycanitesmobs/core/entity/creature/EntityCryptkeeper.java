@@ -16,6 +16,7 @@ import net.minecraft.entity.monster.ZombieVillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.pathfinding.GroundPathNavigator;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 
@@ -87,5 +88,10 @@ public class EntityCryptkeeper extends AgeableCreatureEntity implements IMob {
             this.getEntityWorld().addEntity(zombievillagerentity);
             this.getEntityWorld().playEvent(null, 1016, zombievillagerentity.getPosition(), 0);
         }
+    }
+
+    @Override
+    public boolean getDistanceSq(Vector3f vector3f) {
+        return false;
     }
 }
