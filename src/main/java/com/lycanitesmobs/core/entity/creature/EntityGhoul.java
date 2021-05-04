@@ -88,11 +88,6 @@ public class EntityGhoul extends AgeableCreatureEntity implements IMob {
         }
     }
 
-    @Override
-    public boolean getDistanceSq(Vector3f vector3f) {
-        return false;
-    }
-
 
     // ==================================================
    	//                     Immunities

@@ -331,7 +331,9 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	protected void onKillEntity(LivingEntity entityLivingBase) {
 	}
 
-	public abstract boolean getDistanceSq(Vector3f vector3f);
+	public boolean getDistanceSq(Vector3f vector3f) {
+		return false;
+	}
 
 	/** Used for the TARGET watcher bitmap, bitmaps save on many packets and make network performance better! **/
 	public enum TARGET_BITS {

@@ -23,12 +23,7 @@ public class EntityWraamon extends TameableCreatureEntity implements IMob {
         this.hasAttackSound = true;
         this.setupMob();
     }
-
-    @Override
-    public boolean getDistanceSq(Vector3f vector3f) {
-        return false;
-    }
-
+    
     // ========== Init AI ==========
     @Override
     protected void registerGoals() {
