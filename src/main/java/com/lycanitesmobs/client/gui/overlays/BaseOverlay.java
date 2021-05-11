@@ -116,12 +116,11 @@ public class BaseOverlay extends BaseGui {
             
             // Mount Controls Message:
             if(this.mountMessageTime > 0) {
-            	ITextComponent mountMessage = new TranslationTextComponent("gui.mount.controls.prefix") {
-				}.getString();
-				mountMessage += " " + KeyHandler.instance.mountAbility.getLocalizedName();
-				mountMessage += new TranslationTextComponent("gui.mount.controls.ability").getString();
-				mountMessage += " " + KeyHandler.instance.dismount.getLocalizedName();
-				mountMessage += new TranslationTextComponent("gui.mount.controls.dismount").getString();
+            	ITextComponent mountMessage = new TranslationTextComponent("gui.mount.controls.prefix");
+				mountMessage = mountMessage.copyRaw().appendString(" ").copyRaw().appendString(KeyHandler.instance.mountAbility.getKeyDescription());
+				mountMessage = mountMessage.copyRaw().append(new TranslationTextComponent("gui.mount.controls.ability"));
+				mountMessage = mountMessage.copyRaw().appendString(" ").copyRaw().appendString(KeyHandler.instance.dismount.getKeyDescription());
+				mountMessage = mountMessage.copyRaw().append(new TranslationTextComponent("gui.mount.controls.dismount"));
 				this.mc.ingameGUI.setOverlayMessage(mountMessage, false);
             }
             

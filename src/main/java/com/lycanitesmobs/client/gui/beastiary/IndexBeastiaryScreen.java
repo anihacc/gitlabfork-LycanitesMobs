@@ -36,13 +36,13 @@ public class IndexBeastiaryScreen extends BeastiaryScreen {
 		ButtonBase button;
 
 		// Links:
-		button = new ButtonBase(100, buttonX, buttonY, buttonWidth, buttonHeight, "Website", this);
+		button = new ButtonBase(100, buttonX, buttonY, buttonWidth, buttonHeight, new TranslationTextComponent("Website"), this);
 		this.addButton(button);
-		button = new ButtonBase(101, buttonX + buttonWidthPadded, buttonY, buttonWidth, buttonHeight, "Twitter", this);
+		button = new ButtonBase(101, buttonX + buttonWidthPadded, buttonY, buttonWidth, buttonHeight, new TranslationTextComponent("Twitter"), this);
 		this.addButton(button);
-		button = new ButtonBase(102, buttonX + (buttonWidthPadded * 2), buttonY, buttonWidth, buttonHeight, "Patreon", this);
+		button = new ButtonBase(102, buttonX + (buttonWidthPadded * 2), buttonY, buttonWidth, buttonHeight, new TranslationTextComponent("Patreon"), this);
 		this.addButton(button);
-		button = new ButtonBase(103, buttonX + (buttonWidthPadded * 3), buttonY, buttonWidth, buttonHeight, "Discord", this);
+		button = new ButtonBase(103, buttonX + (buttonWidthPadded * 3), buttonY, buttonWidth, buttonHeight, new TranslationTextComponent("Discord"), this);
 		this.addButton(button);
 
 		// Lists:
