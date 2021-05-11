@@ -157,8 +157,7 @@ public class PetsBeastiaryScreen extends BeastiaryScreen {
 							button.setMessage(new TranslationTextComponent("gui.pet.pvp").getString() + ": " + new TranslationTextComponent("common.yes").getString());
 						}
 						else {
-							button.setMessage(new TranslationTextComponent("gui.pet.pvp").getString() + ": " + new TranslationTextComponent("common.no").getString()));
-						}
+							button.setMessage(new TranslationTextComponent("gui.pet.pvp").getString() + ": " + new TranslationTextComponent("common.no").getString());
 					}
 
 					// Stance:
