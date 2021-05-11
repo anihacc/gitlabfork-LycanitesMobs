@@ -162,10 +162,10 @@ public class PlayerSpawnCondition extends SpawnCondition {
 		}
 
 		// Check Spawn Distance:
-		if(this.spawnDistanceMin >= 0 && player.getDistanceSq(new Vector3d(world.getSpawnPoint())) < this.spawnDistanceMin) {
+		if(this.spawnDistanceMin >= 0 && player.getDistanceSq(new Vector3d(world.getWorldInfo().getSpawnX(), world.getWorldInfo().getSpawnY(), world.getWorldInfo().getSpawnZ())) < this.spawnDistanceMin) {
 			return false;
 		}
-		if(this.spawnDistanceMax >= 0 && player.getDistanceSq(new Vector3d(world.getSpawnPoint())) > this.spawnDistanceMax) {
+		if(this.spawnDistanceMax >= 0 && player.getDistanceSq(new Vector3d(world.getWorldInfo().getSpawnX(), world.getWorldInfo().getSpawnY(), world.getWorldInfo().getSpawnZ())) > this.spawnDistanceMax) {
 			return false;
 		}
 
@@ -178,10 +178,10 @@ public class PlayerSpawnCondition extends SpawnCondition {
 		}
 
 		// Check States:
-		if(this.grounded && !player.onGround) {
+		if(this.grounded && !player.isOnGround()) {
 			return false;
 		}
-		if(this.notGrounded && player.onGround) {
+		if(this.notGrounded && player.isOnGround()) {
 			return false;
 		}
 		if(this.inWater && !player.isInWater()) {

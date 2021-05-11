@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 public class WorldMobEventEffect extends MobEventEffect {
 
@@ -44,9 +45,9 @@ public class WorldMobEventEffect extends MobEventEffect {
 
 			// Lightning:
 			if ("start".equalsIgnoreCase(this.thunder)) {
-				world.getWorldInfo().setThundering(true);
+				world.setThunderStrength(1.0F);
 			} else if ("stop".equalsIgnoreCase(this.thunder)) {
-				world.getWorldInfo().setThundering(false);
+				world.setThunderStrength(1.0F);
 			}
 
 			// Day Time:
@@ -58,7 +59,9 @@ public class WorldMobEventEffect extends MobEventEffect {
 				if (excessTime > targetTime) {
 					targetTime += dayTime;
 				}
-				world.setDayTime(currentTime - excessTime + targetTime);
+				for (ServerWorld serverWorld : world.getServer().getWorlds()) {
+					serverWorld.setDayTime(currentTime - excessTime + targetTime);
+				}
 			}
 		}
 	}
