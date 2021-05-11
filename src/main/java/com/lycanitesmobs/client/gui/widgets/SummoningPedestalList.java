@@ -74,5 +74,10 @@ public class SummoningPedestalList extends BaseList<SummoningPedestalScreen> {
 		protected void onClicked() {
 			this.parentGUI.screen.selectMinion(this.minionName);
 		}
+
+		@Override
+		public List<? extends IGuiEventListener> getEventListeners() {
+			return null;
+		}
 	}
 }
