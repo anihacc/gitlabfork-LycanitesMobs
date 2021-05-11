@@ -5,12 +5,15 @@ import com.lycanitesmobs.client.gui.widgets.BaseList;
 import com.lycanitesmobs.client.gui.widgets.BaseListEntry;
 import com.lycanitesmobs.core.info.ElementInfo;
 import com.mojang.blaze3d.matrix.MatrixStack;
+import net.minecraft.client.gui.IGuiEventListener;
 import net.minecraft.potion.Effect;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+
+import java.util.List;
 
 public class ElementDescriptionList extends BaseList {
 	public ElementInfo elementInfo;
@@ -51,6 +54,11 @@ public class ElementDescriptionList extends BaseList {
 
 		@Override
 		protected void onClicked() {}
+
+		@Override
+		public List<? extends IGuiEventListener> getEventListeners() {
+			return null;
+		}
 	}
 
 	public String getContent() {

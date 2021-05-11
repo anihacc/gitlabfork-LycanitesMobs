@@ -5,6 +5,9 @@ import com.lycanitesmobs.client.gui.widgets.BaseList;
 import com.lycanitesmobs.client.gui.widgets.BaseListEntry;
 import com.lycanitesmobs.core.VersionChecker;
 import com.mojang.blaze3d.matrix.MatrixStack;
+import net.minecraft.client.gui.IGuiEventListener;
+
+import java.util.List;
 
 public class BeastiaryIndexList extends BaseList {
 	protected VersionChecker.VersionInfo versionInfo;
@@ -46,5 +49,10 @@ public class BeastiaryIndexList extends BaseList {
 
 		@Override
 		protected void onClicked() {}
+
+		@Override
+		public List<? extends IGuiEventListener> getEventListeners() {
+			return null;
+		}
 	}
 }

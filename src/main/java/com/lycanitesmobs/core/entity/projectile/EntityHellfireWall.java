@@ -27,9 +27,6 @@ public class EntityHellfireWall extends BaseProjectileEntity {
     // ==================================================
  	//                   Constructors
  	// ==================================================
-    public EntityHellfireWall(World world) {
-        super(world);
-    }
 
     public EntityHellfireWall(EntityType<? extends BaseProjectileEntity> entityType, World world) {
         super(entityType, world);

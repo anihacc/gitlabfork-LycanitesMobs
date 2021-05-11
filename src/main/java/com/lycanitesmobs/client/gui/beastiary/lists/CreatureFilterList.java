@@ -4,6 +4,7 @@ import com.lycanitesmobs.client.gui.beastiary.BeastiaryScreen;
 import com.lycanitesmobs.client.gui.widgets.BaseList;
 import com.lycanitesmobs.client.gui.widgets.BaseListEntry;
 import com.lycanitesmobs.core.info.CreatureInfo;
+import com.mojang.blaze3d.matrix.MatrixStack;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -62,10 +63,10 @@ public abstract class CreatureFilterList extends BaseList<BeastiaryScreen> {
 	/**
 	 * Renders a slot based on the provided entry.
 	 * @param index The entry index.
-	 * @param boxRight
-	 * @param boxTop
-	 * @param boxBottom
-	 * @param tessellator
+	 //* @param boxRight
+	 //* @param boxTop
+	 //* @param boxBottom
+	 //* @param tessellator
 	 */
 	public void renderSlot(int index, int top, int left, int bottom, int right) {}
 
@@ -81,7 +82,7 @@ public abstract class CreatureFilterList extends BaseList<BeastiaryScreen> {
 		}
 
 		@Override
-		public void render(int index, int top, int left, int bottom, int right, int mouseX, int mouseY, boolean focus, float partialTicks) {
+		public void render(MatrixStack matrixStack, int index, int top, int left, int bottom, int right, int mouseX, int mouseY, boolean p_render_8_, float partialTicks) {
 			this.parentList.renderSlot(index, top, left, bottom, right);
 		}
 
