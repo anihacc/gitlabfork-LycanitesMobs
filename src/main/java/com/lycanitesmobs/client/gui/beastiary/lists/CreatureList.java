@@ -12,6 +12,7 @@ import com.lycanitesmobs.core.info.Variant;
 import com.lycanitesmobs.core.network.MessageSummonSetSelection;
 import com.lycanitesmobs.core.pets.PetEntry;
 import com.mojang.blaze3d.matrix.MatrixStack;
+import net.minecraft.client.gui.IGuiEventListener;
 
 import javax.annotation.Nullable;
 import java.text.Collator;
@@ -161,7 +162,7 @@ public class CreatureList extends BaseList<BeastiaryScreen> {
 	}
 
 	@Override
-	protected void renderBackground() {
+	protected void renderBackground(MatrixStack stack) {
 		// Automatically Refresh:
 		if(this.listType == Type.PET || this.listType == Type.MOUNT ||this.listType == Type.FAMILIAR) {
 			if(this.screen.playerExt.selectedPet != null && this.releaseRefresh != this.screen.playerExt.selectedPet.releaseEntity) {
@@ -245,6 +246,11 @@ public class CreatureList extends BaseList<BeastiaryScreen> {
 		@Override
 		protected void onClicked() {
 			this.parentList.setSelected(this);
+		}
+
+		@Override
+		public List<? extends IGuiEventListener> getEventListeners() {
+			return null;
 		}
 	}
 }

@@ -125,14 +125,14 @@ public class PlaceBlockGoal extends Goal {
         this.host.getLookController().setLookPosition(this.pos.getX(), this.pos.getY(), this.pos.getZ(), 30.0F, 30.0F);
         
         // Place Block:
-        if(this.host.getDistanceSq(new Vector3d(this.pos)) <= this.range * this.range) {
+        if(this.host.getDistanceSq(new Vector3d(this.pos.getX(), this.pos.getY(), this.pos.getZ())) <= this.range * this.range) {
         	this.host.getEntityWorld().setBlockState(this.pos, this.blockState, 3);
             this.blockState = null;
             this.host.clearMovement();
         }
         
         // Cancel If Too Far:
-        if(this.host.getDistanceSq(new Vector3d(this.pos)) >= this.maxDistance * this.maxDistance) {
+        if(this.host.getDistanceSq(new Vector3d(this.pos.getX(), this.pos.getY(), this.pos.getZ())) >= this.maxDistance * this.maxDistance) {
             this.blockState = null;
             this.host.clearMovement();
         }

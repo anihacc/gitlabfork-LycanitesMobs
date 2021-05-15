@@ -2,6 +2,8 @@
 modLoader="javafml" #mandatory
 # A version range to match for said mod loader - for regular FML @Mod it will be the forge version
 loaderVersion="[31,)" #mandatory forge version
+# License information
+license="GNU GPL"
 # A URL to refer people to when problems occur with this mod
 issueTrackerURL="https://gitlab.com/Lycanite/LycanitesMobs/issues" #optional
 # A list of mods - how many allowed here is determined by the individual mod loader
@@ -42,6 +44,6 @@ This mod adds many new mobs to specific biomes, dimensions and more. These mobs 
 [[dependencies.lycanitesmobs]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.15.2]"
+    versionRange="[1.16.5]"
     ordering="NONE"
     side="BOTH"

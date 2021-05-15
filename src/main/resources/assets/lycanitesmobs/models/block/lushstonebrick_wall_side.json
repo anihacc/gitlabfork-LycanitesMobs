@@ -1,6 +1,6 @@
 {
-	"parent": "block/template_wall_side",
-	"textures": {
-        "wall": "lycanitesmobs:block/lushstonebrick"
-	}
+  "parent": "minecraft:block/template_wall_side",
+  "textures": {
+    "wall": "lycanitesmobs:block/lushstonebrick"
+  }
 }

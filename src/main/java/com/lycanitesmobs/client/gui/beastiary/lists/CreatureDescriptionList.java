@@ -6,9 +6,12 @@ import com.lycanitesmobs.client.gui.widgets.BaseListEntry;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureKnowledge;
 import com.mojang.blaze3d.matrix.MatrixStack;
+import net.minecraft.client.gui.IGuiEventListener;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+
+import java.util.List;
 
 public class CreatureDescriptionList extends BaseList {
 	public CreatureKnowledge creatureKnowledge;
@@ -49,6 +52,11 @@ public class CreatureDescriptionList extends BaseList {
 
 		@Override
 		protected void onClicked() {}
+
+		@Override
+		public List<? extends IGuiEventListener> getEventListeners() {
+			return null;
+		}
 	}
 
 	public String getContent() {

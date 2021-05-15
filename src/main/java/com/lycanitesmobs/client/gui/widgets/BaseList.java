@@ -101,7 +101,7 @@ public abstract class BaseList<S> extends ExtendedList<BaseListEntry> {
 		RenderSystem.enableTexture();
 		int listLeft = this.getRowLeft();
 		int listTop = this.y0 + 4 - (int)this.getScrollAmount();
-		if (this.renderHeader) {
+		if (this.isFocused()) { // was: this.renderHeader; may cause problems in the future
 			this.renderHeader(matrixStack, listLeft, listTop, tessellator);
 		}
 		this.renderList(matrixStack, listLeft, listTop, mouseX, mouseY, partialTicks);

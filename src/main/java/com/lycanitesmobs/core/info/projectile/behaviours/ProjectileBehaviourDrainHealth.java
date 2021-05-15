@@ -36,7 +36,9 @@ public class ProjectileBehaviourDrainHealth extends ProjectileBehaviour {
 			return;
 		}
 
-		projectile.func_234616_v_().heal(damage * this.rate);
+		if (projectile.func_234616_v_() instanceof LivingEntity) {
+			((LivingEntity) projectile.func_234616_v_()).heal(damage * this.rate);
+		}
 		if(projectile.func_234616_v_().getRidingEntity() instanceof LivingEntity) {
 			((LivingEntity)projectile.func_234616_v_().getRidingEntity()).heal(damage * this.mountRate);
 		}

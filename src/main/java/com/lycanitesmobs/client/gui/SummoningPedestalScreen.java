@@ -84,16 +84,16 @@ public class SummoningPedestalScreen extends BaseContainerScreen<SummoningPedest
 
         // Sitting and Following:
         buttonY += buttonHeight + (buttonSpacing * 2);
-        this.addButton(new ButtonBase(BaseCreatureEntity.GUI_COMMAND.SITTING.id, buttonX, buttonY, buttonWidth * 2, buttonHeight, "...", this));
+        this.addButton(new ButtonBase(BaseCreatureEntity.GUI_COMMAND.SITTING.id, buttonX, buttonY, buttonWidth * 2, buttonHeight, new TranslationTextComponent("..."), this));
 
         // Passive and Stance:
         buttonY += buttonHeight + (buttonSpacing * 2);
-        this.addButton(new ButtonBase(BaseCreatureEntity.GUI_COMMAND.PASSIVE.id, buttonX, buttonY, buttonWidth, buttonHeight, "...", this));
-        this.addButton(new ButtonBase(BaseCreatureEntity.GUI_COMMAND.STANCE.id, buttonXRight, buttonY, buttonWidth, buttonHeight, "...", this));
+        this.addButton(new ButtonBase(BaseCreatureEntity.GUI_COMMAND.PASSIVE.id, buttonX, buttonY, buttonWidth, buttonHeight, new TranslationTextComponent("..."), this));
+        this.addButton(new ButtonBase(BaseCreatureEntity.GUI_COMMAND.STANCE.id, buttonXRight, buttonY, buttonWidth, buttonHeight, new TranslationTextComponent("..."), this));
 
         // PVP:
         buttonY += buttonHeight + (buttonSpacing * 2);
-        this.addButton(new ButtonBase(BaseCreatureEntity.GUI_COMMAND.PVP.id, buttonX, buttonY, buttonWidth * 2, buttonHeight, "...", this));
+        this.addButton(new ButtonBase(BaseCreatureEntity.GUI_COMMAND.PVP.id, buttonX, buttonY, buttonWidth * 2, buttonHeight, new TranslationTextComponent("..."), this));
 
         // List:
         if(this.hasPets() && this.summoningPedestal.summonSet != null) {
@@ -147,16 +147,16 @@ public class SummoningPedestalScreen extends BaseContainerScreen<SummoningPedest
 
                 // Behaviour Buttons:
                 if (button.buttonId == BaseCreatureEntity.GUI_COMMAND.SITTING.id)
-                    button.setMessage(new TranslationTextComponent("gui.pet.sit").getString() + ": " + (this.summonSet.getSitting() ? new TranslationTextComponent("common.yes").getString() : new TranslationTextComponent("common.no").getString()));
+                    button.setMessage(new TranslationTextComponent(new TranslationTextComponent("gui.pet.sit").getString() + ": " + (this.summonSet.getSitting() ? new TranslationTextComponent("common.yes").getString() : new TranslationTextComponent("common.no").getString())));
 
                 if (button.buttonId == BaseCreatureEntity.GUI_COMMAND.PASSIVE.id)
-                    button.setMessage(new TranslationTextComponent("gui.pet.passive").getString() + ": " + (this.summonSet.getPassive() ? new TranslationTextComponent("common.yes").getString() : new TranslationTextComponent("common.no").getString()));
+                    button.setMessage(new TranslationTextComponent(new TranslationTextComponent("gui.pet.passive").getString() + ": " + (this.summonSet.getPassive() ? new TranslationTextComponent("common.yes").getString() : new TranslationTextComponent("common.no").getString())));
 
                 if (button.buttonId == BaseCreatureEntity.GUI_COMMAND.STANCE.id)
-                    button.setMessage((this.summonSet.getAggressive() ? new TranslationTextComponent("gui.pet.aggressive").getString() : new TranslationTextComponent("gui.pet.defensive").getString()));
+                    button.setMessage(new TranslationTextComponent((this.summonSet.getAggressive() ? new TranslationTextComponent("gui.pet.aggressive").getString() : new TranslationTextComponent("gui.pet.defensive").getString())));
 
                 if (button.buttonId == BaseCreatureEntity.GUI_COMMAND.PVP.id)
-                    button.setMessage(new TranslationTextComponent("gui.pet.pvp").getString() + ": " + (this.summonSet.getPVP() ? new TranslationTextComponent("common.yes").getString() : new TranslationTextComponent("common.no").getString()));
+                    button.setMessage(new TranslationTextComponent(new TranslationTextComponent("gui.pet.pvp").getString() + ": " + (this.summonSet.getPVP() ? new TranslationTextComponent("common.yes").getString() : new TranslationTextComponent("common.no").getString())));
             }
         }
 
@@ -175,8 +175,8 @@ public class SummoningPedestalScreen extends BaseContainerScreen<SummoningPedest
 
         // No Pets:
         if (!this.hasPets()) {
-            this.getFontRenderer().drawString(new TranslationTextComponent("gui.beastiary.summoning.empty.title").getString(), this.centerX - 96, this.windowY + 6, 0xFFFFFF);
-            this.drawSplitString(new TranslationTextComponent("gui.beastiary.summoning.empty.info").getString(), this.windowX + 16, this.windowY + 30, this.windowWidth - 32, 0xFFFFFF);
+            this.getFontRenderer().drawString(this.matrixStack, new TranslationTextComponent("gui.beastiary.summoning.empty.title").getString(), this.centerX - 96, this.windowY + 6, 0xFFFFFF);
+            this.getFontRenderer().func_238418_a_(new TranslationTextComponent("gui.beastiary.summoning.empty.info"), this.windowX + 16, this.windowY + 30, this.windowWidth - 32, 0xFFFFFF);
             return;
         }
 

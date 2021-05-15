@@ -7,12 +7,14 @@ import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.Subspecies;
 import com.lycanitesmobs.core.info.Variant;
 import com.mojang.blaze3d.matrix.MatrixStack;
+import net.minecraft.client.gui.IGuiEventListener;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextComponent;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.List;
 
 public class SubspeciesList extends BaseList<BeastiaryScreen> {
 	private CreatureInfo creature;
@@ -100,7 +102,7 @@ public class SubspeciesList extends BaseList<BeastiaryScreen> {
 	}
 
 	@Override
-	protected void renderBackground() {
+	protected void renderBackground(MatrixStack stack) {
 		if(!this.summoning) {
 			if(this.creature != this.screen.playerExt.selectedCreature) {
 				this.refreshList();
@@ -150,6 +152,11 @@ public class SubspeciesList extends BaseList<BeastiaryScreen> {
 		@Override
 		protected void onClicked() {
 			this.parentList.setSelected(this);
+		}
+
+		@Override
+		public List<? extends IGuiEventListener> getEventListeners() {
+			return null;
 		}
 	}
 }

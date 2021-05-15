@@ -3,10 +3,13 @@ package com.lycanitesmobs.client.gui.beastiary.lists;
 import com.lycanitesmobs.client.gui.beastiary.BeastiaryScreen;
 import com.lycanitesmobs.client.gui.widgets.BaseListEntry;
 import com.lycanitesmobs.core.info.CreatureInfo;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import net.minecraft.client.gui.IGuiEventListener;
 import net.minecraft.util.text.TranslationTextComponent;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.List;
 
 public class PetTypeList extends CreatureFilterList {
 
@@ -108,8 +111,13 @@ public class PetTypeList extends CreatureFilterList {
 		}
 
 		@Override
-		public void render(int index, int top, int left, int bottom, int right, int mouseX, int mouseY, boolean focus, float partialTicks) {
-			this.parentList.screen.getFontRenderer().drawString(new TranslationTextComponent(this.petTypeKey).getString(), left + 2 , top + 4, 0xFFFFFF);
+		public void render(MatrixStack stack, int index, int top, int left, int bottom, int right, int mouseX, int mouseY, boolean focus, float partialTicks) {
+			this.parentList.screen.getFontRenderer().drawString(stack, new TranslationTextComponent(this.petTypeKey).getString(), left + 2 , top + 4, 0xFFFFFF);
+		}
+
+		@Override
+		public List<? extends IGuiEventListener> getEventListeners() {
+			return null;
 		}
 	}
 }

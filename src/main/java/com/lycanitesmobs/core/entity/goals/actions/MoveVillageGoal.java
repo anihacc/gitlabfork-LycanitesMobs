@@ -59,11 +59,11 @@ public class MoveVillageGoal extends Goal {
         } else {
             ServerWorld serverWorld = (ServerWorld)this.host.world;
             BlockPos blockPos = new BlockPos((IPosition) this.host);
-            if (!serverWorld.func_217471_a(blockPos, 6)) {
+            if (!serverWorld.func_241119_a_(blockPos, 6)) {
                 return false;
             } else {
                 Vector3d lvt_3_1_ = RandomPositionGenerator.func_221024_a(this.host, 15, 7, (p_220755_1_) -> {
-                    return (double)(-serverWorld.func_217486_a(SectionPos.from(p_220755_1_)));
+                    return (double)(-serverWorld.func_242403_h(p_220755_1_));
                 });
                 this.blockPos = lvt_3_1_ == null ? null : new BlockPos(lvt_3_1_);
                 return this.blockPos != null;
@@ -89,7 +89,7 @@ public class MoveVillageGoal extends Goal {
         if (this.blockPos != null) {
             PathNavigator lvt_1_1_ = this.host.getNavigator();
             if (lvt_1_1_.noPath() && !this.blockPos.withinDistance(this.host.getPositionVec(), 10.0D)) {
-                Vector3d lvt_2_1_ = new Vector3d(this.blockPos);
+                Vector3d lvt_2_1_ = new Vector3d(this.blockPos.getX(), this.blockPos.getY(), this.blockPos.getZ());
                 Vector3d lvt_3_1_ = new Vector3d(this.host.getPositionVec().getX(), this.host.getPositionVec().getY(), this.host.getPositionVec().getZ());
                 Vector3d lvt_4_1_ = lvt_3_1_.subtract(lvt_2_1_);
                 lvt_2_1_ = lvt_4_1_.scale(0.4D).add(lvt_2_1_);

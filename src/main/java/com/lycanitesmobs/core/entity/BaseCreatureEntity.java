@@ -26,7 +26,6 @@ import com.lycanitesmobs.core.item.special.ItemSoulgazer;
 import com.lycanitesmobs.core.pets.PetEntry;
 import com.lycanitesmobs.core.spawner.SpawnerEventListener;
 import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.WoodType;
@@ -34,6 +33,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.Attribute;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraft.entity.ai.controller.MovementController;
@@ -485,18 +485,27 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		this.nextSpecialTargetIndex = 30;
 		this.nextFindTargetIndex = 50;
 
-//		this.getAttributes().registerAttribute(DEFENSE); Move to creature type, perhaps in forge registry now?
-//		this.getAttributes().registerAttribute(Attributes.ATTACK_DAMAGE);
-//		this.getAttributes().registerAttribute(Attributes.ATTACK_SPEED);
-//		this.getAttributes().registerAttribute(RANGED_SPEED);
-
 		this.applyDynamicAttributes();
+	}
+
+	/**
+	 * Returns Registers attributes and returns an attribute map for assigning to an EntityType.
+	 * @return Returns a mutable AttributeModifierMap.
+	 */
+	public static AttributeModifierMap.MutableAttribute registerCustomAttributes() {
+		return MobEntity.registerAttributes()
+				.createMutableAttribute(DEFENSE)
+				.createMutableAttribute(Attributes.ATTACK_DAMAGE)
+				.createMutableAttribute(Attributes.ATTACK_SPEED)
+				.createMutableAttribute(RANGED_SPEED)
+				.createMutableAttribute(Attributes.FOLLOW_RANGE);
 	}
 
 	/**
 	 * Loads this entity's dynamic attributes.
 	 */
 	public void applyDynamicAttributes() {
+		if (true) return;
 		this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(this.creatureStats.getHealth());
 		this.getAttribute(DEFENSE).setBaseValue(this.creatureStats.getDefense());
 		this.getAttribute(Attributes.ARMOR).setBaseValue(this.creatureStats.getArmor());
@@ -1963,9 +1972,10 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     // ========== Get Collision Bounding Box ==========
     @Override
     public AxisAlignedBB getBoundingBox() {
-        if(this.solidCollision)
-            return super.getBoundingBox();
-        return null;
+        if(this.solidCollision) { // TODO Figure out solid collision in 1.16.5+
+			return super.getBoundingBox();
+		}
+        return super.getBoundingBox();
     }
     
     
