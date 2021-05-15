@@ -97,7 +97,7 @@ public class LycanitesMobs {
 		IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 		modEventBus.addListener(this::commonSetup);
 		modEventBus.addListener(this::clientSetup);
-		modEventBus.addListener(this::serverStarting);
+//		modEventBus.addListener(this::serverStarting);
 		modEventBus.addListener(this::enqueueIMC);
 		modEventBus.addListener(this::processIMC);
 		modEventBus.register(ObjectManager.getInstance());
@@ -105,9 +105,9 @@ public class LycanitesMobs {
 		modEventBus.register(CreatureManager.getInstance());
 		modEventBus.register(ProjectileManager.getInstance());
 		modEventBus.register(WorldGenManager.getInstance());
-		//modEventBus.register(StatManager.getInstance()); TODO Stats
+//		modEventBus.register(StatManager.getInstance()); TODO Stats
 		PROXY.registerEvents();
-		//ItemManager.FLUIDS.register(modEventBus); // TODO Fluids
+//		ItemManager.FLUIDS.register(modEventBus); // TODO Fluids
 
 		// Game Event Listeners:
 		MinecraftForge.EVENT_BUS.register(this);

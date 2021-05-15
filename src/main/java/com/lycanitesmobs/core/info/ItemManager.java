@@ -208,6 +208,9 @@ public class ItemManager extends JSONLoader {
 
 
 		// Fluids:
+		if (true) {
+			return; // TODO Fluids idsabled for now.
+		}
 		Block.Properties waterBlockProperties = Block.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100).noDrops();
 		Block.Properties waterLightBlockProperties = Block.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100).noDrops().setLightLevel((BlockState blockState) -> { return 10; });
 		Block.Properties lavaBlockProperties = Block.Properties.create(Material.LAVA).doesNotBlockMovement().hardnessAndResistance(100).noDrops().setLightLevel((BlockState blockState) -> { return 15; });

@@ -6,11 +6,14 @@ import com.lycanitesmobs.core.FileLoader;
 import com.lycanitesmobs.core.JSONLoader;
 import com.lycanitesmobs.core.StreamLoader;
 import com.lycanitesmobs.core.config.ConfigCreatures;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.CreatureStats;
 import com.lycanitesmobs.core.spawner.SpawnerMobRegistry;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MobEntity;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import javax.annotation.Nullable;
@@ -197,6 +200,13 @@ public class CreatureManager extends JSONLoader {
 		LycanitesMobs.logDebug("Creature", "Forge registering all " + this.creatures.size() + " creatures...");
 		for(CreatureInfo creatureInfo : this.creatures.values()) {
 			event.getRegistry().register(creatureInfo.getEntityType());
+		}
+	}
+
+	@SubscribeEvent
+	public void registerEntityAttributes(EntityAttributeCreationEvent event) {
+		for(CreatureInfo creatureInfo : this.creatures.values()) {
+			event.put(creatureInfo.getEntityType(), BaseCreatureEntity.registerCustomAttributes().create());
 		}
 	}
 
