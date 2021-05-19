@@ -1,6 +1,7 @@
 package com.lycanitesmobs.client.gui.widgets;
 
 import com.lycanitesmobs.ClientManager;
+import com.lycanitesmobs.LycanitesMobs;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -81,10 +82,13 @@ public abstract class BaseListEntry extends AbstractOptionList.Entry<BaseListEnt
 	public void drawSplitString(MatrixStack matrixStack, String str, int x, int y, int wrapWidth, int textColor, boolean shadow) {
 		if(shadow) {
 			RenderSystem.translatef(0.5f,0.5f, 0);
-			this.drawSplitString(matrixStack, str, x, y, wrapWidth, 0x444444, true);
+
+			getFontRenderer().drawStringWithShadow(matrixStack, str, y, wrapWidth, 0x444444);
+			//this.drawSplitString(matrixStack, str, x, y, wrapWidth, 0x444444, true);
 			RenderSystem.translatef(-0.5f,-0.5f, 0);
 		}
-		this.drawSplitString(matrixStack, str, x,  y, wrapWidth, textColor, true);
+		getFontRenderer().drawString(matrixStack, str, x, y, textColor);
+		//this.drawSplitString(matrixStack, str, x,  y, wrapWidth, textColor, true);
 	}
 
 	/**
