@@ -20,6 +20,7 @@ import net.minecraft.util.text.ITextComponent;
 public abstract class BaseContainerScreen<T extends Container> extends ContainerScreen<T> implements Button.IPressable {
     public int zLevel = 0;
     public FontRenderer fontRenderer;
+    protected MatrixStack matrixStack = new MatrixStack();
 
     public BaseContainerScreen(T container, PlayerInventory playerInventory, ITextComponent name) {
         super(container, playerInventory, name);
@@ -53,11 +54,11 @@ public abstract class BaseContainerScreen<T extends Container> extends Container
      */
     @Override
     public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(matrixStack, mouseX, mouseY, partialTicks);
-        this.renderWidgets(matrixStack, mouseX, mouseY, partialTicks); // Renders buttons.
-        super.render(matrixStack, mouseX, mouseY, partialTicks); // Renders slots.
+        this.renderBackground(this.matrixStack, mouseX, mouseY, partialTicks);
+        this.renderWidgets(this.matrixStack, mouseX, mouseY, partialTicks); // Renders buttons.
+        super.render(this.matrixStack, mouseX, mouseY, partialTicks); // Renders slots.
         this.renderForeground(mouseX, mouseY, partialTicks);
-        this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
+        this.renderHoveredTooltip(this.matrixStack, mouseX, mouseY);
     }
 
     /**
