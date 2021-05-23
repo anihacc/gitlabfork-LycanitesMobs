@@ -12,7 +12,7 @@
 		"enabled": true,
 		"spawners": ["monster", "beast", "portal", "nether"],
 		"disableSubspecies": false,
-		"dimensionIds": ["minecraft:the_nether", "minecraft:the_end", "midnight:midnight"],
+		"dimensionIds": [-1, 1],
 		"dimensionListType": "whitelist",
 		"ignoreBiome": true,
 		"biomeTags": ["nether", "end"],
@@ -72,8 +72,7 @@
                 {
                     "type": "world",
                     "dimensionIds": [
-                        "minecraft:the_end",
-                        "midnight:midnight"
+                        1
                     ],
                     "dimensionListType": "whitelist"
                 }

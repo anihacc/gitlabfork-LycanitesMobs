@@ -13,7 +13,7 @@
         "spawners": [],
         "disableSubspecies": false,
         "dimensionIds": [
-            "minecraft:the_nether"
+            -1
         ],
         "dimensionListType": "whitelist",
         "ignoreBiome": false,

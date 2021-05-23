@@ -74,7 +74,7 @@ public class EntityAstaroth extends TameableCreatureEntity implements IMob {
     // ==================================================
     @Override
     public boolean canAttack(LivingEntity target) {
-        if(target instanceof EntityTrite || target instanceof EntityCacodemon ||  target instanceof EntityAsmodeus)
+        if(target instanceof EntityTrite || target instanceof EntityMalwrath ||  target instanceof EntityAsmodeus)
             return false;
         return super.canAttack(target);
     }

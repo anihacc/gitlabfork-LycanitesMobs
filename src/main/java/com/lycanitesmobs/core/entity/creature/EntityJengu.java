@@ -158,7 +158,7 @@ public class EntityJengu extends TameableCreatureEntity implements IMob, IFusabl
         if(fusable instanceof EntityGeonach) {
             return CreatureManager.getInstance().getEntityType("spriggan");
         }
-        if(fusable instanceof EntityDjinn) {
+        if(fusable instanceof EntityZephyr) {
             return CreatureManager.getInstance().getEntityType("reiver");
         }
         if(fusable instanceof EntityAegis) {

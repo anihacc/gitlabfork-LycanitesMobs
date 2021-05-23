@@ -1,6 +1,6 @@
 {
     "name": "darkling",
-    "creatureType": "arthropod",
+    "creatureType": "insect",
     "groups": [
         "predator",
         "dark"
@@ -16,7 +16,7 @@
         ],
         "disableSubspecies": false,
         "dimensionIds": [
-            "minecraft:the_nether"
+            -1
         ],
         "dimensionListType": "blacklist",
         "ignoreBiome": true,

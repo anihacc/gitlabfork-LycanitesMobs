@@ -32,7 +32,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public abstract class BaseProjectileEntity extends ThrowableEntity {
+public class BaseProjectileEntity extends ThrowableEntity {
 	public String entityName = "projectile";
 	public ModInfo modInfo;
 	public long updateTick;

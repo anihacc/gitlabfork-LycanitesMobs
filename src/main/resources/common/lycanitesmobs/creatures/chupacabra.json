@@ -15,7 +15,7 @@
         ],
         "disableSubspecies": false,
         "dimensionIds": [
-            "minecraft:the_nether", "minecraft:the_end"
+            -1
         ],
         "dimensionListType": "blacklist",
         "ignoreBiome": true,

@@ -1,6 +1,6 @@
 {
     "name": "salamander",
-    "creatureType": "beast",
+    "creatureType": "amphibian",
     "groups": [
         "predator",
         "inferno"

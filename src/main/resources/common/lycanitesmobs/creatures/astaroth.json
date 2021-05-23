@@ -18,18 +18,14 @@
         ],
         "disableSubspecies": false,
         "dimensionIds": [
-            "minecraft:the_nether",
-            "minecraft:the_end",
-            "midnight:midnight"
+            -1,
+            1
         ],
         "dimensionListType": "whitelist",
         "ignoreBiome": true,
         "biomeTags": [
             "nether",
-            "end",
-            "wasteland",
-            "hills",
-            "mountain"
+            "end"
         ],
         "spawnWeight": 2,
         "dungeonWeight": 0,
@@ -87,8 +83,7 @@
                 {
                     "type": "world",
                     "dimensionIds": [
-                        "minecraft:the_end",
-                        "midnight:midnight"
+                        1
                     ],
                     "dimensionListType": "whitelist"
                 }

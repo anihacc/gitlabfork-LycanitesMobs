@@ -41,7 +41,7 @@
 			"mobNameTag": "Maniacal Ghost"
 		},
 		{
-			"mobId": "lycanitesmobs:cacodemon",
+			"mobId": "lycanitesmobs:malwrath",
 			"weight": 4
 		},
 		{
@@ -52,6 +52,11 @@
 			"mobId": "lycanitesmobs:grue",
 			"weight": 8,
 			"mobNameTag": "Shadow Clown"
+		},
+		{
+			"mobId": "lycanitesmobs:malwrath",
+			"weight": 8,
+			"mobNameTag": "Pumpkin"
 		},
 		{
 			"mobId": "lycanitesmobs:epion",

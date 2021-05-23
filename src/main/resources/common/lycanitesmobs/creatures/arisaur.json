@@ -1,6 +1,6 @@
 {
     "name": "arisaur",
-    "creatureType": "beast",
+    "creatureType": "reptile",
     "groups": [
         "animal"
     ],
@@ -16,8 +16,8 @@
         ],
         "disableSubspecies": false,
         "dimensionIds": [
-            "minecraft:the_nether",
-            "minecraft:the_end"
+            -1,
+            1
         ],
         "dimensionListType": "blacklist",
         "ignoreBiome": false,

@@ -15,8 +15,8 @@
         ],
         "disableSubspecies": false,
         "dimensionIds": [
-            "minecraft:the_nether",
-            "minecraft:the_end"
+            -1,
+            1
         ],
         "dimensionListType": "blacklist",
         "ignoreBiome": false,
@@ -78,7 +78,6 @@
     "summonable": false,
     "tameable": false,
     "mountable": false,
-    "perchable": true,
     "summonCost": 2,
     "dungeonLevel": 2,
     "drops": [

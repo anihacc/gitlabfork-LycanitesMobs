@@ -31,11 +31,11 @@
 	],
 	"mobSpawns": [
 		{
-			"mobId": "lycanitesmobs:lobber",
+			"mobId": "lycanitesmobs:cherufe",
 			"weight": 8
 		},
 		{
-			"mobId": "lycanitesmobs:gorger",
+			"mobId": "lycanitesmobs:umibas",
 			"weight": 8
 		},
 		{

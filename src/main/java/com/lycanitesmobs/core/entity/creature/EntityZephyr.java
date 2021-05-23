@@ -1,24 +1,21 @@
 package com.lycanitesmobs.core.entity.creature;
 
+import com.lycanitesmobs.api.IFusable;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
-import com.lycanitesmobs.core.entity.damagesources.ElementDamageSource;
-import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
-import com.lycanitesmobs.core.info.ElementManager;
+import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
+import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.Pose;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
-import java.util.List;
+public class EntityZephyr extends TameableCreatureEntity implements IMob, IFusable {
 
-public class EntityZephyr extends TameableCreatureEntity implements IMob {
-
-    protected short aoeAttackTick = 0;
+	public float fireDamageAbsorbed = 0;
 
     // ==================================================
  	//                    Constructor
@@ -30,13 +27,15 @@ public class EntityZephyr extends TameableCreatureEntity implements IMob {
         this.attribute = CreatureAttribute.UNDEFINED;
         this.hasAttackSound = false;
         this.setupMob();
+
+        this.stepHeight = 1.0F;
     }
 
     // ========== Init AI ==========
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this));
+        this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackRangedGoal(this).setSpeed(0.75D).setRange(16.0F).setMinChaseDistance(8.0F));
     }
 	
 	
@@ -48,30 +47,33 @@ public class EntityZephyr extends TameableCreatureEntity implements IMob {
     public void livingTick() {
         super.livingTick();
 
-        // Static Aura Attack:
-        if(!this.getEntityWorld().isRemote && this.hasAttackTarget() && ++this.aoeAttackTick == (this.isPetType("familiar") ? 100 : 40)) {
-            this.aoeAttackTick = 0;
-            List aoeTargets = this.getNearbyEntities(LivingEntity.class, null, 4);
-            for(Object entityObj : aoeTargets) {
-                LivingEntity target = (LivingEntity)entityObj;
-                if(target != this && this.canAttack(target.getType()) && this.canAttack(target) && this.getEntitySenses().canSee(target)) {
-                    target.attackEntityFrom(ElementDamageSource.causeElementDamage(this, ElementManager.getInstance().getElement("lightning")), this.getAttackDamage(1));
-                }
-            }
-        }
+		if(!this.getEntityWorld().isRemote) {
+
+			// Environmental Transformation:
+			if(!this.isTamed()) {
+				if (this.fireDamageAbsorbed >= 10) {
+					this.transform(CreatureManager.getInstance().getEntityType("zephyr"), null, false);
+				}
+			}
+		}
         
         // Particles:
-        if(this.getEntityWorld().isRemote && this.hasAttackTarget()) {
-            //this.getEntityWorld().addParticle(ParticleTypes.CLOUD, this.getPositionVec().getX() + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width, this.getPositionVec().getY() + this.rand.nextDouble() * (double) this.getSize(Pose.STANDING).height, this.getPositionVec().getZ() + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
-            
-            List aoeTargets = this.getNearbyEntities(LivingEntity.class, null, 4);
-            for(Object entityObj : aoeTargets) {
-                LivingEntity target = (LivingEntity)entityObj;
-                if(this.canAttack(target.getType()) && this.canAttack(target) && this.getEntitySenses().canSee(target)) {
-                    this.getEntityWorld().addParticle(ParticleTypes.CRIT, target.getPositionVec().getX() + (this.rand.nextDouble() - 0.5D) * (double) target.getSize(Pose.STANDING).width, target.getPositionVec().getY() + this.rand.nextDouble() * (double) target.getSize(Pose.STANDING).height, target.getPositionVec().getZ() + (this.rand.nextDouble() - 0.5D) * (double) target.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
-                }
-            }
-        }
+        //if(this.getEntityWorld().isRemote)
+            //this.getEntityWorld().addParticle(ParticleTypes.SNOWBALL, this.getPositionVec().getX() + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, this.getPositionVec().getY() + this.rand.nextDouble() * (double)this.getSize(Pose.STANDING).height, this.getPositionVec().getZ() + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
+    }
+    
+    
+    // ==================================================
+    //                      Attacks
+    // ==================================================
+    // ========== Ranged Attack ==========
+    @Override
+    public void attackRanged(Entity target, float range) {
+    	int projectileCount = 10;
+    	for(int i = 0; i < projectileCount; i++) {
+    		this.fireProjectile("whirlwind", target, range, (360 / projectileCount) * i, new Vector3d(0, 0, 0), 0.6f, 2f, 1F);
+		}
+        super.attackRanged(target, range);
     }
     
     
@@ -80,6 +82,9 @@ public class EntityZephyr extends TameableCreatureEntity implements IMob {
   	// ==================================================
     @Override
     public boolean isFlying() { return true; }
+
+    @Override
+    public boolean isStrongSwimmer() { return false; }
 
 
     // ==================================================
@@ -93,20 +98,67 @@ public class EntityZephyr extends TameableCreatureEntity implements IMob {
     //                     Pet Control
     // ==================================================
     public boolean petControlsEnabled() { return true; }
-
-
+    
+    
     // ==================================================
-    //                     Immunities
-    // ==================================================
-    /** Returns whether or not the given damage type is applicable, if not no damage will be taken. **/
+   	//                     Immunities
+   	// ==================================================
+    @Override
     public boolean isVulnerableTo(String type, DamageSource source, float damage) {
-    	if("lightningBolt".equalsIgnoreCase(type))
-    		return false;
-    	return super.isVulnerableTo(type, source, damage);
+        if(type.equals("cactus") || type.equals("inWall"))
+            return false;
+        if(source.isFireDamage()) {
+            this.fireDamageAbsorbed += damage;
+            return false;
+        }
+        if(type.equals("lightningBolt") && !this.isTamed()) {
+        	this.transform(CreatureManager.getInstance().getEntityType("zephyr"), null, false);
+        	return false;
+		}
+        return super.isVulnerableTo(type, source, damage);
     }
     
     @Override
     public boolean canBreatheUnderwater() {
         return true;
+    }
+    
+    @Override
+    public boolean canBurn() { return false; }
+
+
+    // ==================================================
+    //                      Fusion
+    // ==================================================
+    protected IFusable fusionTarget;
+
+    @Override
+    public IFusable getFusionTarget() {
+        return this.fusionTarget;
+    }
+
+    @Override
+    public void setFusionTarget(IFusable fusionTarget) {
+        this.fusionTarget = fusionTarget;
+    }
+
+    @Override
+	public EntityType<? extends LivingEntity> getFusionType(IFusable fusable) {
+		if(fusable instanceof EntityCinder) {
+			return CreatureManager.getInstance().getEntityType("zephyr");
+		}
+        if(fusable instanceof EntityJengu) {
+			return CreatureManager.getInstance().getEntityType("reiver");
+        }
+        if(fusable instanceof EntityGeonach) {
+			return CreatureManager.getInstance().getEntityType("banshee");
+        }
+        if(fusable instanceof EntityAegis) {
+			return CreatureManager.getInstance().getEntityType("sylph");
+        }
+		if(fusable instanceof EntityArgus) {
+			return CreatureManager.getInstance().getEntityType("wraith");
+		}
+        return null;
     }
 }

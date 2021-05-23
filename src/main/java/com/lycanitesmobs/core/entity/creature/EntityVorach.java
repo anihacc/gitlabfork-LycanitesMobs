@@ -1,21 +1,16 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
-import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.Pose;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
 public class EntityVorach extends TameableCreatureEntity implements IMob {
 
-	public EntityVorach(EntityType<? extends EntityBehemoth> entityType, World world) {
+	public EntityVorach(EntityType<? extends EntityBehemophet> entityType, World world) {
 		super(entityType, world);
 		this.attribute = CreatureAttribute.UNDEAD;
 		this.hasAttackSound = true;

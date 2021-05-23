@@ -150,7 +150,7 @@ public class EntityAegis extends TameableCreatureEntity implements IFusable {
 		if(fusable instanceof EntityGeonach) {
 			return CreatureManager.getInstance().getEntityType("vapula");
 		}
-		if(fusable instanceof EntityDjinn) {
+		if(fusable instanceof EntityZephyr) {
 			return CreatureManager.getInstance().getEntityType("sylph");
 		}
 		if(fusable instanceof EntityArgus) {

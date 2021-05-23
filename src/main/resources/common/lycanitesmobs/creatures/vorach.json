@@ -18,7 +18,7 @@
         ],
         "disableSubspecies": false,
         "dimensionIds": [
-            "minecraft:the_nether"
+            -1
         ],
         "dimensionListType": "whitelist",
         "ignoreBiome": true,
@@ -42,9 +42,9 @@
     "health": 40,
     "defense": 2,
     "armor": 0,
-    "speed": 30,
+    "speed": 24,
     "damage": 2,
-    "attackSpeed": 4,
+    "attackSpeed": 1,
     "rangedSpeed": 0.5,
     "effectDuration": 5,
     "effectAmplifier": 0,
@@ -71,8 +71,8 @@
         }
     ],
     "elements": [
-        "fae",
-        "quake"
+        "quake",
+        "void"
     ],
     "diets": [
         "carnivore",
@@ -88,7 +88,6 @@
     "drops": [
         {
             "item": "minecraft:soul_sand",
-            "metadata": 1,
             "minAmount": 3,
             "maxAmount": 5,
             "chance": 1

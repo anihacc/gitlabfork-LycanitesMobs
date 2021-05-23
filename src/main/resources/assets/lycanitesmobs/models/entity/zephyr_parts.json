@@ -3,56 +3,56 @@
     "name": "Body",
     "parent": "",
     "centerX": "0.0",
-    "centerY": "0.9",
+    "centerY": "1.3",
+    "centerZ": "-0.2"
+  },
+  {
+    "name": "ArmRight",
+    "parent": "Body",
+    "centerX": "-0.4",
+    "centerY": "1.4",
     "centerZ": "-0.0"
+  },
+  {
+    "name": "ArmRightRibbon",
+    "parent": "ArmRight",
+    "centerX": "-0.4",
+    "centerY": "1.4",
+    "centerZ": "-0.0"
+  },
+  {
+    "name": "BodyRibbon",
+    "parent": "Body",
+    "centerX": "0.0",
+    "centerY": "1.3",
+    "centerZ": "-0.2"
   },
   {
     "name": "Head",
     "parent": "Body",
     "centerX": "0.0",
-    "centerY": "1.2",
-    "centerZ": "-0.0"
+    "centerY": "1.5",
+    "centerZ": "0.14"
   },
   {
-    "name": "EffectInner",
-    "parent": "Body",
+    "name": "HeadRibbon",
+    "parent": "Head",
     "centerX": "0.0",
-    "centerY": "0.9",
-    "centerZ": "-0.07"
-  },
-  {
-    "name": "EffectOuter",
-    "parent": "Body",
-    "centerX": "0.0",
-    "centerY": "1.07",
-    "centerZ": "-0.069"
+    "centerY": "1.5",
+    "centerZ": "0.14"
   },
   {
     "name": "ArmLeft",
     "parent": "Body",
-    "centerX": "0.2",
-    "centerY": "1.1",
+    "centerX": "0.4",
+    "centerY": "1.4",
     "centerZ": "-0.0"
   },
   {
-    "name": "ArmEffectLeft",
+    "name": "ArmLeftRibbon",
     "parent": "ArmLeft",
-    "centerX": "0.43",
-    "centerY": "1.007",
-    "centerZ": "0.15"
-  },
-  {
-    "name": "ArmRight",
-    "parent": "Body",
-    "centerX": "-0.2",
-    "centerY": "1.1",
+    "centerX": "0.4",
+    "centerY": "1.4",
     "centerZ": "-0.0"
-  },
-  {
-    "name": "ArmEffectRight",
-    "parent": "ArmRight",
-    "centerX": "-0.43",
-    "centerY": "1.007",
-    "centerZ": "0.15"
   }
 ]

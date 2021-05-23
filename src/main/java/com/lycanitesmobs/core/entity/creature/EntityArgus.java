@@ -140,7 +140,7 @@ public class EntityArgus extends TameableCreatureEntity implements IMob, IFusabl
 		if(fusable instanceof EntityGeonach) {
 			return CreatureManager.getInstance().getEntityType("tremor");
 		}
-		if(fusable instanceof EntityDjinn) {
+		if(fusable instanceof EntityZephyr) {
 			return CreatureManager.getInstance().getEntityType("wraith");
 		}
 		if(fusable instanceof EntityAegis) {

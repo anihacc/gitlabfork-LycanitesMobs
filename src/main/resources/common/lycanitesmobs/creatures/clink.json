@@ -16,8 +16,8 @@
         ],
         "disableSubspecies": false,
         "dimensionIds": [
-            "minecraft:the_nether",
-            "minecraft:the_end"
+            -1,
+            1
         ],
         "dimensionListType": "blacklist",
         "ignoreBiome": false,
@@ -73,7 +73,7 @@
             ]
         }
     ],
-    "element": "gravity",
+    "element": "arcane",
     "diets": [
         "carnivore",
         "insectivore"

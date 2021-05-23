@@ -1,6 +1,6 @@
 {
     "name": "concapedesegment",
-    "creatureType": "arthropod",
+    "creatureType": "insect",
     "groups": [
         "animal"
     ],
@@ -13,8 +13,8 @@
         "spawners": [],
         "disableSubspecies": false,
         "dimensionIds": [
-            "minecraft:the_nether",
-            "minecraft:the_end"
+            -1,
+            1
         ],
         "dimensionListType": "blacklist",
         "ignoreBiome": false,
@@ -85,8 +85,8 @@
             "chance": 1
         },
         {
-            "item": "lycanitesmobs:concapedemeatraw",
-            "burningItem": "lycanitesmobs:concapedemeatcooked",
+            "item": "lycanitesmobs:raw_concapede_meat",
+            "burningItem": "lycanitesmobs:cooked_concapede_meat",
             "minAmount": 1,
             "maxAmount": 1,
             "chance": 1
