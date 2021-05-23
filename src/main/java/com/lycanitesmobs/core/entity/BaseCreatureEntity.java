@@ -30,12 +30,10 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.WoodType;
 import net.minecraft.block.material.Material;
+import net.minecraft.crash.ReportedException;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.attributes.RangedAttribute;
+import net.minecraft.entity.ai.attributes.*;
 import net.minecraft.entity.ai.controller.MovementController;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.item.BoatEntity;
@@ -494,7 +492,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	 * @return Returns a mutable AttributeModifierMap.
 	 */
 	public static AttributeModifierMap.MutableAttribute registerCustomAttributes() {
-		return MobEntity.registerAttributes()
+		return CreatureEntity.registerAttributes()
 				.createMutableAttribute(DEFENSE)
 				.createMutableAttribute(Attributes.ATTACK_DAMAGE)
 				.createMutableAttribute(Attributes.ATTACK_SPEED)
@@ -4829,8 +4827,15 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 			nbtTagCompound.putLong("FixateUUIDMost", this.getFixateTarget().getUniqueID().getMostSignificantBits());
 			nbtTagCompound.putLong("FixateUUIDLeast", this.getFixateTarget().getUniqueID().getLeastSignificantBits());
 		}
-    	
-        super.writeAdditional(nbtTagCompound);
+
+		try {
+			this.getAttributeManager().serialize();
+		}
+		catch (Throwable t) {
+			LycanitesMobs.logError(t.getMessage());
+			t.printStackTrace();
+		}
+		super.writeAdditional(nbtTagCompound);
         this.inventory.write(nbtTagCompound);
 		ListNBT nbtDropList = new ListNBT();
         for(ItemDrop drop : this.savedDrops) {

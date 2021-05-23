@@ -475,7 +475,7 @@ public class CreatureInfo {
 			entityTypeBuilder.setShouldReceiveVelocityUpdates(false);
 			entityTypeBuilder.size((float)this.width, (float)this.height);
 			this.entityType = entityTypeBuilder.build(this.getName());
-			this.entityType.setRegistryName(this.modInfo.modid, this.getName());
+			this.entityType.setRegistryName(LycanitesMobs.MODID, this.getName());
 			EntityFactory.getInstance().addEntityType(this.entityType, this.entityConstructor, this.getName());
 		}
 		return this.entityType;
