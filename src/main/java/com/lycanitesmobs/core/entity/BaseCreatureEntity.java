@@ -404,6 +404,9 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	protected BaseCreatureEntity(EntityType<? extends BaseCreatureEntity> entityType, World world) {
         super(entityType, world);
 
+        // Init Dynamic Attributes:
+		this.applyDynamicAttributes();
+
         // Movement:
         this.moveController = this.createMoveController();
 
@@ -484,8 +487,6 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		this.nextReactTargetIndex = 10;
 		this.nextSpecialTargetIndex = 30;
 		this.nextFindTargetIndex = 50;
-
-		this.applyDynamicAttributes();
 	}
 
 	/**
@@ -505,7 +506,6 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	 * Loads this entity's dynamic attributes.
 	 */
 	public void applyDynamicAttributes() {
-		if (true) return;
 		this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(this.creatureStats.getHealth());
 		this.getAttribute(DEFENSE).setBaseValue(this.creatureStats.getDefense());
 		this.getAttribute(Attributes.ARMOR).setBaseValue(this.creatureStats.getArmor());
