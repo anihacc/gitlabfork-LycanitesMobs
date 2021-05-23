@@ -32,8 +32,6 @@ public class CreatureInventoryScreen extends BaseContainerScreen<CreatureContain
 		this.creatureInventory = container.creature.inventory;
 	}
 
-	public MatrixStack matrixStack;
-
 	@Override
 	public void init() {
 		super.init();
@@ -120,32 +118,39 @@ public class CreatureInventoryScreen extends BaseContainerScreen<CreatureContain
 	}
 
 	@Override
-	protected void renderForeground(int mouseX, int mouseY, float partialTicks) {
-		this.fontRenderer.drawString(matrixStack, this.creatureInventory.getName(), this.guiLeft + 8, this.guiTop + 6, 4210752);
-        this.fontRenderer.drawString(matrixStack, this.playerInventory.getName().getString(), this.guiLeft + 8, this.guiTop + this.ySize - 96 + 2, 4210752);
+	protected void renderForeground(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+        this.drawHelper.drawString(matrixStack, this.playerInventory.getName().getString(), this.guiLeft + 8, this.guiTop + this.ySize - 96 + 2, 4210752);
 		int backX = (this.width - this.xSize) / 2;
 		int backY = (this.height - this.ySize) / 2;
-		this.drawBars(backX, backY);
+		this.drawBars(matrixStack, backX, backY);
     }
 
-	protected void drawBars(int backX, int backY) {
+	protected void drawBars(MatrixStack matrixStack, int backX, int backY) {
 		int barWidth = 100;
 		int barHeight = 11;
 		int barX = backX - barWidth;
 		int barY = backY + 54 + 18;
 		int barCenter = barX + (barWidth / 2);
-		this.drawTexture(TextureManager.getTexture("GUIPetBarEmpty"), barX, barY, 0, 1, 1, barWidth, barHeight);
-		float healthNormal = Math.min(1, this.creature.getHealth() / this.creature.getMaxHealth());
-		this.drawTexture(TextureManager.getTexture("GUIPetBarHealth"), barX, barY, 0, healthNormal, 1, barWidth * healthNormal, barHeight);
-		String healthText = new TranslationTextComponent("entity.health").getString() + ": " + String.format("%.0f", this.creature.getHealth()) + "/" + String.format("%.0f", this.creature.getMaxHealth());
-		this.fontRenderer.drawString(matrixStack, healthText, barCenter - (this.fontRenderer.getStringWidth(healthText) / 2), barY + 2, 0xFFFFFF);
 
+		// Health Bar:
+		this.drawHelper.drawTexture(matrixStack, TextureManager.getTexture("GUIPetBarEmpty"), barX, barY, 0, 1, 1, barWidth, barHeight);
+		float healthNormal = Math.min(1, this.creature.getHealth() / this.creature.getMaxHealth());
+		this.drawHelper.drawTexture(matrixStack, TextureManager.getTexture("GUIPetBarHealth"), barX, barY, 0, healthNormal, 1, barWidth * healthNormal, barHeight);
+		String healthText = new TranslationTextComponent("entity.health").getString() + ": " + String.format("%.0f", this.creature.getHealth()) + "/" + String.format("%.0f", this.creature.getMaxHealth());
+		this.drawHelper.fontRenderer.drawString(matrixStack, healthText, barCenter - ((float)this.drawHelper.getStringWidth(healthText) / 2), barY + 2, 0xFFFFFF);
 		barY += barHeight + 1;
-		this.drawTexture(TextureManager.getTexture("GUIPetBarEmpty"), barX, barY, 0, 1, 1, barWidth, barHeight);
+
+		// XP Bar:
+		this.drawHelper.drawTexture(matrixStack, TextureManager.getTexture("GUIPetBarEmpty"), barX, barY, 0, 1, 1, barWidth, barHeight);
 		float experienceNormal = Math.min(1, (float)this.creature.getExperience() / this.creature.creatureStats.getExperienceForNextLevel());
-		this.drawTexture(TextureManager.getTexture("GUIBarExperience"), barX, barY, 0, experienceNormal, 1, barWidth * experienceNormal, barHeight);
+		this.drawHelper.drawTexture(matrixStack, TextureManager.getTexture("GUIBarExperience"), barX, barY, 0, experienceNormal, 1, barWidth * experienceNormal, barHeight);
 		String experienceText = new TranslationTextComponent("entity.experience").getString() + ": " + this.creature.getExperience() + "/" + this.creature.creatureStats.getExperienceForNextLevel();
-		this.fontRenderer.drawString(matrixStack, experienceText, barCenter - (this.fontRenderer.getStringWidth(experienceText) / 2), barY + 2, 0xFFFFFF);
+		this.drawHelper.fontRenderer.drawString(matrixStack, experienceText, barCenter - ((float)this.drawHelper.getStringWidth(experienceText) / 2), barY + 2, 0xFFFFFF);
+		barY += barHeight + 1;
+
+		// Level:
+		String levelText = new TranslationTextComponent("entity.level").getString() + ": " + this.creature.getLevel();
+		this.drawHelper.fontRenderer.drawString(matrixStack, levelText, barCenter - ((float)this.drawHelper.getStringWidth(levelText) / 2), barY + 2, 0xFFFFFF);
 	}
 
 	@Override
@@ -156,29 +161,32 @@ public class CreatureInventoryScreen extends BaseContainerScreen<CreatureContain
         this.ySize = 166;
         int backX = (this.width - this.xSize) / 2;
         int backY = (this.height - this.ySize) / 2;
-        this.drawTexturedModalRect(backX, backY, 0, 0, this.xSize, this.ySize);
+        this.drawHelper.drawTexturedModalRect(matrixStack, backX, backY, 0, 0, this.xSize, this.ySize);
 
-		this.drawFrames(backX, backY, mouseX, mouseY);
-		this.drawSlots(backX, backY);
+		this.drawFrames(matrixStack, backX, backY, mouseX, mouseY);
+		this.drawSlots(matrixStack, backX, backY);
 	}
 
-	protected void drawFrames(int backX, int backY, int mouseX, int mouseY) {
+	protected void drawFrames(MatrixStack matrixStack, int backX, int backY, int mouseX, int mouseY) {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.getMinecraft().getTextureManager().bindTexture(TextureManager.getTexture("GUIInventoryCreature"));
         
         // Status Frame:
         int statusWidth = 90;
         int statusHeight = 54;
-        this.drawTexturedModalRect(backX + 79, backY + 17, 0, 256 - statusHeight, statusWidth, statusHeight);
+        this.drawHelper.drawTexturedModalRect(matrixStack, backX + 79, backY + 17, 0, 256 - statusHeight, statusWidth, statusHeight);
         
         // Creature Frame:
-        int creatureWidth = 54;
-        int creatureHeight = 54;
-        this.drawTexturedModalRect(backX - creatureWidth + 1, backY + 17, statusWidth, 256 - creatureHeight, creatureWidth, creatureHeight);
-		BaseGui.renderLivingEntity(backX + 26 - creatureWidth + 1, backY + 60, 17, (float) backX - mouseX, (float) backY - mouseY, this.creature); // drawEntityOnScreen()
+        int creatureFrameWidth = 54;
+        int creatureFrameHeight = 54;
+        this.drawHelper.drawTexturedModalRect(matrixStack, backX - creatureFrameWidth + 1, backY + 17, statusWidth, 256 - creatureFrameHeight, creatureFrameWidth, creatureFrameHeight);
+		double creatureWidth = creature.getWidth();
+		double creatureHeight = creature.getHeight();
+		int scale = (int)Math.round((2.5F / Math.max(creatureWidth, creatureHeight)) * 6);
+		BaseGui.renderLivingEntity(matrixStack, backX + 26 - creatureFrameWidth + 1, backY + 60, scale, (float) backX - mouseX, (float) backY - mouseY, this.creature);
 	}
 
-	protected void drawSlots(int backX, int backY) {
+	protected void drawSlots(MatrixStack matrixStack, int backX, int backY) {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.getMinecraft().getTextureManager().bindTexture(TextureManager.getTexture("GUIInventoryCreature"));
         
@@ -201,7 +209,7 @@ public class CreatureInventoryScreen extends BaseContainerScreen<CreatureContain
 				else if(slotType.equals("chest"))
 					slotV += slotHeight * 3;
 			}
-			this.drawTexturedModalRect(slotX, slotY, slotU, slotV, slotWidth, slotHeight);
+			this.drawHelper.drawTexturedModalRect(matrixStack, slotX, slotY, slotU, slotV, slotWidth, slotHeight);
 		}
 	}
 

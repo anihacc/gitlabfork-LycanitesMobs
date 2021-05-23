@@ -63,12 +63,8 @@ public abstract class CreatureFilterList extends BaseList<BeastiaryScreen> {
 	/**
 	 * Renders a slot based on the provided entry.
 	 * @param index The entry index.
-	 //* @param boxRight
-	 //* @param boxTop
-	 //* @param boxBottom
-	 //* @param tessellator
 	 */
-	public void renderSlot(int index, int top, int left, int bottom, int right) {}
+	public void renderSlot(MatrixStack matrixStack, int index, int top, int left, int bottom, int right) {}
 
 	/**
 	 * List Entry
@@ -83,7 +79,7 @@ public abstract class CreatureFilterList extends BaseList<BeastiaryScreen> {
 
 		@Override
 		public void render(MatrixStack matrixStack, int index, int top, int left, int bottom, int right, int mouseX, int mouseY, boolean p_render_8_, float partialTicks) {
-			this.parentList.renderSlot(index, top, left, bottom, right);
+			this.parentList.renderSlot(matrixStack, index, top, left, bottom, right);
 		}
 
 		@Override

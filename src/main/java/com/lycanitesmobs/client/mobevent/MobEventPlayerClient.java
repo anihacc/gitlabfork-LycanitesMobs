@@ -1,4 +1,4 @@
-package com.lycanitesmobs.core.mobevent;
+package com.lycanitesmobs.client.mobevent;
 
 import com.lycanitesmobs.ClientManager;
 import com.lycanitesmobs.LycanitesMobs;
@@ -6,6 +6,9 @@ import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.client.gui.overlays.BaseOverlay;
 import com.lycanitesmobs.core.MobEventSound;
+import com.lycanitesmobs.core.mobevent.MobEvent;
+import com.lycanitesmobs.core.mobevent.MobEventPlayerServer;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SimpleSound;
 import net.minecraft.entity.player.PlayerEntity;
@@ -100,7 +103,7 @@ public class MobEventPlayerClient {
     //                       GUI
     // ==================================================
     @OnlyIn(Dist.CLIENT)
-    public void onGUIUpdate(BaseOverlay gui, int sWidth, int sHeight) {
+    public void onGUIUpdate(MatrixStack matrixStack, BaseOverlay gui, int sWidth, int sHeight) {
     	PlayerEntity player = ClientManager.getInstance().getClientPlayer();
         if(player.abilities.isCreativeMode && !MobEventPlayerServer.testOnCreative && "world".equalsIgnoreCase(this.mobEvent.channel)) {
 			return;
@@ -128,10 +131,10 @@ public class MobEventPlayerClient {
         x += 3 - (this.ticks % 6);
         y += 2 - (this.ticks % 4);
 
-        gui.mc.getTextureManager().bindTexture(this.getTexture());
+        gui.minecraft.getTextureManager().bindTexture(this.getTexture());
         GL11.glColor4f(1.0F, 1.0F, 1.0F, animation);
         if(animation > 0) {
-			gui.drawTexturedModalRect(x, y, u, v, width, height);
+			gui.drawHelper.drawTexturedModalRect(matrixStack, x, y, u, v, width, height);
 		}
     }
 

@@ -652,7 +652,7 @@ public class PetEntry {
                 this.entityName = this.entity.getCustomName().getString();
             }
 
-            this.entity.writeWithoutTypeId(this.entityNBT);
+//            this.entity.writeWithoutTypeId(this.entityNBT); Disabled entity NBT writing, going forwards the PetEntry should record everything specific needed instead as this has become to unreliable over recent updates.
         }
     }
 

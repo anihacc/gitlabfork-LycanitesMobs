@@ -3,18 +3,15 @@ package com.lycanitesmobs;
 import com.lycanitesmobs.core.block.BlockFireBase;
 import com.lycanitesmobs.core.capabilities.CapabilityProviderEntity;
 import com.lycanitesmobs.core.capabilities.CapabilityProviderPlayer;
-import com.lycanitesmobs.core.config.ConfigDebug;
 import com.lycanitesmobs.core.config.ConfigExtra;
 import com.lycanitesmobs.core.entity.*;
 import com.lycanitesmobs.core.info.ItemConfig;
 import com.lycanitesmobs.core.item.equipment.ItemEquipment;
 import com.lycanitesmobs.core.network.MessagePlayerLeftClick;
 import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -23,14 +20,10 @@ import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
 import net.minecraftforge.event.entity.EntityMountEvent;
@@ -462,60 +455,5 @@ public class GameEventListener {
 			return;
 		}
 		event.setCanceled(event.getEntityMounting().isSneaking() && !extendedPlayer.isControlActive(ExtendedPlayer.CONTROL_ID.MOUNT_DISMOUNT));
-	}
-
-
-	// ==================================================
-	//                 Debug Overlay
-	// ==================================================
-	@OnlyIn(Dist.CLIENT)
-	@SubscribeEvent
-	public void onGameOverlay(RenderGameOverlayEvent.Text event) {
-		if(!ConfigDebug.INSTANCE.creatureOverlay.get())
-			return;
-
-		// Entity:
-		RayTraceResult mouseOver = Minecraft.getInstance().objectMouseOver;
-		if(mouseOver instanceof EntityRayTraceResult) {
-			Entity mouseOverEntity = ((EntityRayTraceResult)mouseOver).getEntity();
-			if(mouseOverEntity instanceof BaseCreatureEntity) {
-				BaseCreatureEntity mouseOverCreature = (BaseCreatureEntity)mouseOverEntity;
-				event.getLeft().add("");
-				event.getLeft().add("Target Creature: " + mouseOverCreature.getName().getString());
-				event.getLeft().add("Distance To player: " + mouseOverCreature.getDistance(Minecraft.getInstance().player));
-				event.getLeft().add("Elements: " + mouseOverCreature.creatureInfo.getElementNames(mouseOverCreature.getSubspecies()).getString());
-				event.getLeft().add("Subspecies: " + mouseOverCreature.getSubspeciesIndex());
-				event.getLeft().add("Variant: " + mouseOverCreature.getVariantIndex());
-				event.getLeft().add("Level: " + mouseOverCreature.getLevel());
-				event.getLeft().add("Experience: " + mouseOverCreature.getExperience() + "/" + mouseOverCreature.creatureStats.getExperienceForNextLevel());
-				event.getLeft().add("Size: " + mouseOverCreature.sizeScale);
-				event.getLeft().add("");
-				event.getLeft().add("Health: " + mouseOverCreature.getHealth() + "/" + mouseOverCreature.getMaxHealth() + " Fresh: " + mouseOverCreature.creatureStats.getHealth());
-				event.getLeft().add("Speed: " + mouseOverCreature.getAttribute(Attributes.MOVEMENT_SPEED).getValue() + "/" + mouseOverCreature.creatureStats.getSpeed());
-				event.getLeft().add("");
-				event.getLeft().add("Defense: " + mouseOverCreature.creatureStats.getDefense());
-				event.getLeft().add("Armor: " + mouseOverCreature.getTotalArmorValue());
-				event.getLeft().add("");
-				event.getLeft().add("Damage: " + mouseOverCreature.creatureStats.getDamage());
-				event.getLeft().add("Melee Speed: " + mouseOverCreature.creatureStats.getAttackSpeed());
-				event.getLeft().add("Melee Range: " + mouseOverCreature.getPhysicalRange());
-				event.getLeft().add("Ranged Speed: " + mouseOverCreature.creatureStats.getRangedSpeed());
-				event.getLeft().add("Pierce: " + mouseOverCreature.creatureStats.getPierce());
-				event.getLeft().add("");
-				event.getLeft().add("Effect Duration: " + mouseOverCreature.creatureStats.getEffect() + " Base Seconds");
-				event.getLeft().add("Effect Amplifier: x" + mouseOverCreature.creatureStats.getAmplifier());
-				event.getLeft().add("");
-				event.getLeft().add("Has Attack Target: " + mouseOverCreature.hasAttackTarget());
-				event.getLeft().add("Has Avoid Target: " + mouseOverCreature.hasAvoidTarget());
-				event.getLeft().add("Has Master Target: " + mouseOverCreature.hasMaster());
-				event.getLeft().add("Has Parent Target: " + mouseOverCreature.hasParent());
-				if(mouseOverEntity instanceof TameableCreatureEntity) {
-					TameableCreatureEntity mouseOverTameable = (TameableCreatureEntity)mouseOverCreature;
-					event.getLeft().add("");
-					event.getLeft().add("Owner ID: " + (mouseOverTameable.getOwnerId() != null ? mouseOverTameable.getOwnerId().toString() : "None"));
-					event.getLeft().add("Owner Name: " + mouseOverTameable.getOwnerName().getString());
-				}
-			}
-		}
 	}
 }

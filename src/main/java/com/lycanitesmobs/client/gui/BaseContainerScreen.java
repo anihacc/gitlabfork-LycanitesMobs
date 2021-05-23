@@ -15,20 +15,20 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.vector.Matrix3f;
+import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.text.ITextComponent;
 
 public abstract class BaseContainerScreen<T extends Container> extends ContainerScreen<T> implements Button.IPressable {
-    public int zLevel = 0;
-    public FontRenderer fontRenderer;
-    protected MatrixStack matrixStack = new MatrixStack();
+    public DrawHelper drawHelper;
 
     public BaseContainerScreen(T container, PlayerInventory playerInventory, ITextComponent name) {
         super(container, playerInventory, name);
-        this.fontRenderer = Minecraft.getInstance().fontRenderer;
     }
 
     @Override
     public void init(Minecraft minecraft, int width, int height) {
+        this.drawHelper = new DrawHelper(minecraft, minecraft.fontRenderer);
         this.minecraft = minecraft;
         super.init(minecraft, width, height);
         this.initWidgets();
@@ -54,11 +54,11 @@ public abstract class BaseContainerScreen<T extends Container> extends Container
      */
     @Override
     public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(this.matrixStack, mouseX, mouseY, partialTicks);
-        this.renderWidgets(this.matrixStack, mouseX, mouseY, partialTicks); // Renders buttons.
-        super.render(this.matrixStack, mouseX, mouseY, partialTicks); // Renders slots.
-        this.renderForeground(mouseX, mouseY, partialTicks);
-        this.renderHoveredTooltip(this.matrixStack, mouseX, mouseY);
+        this.renderBackground(matrixStack, mouseX, mouseY, partialTicks);
+        this.renderWidgets(matrixStack, mouseX, mouseY, partialTicks); // Renders buttons.
+        super.render(matrixStack, mouseX, mouseY, partialTicks); // Renders slots.
+        this.renderForeground(matrixStack, mouseX, mouseY, partialTicks);
+        this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
     }
 
     /**
@@ -88,7 +88,7 @@ public abstract class BaseContainerScreen<T extends Container> extends Container
      * @param mouseY The y position of the mouse cursor.
      * @param partialTicks Ticks for animation.
      */
-    protected abstract void renderForeground(int mouseX, int mouseY, float partialTicks);
+    protected abstract void renderForeground(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks);
 
     @Override
     public void onPress(Button guiButton) {
@@ -103,94 +103,4 @@ public abstract class BaseContainerScreen<T extends Container> extends Container
      * @param buttonId The id of the button pressed.
      */
     public abstract void actionPerformed(int buttonId);
-
-    /**
-     * Returns the font renderer.
-     * @return The font renderer to use.
-     */
-    public FontRenderer getFontRenderer() {
-        return ClientManager.getInstance().getFontRenderer();
-    }
-
-    /**
-     *
-     * @param texture The texture resource location.
-     * @param x The x position to draw at.
-     * @param y The y position to draw at.
-     * @param z The z position to draw at.
-     * @param width The width of each bar segment.
-     * @param height The height of each bar segment.
-     * @param segments How many segments to draw.
-     * @param segmentLimit How many segments to draw up to before squishing them. If negative the bar is draw backwards.
-     */
-    public void drawBar(ResourceLocation texture, int x, int y, float z, float width, float height, int segments, int segmentLimit) {
-        boolean reverse = segmentLimit < 0;
-        if(reverse) {
-            segmentLimit = -segmentLimit;
-        }
-        // TODO segmentLimit
-        for (int i = 0; i < segments; i++) {
-            int currentSegment = i;
-            if(reverse) {
-                currentSegment = segmentLimit - i - 1;
-            }
-            this.drawTexture(texture, x + (width * currentSegment), y, z, 1, 1, width, height);
-        }
-    }
-
-    /**
-     * Draws a texture.
-     * @param texture The texture resource location.
-     * @param x The x position to draw at.
-     * @param y The y position to draw at.
-     * @param z The z position to draw at.
-     * @param u The texture ending u coord.
-     * @param v The texture ending v coord.
-     * @param width The width of the texture.
-     * @param height The height of the texture.
-     */
-    public void drawTexture(ResourceLocation texture, float x, float y, float z, float u, float v, float width, float height) {
-        RenderSystem.enableBlend();
-        RenderSystem.disableDepthTest();
-        RenderSystem.depthMask(false);
-        RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.disableAlphaTest();
-
-        this.getMinecraft().getTextureManager().bindTexture(texture);
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder buffer = tessellator.getBuffer();
-        buffer.begin(7, DefaultVertexFormats.POSITION_TEX);
-        buffer.pos(x, y + height, z).tex(0, v).endVertex(); // pos().tex()
-        buffer.pos(x + width, y + height, z).tex(u, v).endVertex();
-        buffer.pos(x + width, y, z).tex(u, 0).endVertex();
-        buffer.pos(x, y, z).tex(0, 0).endVertex();
-        tessellator.draw();
-
-        RenderSystem.enableAlphaTest();
-        RenderSystem.depthMask(true);
-        RenderSystem.enableDepthTest();
-        RenderSystem.disableBlend();
-    }
-
-    public void drawTexturedModalRect(int x, int y, int u, int v, int width, int height) {
-        this.drawTexturedModalRect(x, y, u, v, width, height, 1);
-    }
-
-    public void drawTexturedModalRect(int x, int y, int u, int v, int width, int height, int resolution) {
-        float scaleX = 0.00390625F * resolution;
-        float scaleY = scaleX;
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder bufferBuilder = tessellator.getBuffer();
-        bufferBuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
-        bufferBuilder.pos((double)(x + 0), (double)(y + height), (double)this.zLevel) // pos()
-                .tex(((float)(u + 0) * scaleX), ((float)(v + height) * scaleY)).endVertex(); // tex()
-        bufferBuilder.pos((double)(x + width), (double)(y + height), (double)this.zLevel)
-                .tex(((float)(u + width) * scaleX), ((float)(v + height) * scaleY)).endVertex();
-        bufferBuilder.pos((double)(x + width), (double)(y + 0), (double)this.zLevel)
-                .tex(((float)(u + width) * scaleX), ((float)(v + 0) * scaleY)).endVertex();
-        bufferBuilder.pos((double)(x + 0), (double)(y + 0), (double)this.zLevel)
-                .tex(((float)(u + 0) * scaleX), ((float)(v + 0) * scaleY)).endVertex();
-        tessellator.draw();
-    }
 }

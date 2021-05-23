@@ -3,6 +3,7 @@ package com.lycanitesmobs.client.gui.beastiary;
 import com.lycanitesmobs.client.gui.beastiary.lists.ElementDescriptionList;
 import com.lycanitesmobs.client.gui.beastiary.lists.ElementList;
 import com.lycanitesmobs.core.info.ElementInfo;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
@@ -30,27 +31,27 @@ public class ElementsBeastiaryScreen extends BeastiaryScreen {
 	}
 
 	@Override
-	public void renderBackground(int x, int y, float partialTicks) {
-		super.renderBackground(x, y, partialTicks);
+	public void renderBackground(MatrixStack matrixStack, int x, int y, float partialTicks) {
+		super.renderBackground(matrixStack, x, y, partialTicks);
 	}
 
 	@Override
-	protected void renderWidgets(int x, int y, float partialTicks) {
+	protected void renderWidgets(MatrixStack matrixStack, int x, int y, float partialTicks) {
 		this.elementList.render(matrixStack, x, y, partialTicks);
 
 		if(this.elementInfo != null) {
-			this.descriptionList.elementInfo = this.elementInfo;
+			this.descriptionList.setElementInfo(this.elementInfo);
 			this.descriptionList.render(matrixStack, x, y, partialTicks);
 		}
 	}
 
 	@Override
-	public void renderForeground(int x, int y, float partialTicks) {
-		super.renderForeground(x, y, partialTicks);
+	public void renderForeground(MatrixStack matrixStack, int x, int y, float partialTicks) {
+		super.renderForeground(matrixStack, x, y, partialTicks);
 
 		if(this.elementInfo == null) {
 			String info = new TranslationTextComponent("gui.beastiary.elements.about").getString();
-			this.drawSplitString(matrixStack, info, colRightX + 1, colRightY + 12 + 1, colRightWidth, 0xFFFFFF, true);
+			this.drawHelper.drawStringWrapped(matrixStack, info, colRightX + 1, colRightY + 12 + 1, colRightWidth, 0xFFFFFF, true);
 		}
 	}
 

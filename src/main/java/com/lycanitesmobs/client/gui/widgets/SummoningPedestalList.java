@@ -58,11 +58,11 @@ public class SummoningPedestalList extends BaseList<SummoningPedestalScreen> {
 			int levelBarY = top - levelBarHeight - 6;
 			int level = creatureInfo.summonCost;
 			if(level <= 10) {
-				this.parentGUI.screen.drawBar(TextureManager.getTexture("GUIPetLevel"), levelBarX, levelBarY, 0, levelBarWidth, levelBarHeight, level, 10);
+				this.parentGUI.screen.drawHelper.drawBar(matrixStack, TextureManager.getTexture("GUIPetLevel"), levelBarX, levelBarY, 0, levelBarWidth, levelBarHeight, level, 10);
 			}
 
-			this.parentGUI.screen.getFontRenderer().drawString(matrixStack, creatureInfo.getTitle().getString(), left + 20 , top + 4, 0xFFFFFF);
-			this.parentGUI.screen.drawTexture(creatureInfo.getIcon(), left + 2, top + 4, 0, 1, 1, 16, 16);
+			this.parentGUI.screen.drawHelper.getFontRenderer().drawString(matrixStack, creatureInfo.getTitle().getString(), left + 20 , top + 4, 0xFFFFFF);
+			this.parentGUI.screen.drawHelper.drawTexture(matrixStack, creatureInfo.getIcon(), left + 2, top + 4, 0, 1, 1, 16, 16);
 		}
 
 		@Override

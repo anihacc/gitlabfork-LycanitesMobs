@@ -39,7 +39,6 @@ public abstract class BeastiaryScreen extends BaseScreen {
     public PlayerEntity player;
     public ExtendedPlayer playerExt;
     public LivingEntity creaturePreviewEntity;
-    public MatrixStack matrixStack;
     public float creaturePreviewTicks = 0;
 
     public int centerX;
@@ -75,7 +74,6 @@ public abstract class BeastiaryScreen extends BaseScreen {
         super(new TranslationTextComponent("gui.beastiary.name"));
         this.player = player;
         this.playerExt = ExtendedPlayer.getForPlayer(player);
-        this.matrixStack = new MatrixStack();
         this.mc = Minecraft.getInstance();
 		/*if(this.mc.gameSettings.guiScale != 2 || GUI_ACTIVE) {
 			OPENED_GUI_SCALE = this.mc.gameSettings.guiScale;
@@ -166,15 +164,15 @@ public abstract class BeastiaryScreen extends BaseScreen {
     }
 
     @Override
-    public void renderBackground(int mouseX, int mouseY, float partialTicks) {
-        this.drawTexture(TextureManager.getTexture("GUIBeastiaryBackground"), this.windowX, this.windowY, this.zLevel, 1, 1, this.windowWidth, this.windowHeight);
+    public void renderBackground(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+        this.drawHelper.drawTexture(matrixStack, TextureManager.getTexture("GUIBeastiaryBackground"), this.windowX, this.windowY, this.zLevel, 1, 1, this.windowWidth, this.windowHeight);
     }
 
     @Override
-    public void renderForeground(int mouseX, int mouseY, float partialTicks) {
+    public void renderForeground(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         ITextComponent title = new StringTextComponent("\u00A7l\u00A7n").append(this.getTitle());
-        float width = this.getFontRenderer().getStringWidth(title.getString());
-        this.getFontRenderer().drawStringWithShadow(matrixStack, title.getString(), this.colRightCenterX - Math.round(width / 2), this.colRightY, 0xFFFFFF);
+        float width = this.drawHelper.getStringWidth(title.getString());
+        this.drawHelper.drawString(matrixStack, title.getString(), this.colRightCenterX - Math.round(width / 2), this.colRightY, 0xFFFFFF, true);
     }
 
     /**
@@ -221,19 +219,20 @@ public abstract class BeastiaryScreen extends BaseScreen {
 
     /**
      * Draws a level bar for the provided creature info.
+     * @param matrixStack The matrix stack to draw with.
      * @param creatureInfo The creature info to get stats from.
      * @param texture The texture to use as a level dot/star.
      * @param x The x position to draw from.
      * @param y The y position to draw from.
      */
-    public void drawLevel(CreatureInfo creatureInfo, ResourceLocation texture, int x, int y) {
+    public void drawLevel(MatrixStack matrixStack, CreatureInfo creatureInfo, ResourceLocation texture, int x, int y) {
         int level = creatureInfo.summonCost;
         if(level <= 10) {
-            this.drawBar(texture, x, y, 0, 9, 9, level, 10);
+            this.drawHelper.drawBar(matrixStack, texture, x, y, 0, 9, 9, level, 10);
         }
     }
 
-    public void renderCreature(CreatureInfo creatureInfo, int x, int y, int mouseX, int mouseY, float partialTicks) {
+    public void renderCreature(MatrixStack matrixStack, CreatureInfo creatureInfo, int x, int y, int mouseX, int mouseY, float partialTicks) {
         // Clear:
         if(creatureInfo == null) {
             this.creaturePreviewEntity = null;
@@ -270,9 +269,9 @@ public abstract class BeastiaryScreen extends BaseScreen {
                 int creatureSize = Math.round((float)this.windowHeight / 6);
                 double creatureWidth = creatureInfo.width;
                 double creatureHeight = creatureInfo.height;
-                int scale = (int)Math.round((1.8F / Math.max(creatureWidth, creatureHeight)) * creatureSize);
+                int scale = (int)Math.round((2.5F / Math.max(creatureWidth, creatureHeight)) * creatureSize);
                 int posX = x;
-                int posY = y;
+                int posY = y + 80;
                 float lookX = (float)posX - mouseX;
                 float lookY = (float)posY - mouseY;
                 this.creaturePreviewTicks += partialTicks;
@@ -281,11 +280,10 @@ public abstract class BeastiaryScreen extends BaseScreen {
                     previewCreatureBase.onlyRenderTicks = this.creaturePreviewTicks;
                 }
 
-                RenderSystem.pushMatrix();
-                RenderSystem.translatef(0, 0, -1000);
-
-                BaseGui.renderLivingEntity(posX, posY, scale, lookX, lookY, this.creaturePreviewEntity); // drawEntityOnScreen()
-                RenderSystem.popMatrix();
+                matrixStack.push();
+                matrixStack.translate(0, 0, -1000);
+                BaseGui.renderLivingEntity(matrixStack, posX, posY, scale, lookX, lookY, this.creaturePreviewEntity);
+                matrixStack.pop();
             }
         }
         catch (Exception e) {

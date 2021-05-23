@@ -4,6 +4,7 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.gui.beastiary.lists.BeastiaryIndexList;
 import com.lycanitesmobs.client.gui.buttons.ButtonBase;
 import com.lycanitesmobs.core.VersionChecker;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -26,7 +27,7 @@ public class IndexBeastiaryScreen extends BeastiaryScreen {
 
 		int menuWidth = this.colRightWidth;
 
-		int buttonCount = 4;
+		int buttonCount = 5;
 		int buttonPadding = 2;
 		int buttonWidth = Math.round((float)(menuWidth / buttonCount)) - buttonPadding;
 		int buttonWidthPadded = buttonWidth + buttonPadding;
@@ -44,6 +45,8 @@ public class IndexBeastiaryScreen extends BeastiaryScreen {
 		this.addButton(button);
 		button = new ButtonBase(103, buttonX + (buttonWidthPadded * 3), buttonY, buttonWidth, buttonHeight, new TranslationTextComponent("Discord"), this);
 		this.addButton(button);
+		button = new ButtonBase(104, buttonX + (buttonWidthPadded * 4), buttonY, buttonWidth, buttonHeight, new TranslationTextComponent("Card Game"), this);
+		this.addButton(button);
 
 		// Lists:
 		if(this.versionInfo != null) {
@@ -53,25 +56,25 @@ public class IndexBeastiaryScreen extends BeastiaryScreen {
 	}
 
 	@Override
-	public void renderBackground(int mouseX, int mouseY, float partialTicks) {
-		super.renderBackground(mouseX, mouseY, partialTicks);
+	public void renderBackground(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+		super.renderBackground(matrixStack, mouseX, mouseY, partialTicks);
 	}
 
 	@Override
-	public void renderWidgets(int mouseX, int mouseY, float partialTicks) {
-		super.renderWidgets(mouseX, mouseY, partialTicks);
+	public void renderWidgets(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+		super.renderWidgets(matrixStack, mouseX, mouseY, partialTicks);
 		if(this.indexList != null)
 			this.indexList.render(matrixStack, mouseX, mouseY, partialTicks);
 	}
 
 	@Override
-	public void renderForeground(int mouseX, int mouseY, float partialTicks) {
-		super.renderForeground(mouseX, mouseY, partialTicks);
+	public void renderForeground(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+		super.renderForeground(matrixStack, mouseX, mouseY, partialTicks);
 
 		int yOffset = this.colRightY + 13;
 		String info = new TranslationTextComponent("gui.beastiary.index.description").getString();
-		this.drawSplitString(matrixStack, info, this.colRightX + 1, yOffset, this.colRightWidth, 0xFFFFFF, true);
-		yOffset += this.getFontRenderer().getWordWrappedHeight(info, this.colRightWidth);
+		this.drawHelper.drawStringWrapped(matrixStack, info, this.colRightX + 1, yOffset, this.colRightWidth, 0xFFFFFF, true);
+		yOffset += this.drawHelper.getWordWrappedHeight(info, this.colRightWidth);
 
 		if(this.versionInfo == null)
 			return;
@@ -85,7 +88,7 @@ public class IndexBeastiaryScreen extends BeastiaryScreen {
 		if(this.versionInfo.isNewer) {
 			version += " \u00A7l" + new TranslationTextComponent("gui.beastiary.index.version.newer").getString() + ": \u00A7r\u00A72" + this.versionInfo.versionNumber + "\u00A7r";
 		}
-		this.drawSplitString(matrixStack, version, this.colRightX + 1, yOffset, this.colRightWidth, 0xFFFFFF, true);
+		this.drawHelper.drawStringWrapped(matrixStack, version, this.colRightX + 1, yOffset, this.colRightWidth, 0xFFFFFF, true);
 	}
 
 	@Override
@@ -108,6 +111,11 @@ public class IndexBeastiaryScreen extends BeastiaryScreen {
 		if(buttonId == 103) {
 			try {
 				this.openURI(new URI(LycanitesMobs.discord));
+			} catch (URISyntaxException e) {}
+		}
+		if(buttonId == 104) {
+			try {
+				this.openURI(new URI("https://shardtcg.com"));
 			} catch (URISyntaxException e) {}
 		}
 		super.actionPerformed(buttonId);

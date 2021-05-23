@@ -3,7 +3,6 @@ package com.lycanitesmobs.core;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.lycanitesmobs.ClientManager;
 import com.lycanitesmobs.LycanitesMobs;
 import net.minecraft.util.text.TranslationTextComponent;
 import org.apache.commons.io.IOUtils;
@@ -90,10 +89,6 @@ public class VersionChecker {
 				content += "\n\n\u00A7l" + new TranslationTextComponent("gui.beastiary.index.changes.minor").getString() + ":\u00A7r\n" + this.minorFixes;
 
 			return content;
-		}
-
-		public int getUpdateNotesHeight(int displayWidth) {
-			return ClientManager.getInstance().getFontRenderer().getWordWrappedHeight(this.getUpdateNotes(), displayWidth) + 10;
 		}
 	}
 

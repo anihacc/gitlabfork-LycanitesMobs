@@ -96,7 +96,7 @@ public class PetTypeList extends CreatureFilterList {
 	}
 
 	@Override
-	public void renderSlot(int index, int top, int left, int bottom, int right) {
+	public void renderSlot(MatrixStack matrixStack, int index, int top, int left, int bottom, int right) {
 	}
 
 	/**
@@ -112,7 +112,7 @@ public class PetTypeList extends CreatureFilterList {
 
 		@Override
 		public void render(MatrixStack stack, int index, int top, int left, int bottom, int right, int mouseX, int mouseY, boolean focus, float partialTicks) {
-			this.parentList.screen.getFontRenderer().drawString(stack, new TranslationTextComponent(this.petTypeKey).getString(), left + 2 , top + 4, 0xFFFFFF);
+			this.parentList.screen.drawHelper.drawString(stack, new TranslationTextComponent(this.petTypeKey).getString(), left + 2 , top + 4, 0xFFFFFF);
 		}
 
 		@Override

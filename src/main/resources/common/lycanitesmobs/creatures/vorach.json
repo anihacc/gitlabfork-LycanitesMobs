@@ -42,9 +42,9 @@
     "health": 40,
     "defense": 2,
     "armor": 0,
-    "speed": 24,
+    "speed": 30,
     "damage": 2,
-    "attackSpeed": 1,
+    "attackSpeed": 4,
     "rangedSpeed": 0.5,
     "effectDuration": 5,
     "effectAmplifier": 0,
@@ -71,8 +71,8 @@
         }
     ],
     "elements": [
-        "quake",
-        "void"
+        "fae",
+        "quake"
     ],
     "diets": [
         "carnivore",

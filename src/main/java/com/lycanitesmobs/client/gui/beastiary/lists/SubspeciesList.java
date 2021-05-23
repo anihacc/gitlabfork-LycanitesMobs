@@ -146,7 +146,7 @@ public class SubspeciesList extends BaseList<BeastiaryScreen> {
 			}
 
 			int nameY = top + 6;
-			this.parentList.screen.getFontRenderer().drawString(matrixStack, variantName.append(subspeciesName).getString(), left + 10, nameY, 0xFFFFFF);
+			this.parentList.screen.drawHelper.drawString(matrixStack, variantName.append(subspeciesName).getString(), left + 10, nameY, 0xFFFFFF);
 		}
 
 		@Override

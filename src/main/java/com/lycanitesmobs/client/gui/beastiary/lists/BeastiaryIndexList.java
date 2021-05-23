@@ -21,7 +21,7 @@ public class BeastiaryIndexList extends BaseList {
 	 * @param x The x position of the list.
 	 */
 	public BeastiaryIndexList(BeastiaryScreen parentGui, int width, int height, int top, int bottom, int x, VersionChecker.VersionInfo versionInfo) {
-		super(parentGui, width, height, top, bottom, x, versionInfo.getUpdateNotesHeight(width - 20));
+		super(parentGui, width, height, top, bottom, x, parentGui.drawHelper.getWordWrappedHeight(versionInfo.getUpdateNotes(), width - 20));
 		this.versionInfo = versionInfo;
 	}
 
@@ -43,7 +43,7 @@ public class BeastiaryIndexList extends BaseList {
 		@Override
 		public void render(MatrixStack matrixStack, int index, int top, int left, int bottom, int right, int mouseX, int mouseY, boolean focus, float partialTicks) {
 			if(index == 0 && this.parentList.versionInfo != null) {
-				this.drawSplitString(matrixStack, this.parentList.versionInfo.getUpdateNotes(), left + 6, top, this.parentList.getWidth() - 20, 0xFFFFFF, true);
+				this.parentList.drawHelper.drawStringWrapped(matrixStack, this.parentList.versionInfo.getUpdateNotes(), left + 6, top, this.parentList.getWidth() - 20, 0xFFFFFF, true);
 			}
 		}
 

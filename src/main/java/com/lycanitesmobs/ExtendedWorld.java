@@ -4,7 +4,7 @@ import com.lycanitesmobs.core.dungeon.instance.DungeonInstance;
 import com.lycanitesmobs.core.entity.BossEntry;
 import com.lycanitesmobs.core.mobevent.MobEvent;
 import com.lycanitesmobs.core.mobevent.MobEventManager;
-import com.lycanitesmobs.core.mobevent.MobEventPlayerClient;
+import com.lycanitesmobs.client.mobevent.MobEventPlayerClient;
 import com.lycanitesmobs.core.mobevent.MobEventPlayerServer;
 import com.lycanitesmobs.core.network.MessageMobEvent;
 import com.lycanitesmobs.core.network.MessageWorldEvent;

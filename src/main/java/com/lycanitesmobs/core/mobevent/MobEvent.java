@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.ExtendedWorld;
 import com.lycanitesmobs.LycanitesMobs;
+import com.lycanitesmobs.client.mobevent.MobEventPlayerClient;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.mobevent.effects.MobEventEffect;
 import com.lycanitesmobs.core.mobevent.trigger.MobEventTrigger;

@@ -41,10 +41,10 @@ public class CreatureButton extends ButtonBase {
 		if(playerExt != null && playerExt.selectedSummonSet == this.summonSetId) {
 			stateVOffset = 32;
 		}
-		this.drawTexturedModalRect(buttonX, buttonY, 193, 187 -stateVOffset, this.width, this.height);
+		this.drawHelper.drawTexturedModalRect(matrixStack, buttonX, buttonY, 193, 187 -stateVOffset, this.width, this.height);
 		if(this.creatureInfo != null) {
 			Minecraft.getInstance().getTextureManager().bindTexture(creatureInfo.getIcon());
-			this.drawTexturedModalRect(buttonX + 8, buttonY + 8, 0, 0, 16, 16, 16);
+			this.drawHelper.drawTexturedModalRect(matrixStack, buttonX + 8, buttonY + 8, 0, 0, 16, 16, 16);
 		}
 
 		//this.mouseDragged(Minecraft.getInstance(), mouseX, mouseY);
@@ -57,6 +57,6 @@ public class CreatureButton extends ButtonBase {
 			textColor = 16777120;
 		}
 
-		this.drawCenteredString(matrixStack, this.fontRenderer, this.getMessage(), buttonX + 5, buttonY + 2, textColor);
+		this.drawCenteredString(matrixStack, this.drawHelper.getFontRenderer(), this.getMessage(), buttonX + 5, buttonY + 2, textColor);
     }
 }

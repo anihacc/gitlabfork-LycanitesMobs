@@ -1,5 +1,6 @@
 package com.lycanitesmobs.client.gui.beastiary.lists;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.gui.beastiary.BeastiaryScreen;
 import com.lycanitesmobs.client.gui.widgets.BaseListEntry;
 import com.lycanitesmobs.core.info.CreatureInfo;
@@ -80,7 +81,7 @@ public class CreatureTypeList extends CreatureFilterList {
 
 		@Override
 		public void render(MatrixStack matrixStack, int index, int top, int left, int bottom, int right, int mouseX, int mouseY, boolean focus, float partialTicks) {
-			this.parentList.screen.getFontRenderer().drawString(matrixStack, this.creatureType.getTitle().getString(), left + 4 , top + 2, 0xFFFFFF);
+			this.parentList.screen.drawHelper.drawString(matrixStack, this.creatureType.getTitle().getString(), left + 4, top + 2, 0xFFFFFF);
 		}
 
 		@Override

@@ -24,7 +24,6 @@ public class SummoningPedestalScreen extends BaseContainerScreen<SummoningPedest
     public ExtendedPlayer playerExt;
     public TileEntitySummoningPedestal summoningPedestal;
     public SummonSet summonSet;
-    public MatrixStack matrixStack;
 
     public ExtendedList list;
 
@@ -113,16 +112,16 @@ public class SummoningPedestalScreen extends BaseContainerScreen<SummoningPedest
         GL11.glColor4f(255, 255, 255, 1.0F);
         Minecraft.getInstance().getTextureManager().bindTexture(this.getTexture());
 
-        this.drawTexturedModalRect(this.windowX, this.windowY, 0, 0, this.windowWidth, this.windowHeight);
-        this.drawTexturedModalRect(this.windowX + 40, this.windowY + this.windowHeight, 40, 224, this.windowWidth - 80, 29);
+        this.drawHelper.drawTexturedModalRect(matrixStack, this.windowX, this.windowY, 0, 0, this.windowWidth, this.windowHeight);
+        this.drawHelper.drawTexturedModalRect(matrixStack, this.windowX + 40, this.windowY + this.windowHeight, 40, 224, this.windowWidth - 80, 29);
 
         if(!this.hasPets()) {
             return;
         }
 
-        this.drawFuel();
-        this.drawCapacityBar();
-        this.drawProgressBar();
+        this.drawFuel(matrixStack);
+        this.drawCapacityBar(matrixStack);
+        this.drawProgressBar(matrixStack);
     }
 
     @Override
@@ -169,22 +168,22 @@ public class SummoningPedestalScreen extends BaseContainerScreen<SummoningPedest
     }
 
     @Override
-    protected void renderForeground(int mouseX, int mouseY, float partialTicks) {
+    protected void renderForeground(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         GL11.glColor4f(255, 255, 255, 1.0F);
         Minecraft.getInstance().getTextureManager().bindTexture(this.getTexture());
 
         // No Pets:
         if (!this.hasPets()) {
-            this.getFontRenderer().drawString(this.matrixStack, new TranslationTextComponent("gui.beastiary.summoning.empty.title").getString(), this.centerX - 96, this.windowY + 6, 0xFFFFFF);
-            this.getFontRenderer().func_238418_a_(new TranslationTextComponent("gui.beastiary.summoning.empty.info"), this.windowX + 16, this.windowY + 30, this.windowWidth - 32, 0xFFFFFF);
+            this.drawHelper.drawString(matrixStack, new TranslationTextComponent("gui.beastiary.summoning.empty.title").getString(), this.centerX - 96, this.windowY + 6, 0xFFFFFF);
+            this.drawHelper.drawStringWrapped(matrixStack, new TranslationTextComponent("gui.beastiary.summoning.empty.info").getString(), this.windowX + 16, this.windowY + 30, this.windowWidth - 32, 0xFFFFFF, false);
             return;
         }
 
         // Title:
-        this.getFontRenderer().drawString(matrixStack, this.getTitle().getString(), this.centerX - 24, this.windowY + 6, 0xFFFFFF);
+        this.drawHelper.drawStringCentered(matrixStack, this.getTitle().getString(), this.centerX, this.windowY + 6, 0xFFFFFF, false);
 
         // Spirit Title:
-        this.getFontRenderer().drawString(matrixStack, this.getEnergyTitle().getString(), this.windowX + 16, this.windowY + 20, 0xFFFFFF);
+        this.drawHelper.drawString(matrixStack, this.getEnergyTitle().getString(), this.windowX + 16, this.windowY + 20, 0xFFFFFF);
     }
 
     @Override
@@ -226,10 +225,10 @@ public class SummoningPedestalScreen extends BaseContainerScreen<SummoningPedest
         return new TranslationTextComponent("stat.portal");
     }
 
-    public void drawFuel() {
+    public void drawFuel(MatrixStack matrixStack) {
         int fuelX = this.windowX + 132;
         int fuelY = this.windowY + 42;
-        this.drawTexturedModalRect(fuelX, fuelY, 47, 170, 18, 18);
+        this.drawHelper.drawTexturedModalRect(matrixStack, fuelX, fuelY, 47, 170, 18, 18);
 
         int barWidth = 38;
         int barHeight = 11;
@@ -237,32 +236,32 @@ public class SummoningPedestalScreen extends BaseContainerScreen<SummoningPedest
         int barY = fuelY + 3;
         int barU = 218;
         int barV = 225;
-        this.drawTexturedModalRect(barX, barY, barU, barV + barHeight, barWidth, barHeight);
+        this.drawHelper.drawTexturedModalRect(matrixStack, barX, barY, barU, barV + barHeight, barWidth, barHeight);
 
         barWidth = Math.round((float)barWidth * ((float)this.summoningPedestal.summoningFuel / this.summoningPedestal.summoningFuelMax));
-        this.drawTexturedModalRect(barX, barY, barU, barV, barWidth, barHeight);
+        this.drawHelper.drawTexturedModalRect(matrixStack, barX, barY, barU, barV, barWidth, barHeight);
     }
 
-    public void drawCapacityBar() {
+    public void drawCapacityBar(MatrixStack matrixStack) {
         int energyBarWidth = 9;
         int energyBarHeight = 9;
         int energyBarX = this.windowX + 16;
         int energyBarY = this.windowY + 40 - energyBarHeight;
-        this.drawBar(TextureManager.getTexture("GUIPetSpiritEmpty"), energyBarX, energyBarY, 0, energyBarWidth, energyBarHeight, 10, 10);
-        this.drawBar(TextureManager.getTexture("GUIPetSpirit"), energyBarX, energyBarY, 0, energyBarWidth, energyBarHeight, this.summoningPedestal.capacity / this.summoningPedestal.capacityCharge, 10);
+        this.drawHelper.drawBar(matrixStack, TextureManager.getTexture("GUIPetSpiritEmpty"), energyBarX, energyBarY, 0, energyBarWidth, energyBarHeight, 10, 10);
+        this.drawHelper.drawBar(matrixStack, TextureManager.getTexture("GUIPetSpirit"), energyBarX, energyBarY, 0, energyBarWidth, energyBarHeight, this.summoningPedestal.capacity / this.summoningPedestal.capacityCharge, 10);
     }
 
-    public void drawProgressBar() {
+    public void drawProgressBar(MatrixStack matrixStack) {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
         int barWidth = (256 / 4) + 16;
         int barHeight = (32 / 4) + 2;
         int barX = this.centerX + 2;
         int barY = this.windowY + 26;
-        this.drawTexture(TextureManager.getTexture("GUIPetBarEmpty"), barX, barY, 0, 1, 1, barWidth, barHeight);
+        this.drawHelper.drawTexture(matrixStack, TextureManager.getTexture("GUIPetBarEmpty"), barX, barY, 0, 1, 1, barWidth, barHeight);
 
         float respawnNormal = ((float)this.summoningPedestal.summonProgress / this.summoningPedestal.summonProgressMax);
-        this.drawTexture(TextureManager.getTexture("GUIPetBarRespawn"), barX, barY, 0, respawnNormal, 1, barWidth * respawnNormal, barHeight);
+        this.drawHelper.drawTexture(matrixStack, TextureManager.getTexture("GUIPetBarRespawn"), barX, barY, 0, respawnNormal, 1, barWidth * respawnNormal, barHeight);
     }
 
     public void sendCommandsToServer() {
