@@ -1,7 +1,7 @@
 {
 	"parent": "item/generated",
 	"textures": {
-		"layer0": "lycanitesmobs:items/spawns/golem",
-		"layer1": "lycanitesmobs:items/spawns/golem_overlay"
+		"layer0": "lycanitesmobs:item/spawns/golem",
+		"layer1": "lycanitesmobs:item/spawns/golem_overlay"
 	}
 }
