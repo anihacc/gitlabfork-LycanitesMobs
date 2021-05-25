@@ -12,14 +12,14 @@ import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class Entityningen extends TameableCreatureEntity implements IMob {
+public class EntityNingen extends TameableCreatureEntity implements IMob {
 	
 	WanderGoal wanderAI;
     
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public Entityningen(EntityType<? extends Entityningen> entityType, World world) {
+    public EntityNingen(EntityType<? extends EntityNingen> entityType, World world) {
         super(entityType, world);
         
         // Setup:
