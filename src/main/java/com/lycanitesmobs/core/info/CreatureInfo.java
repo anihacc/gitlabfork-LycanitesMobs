@@ -195,7 +195,7 @@ public class CreatureInfo {
 			this.entityConstructor = this.entityClass.getConstructor(EntityType.class, World.class);
 		}
 		catch(Exception e) {
-			LycanitesMobs.logWarning("", "[Creature] Unable to find the Java Entity Class: " + json.get("entityClass").getAsString() + " for " + this.getName());
+			LycanitesMobs.logError("[Creature] Unable to find the Java Entity Class: " + json.get("entityClass").getAsString() + " for " + this.getName());
 			throw new RuntimeException(e);
 		}
 

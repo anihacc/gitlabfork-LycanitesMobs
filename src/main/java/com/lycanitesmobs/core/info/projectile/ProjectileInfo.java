@@ -152,7 +152,7 @@ public class ProjectileInfo {
 			}
 			this.entityConstructor = this.entityClass.getConstructor(EntityType.class, World.class);
 		} catch (Exception e) {
-			LycanitesMobs.logWarning("", "[Projectile] Unable to find the Java Entity Class: " + json.get("entityClass").getAsString() + " for " + this.getName());
+			LycanitesMobs.logError("[Projectile] Unable to find the Java Entity Class: " + json.get("entityClass").getAsString() + " for " + this.getName());
 			throw new RuntimeException(e);
 		}
 
