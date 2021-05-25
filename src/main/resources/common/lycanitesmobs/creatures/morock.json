@@ -15,8 +15,8 @@
         ],
         "disableSubspecies": false,
         "dimensionIds": [
-            -1,
-            1
+            "minecraft:the_nether",
+            "minecraft:the_end"
         ],
         "dimensionListType": "blacklist",
         "ignoreBiome": false,
@@ -70,7 +70,10 @@
             ]
         }
     ],
-    "element": "order",
+    "element": 
+		"quake",
+		"earth"
+	],
     "diets": [
         "carnivore",
         "piscivore",

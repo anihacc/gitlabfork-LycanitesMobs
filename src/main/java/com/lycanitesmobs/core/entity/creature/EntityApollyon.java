@@ -43,7 +43,7 @@ public class EntityApollyon extends TameableCreatureEntity implements IMob {
                 .setTargetTypes(TARGET_TYPES.ALLY.id).setTargetCreatureType("demon"));
         this.goalSelector.addGoal(this.nextCombatGoalIndex, new EffectAuraGoal(this).setEffect(Effects.RESISTANCE).setAmplifier(2).setEffectSeconds(2).setRange(32).setCheckSight(false)
                 .setTargetTypes(TARGET_TYPES.ALLY.id).setTargetCreatureType("demon"));
-        this.goalSelector.addGoal(this.nextCombatGoalIndex, new SummonMinionsGoal(this).setMinionInfo("belph").setSummonCap(2)
+        this.goalSelector.addGoal(this.nextCombatGoalIndex, new SummonMinionsGoal(this).setMinionInfo("belphegor").setSummonCap(2)
                 .setConditions(new GoalConditions().setRareVariantOnly(true)));
     }
 	

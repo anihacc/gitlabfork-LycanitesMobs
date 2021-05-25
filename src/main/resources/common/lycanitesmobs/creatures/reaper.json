@@ -65,7 +65,10 @@
             ]
         }
     ],
-    "element": "phase",
+    "element": 
+		"phase",
+		"nether"
+	],
     "peaceful": false,
     "summonable": true,
     "tameable": false,

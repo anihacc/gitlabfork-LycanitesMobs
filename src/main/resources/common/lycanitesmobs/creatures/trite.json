@@ -10,12 +10,23 @@
 	"enabled": true,
 	"spawning": {
 		"enabled": true,
-		"spawners": ["monster", "beast", "portal", "nether"],
+		"spawners": [
+			"monster",
+			"beast", 
+			"portal", 
+			"nether"
+		],
 		"disableSubspecies": false,
-		"dimensionIds": [-1, 1],
+        "dimensionIds": [
+            "minecraft:the_nether",
+            "minecraft:the_end"
+        ],
 		"dimensionListType": "whitelist",
 		"ignoreBiome": true,
-		"biomeTags": ["nether", "end"],
+		"biomeTags": [
+			"nether", 
+			"end"
+		],
 		"spawnWeight": 8,
 		"dungeonWeight": 200,
 		"spawnAreaLimit": 5,
