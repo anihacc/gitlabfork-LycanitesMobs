@@ -71,7 +71,10 @@
             ]
         }
     ],
-    "element": "void",
+    "element": 
+		"air",
+		"shadow"
+	],
     "diets": [
         "carnivore",
         "insectivore",

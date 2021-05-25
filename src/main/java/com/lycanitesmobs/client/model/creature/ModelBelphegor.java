@@ -6,19 +6,19 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class ModelBelphgor extends ModelTemplateBiped {
+public class ModelBelphegor extends ModelTemplateBiped {
 
 	// ==================================================
   	//                    Constructors
   	// ==================================================
-    public ModelBelphgor() {
+    public ModelBelphegor() {
         this(1.0F);
     }
 
-    public ModelBelphgor(float shadowSize) {
+    public ModelBelphegor(float shadowSize) {
 
 		// Load Model:
-		this.initModel("belphgor", LycanitesMobs.modInfo, "entity/belphgor");
+		this.initModel("behemophet", LycanitesMobs.modInfo, "entity/behemophet");
 
 		// Trophy:
 		this.trophyScale = 1.2F;

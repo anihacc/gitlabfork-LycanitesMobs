@@ -16,7 +16,7 @@
         ],
         "disableSubspecies": false,
         "dimensionIds": [
-            "minecraft:nether"
+            "minecraft:the_nether"
         ],
         "dimensionListType": "whitelist",
         "ignoreBiome": true,

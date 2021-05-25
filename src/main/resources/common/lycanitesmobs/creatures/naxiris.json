@@ -1,11 +1,11 @@
 {
-    "name": "beholder",
+    "name": "Naxiris",
     "creatureType": "aberration",
     "groups": [
         "monster"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityBeholder",
-    "modelClass": "com.lycanitesmobs.client.model.creature.ModelBeholder",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityNaxiris",
+    "modelClass": "com.lycanitesmobs.client.model.creature.ModelNaxiris",
     "loadDefault": true,
     "enabled": true,
     "spawning": {
@@ -15,8 +15,8 @@
         ],
         "disableSubspecies": false,
         "dimensionIds": [
-            -1,
-            1
+            "minecraft:the_nether",
+            "minecraft:the_end"
         ],
         "dimensionListType": "blacklist",
         "ignoreBiome": false,
@@ -69,8 +69,7 @@
         }
     ],
     "elements": [
-        "gravity",
-        "void"
+        "arcane"
     ],
     "diets": [
         "carnivore",
