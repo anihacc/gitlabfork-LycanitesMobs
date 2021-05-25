@@ -70,10 +70,10 @@
             ]
         }
     ],
-    "element": 
+    "elements": [
 		"air",
 		"poison"
-	    ],
+    ],
     "diets": [
         "carnivore",
         "insectivore"
