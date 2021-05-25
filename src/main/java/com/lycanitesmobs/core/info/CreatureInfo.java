@@ -26,10 +26,8 @@ import net.minecraft.world.biome.Biome;
 import javax.annotation.Nonnull;
 import java.awt.*;
 import java.lang.reflect.Constructor;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 /** Contains various information about a creature from default spawn information to stats, etc. **/
 public class CreatureInfo {
@@ -348,7 +346,7 @@ public class CreatureInfo {
 					this.drops.add(itemDrop);
 				}
 				else {
-					LycanitesMobs.logWarning("", "[Creature] Unable to add item drop to creature: " + this.name + ".");
+					LycanitesMobs.logWarning("", "[Creature] Unable to add item drop to creature: " + getName() + ".");
 				}
 			}
 		}
@@ -414,23 +412,23 @@ public class CreatureInfo {
 	 * Adds sounds that this creature uses.
 	 */
 	public void addSounds(String suffix) {
-		ObjectManager.addSound(this.name + suffix + "_say", modInfo, "entity." + this.name + suffix + ".say");
-		ObjectManager.addSound(this.name + suffix + "_hurt", modInfo, "entity." + this.name + suffix + ".hurt");
-		ObjectManager.addSound(this.name + suffix + "_death", modInfo, "entity." + this.name + suffix + ".death");
-		ObjectManager.addSound(this.name + suffix + "_step", modInfo, "entity." + this.name + suffix + ".step");
-		ObjectManager.addSound(this.name + suffix + "_attack", modInfo, "entity." + this.name + suffix + ".attack");
-		ObjectManager.addSound(this.name + suffix + "_jump", modInfo, "entity." + this.name + suffix + ".jump");
-		ObjectManager.addSound(this.name + suffix + "_fly", modInfo, "entity." + this.name + suffix + ".fly");
+		ObjectManager.addSound(this.getName() + suffix + "_say", modInfo, "entity." + getName() + suffix + ".say");
+		ObjectManager.addSound(this.name + suffix + "_hurt", modInfo, "entity." + getName() + suffix + ".hurt");
+		ObjectManager.addSound(this.name + suffix + "_death", modInfo, "entity." + getName() + suffix + ".death");
+		ObjectManager.addSound(this.name + suffix + "_step", modInfo, "entity." + getName() + suffix + ".step");
+		ObjectManager.addSound(this.name + suffix + "_attack", modInfo, "entity." + getName() + suffix + ".attack");
+		ObjectManager.addSound(this.name + suffix + "_jump", modInfo, "entity." + getName() + suffix + ".jump");
+		ObjectManager.addSound(this.name + suffix + "_fly", modInfo, "entity." + getName() + suffix + ".fly");
 		if(this.isSummonable() || this.isTameable() || TameableCreatureEntity.class.isAssignableFrom(this.entityClass)) {
-			ObjectManager.addSound(this.name + suffix + "_tame", modInfo, "entity." + this.name + suffix + ".tame");
-			ObjectManager.addSound(this.name + suffix + "_beg", modInfo, "entity." + this.name + suffix + ".beg");
+			ObjectManager.addSound(this.name + suffix + "_tame", modInfo, "entity." + getName() + suffix + ".tame");
+			ObjectManager.addSound(this.name + suffix + "_beg", modInfo, "entity." + getName() + suffix + ".beg");
 		}
 		if(this.isTameable())
-			ObjectManager.addSound(this.name + suffix + "_eat", modInfo, "entity." + this.name + suffix + ".eat");
+			ObjectManager.addSound(this.name + suffix + "_eat", modInfo, "entity." + getName() + suffix + ".eat");
 		if(this.isMountable())
-			ObjectManager.addSound(this.name + suffix + "_mount", modInfo, "entity." + this.name + suffix + ".mount");
+			ObjectManager.addSound(this.name + suffix + "_mount", modInfo, "entity." + getName() + suffix + ".mount");
 		if(this.isBoss())
-			ObjectManager.addSound(this.name + suffix + "_phase", modInfo, "entity." + this.name + suffix + ".phase");
+			ObjectManager.addSound(this.name + suffix + "_phase", modInfo, "entity." + getName() + suffix + ".phase");
 	}
 
 
@@ -439,7 +437,7 @@ public class CreatureInfo {
 	 * @return Creature name.
 	 */
 	public String getName() {
-		return this.name;
+		return this.name.toLowerCase();
 	}
 
 

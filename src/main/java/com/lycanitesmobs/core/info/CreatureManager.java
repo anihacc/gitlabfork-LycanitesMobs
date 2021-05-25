@@ -122,7 +122,8 @@ public class CreatureManager extends JSONLoader {
 			LycanitesMobs.logDebug("Creature", "Complete! " + this.creatures.size() + " JSON Creatures Loaded In Total.");
 		}
 		catch(Exception e) {
-			LycanitesMobs.logWarning("", "No Creatures loaded for: " + modInfo.name);
+			LycanitesMobs.logError("Error loading Creatures for: " + modInfo.name);
+			throw(e);
 		}
 	}
 

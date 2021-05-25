@@ -62,7 +62,7 @@ public class ModelAsmodeus extends CreatureObjModelOld {
     @Override
     public void addCustomLayers(CreatureRenderer renderer) {
         super.addCustomLayers(renderer);
-        renderer.addLayer(new LayerCreatureEffect(renderer, "fire", "fire", true, CustomRenderStates.BLEND.ADD.id, true));
+        renderer.addLayer(new LayerCreatureEffect(renderer, "fire", "fire", true, CustomRenderStates.BLEND.ADD.id, false));
         renderer.addLayer(new LayerCreatureEffect(renderer, "shield", "", true, CustomRenderStates.BLEND.ADD.id, true));
     }
 
