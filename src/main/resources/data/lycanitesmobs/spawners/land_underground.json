@@ -1,5 +1,5 @@
 {
-	"name": "underground",
+	"name": "land_underground",
 	"type": "spawner",
 	"enabled": true,
 	"loadDefault": true,

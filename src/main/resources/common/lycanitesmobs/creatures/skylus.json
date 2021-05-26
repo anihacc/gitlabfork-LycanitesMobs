@@ -12,7 +12,7 @@
         "enabled": true,
         "spawners": [
             "water",
-            "waterfloor"
+            "water_floor"
         ],
         "disableSubspecies": false,
         "dimensionIds": [

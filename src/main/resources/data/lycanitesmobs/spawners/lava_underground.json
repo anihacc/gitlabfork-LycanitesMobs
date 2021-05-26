@@ -1,33 +1,32 @@
 {
-	"name": "nether",
+	"name": "lava_underground",
 	"type": "spawner",
 	"enabled": true,
 	"loadDefault": true,
-	"mobCountMin": 6,
+	"mobCountMin": 1,
+	"ignoreDimensions": true,
 	"ignoreBiomes": true,
 	"ignoreLightLevel": true,
-	"conditions": [
-		{
-			"type": "world",
-			"dimensionIds": ["minecraft:the_nether"],
-			"dimensionListType": "whitelist"
-		}
-	],
+	"conditions": [],
 	"triggers": [
 		{
 			"type": "world",
-			"chance": 1,
+			"chance": 0.125,
 			"tickRate": 800
 		}
 	],
 	"locations": [
 		{
-			"type": "random",
+			"type": "block",
 			"rangeMin": [16, 0, 16],
 			"rangeMax": [32, 32, 32],
+			"yMax": 50,
 			"sorting": "random",
-			"limit": 32,
-			"solidGround": true
+			"blocks": [
+				"minecraft:lava"
+			],
+			"blockCost": 16,
+			"listType": "whitelist"
 		}
 	]
 }

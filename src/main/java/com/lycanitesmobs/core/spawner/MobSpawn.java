@@ -268,6 +268,7 @@ public class MobSpawn {
 				}
 			}
 
+
 			// Dimension:
 			if (!forceIgnoreDimension && !this.ignoreDimension && !this.creatureInfo.creatureSpawn.isAllowedDimension(world)) {
 				return false;

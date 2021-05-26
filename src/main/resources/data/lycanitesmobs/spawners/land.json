@@ -1,18 +1,26 @@
 {
-	"name": "animal",
+	"name": "land",
 	"type": "spawner",
 	"enabled": true,
 	"loadDefault": true,
-	"mobCountMin": 8,
+	"mobCountMin": 6,
 	"ignoreBiomes": false,
 	"ignoreLightLevel": false,
-	"groupLimitRange": 64,
-	"conditions": [],
+	"conditions": [
+		{
+			"type": "world",
+			"dimensionIds": [
+				"minecraft:the_nether",
+				"minecraft:the_end"
+			],
+			"dimensionListType": "blacklist"
+		}
+	],
 	"triggers": [
 		{
 			"type": "world",
-			"chance": 0.25,
-			"tickRate": 3200
+			"chance": 1,
+			"tickRate": 600
 		}
 	],
 	"locations": [
@@ -22,8 +30,7 @@
 			"rangeMax": [48, 48, 48],
 			"sorting": "random",
 			"limit": 32,
-			"solidGround": true,
-			"underground": false
+			"solidGround": true
 		}
 	]
 }

@@ -11,9 +11,8 @@
     "spawning": {
         "enabled": true,
         "spawners": [
-            "monster",
-            "beast",
-            "waterfloor"
+            "land",
+            "water_floor"
         ],
         "disableSubspecies": false,
         "dimensionIds": [

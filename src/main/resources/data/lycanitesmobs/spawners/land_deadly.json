@@ -1,30 +1,33 @@
 {
-	"name": "end",
+	"name": "land_deadly",
 	"type": "spawner",
 	"enabled": true,
 	"loadDefault": true,
-	"mobCountMin": 4,
-	"ignoreBiomes": true,
+	"mobCountMin": 6,
+	"ignoreBiomes": false,
 	"ignoreLightLevel": true,
 	"conditions": [
 		{
 			"type": "world",
-			"dimensionIds": ["minecraft:the_end"],
+			"dimensionIds": [
+				"minecraft:the_nether",
+				"minecraft:the_end"
+			],
 			"dimensionListType": "whitelist"
 		}
 	],
 	"triggers": [
 		{
 			"type": "world",
-			"chance": 0.25,
+			"chance": 1,
 			"tickRate": 800
 		}
 	],
 	"locations": [
 		{
 			"type": "random",
-			"rangeMin": [16, 0, 16],
-			"rangeMax": [32, 32, 32],
+			"rangeMin": [24, 0, 24],
+			"rangeMax": [48, 48, 48],
 			"sorting": "random",
 			"limit": 32,
 			"solidGround": true

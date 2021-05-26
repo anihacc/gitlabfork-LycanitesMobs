@@ -13,9 +13,8 @@
     "spawning": {
         "enabled": true,
         "spawners": [
-            "creature",
-            "animal",
-            "wateranimal"
+            "land_animal",
+            "water_animal"
         ],
         "disableSubspecies": false,
         "dimensionIds": [

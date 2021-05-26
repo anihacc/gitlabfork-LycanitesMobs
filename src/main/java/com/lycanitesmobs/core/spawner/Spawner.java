@@ -424,6 +424,7 @@ public class Spawner {
 		ExtendedWorld worldExt = ExtendedWorld.getForWorld(world);
 		LycanitesMobs.logDebug("JSONSpawner", "Spawning Wave: " + mobCount + " Mob(s)");
 		LycanitesMobs.logDebug("JSONSpawner", "Trigger World: " + world);
+		LycanitesMobs.logDebug("JSONSpawner", "Trigger Dimension: " + world.getDimensionKey().getLocation());
 		LycanitesMobs.logDebug("JSONSpawner", "Trigger Player: " + player);
 		LycanitesMobs.logDebug("JSONSpawner", "Trigger Position: " + triggerPos);
 
@@ -477,13 +478,16 @@ public class Spawner {
 			if(mobsSpawned >= mobCount) {
 				break;
 			}
+			Biome spawnBiome = world.getBiomeManager().getBiome(spawnPos);
+
 			LycanitesMobs.logDebug("JSONSpawner", "---------- Spawn Iteration: " + mobsSpawned + " ----------");
 			LycanitesMobs.logDebug("JSONSpawner", "Spawn Position: " + spawnPos);
+			LycanitesMobs.logDebug("JSONSpawner", "Spawn Biome: " + spawnBiome.getRegistryName());
 
 			// Choose Mob To Spawn:
 			MobSpawn mobSpawn = null;
-			Biome spawnBiome = world.getBiomeManager().getBiome(spawnPos); //getBiomeManager().getBiome()
 			if(mobSpawns.containsKey(null)) {
+				LycanitesMobs.logDebug("JSONSpawner", "Biome Ignored");
 				mobSpawn = this.chooseMobToSpawn(world, mobSpawns.get(null));
 			}
 			else if(mobSpawns.containsKey(spawnBiome)) {
@@ -638,20 +642,20 @@ public class Spawner {
 	 * @return A list of mob spawns.
 	 */
 	public List<MobSpawn> getBiomeSpawns(World world, @Nullable PlayerEntity player, int blockCount, @Nullable Biome biome) {
-		List<MobSpawn> biomeSpawns = new ArrayList<>();
+		List<MobSpawn> possibleSpawns = new ArrayList<>();
 
 		// Global Spawns:
 		Collection<MobSpawn> globalSpawns = SpawnerMobRegistry.getMobSpawns(this.sharedName);
 		if(globalSpawns != null) {
-			biomeSpawns.addAll(globalSpawns);
+			possibleSpawns.addAll(globalSpawns);
 		}
 
 		// Local Spawns:
-		biomeSpawns.addAll(this.mobSpawns);
+		possibleSpawns.addAll(this.mobSpawns);
 
 		// Get Viable Spawns:
 		List<MobSpawn> viableMobSpawns = new ArrayList<>();
-		for(MobSpawn possibleMobSpawn : biomeSpawns) {
+		for(MobSpawn possibleMobSpawn : possibleSpawns) {
 			if(possibleMobSpawn.canSpawn(world, blockCount, biome, this.ignoreDimensions)) {
 				viableMobSpawns.add(possibleMobSpawn);
 			}
