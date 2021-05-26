@@ -1,6 +1,6 @@
 {
     "name": "ostimien",
-    "creatureType": "arachnid",
+    "creatureType": "insect",
     "groups": [
         "predator"
     ],

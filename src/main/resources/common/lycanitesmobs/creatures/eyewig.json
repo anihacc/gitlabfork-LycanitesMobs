@@ -1,6 +1,6 @@
 {
     "name": "eyewig",
-    "creatureType": "arachnid",
+    "creatureType": "insect",
     "groups": [
         "monster"
     ],
