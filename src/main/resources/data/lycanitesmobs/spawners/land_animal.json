@@ -1,9 +1,9 @@
 {
-	"name": "wateranimal",
+	"name": "land_animal",
 	"type": "spawner",
 	"enabled": true,
 	"loadDefault": true,
-	"mobCountMin": 4,
+	"mobCountMin": 8,
 	"ignoreBiomes": false,
 	"ignoreLightLevel": false,
 	"groupLimitRange": 64,
@@ -22,11 +22,8 @@
 			"rangeMax": [48, 48, 48],
 			"sorting": "random",
 			"limit": 32,
-			"blocks": [
-				"minecraft:water"
-			],
-			"listType": "whitelist",
-			"solidGround": false
+			"solidGround": true,
+			"underground": false
 		}
 	]
 }

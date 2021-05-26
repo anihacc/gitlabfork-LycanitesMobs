@@ -11,7 +11,7 @@
     "spawning": {
         "enabled": true,
         "spawners": [
-            "lavaunderground"
+            "lava_underground"
         ],
         "disableSubspecies": false,
         "dimensionIds": [],

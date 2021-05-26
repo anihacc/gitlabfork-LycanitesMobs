@@ -1,6 +1,6 @@
 {
-	"name": "animalchunk",
-	"sharedName": "animal",
+	"name": "chunk_animal",
+	"sharedName": "land_animal",
 	"type": "spawner",
 	"enabled": true,
 	"loadDefault": true,

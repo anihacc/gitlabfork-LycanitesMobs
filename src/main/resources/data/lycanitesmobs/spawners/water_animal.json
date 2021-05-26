@@ -1,17 +1,18 @@
 {
-	"name": "waterfloor",
+	"name": "water_animal",
 	"type": "spawner",
 	"enabled": true,
 	"loadDefault": true,
-	"mobCountMin": 16,
+	"mobCountMin": 4,
 	"ignoreBiomes": false,
 	"ignoreLightLevel": false,
+	"groupLimitRange": 64,
 	"conditions": [],
 	"triggers": [
 		{
 			"type": "world",
-			"chance": 0.75,
-			"tickRate": 800
+			"chance": 0.25,
+			"tickRate": 3200
 		}
 	],
 	"locations": [
@@ -20,12 +21,12 @@
 			"rangeMin": [32, 0, 32],
 			"rangeMax": [48, 48, 48],
 			"sorting": "random",
-			"listType": "whitelist",
 			"limit": 32,
 			"blocks": [
 				"minecraft:water"
 			],
-			"solidGround": true
+			"listType": "whitelist",
+			"solidGround": false
 		}
 	]
 }

@@ -69,7 +69,7 @@ public class DebugCommand {
 			return 0;
 		}
 		for(RegistryKey<Biome> biomeKey : BiomeDictionary.getBiomes(biomeType)) {
-			context.getSource().sendFeedback(new StringTextComponent(biomeKey.toString()), true); // TODO Figure out how the hell to get a biome display name now...
+			context.getSource().sendFeedback(new StringTextComponent(biomeKey.getLocation().toString()), true); // TODO Figure out how the hell to get a biome display name now...
 		}
 		return 0;
 	}

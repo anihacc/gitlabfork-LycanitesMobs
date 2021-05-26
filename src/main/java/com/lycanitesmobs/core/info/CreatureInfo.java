@@ -588,22 +588,22 @@ public class CreatureInfo {
 	 * @return The Biomes native for this Creature.
 	 */
 	public ITextComponent getBiomeNames() {
-		List<Biome> biomes = new ArrayList<>();
+		List<String> biomeIds = new ArrayList<>();
 		if(this.creatureSpawn.biomesFromTags != null)
-			biomes.addAll(this.creatureSpawn.biomesFromTags);
-		if(this.creatureSpawn.biomes != null)
-			biomes.addAll(this.creatureSpawn.biomes);
-		if(biomes.isEmpty()) {
+			biomeIds.addAll(this.creatureSpawn.biomesFromTags);
+		if(this.creatureSpawn.biomeIds != null)
+			biomeIds.addAll(this.creatureSpawn.biomeIds);
+		if(biomeIds.isEmpty()) {
 			return new TranslationTextComponent("gui.beastiary.biomes.none");
 		}
 		StringTextComponent biomeNames = new StringTextComponent("");
 		boolean firstBiome = true;
-		for(Biome biome : biomes) {
+		for(String biomeId : biomeIds) {
 			if(!firstBiome) {
 				biomeNames.appendString(", ");
 			}
 			firstBiome = false;
-			biomeNames.append(new StringTextComponent(biome.getRegistryName().toString())); // TODO Figure out how to get biome display names now.
+			biomeNames.append(new StringTextComponent(biomeId)); // TODO Figure out how to get biome display names now.
 		}
 		return biomeNames;
 	}

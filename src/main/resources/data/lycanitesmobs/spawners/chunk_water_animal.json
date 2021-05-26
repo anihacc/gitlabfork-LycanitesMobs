@@ -1,6 +1,6 @@
 {
-	"name": "wateranimalchunk",
-	"sharedName": "wateranimal",
+	"name": "chunk_water_animal",
+	"sharedName": "water_animal",
 	"type": "spawner",
 	"enabled": true,
 	"loadDefault": true,

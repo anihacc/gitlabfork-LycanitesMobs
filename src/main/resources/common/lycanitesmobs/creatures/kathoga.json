@@ -11,11 +11,9 @@
     "spawning": {
         "enabled": true,
         "spawners": [
-            "creature",
-            "animal",
+            "land_animal",
             "portal",
-            "nether",
-            "end"
+            "land_deadly"
         ],
         "disableSubspecies": false,
         "dimensionIds": [
@@ -23,7 +21,7 @@
             "minecraft:the_end"
         ],
         "dimensionListType": "whitelist",
-        "ignoreBiome": true,
+        "ignoreBiome": false,
         "biomeTags": [
             "nether",
             "end"

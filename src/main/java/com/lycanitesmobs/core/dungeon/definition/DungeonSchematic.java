@@ -41,8 +41,8 @@ public class DungeonSchematic {
 	/** A list of SpawnConditions to use. Optional. **/
 	public List<SpawnCondition> conditions = new ArrayList<>();
 
-	/** The list of biomes that this dungeon spawns in. **/
-	public List<Biome> biomes = new ArrayList<>();
+	/** The list of biome ids that this dungeon spawns in. **/
+	public List<String> biomeIds = new ArrayList<>();
 
 	/** A list of themes to use. Required. **/
 	public List<String> themes = new ArrayList<>();
@@ -126,7 +126,7 @@ public class DungeonSchematic {
 
 		// Biomes:
 		if(json.has("biomes"))
-			this.biomes = JSONHelper.getBiomesFromTags(JSONHelper.getJsonStrings(json.get("biomes").getAsJsonArray()));
+			this.biomeIds = JSONHelper.getBiomesFromTags(JSONHelper.getJsonStrings(json.get("biomes").getAsJsonArray()));
 
 		// Themes:
 		if(json.has("themes")) {
@@ -262,10 +262,10 @@ public class DungeonSchematic {
 	 * @return True if at least one biome in the provided list is a valid biome.
 	 */
 	public boolean isValidBiome(Biome biome) {
-		if(this.biomes.isEmpty()) {
+		if(this.biomeIds.isEmpty()) {
 			return true;
 		}
-		if(this.biomes.contains(biome)) {
+		if(this.biomeIds.contains(biome)) {
 			return true;
 		}
 		return false;

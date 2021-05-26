@@ -173,8 +173,8 @@ public class JSONHelper {
 		return materials;
 	}
 
-	public static List<Biome> getBiomesFromTags(List<String> biomeTags) {
-		List<Biome> biomeList = new ArrayList<>();
+	public static List<String> getBiomesFromTags(List<String> biomeTags) {
+		List<String> biomeList = new ArrayList<>();
 		for(String biomeEntry : biomeTags) {
 
 			// Determine Function:
@@ -191,7 +191,7 @@ public class JSONHelper {
 				for (BiomeDictionary.Type biomeType : BiomeDictionary.Type.getAll()) {
 					Set<RegistryKey<Biome>> selectedBiomesSet = BiomeDictionary.getBiomes(biomeType);
 					for (RegistryKey<Biome> selectedBiomesKey : selectedBiomesSet) {
-						Biome biome = ForgeRegistries.BIOMES.getValue(selectedBiomesKey.getRegistryName());
+						Biome biome = ForgeRegistries.BIOMES.getValue(selectedBiomesKey.getLocation());
 						if(biome != null) {
 							selectedBiomes.add(biome);
 						}
@@ -208,7 +208,7 @@ public class JSONHelper {
 				if (biomeType != null) {
 					Set<RegistryKey<Biome>> selectedBiomesSet = BiomeDictionary.getBiomes(biomeType);
 					for (RegistryKey<Biome> selectedBiomesKey : selectedBiomesSet) {
-						Biome biome = ForgeRegistries.BIOMES.getValue(selectedBiomesKey.getRegistryName());
+						Biome biome = ForgeRegistries.BIOMES.getValue(selectedBiomesKey.getLocation());
 						if(biome != null) {
 							selectedBiomes.add(biome);
 						}
@@ -218,11 +218,11 @@ public class JSONHelper {
 
 			for (Biome biome : selectedBiomes) {
 				if (additive) {
-					if (!biomeList.contains(biome)) {
-						biomeList.add(biome);
+					if (!biomeList.contains(biome.getRegistryName().toString())) {
+						biomeList.add(biome.getRegistryName().toString());
 					}
 				} else {
-					biomeList.remove(biome);
+					biomeList.remove(biome.getRegistryName().toString());
 				}
 			}
 		}

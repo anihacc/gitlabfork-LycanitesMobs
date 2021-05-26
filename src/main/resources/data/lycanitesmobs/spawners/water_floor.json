@@ -1,17 +1,17 @@
 {
-	"name": "beast",
+	"name": "water_floor",
 	"type": "spawner",
 	"enabled": true,
 	"loadDefault": true,
-	"mobCountMin": 6,
+	"mobCountMin": 16,
 	"ignoreBiomes": false,
 	"ignoreLightLevel": false,
 	"conditions": [],
 	"triggers": [
 		{
 			"type": "world",
-			"chance": 1,
-			"tickRate": 600
+			"chance": 0.75,
+			"tickRate": 800
 		}
 	],
 	"locations": [
@@ -20,7 +20,11 @@
 			"rangeMin": [32, 0, 32],
 			"rangeMax": [48, 48, 48],
 			"sorting": "random",
+			"listType": "whitelist",
 			"limit": 32,
+			"blocks": [
+				"minecraft:water"
+			],
 			"solidGround": true
 		}
 	]

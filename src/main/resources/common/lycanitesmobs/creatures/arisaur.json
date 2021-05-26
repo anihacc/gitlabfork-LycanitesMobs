@@ -11,8 +11,7 @@
     "spawning": {
         "enabled": true,
         "spawners": [
-            "creature",
-            "animal"
+            "land_animal"
         ],
         "disableSubspecies": false,
         "dimensionIds": [

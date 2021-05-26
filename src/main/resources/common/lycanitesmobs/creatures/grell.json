@@ -11,7 +11,7 @@
     "spawning": {
         "enabled": true,
         "spawners": [
-            "nethersky",
+            "sky_deadly",
             "portal"
         ],
         "disableSubspecies": false,
@@ -19,7 +19,7 @@
             "minecraft:the_nether"
         ],
         "dimensionListType": "whitelist",
-        "ignoreBiome": true,
+        "ignoreBiome": false,
         "biomeTags": [
             "nether"
         ],

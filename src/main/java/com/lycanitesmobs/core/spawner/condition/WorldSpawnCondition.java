@@ -2,13 +2,11 @@ package com.lycanitesmobs.core.spawner.condition;
 
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.ExtendedWorld;
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.helpers.JSONHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,16 +29,13 @@ public class WorldSpawnCondition extends SpawnCondition {
 	public List<String> biomeTags = new ArrayList<>();
 
 	/** The list of biomes generated from the list of biome tags. **/
-	public List<Biome> biomesFromTags = null;
+	public List<String> biomesFromTags = null;
 
 	/** How the biomes from the biome ids list works. Can be whitelist or blacklist. **/
 	public String biomeIdListType = "whitelist";
 
 	/** The list of specific biome ids that this creature spawns in. **/
 	public List<String> biomeIds = new ArrayList<>();
-
-	/** The list of specific biomes that this creature spawns in. **/
-	public List<Biome> biomes = null;
 
     /** The minimum world days that must have gone by, can accept fractions such as 5.25 for 5 and a quarter days. **/
     public double worldDayMin = -1;
@@ -97,7 +92,6 @@ public class WorldSpawnCondition extends SpawnCondition {
 
 		if(json.has("biomeIds")) {
 			this.biomeIds.clear();
-			this.biomes = null;
 			this.biomeIds = JSONHelper.getJsonStrings(json.get("biomeIds").getAsJsonArray());
 		}
 
@@ -210,22 +204,15 @@ public class WorldSpawnCondition extends SpawnCondition {
 	 * @return True if the biome is allowed, false if not.
 	 */
 	public boolean isAllowedDimension(World world) {
-		DimensionType dimension = world.getDimensionType();
+		String dimension = world.getDimensionKey().getLocation().toString();
 
 		// Dimension IDs:
 		if (!this.dimensionIds.isEmpty()) {
 			for(String dimensionId : this.dimensionIds) {
-				if(dimensionId.equals(dimension.toString())) {
+				if(dimensionId.equals(dimension)) {
 					return !"blacklist".equalsIgnoreCase(this.dimensionListType);
 				}
 			}
-			// Cannot get forge Dimension Type registry for some reason, so temp workaround above for now.
-			/*if (this.dimensions == null) {
-				this.dimensions = JSONHelper.getDimensions(this.dimensionIds);
-			}
-			if (this.dimensions.contains(dimension)) {
-				return !"blacklist".equalsIgnoreCase(this.dimensionListType);
-			}*/
 		}
 
 		return "blacklist".equalsIgnoreCase(this.dimensionListType);
@@ -240,14 +227,11 @@ public class WorldSpawnCondition extends SpawnCondition {
 	 */
 	public boolean isAllowedBiome(World world, BlockPos position) {
 		if(position != null) {
-			Biome biome = world.getBiomeManager().getBiome(position); // getBiomeManager().getBiome()
+			String biomeId = world.getBiomeManager().getBiome(position).getRegistryName().toString();
 
 			// Biome IDs:
 			if (!this.biomeIds.isEmpty()) {
-				if (this.biomes == null) {
-					this.biomes = JSONHelper.getBiomes(this.biomeIds);
-				}
-				if (this.biomes.contains(biome)) {
+				if (this.biomeIds.contains(biomeId)) {
 					return !"blacklist".equalsIgnoreCase(this.biomeIdListType);
 				}
 			}
@@ -257,7 +241,7 @@ public class WorldSpawnCondition extends SpawnCondition {
 				if (this.biomesFromTags == null) {
 					this.biomesFromTags = JSONHelper.getBiomesFromTags(this.biomeTags);
 				}
-				if (this.biomesFromTags.contains(biome)) {
+				if (this.biomesFromTags.contains(biomeId)) {
 					return !"blacklist".equalsIgnoreCase(this.biomeTagListType);
 				}
 			}
