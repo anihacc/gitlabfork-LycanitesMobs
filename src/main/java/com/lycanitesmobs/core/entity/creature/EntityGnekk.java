@@ -69,10 +69,13 @@ public class EntityGnekk extends TameableCreatureEntity {
 	@Override
 	public boolean canClimb() { return true; }
 
+    // ==================================================
+    //                     Equipment
+    // ==================================================
+    @Override
     public int getNoBagSize() { return 0; }
-
-    public int getBagSize() { return 5; }
-
+    @Override
+    public int getBagSize() { return this.creatureInfo.BagSize; }
     @Override
     public float getFallResistance() {
     	return 100;

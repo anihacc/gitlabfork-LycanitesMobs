@@ -306,7 +306,13 @@ public class EntityAmalgalich extends BaseCreatureEntity implements IMob, IGroup
         }
         return super.isVulnerableTo(entity);
     }
-
+    // ==================================================
+    //                     Equipment
+    // ==================================================
+    @Override
+    public int getNoBagSize() { return 0; }
+    @Override
+    public int getBagSize() { return this.creatureInfo.BagSize; }
 
     // ==================================================
     //                    Taking Damage

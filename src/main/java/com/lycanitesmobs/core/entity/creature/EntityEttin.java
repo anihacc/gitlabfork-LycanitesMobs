@@ -51,8 +51,14 @@ public class EntityEttin extends AgeableCreatureEntity implements IMob {
 	public void loadCreatureFlags() {
 		this.griefing = this.creatureInfo.getFlag("griefing", this.griefing);
 	}
-	
-	
+
+    // ==================================================
+    //                     Equipment
+    // ==================================================
+    @Override
+    public int getNoBagSize() { return 0; }
+    @Override
+    public int getBagSize() { return this.creatureInfo.BagSize; }
     // ==================================================
     //                      Updates
     // ==================================================

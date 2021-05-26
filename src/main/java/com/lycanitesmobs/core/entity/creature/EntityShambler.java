@@ -106,4 +106,11 @@ public class EntityShambler extends TameableCreatureEntity implements IMob {
     //                     Pet Control
     // ==================================================
     public boolean petControlsEnabled() { return true; }
+    // ==================================================
+    //                     Equipment
+    // ==================================================
+    @Override
+    public int getNoBagSize() { return 0; }
+    @Override
+    public int getBagSize() { return this.creatureInfo.BagSize; }
 }

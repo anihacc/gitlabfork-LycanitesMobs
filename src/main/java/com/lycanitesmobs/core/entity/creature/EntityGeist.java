@@ -134,8 +134,14 @@ public class EntityGeist extends AgeableCreatureEntity implements IMob {
         catch(Exception e) {}
         super.onDeath(damageSource);
     }
-    
-    
+
+    // ==================================================
+    //                     Equipment
+    // ==================================================
+    @Override
+    public int getNoBagSize() { return 0; }
+    @Override
+    public int getBagSize() { return this.creatureInfo.BagSize; }
     // ==================================================
    	//                     Immunities
    	// ==================================================

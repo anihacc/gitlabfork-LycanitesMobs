@@ -246,8 +246,14 @@ public class EntityYale extends AgeableCreatureEntity implements IForgeShearable
     public boolean canBeLeashedTo(PlayerEntity player) {
         return true;
     }
-    
-    
+
+	// ==================================================
+	//                     Equipment
+	// ==================================================
+	@Override
+	public int getNoBagSize() { return 0; }
+	@Override
+	public int getBagSize() { return this.creatureInfo.BagSize; }
     // ==================================================
    	//                     Immunities
    	// ==================================================

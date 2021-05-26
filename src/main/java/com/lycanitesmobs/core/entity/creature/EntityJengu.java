@@ -81,9 +81,10 @@ public class EntityJengu extends TameableCreatureEntity implements IMob, IFusabl
     // ==================================================
     //                     Equipment
     // ==================================================
+    @Override
     public int getNoBagSize() { return 0; }
-    public int getBagSize() { return 5; }
-    
+    @Override
+    public int getBagSize() { return this.creatureInfo.BagSize; }
     
     // ==================================================
     //                     Pet Control

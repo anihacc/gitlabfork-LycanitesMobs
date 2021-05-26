@@ -100,8 +100,14 @@ public class EntityNingen extends TameableCreatureEntity implements IMob {
     		return false;
     	return super.isAggressive();
     }
-    
-    
+
+    // ==================================================
+    //                     Equipment
+    // ==================================================
+    @Override
+    public int getNoBagSize() { return 0; }
+    @Override
+    public int getBagSize() { return this.creatureInfo.BagSize; }
     // ==================================================
    	//                     Immunities
    	// ==================================================

@@ -96,7 +96,13 @@ public class EntityCalpod extends BaseCreatureEntity implements IMob {
         super.onDeath(par1DamageSource);
     }
 
-
+	// ==================================================
+	//                     Equipment
+	// ==================================================
+	@Override
+	public int getNoBagSize() { return 0; }
+	@Override
+	public int getBagSize() { return this.creatureInfo.BagSize; }
 	// ==================================================
 	//                     Abilities
 	// ==================================================

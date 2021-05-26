@@ -32,7 +32,7 @@ import java.util.List;
 /** Contains various information about a creature from default spawn information to stats, etc. **/
 public class CreatureInfo {
 
-	// Core Info:
+    // Core Info:
 	/** The name of this mob. Lowercase, no space, used for language entries and for generating the entity id, etc. Required. **/
 	protected String name;
 
@@ -85,6 +85,7 @@ public class CreatureInfo {
 
 	public double sight = 16.0D;
 	public double knockbackResistance = 0.0D;
+	public int BagSize = 5;
 
 	public int packSize = 3;
 
@@ -275,6 +276,8 @@ public class CreatureInfo {
 			this.knockbackResistance = json.get("knockbackResistance").getAsDouble();
 		if(json.has("sight"))
 			this.sight = json.get("sight").getAsDouble();
+		if(json.has("getBagSize"))
+			this.BagSize = json.get("getBagSize").getAsInt();
 
 		if(json.has("packSize"))
 			this.packSize = json.get("packSize").getAsInt();

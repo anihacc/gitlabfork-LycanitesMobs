@@ -253,9 +253,9 @@ public class EntityDeioneus extends RideableCreatureEntity implements IGroupHeav
     //                     Equipment
     // ==================================================
     @Override
-    public int getBagSize() { return 15; }
-    
-    
+    public int getNoBagSize() { return 0; }
+    @Override
+    public int getBagSize() { return this.creatureInfo.BagSize; }
     // ==================================================
     //                     Pet Control
     // ==================================================

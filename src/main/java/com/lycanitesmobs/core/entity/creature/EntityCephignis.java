@@ -122,8 +122,14 @@ public class EntityCephignis extends AgeableCreatureEntity {
     public boolean canBreatheAir() {
         return false;
     }
-    
-    
+
+    // ==================================================
+    //                     Equipment
+    // ==================================================
+    @Override
+    public int getNoBagSize() { return 0; }
+    @Override
+    public int getBagSize() { return this.creatureInfo.BagSize; }
     // ==================================================
    	//                    Taking Damage
    	// ==================================================

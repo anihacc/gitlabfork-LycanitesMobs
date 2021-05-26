@@ -43,6 +43,13 @@ public class EntityVorach extends TameableCreatureEntity implements IMob {
 
 	@Override
 	public boolean canBurn() { return false; }
+	// ==================================================
+	//                     Equipment
+	// ==================================================
+	@Override
+	public int getNoBagSize() { return 0; }
+	@Override
+	public int getBagSize() { return this.creatureInfo.BagSize; }
 
 	@Override
 	public float getFallResistance() {
