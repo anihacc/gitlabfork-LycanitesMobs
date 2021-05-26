@@ -18,7 +18,7 @@ public class ModelBehemophet extends ModelTemplateBiped {
     public ModelBehemophet(float shadowSize) {
 
 		// Load Model:
-		this.initModel("belphgor", LycanitesMobs.modInfo, "entity/belphgor");
+		this.initModel("behemophet", LycanitesMobs.modInfo, "entity/behemophet");
 
 		// Trophy:
 		this.trophyScale = 1.2F;
