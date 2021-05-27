@@ -283,15 +283,6 @@ public class SpawnerEventListener {
 	// ==================================================
 	//                Populate Chunk Event
 	// ==================================================
-	// TODO: Temporary, this will constantly spawn mobs as chunks load and unload, the mob density isn't too bad so I'm keeping this for testing purposes until a worldgen feature or whatever can take it's place.
-	@SubscribeEvent
-	public void onChunkLoad(ChunkEvent.Load event) {
-		if (event.getWorld() instanceof World) {
-			String dimensionId = ((World) event.getWorld()).getDimensionKey().getLocation().toString();
-			this.onChunkGenerate(dimensionId, event.getChunk().getPos());
-		}
-	}
-
 	/** Set to true when chunk spawn triggers are active and back to false when they have completed. This stops a cascading trigger loop! **/
 	public boolean chunkSpawnTriggersActive = false;
 

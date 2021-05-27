@@ -18,6 +18,6 @@ public class AlwaysPlacement extends Placement<NoPlacementConfig> {
 
 	@Override
 	public Stream<BlockPos> getPositions(WorldDecoratingHelper helper, Random rand, NoPlacementConfig config, BlockPos blockPos) {
-		return Stream.of(blockPos);
+		return Stream.of(new BlockPos(blockPos));
 	}
 }
