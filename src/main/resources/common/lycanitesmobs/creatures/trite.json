@@ -11,16 +11,12 @@
 	"spawning": {
 		"enabled": true,
 		"spawners": [
-			"monster",
-			"beast", 
+			"land",
 			"portal", 
 			"nether"
 		],
 		"disableSubspecies": false,
-        "dimensionIds": [
-            "minecraft:the_nether",
-            "minecraft:the_end"
-        ],
+        "dimensionIds": [],
 		"dimensionListType": "whitelist",
 		"ignoreBiome": true,
 		"biomeTags": [

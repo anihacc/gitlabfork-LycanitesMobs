@@ -23,7 +23,7 @@ public class ChunkSpawnFeature extends Feature<NoFeatureConfig> {
 	@Override
 	protected void setBlockState(IWorldWriter worldWriter, BlockPos pos, BlockState state) {
 		if(worldWriter instanceof World) {
-			SpawnerEventListener.getInstance().onChunkGenerate((World) worldWriter, new ChunkPos(pos)); // TODO Probably doesn't work, need a proper chunk gen event again for custom mob spawning!
+			SpawnerEventListener.getInstance().onChunkGenerate(((World) worldWriter).getDimensionKey().getLocation().toString(), new ChunkPos(pos)); // TODO Probably doesn't work, need a proper chunk gen event again for custom mob spawning!
 		}
 	}
 

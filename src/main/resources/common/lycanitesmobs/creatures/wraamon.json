@@ -12,15 +12,16 @@
         "enabled": true,
         "spawners": [
             "underground",
-            "end"
+            "land_deadly"
         ],
         "disableSubspecies": false,
-        "dimensionIds": [
-            "minecraft:the_nether"
-        ],
+        "dimensionIds": [],
         "dimensionListType": "blacklist",
         "ignoreBiome": true,
-        "biomeTags": [],
+        "biomeTags": [
+            "all",
+            "-nether"
+        ],
         "spawnWeight": 8,
         "dungeonWeight": 200,
         "spawnAreaLimit": 5,
