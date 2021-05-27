@@ -13,8 +13,7 @@
     "spawning": {
         "enabled": true,
         "spawners": [
-            "land",
-            "beast"
+            "land"
         ],
         "disableSubspecies": false,
         "dimensionIds": [

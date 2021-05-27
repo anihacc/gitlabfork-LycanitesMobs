@@ -28,6 +28,7 @@ public abstract class BaseGui extends AbstractGui {
         modelRotationRoll.multiply(modelRotationPitch);
         matrixStack.rotate(modelRotationRoll);
         matrixStack.rotate(Vector3f.YN.rotationDegrees(180.0F));
+
         float renderYawOffset = entity.renderYawOffset;
         float rotationYaw = entity.rotationYaw;
         float rotationPitch = entity.rotationPitch;
