@@ -276,8 +276,8 @@ public class CreatureInfo {
 			this.knockbackResistance = json.get("knockbackResistance").getAsDouble();
 		if(json.has("sight"))
 			this.sight = json.get("sight").getAsDouble();
-		if(json.has("BagSize"))
-			this.BagSize = json.get("BagSize").getAsInt();
+		if(json.has("bagSize"))
+			this.BagSize = json.get("bagSize").getAsInt();
 
 		if(json.has("packSize"))
 			this.packSize = json.get("packSize").getAsInt();

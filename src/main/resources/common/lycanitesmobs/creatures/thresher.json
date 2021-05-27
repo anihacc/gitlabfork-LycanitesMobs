@@ -52,7 +52,7 @@
     "pierce": 2,
     "sight": 32,
     "knockbackResistance": 1,
-	"BagSize": 10,
+	"bagSize": 10,
     "packSize": 1,
     "eggBackColor": "#77747e",
     "eggForeColor": "#3f4567",

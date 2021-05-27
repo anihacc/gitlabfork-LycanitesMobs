@@ -47,7 +47,7 @@
     "pierce": 1,
     "sight": 24,
     "knockbackResistance": 0.5,
-	"BagSize": 10,
+	"bagSize": 10,
     "eggBackColor": "#000402",
     "eggForeColor": "#102336",
     "subspecies": [
