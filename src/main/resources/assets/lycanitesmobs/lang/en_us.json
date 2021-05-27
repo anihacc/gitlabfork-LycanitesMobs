@@ -909,7 +909,7 @@
     "entity.lycanitesmobs.grell.habitat": "These, creatures inhabit the fleshscapes of the Nether.",
     "entity.lycanitesmobs.grell.combat": "Grell fire a deadly glob of acid, have a wicked bite and let off pheromones to control nearby Grigori.",
     "_comment": "#############################",
-    "entity.lycanitesmobs.grigori": "Grigori,",
+    "entity.lycanitesmobs.grigori": "Grigori",
     "entity.lycanitesmobs.grigori.description": "Aggressive, lumps of flesh with bonecrushing teeth that float through the sky. Grigori are known to travel in large swarms and hunt using taste and smell.",
     "entity.lycanitesmobs.grigori.habitat": "These, creatures can be found floating through the skies of the Nether.",
     "entity.lycanitesmobs.grigori.combat": "Grigori, have a devastating bite that cause their victims to bleed, they are simple minded creatures that attack on instinct.",
