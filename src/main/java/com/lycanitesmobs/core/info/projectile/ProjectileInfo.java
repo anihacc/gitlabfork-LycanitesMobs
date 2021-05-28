@@ -269,7 +269,7 @@ public class ProjectileInfo {
 	 * @return Projectile name.
 	 */
 	public String getName() {
-		return this.name;
+		return this.name.toLowerCase();
 	}
 
 	/**
