@@ -12,8 +12,7 @@
     "spawning": {
         "enabled": true,
         "spawners": [
-            "monster",
-            "beast",
+            "land",
             "ooze"
         ],
         "disableSubspecies": false,
@@ -55,6 +54,7 @@
     "pierce": 2,
     "sight": 24,
     "knockbackResistance": 1,
+	"bagSize": 5,
     "eggBackColor": "#CCEEFF",
     "eggForeColor": "#0000BB",
     "subspecies": [

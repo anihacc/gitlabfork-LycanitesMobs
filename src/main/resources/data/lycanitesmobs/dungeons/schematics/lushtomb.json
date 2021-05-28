@@ -53,7 +53,7 @@
 			"weight": 14
 		},
 		{
-			"mobId": "lycanitesmobs:tarantula",
+			"mobId": "lycanitesmobs:lycosa",
 			"weight": 14
 		},
 		{
@@ -62,7 +62,7 @@
 			"dungeonLevelMin": 2
 		},
 		{
-			"mobId": "lycanitesmobs:lurker",
+			"mobId": "lycanitesmobs:ostimien",
 			"weight": 6,
 			"dungeonLevelMin": 2
 		},
@@ -134,7 +134,7 @@
 			]
 		},
 		{
-			"mobId": "lycanitesmobs:beholder",
+			"mobId": "lycanitesmobs:naxiris",
 			"weight": 1,
 			"variant": 2,
 			"mobSizeScale": 1.25,

@@ -16,7 +16,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import java.util.List;
 
 public class ElementDescriptionList extends BaseList {
-	public ElementInfo elementInfo;
+	protected ElementInfo elementInfo;
 
 	/**
 	 * Constructor
@@ -28,6 +28,15 @@ public class ElementDescriptionList extends BaseList {
 	 */
 	public ElementDescriptionList(BeastiaryScreen parentGui, int width, int height, int top, int bottom, int x) {
 		super(parentGui, width, height, top, bottom, x, 500);
+	}
+
+	public void setElementInfo(ElementInfo elementInfo) {
+		this.elementInfo = elementInfo;
+	}
+
+	@Override
+	protected int getMaxPosition() {
+		return this.drawHelper.getWordWrappedHeight(this.getContent(), (this.width / 2)) + this.headerHeight;
 	}
 
 	@Override
@@ -48,7 +57,7 @@ public class ElementDescriptionList extends BaseList {
 		@Override
 		public void render(MatrixStack matrixStack, int index, int top, int left, int bottom, int right, int mouseX, int mouseY, boolean focus, float partialTicks) {
 			if(index == 0) {
-				this.drawSplitString(matrixStack, this.parentList.getContent(), left + 6, top, this.parentList.getWidth() - 20, 0xFFFFFF, true);
+				this.parentList.drawHelper.drawStringWrapped(matrixStack, this.parentList.getContent(), left + 6, top, this.parentList.getWidth() - 20, 0xFFFFFF, true);
 			}
 		}
 
@@ -82,7 +91,7 @@ public class ElementDescriptionList extends BaseList {
 				continue;
 			}
 			ResourceLocation effectResource = new ResourceLocation(buff);
-			new TranslationTextComponent("\n")
+			new StringTextComponent("\n")
 					.append(effect.getDisplayName())
 					.appendString(": ")
 					.append(new TranslationTextComponent("effect." + effectResource.getPath() + ".description"));
@@ -94,7 +103,7 @@ public class ElementDescriptionList extends BaseList {
 				.appendString(": " + "\u00A7r");
 		for(String debuff : this.elementInfo.debuffs) {
 			if("burning".equals(debuff)) {
-				new TranslationTextComponent("\n")
+				new StringTextComponent("\n")
 				.append(new TranslationTextComponent("effect.burning"))
 				.appendString(": ")
 				.append(new TranslationTextComponent("effect.burning.description"));
@@ -105,7 +114,7 @@ public class ElementDescriptionList extends BaseList {
 				continue;
 			}
 			ResourceLocation effectResource = new ResourceLocation(debuff);
-			new TranslationTextComponent("\n")
+			new StringTextComponent("\n")
 				.append(effect.getDisplayName())
 				.appendString(": ")
 				.append(new TranslationTextComponent("effect." + effectResource.getPath() + ".description"));

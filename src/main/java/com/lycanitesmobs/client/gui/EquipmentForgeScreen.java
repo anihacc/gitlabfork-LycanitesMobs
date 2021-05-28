@@ -20,7 +20,6 @@ public class EquipmentForgeScreen extends BaseContainerScreen<EquipmentForgeCont
 	public TileEntityEquipmentForge equipmentForge;
 	public String currentMode = "empty";
 	public boolean confirmation = false;
-	public MatrixStack matrixStack;
 
 	public EquipmentForgeScreen(EquipmentForgeContainer container, PlayerInventory playerInventory, ITextComponent name) {
 		super(container, playerInventory, name);
@@ -59,12 +58,12 @@ public class EquipmentForgeScreen extends BaseContainerScreen<EquipmentForgeCont
 	@Override
 	protected void renderBackground(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		this.getMinecraft().getTextureManager().bindTexture(TextureManager.getTexture("GUIEquipmentForge"));
+		this.drawHelper.getMinecraft().getTextureManager().bindTexture(TextureManager.getTexture("GUIEquipmentForge"));
 		int backX = (this.width - this.xSize) / 2;
 		int backY = (this.height - this.ySize) / 2;
-		this.drawTexturedModalRect(backX, backY, 0, 0, this.xSize, this.ySize);
+		this.drawHelper.drawTexturedModalRect(matrixStack, backX, backY, 0, 0, this.xSize, this.ySize);
 
-		this.drawSlots(backX, backY);
+		this.drawSlots(matrixStack, backX, backY);
 	}
 
 	/**
@@ -72,7 +71,7 @@ public class EquipmentForgeScreen extends BaseContainerScreen<EquipmentForgeCont
 	 * @param backX
 	 * @param backY
 	 */
-	protected void drawSlots(int backX, int backY) {
+	protected void drawSlots(MatrixStack matrixStack, int backX, int backY) {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		this.getMinecraft().getTextureManager().bindTexture(TextureManager.getTexture("GUIEquipmentForge"));
 
@@ -115,14 +114,13 @@ public class EquipmentForgeScreen extends BaseContainerScreen<EquipmentForgeCont
 				}
 			}
 
-			this.drawTexturedModalRect(slotX, slotY, slotU, slotV, slotWidth, slotHeight);
+			this.drawHelper.drawTexturedModalRect(matrixStack, slotX, slotY, slotU, slotV, slotWidth, slotHeight);
 		}
 	}
 
 	@Override
-	protected void renderForeground(int mouseX, int mouseY, float partialTicks) {
-		this.fontRenderer.drawString(matrixStack, this.equipmentForge.getName().getString(), this.guiLeft + 8, this.guiTop + 6, 4210752);
-        this.fontRenderer.drawString(matrixStack, this.playerInventory.getName().getString(), this.guiLeft + 8, this.guiTop + this.ySize - 96 + 2, 4210752);
+	protected void renderForeground(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+        this.drawHelper.drawString(matrixStack, this.playerInventory.getName().getString(), this.guiLeft + 8, this.guiTop + this.ySize - 96 + 2, 4210752);
     }
     
 	@Override

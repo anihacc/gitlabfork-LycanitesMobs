@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.spawner;
 
 import com.lycanitesmobs.ExtendedWorld;
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.spawner.trigger.*;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -10,6 +11,7 @@ import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.vector.Vector3d;
@@ -21,8 +23,7 @@ import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.entity.player.ItemFishedEvent;
 import net.minecraftforge.event.entity.player.PlayerSleepInBedEvent;
-import net.minecraftforge.event.world.BlockEvent;
-import net.minecraftforge.event.world.ExplosionEvent;
+import net.minecraftforge.event.world.*;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.ArrayList;
@@ -46,7 +47,7 @@ public class SpawnerEventListener {
 	private List<MobEventSpawnTrigger> mobEventSpawnTriggers = new ArrayList<>();
 	private List<MixBlockSpawnTrigger> mixBlockSpawnTriggers = new ArrayList<>();
 
-	private Map<World, List<ChunkPos>> freshChunks = new HashMap<>();
+	private Map<String, List<ChunkPos>> freshChunks = new HashMap<>();
 
 
 	/** Returns the main Mob Event Listener instance. **/
@@ -285,32 +286,33 @@ public class SpawnerEventListener {
 	/** Set to true when chunk spawn triggers are active and back to false when they have completed. This stops a cascading trigger loop! **/
 	public boolean chunkSpawnTriggersActive = false;
 
-	/** Called by the ChunkSpawn Feature every time a new chunk is generated. Adds the chunk to a list for spawning in later when ready. **/
-	public void onChunkGenerate(World world, ChunkPos chunkPos) {
+	/** Called every time a new chunk is generated. Adds the chunk to a list for spawning in later when ready. **/
+	public void onChunkGenerate(String dimensionId, ChunkPos chunkPos) {
 		// Add To Fresh Chunks Map:
-		if(!this.freshChunks.containsKey(world)) {
-			this.freshChunks.put(world, new ArrayList<>());
+		if(!this.freshChunks.containsKey(dimensionId)) {
+			this.freshChunks.put(dimensionId, new ArrayList<>());
 		}
-		if(this.freshChunks.get(world).contains(chunkPos)) {
+		if(this.freshChunks.get(dimensionId).contains(chunkPos)) {
 			return;
 		}
-		this.freshChunks.get(world).add(chunkPos);
+		this.freshChunks.get(dimensionId).add(chunkPos);
 	}
 
 	/** Called on World Tick, checks for any fresh chunks to spawn in. **/
 	public void checkFreshChunks(World world) {
-		if (!this.freshChunks.containsKey(world)) {
-			this.freshChunks.put(world, new ArrayList<>());
+		String dimensionId = world.getDimensionKey().getLocation().toString();
+		if (!this.freshChunks.containsKey(dimensionId)) {
+			this.freshChunks.put(dimensionId, new ArrayList<>());
 			return;
 		}
 
-		List<ChunkPos> freshChunks = new ArrayList<>(this.freshChunks.get(world));
+		List<ChunkPos> freshChunks = new ArrayList<>(this.freshChunks.get(dimensionId));
 		for(ChunkPos chunkPos : freshChunks) {
 			// Check If Loaded:
 			if(!world.getChunkProvider().isChunkLoaded(chunkPos)) {
 				continue;
 			}
-			this.freshChunks.get(world).remove(chunkPos);
+			this.freshChunks.get(dimensionId).remove(chunkPos);
 
 			// Call Triggers:
 			//if (this.chunkSpawnTriggersActive) {}
@@ -323,8 +325,8 @@ public class SpawnerEventListener {
 		}
 
 		// Clear If Too Many:
-		if(this.freshChunks.get(world).size() > 100) {
-			this.freshChunks.get(world).clear();
+		if(this.freshChunks.get(dimensionId).size() > 1000) {
+			this.freshChunks.get(dimensionId).clear();
 		}
 	}
 

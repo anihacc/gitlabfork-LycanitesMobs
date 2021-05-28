@@ -47,7 +47,7 @@
 	],
 	"mobSpawns": [
 		{
-			"mobId": "lycanitesmobs:belph",
+			"mobId": "lycanitesmobs:belphegor",
 			"weight": 14
 		},
 		{
@@ -55,22 +55,22 @@
 			"weight": 8
 		},
 		{
-			"mobId": "lycanitesmobs:behemoth",
+			"mobId": "lycanitesmobs:behemophet",
 			"weight": 4,
 			"dungeonLevelMin": 1
 		},
 		{
-			"mobId": "lycanitesmobs:pinky",
+			"mobId": "lycanitesmobs:kathoga",
 			"weight": 4,
 			"dungeonLevelMin": 2
 		},
 		{
-			"mobId": "lycanitesmobs:cacodemon",
+			"mobId": "lycanitesmobs:malwrath",
 			"weight": 1,
 			"dungeonLevelMin": 3
 		},
 		{
-			"mobId": "lycanitesmobs:behemoth",
+			"mobId": "lycanitesmobs:behemophet",
 			"weight": 1,
 			"variant": 0,
 			"mobNameTag": "Baron of Hell",
@@ -93,7 +93,7 @@
 			]
 		},
 		{
-			"mobId": "lycanitesmobs:pinky",
+			"mobId": "lycanitesmobs:kathoga",
 			"weight": 1,
 			"variant": 2,
 			"mobNameTag": "Gluttony",
@@ -117,7 +117,7 @@
 			]
 		},
 		{
-			"mobId": "lycanitesmobs:cacodemon",
+			"mobId": "lycanitesmobs:malwrath",
 			"weight": 1,
 			"variant": 3,
 			"mobSizeScale": 1.25,
@@ -144,7 +144,7 @@
 			]
 		},
 		{
-			"mobId": "lycanitesmobs:archvile",
+			"mobId": "lycanitesmobs:apollyon",
 			"weight": 1,
 			"variant": 3,
 			"mobSizeScale": 1.25,

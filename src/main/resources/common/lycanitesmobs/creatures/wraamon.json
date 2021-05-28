@@ -12,15 +12,16 @@
         "enabled": true,
         "spawners": [
             "underground",
-            "end"
+            "land_deadly"
         ],
         "disableSubspecies": false,
-        "dimensionIds": [
-            "minecraft:the_nether"
-        ],
+        "dimensionIds": [],
         "dimensionListType": "blacklist",
         "ignoreBiome": true,
-        "biomeTags": [],
+        "biomeTags": [
+            "all",
+            "-nether"
+        ],
         "spawnWeight": 8,
         "dungeonWeight": 200,
         "spawnAreaLimit": 5,
@@ -47,6 +48,7 @@
     "pierce": 1,
     "sight": 24,
     "knockbackResistance": 0,
+	"bagSize": 5,
     "eggBackColor": "#206d1e",
     "eggForeColor": "#822b9e",
     "subspecies": [

@@ -11,17 +11,15 @@
     "spawning": {
         "enabled": true,
         "spawners": [
-            "monster",
-            "beast",
-            "portal",
-            "nether"
+            "land_deadly",
+            "portal"
         ],
         "disableSubspecies": false,
         "dimensionIds": [
             "minecraft:the_nether"
         ],
         "dimensionListType": "whitelist",
-        "ignoreBiome": true,
+        "ignoreBiome": false,
         "biomeTags": [
             "nether"
         ],
@@ -51,6 +49,7 @@
     "pierce": 1,
     "sight": 24,
     "knockbackResistance": 0.25,
+	"bagSize": 5,
     "eggBackColor": "#4E5567",
     "eggForeColor": "#49005C",
     "subspecies": [
@@ -64,15 +63,14 @@
                 },
                 {
                     "index": 2,
-                    "name": "lux",
+                    "name": "dark",
                     "type": "uncommon"
                 }
             ]
         }
     ],
     "elements": [
-        "quake",
-        "void"
+        "fae"
     ],
     "diets": [
         "carnivore",
@@ -88,7 +86,6 @@
     "drops": [
         {
             "item": "minecraft:soul_sand",
-            "metadata": 1,
             "minAmount": 3,
             "maxAmount": 5,
             "chance": 1

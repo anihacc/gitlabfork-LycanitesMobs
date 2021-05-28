@@ -1,6 +1,6 @@
 {
     "name": "khalk",
-    "creatureType": "beast",
+    "creatureType": "reptile",
     "groups": [
         "inferno"
     ],
@@ -11,7 +11,7 @@
     "spawning": {
         "enabled": true,
         "spawners": [
-            "lavaunderground"
+            "lava_underground"
         ],
         "disableSubspecies": false,
         "dimensionIds": [],
@@ -46,6 +46,7 @@
     "pierce": 1,
     "sight": 24,
     "knockbackResistance": 1,
+	"bagSize": 5,
     "eggBackColor": "#442200",
     "eggForeColor": "#FFAA22",
     "subspecies": [

@@ -90,7 +90,13 @@ public class EntityAegis extends TameableCreatureEntity implements IFusable {
     // ==================================================
     public boolean petControlsEnabled() { return true; }
 
-    
+	// ==================================================
+	//                     Equipment
+	// ==================================================
+	@Override
+	public int getNoBagSize() { return 0; }
+	@Override
+	public int getBagSize() { return this.creatureInfo.BagSize; }
     // ==================================================
    	//                     Immunities
    	// ==================================================
@@ -150,7 +156,7 @@ public class EntityAegis extends TameableCreatureEntity implements IFusable {
 		if(fusable instanceof EntityGeonach) {
 			return CreatureManager.getInstance().getEntityType("vapula");
 		}
-		if(fusable instanceof EntityDjinn) {
+		if(fusable instanceof EntityZephyr) {
 			return CreatureManager.getInstance().getEntityType("sylph");
 		}
 		if(fusable instanceof EntityArgus) {

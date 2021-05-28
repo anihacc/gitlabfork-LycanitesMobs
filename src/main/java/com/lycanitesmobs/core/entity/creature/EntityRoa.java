@@ -200,8 +200,8 @@ public class EntityRoa extends RideableCreatureEntity implements IMob {
     public double getMountedYOffset() {
         return (double)this.getSize(Pose.STANDING).height * 0.25D;
     }
-    
-    
+
+
     // ==================================================
    	//                     Immunities
    	// ==================================================
@@ -263,7 +263,7 @@ public class EntityRoa extends RideableCreatureEntity implements IMob {
     @Override
     public int getNoBagSize() { return 0; }
     @Override
-    public int getBagSize() { return 10; }
+    public int getBagSize() { return this.creatureInfo.BagSize; }
 
 
     // ==================================================

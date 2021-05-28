@@ -131,7 +131,7 @@ public class OBJLoader
                     }
                     else if(parts[0].equals(USE_MATERIAL))
                     {
-                        currentObject.material = getMaterial(materials, parts[1]);
+                        //currentObject.material = getMaterial(materials, parts[1]); // No longer bother with the material files.
                     }
                     else if(parts[0].equals(NEW_OBJECT) || parts[0].equals(NEW_GROUP))
                     {
@@ -234,7 +234,8 @@ public class OBJLoader
             throw e;
         }
     }
-    
+
+    @Deprecated
     private Material getMaterial(ArrayList<Material> materials, String id)
     {
         for(Material mat : materials)

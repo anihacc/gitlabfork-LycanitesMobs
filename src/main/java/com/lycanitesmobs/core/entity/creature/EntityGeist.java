@@ -8,7 +8,6 @@ import com.lycanitesmobs.core.entity.goals.actions.BreakDoorGoal;
 import com.lycanitesmobs.core.entity.goals.actions.MoveVillageGoal;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
-import net.minecraft.dispenser.IPosition;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -20,7 +19,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.pathfinding.GroundPathNavigator;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
@@ -84,7 +82,7 @@ public class EntityGeist extends AgeableCreatureEntity implements IMob {
             ZombieVillagerEntity zombievillagerentity = EntityType.ZOMBIE_VILLAGER.create(this.world);
             zombievillagerentity.copyLocationAndAnglesFrom(villagerentity);
             villagerentity.remove();
-            zombievillagerentity.onInitialSpawn((IServerWorld) this.getEntityWorld(), this.getEntityWorld().getDifficultyForLocation(new BlockPos((IPosition) zombievillagerentity)),SpawnReason.CONVERSION, null, null);
+            zombievillagerentity.onInitialSpawn((IServerWorld) this.getEntityWorld(), this.getEntityWorld().getDifficultyForLocation(zombievillagerentity.getPosition()),SpawnReason.CONVERSION, null, null);
             zombievillagerentity.setVillagerData(villagerentity.getVillagerData());
             zombievillagerentity.setOffers(villagerentity.getOffers().write());
             zombievillagerentity.setEXP(villagerentity.getXp());
@@ -136,8 +134,14 @@ public class EntityGeist extends AgeableCreatureEntity implements IMob {
         catch(Exception e) {}
         super.onDeath(damageSource);
     }
-    
-    
+
+    // ==================================================
+    //                     Equipment
+    // ==================================================
+    @Override
+    public int getNoBagSize() { return 0; }
+    @Override
+    public int getBagSize() { return this.creatureInfo.BagSize; }
     // ==================================================
    	//                     Immunities
    	// ==================================================

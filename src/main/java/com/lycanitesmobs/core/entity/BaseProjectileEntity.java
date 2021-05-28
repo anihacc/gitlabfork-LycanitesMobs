@@ -1,5 +1,6 @@
 package com.lycanitesmobs.core.entity;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.core.info.CreatureManager;
@@ -32,7 +33,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public abstract class BaseProjectileEntity extends ThrowableEntity {
+public class BaseProjectileEntity extends ThrowableEntity {
 	public String entityName = "projectile";
 	public ModInfo modInfo;
 	public long updateTick;
@@ -82,7 +83,7 @@ public abstract class BaseProjectileEntity extends ThrowableEntity {
 	   this(entityType, world);
 	   this.setPosition(entityLiving.getPositionVec().getX(), entityLiving.getPositionVec().getY() + entityLiving.getEyeHeight(), entityLiving.getPositionVec().getZ());
 	   this.func_234612_a_(entityLiving, entityLiving.rotationPitch, entityLiving.rotationYaw, 0.0F, 1.1F, 1.0F); // Shoot from entity
-	   this.owner = entityLiving;
+	   this.setShooter(entityLiving);
 	   this.setup();
     }
 

@@ -78,7 +78,6 @@ public class CustomProjectileEntity extends BaseProjectileEntity {
 		super(entityType, world, entityLiving);
 		if(projectileInfo != null)
 			this.func_234612_a_(entityLiving, entityLiving.rotationPitch, entityLiving.rotationYaw, 0.0F, (float)projectileInfo.velocity, 1.0F); // Shoot from Entity
-		this.owner = entityLiving;
 		this.modInfo = LycanitesMobs.modInfo;
 		this.setProjectileInfo(projectileInfo);
 	}

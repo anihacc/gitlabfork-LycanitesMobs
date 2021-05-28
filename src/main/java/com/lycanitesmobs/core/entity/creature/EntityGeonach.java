@@ -180,8 +180,14 @@ public class EntityGeonach extends TameableCreatureEntity implements IMob, IFusa
 		}
 		return super.getDamageModifier(damageSrc);
     }
-    
-    
+
+	// ==================================================
+	//                     Equipment
+	// ==================================================
+	@Override
+	public int getNoBagSize() { return 0; }
+	@Override
+	public int getBagSize() { return this.creatureInfo.BagSize; }
     // ==================================================
    	//                     Immunities
    	// ==================================================
@@ -231,7 +237,7 @@ public class EntityGeonach extends TameableCreatureEntity implements IMob, IFusa
 		if(fusable instanceof EntityJengu) {
 			return CreatureManager.getInstance().getEntityType("spriggan");
 		}
-		if(fusable instanceof EntityDjinn) {
+		if(fusable instanceof EntityZephyr) {
 			return CreatureManager.getInstance().getEntityType("banshee");
 		}
 		if(fusable instanceof EntityAegis) {

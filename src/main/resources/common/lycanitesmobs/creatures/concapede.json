@@ -1,6 +1,6 @@
 {
     "name": "concapede",
-    "creatureType": "arthropod",
+    "creatureType": "insect",
     "groups": [
         "alpha"
     ],
@@ -11,8 +11,7 @@
     "spawning": {
         "enabled": true,
         "spawners": [
-            "creature",
-            "animal"
+            "land_animal"
         ],
         "disableSubspecies": false,
         "dimensionIds": [
@@ -50,6 +49,7 @@
     "pierce": 1,
     "sight": 24,
     "knockbackResistance": 0,
+	"bagSize": 5,
     "eggBackColor": "#111144",
     "eggForeColor": "#DD0000",
     "subspecies": [

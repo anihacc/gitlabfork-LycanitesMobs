@@ -138,8 +138,14 @@ public class EntityTroll extends TameableCreatureEntity implements IMob {
 		}
 		return super.getDamageModifier(damageSrc);
     }
-    
-    
+
+	// ==================================================
+	//                     Equipment
+	// ==================================================
+	@Override
+	public int getNoBagSize() { return 0; }
+	@Override
+	public int getBagSize() { return this.creatureInfo.BagSize; }
     // ==================================================
    	//                     Immunities
    	// ==================================================

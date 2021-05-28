@@ -1,7 +1,9 @@
 package com.lycanitesmobs.core.entity.navigate;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.creature.EntityJoustAlpha;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -466,21 +468,43 @@ public class CreaturePathNavigator extends PathNavigator {
         // Walking:
         this.maxDistanceToWaypoint = entityWidth > 0.75F ? entityWidth : 0.75F - entityWidth / 2.0F;
         Vector3i pathTargetPos = this.currentPath.getTarget();
-        if (Math.abs(this.entity.getPositionVec().getX() - (pathTargetPos.getX() + (entityWidth + 1) / 2D)) < (double)this.maxDistanceToWaypoint && Math.abs(this.entity.getPositionVec().getZ() - (pathTargetPos.getZ() + (entityWidth + 1) / 2D)) < (double)this.maxDistanceToWaypoint && Math.abs(this.entity.getPositionVec().getY() - pathTargetPos.getY()) < 1.0D) {
+        double distanceX = Math.abs(this.entity.getPositionVec().getX() - (pathTargetPos.getX() + (entityWidth + 1) / 2D));
+        double distanceY = Math.abs(this.entity.getPositionVec().getY() - pathTargetPos.getY());
+        double distanceZ = Math.abs(this.entity.getPositionVec().getZ() - (pathTargetPos.getZ() + (entityWidth + 1) / 2D));
+        boolean reachedTargetPos = distanceX <= this.maxDistanceToWaypoint && distanceY <= 1 && distanceZ <= this.maxDistanceToWaypoint;
+        if (reachedTargetPos || this.entity.func_233660_b_(this.currentPath.func_237225_h_().nodeType) && this.func_234112_b_(currentPos)) {
             this.currentPath.setCurrentPathIndex(this.currentPath.getCurrentPathIndex() + 1);
         }
         this.checkForStuck(currentPos);
+    }
+
+    /** Copied from PathNavigator. **/
+    private boolean func_234112_b_(Vector3d currentPosition) {
+        if (this.currentPath.getCurrentPathIndex() + 1 >= this.currentPath.getCurrentPathLength()) {
+            return false;
+        } else {
+            Vector3d vector3d = Vector3d.copyCenteredHorizontally(this.currentPath.func_242948_g());
+            if (!currentPosition.isWithinDistanceOf(vector3d, 2.0D)) {
+                return false;
+            } else {
+                Vector3d vector3d1 = Vector3d.copyCenteredHorizontally(this.currentPath.func_242947_d(this.currentPath.getCurrentPathIndex() + 1));
+                Vector3d vector3d2 = vector3d1.subtract(vector3d);
+                Vector3d vector3d3 = currentPosition.subtract(vector3d);
+                return vector3d2.dotProduct(vector3d3) > 0.0D;
+            }
+        }
     }
 
     /** Called on entity update to update the navigation progress. **/
     @Override
     public void tick() {
         // Clear Path If Close To Last Node: (Stop stupid spinning)
-        if(!this.noPath() && !this.entityCreature.hasAttackTarget()) {
+        if(this.hasPath()) {
             PathPoint finalPoint = this.getPath().getFinalPathPoint();
             Vector3d finalVec = new Vector3d((double)finalPoint.x, (double)finalPoint.y, (double)finalPoint.z);
-            if(this.entityCreature.getDistanceSq(finalVec) <= this.entityCreature.getSize(Pose.STANDING).width)
+            if(this.entityCreature.getDistanceSq(finalVec) <= this.entityCreature.getSize(Pose.STANDING).width) {
                 this.clearPath();
+            }
         }
 
         // Climbing Tick:
@@ -497,7 +521,7 @@ public class CreaturePathNavigator extends PathNavigator {
         }
 
         // Update Path and Move:
-        if (!this.noPath()) {
+        if (this.hasPath()) {
             ++this.totalTicks;
             if (this.tryUpdatePath) {
                 this.updatePath();
@@ -517,10 +541,10 @@ public class CreaturePathNavigator extends PathNavigator {
             }
 
             DebugPacketSender.sendPath(this.world, this.entity, this.currentPath, this.maxDistanceToWaypoint);
-            if (!this.noPath()) {
-                Vector3d vec3d2 = this.currentPath.getPosition(this.entity);
-                BlockPos blockpos = new BlockPos(vec3d2);
-                this.entity.getMoveHelper().setMoveTo(vec3d2.x, this.world.getBlockState(blockpos.down()).isAir() ? vec3d2.y : WalkNodeProcessor.getGroundY(this.world, blockpos), vec3d2.z, this.speed);
+            if (this.hasPath()) {
+                Vector3d currentPos = this.currentPath.getPosition(this.entity);
+                BlockPos blockpos = new BlockPos(currentPos);
+                this.entity.getMoveHelper().setMoveTo(currentPos.x, this.world.getBlockState(blockpos.down()).isAir() ? currentPos.y : WalkNodeProcessor.getGroundY(this.world, blockpos), currentPos.z, this.speed);
             }
         }
     }

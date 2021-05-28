@@ -1,8 +1,10 @@
 package com.lycanitesmobs.core.entity.navigate;
 
 import com.google.common.collect.Sets;
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.creature.EntityJoustAlpha;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -138,7 +140,7 @@ public class CreatureNodeProcessor extends NodeProcessor implements ICreatureNod
 
         // Walking On ground:
         else if (this.entity.isOnGround()) {
-            posY = MathHelper.floor(this.entity.getBoundingBox().minY + 0.5D);
+            posY = MathHelper.floor(this.entity.getPosY() + 0.5D);
         }
 
         // In Air:

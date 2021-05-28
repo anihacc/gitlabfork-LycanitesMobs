@@ -11,8 +11,7 @@
     "spawning": {
         "enabled": true,
         "spawners": [
-            "monster",
-            "beast"
+            "land"
         ],
         "disableSubspecies": false,
         "dimensionIds": [
@@ -51,6 +50,7 @@
     "pierce": 1,
     "sight": 24,
     "knockbackResistance": 0.5,
+	"bagSize": 5,
     "eggBackColor": "#321806",
     "eggForeColor": "#68523b",
     "subspecies": [
@@ -71,8 +71,8 @@
         }
     ],
     "elements": [
-        "lightning",
-        "fae"
+        "shadow",
+        "quake"
     ],
     "diets": [
         "carnivore"

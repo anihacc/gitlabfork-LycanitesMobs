@@ -48,13 +48,10 @@ public class CreatureSpawn {
 	public List<String> biomeTags = new ArrayList<>();
 
 	/** The list of biomes generated from the list of biome tags. **/
-	public List<Biome> biomesFromTags = null;
+	public List<String> biomesFromTags = null;
 
 	/** The list of specific biome ids that this creature spawns in. **/
 	public List<String> biomeIds = new ArrayList<>();
-
-	/** The list of specific biomes that this creature spawns in. **/
-	public List<Biome> biomes = null;
 
 	/** If true, the biome check will be ignored completely by this creature. **/
 	public boolean ignoreBiome = false;
@@ -153,7 +150,6 @@ public class CreatureSpawn {
 
 		if(json.has("biomeIds")) {
 			this.biomeIds.clear();
-			this.biomes = null;
 			this.biomeIds = JSONHelper.getJsonStrings(json.get("biomeIds").getAsJsonArray());
 		}
 
@@ -219,7 +215,7 @@ public class CreatureSpawn {
 		}
 
 		// Check IDs:
-		String targetDimensionId = world.getDimensionKey().getRegistryName().toString(); // TODO Check if this matches dimension ids!
+		String targetDimensionId = world.getDimensionKey().getLocation().toString();
 		for(String dimensionId : this.dimensionIds) {
 			if(dimensionId.equals(targetDimensionId)) {
 				return this.dimensionListType.equalsIgnoreCase("whitelist");
@@ -239,22 +235,21 @@ public class CreatureSpawn {
 			return true;
 		}
 
+		String biomeId = biome.getRegistryName().toString();
+
 		// Biome Tags:
 		if(!this.biomeTags.isEmpty()) {
 			if (this.biomesFromTags == null) {
 				this.biomesFromTags = JSONHelper.getBiomesFromTags(this.biomeTags);
 			}
-			if (this.biomesFromTags.contains(biome)) {
+			if (this.biomesFromTags.contains(biomeId)) {
 				return true;
 			}
 		}
 
 		// Biome IDs:
 		if(!this.biomeIds.isEmpty()) {
-			if (this.biomes == null) {
-				this.biomes = JSONHelper.getBiomes(this.biomeIds);
-			}
-			if (this.biomes.contains(biome)) {
+			if (this.biomeIds.contains(biomeId)) {
 				return true;
 			}
 		}

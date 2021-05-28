@@ -11,25 +11,19 @@
     "spawning": {
         "enabled": true,
         "spawners": [
-            "monster",
-            "beast",
-            "portal",
-            "nether"
+            "land_deadly",
+            "portal"
         ],
         "disableSubspecies": false,
         "dimensionIds": [
             "minecraft:the_nether",
-            "minecraft:the_end",
-            "midnight:midnight"
+            "minecraft:the_end"
         ],
         "dimensionListType": "whitelist",
-        "ignoreBiome": true,
+        "ignoreBiome": false,
         "biomeTags": [
             "nether",
-            "end",
-            "wasteland",
-            "hills",
-            "mountain"
+            "end"
         ],
         "spawnWeight": 2,
         "dungeonWeight": 0,
@@ -57,6 +51,7 @@
     "pierce": 1,
     "sight": 40,
     "knockbackResistance": 1,
+	"bagSize": 5,
     "eggBackColor": "#999944",
     "eggForeColor": "#0000FF",
     "subspecies": [
@@ -87,8 +82,7 @@
                 {
                     "type": "world",
                     "dimensionIds": [
-                        "minecraft:the_end",
-                        "midnight:midnight"
+                        1
                     ],
                     "dimensionListType": "whitelist"
                 }

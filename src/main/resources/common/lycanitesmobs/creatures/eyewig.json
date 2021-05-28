@@ -1,6 +1,6 @@
 {
     "name": "eyewig",
-    "creatureType": "arthropod",
+    "creatureType": "insect",
     "groups": [
         "monster"
     ],
@@ -11,8 +11,7 @@
     "spawning": {
         "enabled": true,
         "spawners": [
-            "monster",
-            "beast"
+            "land"
         ],
         "disableSubspecies": false,
         "dimensionIds": [
@@ -52,6 +51,7 @@
     "pierce": 1,
     "sight": 24,
     "knockbackResistance": 0,
+	"bagSize": 10,
     "eggBackColor": "#000000",
     "eggForeColor": "#009900",
     "subspecies": [
@@ -72,8 +72,7 @@
         }
     ],
     "elements": [
-        "arbour",
-        "shadow"
+        "poison"
     ],
     "diets": [
         "carnivore",

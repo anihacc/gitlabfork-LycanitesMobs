@@ -20,7 +20,6 @@ import java.util.List;
 
 public class EquipmentInfuserScreen extends BaseContainerScreen<EquipmentInfuserContainer> {
 	public EquipmentInfuserTileEntity equipmentInfuser;
-	public MatrixStack matrixStack;
 
 	public EquipmentInfuserScreen(EquipmentInfuserContainer container, PlayerInventory playerInventory, ITextComponent name) {
 		super(container, playerInventory, name);
@@ -47,9 +46,9 @@ public class EquipmentInfuserScreen extends BaseContainerScreen<EquipmentInfuser
 		this.ySize = 166;
 		int backX = (this.width - this.xSize) / 2;
 		int backY = (this.height - this.ySize) / 2;
-		this.drawTexturedModalRect(backX, backY, 0, 0, this.xSize, this.ySize);
+		this.drawHelper.drawTexturedModalRect(matrixStack, backX, backY, 0, 0, this.xSize, this.ySize);
 
-		this.drawSlots(backX, backY);
+		this.drawSlots(matrixStack, backX, backY);
 	}
 
 	/**
@@ -57,7 +56,7 @@ public class EquipmentInfuserScreen extends BaseContainerScreen<EquipmentInfuser
 	 * @param backX
 	 * @param backY
 	 */
-	protected void drawSlots(int backX, int backY) {
+	protected void drawSlots(MatrixStack matrixStack, int backX, int backY) {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		this.getMinecraft().getTextureManager().bindTexture(TextureManager.getTexture("GUIEquipmentForge"));
 
@@ -76,26 +75,25 @@ public class EquipmentInfuserScreen extends BaseContainerScreen<EquipmentInfuser
 				slotV += slotHeight * 9;
 			}
 
-			this.drawTexturedModalRect(slotX, slotY, slotU, slotV, slotWidth, slotHeight);
+			this.drawHelper.drawTexturedModalRect(matrixStack, slotX, slotY, slotU, slotV, slotWidth, slotHeight);
 		}
 	}
 
 	@Override
-	protected void renderForeground(int mouseX, int mouseY, float partialTicks) {
-		this.fontRenderer.drawString(matrixStack, this.equipmentInfuser.getName().getString(), this.guiLeft + 8, this.guiTop + 6, 4210752);
-        this.fontRenderer.drawString(matrixStack, this.playerInventory.getName().getString(), this.guiLeft + 8, this.guiTop + this.ySize - 96 + 2, 4210752);
+	protected void renderForeground(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+        this.drawHelper.drawString(matrixStack, this.playerInventory.getName().getString(), this.guiLeft + 8, this.guiTop + this.ySize - 96 + 2, 4210752);
 		int backX = (this.width - this.xSize) / 2;
 		int backY = (this.height - this.ySize) / 2;
-		this.drawBars(backX, backY);
+		this.drawBars(matrixStack, backX, backY);
     }
 
-	protected void drawBars(int backX, int backY) {
+	protected void drawBars(MatrixStack matrixStack, int backX, int backY) {
 		int barWidth = 100;
 		int barHeight = 11;
 		int barX = (this.width / 2) - (barWidth / 2);
 		int barY = backY + 58;
 		int barCenter = barX + (barWidth / 2);
-		this.drawTexture(TextureManager.getTexture("GUIPetBarEmpty"), barX, barY, 0, 1, 1, barWidth, barHeight);
+		this.drawHelper.drawTexture(matrixStack, TextureManager.getTexture("GUIPetBarEmpty"), barX, barY, 0, 1, 1, barWidth, barHeight);
 		ItemStack partStack = this.equipmentInfuser.getStackInSlot(1);
 		if(!(partStack.getItem() instanceof ItemEquipmentPart)) {
 			return;
@@ -107,9 +105,9 @@ public class EquipmentInfuserScreen extends BaseContainerScreen<EquipmentInfuser
 		int experience = partItem.getExperience(partStack);
 		int experienceMax = partItem.getExperienceForNextLevel(partStack);
 		float experienceNormal = (float)experience / experienceMax;
-		this.drawTexture(TextureManager.getTexture("GUIBarExperience"), barX, barY, 0, experienceNormal, 1, barWidth * experienceNormal, barHeight);
+		this.drawHelper.drawTexture(matrixStack, TextureManager.getTexture("GUIBarExperience"), barX, barY, 0, experienceNormal, 1, barWidth * experienceNormal, barHeight);
 		String experienceText = new TranslationTextComponent("entity.experience").getString() + ": " + experience + "/" + experienceMax;
-		this.fontRenderer.drawString(matrixStack, experienceText, barCenter - (this.fontRenderer.getStringWidth(experienceText) / 2), barY + 2, 0xFFFFFF);
+		this.drawHelper.drawString(matrixStack, experienceText, barCenter - (this.drawHelper.getStringWidth(experienceText) / 2), barY + 2, 0xFFFFFF);
 	}
     
 	@Override

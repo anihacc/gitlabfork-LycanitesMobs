@@ -31,15 +31,15 @@
 	],
 	"mobSpawns": [
 		{
-			"mobId": "lycanitesmobs:belph",
+			"mobId": "lycanitesmobs:belphegoregor",
 			"weight": 16
 		},
 		{
-			"mobId": "lycanitesmobs:behemoth",
+			"mobId": "lycanitesmobs:behemophet",
 			"weight": 8
 		},
 		{
-			"mobId": "lycanitesmobs:archvile",
+			"mobId": "lycanitesmobs:apollyon",
 			"weight": 1
 		}
 	]

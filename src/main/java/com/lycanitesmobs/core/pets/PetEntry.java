@@ -7,6 +7,7 @@ import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.Subspecies;
 import com.lycanitesmobs.core.info.Variant;
+import net.minecraft.crash.ReportedException;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
@@ -652,7 +653,15 @@ public class PetEntry {
                 this.entityName = this.entity.getCustomName().getString();
             }
 
-            this.entity.writeWithoutTypeId(this.entityNBT);
+            try {
+                this.entity.writeWithoutTypeId(this.entityNBT);
+            }
+            catch (Throwable t) {
+                LycanitesMobs.logError("Failed to save data for a Pet Entry.");
+                if (t instanceof ReportedException) {
+                    LycanitesMobs.logError(((ReportedException)t).getCause().toString());
+                }
+            }
         }
     }
 

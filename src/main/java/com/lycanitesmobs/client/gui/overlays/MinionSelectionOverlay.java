@@ -7,6 +7,7 @@ import com.lycanitesmobs.client.gui.buttons.CreatureButton;
 import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.network.MessageSummonSetSelection;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -82,10 +83,10 @@ public class MinionSelectionOverlay extends BaseScreen {
 	}
 
 	@Override
-	protected void renderForeground(int mouseX, int mouseY, float partialTicks) {}
+	protected void renderForeground(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {}
 
 	@Override
-	protected void renderWidgets(int mouseX, int mouseY, float partialTicks) {
+	protected void renderWidgets(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
 		for(Object buttonObj : this.buttons) {
 			if(buttonObj instanceof ButtonBase) {
 				ButtonBase button = (ButtonBase)buttonObj;
@@ -96,7 +97,7 @@ public class MinionSelectionOverlay extends BaseScreen {
 	}
 
 	@Override
-	protected void renderBackground(int mouseX, int mouseY, float partialTicks) {
+	protected void renderBackground(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 	

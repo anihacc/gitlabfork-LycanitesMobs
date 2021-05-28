@@ -9,9 +9,11 @@ import com.lycanitesmobs.core.config.ConfigCreatures;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.CreatureStats;
 import com.lycanitesmobs.core.spawner.SpawnerMobRegistry;
+import net.minecraft.block.Block;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -120,7 +122,8 @@ public class CreatureManager extends JSONLoader {
 			LycanitesMobs.logDebug("Creature", "Complete! " + this.creatures.size() + " JSON Creatures Loaded In Total.");
 		}
 		catch(Exception e) {
-			LycanitesMobs.logWarning("", "No Creatures loaded for: " + modInfo.name);
+			LycanitesMobs.logError("Error loading Creatures for: " + modInfo.name);
+			throw(e);
 		}
 	}
 
@@ -208,6 +211,12 @@ public class CreatureManager extends JSONLoader {
 		for(CreatureInfo creatureInfo : this.creatures.values()) {
 			event.put(creatureInfo.getEntityType(), BaseCreatureEntity.registerCustomAttributes().create());
 		}
+	}
+
+	@SubscribeEvent
+	public void registerBlocks(RegistryEvent.Register<Attribute> event) {
+		event.getRegistry().register(BaseCreatureEntity.DEFENSE);
+		event.getRegistry().register(BaseCreatureEntity.RANGED_SPEED);
 	}
 
 	/**

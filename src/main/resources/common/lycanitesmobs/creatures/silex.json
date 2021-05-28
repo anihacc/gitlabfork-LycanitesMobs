@@ -11,7 +11,7 @@
     "spawning": {
         "enabled": true,
         "spawners": [
-            "wateranimal"
+            "water_animal"
         ],
         "disableSubspecies": false,
         "dimensionIds": [
@@ -51,6 +51,7 @@
     "pierce": 1,
     "sight": 24,
     "knockbackResistance": 0,
+	"bagSize": 5,
     "eggBackColor": "#263abd",
     "eggForeColor": "#040e75",
     "subspecies": [
@@ -83,7 +84,8 @@
     "dungeonLevel": 0,
     "drops": [
         {
-            "item": "minecraft:lapis_lazuli",
+            "item": "minecraft:dye",
+            "metadata": 4,
             "minAmount": 1,
             "maxAmount": 3,
             "chance": 1

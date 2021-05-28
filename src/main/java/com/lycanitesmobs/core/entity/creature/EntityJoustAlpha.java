@@ -82,8 +82,14 @@ public class EntityJoustAlpha extends AgeableCreatureEntity {
     	}
     	super.setAttackTarget(entity);
     }
-    
-    
+
+    // ==================================================
+    //                     Equipment
+    // ==================================================
+    @Override
+    public int getNoBagSize() { return 0; }
+    @Override
+    public int getBagSize() { return this.creatureInfo.BagSize; }
     // ==================================================
    	//                     Immunities
    	// ==================================================

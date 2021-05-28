@@ -85,7 +85,8 @@ public class ProjectileBehaviourFireProjectiles extends ProjectileBehaviour {
 		BaseProjectileEntity childProjectile;
 
 		if(projectile.func_234616_v_() != null) {
-			childProjectile = projectileInfo.createProjectile(projectile.getEntityWorld(), this.getShooter());
+			LivingEntity shooter = projectile.getShooter() instanceof  LivingEntity ? (LivingEntity)projectile.getShooter() : null;
+			childProjectile = projectileInfo.createProjectile(projectile.getEntityWorld(), shooter);
 			childProjectile.setPosition(
 					projectile.getPositionVec().getX(),
 					projectile.getPositionVec().getY(),

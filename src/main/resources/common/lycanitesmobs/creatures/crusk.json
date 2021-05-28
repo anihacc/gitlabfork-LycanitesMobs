@@ -11,8 +11,7 @@
     "spawning": {
         "enabled": true,
         "spawners": [
-            "monster",
-            "beast"
+            "land"
         ],
         "disableSubspecies": false,
         "dimensionIds": [
@@ -54,6 +53,7 @@
     "pierce": 1,
     "sight": 24,
     "knockbackResistance": 1,
+	"bagSize": 15,
     "packSize": 1,
     "eggBackColor": "#FFDDAA",
     "eggForeColor": "#000000",
@@ -74,7 +74,7 @@
             ]
         }
     ],
-    "element": "quake",
+    "element": "earth",
     "diets": [
         "carnivore",
         "insectivore"

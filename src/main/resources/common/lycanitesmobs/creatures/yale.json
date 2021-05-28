@@ -11,8 +11,7 @@
     "spawning": {
         "enabled": true,
         "spawners": [
-            "creature",
-            "animal"
+            "land_animal"
         ],
         "disableSubspecies": false,
         "dimensionIds": [
@@ -50,6 +49,7 @@
     "pierce": 1,
     "sight": 24,
     "knockbackResistance": 0.25,
+	"bagSize": 5,
     "eggBackColor": "#FFEEAA",
     "eggForeColor": "#FFDD77",
     "subspecies": [
@@ -89,7 +89,7 @@
             "chance": 1
         },
         {
-            "item": "minecraft:white_wool",
+            "item": "minecraft:wool",
             "minAmount": 1,
             "maxAmount": 1,
             "chance": 1

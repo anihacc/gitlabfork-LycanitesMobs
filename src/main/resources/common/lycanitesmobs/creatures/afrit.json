@@ -46,6 +46,7 @@
     "pierce": 1,
     "sight": 24,
     "knockbackResistance": 0,
+	"bagSize": 5,
     "eggBackColor": "#110000",
     "eggForeColor": "#773300",
     "subspecies": [
@@ -66,8 +67,7 @@
         }
     ],
     "elements": [
-        "fire",
-        "acid"
+        "fire"
     ],
     "diets": [
         "carnivore",

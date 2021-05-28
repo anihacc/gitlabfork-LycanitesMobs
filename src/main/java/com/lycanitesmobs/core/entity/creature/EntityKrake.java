@@ -97,7 +97,13 @@ public class EntityKrake extends AgeableCreatureEntity implements IMob {
         return super.canBeLeashedTo(player);
     }
 
-
+    // ==================================================
+    //                     Equipment
+    // ==================================================
+    @Override
+    public int getNoBagSize() { return 0; }
+    @Override
+    public int getBagSize() { return this.creatureInfo.BagSize; }
     // ========== Get Wander Position ==========
     public BlockPos getWanderPosition(BlockPos wanderPosition) {
         BlockPos groundPos;

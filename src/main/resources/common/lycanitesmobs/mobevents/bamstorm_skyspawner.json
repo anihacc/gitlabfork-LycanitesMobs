@@ -31,11 +31,11 @@
 	],
 	"mobSpawns": [
 		{
-			"mobId": "lycanitesmobs:djinn",
+			"mobId": "lycanitesmobs:zephyr",
 			"weight": 8
 		},
 		{
-			"mobId": "lycanitesmobs:zephyr",
+			"mobId": "lycanitesmobs:raidra",
 			"weight": 8
 		},
 		{

@@ -11,8 +11,7 @@
     "spawning": {
         "enabled": true,
         "spawners": [
-            "monster",
-            "beast"
+            "land"
         ],
         "disableSubspecies": false,
         "dimensionIds": [
@@ -50,6 +49,7 @@
     "pierce": 1,
     "sight": 24,
     "knockbackResistance": 0,
+	"bagSize": 5,
     "eggBackColor": "#665500",
     "eggForeColor": "#CC99BB",
     "subspecies": [
@@ -69,7 +69,7 @@
             ]
         }
     ],
-    "element": "gravity",
+    "element": "arcane",
     "diets": [
         "frugivore"
     ],

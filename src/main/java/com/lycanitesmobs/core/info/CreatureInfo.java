@@ -26,15 +26,13 @@ import net.minecraft.world.biome.Biome;
 import javax.annotation.Nonnull;
 import java.awt.*;
 import java.lang.reflect.Constructor;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 /** Contains various information about a creature from default spawn information to stats, etc. **/
 public class CreatureInfo {
 
-	// Core Info:
+    // Core Info:
 	/** The name of this mob. Lowercase, no space, used for language entries and for generating the entity id, etc. Required. **/
 	protected String name;
 
@@ -87,6 +85,7 @@ public class CreatureInfo {
 
 	public double sight = 16.0D;
 	public double knockbackResistance = 0.0D;
+	public int BagSize = 5;
 
 	public int packSize = 3;
 
@@ -195,7 +194,7 @@ public class CreatureInfo {
 			this.entityConstructor = this.entityClass.getConstructor(EntityType.class, World.class);
 		}
 		catch(Exception e) {
-			LycanitesMobs.logWarning("", "[Creature] Unable to find the Java Entity Class: " + json.get("entityClass").getAsString() + " for " + this.getName());
+			LycanitesMobs.logError("[Creature] Unable to find the Java Entity Class: " + json.get("entityClass").getAsString() + " for " + this.getName());
 			throw new RuntimeException(e);
 		}
 
@@ -277,6 +276,8 @@ public class CreatureInfo {
 			this.knockbackResistance = json.get("knockbackResistance").getAsDouble();
 		if(json.has("sight"))
 			this.sight = json.get("sight").getAsDouble();
+		if(json.has("bagSize"))
+			this.BagSize = json.get("bagSize").getAsInt();
 
 		if(json.has("packSize"))
 			this.packSize = json.get("packSize").getAsInt();
@@ -348,7 +349,7 @@ public class CreatureInfo {
 					this.drops.add(itemDrop);
 				}
 				else {
-					LycanitesMobs.logWarning("", "[Creature] Unable to add item drop to creature: " + this.name + ".");
+					LycanitesMobs.logWarning("", "[Creature] Unable to add item drop to creature: " + getName() + ".");
 				}
 			}
 		}
@@ -414,23 +415,23 @@ public class CreatureInfo {
 	 * Adds sounds that this creature uses.
 	 */
 	public void addSounds(String suffix) {
-		ObjectManager.addSound(this.name + suffix + "_say", modInfo, "entity." + this.name + suffix + ".say");
-		ObjectManager.addSound(this.name + suffix + "_hurt", modInfo, "entity." + this.name + suffix + ".hurt");
-		ObjectManager.addSound(this.name + suffix + "_death", modInfo, "entity." + this.name + suffix + ".death");
-		ObjectManager.addSound(this.name + suffix + "_step", modInfo, "entity." + this.name + suffix + ".step");
-		ObjectManager.addSound(this.name + suffix + "_attack", modInfo, "entity." + this.name + suffix + ".attack");
-		ObjectManager.addSound(this.name + suffix + "_jump", modInfo, "entity." + this.name + suffix + ".jump");
-		ObjectManager.addSound(this.name + suffix + "_fly", modInfo, "entity." + this.name + suffix + ".fly");
+		ObjectManager.addSound(this.getName() + suffix + "_say", modInfo, "entity." + getName() + suffix + ".say");
+		ObjectManager.addSound(this.name + suffix + "_hurt", modInfo, "entity." + getName() + suffix + ".hurt");
+		ObjectManager.addSound(this.name + suffix + "_death", modInfo, "entity." + getName() + suffix + ".death");
+		ObjectManager.addSound(this.name + suffix + "_step", modInfo, "entity." + getName() + suffix + ".step");
+		ObjectManager.addSound(this.name + suffix + "_attack", modInfo, "entity." + getName() + suffix + ".attack");
+		ObjectManager.addSound(this.name + suffix + "_jump", modInfo, "entity." + getName() + suffix + ".jump");
+		ObjectManager.addSound(this.name + suffix + "_fly", modInfo, "entity." + getName() + suffix + ".fly");
 		if(this.isSummonable() || this.isTameable() || TameableCreatureEntity.class.isAssignableFrom(this.entityClass)) {
-			ObjectManager.addSound(this.name + suffix + "_tame", modInfo, "entity." + this.name + suffix + ".tame");
-			ObjectManager.addSound(this.name + suffix + "_beg", modInfo, "entity." + this.name + suffix + ".beg");
+			ObjectManager.addSound(this.name + suffix + "_tame", modInfo, "entity." + getName() + suffix + ".tame");
+			ObjectManager.addSound(this.name + suffix + "_beg", modInfo, "entity." + getName() + suffix + ".beg");
 		}
 		if(this.isTameable())
-			ObjectManager.addSound(this.name + suffix + "_eat", modInfo, "entity." + this.name + suffix + ".eat");
+			ObjectManager.addSound(this.name + suffix + "_eat", modInfo, "entity." + getName() + suffix + ".eat");
 		if(this.isMountable())
-			ObjectManager.addSound(this.name + suffix + "_mount", modInfo, "entity." + this.name + suffix + ".mount");
+			ObjectManager.addSound(this.name + suffix + "_mount", modInfo, "entity." + getName() + suffix + ".mount");
 		if(this.isBoss())
-			ObjectManager.addSound(this.name + suffix + "_phase", modInfo, "entity." + this.name + suffix + ".phase");
+			ObjectManager.addSound(this.name + suffix + "_phase", modInfo, "entity." + getName() + suffix + ".phase");
 	}
 
 
@@ -439,7 +440,7 @@ public class CreatureInfo {
 	 * @return Creature name.
 	 */
 	public String getName() {
-		return this.name;
+		return this.name.toLowerCase();
 	}
 
 
@@ -475,7 +476,7 @@ public class CreatureInfo {
 			entityTypeBuilder.setShouldReceiveVelocityUpdates(false);
 			entityTypeBuilder.size((float)this.width, (float)this.height);
 			this.entityType = entityTypeBuilder.build(this.getName());
-			this.entityType.setRegistryName(this.modInfo.modid, this.getName());
+			this.entityType.setRegistryName(LycanitesMobs.MODID, this.getName());
 			EntityFactory.getInstance().addEntityType(this.entityType, this.entityConstructor, this.getName());
 		}
 		return this.entityType;
@@ -587,22 +588,22 @@ public class CreatureInfo {
 	 * @return The Biomes native for this Creature.
 	 */
 	public ITextComponent getBiomeNames() {
-		List<Biome> biomes = new ArrayList<>();
+		List<String> biomeIds = new ArrayList<>();
 		if(this.creatureSpawn.biomesFromTags != null)
-			biomes.addAll(this.creatureSpawn.biomesFromTags);
-		if(this.creatureSpawn.biomes != null)
-			biomes.addAll(this.creatureSpawn.biomes);
-		if(biomes.isEmpty()) {
+			biomeIds.addAll(this.creatureSpawn.biomesFromTags);
+		if(this.creatureSpawn.biomeIds != null)
+			biomeIds.addAll(this.creatureSpawn.biomeIds);
+		if(biomeIds.isEmpty()) {
 			return new TranslationTextComponent("gui.beastiary.biomes.none");
 		}
 		StringTextComponent biomeNames = new StringTextComponent("");
 		boolean firstBiome = true;
-		for(Biome biome : biomes) {
+		for(String biomeId : biomeIds) {
 			if(!firstBiome) {
 				biomeNames.appendString(", ");
 			}
 			firstBiome = false;
-			biomeNames.append(new StringTextComponent(biome.getRegistryName().toString())); // TODO Figure out how to get biome display names now.
+			biomeNames.append(new StringTextComponent(biomeId)); // TODO Figure out how to get biome display names now.
 		}
 		return biomeNames;
 	}

@@ -5,6 +5,7 @@ import com.lycanitesmobs.ClientManager;
 import com.lycanitesmobs.ExtendedWorld;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
+import com.lycanitesmobs.client.mobevent.MobEventPlayerClient;
 import com.lycanitesmobs.core.FileLoader;
 import com.lycanitesmobs.core.JSONLoader;
 import com.lycanitesmobs.core.StreamLoader;

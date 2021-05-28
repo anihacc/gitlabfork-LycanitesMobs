@@ -12,7 +12,7 @@
         "enabled": true,
         "spawners": [
             "water",
-            "waterfloor"
+            "water_floor"
         ],
         "disableSubspecies": false,
         "dimensionIds": [
@@ -50,6 +50,7 @@
     "pierce": 1,
     "sight": 32,
     "knockbackResistance": 0,
+	"bagSize": 10,
     "eggBackColor": "#5247ca",
     "eggForeColor": "#ccd6ec",
     "subspecies": [
@@ -69,7 +70,10 @@
             ]
         }
     ],
-    "element": "acid",
+    "elements": [
+		"arcane",
+		"water"
+	],
     "diets": [
         "piscivore"
     ],

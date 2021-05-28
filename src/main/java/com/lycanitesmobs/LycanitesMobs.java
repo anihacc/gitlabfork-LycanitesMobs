@@ -27,6 +27,7 @@ import com.lycanitesmobs.core.network.PacketHandler;
 import com.lycanitesmobs.core.spawner.SpawnerEventListener;
 import com.lycanitesmobs.core.spawner.SpawnerManager;
 import com.lycanitesmobs.core.worldgen.WorldGenManager;
+import com.lycanitesmobs.core.worldgen.WorldGenerator;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraftforge.common.MinecraftForge;
@@ -116,6 +117,7 @@ public class LycanitesMobs {
 		MinecraftForge.EVENT_BUS.register(SpawnerEventListener.getInstance());
 		MinecraftForge.EVENT_BUS.register(MobEventManager.getInstance());
 		MinecraftForge.EVENT_BUS.register(MobEventListener.getInstance());
+		MinecraftForge.EVENT_BUS.register(new WorldGenerator());
 
 		// Network:
 		packetHandler.register();
@@ -178,9 +180,6 @@ public class LycanitesMobs {
 
 		// Mod Support:
 		DLDungeons.init();
-
-		// World Gen:
-		WorldGenManager.getInstance().addToBiomes();
 	}
 
 	@SubscribeEvent

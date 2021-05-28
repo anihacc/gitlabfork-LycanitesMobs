@@ -289,8 +289,14 @@ public class EntityVespid extends AgeableCreatureEntity implements IMob {
     		return 4.0F;
     	return 1.0F;
     }
-    
-    
+
+	// ==================================================
+	//                     Equipment
+	// ==================================================
+	@Override
+	public int getNoBagSize() { return 0; }
+	@Override
+	public int getBagSize() { return this.creatureInfo.BagSize; }
     // ==================================================
    	//                     Immunities
    	// ==================================================

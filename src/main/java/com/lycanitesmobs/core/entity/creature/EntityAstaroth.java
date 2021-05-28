@@ -74,7 +74,7 @@ public class EntityAstaroth extends TameableCreatureEntity implements IMob {
     // ==================================================
     @Override
     public boolean canAttack(LivingEntity target) {
-        if(target instanceof EntityTrite || target instanceof EntityCacodemon ||  target instanceof EntityAsmodeus)
+        if(target instanceof EntityTrite || target instanceof EntityMalwrath ||  target instanceof EntityAsmodeus)
             return false;
         return super.canAttack(target);
     }
@@ -82,7 +82,7 @@ public class EntityAstaroth extends TameableCreatureEntity implements IMob {
     // ========== Ranged Attack ==========
     @Override
     public void attackRanged(Entity target, float range) {
-        this.fireProjectile("devilstar", target, range, 0, new Vector3d(0, 2.6F, 0), 1.2f, 1f, 1F);
+        this.fireProjectile("devilstar", target, range, 0, new Vector3d(0, 2.0F, 0), 1.2f, 1f, 1F);
         super.attackRanged(target, range);
     }
 	
@@ -112,6 +112,8 @@ public class EntityAstaroth extends TameableCreatureEntity implements IMob {
     // ==================================================
     //                     Equipment
     // ==================================================
+    @Override
     public int getNoBagSize() { return 0; }
-    public int getBagSize() { return 5; }
+    @Override
+    public int getBagSize() { return this.creatureInfo.BagSize; }
 }

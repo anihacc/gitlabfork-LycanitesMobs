@@ -205,16 +205,16 @@ public class CreatureList extends BaseList<BeastiaryScreen> {
 				if (this.parentList.listType == Type.SUMMONABLE) {
 					nameY = top + 2;
 				}
-				this.parentList.screen.getFontRenderer().drawString(matrixStack, this.creatureInfo.getTitle().getString(), left + 20, nameY, 0xFFFFFF);
+				this.parentList.screen.drawHelper.drawString(matrixStack, this.creatureInfo.getTitle().getString(), left + 20, nameY, 0xFFFFFF);
 
 				// Level:
 				if (this.parentList.listType == Type.SUMMONABLE) {
-					this.parentList.screen.drawLevel(this.creatureInfo, TextureManager.getTexture("GUIPetLevel"), left + 18, top + 10);
+					this.parentList.screen.drawLevel(matrixStack, this.creatureInfo, TextureManager.getTexture("GUIPetLevel"), left + 18, top + 10);
 				}
 
 				// Icon:
 				if (this.creatureInfo.getIcon() != null) {
-					this.parentList.screen.drawTexture(this.creatureInfo.getIcon(), left + 2, top + 2, 0, 1, 1, 16, 16);
+					this.parentList.screen.drawHelper.drawTexture(matrixStack, this.creatureInfo.getIcon(), left + 2, top + 2, 0, 1, 1, 16, 16);
 				}
 			}
 
@@ -229,16 +229,16 @@ public class CreatureList extends BaseList<BeastiaryScreen> {
 				if (this.parentList.listType == Type.PET || this.parentList.listType == Type.MOUNT) {
 					nameY = top + 2;
 				}
-				this.parentList.screen.getFontRenderer().drawString(matrixStack, this.petEntry.getDisplayName().getString(), left + 20, nameY, 0xFFFFFF);
+				this.parentList.screen.drawHelper.drawString(matrixStack, this.petEntry.getDisplayName().getString(), left + 20, nameY, 0xFFFFFF);
 
 				// Level:
 				if (this.parentList.listType == Type.PET || this.parentList.listType == Type.MOUNT) {
-					this.parentList.screen.drawLevel(this.petEntry.getCreatureInfo(), TextureManager.getTexture("GUIPetLevel"), left + 18, top + 10);
+					this.parentList.screen.drawLevel(matrixStack, this.petEntry.getCreatureInfo(), TextureManager.getTexture("GUIPetLevel"), left + 18, top + 10);
 				}
 
 				// Icon:
 				if (this.petEntry.getCreatureInfo().getIcon() != null) {
-					this.parentList.screen.drawTexture(this.petEntry.getCreatureInfo().getIcon(), left + 2, top + 2, 0, 1, 1, 16, 16);
+					this.parentList.screen.drawHelper.drawTexture(matrixStack, this.petEntry.getCreatureInfo().getIcon(), left + 2, top + 2, 0, 1, 1, 16, 16);
 				}
 			}
 		}

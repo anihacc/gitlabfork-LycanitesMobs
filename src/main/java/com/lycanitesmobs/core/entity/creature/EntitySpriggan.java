@@ -195,13 +195,15 @@ public class EntitySpriggan extends TameableCreatureEntity implements IMob {
     //                     Pet Control
     // ==================================================
     public boolean petControlsEnabled() { return true; }
-    
-    
-    // ==================================================
-    //                     Equipment
-    // ==================================================
-    public int getNoBagSize() { return 0; }
-    public int getBagSize() { return 5; }
+
+
+	// ==================================================
+	//                     Equipment
+	// ==================================================
+	@Override
+	public int getNoBagSize() { return 0; }
+	@Override
+	public int getBagSize() { return this.creatureInfo.BagSize; }
 
 	@Override
 	public boolean canBreatheUnderwater() {

@@ -6,7 +6,16 @@
 	"mobCountMin": 2,
 	"ignoreBiomes": false,
 	"ignoreLightLevel": false,
-	"conditions": [],
+	"conditions": [
+		{
+			"type": "world",
+			"dimensionIds": [
+				"minecraft:the_nether",
+				"minecraft:the_end"
+			],
+			"dimensionListType": "blacklist"
+		}
+	],
 	"triggers": [
 		{
 			"type": "world",

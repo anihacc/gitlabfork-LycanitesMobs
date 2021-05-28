@@ -1,6 +1,6 @@
 {
     "name": "ettin",
-    "creatureType": "brute",
+    "creatureType": "anthronian",
     "groups": [
         "raider"
     ],
@@ -11,8 +11,7 @@
     "spawning": {
         "enabled": true,
         "spawners": [
-            "monster",
-            "beast"
+            "land"
         ],
         "disableSubspecies": false,
         "dimensionIds": [
@@ -51,6 +50,7 @@
     "pierce": 1,
     "sight": 24,
     "knockbackResistance": 0,
+	"bagSize": 5,
     "eggBackColor": "#669900",
     "eggForeColor": "#FF6600",
     "subspecies": [

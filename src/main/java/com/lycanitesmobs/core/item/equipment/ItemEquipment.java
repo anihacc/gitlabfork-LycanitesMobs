@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.item.equipment;
 
 import com.google.common.collect.Multimap;
+import com.google.common.collect.MultimapBuilder;
 import com.lycanitesmobs.ClientManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.TextureManager;
@@ -646,7 +647,7 @@ public class ItemEquipment extends BaseItem {
 	 */
 	@Override
 	public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack itemStack) {
-		Multimap<Attribute, AttributeModifier> multimap = super.getAttributeModifiers(slot, itemStack);
+		Multimap<Attribute, AttributeModifier> multimap = MultimapBuilder.hashKeys().arrayListValues().build(super.getAttributeModifiers(slot, itemStack));
 		if (slot == EquipmentSlotType.MAINHAND) {
 			multimap.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", this.getDamageAmount(itemStack), AttributeModifier.Operation.ADDITION));
 			multimap.put(Attributes.ATTACK_SPEED, new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", -this.getDamageCooldown(itemStack), AttributeModifier.Operation.ADDITION));
