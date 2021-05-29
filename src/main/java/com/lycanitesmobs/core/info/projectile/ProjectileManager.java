@@ -121,7 +121,6 @@ public class ProjectileManager extends JSONLoader {
 		entityTypeBuilder.setUpdateInterval(3);
 		entityTypeBuilder.setShouldReceiveVelocityUpdates(true);
 		entityTypeBuilder.sized(0.25F, 0.25F);
-		entityTypeBuilder.noSummon();
 		EntityType entityType = entityTypeBuilder.build(entityName);
 		entityType.setRegistryName(LycanitesMobs.MODID, entityName);
 		try {

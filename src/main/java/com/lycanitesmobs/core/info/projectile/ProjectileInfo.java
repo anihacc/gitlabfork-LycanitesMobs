@@ -294,7 +294,6 @@ public class ProjectileInfo {
 			entityTypeBuilder.setUpdateInterval(3);
 			entityTypeBuilder.setShouldReceiveVelocityUpdates(true);
 			entityTypeBuilder.sized(this.width, this.height);
-			entityTypeBuilder.noSummon();
 			this.entityType = entityTypeBuilder.build(this.getName());
 			this.entityType.setRegistryName(this.modInfo.modid, this.getName());
 			EntityFactory.getInstance().addEntityType(this.entityType, this.entityConstructor, this.getName());
