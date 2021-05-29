@@ -61,8 +61,8 @@ public class ProjectileSpriteRenderer extends EntityRenderer<BaseProjectileEntit
     }
 
     public void renderSprite(BaseProjectileEntity entity, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, RenderType rendertype, float scale) {
-		float textureWidth = 0.5F;
-		float textureHeight = 0.5F;
+		float textureWidth = 0.25F;
+		float textureHeight = 0.25F;
 		float minU = 0;
 		float maxU = 1;
 		float minV = 0;

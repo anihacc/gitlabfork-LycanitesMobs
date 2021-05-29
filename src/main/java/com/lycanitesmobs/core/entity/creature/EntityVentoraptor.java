@@ -104,7 +104,7 @@ public class EntityVentoraptor extends RideableCreatureEntity {
     		return;
     	
     	this.playJumpSound();
-    	this.leap(4.0D, 0.5D);
+    	this.leap(4D, 1D);
     	
     	this.applyStaminaCost();
     }

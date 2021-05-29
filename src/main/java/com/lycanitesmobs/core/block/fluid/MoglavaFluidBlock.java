@@ -20,22 +20,22 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.function.Supplier;
 
-public class BlockFluidMoglava extends BaseFluidBlock {
-	public BlockFluidMoglava(Supplier<? extends FlowingFluid> fluidSupplier, Block.Properties properties, String name) {
+public class MoglavaFluidBlock extends BaseFluidBlock {
+	public MoglavaFluidBlock(Supplier<? extends FlowingFluid> fluidSupplier, Block.Properties properties, String name) {
 		super(fluidSupplier, properties, name);
 	}
 
 	@Override
-	public boolean shouldSpreadLiquid(World world, BlockPos pos, BlockState blockState) {
-		BlockState neighborBlockState = world.getBlockState(pos);
+	public boolean shouldSpreadLiquid(World world, BlockPos neighborBlockPos, BlockState blockState) {
+		BlockState neighborBlockState = world.getBlockState(neighborBlockPos);
 
         // Water Cobblestone:
-		if (blockState.getMaterial() == Material.WATER) {
-			world.setBlock(pos, Blocks.STONE.defaultBlockState(), 2);
+		if (neighborBlockState.getMaterial() == Material.WATER) {
+			world.setBlock(neighborBlockPos, Blocks.STONE.defaultBlockState(), 2);
 			return false;
         }
 
-		return super.shouldSpreadLiquid(world, pos, blockState);
+		return super.shouldSpreadLiquid(world, neighborBlockPos, blockState);
 	}
 
 	@Override

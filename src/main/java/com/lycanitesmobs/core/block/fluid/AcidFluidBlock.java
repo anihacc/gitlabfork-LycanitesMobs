@@ -24,28 +24,28 @@ import java.util.function.Supplier;
 
 import net.minecraft.block.AbstractBlock.Properties;
 
-public class BlockFluidAcid extends BaseFluidBlock {
-	public BlockFluidAcid(Supplier<? extends FlowingFluid> fluidSupplier, Properties properties, String name) {
+public class AcidFluidBlock extends BaseFluidBlock {
+	public AcidFluidBlock(Supplier<? extends FlowingFluid> fluidSupplier, Properties properties, String name) {
         super(fluidSupplier, properties, name);
 	}
 
     @Override
-    public boolean shouldSpreadLiquid(World world, BlockPos pos, BlockState blockState) {
-        BlockState neighborBlockState = world.getBlockState(pos);
+    public boolean shouldSpreadLiquid(World world, BlockPos neighborBlockPos, BlockState blockState) {
+        BlockState neighborBlockState = world.getBlockState(neighborBlockPos);
 
         // Water Gravel:
-        if (blockState.getMaterial() == Material.WATER) {
-            world.setBlock(pos, Blocks.GRAVEL.defaultBlockState(), 2);
+        if (neighborBlockState.getMaterial() == Material.WATER) {
+            world.setBlock(neighborBlockPos, Blocks.GRAVEL.defaultBlockState(), 4);
             return false;
         }
 
         // Freeze Lava:
         if (neighborBlockState.getMaterial() == Material.LAVA) {
-            world.setBlock(pos, Blocks.GRANITE.defaultBlockState(), 4);
+            world.setBlock(neighborBlockPos, Blocks.GRANITE.defaultBlockState(), 4);
             return false;
         }
 
-        return super.shouldSpreadLiquid(world, pos, blockState);
+        return super.shouldSpreadLiquid(world, neighborBlockPos, blockState);
     }
 
     @Override

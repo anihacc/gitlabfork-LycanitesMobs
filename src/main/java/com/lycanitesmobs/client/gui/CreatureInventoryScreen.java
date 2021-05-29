@@ -149,7 +149,7 @@ public class CreatureInventoryScreen extends BaseContainerScreen<CreatureContain
 		barY += barHeight + 1;
 
 		// Level:
-		String levelText = new TranslationTextComponent("entity.level").getString() + ": " + this.creature.getLevel();
+		String levelText = new TranslationTextComponent("entity.level").getString() + ": " + this.creature.getMobLevel();
 		this.drawHelper.fontRenderer.draw(matrixStack, levelText, barCenter - ((float)this.drawHelper.getStringWidth(levelText) / 2), barY + 2, 0xFFFFFF);
 	}
 

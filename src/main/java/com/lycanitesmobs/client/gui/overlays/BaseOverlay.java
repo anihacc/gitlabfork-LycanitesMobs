@@ -131,11 +131,11 @@ public class BaseOverlay extends BaseGui {
             
             // Mount Controls Message:
             if(this.mountMessageTime > 0) {
-            	ITextComponent mountMessage = new TranslationTextComponent("gui.mount.controls.prefix");
-				mountMessage = mountMessage.plainCopy().append(" ").plainCopy().append(KeyHandler.instance.mountAbility.getName());
-				mountMessage = mountMessage.plainCopy().append(new TranslationTextComponent("gui.mount.controls.ability"));
-				mountMessage = mountMessage.plainCopy().append(" ").plainCopy().append(KeyHandler.instance.dismount.getName());
-				mountMessage = mountMessage.plainCopy().append(new TranslationTextComponent("gui.mount.controls.dismount"));
+            	ITextComponent mountMessage = new TranslationTextComponent("gui.mount.controls.prefix")
+						.append(" ").append(KeyHandler.instance.mountAbility.getTranslatedKeyMessage())
+						.append(" ").append(new TranslationTextComponent("gui.mount.controls.ability"));
+//						.append(" ").append(KeyHandler.instance.dismount.getTranslatedKeyMessage())
+//						.append(" ").append(new TranslationTextComponent("gui.mount.controls.dismount"));
 				this.minecraft.gui.setOverlayMessage(mountMessage, false);
             }
             
@@ -189,7 +189,7 @@ public class BaseOverlay extends BaseGui {
 				event.getLeft().add("Elements: " + mouseOverCreature.creatureInfo.getElementNames(mouseOverCreature.getSubspecies()).getString());
 				event.getLeft().add("Subspecies: " + mouseOverCreature.getSubspeciesIndex());
 				event.getLeft().add("Variant: " + mouseOverCreature.getVariantIndex());
-				event.getLeft().add("Level: " + mouseOverCreature.getLevel());
+				event.getLeft().add("Level: " + mouseOverCreature.getMobLevel());
 				event.getLeft().add("Experience: " + mouseOverCreature.getExperience() + "/" + mouseOverCreature.creatureStats.getExperienceForNextLevel());
 				event.getLeft().add("Size: " + mouseOverCreature.sizeScale);
 				event.getLeft().add("");

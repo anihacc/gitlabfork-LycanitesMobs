@@ -296,7 +296,7 @@ public abstract class TameableCreatureEntity extends AgeableCreatureEntity {
 			commands.put(COMMAND_PIORITIES.MAIN.id, "Perch");
 		
 		// Open GUI:
-		else if(!this.getCommandSenderWorld().isClientSide && this.isTamed() && (itemStack.isEmpty() || player.isShiftKeyDown()) && player == this.getPlayerOwner()) {
+		else if(!this.getCommandSenderWorld().isClientSide && player.isShiftKeyDown() && this.isTamed() && (itemStack.isEmpty() || player.isShiftKeyDown()) && player == this.getPlayerOwner()) {
 			commands.put(COMMAND_PIORITIES.MAIN.id, "GUI");
 		}
     	

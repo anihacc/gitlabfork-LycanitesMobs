@@ -17,6 +17,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.fluid.FlowingFluid;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -28,6 +29,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fluids.ForgeFlowingFluid;
 import net.minecraftforge.fml.RegistryObject;
 
 import java.lang.reflect.Constructor;
@@ -47,7 +49,7 @@ public class ObjectManager {
 	public static Map<String, Block> blocks = new HashMap<>();
     public static Map<String, Item> items = new HashMap<>();
     public static Map<Item, ModInfo> itemGroups = new HashMap<>();
-	public static Map<String, RegistryObject<FlowingFluid>> fluids = new HashMap<>();
+	public static Map<String, ForgeFlowingFluid> fluids = new HashMap<>();
     public static Map<Block, Item> buckets = new HashMap<>();
     public static Map<String, Class> tileEntities = new HashMap<>();
 	public static Map<String, EffectBase> effects = new HashMap<>();
@@ -94,7 +96,7 @@ public class ObjectManager {
 	}
 
 	// ========== Fluid ==========
-	public static RegistryObject<FlowingFluid> addFluid(String name, RegistryObject<FlowingFluid> fluid) {
+	public static Fluid addFluid(String name, ForgeFlowingFluid fluid) {
         fluids.put(name, fluid);
         return fluid;
 	}
@@ -165,7 +167,7 @@ public class ObjectManager {
 	}
 
 	// ========== Fluid ==========
-	public static RegistryObject<FlowingFluid> getFluid(String name) {
+	public static ForgeFlowingFluid getFluid(String name) {
 		name = name.toLowerCase();
 		if(!fluids.containsKey(name))
 			return null;
@@ -247,6 +249,14 @@ public class ObjectManager {
         	event.getRegistry().register(effect);
 		}
     }
+
+	// ========== Fluids ==========
+	@SubscribeEvent
+	public void registerFluids(RegistryEvent.Register<Fluid> event) {
+		for(Fluid fluid : fluids.values()) {
+			event.getRegistry().register(fluid);
+		}
+	}
 
 	// ========== Entities ==========
 	@SubscribeEvent

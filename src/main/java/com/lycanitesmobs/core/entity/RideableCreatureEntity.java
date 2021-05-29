@@ -98,13 +98,13 @@ public abstract class RideableCreatureEntity extends TameableCreatureEntity {
 			}
 
 			// Dismounting:
-			if (!this.getCommandSenderWorld().isClientSide && this.getControllingPassenger() instanceof PlayerEntity) {
-				PlayerEntity player = (PlayerEntity) this.getControllingPassenger();
-				ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
-				if(playerExt != null && playerExt.isControlActive(ExtendedPlayer.CONTROL_ID.MOUNT_DISMOUNT)) {
-					player.stopRiding();
-				}
-			}
+//			if (!this.getCommandSenderWorld().isClientSide && this.getControllingPassenger() instanceof PlayerEntity) {
+//				PlayerEntity player = (PlayerEntity) this.getControllingPassenger();
+//				ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
+//				if(playerExt != null && playerExt.isControlActive(ExtendedPlayer.CONTROL_ID.MOUNT_DISMOUNT)) {
+//					player.stopRiding();
+//				}
+//			}
 		}
     	else {
     		this.abilityToggled = false;
@@ -160,7 +160,6 @@ public abstract class RideableCreatureEntity extends TameableCreatureEntity {
     @Override
     protected boolean isImmobile() {
     	// This will disable AI, we don't want this though!
-        //return this.hasRiderTarget() && this.isSaddled() ? true : false;
     	return super.isImmobile();
     }
     

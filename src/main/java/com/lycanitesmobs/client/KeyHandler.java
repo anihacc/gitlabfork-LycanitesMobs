@@ -28,13 +28,13 @@ public class KeyHandler {
 	
 	public boolean inventoryOpen = false;
 	
-	public KeyBinding dismount = new KeyBinding("key.mount.dismount", GLFW.GLFW_KEY_C, "Lycanites Mobs");
-	public KeyBinding descend = new KeyBinding("key.mount.descend", GLFW.GLFW_KEY_LEFT_SHIFT, "Lycanites Mobs");
-	public KeyBinding mountAbility = new KeyBinding("key.mount.ability", GLFW.GLFW_KEY_X, "Lycanites Mobs");
-	public KeyBinding mountInventory = new KeyBinding("key.mount.inventory", GLFW.GLFW_KEY_UNKNOWN, "Lycanites Mobs");
+	public KeyBinding dismount = new KeyBinding("key.mount.dismount", GLFW.GLFW_KEY_V, "Lycanites Mobs");
+	public KeyBinding descend = new KeyBinding("key.mount.descend", GLFW.GLFW_KEY_LEFT_ALT, "Lycanites Mobs");
+	public KeyBinding mountAbility = new KeyBinding("key.mount.ability", GLFW.GLFW_KEY_G, "Lycanites Mobs");
+	public KeyBinding mountInventory = new KeyBinding("key.mount.inventory", GLFW.GLFW_KEY_K, "Lycanites Mobs");
 
 	public KeyBinding beastiary = new KeyBinding("key.beastiary", GLFW.GLFW_KEY_UNKNOWN, "Lycanites Mobs");
-	public KeyBinding index = new KeyBinding("key.index", GLFW.GLFW_KEY_G, "Lycanites Mobs");
+	public KeyBinding index = new KeyBinding("key.index", GLFW.GLFW_KEY_B, "Lycanites Mobs");
 	public KeyBinding pets = new KeyBinding("key.pets", GLFW.GLFW_KEY_UNKNOWN, "Lycanites Mobs");
 	public KeyBinding summoning = new KeyBinding("key.summoning", GLFW.GLFW_KEY_UNKNOWN, "Lycanites Mobs");
 	public KeyBinding minionSelection = new KeyBinding("key.minions", GLFW.GLFW_KEY_R, "Lycanites Mobs");

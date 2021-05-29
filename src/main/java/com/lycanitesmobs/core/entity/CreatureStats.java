@@ -321,7 +321,7 @@ public class CreatureStats {
 	 * @return The stat multiplier.
 	 */
 	protected double getLevelMultiplier(String stat) {
-		double statLevel = Math.max(0, this.entity.getLevel() - 1);
+		double statLevel = Math.max(0, this.entity.getMobLevel() - 1);
 		return 1 + (statLevel * CreatureManager.getInstance().getLevelMultiplier(stat.toUpperCase()));
 	}
 
@@ -330,6 +330,6 @@ public class CreatureStats {
 	 * @return Experience required for a level up.
 	 */
 	public int getExperienceForNextLevel() {
-		return BASE_LEVELUP_EXPERIENCE + Math.round(BASE_LEVELUP_EXPERIENCE * (this.entity.getLevel() - 1) * 0.25F);
+		return BASE_LEVELUP_EXPERIENCE + Math.round(BASE_LEVELUP_EXPERIENCE * (this.entity.getMobLevel() - 1) * 0.25F);
 	}
 }

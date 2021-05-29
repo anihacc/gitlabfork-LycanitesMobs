@@ -82,7 +82,7 @@ public class EntityOstimien extends TameableCreatureEntity {
 	    			if(this.isTamingItem(itemstack))
 	    				return false;
 	    		}
-				EffectBase stalkingEffect = ObjectManager.getEffect("plague");
+				EffectBase stalkingEffect = ObjectManager.getEffect("instability");
 	    		if(stalkingEffect != null) {
 					if(!this.getTarget().hasEffect(stalkingEffect))
 						return false;

@@ -15,8 +15,8 @@
 		"lycanitesmobs:cooked_maka_meat",
 		"lycanitesmobs:raw_yeti_meat",
 		"lycanitesmobs:cooked_yeti_meat",
-		"lycanitesmobs:raw_pinky_meat",
-		"lycanitesmobs:cooked_pinky_meat",
+		"lycanitesmobs:raw_kathoga_meat",
+		"lycanitesmobs:cooked_kathoga_meat",
 		"minecraft:mutton",
 		"minecraft:cooked_mutton",
 		"lycanitesmobs:raw_yale_meat",
@@ -28,6 +28,8 @@
 		"minecraft:rabbit",
 		"minecraft:cooked_rabbit",
 		"lycanitesmobs:raw_concapede_meat",
-		"lycanitesmobs:cooked_concapede_meat"
+		"lycanitesmobs:cooked_concapede_meat",
+		"lycanitesmobs:raw_krake_meat",
+		"lycanitesmobs:cooked_krake_meat"
 	]
 }

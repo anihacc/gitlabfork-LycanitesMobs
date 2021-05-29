@@ -444,16 +444,20 @@ public class GameEventListener {
 	// ==================================================
 	@SubscribeEvent
 	public void onEntityMount(EntityMountEvent event) {
-		if(!ConfigExtra.INSTANCE.disableSneakDismount.get()) {
+		if(!ConfigExtra.INSTANCE.disableSneakDismount.get() || true) { // Disabled for now as cancelling this event doesn't work correctly for players atm.
 			return;
 		}
-		if(!event.isDismounting() || !(event.getEntityMounting() instanceof PlayerEntity) || !(event.getEntityBeingMounted() instanceof RideableCreatureEntity)) {
+		if(!(event.getEntityMounting() instanceof PlayerEntity)) {
 			return;
 		}
-		ExtendedPlayer extendedPlayer = ExtendedPlayer.getForPlayer((PlayerEntity)event.getEntityMounting());
-		if(extendedPlayer == null) {
-			return;
+
+		// Override Sneak to Dismount for Lycanites Mobs:
+		if (event.isDismounting() && event.getEntityBeingMounted() instanceof RideableCreatureEntity) {
+			ExtendedPlayer extendedPlayer = ExtendedPlayer.getForPlayer((PlayerEntity) event.getEntityMounting());
+			if (extendedPlayer == null) {
+				return;
+			}
+			event.setCanceled(event.getEntityMounting().isShiftKeyDown() && !extendedPlayer.isControlActive(ExtendedPlayer.CONTROL_ID.MOUNT_DISMOUNT));
 		}
-		event.setCanceled(event.getEntityMounting().isShiftKeyDown() && !extendedPlayer.isControlActive(ExtendedPlayer.CONTROL_ID.MOUNT_DISMOUNT));
 	}
 }

@@ -30,7 +30,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.WoodType;
 import net.minecraft.block.material.Material;
-import net.minecraft.crash.ReportedException;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.*;
@@ -660,10 +659,10 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
 	/** Returns a mobs level to append to the name if above level 1. **/
 	public TextComponent getLevelName() {
-		if(this.getLevel() < 2) {
+		if(this.getMobLevel() < 2) {
 			return new StringTextComponent("");
 		}
-		return (TextComponent) new TranslationTextComponent("entity.level").append(" " + this.getLevel());
+		return (TextComponent) new TranslationTextComponent("entity.level").append(" " + this.getMobLevel());
 	}
 
     /** Gets the name of this entity relative to it's age, more useful for EntityCreatureAgeable. **/
@@ -1340,7 +1339,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	}
 
 	/** Returns the level of this mob, higher levels have higher stats. **/
-	public int getLevel() {
+	public int getMobLevel() {
 		if(this.getCommandSenderWorld().isClientSide) {
 			return this.getIntFromDataManager(LEVEL);
 		}
@@ -1620,7 +1619,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 				this.setDeltaMovement(perchTarget.getDeltaMovement());
 				this.yRot = perchTarget.yRot;
 			}
-			if(perchTarget instanceof PlayerEntity && !perchTarget.isPassenger()) {
+			if(perchTarget instanceof PlayerEntity) {
 				ExtendedPlayer perchPlayerExt = ExtendedPlayer.getForPlayer((PlayerEntity) perchTarget);
 				if(perchPlayerExt.isControlActive(ExtendedPlayer.CONTROL_ID.MOUNT_DISMOUNT)) {
 					this.perchOnEntity(null);
@@ -2270,6 +2269,13 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
                 yAmount,
                 zAmount * distance + this.getDeltaMovement().z() * 0.2D
         );
+    	if (this.getRider() != null) {
+			this.getRider().push(
+					xAmount * distance + this.getDeltaMovement().x() * 0.2D,
+					yAmount,
+					zAmount * distance + this.getDeltaMovement().z() * 0.2D
+			);
+		}
 		net.minecraftforge.common.ForgeHooks.onLivingJump(this);
     }
     
@@ -3419,19 +3425,19 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 				}
 
 				// Level:
-				int transformedLevel = this.getLevel();
+				int transformedLevel = this.getMobLevel();
 				if("lowest".equalsIgnoreCase(CreatureManager.getInstance().config.elementalFusionLevelMix)) {
-					if(transformedLevel > partnerCreature.getLevel()) {
-						transformedLevel = partnerCreature.getLevel();
+					if(transformedLevel > partnerCreature.getMobLevel()) {
+						transformedLevel = partnerCreature.getMobLevel();
 					}
 				}
 				else if("highest".equalsIgnoreCase(CreatureManager.getInstance().config.elementalFusionLevelMix)) {
-					if(transformedLevel < partnerCreature.getLevel()) {
-						transformedLevel = partnerCreature.getLevel();
+					if(transformedLevel < partnerCreature.getMobLevel()) {
+						transformedLevel = partnerCreature.getMobLevel();
 					}
 				}
 				else {
-					transformedLevel += partnerCreature.getLevel();
+					transformedLevel += partnerCreature.getMobLevel();
 				}
 				transformedCreature.applyLevel(Math.round(transformedLevel * (float)CreatureManager.getInstance().config.elementalFusionLevelMultiplier));
 
@@ -3481,7 +3487,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 				transformedCreature.setSubspecies(this.getSubspeciesIndex());
 				transformedCreature.applyVariant(this.getVariantIndex());
 				transformedCreature.setSizeScale(this.sizeScale);
-				transformedCreature.applyLevel(this.getLevel());
+				transformedCreature.applyLevel(this.getMobLevel());
 
 				// Tamed:
 				if (transformedCreature instanceof TameableCreatureEntity) {
@@ -4804,7 +4810,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
         nbtTagCompound.putByte("Subspecies", (byte) this.getSubspeciesIndex());
         nbtTagCompound.putByte("Variant", (byte) this.getVariantIndex());
     	nbtTagCompound.putDouble("Size", this.sizeScale);
-		nbtTagCompound.putInt("MobLevel", this.getLevel());
+		nbtTagCompound.putInt("MobLevel", this.getMobLevel());
 		nbtTagCompound.putInt("Experience", this.getExperience());
 		nbtTagCompound.putBoolean("SpawnedAsBoss", this.spawnedAsBoss);
     	

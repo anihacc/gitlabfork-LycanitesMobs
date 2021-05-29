@@ -20,28 +20,28 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import java.util.Random;
 import java.util.function.Supplier;
 
-public class BlockFluidOoze extends BaseFluidBlock {
-	public BlockFluidOoze(Supplier<? extends FlowingFluid> fluidSupplier, Block.Properties properties, String name) {
+public class OozeFluidBlock extends BaseFluidBlock {
+	public OozeFluidBlock(Supplier<? extends FlowingFluid> fluidSupplier, Block.Properties properties, String name) {
         super(fluidSupplier, properties, name);
 	}
 
     @Override
-    public boolean shouldSpreadLiquid(World world, BlockPos pos, BlockState blockState) {
-        BlockState neighborBlockState = world.getBlockState(pos);
+    public boolean shouldSpreadLiquid(World world, BlockPos neighborBlockPos, BlockState blockState) {
+        BlockState neighborBlockState = world.getBlockState(neighborBlockPos);
 
         // Freeze Water:
         if (neighborBlockState.getMaterial() == Material.WATER) {
-            world.setBlock(pos, Blocks.PACKED_ICE.defaultBlockState(), 4);
+            world.setBlock(neighborBlockPos, Blocks.PACKED_ICE.defaultBlockState(), 4);
             return false;
         }
 
         // Freeze Lava:
         if (neighborBlockState.getMaterial() == Material.LAVA) {
-            world.setBlock(pos, Blocks.OBSIDIAN.defaultBlockState(), 4);
+            world.setBlock(neighborBlockPos, Blocks.OBSIDIAN.defaultBlockState(), 4);
             return false;
         }
 
-        return super.shouldSpreadLiquid(world, pos, blockState);
+        return super.shouldSpreadLiquid(world, neighborBlockPos, blockState);
     }
 
     @Override

@@ -15,6 +15,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
 public class PetsBeastiaryScreen extends BeastiaryScreen {
@@ -386,10 +387,10 @@ public class PetsBeastiaryScreen extends BeastiaryScreen {
 	@Override
 	public ITextComponent getTitle() {
 		if(this.playerExt.selectedPet != null) {
-			ITextComponent title = this.playerExt.selectedPet.getDisplayName()
-					.plainCopy().append(" ")
-					.plainCopy().append(new TranslationTextComponent("creature.stat.level"))
-					.plainCopy().append(" " + this.playerExt.selectedPet.getLevel());
+			ITextComponent title = ((TextComponent)this.playerExt.selectedPet.getDisplayName())
+					.append(" ")
+					.append(new TranslationTextComponent("creature.stat.level"))
+					.append(" " + this.playerExt.selectedPet.getLevel());
 			if(this.playerExt.selectedPet.releaseEntity) {
 				title = new TranslationTextComponent("gui.pet.release").append(" ").append(title);
 			}

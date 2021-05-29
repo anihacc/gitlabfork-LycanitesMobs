@@ -101,7 +101,7 @@ public class InventoryCreature implements IInventory {
   	//                     Details
   	// ==================================================
     public String getName() {
-        return this.inventoryName + new TranslationTextComponent("entity.level").getString() + " " + this.creature.getLevel();
+        return this.inventoryName + new TranslationTextComponent("entity.level").getString() + " " + this.creature.getMobLevel();
     }
 
     public ITextComponent getDisplayName() {
@@ -243,6 +243,9 @@ public class InventoryCreature implements IInventory {
 	// ========== Decrease Stack Size ==========
 	@Override
 	public ItemStack removeItem(int slot, int amount) {
+    	if (this.creature.isDeadOrDying()) {
+    		return ItemStack.EMPTY;
+		}
 		ItemStack[] splitStacks = this.decrStackSize(this.getItem(slot), amount);
 		this.setItem(slot, splitStacks[0]);
         this.onInventoryChanged(false);
@@ -251,7 +254,7 @@ public class InventoryCreature implements IInventory {
 
     @Override
     public ItemStack removeItemNoUpdate(int index) {
-        return null;
+        return ItemStack.EMPTY;
     }
 
     public ItemStack[] decrStackSize(ItemStack itemStack, int amount) {
@@ -260,13 +263,13 @@ public class InventoryCreature implements IInventory {
 			return splitStacks;
 		
         if(itemStack.getCount() <= amount) {
-            splitStacks[0] = null;
+            splitStacks[0] = ItemStack.EMPTY;
             splitStacks[1] = itemStack;
         }
         else {
         	splitStacks[1] = itemStack.split(amount);
             if(itemStack.getCount() == 0)
-            	itemStack = null;
+            	itemStack = ItemStack.EMPTY;
             splitStacks[0] = itemStack;
         }
         return splitStacks;
@@ -274,6 +277,9 @@ public class InventoryCreature implements IInventory {
 
 	@Override
 	public boolean canPlaceItem(int slotID, ItemStack itemStack) {
+		if (this.creature.isDeadOrDying()) {
+			return false;
+		}
 		String type = this.getTypeFromSlot(slotID);
 		if(type != null) {
 			if(!this.isEquipmentValidForSlot(type, itemStack))
@@ -314,10 +320,9 @@ public class InventoryCreature implements IInventory {
 	
 	// ========== Auto Insert Item Stack ==========
 	public ItemStack autoInsertStack(ItemStack itemStack) {
-		if(itemStack == null)
-			return itemStack;
-		if(itemStack.getItem() == null || itemStack.getCount() < 1)
-			return null;
+		if(itemStack == null || itemStack.getCount() < 1 || this.creature.isDeadOrDying()) {
+			return ItemStack.EMPTY;
+		}
 
 		for(int slotID = 0; slotID < this.inventoryContents.size(); slotID++) {
 			ItemStack slotStack = this.inventoryContents.get(slotID);
@@ -418,6 +423,8 @@ public class InventoryCreature implements IInventory {
 		
 		// Basic Armor:
 		if(this.basicArmor) {
+			if(itemStack.getItem() == Items.LEATHER_HORSE_ARMOR)
+				return "chest";
 			if(itemStack.getItem() == Items.IRON_HORSE_ARMOR)
 				return "chest";
 	    	if(itemStack.getItem() == Items.GOLDEN_HORSE_ARMOR)
@@ -475,6 +482,8 @@ public class InventoryCreature implements IInventory {
     		else if(armor.getMaterial() == ArmorMaterial.DIAMOND)
     			return "Diamond";
     	}
+    	if(equipmentStack.getItem() == Items.LEATHER_HORSE_ARMOR)
+    		return "Leather";
     	if(equipmentStack.getItem() == Items.IRON_HORSE_ARMOR)
     		return "Iron";
     	if(equipmentStack.getItem() == Items.GOLDEN_HORSE_ARMOR)

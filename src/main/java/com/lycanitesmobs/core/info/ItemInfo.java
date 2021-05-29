@@ -36,7 +36,6 @@ public class ItemInfo {
 	/** Loads this item from a JSON object. **/
 	public void loadFromJSON(JsonObject json) {
 		this.name = json.get("name").getAsString();
-		LycanitesMobs.logDebug("", "Loading item " + this.name + " from JSON...");
 
 		// Model (Optional):
 		String modelName = null;

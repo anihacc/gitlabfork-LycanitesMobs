@@ -16,9 +16,12 @@
 			"nether"
 		],
 		"disableSubspecies": false,
-        "dimensionIds": [],
+        "dimensionIds": [
+			"minecraft:the_nether",
+			"minecraft:the_end"
+		],
 		"dimensionListType": "whitelist",
-		"ignoreBiome": true,
+		"ignoreBiome": false,
 		"biomeTags": [
 			"nether", 
 			"end"

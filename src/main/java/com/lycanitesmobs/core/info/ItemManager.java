@@ -9,10 +9,8 @@ import com.lycanitesmobs.core.StreamLoader;
 import com.lycanitesmobs.core.block.*;
 import com.lycanitesmobs.core.block.building.BlockVeswax;
 import com.lycanitesmobs.core.block.effect.*;
-import com.lycanitesmobs.core.block.fluid.BlockFluidAcid;
-import com.lycanitesmobs.core.block.fluid.BlockFluidMoglava;
-import com.lycanitesmobs.core.block.fluid.BlockFluidOoze;
-import com.lycanitesmobs.core.block.fluid.BlockFluidPoison;
+import com.lycanitesmobs.core.block.fluid.*;
+import com.lycanitesmobs.core.block.CustomFluid;
 import com.lycanitesmobs.core.item.*;
 import com.lycanitesmobs.core.item.consumable.*;
 import com.lycanitesmobs.core.item.equipment.ItemEquipment;
@@ -22,7 +20,6 @@ import com.lycanitesmobs.core.item.special.ItemSoulstone;
 import com.lycanitesmobs.core.item.summoningstaff.*;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
-import net.minecraft.fluid.FlowingFluid;
 import net.minecraft.item.BucketItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -34,6 +31,8 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -206,58 +205,49 @@ public class ItemManager extends JSONLoader {
 
 
 		// Fluids:
-		if (true) {
-			return; // TODO Fluids disabled for now.
-		}
 		Block.Properties waterBlockProperties = Block.Properties.of(Material.WATER).noCollission().strength(100).noDrops();
-		Block.Properties waterLightBlockProperties = Block.Properties.of(Material.WATER).noCollission().strength(100).noDrops().lightLevel((BlockState blockState) -> { return 10; });
+		Block.Properties waterBrightBlockProperties = Block.Properties.of(Material.WATER).noCollission().strength(100).noDrops().lightLevel((BlockState blockState) -> { return 10; });
 		Block.Properties lavaBlockProperties = Block.Properties.of(Material.LAVA).noCollission().strength(100).noDrops().lightLevel((BlockState blockState) -> { return 15; });
-
-		this.addFluid("ooze", 0x003A9F, 3000, 3000, 0, 10, false);
-		ObjectManager.addBlock("ooze", new BlockFluidOoze(() -> ObjectManager.getFluid("ooze").get(), waterLightBlockProperties, "ooze"));
+		this.addFluid("ooze", 0x009F9F, 3000, 3000, 0, 10, false, OozeFluidBlock.class, waterBrightBlockProperties);
+		this.addFluid("rabbitooze", 0x00AFAF, 3000, 3000, 0, 10, true, OozeFluidBlock.class, waterBrightBlockProperties);
+		this.addFluid("moglava", 0xFF5722, 3000, 5000, 1100, 15, true, MoglavaFluidBlock.class, lavaBlockProperties);
+		this.addFluid("acid", 0x8BC34A, 1000, 10, 40, 10, false, AcidFluidBlock.class, waterBrightBlockProperties);
+		this.addFluid("sharacid", 0x8BB35A, 1000, 10, 40, 10, true, AcidFluidBlock.class, waterBrightBlockProperties);
+		this.addFluid("poison", 0x9C27B0, 1000, 8, 20, 0, false, PoisonFluidBlock.class, waterBlockProperties);
+		this.addFluid("vesspoison", 0xAC27A0, 1000, 8, 20, 0, true, PoisonFluidBlock.class, waterBlockProperties);
 		ObjectManager.addDamageSource("ooze", new DamageSource("ooze"));
-
-		this.addFluid("rabbitooze", 0x002AAF, 3000, 3000, 0, 10, true);
-		ObjectManager.addBlock("rabbitooze", new BlockFluidOoze(() -> ObjectManager.getFluid("rabbitooze").get(), waterLightBlockProperties, "rabbitooze"));
-
-		this.addFluid("moglava", 0xFF5722, 3000, 5000, 1100, 15, true);
-		ObjectManager.addBlock("moglava", new BlockFluidMoglava(() -> ObjectManager.getFluid("moglava").get(), lavaBlockProperties, "moglava"));
-
-		this.addFluid("acid", 0x8BC34A, 1000, 10, 40, 10, false);
-		ObjectManager.addBlock("acid", new BlockFluidAcid(() -> ObjectManager.getFluid("acid").get(), waterLightBlockProperties, "acid"));
 		ObjectManager.addDamageSource("acid", new DamageSource("acid"));
-
-		this.addFluid("sharacid", 0x8BB35A, 1000, 10, 40, 10, true);
-		ObjectManager.addBlock("sharacid", new BlockFluidAcid(() -> ObjectManager.getFluid("sharacid").get(), waterLightBlockProperties, "sharacid"));
-
-		this.addFluid("poison", 0x9C27B0, 1000, 8, 20, 0, false);
-		ObjectManager.addBlock("poison", new BlockFluidPoison(() -> ObjectManager.getFluid("poison").get(), waterBlockProperties, "poison"));
-
-		this.addFluid("vesspoison", 0xAC27A0, 1000, 8, 20, 0, true);
-		ObjectManager.addBlock("vesspoison", new BlockFluidPoison(() -> ObjectManager.getFluid("vesspoison").get(), waterBlockProperties, "vesspoison"));
 	}
 
-	public void addFluid(String fluidName, int fluidColor, int density, int viscosity, int temperature, int luminosity, boolean multiply) {
+	public void addFluid(String fluidName, int fluidColor, int density, int viscosity, int temperature, int luminosity, boolean multiply, Class<? extends BaseFluidBlock> blockClass, AbstractBlock.Properties blockProperties) {
+		Supplier<ForgeFlowingFluid> stillFluidSupplier = () -> ObjectManager.getFluid(fluidName + "_still");
+		Supplier<ForgeFlowingFluid> flowingFluidSupplier = () -> ObjectManager.getFluid(fluidName + "_flowing");
+
 		FluidAttributes.Builder fluidBuilder = FluidAttributes.builder(new ResourceLocation(LycanitesMobs.MODID, "block/" + fluidName + "_still"), new ResourceLocation(LycanitesMobs.MODID, "block/" + fluidName + "_flowing"));
 		fluidBuilder.color(fluidColor);
 		fluidBuilder.density(density);
 		fluidBuilder.viscosity(viscosity);
 		fluidBuilder.temperature(temperature);
 		fluidBuilder.luminosity(luminosity);
-
-		Supplier<FlowingFluid> flowingFluidSupplier = () -> ObjectManager.getFluid(fluidName).get();
-		ForgeFlowingFluid.Properties fluidProperties = new ForgeFlowingFluid.Properties(flowingFluidSupplier, () -> ObjectManager.getFluid(fluidName + "_flowing").get(), fluidBuilder);
-		if(multiply)
+		ForgeFlowingFluid.Properties fluidProperties = new ForgeFlowingFluid.Properties(stillFluidSupplier, flowingFluidSupplier, fluidBuilder);
+		if(multiply) {
 			fluidProperties.canMultiply();
+		}
 		fluidProperties.bucket(() -> ObjectManager.getItem("bucket" + fluidName));
 		fluidProperties.block(() -> (FlowingFluidBlock)ObjectManager.getBlock(fluidName));
 
-//		ObjectManager.addFluid(fluidName, FLUIDS.register(fluidName, () -> new ForgeFlowingFluid.Source(fluidProperties))); TODO Add fluids!
-//		ObjectManager.addFluid(fluidName + "_flowing", FLUIDS.register(fluidName + "_flowing", () -> new ForgeFlowingFluid.Flowing(fluidProperties)));
-
+		ObjectManager.addFluid(fluidName + "_still", new CustomFluid.Still(fluidProperties, fluidName + "_still"));
+		ObjectManager.addFluid(fluidName + "_flowing", new CustomFluid.Flowing(fluidProperties, fluidName + "_flowing"));
 		ObjectManager.addSound(fluidName, LycanitesMobs.modInfo, "block." + fluidName);
 
 		Item.Properties bucketProperties = new Item.Properties().tab(this.itemsGroup).craftRemainder(Items.BUCKET).stacksTo(1);
-		ObjectManager.addItem("bucket" + fluidName, new BucketItem(flowingFluidSupplier, bucketProperties).setRegistryName(LycanitesMobs.MODID, "bucket" + fluidName));
+		ObjectManager.addItem(fluidName + "_bucket", new BucketItem(stillFluidSupplier, bucketProperties).setRegistryName(LycanitesMobs.MODID, fluidName + "_bucket"));
+
+		try {
+			Constructor<? extends BaseFluidBlock> blockConstructor = blockClass.getDeclaredConstructor(Supplier.class, AbstractBlock.Properties.class, String.class);
+			ObjectManager.addBlock(fluidName, blockConstructor.newInstance(stillFluidSupplier, blockProperties, fluidName));
+		} catch (NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
+			throw new RuntimeException(e);
+		}
 	}
 }

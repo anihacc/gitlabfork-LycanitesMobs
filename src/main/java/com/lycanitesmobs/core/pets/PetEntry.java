@@ -183,7 +183,7 @@ public class PetEntry {
 
     public int getLevel() {
         if(this.entity != null && this.entity instanceof BaseCreatureEntity)
-            this.entityLevel = ((BaseCreatureEntity)this.entity).getLevel();
+            this.entityLevel = ((BaseCreatureEntity)this.entity).getMobLevel();
         return this.entityLevel;
     }
 

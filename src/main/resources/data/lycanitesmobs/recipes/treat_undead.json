@@ -14,7 +14,7 @@
       "item": "minecraft:bone"
     },
     "M": {
-      "item": "minecraft:rotten_flesh"
+      "tag": "lycanitesmobs:diet_detritivore"
     }
   }
 }

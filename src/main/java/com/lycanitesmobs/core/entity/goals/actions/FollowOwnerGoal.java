@@ -1,5 +1,6 @@
 package com.lycanitesmobs.core.entity.goals.actions;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
@@ -121,7 +122,7 @@ public class FollowOwnerGoal extends FollowGoal {
 	        for(int x = -2; x <= 2; ++x) {
 	            for(int z = -2; z <= 2; ++z) {
 	                if(this.canTeleportTo(this.getTarget().blockPosition().offset(x, 0, z))) {
-                        this.host.moveTo((double)((float)(i + x) + 0.5F), (double)j, (double)((float)(k + z) + 0.5F), this.host.yRot, this.host.xRot);
+                        this.host.moveTo((float)(i + x) + 0.5F, j, (float)(k + z) + 0.5F, this.host.yRot, this.host.xRot);
 	                    this.host.clearMovement();
 	                    return;
 	                }

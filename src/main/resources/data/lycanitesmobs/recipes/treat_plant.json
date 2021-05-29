@@ -14,7 +14,7 @@
       "item": "minecraft:sugar_cane"
     },
     "M": {
-      "item": "minecraft:carrot"
+      "tag": "lycanitesmobs:diet_herbivore"
     }
   }
 }

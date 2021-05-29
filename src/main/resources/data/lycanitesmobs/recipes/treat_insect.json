@@ -8,13 +8,13 @@
     "BBM",
     " MM"
   ],
-  "type": "minecraft:ore_shaped",
+  "type": "minecraft:crafting_shaped",
   "key": {
     "B": {
       "item": "minecraft:bone"
     },
     "M": {
-      "item": "minecraft:sugar"
+      "tag": "lycanitesmobs:diet_fungivore"
     }
   }
 }
