@@ -1,6 +1,6 @@
 {
 	"parent": "item/generated",
 	"textures": {
-		"layer0": "lycanitesmobs:item/bucketmoglava"
+		"layer0": "lycanitesmobs:item/moglava_bucket"
 	}
 }

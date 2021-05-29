@@ -1,11 +1,11 @@
 {
   "result": {
-    "item": "lycanitesmobs:bucketvesspoison",
+    "item": "lycanitesmobs:sharacid_bucket",
     "count": 1
   },
   "ingredients": [
     {
-      "item": "lycanitesmobs:bucketpoison",
+      "item": "lycanitesmobs:acid_bucket",
       "item": "minecraft:ghast_tear"
     }
   ],

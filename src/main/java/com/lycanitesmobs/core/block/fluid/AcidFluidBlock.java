@@ -3,7 +3,9 @@ package com.lycanitesmobs.core.block.fluid;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.FlowingFluidBlock;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ExperienceOrbEntity;
@@ -22,60 +24,30 @@ import java.util.function.Supplier;
 
 import net.minecraft.block.AbstractBlock.Properties;
 
-public class BlockFluidAcid extends FlowingFluidBlock {
-
-	// ==================================================
-	//                   Constructor
-	// ==================================================
+public class BlockFluidAcid extends BaseFluidBlock {
 	public BlockFluidAcid(Supplier<? extends FlowingFluid> fluidSupplier, Properties properties, String name) {
-        super(fluidSupplier, properties);
-        this.setRegistryName(LycanitesMobs.MODID, name);
+        super(fluidSupplier, properties, name);
 	}
 
+    @Override
+    public boolean shouldSpreadLiquid(World world, BlockPos pos, BlockState blockState) {
+        BlockState neighborBlockState = world.getBlockState(pos);
 
-    // ==================================================
-    //                       Fluid
-    // ==================================================
-    /*@Override
-    public boolean canDisplace(IBlockAccess world, BlockPos pos) {
-        BlockState blockState = world.getBlockState(pos);
-        if(blockState == null || blockState.getBlock() == this) {
-            return false;
-        }
-
-        // Freeze Water:
-        if(blockState.getMaterial() == Material.WATER) {
-            if(world instanceof World) {
-                ((World)world).setBlockState(pos, Blocks.PACKED_ICE.getDefaultState());
-            }
+        // Water Gravel:
+        if (blockState.getMaterial() == Material.WATER) {
+            world.setBlock(pos, Blocks.GRAVEL.defaultBlockState(), 2);
             return false;
         }
 
         // Freeze Lava:
-        if(blockState.getMaterial() == Material.LAVA) {
-            if(world instanceof World) {
-                ((World)world).setBlockState(pos, Blocks.OBSIDIAN.getDefaultState());
-            }
+        if (neighborBlockState.getMaterial() == Material.LAVA) {
+            world.setBlock(pos, Blocks.GRANITE.defaultBlockState(), 4);
             return false;
         }
 
-        if(blockState.getMaterial().isLiquid()) {
-            return false;
-        }
-
-        return super.canDisplace(world, pos);
+        return super.shouldSpreadLiquid(world, pos, blockState);
     }
 
-    @Override
-    public boolean displaceIfPossible(World world, BlockPos pos) {
-        if(world.getBlockState(pos).getMaterial().isLiquid()) return this.canDisplace(world, pos);
-        return super.displaceIfPossible(world, pos);
-    }*/
-    
-    
-	// ==================================================
-	//                      Collision
-	// ==================================================
     @Override
     public void entityInside(BlockState blockState, World world, BlockPos pos, Entity entity) {
         // Damage:
@@ -93,11 +65,7 @@ public class BlockFluidAcid extends FlowingFluidBlock {
 
         super.entityInside(blockState, world, pos, entity);
     }
-    
-    
-	// ==================================================
-	//                      Particles
-	// ==================================================
+
     @OnlyIn(Dist.CLIENT)
     public void animateTick(BlockState state, World world, BlockPos pos, Random random) {
         float f; 

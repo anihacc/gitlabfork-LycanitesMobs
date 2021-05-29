@@ -1,6 +1,6 @@
 {
 	"parent": "item/generated",
 	"textures": {
-		"layer0": "lycanitesmobs:item/bucketsharacid"
+		"layer0": "lycanitesmobs:item/poison_bucket"
 	}
 }

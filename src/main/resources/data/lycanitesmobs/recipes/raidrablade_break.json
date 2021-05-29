@@ -5,7 +5,7 @@
   },
   "ingredients": [
 	{
-      "item": "lycanitesmobs:equipmentpart_zephyrblade"
+      "item": "lycanitesmobs:equipmentpart_raidrablade"
     }
   ],
   "type": "minecraft:crafting_shapeless"
