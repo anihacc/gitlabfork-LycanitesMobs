@@ -23,10 +23,7 @@ import net.minecraft.tileentity.MobSpawnerTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.*;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.text.*;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.spawner.AbstractSpawner;
@@ -89,7 +86,7 @@ public class ItemCustomSpawnEgg extends BaseItem {
 			LycanitesMobs.logWarning("Mob Spawn Egg", "Unable to get Creature Info for id: " + creatureName);
 			return new StringTextComponent("Unable to get Creature Info for id: '" + creatureName + "' this spawn egg may have been created by a give command without NBT data.");
 		}
-		return creatureInfo.getDescription();
+		return creatureInfo.getDescription().plainCopy().withStyle(style -> style.withColor(Color.fromLegacyFormat(TextFormatting.GREEN)));
     }
 
 

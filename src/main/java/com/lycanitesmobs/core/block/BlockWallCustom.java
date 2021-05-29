@@ -5,9 +5,7 @@ import net.minecraft.block.WallBlock;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.text.*;
 import net.minecraft.world.IBlockReader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -38,6 +36,6 @@ public class BlockWallCustom extends WallBlock {
 	}
 
 	public ITextComponent getDescription(ItemStack itemStack, @Nullable IBlockReader world) {
-		return new TranslationTextComponent(this.getDescriptionId() + ".description");
+		return new TranslationTextComponent(this.getDescriptionId() + ".description").withStyle(style -> style.withColor(Color.fromLegacyFormat(TextFormatting.GREEN)));
 	}
 }

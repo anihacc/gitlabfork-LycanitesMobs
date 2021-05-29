@@ -8,9 +8,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.text.*;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -49,7 +47,7 @@ public class BlockSlabCustom extends SlabBlock {
     }
 
     public ITextComponent getDescription(ItemStack itemStack, @Nullable IBlockReader world) {
-        return new TranslationTextComponent(this.getDescriptionId() + ".description");
+        return new TranslationTextComponent(this.getDescriptionId() + ".description").withStyle(style -> style.withColor(Color.fromLegacyFormat(TextFormatting.GREEN)));
     }
 
 
