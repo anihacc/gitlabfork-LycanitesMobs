@@ -86,7 +86,7 @@ public class EntityVentoraptor extends RideableCreatureEntity {
     // ========== Falling Speed Modifier ==========
     @Override
     public double getFallingMod() {
-    	return 0.98D;
+    	return 0.99D;
     }
 
     
@@ -95,16 +95,15 @@ public class EntityVentoraptor extends RideableCreatureEntity {
     // ==================================================
     @Override
     public void mountAbility(Entity rider) {
-    	if(this.getCommandSenderWorld().isClientSide)
-    		return;
-
     	if(this.abilityToggled)
     		return;
     	if(this.getStamina() < this.getStaminaCost())
     		return;
     	
     	this.playJumpSound();
-    	this.leap(4D, 1D);
+		if(this.getCommandSenderWorld().isClientSide()) {
+			this.leap(4D, 1D);
+		}
     	
     	this.applyStaminaCost();
     }

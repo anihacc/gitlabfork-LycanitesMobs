@@ -177,16 +177,15 @@ public class EntityMorock extends RideableCreatureEntity implements IMob, IGroup
     // ==================================================
     @Override
     public void mountAbility(Entity rider) {
-        if(this.getCommandSenderWorld().isClientSide)
-            return;
-
         if(this.abilityToggled)
             return;
         if(this.getStamina() < this.getStaminaCost())
             return;
 
         this.playJumpSound();
-        this.leap(4.0D, 0D);
+        if(this.getCommandSenderWorld().isClientSide()) {
+            this.leap(4.0D, 0D);
+        }
 
         this.applyStaminaCost();
     }
