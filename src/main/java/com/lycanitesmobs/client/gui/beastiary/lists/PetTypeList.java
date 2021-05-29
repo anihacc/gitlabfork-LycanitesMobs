@@ -116,7 +116,7 @@ public class PetTypeList extends CreatureFilterList {
 		}
 
 		@Override
-		public List<? extends IGuiEventListener> getEventListeners() {
+		public List<? extends IGuiEventListener> children() {
 			return null;
 		}
 	}

@@ -31,7 +31,7 @@ public class ProjectileBehaviourRandomEffect extends ProjectileBehaviour {
 
 	@Override
 	public void onProjectileDamage(BaseProjectileEntity projectile, World world, LivingEntity target, float damage) {
-		if(projectile.func_234616_v_() == null || damage <= 0) {
+		if(projectile.getOwner() == null || damage <= 0) {
 			return;
 		}
 
@@ -39,10 +39,10 @@ public class ProjectileBehaviourRandomEffect extends ProjectileBehaviour {
 			return;
 		}
 
-		int randomIndex = world.rand.nextInt(this.effects.size());
+		int randomIndex = world.random.nextInt(this.effects.size());
 		Effect effect = GameRegistry.findRegistry(Effect.class).getValue(new ResourceLocation(this.effects.get(randomIndex)));
 		if(effect != null) {
-			target.addPotionEffect(new EffectInstance(effect, this.duration, this.amplifier));
+			target.addEffect(new EffectInstance(effect, this.duration, this.amplifier));
 		}
 	}
 }

@@ -25,11 +25,11 @@ public class FollowFuseGoal extends FollowGoal {
 	//                  Should Execute
 	// ==================================================
 	@Override
-	public boolean shouldExecute() {
+	public boolean canUse() {
     	if(this.host.isBoss()) {
     		return false;
 		}
-		return super.shouldExecute();
+		return super.canUse();
 	}
     
     

@@ -31,7 +31,7 @@ public class ClientEventListener {
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
     public void onBlockOverlay(RenderBlockOverlayEvent event) {
-        if(event.getBlockForOverlay().getMaterial() == Material.FIRE && (!event.getPlayer().isBurning() || event.getPlayer().isPotionActive(Effects.FIRE_RESISTANCE))) {
+        if(event.getBlockForOverlay().getMaterial() == Material.FIRE && (!event.getPlayer().isOnFire() || event.getPlayer().hasEffect(Effects.FIRE_RESISTANCE))) {
             event.setCanceled(true);
         }
     }

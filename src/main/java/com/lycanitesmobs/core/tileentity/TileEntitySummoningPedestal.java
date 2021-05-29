@@ -84,18 +84,18 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
 
     /** Can be called by a block when broken to alert this TileEntity that it is being removed. **/
     @Override
-    public void remove() {
+    public void setRemoved() {
         if(this.summoningPortal != null && this.summoningPortal.isAlive()) {
             this.summoningPortal.remove();
         }
-        super.remove();
+        super.setRemoved();
     }
 
     /** The main update called every tick. **/
     @Override
     public void tick() {
         // Client Side Only:
-        if(this.getWorld().isRemote) {
+        if(this.getLevel().isClientSide) {
 
             // Summoning Progress Animation:
             if(this.summoningFuel > 0) {
@@ -111,16 +111,16 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
         // Load Minion IDs:
         if(this.loadMinionIDs != null) {
             int range = 20;
-            List nearbyEntities = this.getWorld().getEntitiesWithinAABB(BaseCreatureEntity.class,
-                    new AxisAlignedBB(this.getPos().getX() - range, this.getPos().getY() - range, this.getPos().getZ() - range,
-                            this.getPos().getX() + range, this.getPos().getY() + range, this.getPos().getZ() + range));
+            List nearbyEntities = this.getLevel().getEntitiesOfClass(BaseCreatureEntity.class,
+                    new AxisAlignedBB(this.getBlockPos().getX() - range, this.getBlockPos().getY() - range, this.getBlockPos().getZ() - range,
+                            this.getBlockPos().getX() + range, this.getBlockPos().getY() + range, this.getBlockPos().getZ() + range));
             Iterator possibleEntities = nearbyEntities.iterator();
             while(possibleEntities.hasNext()) {
                 BaseCreatureEntity possibleEntity = (BaseCreatureEntity)possibleEntities.next();
                 for(String loadMinionID : this.loadMinionIDs) {
                     UUID uuid = null;
                     try { uuid = UUID.fromString(loadMinionID); } catch (Exception e) {}
-                    if(possibleEntity.getUniqueID().equals(uuid)) {
+                    if(possibleEntity.getUUID().equals(uuid)) {
                         this.minions.add(possibleEntity);
                         break;
                     }
@@ -137,9 +137,9 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
 
 			// Summoning Portal:
 			if (this.summoningPortal == null || !this.summoningPortal.isAlive()) {
-				this.summoningPortal = new PortalEntity((EntityType<? extends PortalEntity>) ProjectileManager.getInstance().oldProjectileTypes.get(PortalEntity.class), this.getWorld(), this);
+				this.summoningPortal = new PortalEntity((EntityType<? extends PortalEntity>) ProjectileManager.getInstance().oldProjectileTypes.get(PortalEntity.class), this.getLevel(), this);
 				this.summoningPortal.setProjectileScale(4);
-				this.getWorld().addEntity(this.summoningPortal);
+				this.getLevel().addFreshEntity(this.summoningPortal);
 			}
 
 			// Update Minions:
@@ -162,10 +162,10 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
 			// Try To Summon:
 			else {
 			    if(this.summoningFuel <= 0) {
-			        ItemStack fuelStack = this.getStackInSlot(0);
+			        ItemStack fuelStack = this.getItem(0);
 			        if(!fuelStack.isEmpty()) {
 			            int refuel = this.summoningFuelAmount;
-                        if(fuelStack.getItem() == Item.getItemFromBlock(Blocks.REDSTONE_BLOCK)) {
+                        if(fuelStack.getItem() == Item.byBlock(Blocks.REDSTONE_BLOCK)) {
 							refuel = this.summoningFuelAmount * 9;
                         }
 			            fuelStack.split(1);
@@ -190,16 +190,16 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
 		// Block State:
 		if (!this.blockStateSet) {
 			if (!"".equals(this.getOwnerName()))
-				BlockSummoningPedestal.setState(BlockSummoningPedestal.EnumSummoningPedestal.PLAYER, this.getWorld(), this.getPos());
+				BlockSummoningPedestal.setState(BlockSummoningPedestal.EnumSummoningPedestal.PLAYER, this.getLevel(), this.getBlockPos());
 			else
-				BlockSummoningPedestal.setState(BlockSummoningPedestal.EnumSummoningPedestal.NONE, this.getWorld(), this.getPos());
+				BlockSummoningPedestal.setState(BlockSummoningPedestal.EnumSummoningPedestal.NONE, this.getLevel(), this.getBlockPos());
 			this.blockStateSet = true;
 		}
 
         // Sync To Client:
         if(this.updateTick % 20 == 0) {
-            MessageSummoningPedestalStats message = new MessageSummoningPedestalStats(this.capacity, this.summonProgress, this.summoningFuel, this.summoningFuelMax, this.getPos().getX(), this.getPos().getY(), this.getPos().getZ());
-            LycanitesMobs.packetHandler.sendToAllAround(message, this.getWorld(), Vector3d.copy(this.getPos()), 5);
+            MessageSummoningPedestalStats message = new MessageSummoningPedestalStats(this.capacity, this.summonProgress, this.summoningFuel, this.summoningFuelMax, this.getBlockPos().getX(), this.getBlockPos().getY(), this.getBlockPos().getZ());
+            LycanitesMobs.packetHandler.sendToAllAround(message, this.getLevel(), Vector3d.atLowerCornerOf(this.getBlockPos()), 5);
         }
 
         this.updateTick++;
@@ -213,7 +213,7 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
     public void setOwner(LivingEntity entity) {
         if(entity instanceof PlayerEntity) {
             PlayerEntity entityPlayer = (PlayerEntity)entity;
-            this.ownerUUID = entityPlayer.getUniqueID();
+            this.ownerUUID = entityPlayer.getUUID();
         }
     }
 
@@ -237,7 +237,7 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
         if(this.ownerUUID == null) {
 			return null;
 		}
-        return this.getWorld().getPlayerByUuid(this.ownerUUID);
+        return this.getLevel().getPlayerByUUID(this.ownerUUID);
     }
 
     /** Returns the class that this is summoning. **/
@@ -282,7 +282,7 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
             minion.applyVariant(this.summonSet.variant);
         }
         this.minions.add(minion);
-        minion.setHome(this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 20);
+        minion.setHome(this.getBlockPos().getX(), this.getBlockPos().getY(), this.getBlockPos().getZ(), 20);
     }
 
 
@@ -303,7 +303,7 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
      * Returns the stack in the given slot.
      */
     @Override
-    public ItemStack getStackInSlot(int index) {
+    public ItemStack getItem(int index) {
         return this.itemStacks.get(index);
     }
 
@@ -311,31 +311,31 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
      * Removes up to a specified number of items from an inventory slot and returns them in a new stack.
      */
     @Override
-    public ItemStack decrStackSize(int index, int count) {
-        return ItemStackHelper.getAndSplit(this.itemStacks, index, count);
+    public ItemStack removeItem(int index, int count) {
+        return ItemStackHelper.removeItem(this.itemStacks, index, count);
     }
 
     /**
      * Removes a stack from the given slot and returns it.
      */
     @Override
-    public ItemStack removeStackFromSlot(int index) {
-        return ItemStackHelper.getAndRemove(this.itemStacks, index);
+    public ItemStack removeItemNoUpdate(int index) {
+        return ItemStackHelper.takeItem(this.itemStacks, index);
     }
 
     /**
      * Sets the given item stack to the specified slot in the inventory (can be crafting or armor sections).
      */
     @Override
-    public void setInventorySlotContents(int index, ItemStack stack) {
+    public void setItem(int index, ItemStack stack) {
         this.itemStacks.set(index, stack);
-        if (stack.getCount() > this.getInventoryStackLimit()) {
-            stack.setCount(this.getInventoryStackLimit());
+        if (stack.getCount() > this.getMaxStackSize()) {
+            stack.setCount(this.getMaxStackSize());
         }
     }
 
     @Override
-    public int getSizeInventory() {
+    public int getContainerSize() {
         return this.itemStacks.size();
     }
 
@@ -343,22 +343,22 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
      * Returns the maximum stack size for a inventory slot. Seems to always be 64, possibly will be extended.
      */
     @Override
-    public int getInventoryStackLimit() {
+    public int getMaxStackSize() {
         return 64;
     }
 
     @Override
-    public boolean isUsableByPlayer(PlayerEntity player) {
+    public boolean stillValid(PlayerEntity player) {
         return false;
     }
 
     @Override
-    public void openInventory(PlayerEntity player) {
+    public void startOpen(PlayerEntity player) {
 
     }
 
     @Override
-    public void closeInventory(PlayerEntity player) {
+    public void stopOpen(PlayerEntity player) {
 
     }
 
@@ -367,12 +367,12 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
      * guis use Slot.isItemValid
      */
     @Override
-    public boolean isItemValidForSlot(int index, ItemStack itemStack) {
-        return itemStack.getItem() == Items.REDSTONE || itemStack.getItem() == Item.getItemFromBlock(Blocks.REDSTONE_BLOCK);
+    public boolean canPlaceItem(int index, ItemStack itemStack) {
+        return itemStack.getItem() == Items.REDSTONE || itemStack.getItem() == Item.byBlock(Blocks.REDSTONE_BLOCK);
     }
 
     @Override
-    public void clear() {
+    public void clearContent() {
 
     }
 
@@ -397,7 +397,7 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
     //              Client Events
     // ========================================
     @Override
-    public boolean receiveClientEvent(int eventID, int eventArg) {
+    public boolean triggerEvent(int eventID, int eventArg) {
         return false;
     }
 
@@ -417,20 +417,20 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
         }
 
         // Server to Client:
-        if(!this.getWorld().isRemote && this.getOwnerUUID() != null && this.getOwnerName() != null) {
+        if(!this.getLevel().isClientSide && this.getOwnerUUID() != null && this.getOwnerName() != null) {
             syncData.putString("OwnerUUID", this.getOwnerUUID().toString());
             syncData.putString("InventoryName", this.inventoryName);
         }
 
-        return new SUpdateTileEntityPacket(this.getPos(), 1, syncData);
+        return new SUpdateTileEntityPacket(this.getBlockPos(), 1, syncData);
     }
 
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket packet) {
-        if(!this.getWorld().isRemote)
+        if(!this.getLevel().isClientSide)
             return;
 
-        CompoundNBT syncData = packet.getNbtCompound();
+        CompoundNBT syncData = packet.getTag();
         if (syncData.contains("OwnerUUID"))
             this.ownerUUID = UUID.fromString(syncData.getString("OwnerUUID"));
         if (syncData.contains("InventoryName"))
@@ -443,7 +443,7 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
     }
 
     public void sendSummonSetToServer(SummonSet summonSet) {
-        LycanitesMobs.packetHandler.sendToServer(new MessageSummoningPedestalSummonSet(summonSet, this.getPos().getX(), this.getPos().getY(), this.getPos().getZ()));
+        LycanitesMobs.packetHandler.sendToServer(new MessageSummoningPedestalSummonSet(summonSet, this.getBlockPos().getX(), this.getBlockPos().getY(), this.getBlockPos().getZ()));
     }
 
 
@@ -452,8 +452,8 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
     // ========================================
     /** Reads from saved NBT data. **/
     @Override
-    public void read(BlockState blockState, CompoundNBT nbtTagCompound) {
-        super.read(blockState, nbtTagCompound);
+    public void load(BlockState blockState, CompoundNBT nbtTagCompound) {
+        super.load(blockState, nbtTagCompound);
 
         if(nbtTagCompound.contains("OwnerUUID")) {
             String uuidString = nbtTagCompound.getString("OwnerUUID");
@@ -495,28 +495,28 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
 			this.summoningFuelMax = nbtTagCompound.getInt("FuelMax");
 		}
 		if(nbtTagCompound.contains("Items")) {
-			NonNullList<ItemStack> itemStacks = NonNullList.withSize(this.getSizeInventory(), ItemStack.EMPTY);
+			NonNullList<ItemStack> itemStacks = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
 			ItemStackHelper.loadAllItems(nbtTagCompound, itemStacks); // Reads ItemStack into a List from "Items" tag.
 
 			for(int i = 0; i < itemStacks.size(); ++i) {
-				if(i < this.getSizeInventory()) {
+				if(i < this.getContainerSize()) {
 					ItemStack itemStack = itemStacks.get(i);
 					if(itemStack.isEmpty())
-						this.setInventorySlotContents(i, ItemStack.EMPTY);
+						this.setItem(i, ItemStack.EMPTY);
 					else {
-						this.setInventorySlotContents(i, itemStack);
+						this.setItem(i, itemStack);
 					}
 				}
 			}
 		}
 
-		super.read(blockState, nbtTagCompound);
+		super.load(blockState, nbtTagCompound);
     }
 
     /** Writes to NBT data. **/
     @Override
-    public CompoundNBT write(CompoundNBT nbtTagCompound) {
-        super.write(nbtTagCompound);
+    public CompoundNBT save(CompoundNBT nbtTagCompound) {
+        super.save(nbtTagCompound);
 
         if(this.ownerUUID == null) {
             nbtTagCompound.putString("OwnerUUID", "");
@@ -535,7 +535,7 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
             ListNBT minionIDs = new ListNBT();
             for(LivingEntity minion : this.minions) {
                 CompoundNBT minionID = new CompoundNBT();
-                minionID.putString("ID", minion.getUniqueID().toString());
+                minionID.putString("ID", minion.getUUID().toString());
                 minionIDs.add(minionID);
             }
             nbtTagCompound.put("MinionIDs", minionIDs);

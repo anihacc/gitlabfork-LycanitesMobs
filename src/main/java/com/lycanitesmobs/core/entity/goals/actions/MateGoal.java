@@ -9,6 +9,8 @@ import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
 
+import net.minecraft.entity.ai.goal.Goal.Flag;
+
 public class MateGoal extends Goal {
 	// Targets:
     private AgeableCreatureEntity host;
@@ -27,7 +29,7 @@ public class MateGoal extends Goal {
     public MateGoal(AgeableCreatureEntity setHost) {
         this.host = setHost;
         this.targetClass = this.host.getClass();
-		this.setMutexFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
+		this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
     }
     
     
@@ -56,7 +58,7 @@ public class MateGoal extends Goal {
   	//                  Should Execute
   	// ==================================================
 	@Override
-    public boolean shouldExecute() {
+    public boolean canUse() {
         if(!this.host.canMate()) {
 			return false;
 		}
@@ -69,7 +71,7 @@ public class MateGoal extends Goal {
   	//                Continue Executing
   	// ==================================================
 	@Override
-    public boolean shouldContinueExecuting() {
+    public boolean canContinueToUse() {
         return this.partner != null && this.partner.isAlive() && this.partner.isInLove() && this.mateTime < mateTimeMax;
     }
     
@@ -78,7 +80,7 @@ public class MateGoal extends Goal {
   	//                      Reset
   	// ==================================================
 	@Override
-    public void resetTask() {
+    public void stop() {
         this.partner = null;
         this.mateTime = 0;
     }
@@ -89,12 +91,12 @@ public class MateGoal extends Goal {
   	// ==================================================
 	@Override
     public void tick() {
-        this.host.getLookController().setLookPositionWithEntity(this.partner, 10.0F, (float)this.host.getVerticalFaceSpeed());
+        this.host.getLookControl().setLookAt(this.partner, 10.0F, (float)this.host.getMaxHeadXRot());
         if(!this.host.useDirectNavigator())
-        	this.host.getNavigator().tryMoveToEntityLiving(this.partner, this.speed);
+        	this.host.getNavigation().moveTo(this.partner, this.speed);
         else
-        	this.host.directNavigator.setTargetPosition(new BlockPos((int)this.partner.getPositionVec().getX(), (int)this.partner.getPositionVec().getY(), (int)this.partner.getPositionVec().getZ()), speed);
-        if(this.host.getDistanceSq(this.partner) < this.mateDistance + this.host.getPhysicalRange()) {
+        	this.host.directNavigator.setTargetPosition(new BlockPos((int)this.partner.position().x(), (int)this.partner.position().y(), (int)this.partner.position().z()), speed);
+        if(this.host.distanceToSqr(this.partner) < this.mateDistance + this.host.getPhysicalRange()) {
 			++this.mateTime;
 			if(this.mateTime >= mateTimeMax) {
 				this.host.procreate(this.partner);
@@ -108,7 +110,7 @@ public class MateGoal extends Goal {
   	// ==================================================
     private AgeableCreatureEntity getPartner() {
         float distance = 8.0F;
-        List possibleMates = this.host.getEntityWorld().getEntitiesWithinAABB(this.targetClass, this.host.getBoundingBox().grow((double)distance, (double)distance, (double)distance));
+        List possibleMates = this.host.getCommandSenderWorld().getEntitiesOfClass(this.targetClass, this.host.getBoundingBox().inflate((double)distance, (double)distance, (double)distance));
         double closestDistance = Double.MAX_VALUE;
         AgeableCreatureEntity newMate = null;
         Iterator possibleMate = possibleMates.iterator();
@@ -117,9 +119,9 @@ public class MateGoal extends Goal {
         	LivingEntity nextEntity = (LivingEntity)possibleMate.next();
         	if(nextEntity instanceof AgeableCreatureEntity) {
 	        	AgeableCreatureEntity testMate = (AgeableCreatureEntity)nextEntity;
-	            if(this.host.canBreedWith(testMate) && this.host.getDistance(testMate) < closestDistance) {
+	            if(this.host.canBreedWith(testMate) && this.host.distanceTo(testMate) < closestDistance) {
 	            	newMate = testMate;
-	            	closestDistance = this.host.getDistance(testMate);
+	            	closestDistance = this.host.distanceTo(testMate);
 	            }
         	}
         }

@@ -65,7 +65,7 @@ public class ElementDescriptionList extends BaseList {
 		protected void onClicked() {}
 
 		@Override
-		public List<? extends IGuiEventListener> getEventListeners() {
+		public List<? extends IGuiEventListener> children() {
 			return null;
 		}
 	}
@@ -78,13 +78,13 @@ public class ElementDescriptionList extends BaseList {
 		// Summary:
 		ITextComponent text = new StringTextComponent("\u00A7l")
 				.append(elementInfo.getTitle())
-				.appendString(": " + "\u00A7r\n")
+				.append(": " + "\u00A7r\n")
 				.append(elementInfo.getDescription());
 
 		// Buffs:
 		new TranslationTextComponent("\n\n\u00A7l")
 			.append(new TranslationTextComponent("gui.beastiary.elements.buffs"))
-			.appendString(": " + "\u00A7r");
+			.append(": " + "\u00A7r");
 		for(String buff : this.elementInfo.buffs) {
 			Effect effect = GameRegistry.findRegistry(Effect.class).getValue(new ResourceLocation(buff));
 			if(effect == null) {
@@ -93,19 +93,19 @@ public class ElementDescriptionList extends BaseList {
 			ResourceLocation effectResource = new ResourceLocation(buff);
 			new StringTextComponent("\n")
 					.append(effect.getDisplayName())
-					.appendString(": ")
+					.append(": ")
 					.append(new TranslationTextComponent("effect." + effectResource.getPath() + ".description"));
 		}
 
 		// Debuffs:
 		new TranslationTextComponent("\n\n\u00A7l")
 				.append(new TranslationTextComponent("gui.beastiary.elements.debuffs"))
-				.appendString(": " + "\u00A7r");
+				.append(": " + "\u00A7r");
 		for(String debuff : this.elementInfo.debuffs) {
 			if("burning".equals(debuff)) {
 				new StringTextComponent("\n")
 				.append(new TranslationTextComponent("effect.burning"))
-				.appendString(": ")
+				.append(": ")
 				.append(new TranslationTextComponent("effect.burning.description"));
 				continue;
 			}
@@ -116,7 +116,7 @@ public class ElementDescriptionList extends BaseList {
 			ResourceLocation effectResource = new ResourceLocation(debuff);
 			new StringTextComponent("\n")
 				.append(effect.getDisplayName())
-				.appendString(": ")
+				.append(": ")
 				.append(new TranslationTextComponent("effect." + effectResource.getPath() + ".description"));
 		}
 

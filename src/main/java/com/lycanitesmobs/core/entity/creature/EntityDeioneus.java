@@ -39,8 +39,8 @@ public class EntityDeioneus extends RideableCreatureEntity implements IGroupHeav
         this.hitAreaWidthScale = 1.5f;
         this.hitAreaHeightScale = 1;
 
-        this.setPathPriority(PathNodeType.WATER, 0F);
-        this.stepHeight = 4.0F;
+        this.setPathfindingMalus(PathNodeType.WATER, 0F);
+        this.maxUpStep = 4.0F;
     }
 
     // ========== Init AI ==========
@@ -57,9 +57,9 @@ public class EntityDeioneus extends RideableCreatureEntity implements IGroupHeav
     private int pickupTime = 0;
 	// ========== Living Update ==========
 	@Override
-    public void livingTick() {
-        super.livingTick();
-        if(!this.getEntityWorld().isRemote) {
+    public void aiStep() {
+        super.aiStep();
+        if(!this.getCommandSenderWorld().isClientSide) {
             // Drop Owner When Tamed:
             if(this.isTamed() && this.hasPickupEntity() && this.getPickupEntity() == this.getOwner())
                 this.dropPickupEntity();
@@ -71,14 +71,14 @@ public class EntityDeioneus extends RideableCreatureEntity implements IGroupHeav
                     extendedEntity.setPickedUpByEntity(this);
 
                 if(this.isTamed() && !this.canAttack(this.getPickupEntity())) {
-                    this.getPickupEntity().addPotionEffect(new EffectInstance(Effects.WATER_BREATHING, this.getEffectDuration(5), 1));
+                    this.getPickupEntity().addEffect(new EffectInstance(Effects.WATER_BREATHING, this.getEffectDuration(5), 1));
                 }
 
                 else if(this.pickupTime++ % 40 == 0) {
                     this.attackEntityAsMob(this.getPickupEntity(), 0.5F);
                     if(this.getPickupEntity() instanceof LivingEntity) {
                         if(ObjectManager.getEffect("penetration") != null)
-                            this.getPickupEntity().addPotionEffect(new EffectInstance(ObjectManager.getEffect("penetration"), this.getEffectDuration(5), 1));
+                            this.getPickupEntity().addEffect(new EffectInstance(ObjectManager.getEffect("penetration"), this.getEffectDuration(5), 1));
                     }
                 }
             }
@@ -96,7 +96,7 @@ public class EntityDeioneus extends RideableCreatureEntity implements IGroupHeav
     // ==================================================
     @Override
     public void mountAbility(Entity rider) {
-        if(this.getEntityWorld().isRemote)
+        if(this.getCommandSenderWorld().isClientSide)
             return;
 
         if(this.abilityToggled)
@@ -145,7 +145,7 @@ public class EntityDeioneus extends RideableCreatureEntity implements IGroupHeav
 
     // Pushed By Water:
     @Override
-    public boolean isPushedByWater() {
+    public boolean isPushedByFluid() {
         return false;
     }
     
@@ -154,13 +154,13 @@ public class EntityDeioneus extends RideableCreatureEntity implements IGroupHeav
 	public float getBlockPathWeight(int x, int y, int z) {
         int waterWeight = 10;
 
-        Block block = this.getEntityWorld().getBlockState(new BlockPos(x, y, z)).getBlock();
+        Block block = this.getCommandSenderWorld().getBlockState(new BlockPos(x, y, z)).getBlock();
         if(block == Blocks.WATER)
             return (super.getBlockPathWeight(x, y, z) + 1) * (waterWeight + 1);
-        if(this.getEntityWorld().isRaining() && this.getEntityWorld().canBlockSeeSky(new BlockPos(x, y, z)))
+        if(this.getCommandSenderWorld().isRaining() && this.getCommandSenderWorld().canSeeSkyFromBelowWater(new BlockPos(x, y, z)))
             return (super.getBlockPathWeight(x, y, z) + 1) * (waterWeight + 1);
 
-        if(this.getAttackTarget() != null)
+        if(this.getTarget() != null)
             return super.getBlockPathWeight(x, y, z);
         if(this.waterContact())
             return -999999.0F;
@@ -172,8 +172,8 @@ public class EntityDeioneus extends RideableCreatureEntity implements IGroupHeav
     // ========== Get Wander Position ==========
     public BlockPos getWanderPosition(BlockPos wanderPosition) {
         BlockPos groundPos;
-        for(groundPos = wanderPosition.down(); groundPos.getY() > 0 && !this.getEntityWorld().getBlockState(groundPos).getMaterial().isSolid(); groundPos = groundPos.down()) {}
-        return groundPos.up();
+        for(groundPos = wanderPosition.below(); groundPos.getY() > 0 && !this.getCommandSenderWorld().getBlockState(groundPos).getMaterial().isSolid(); groundPos = groundPos.below()) {}
+        return groundPos.above();
     }
 
 
@@ -189,7 +189,7 @@ public class EntityDeioneus extends RideableCreatureEntity implements IGroupHeav
         // Pickup:
         if(target instanceof LivingEntity) {
             LivingEntity entityLivingBase = (LivingEntity)target;
-            if (this.canPickupEntity(entityLivingBase) && this.canEntityBeSeen(target)) {
+            if (this.canPickupEntity(entityLivingBase) && this.canSee(target)) {
                 this.pickupEntity(entityLivingBase);
                 this.pickupCooldown = 100;
             }
@@ -206,7 +206,7 @@ public class EntityDeioneus extends RideableCreatureEntity implements IGroupHeav
     /** Called when this mob has received damage. Here there is a random chance of this mob dropping any picked up entities. **/
     @Override
     public void onDamage(DamageSource damageSrc, float damage) {
-        if(this.hasPickupEntity() && !this.isTamed() && this.getRNG().nextFloat() <= 0.25F)
+        if(this.hasPickupEntity() && !this.isTamed() && this.getRandom().nextFloat() <= 0.25F)
             this.dropPickupEntity();
         super.onDamage(damageSrc, damage);
     }

@@ -41,7 +41,7 @@ public class SuicideGoal extends Goal {
 	}
 
 	@Override
-    public boolean shouldExecute() {
+    public boolean canUse() {
 		if(!this.host.isAlive() ) {
 			return false;
 		}
@@ -55,8 +55,8 @@ public class SuicideGoal extends Goal {
 		}
 
 		DamageSource damageSource = new EntityDamageSource("mob", this.host);
-		damageSource.setDamageIsAbsolute();
-		damageSource.setDamageBypassesArmor();
-		this.host.attackEntityFrom(damageSource, this.host.getHealth());
+		damageSource.bypassMagic();
+		damageSource.bypassArmor();
+		this.host.hurt(damageSource, this.host.getHealth());
     }
 }

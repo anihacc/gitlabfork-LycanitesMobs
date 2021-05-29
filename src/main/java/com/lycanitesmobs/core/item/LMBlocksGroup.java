@@ -18,14 +18,14 @@ public class LMBlocksGroup extends ItemGroup {
 	// ========== Tab Icon ==========
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public ItemStack createIcon() {
+	public ItemStack makeIcon() {
 		if(ObjectManager.getBlock("shadowcrystal") != null)
-			return new ItemStack(Item.getItemFromBlock(ObjectManager.getBlock("shadowcrystal")));
+			return new ItemStack(Item.byBlock(ObjectManager.getBlock("shadowcrystal")));
 		else if(ObjectManager.getBlock("summoningpedestal") != null)
-			return new ItemStack(Item.getItemFromBlock(ObjectManager.getBlock("summoningpedestal")));
+			return new ItemStack(Item.byBlock(ObjectManager.getBlock("summoningpedestal")));
 		else if(ObjectManager.getBlock("demoncrystal") != null)
-			return new ItemStack(Item.getItemFromBlock(ObjectManager.getBlock("demoncrystal")));
+			return new ItemStack(Item.byBlock(ObjectManager.getBlock("demoncrystal")));
 		else
-			return new ItemStack(Item.getItemFromBlock(Blocks.OBSIDIAN));
+			return new ItemStack(Item.byBlock(Blocks.OBSIDIAN));
 	}
 }

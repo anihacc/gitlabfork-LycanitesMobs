@@ -32,7 +32,7 @@ public class EntityNingen extends TameableCreatureEntity implements IMob {
         this.canGrow = false;
         this.setupMob();
 
-        this.setPathPriority(PathNodeType.WATER, 0F);
+        this.setPathfindingMalus(PathNodeType.WATER, 0F);
     }
 
     // ========== Init AI ==========
@@ -61,13 +61,13 @@ public class EntityNingen extends TameableCreatureEntity implements IMob {
 	public float getBlockPathWeight(int x, int y, int z) {
 		int waterWeight = 10;
         BlockPos pos = new BlockPos(x, y, z);
-        BlockState blockState = this.getEntityWorld().getBlockState(pos);
+        BlockState blockState = this.getCommandSenderWorld().getBlockState(pos);
         if(blockState.getBlock() == Blocks.WATER)
         	return (super.getBlockPathWeight(x, y, z) + 1) * (waterWeight + 1);
-        if(this.getEntityWorld().isRaining() && this.getEntityWorld().canBlockSeeSky(pos))
+        if(this.getCommandSenderWorld().isRaining() && this.getCommandSenderWorld().canSeeSkyFromBelowWater(pos))
         	return (super.getBlockPathWeight(x, y, z) + 1) * (waterWeight + 1);
         
-        if(this.getAttackTarget() != null)
+        if(this.getTarget() != null)
         	return super.getBlockPathWeight(x, y, z);
         if(this.waterContact())
 			return -999999.0F;
@@ -77,7 +77,7 @@ public class EntityNingen extends TameableCreatureEntity implements IMob {
 	
 	// Pushed By Water:
 	@Override
-	public boolean isPushedByWater() {
+	public boolean isPushedByFluid() {
         return false;
     }
 
@@ -85,8 +85,8 @@ public class EntityNingen extends TameableCreatureEntity implements IMob {
     // ========== Get Wander Position ==========
     public BlockPos getWanderPosition(BlockPos wanderPosition) {
         BlockPos groundPos;
-        for(groundPos = wanderPosition.down(); groundPos.getY() > 0 && !this.getEntityWorld().getBlockState(groundPos).getMaterial().isSolid(); groundPos = groundPos.down()) {}
-        return groundPos.up();
+        for(groundPos = wanderPosition.below(); groundPos.getY() > 0 && !this.getCommandSenderWorld().getBlockState(groundPos).getMaterial().isSolid(); groundPos = groundPos.below()) {}
+        return groundPos.above();
     }
     
     
@@ -96,7 +96,7 @@ public class EntityNingen extends TameableCreatureEntity implements IMob {
     // ========== Is Aggressive ==========
     @Override
     public boolean isAggressive() {
-    	if(this.getAir() <= -100)
+    	if(this.getAirSupply() <= -100)
     		return false;
     	return super.isAggressive();
     }

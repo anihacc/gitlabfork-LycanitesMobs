@@ -78,7 +78,7 @@ public class OreBlockSpawnTrigger extends BlockSpawnTrigger {
 							drops = block.getDrops(blockState, (ServerWorld)world, blockPos, null);
 						}
 						else {
-							drops = block.getDrops(blockState, (ServerWorld)world, blockPos, null, entity, entity.getActiveItemStack());
+							drops = block.getDrops(blockState, (ServerWorld)world, blockPos, null, entity, entity.getUseItem());
 						}
 						for(ItemStack dropStack : drops) {
 							if(dropStack.getItem() instanceof BlockItem) {

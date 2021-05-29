@@ -209,7 +209,7 @@ public class CreatureManager extends JSONLoader {
 	@SubscribeEvent
 	public void registerEntityAttributes(EntityAttributeCreationEvent event) {
 		for(CreatureInfo creatureInfo : this.creatures.values()) {
-			event.put(creatureInfo.getEntityType(), BaseCreatureEntity.registerCustomAttributes().create());
+			event.put(creatureInfo.getEntityType(), BaseCreatureEntity.registerCustomAttributes().build());
 		}
 	}
 

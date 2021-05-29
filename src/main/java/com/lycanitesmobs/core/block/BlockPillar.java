@@ -19,7 +19,7 @@ public class BlockPillar extends BlockBase {
 	// ==================================================
 	public BlockPillar(Block.Properties properties, ModInfo group, String name) {
 		super(properties, group, name);
-        this.setDefaultState(this.getDefaultState().with(AXIS, Direction.Axis.Y));
+        this.registerDefaultState(this.defaultBlockState().setValue(AXIS, Direction.Axis.Y));
 	}
 
 	// ==================================================
@@ -29,11 +29,11 @@ public class BlockPillar extends BlockBase {
 		switch(rot) {
 			case COUNTERCLOCKWISE_90:
 			case CLOCKWISE_90:
-				switch((Direction.Axis)state.get(AXIS)) {
+				switch((Direction.Axis)state.getValue(AXIS)) {
 					case X:
-						return state.with(AXIS, Direction.Axis.Z);
+						return state.setValue(AXIS, Direction.Axis.Z);
 					case Z:
-						return state.with(AXIS, Direction.Axis.X);
+						return state.setValue(AXIS, Direction.Axis.X);
 					default:
 						return state;
 				}
@@ -42,11 +42,11 @@ public class BlockPillar extends BlockBase {
 		}
 	}
 
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
 		builder.add(AXIS);
 	}
 
 	public BlockState getStateForPlacement(BlockItemUseContext context) {
-		return this.getDefaultState().with(AXIS, context.getFace().getAxis());
+		return this.defaultBlockState().setValue(AXIS, context.getClickedFace().getAxis());
 	}
 }

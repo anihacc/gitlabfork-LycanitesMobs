@@ -29,7 +29,7 @@ public class EntityWraith extends TameableCreatureEntity implements IMob {
         this.hasAttackSound = true;
         this.setupMob();
 
-        this.stepHeight = 1.0F;
+        this.maxUpStep = 1.0F;
     }
 
     // ========== Init AI ==========
@@ -45,17 +45,17 @@ public class EntityWraith extends TameableCreatureEntity implements IMob {
    	// ==================================================
     // ========== Living ==========
     @Override
-    public void livingTick() {
+    public void aiStep() {
         
         // Detonate:
-        if(!this.getEntityWorld().isRemote) {
+        if(!this.getCommandSenderWorld().isClientSide) {
             if(this.detonateTimer == 0) {
-                this.getEntityWorld().createExplosion(this, this.getPositionVec().getX(), this.getPositionVec().getY(), this.getPositionVec().getZ(), 1, Explosion.Mode.BREAK);
+                this.getCommandSenderWorld().explode(this, this.position().x(), this.position().y(), this.position().z(), 1, Explosion.Mode.BREAK);
                 this.remove();
             }
             else if(this.detonateTimer > 0) {
                 this.detonateTimer--;
-                if(this.getEntityWorld().getBlockState(this.getPosition()).getMaterial().isSolid()) {
+                if(this.getCommandSenderWorld().getBlockState(this.blockPosition()).getMaterial().isSolid()) {
                     this.detonateTimer = 0;
                 }
                 else {
@@ -75,19 +75,19 @@ public class EntityWraith extends TameableCreatureEntity implements IMob {
         }
 
         // Particles:
-        if(this.getEntityWorld().isRemote && this.detonateTimer <= 5) {
+        if(this.getCommandSenderWorld().isClientSide && this.detonateTimer <= 5) {
 			for (int i = 0; i < 2; ++i) {
-				this.getEntityWorld().addParticle(ParticleTypes.SMOKE, this.getPositionVec().getX() + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width, this.getPositionVec().getY() + this.rand.nextDouble() * (double) this.getSize(Pose.STANDING).height, this.getPositionVec().getZ() + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
-				this.getEntityWorld().addParticle(ParticleTypes.FLAME, this.getPositionVec().getX() + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width, this.getPositionVec().getY() + this.rand.nextDouble() * (double) this.getSize(Pose.STANDING).height, this.getPositionVec().getZ() + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
+				this.getCommandSenderWorld().addParticle(ParticleTypes.SMOKE, this.position().x() + (this.random.nextDouble() - 0.5D) * (double) this.getDimensions(Pose.STANDING).width, this.position().y() + this.random.nextDouble() * (double) this.getDimensions(Pose.STANDING).height, this.position().z() + (this.random.nextDouble() - 0.5D) * (double) this.getDimensions(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
+				this.getCommandSenderWorld().addParticle(ParticleTypes.FLAME, this.position().x() + (this.random.nextDouble() - 0.5D) * (double) this.getDimensions(Pose.STANDING).width, this.position().y() + this.random.nextDouble() * (double) this.getDimensions(Pose.STANDING).height, this.position().z() + (this.random.nextDouble() - 0.5D) * (double) this.getDimensions(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
 			}
 		}
         
-        super.livingTick();
+        super.aiStep();
     }
 
 	@Override
 	public boolean rollWanderChance() {
-		return this.getRNG().nextDouble() <= 0.25D;
+		return this.getRandom().nextDouble() <= 0.25D;
 	}
 
 
@@ -95,7 +95,7 @@ public class EntityWraith extends TameableCreatureEntity implements IMob {
     //                     Attacks
     // ==================================================
     public void chargeAttack() {
-        this.leap(5, this.rotationPitch);
+        this.leap(5, this.xRot);
         this.detonateTimer = 10;
     }
 	
@@ -111,15 +111,15 @@ public class EntityWraith extends TameableCreatureEntity implements IMob {
    	//                      Death
    	// ==================================================
     @Override
-    public void onDeath(DamageSource par1DamageSource) {
-		if(!this.getEntityWorld().isRemote && this.getEntityWorld().getGameRules().getBoolean(GameRules.MOB_GRIEFING)) {
+    public void die(DamageSource par1DamageSource) {
+		if(!this.getCommandSenderWorld().isClientSide && this.getCommandSenderWorld().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) {
 			int explosionRadius = 1;
 			if(this.subspecies != null)
 				explosionRadius = 3;
 			explosionRadius = Math.max(1, Math.round((float)explosionRadius * (float)this.sizeScale));
-			this.getEntityWorld().createExplosion(this, this.getPositionVec().getX(), this.getPositionVec().getY(), this.getPositionVec().getZ(), explosionRadius, Explosion.Mode.BREAK);
+			this.getCommandSenderWorld().explode(this, this.position().x(), this.position().y(), this.position().z(), explosionRadius, Explosion.Mode.BREAK);
 		}
-        super.onDeath(par1DamageSource);
+        super.die(par1DamageSource);
     }
     // ==================================================
     //                     Equipment
@@ -152,8 +152,8 @@ public class EntityWraith extends TameableCreatureEntity implements IMob {
 	// ==================================================
 	// ========== Read ===========
 	@Override
-	public void readAdditional(CompoundNBT nbtTagCompound) {
-		super.readAdditional(nbtTagCompound);
+	public void readAdditionalSaveData(CompoundNBT nbtTagCompound) {
+		super.readAdditionalSaveData(nbtTagCompound);
 		if(nbtTagCompound.contains("DetonateTimer")) {
 			this.detonateTimer = nbtTagCompound.getInt("DetonateTimer");
 		}
@@ -161,8 +161,8 @@ public class EntityWraith extends TameableCreatureEntity implements IMob {
 
 	// ========== Write ==========
 	@Override
-	public void writeAdditional(CompoundNBT nbtTagCompound) {
-		super.writeAdditional(nbtTagCompound);
+	public void addAdditionalSaveData(CompoundNBT nbtTagCompound) {
+		super.addAdditionalSaveData(nbtTagCompound);
 		if(this.detonateTimer > -1) {
 			nbtTagCompound.putInt("DetonateTimer", this.detonateTimer);
 		}

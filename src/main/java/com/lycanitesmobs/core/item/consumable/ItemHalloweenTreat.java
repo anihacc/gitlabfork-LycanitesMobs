@@ -40,14 +40,14 @@ public class ItemHalloweenTreat extends BaseItem {
  	//                    Item Use
  	// ==================================================
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
-        ItemStack itemStack = player.getHeldItem(hand);
-         if(!player.abilities.isCreativeMode) {
+    public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
+        ItemStack itemStack = player.getItemInHand(hand);
+         if(!player.abilities.instabuild) {
              itemStack.setCount(Math.max(0, itemStack.getCount() - 1));
          }
          
-         if(!world.isRemote) {
-         	if(player.getRNG().nextBoolean())
+         if(!world.isClientSide) {
+         	if(player.getRandom().nextBoolean())
          		this.openGood(itemStack, world, player);
          	else
          		this.openBad(itemStack, world, player);
@@ -62,18 +62,18 @@ public class ItemHalloweenTreat extends BaseItem {
   	// ==================================================
     public void openGood(ItemStack itemStack, World world, PlayerEntity player) {
 		ITextComponent message = new TranslationTextComponent("item.lycanitesmobs." + this.itemName + ".good");
-		player.sendMessage(message, Util.DUMMY_UUID);
-        this.playSound(world, player.getPositionVec().getX(), player.getPositionVec().getY(), player.getPositionVec().getZ(), ObjectManager.getSound(this.itemName + "_good"), SoundCategory.AMBIENT, 5.0F, 1.0F);
+		player.sendMessage(message, Util.NIL_UUID);
+        this.playSound(world, player.position().x(), player.position().y(), player.position().z(), ObjectManager.getSound(this.itemName + "_good"), SoundCategory.AMBIENT, 5.0F, 1.0F);
 		
 		// Three Random Treats:
 		List<ItemStack> dropStacks = ObjectLists.getItems("halloween_treats");
 		if(dropStacks == null || dropStacks.isEmpty())
 			return;
-		ItemStack dropStack = dropStacks.get(player.getRNG().nextInt(dropStacks.size()));
-		dropStack.setCount(1 + player.getRNG().nextInt(4));
-		CustomItemEntity entityItem = new CustomItemEntity(world, player.getPositionVec().getX(), player.getPositionVec().getY(), player.getPositionVec().getZ(), dropStack);
-		entityItem.setPickupDelay(10);
-		world.addEntity(entityItem);
+		ItemStack dropStack = dropStacks.get(player.getRandom().nextInt(dropStacks.size()));
+		dropStack.setCount(1 + player.getRandom().nextInt(4));
+		CustomItemEntity entityItem = new CustomItemEntity(world, player.position().x(), player.position().y(), player.position().z(), dropStack);
+		entityItem.setPickUpDelay(10);
+		world.addFreshEntity(entityItem);
     }
     
     
@@ -82,23 +82,23 @@ public class ItemHalloweenTreat extends BaseItem {
   	// ==================================================
     public void openBad(ItemStack itemStack, World world, PlayerEntity player) {
 		ITextComponent message = new TranslationTextComponent("item.lycanitesmobs." + this.itemName + ".bad");
-		player.sendMessage(message, Util.DUMMY_UUID);
-        this.playSound(world, player.getPositionVec().getX(), player.getPositionVec().getY(), player.getPositionVec().getZ(), ObjectManager.getSound(this.itemName + "_bad"), SoundCategory.AMBIENT, 5.0F, 1.0F);
+		player.sendMessage(message, Util.NIL_UUID);
+        this.playSound(world, player.position().x(), player.position().y(), player.position().z(), ObjectManager.getSound(this.itemName + "_bad"), SoundCategory.AMBIENT, 5.0F, 1.0F);
 		
 		// One Random Trick:
 		List<EntityType> entityTypes = ObjectLists.getEntites("halloween_tricks");
 		if(entityTypes.isEmpty())
 			return;
-		EntityType entityType = entityTypes.get(player.getRNG().nextInt(entityTypes.size()));
+		EntityType entityType = entityTypes.get(player.getRandom().nextInt(entityTypes.size()));
 		if(entityType != null) {
 			Entity entity = entityType.create(world);
             if(entity != null) {
-	            entity.setLocationAndAngles(player.getPositionVec().getX(), player.getPositionVec().getY(), player.getPositionVec().getZ(), player.rotationYaw, player.rotationPitch);
+	            entity.moveTo(player.position().x(), player.position().y(), player.position().z(), player.yRot, player.xRot);
 
                 // Themed Names:
                 if (entity instanceof BaseCreatureEntity) {
                     BaseCreatureEntity entityCreature = (BaseCreatureEntity) entity;
-					entityCreature.addLevel(world.rand.nextInt(10));
+					entityCreature.addLevel(world.random.nextInt(10));
                     if (entityCreature.creatureInfo.getName().equals("ent"))
                         entityCreature.setCustomName(new StringTextComponent("Twisted Ent"));
 					else if (entityCreature.creatureInfo.getName().equals("treant"))
@@ -109,7 +109,7 @@ public class ItemHalloweenTreat extends BaseItem {
 						entityCreature.setCustomName(new StringTextComponent("Shadow Clown"));
                 }
 
-	            world.addEntity(entity);
+	            world.addFreshEntity(entity);
             }
 		}
     }

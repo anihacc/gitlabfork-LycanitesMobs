@@ -15,11 +15,11 @@ public class ClientProxy implements IProxy {
 
 	@Override
 	public World getWorld() {
-		return Minecraft.getInstance().world;
+		return Minecraft.getInstance().level;
 	}
 
 	@Override
 	public void addEntityToWorld(int entityId, Entity entity) {
-		Minecraft.getInstance().world.addEntity(entityId, entity);
+		Minecraft.getInstance().level.putNonPlayerEntity(entityId, entity);
 	}
 }

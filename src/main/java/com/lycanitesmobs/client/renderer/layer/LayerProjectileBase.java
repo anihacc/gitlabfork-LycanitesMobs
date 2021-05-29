@@ -46,8 +46,8 @@ public class LayerProjectileBase extends LayerRenderer<BaseProjectileEntity, Pro
      * @return True if this layer can render the part.
      */
     public boolean canRenderPart(String partName, BaseProjectileEntity entity) {
-        if(this.renderer.getEntityModel() != null) {
-            this.renderer.getEntityModel().canBaseRenderPart(partName, entity);
+        if(this.renderer.getModel() != null) {
+            this.renderer.getModel().canBaseRenderPart(partName, entity);
         }
         return true;
     }

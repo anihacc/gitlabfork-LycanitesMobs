@@ -110,8 +110,8 @@ public class MinionSelectionOverlay extends BaseScreen {
 	
 	@Override
 	public boolean keyPressed(int par1, int par2, int par3) {
-		if(par2 == 1 || par2 == Minecraft.getInstance().gameSettings.keyBindInventory.getKey().getKeyCode())
-        	 Minecraft.getInstance().player.closeScreen();
+		if(par2 == 1 || par2 == Minecraft.getInstance().options.keyInventory.getKey().getValue())
+        	 Minecraft.getInstance().player.closeContainer();
 		return super.keyPressed(par1, par2, par3);
 	}
 }

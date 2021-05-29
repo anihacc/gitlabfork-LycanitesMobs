@@ -44,12 +44,12 @@ public class DefendEntitiesGoal extends TargetingGoal {
  	// ==================================================
     @Override
     protected LivingEntity getTarget() {
-    	return this.host.getAttackTarget();
+    	return this.host.getTarget();
     }
 
     @Override
     protected void setTarget(LivingEntity newTarget) {
-    	this.host.setAttackTarget(newTarget);
+    	this.host.setTarget(newTarget);
     }
     
     
@@ -65,9 +65,9 @@ public class DefendEntitiesGoal extends TargetingGoal {
 		}
 
 		// Has Target Check:
-		LivingEntity targetTarget = target.getRevengeTarget();
+		LivingEntity targetTarget = target.getLastHurtByMob();
 		if(target instanceof CreatureEntity) {
-			targetTarget = ((CreatureEntity)target).getAttackTarget();
+			targetTarget = ((CreatureEntity)target).getTarget();
 		}
 		if(targetTarget == null) {
 			return false;
@@ -99,17 +99,17 @@ public class DefendEntitiesGoal extends TargetingGoal {
   	//                   Should Execute
   	// ==================================================
     @Override
-    public boolean shouldExecute() {
+    public boolean canUse() {
     	this.target = null;
     	
     	// Owner Check:
     	if(this.host.getOwner() != null)
     		return false;
         
-        double distance = this.getTargetDistance() - this.host.getSize(Pose.STANDING).width;
-        double heightDistance = 4.0D - this.host.getSize(Pose.STANDING).height;
+        double distance = this.getTargetDistance() - this.host.getDimensions(Pose.STANDING).width;
+        double heightDistance = 4.0D - this.host.getDimensions(Pose.STANDING).height;
         if(this.host.useDirectNavigator())
-            heightDistance = this.getTargetDistance() - this.host.getSize(Pose.STANDING).height;
+            heightDistance = this.getTargetDistance() - this.host.getDimensions(Pose.STANDING).height;
         if(this.host.useDirectNavigator())
             heightDistance = distance;
         this.target = this.getNewTarget(distance, heightDistance, distance);

@@ -47,7 +47,7 @@ public class BaseOverlay extends BaseGui {
 	public BaseOverlay(Minecraft minecraft) {
 		super(new TranslationTextComponent("gui.overlay"));
 		this.minecraft = Minecraft.getInstance();
-		this.drawHelper = new DrawHelper(minecraft, minecraft.fontRenderer);
+		this.drawHelper = new DrawHelper(minecraft, minecraft.font);
 	}
 	
 	
@@ -65,38 +65,38 @@ public class BaseOverlay extends BaseGui {
 		}
 		MatrixStack matrixStack = event.getMatrixStack();
 
-		matrixStack.push();
+		matrixStack.pushPose();
 		RenderSystem.disableLighting();
 		RenderSystem.enableBlend();
 		RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
-		int sWidth = Minecraft.getInstance().getMainWindow().getScaledWidth(); // getMainWindow()
-        int sHeight = Minecraft.getInstance().getMainWindow().getScaledHeight();
+		int sWidth = Minecraft.getInstance().getWindow().getGuiScaledWidth(); // getMainWindow()
+        int sHeight = Minecraft.getInstance().getWindow().getGuiScaledHeight();
 
         // ========== Mob/World Events Title ==========
-        ExtendedWorld worldExt = ExtendedWorld.getForWorld(player.getEntityWorld());
+        ExtendedWorld worldExt = ExtendedWorld.getForWorld(player.getCommandSenderWorld());
         if(worldExt != null) {
             for(MobEventPlayerClient mobEventPlayerClient : worldExt.clientMobEventPlayers.values()) {
-				matrixStack.push();
+				matrixStack.pushPose();
 				mobEventPlayerClient.onGUIUpdate(matrixStack, this, sWidth, sHeight);
-				matrixStack.pop();
+				matrixStack.popPose();
 			}
             if(worldExt.clientWorldEventPlayer != null) {
-				matrixStack.push();
+				matrixStack.pushPose();
 				worldExt.clientWorldEventPlayer.onGUIUpdate(matrixStack, this, sWidth, sHeight);
-				matrixStack.pop();
+				matrixStack.popPose();
 			}
         }
 		
 		// ========== Summoning Focus Bar ==========
         ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
-		if(playerExt != null && !this.minecraft.player.abilities.isCreativeMode && (
-                (this.minecraft.player.getHeldItem(Hand.MAIN_HAND).getItem() instanceof ItemStaffSummoning)
-                || (this.minecraft.player.getHeldItem(Hand.OFF_HAND).getItem() instanceof ItemStaffSummoning)
+		if(playerExt != null && !this.minecraft.player.abilities.instabuild && (
+                (this.minecraft.player.getItemInHand(Hand.MAIN_HAND).getItem() instanceof ItemStaffSummoning)
+                || (this.minecraft.player.getItemInHand(Hand.OFF_HAND).getItem() instanceof ItemStaffSummoning)
                 )) {
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-			this.minecraft.getTextureManager().bindTexture(TextureManager.getTexture("GUIInventoryCreature"));
+			this.minecraft.getTextureManager().bind(TextureManager.getTexture("GUIInventoryCreature"));
 			
 			int barYSpace = 10;
 			int barXSpace = -1;
@@ -109,7 +109,7 @@ public class BaseOverlay extends BaseGui {
             int summonBarV = 256 - summonBarHeight;
             
             summonBarY -= barYSpace;
-            if(this.minecraft.player.areEyesInFluid(FluidTags.WATER))
+            if(this.minecraft.player.isEyeInFluid(FluidTags.WATER))
             	summonBarY -= barYSpace;
             
             for(int summonBarEnergyN = 0; summonBarEnergyN < 10; summonBarEnergyN++) {
@@ -125,23 +125,23 @@ public class BaseOverlay extends BaseGui {
 		}
 		
 		// ========== Mount Stamina Bar ==========
-		if(this.minecraft.player.getRidingEntity() != null && this.minecraft.player.getRidingEntity() instanceof RideableCreatureEntity) {
-			RideableCreatureEntity mount = (RideableCreatureEntity)this.minecraft.player.getRidingEntity();
+		if(this.minecraft.player.getVehicle() != null && this.minecraft.player.getVehicle() instanceof RideableCreatureEntity) {
+			RideableCreatureEntity mount = (RideableCreatureEntity)this.minecraft.player.getVehicle();
             float mountStamina = mount.getStaminaPercent();
             
             // Mount Controls Message:
             if(this.mountMessageTime > 0) {
             	ITextComponent mountMessage = new TranslationTextComponent("gui.mount.controls.prefix");
-				mountMessage = mountMessage.copyRaw().appendString(" ").copyRaw().appendString(KeyHandler.instance.mountAbility.getKeyDescription());
-				mountMessage = mountMessage.copyRaw().append(new TranslationTextComponent("gui.mount.controls.ability"));
-				mountMessage = mountMessage.copyRaw().appendString(" ").copyRaw().appendString(KeyHandler.instance.dismount.getKeyDescription());
-				mountMessage = mountMessage.copyRaw().append(new TranslationTextComponent("gui.mount.controls.dismount"));
-				this.minecraft.ingameGUI.setOverlayMessage(mountMessage, false);
+				mountMessage = mountMessage.plainCopy().append(" ").plainCopy().append(KeyHandler.instance.mountAbility.getName());
+				mountMessage = mountMessage.plainCopy().append(new TranslationTextComponent("gui.mount.controls.ability"));
+				mountMessage = mountMessage.plainCopy().append(" ").plainCopy().append(KeyHandler.instance.dismount.getName());
+				mountMessage = mountMessage.plainCopy().append(new TranslationTextComponent("gui.mount.controls.dismount"));
+				this.minecraft.gui.setOverlayMessage(mountMessage, false);
             }
             
             // Mount Ability Stamina Bar:
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-			this.minecraft.getTextureManager().bindTexture(GUI_ICONS_LOCATION);
+			this.minecraft.getTextureManager().bind(GUI_ICONS_LOCATION);
             int staminaBarWidth = 182;
             int staminaBarHeight = 5;
             int staminaEnergyWidth = (int)((float)(staminaBarWidth + 1) * mountStamina);
@@ -162,8 +162,8 @@ public class BaseOverlay extends BaseGui {
 		else
 			this.mountMessageTime = this.mountMessageTimeMax;
 
-		matrixStack.pop();
-		this.minecraft.getTextureManager().bindTexture(GUI_ICONS_LOCATION);
+		matrixStack.popPose();
+		this.minecraft.getTextureManager().bind(GUI_ICONS_LOCATION);
 	}
 
 
@@ -178,14 +178,14 @@ public class BaseOverlay extends BaseGui {
 		}
 
 		// Entity:
-		RayTraceResult mouseOver = Minecraft.getInstance().objectMouseOver;
+		RayTraceResult mouseOver = Minecraft.getInstance().hitResult;
 		if(mouseOver instanceof EntityRayTraceResult) {
 			Entity mouseOverEntity = ((EntityRayTraceResult)mouseOver).getEntity();
 			if(mouseOverEntity instanceof BaseCreatureEntity) {
 				BaseCreatureEntity mouseOverCreature = (BaseCreatureEntity)mouseOverEntity;
 				event.getLeft().add("");
 				event.getLeft().add("Target Creature: " + mouseOverCreature.getName().getString());
-				event.getLeft().add("Distance To player: " + mouseOverCreature.getDistance(Minecraft.getInstance().player));
+				event.getLeft().add("Distance To player: " + mouseOverCreature.distanceTo(Minecraft.getInstance().player));
 				event.getLeft().add("Elements: " + mouseOverCreature.creatureInfo.getElementNames(mouseOverCreature.getSubspecies()).getString());
 				event.getLeft().add("Subspecies: " + mouseOverCreature.getSubspeciesIndex());
 				event.getLeft().add("Variant: " + mouseOverCreature.getVariantIndex());
@@ -197,7 +197,7 @@ public class BaseOverlay extends BaseGui {
 				event.getLeft().add("Speed: " + mouseOverCreature.getAttribute(Attributes.MOVEMENT_SPEED).getValue() + "/" + mouseOverCreature.creatureStats.getSpeed());
 				event.getLeft().add("");
 				event.getLeft().add("Defense: " + mouseOverCreature.creatureStats.getDefense());
-				event.getLeft().add("Armor: " + mouseOverCreature.getTotalArmorValue());
+				event.getLeft().add("Armor: " + mouseOverCreature.getArmorValue());
 				event.getLeft().add("");
 				event.getLeft().add("Damage: " + mouseOverCreature.creatureStats.getDamage());
 				event.getLeft().add("Melee Speed: " + mouseOverCreature.creatureStats.getAttackSpeed());

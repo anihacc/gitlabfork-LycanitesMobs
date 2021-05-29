@@ -20,6 +20,8 @@ import net.minecraft.world.World;
 import java.util.HashMap;
 import java.util.List;
 
+import com.lycanitesmobs.core.entity.BaseCreatureEntity.COMMAND_PIORITIES;
+
 public class EntityVolcan extends TameableCreatureEntity implements IMob {
 
 	public int blockMeltingRadius = 2;
@@ -36,7 +38,7 @@ public class EntityVolcan extends TameableCreatureEntity implements IMob {
         
         this.setupMob();
 
-        this.stepHeight = 1.0F;
+        this.maxUpStep = 1.0F;
     }
 
     @Override
@@ -56,30 +58,30 @@ public class EntityVolcan extends TameableCreatureEntity implements IMob {
     // ==================================================
 	// ========== Living Update ==========
 	@Override
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
 
 		// Burning Aura Attack:
-		if(!this.getEntityWorld().isRemote && this.updateTick % 40 == 0) {
+		if(!this.getCommandSenderWorld().isClientSide && this.updateTick % 40 == 0) {
 			List aoeTargets = this.getNearbyEntities(LivingEntity.class, null, 4);
 			for(Object entityObj : aoeTargets) {
 				LivingEntity target = (LivingEntity)entityObj;
-				if(target != this && this.canAttack(target.getType()) && this.canAttack(target) && this.getEntitySenses().canSee(target)) {
-					target.setFire(2);
+				if(target != this && this.canAttackType(target.getType()) && this.canAttack(target) && this.getSensing().canSee(target)) {
+					target.setSecondsOnFire(2);
 				}
 			}
 		}
 
 		// Melt Blocks:
-		if(!this.getEntityWorld().isRemote && this.updateTick % 40 == 0 && this.blockMeltingRadius > 0 && !this.isTamed() && this.getEntityWorld().getGameRules().getBoolean(GameRules.MOB_GRIEFING)) {
+		if(!this.getCommandSenderWorld().isClientSide && this.updateTick % 40 == 0 && this.blockMeltingRadius > 0 && !this.isTamed() && this.getCommandSenderWorld().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) {
 			int range = this.blockMeltingRadius;
-			for (int w = -((int) Math.ceil(this.getSize(Pose.STANDING).width) + range); w <= (Math.ceil(this.getSize(Pose.STANDING).width) + range); w++) {
-				for (int d = -((int) Math.ceil(this.getSize(Pose.STANDING).width) + range); d <= (Math.ceil(this.getSize(Pose.STANDING).width) + range); d++) {
-					for (int h = -((int) Math.ceil(this.getSize(Pose.STANDING).height) + range); h <= Math.ceil(this.getSize(Pose.STANDING).height); h++) {
-						Block block = this.getEntityWorld().getBlockState(this.getPosition().add(w, h, d)).getBlock();
+			for (int w = -((int) Math.ceil(this.getDimensions(Pose.STANDING).width) + range); w <= (Math.ceil(this.getDimensions(Pose.STANDING).width) + range); w++) {
+				for (int d = -((int) Math.ceil(this.getDimensions(Pose.STANDING).width) + range); d <= (Math.ceil(this.getDimensions(Pose.STANDING).width) + range); d++) {
+					for (int h = -((int) Math.ceil(this.getDimensions(Pose.STANDING).height) + range); h <= Math.ceil(this.getDimensions(Pose.STANDING).height); h++) {
+						Block block = this.getCommandSenderWorld().getBlockState(this.blockPosition().offset(w, h, d)).getBlock();
 						if (block == Blocks.COBBLESTONE || block == Blocks.GRAVEL) {
-							BlockState blockState = Blocks.LAVA.getDefaultState().with(FlowingFluidBlock.LEVEL, 5);
-							this.getEntityWorld().setBlockState(this.getPosition().add(w, h, d), blockState);
+							BlockState blockState = Blocks.LAVA.defaultBlockState().setValue(FlowingFluidBlock.LEVEL, 5);
+							this.getCommandSenderWorld().setBlockAndUpdate(this.blockPosition().offset(w, h, d), blockState);
 						}
 						/*else if (block == Blocks.WATER || block == Blocks.FLOWING_WATER || block == Blocks.ICE || block == Blocks.SNOW) {
 							this.getEntityWorld().setBlockState(this.getPosition().add(w, h, d), Blocks.AIR.getDefaultState(), 3);
@@ -90,14 +92,14 @@ public class EntityVolcan extends TameableCreatureEntity implements IMob {
 		}
 
 		// Particles:
-		if(this.getEntityWorld().isRemote) {
+		if(this.getCommandSenderWorld().isClientSide) {
 			for(int i = 0; i < 2; ++i) {
-				this.getEntityWorld().addParticle(ParticleTypes.FLAME, this.getPositionVec().getX() + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, this.getPositionVec().getY() + this.rand.nextDouble() * (double)this.getSize(Pose.STANDING).height, this.getPositionVec().getZ() + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
-				this.getEntityWorld().addParticle(ParticleTypes.DRIPPING_LAVA, this.getPositionVec().getX() + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, this.getPositionVec().getY() + this.rand.nextDouble() * (double)this.getSize(Pose.STANDING).height, this.getPositionVec().getZ() + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
+				this.getCommandSenderWorld().addParticle(ParticleTypes.FLAME, this.position().x() + (this.random.nextDouble() - 0.5D) * (double)this.getDimensions(Pose.STANDING).width, this.position().y() + this.random.nextDouble() * (double)this.getDimensions(Pose.STANDING).height, this.position().z() + (this.random.nextDouble() - 0.5D) * (double)this.getDimensions(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
+				this.getCommandSenderWorld().addParticle(ParticleTypes.DRIPPING_LAVA, this.position().x() + (this.random.nextDouble() - 0.5D) * (double)this.getDimensions(Pose.STANDING).width, this.position().y() + this.random.nextDouble() * (double)this.getDimensions(Pose.STANDING).height, this.position().z() + (this.random.nextDouble() - 0.5D) * (double)this.getDimensions(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
 			}
-			if(this.ticksExisted % 10 == 0)
+			if(this.tickCount % 10 == 0)
 				for(int i = 0; i < 2; ++i) {
-					this.getEntityWorld().addParticle(ParticleTypes.FLAME, this.getPositionVec().getX() + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, this.getPositionVec().getY() + this.rand.nextDouble() * (double)this.getSize(Pose.STANDING).height, this.getPositionVec().getZ() + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
+					this.getCommandSenderWorld().addParticle(ParticleTypes.FLAME, this.position().x() + (this.random.nextDouble() - 0.5D) * (double)this.getDimensions(Pose.STANDING).width, this.position().y() + this.random.nextDouble() * (double)this.getDimensions(Pose.STANDING).height, this.position().z() + (this.random.nextDouble() - 0.5D) * (double)this.getDimensions(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
 				}
 		}
     }
@@ -167,7 +169,7 @@ public class EntityVolcan extends TameableCreatureEntity implements IMob {
    	// ==================================================
 	// ========== Damage Modifier ==========
 	public float getDamageModifier(DamageSource damageSrc) {
-		if(damageSrc.isFireDamage())
+		if(damageSrc.isFire())
 			return 0F;
 		else return super.getDamageModifier(damageSrc);
 	}

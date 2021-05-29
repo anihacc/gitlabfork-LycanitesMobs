@@ -6,6 +6,8 @@ import net.minecraft.util.math.BlockPos;
 
 import java.util.EnumSet;
 
+import net.minecraft.entity.ai.goal.Goal.Flag;
+
 public class StayByHomeGoal extends Goal {
 	// Targets:
     private BaseCreatureEntity host;
@@ -20,7 +22,7 @@ public class StayByHomeGoal extends Goal {
  	// ==================================================
     public StayByHomeGoal(BaseCreatureEntity setHost) {
         this.host = setHost;
-		this.setMutexFlags(EnumSet.of(Flag.MOVE));
+		this.setFlags(EnumSet.of(Flag.MOVE));
     }
     
     
@@ -47,7 +49,7 @@ public class StayByHomeGoal extends Goal {
   	//                   Should Execute
   	// ==================================================
 	@Override
-    public boolean shouldExecute() {
+    public boolean canUse() {
     	if(!this.enabled)
     		return false;
     	if(!this.host.hasHome())
@@ -65,15 +67,15 @@ public class StayByHomeGoal extends Goal {
  	//                      Start
  	// ==================================================
 	@Override
-    public void startExecuting() {
+    public void start() {
         this.host.clearMovement();
         if(this.host.hasHome() && this.host.getDistanceFromHome() > 1.0F) {
-            BlockPos homePos = this.host.getHomePosition();
+            BlockPos homePos = this.host.getRestrictCenter();
         	double speed = this.speed;
         	if(this.host.getDistanceFromHome() > this.host.getHomeDistanceMax())
         		speed = this.farSpeed;
 	    	if(!host.useDirectNavigator())
-	    		this.host.getNavigator().tryMoveToXYZ(homePos.getX(), homePos.getY(), homePos.getZ(), this.speed);
+	    		this.host.getNavigation().moveTo(homePos.getX(), homePos.getY(), homePos.getZ(), this.speed);
 	    	else
 	    		host.directNavigator.setTargetPosition(new BlockPos((int)homePos.getX(), (int)homePos.getY(), (int)homePos.getZ()), speed);
         }

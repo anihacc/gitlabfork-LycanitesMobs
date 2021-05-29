@@ -44,7 +44,7 @@ public class TickMobEventTrigger extends MobEventTrigger {
 		}
 
 		// Chance:
-		if(this.chance < 1 && world.rand.nextDouble() > this.chance) {
+		if(this.chance < 1 && world.random.nextDouble() > this.chance) {
 			return;
 		}
 

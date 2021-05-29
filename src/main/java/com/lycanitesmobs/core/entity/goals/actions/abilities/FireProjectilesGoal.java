@@ -10,6 +10,8 @@ import net.minecraft.util.math.vector.Vector3d;
 
 import java.util.EnumSet;
 
+import net.minecraft.entity.ai.goal.Goal.Flag;
+
 public class FireProjectilesGoal extends BaseGoal {
 	protected String projectileName;
 	protected Class<? extends BaseProjectileEntity> projectileClass;
@@ -33,7 +35,7 @@ public class FireProjectilesGoal extends BaseGoal {
 	 */
 	public FireProjectilesGoal(BaseCreatureEntity setHost) {
 		super(setHost);
-		this.setMutexFlags(EnumSet.noneOf(Flag.class));
+		this.setFlags(EnumSet.noneOf(Flag.class));
     }
 
 	/**
@@ -147,15 +149,15 @@ public class FireProjectilesGoal extends BaseGoal {
 	}
 
 	@Override
-    public boolean shouldExecute() {
-		if(!super.shouldExecute()) {
+    public boolean canUse() {
+		if(!super.canUse()) {
 			return false;
 		}
 		if(this.projectileName == null && this.projectileClass == null) {
 			return false;
 		}
 
-		this.attackTarget = this.host.getAttackTarget();
+		this.attackTarget = this.host.getTarget();
 		if(!this.allPlayers && this.randomCount <= 0 && this.attackTarget == null) {
 			return false;
 		}
@@ -164,12 +166,12 @@ public class FireProjectilesGoal extends BaseGoal {
     }
 
 	@Override
-	public void startExecuting() {
+	public void start() {
 		this.abilityTime = 1;
 	}
 
 	@Override
-    public void resetTask() {
+    public void stop() {
 		this.attackTarget = null;
 	}
 
@@ -182,7 +184,7 @@ public class FireProjectilesGoal extends BaseGoal {
 		// All Players Mode:
 		if(this.allPlayers) {
 			for (PlayerEntity target : this.host.playerTargets) {
-				if(target.abilities.disableDamage || target.isSpectator())
+				if(target.abilities.invulnerable || target.isSpectator())
 					continue;
 				this.fireProjectile(target);
 			}
@@ -192,7 +194,7 @@ public class FireProjectilesGoal extends BaseGoal {
 		// Random Mode:
 		if(this.randomCount > 0) {
 			for(int i = 0; i < this.randomCount; i++) {
-				this.host.fireProjectile(this.projectileName, null, this.host.getRNG().nextFloat() * 20, this.host.getRNG().nextFloat() * this.angle, this.offset, this.velocity, this.scale, this.inaccuracy);
+				this.host.fireProjectile(this.projectileName, null, this.host.getRandom().nextFloat() * 20, this.host.getRandom().nextFloat() * this.angle, this.offset, this.velocity, this.scale, this.inaccuracy);
 			}
 			return;
 		}
@@ -207,10 +209,10 @@ public class FireProjectilesGoal extends BaseGoal {
 	 */
 	public void fireProjectile(Entity target) {
 		if(this.projectileName != null) {
-			this.host.fireProjectile(this.projectileName, target, this.host.getDistance(target), this.angle, this.offset, this.velocity, this.scale, this.inaccuracy);
+			this.host.fireProjectile(this.projectileName, target, this.host.distanceTo(target), this.angle, this.offset, this.velocity, this.scale, this.inaccuracy);
 		}
 		if(this.projectileClass != null) {
-			this.host.fireProjectile(this.projectileClass, target, this.host.getDistance(target), this.angle, this.offset, this.velocity, this.scale, this.inaccuracy);
+			this.host.fireProjectile(this.projectileClass, target, this.host.distanceTo(target), this.angle, this.offset, this.velocity, this.scale, this.inaccuracy);
 		}
 	}
 }

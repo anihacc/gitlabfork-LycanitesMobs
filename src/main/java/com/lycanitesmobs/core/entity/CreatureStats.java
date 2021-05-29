@@ -292,7 +292,7 @@ public class CreatureStats {
 	 * @return The stat multiplier.
 	 */
 	protected double getDifficultyMultiplier(String stat) {
-		Difficulty difficulty = this.entity.getEntityWorld().getDifficulty();
+		Difficulty difficulty = this.entity.getCommandSenderWorld().getDifficulty();
 		String difficultyName = "Easy";
 		if(difficulty.getId() >= 3)
 			difficultyName = "Hard";

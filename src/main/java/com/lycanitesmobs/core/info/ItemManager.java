@@ -116,14 +116,14 @@ public class ItemManager extends JSONLoader {
 	/** Called during early start up, loads all non-json items. **/
 	public void loadItems() {
 		ModInfo modInfo = LycanitesMobs.modInfo;
-		Item.Properties itemProperties = new Item.Properties().group(this.itemsGroup);
+		Item.Properties itemProperties = new Item.Properties().tab(this.itemsGroup);
 
-		ObjectManager.addItem("soulgazer", new ItemSoulgazer(new Item.Properties().maxStackSize(1).group(this.itemsGroup)));
+		ObjectManager.addItem("soulgazer", new ItemSoulgazer(new Item.Properties().stacksTo(1).tab(this.itemsGroup)));
 		ObjectManager.addItem("mobtoken", new ItemMobToken(new Item.Properties(), modInfo));
 		ObjectManager.addItem("soulstone", new ItemSoulstone(itemProperties, null));
 
 		// Equipment Pieces:
-		Item.Properties equipmentProperties = new Item.Properties().maxStackSize(1).setNoRepair().setISTER(() -> com.lycanitesmobs.client.renderer.EquipmentRenderer::new);
+		Item.Properties equipmentProperties = new Item.Properties().stacksTo(1).setNoRepair().setISTER(() -> com.lycanitesmobs.client.renderer.EquipmentRenderer::new);
 		ObjectManager.addItem("equipment", new ItemEquipment(equipmentProperties));
 
 		// Keys:
@@ -133,11 +133,11 @@ public class ItemManager extends JSONLoader {
 
 
 		// Utilities:
-		ObjectManager.addBlock("summoningpedestal", new BlockSummoningPedestal(Block.Properties.create(Material.IRON).hardnessAndResistance(5, 10).sound(SoundType.METAL), modInfo));
-		ObjectManager.addBlock("equipmentforge_lesser", new BlockEquipmentForge(Block.Properties.create(Material.WOOD).hardnessAndResistance(5, 10).sound(SoundType.WOOD), modInfo, 1));
-		ObjectManager.addBlock("equipmentforge_greater", new BlockEquipmentForge(Block.Properties.create(Material.ROCK).hardnessAndResistance(5, 20).sound(SoundType.STONE), modInfo, 2));
-		ObjectManager.addBlock("equipmentforge_master", new BlockEquipmentForge(Block.Properties.create(Material.IRON).hardnessAndResistance(5, 1000).sound(SoundType.METAL), modInfo, 3));
-		ObjectManager.addBlock("equipment_infuser", new EquipmentInfuserBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(5, 1000).sound(SoundType.METAL), modInfo));
+		ObjectManager.addBlock("summoningpedestal", new BlockSummoningPedestal(Block.Properties.of(Material.METAL).strength(5, 10).sound(SoundType.METAL), modInfo));
+		ObjectManager.addBlock("equipmentforge_lesser", new BlockEquipmentForge(Block.Properties.of(Material.WOOD).strength(5, 10).sound(SoundType.WOOD), modInfo, 1));
+		ObjectManager.addBlock("equipmentforge_greater", new BlockEquipmentForge(Block.Properties.of(Material.STONE).strength(5, 20).sound(SoundType.STONE), modInfo, 2));
+		ObjectManager.addBlock("equipmentforge_master", new BlockEquipmentForge(Block.Properties.of(Material.METAL).strength(5, 1000).sound(SoundType.METAL), modInfo, 3));
+		ObjectManager.addBlock("equipment_infuser", new EquipmentInfuserBlock(Block.Properties.of(Material.METAL).strength(5, 1000).sound(SoundType.METAL), modInfo));
 
 
 		// Buff Items:
@@ -158,7 +158,7 @@ public class ItemManager extends JSONLoader {
 
 
 		// Summoning Staves:
-		Item.Properties summoningStaffProperties = new Item.Properties().group(this.itemsGroup).maxStackSize(1).maxDamage(500);
+		Item.Properties summoningStaffProperties = new Item.Properties().tab(this.itemsGroup).stacksTo(1).durability(500);
 		ObjectManager.addItem("summoningstaff", new ItemStaffSummoning(summoningStaffProperties, "summoningstaff", "summoningstaff"));
 		ObjectManager.addItem("stablesummoningstaff", new ItemStaffStable(summoningStaffProperties, "stablesummoningstaff", "staffstable"));
 		ObjectManager.addItem("bloodsummoningstaff", new ItemStaffBlood(summoningStaffProperties, "bloodsummoningstaff", "staffblood"));
@@ -172,15 +172,15 @@ public class ItemManager extends JSONLoader {
 		BlockMaker.addStoneBlocks(modInfo, "shadow");
 		BlockMaker.addStoneBlocks(modInfo, "demon");
 		BlockMaker.addStoneBlocks(modInfo, "aberrant");
-		ObjectManager.addBlock("soulcubedemonic", new BlockBase(Block.Properties.create(Material.ROCK).sound(SoundType.STONE).hardnessAndResistance(2F, 1200.0F), modInfo, "soulcubedemonic"));
-		ObjectManager.addBlock("soulcubeundead", new BlockBase(Block.Properties.create(Material.ROCK).sound(SoundType.STONE).hardnessAndResistance(2F, 1200.0F), modInfo, "soulcubeundead"));
-		ObjectManager.addBlock("soulcubeaberrant", new BlockBase(Block.Properties.create(Material.ROCK).sound(SoundType.STONE).hardnessAndResistance(2F, 1200.0F), modInfo, "soulcubeaberrant"));
-		ObjectManager.addBlock("propolis", new BlockVeswax(Block.Properties.create(Material.CLAY).sound(SoundType.WET_GRASS).hardnessAndResistance(0.6F).tickRandomly(), "propolis"));
-		ObjectManager.addBlock("veswax", new BlockVeswax(Block.Properties.create(Material.WOOD).sound(SoundType.WOOD).hardnessAndResistance(0.6F).tickRandomly(), "veswax"));
+		ObjectManager.addBlock("soulcubedemonic", new BlockBase(Block.Properties.of(Material.STONE).sound(SoundType.STONE).strength(2F, 1200.0F), modInfo, "soulcubedemonic"));
+		ObjectManager.addBlock("soulcubeundead", new BlockBase(Block.Properties.of(Material.STONE).sound(SoundType.STONE).strength(2F, 1200.0F), modInfo, "soulcubeundead"));
+		ObjectManager.addBlock("soulcubeaberrant", new BlockBase(Block.Properties.of(Material.STONE).sound(SoundType.STONE).strength(2F, 1200.0F), modInfo, "soulcubeaberrant"));
+		ObjectManager.addBlock("propolis", new BlockVeswax(Block.Properties.of(Material.CLAY).sound(SoundType.WET_GRASS).strength(0.6F).randomTicks(), "propolis"));
+		ObjectManager.addBlock("veswax", new BlockVeswax(Block.Properties.of(Material.WOOD).sound(SoundType.WOOD).strength(0.6F).randomTicks(), "veswax"));
 
 
 		// Effect Blocks:
-		Block.Properties fireProperties = Block.Properties.create(Material.FIRE).tickRandomly().doesNotBlockMovement().variableOpacity().sound(SoundType.CLOTH).notSolid();
+		Block.Properties fireProperties = Block.Properties.of(Material.FIRE).randomTicks().noCollission().dynamicShape().sound(SoundType.WOOL).noOcclusion();
 		ObjectManager.addSound("frostfire", modInfo, "block.frostfire");
 		ObjectManager.addBlock("frostfire", new BlockFrostfire(fireProperties));
 		ObjectManager.addSound("icefire", modInfo, "block.icefire");
@@ -194,7 +194,7 @@ public class ItemManager extends JSONLoader {
 		ObjectManager.addSound("shadowfire", modInfo, "block.shadowfire");
 		ObjectManager.addBlock("shadowfire", new BlockShadowfire(fireProperties));
 
-		Block.Properties cloudProperties = Block.Properties.create(Material.MISCELLANEOUS).tickRandomly().doesNotBlockMovement().variableOpacity().sound(SoundType.CLOTH).notSolid();
+		Block.Properties cloudProperties = Block.Properties.of(Material.DECORATION).randomTicks().noCollission().dynamicShape().sound(SoundType.WOOL).noOcclusion();
 		ObjectManager.addSound("frostcloud", modInfo, "block.frostcloud");
 		ObjectManager.addBlock("frostcloud", new BlockFrostCloud(cloudProperties));
 		ObjectManager.addSound("poisoncloud", modInfo, "block.poisoncloud");
@@ -202,7 +202,7 @@ public class ItemManager extends JSONLoader {
 		ObjectManager.addSound("poopcloud", modInfo, "block.poopcloud");
 		ObjectManager.addBlock("poopcloud", new BlockPoopCloud(cloudProperties));
 
-		Block.Properties webProperties = Block.Properties.create(Material.WEB).tickRandomly().doesNotBlockMovement().variableOpacity().sound(SoundType.CLOTH).notSolid();
+		Block.Properties webProperties = Block.Properties.of(Material.WEB).randomTicks().noCollission().dynamicShape().sound(SoundType.WOOL).noOcclusion();
 		ObjectManager.addBlock("quickweb", new BlockQuickWeb(webProperties));
 		ObjectManager.addBlock("frostweb", new BlockFrostweb(webProperties));
 
@@ -211,9 +211,9 @@ public class ItemManager extends JSONLoader {
 		if (true) {
 			return; // TODO Fluids idsabled for now.
 		}
-		Block.Properties waterBlockProperties = Block.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100).noDrops();
-		Block.Properties waterLightBlockProperties = Block.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100).noDrops().setLightLevel((BlockState blockState) -> { return 10; });
-		Block.Properties lavaBlockProperties = Block.Properties.create(Material.LAVA).doesNotBlockMovement().hardnessAndResistance(100).noDrops().setLightLevel((BlockState blockState) -> { return 15; });
+		Block.Properties waterBlockProperties = Block.Properties.of(Material.WATER).noCollission().strength(100).noDrops();
+		Block.Properties waterLightBlockProperties = Block.Properties.of(Material.WATER).noCollission().strength(100).noDrops().lightLevel((BlockState blockState) -> { return 10; });
+		Block.Properties lavaBlockProperties = Block.Properties.of(Material.LAVA).noCollission().strength(100).noDrops().lightLevel((BlockState blockState) -> { return 15; });
 
 		this.addFluid("ooze", 0x003A9F, 3000, 3000, 0, 10, false);
 		ObjectManager.addBlock("ooze", new BlockFluidOoze(() -> ObjectManager.getFluid("ooze").get(), waterLightBlockProperties, "ooze"));
@@ -259,7 +259,7 @@ public class ItemManager extends JSONLoader {
 
 		ObjectManager.addSound(fluidName, LycanitesMobs.modInfo, "block." + fluidName);
 
-		Item.Properties bucketProperties = new Item.Properties().group(this.itemsGroup).containerItem(Items.BUCKET).maxStackSize(1);
+		Item.Properties bucketProperties = new Item.Properties().tab(this.itemsGroup).craftRemainder(Items.BUCKET).stacksTo(1);
 		ObjectManager.addItem("bucket" + fluidName, new BucketItem(flowingFluidSupplier, bucketProperties).setRegistryName(LycanitesMobs.MODID, "bucket" + fluidName));
 	}
 }

@@ -41,41 +41,41 @@ public class BaseProjectileDispenseBehaviour extends ProjectileDispenseBehavior 
 	//                      Dispense
 	// ==================================================
 	@Override
-    public ItemStack dispenseStack(IBlockSource blockSource, ItemStack stack) {
-        World world = blockSource.getWorld();
+    public ItemStack execute(IBlockSource blockSource, ItemStack stack) {
+        World world = blockSource.getLevel();
         IPosition position = DispenserBlock.getDispensePosition(blockSource);
-        Direction facing = blockSource.getBlockState().get(DispenserBlock.FACING);
+        Direction facing = blockSource.getBlockState().getValue(DispenserBlock.FACING);
 
-		ProjectileEntity projectile = this.getProjectileEntity(world, position, stack);
+		ProjectileEntity projectile = this.getProjectile(world, position, stack);
         if(projectile == null)
         	return stack;
         
-        projectile.shoot((double)facing.getXOffset(), (double)facing.getYOffset(), (double)facing.getZOffset(), this.getProjectileVelocity(), this.getProjectileInaccuracy());
-        world.addEntity(projectile);
+        projectile.shoot((double)facing.getStepX(), (double)facing.getStepY(), (double)facing.getStepZ(), this.getPower(), this.getUncertainty());
+        world.addFreshEntity(projectile);
         stack.split(1);
         
         return stack;
     }
     
 	@Override
-    protected ProjectileEntity getProjectileEntity(World world, IPosition pos, ItemStack stack) {
+    protected ProjectileEntity getProjectile(World world, IPosition pos, ItemStack stack) {
 		if(this.projectileInfo != null) {
-			return this.projectileInfo.createProjectile(world, pos.getX(), pos.getY(), pos.getZ());
+			return this.projectileInfo.createProjectile(world, pos.x(), pos.y(), pos.z());
 		}
 		if(this.oldProjectileClass != null) {
-			return ProjectileManager.getInstance().createOldProjectile(this.oldProjectileClass, world, pos.getX(), pos.getY(), pos.getZ());
+			return ProjectileManager.getInstance().createOldProjectile(this.oldProjectileClass, world, pos.x(), pos.y(), pos.z());
 		}
 		return null;
 	}
 
 	@Override
-	protected float getProjectileInaccuracy()
+	protected float getUncertainty()
 	{
 		return 0F;
 	}
 
 	@Override
-	protected float getProjectileVelocity()
+	protected float getPower()
 	{
 		if(this.projectileInfo != null) {
 			return (float)this.projectileInfo.velocity;
@@ -88,11 +88,11 @@ public class BaseProjectileDispenseBehaviour extends ProjectileDispenseBehavior 
 	//                        Sound
 	// ==================================================
 	@Override
-    protected void playDispenseSound(IBlockSource blockSource) {
+    protected void playSound(IBlockSource blockSource) {
         SoundEvent soundEvent = this.getDispenseSound();
         if(soundEvent == null || blockSource == null)
             return;
-        blockSource.getWorld().playSound(null, blockSource.getBlockPos(), soundEvent, SoundCategory.AMBIENT, 1.0F, 1.0F / (new Random().nextFloat() * 0.4F + 0.8F));
+        blockSource.getLevel().playSound(null, blockSource.getPos(), soundEvent, SoundCategory.AMBIENT, 1.0F, 1.0F / (new Random().nextFloat() * 0.4F + 0.8F));
     }
 
     protected SoundEvent getDispenseSound() {

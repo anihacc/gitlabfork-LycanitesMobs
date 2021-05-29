@@ -35,15 +35,15 @@ public class ItemSoulkey extends BaseItem {
 	//                       Use
 	// ==================================================
     @Override
-    public ActionResultType onItemUse(ItemUseContext context) {
-        World world = context.getWorld();
-        BlockPos pos = context.getPos();
+    public ActionResultType useOn(ItemUseContext context) {
+        World world = context.getLevel();
+        BlockPos pos = context.getClickedPos();
         PlayerEntity player = context.getPlayer();
-        ItemStack itemStack = context.getItem();
+        ItemStack itemStack = context.getItemInHand();
 
-        if(!AltarInfo.checkAltarsEnabled() && !player.getEntityWorld().isRemote) {
+        if(!AltarInfo.checkAltarsEnabled() && !player.getCommandSenderWorld().isClientSide) {
             ITextComponent message = new TranslationTextComponent("message.soulkey.disabled");
-            player.sendMessage(message, Util.DUMMY_UUID);
+            player.sendMessage(message, Util.NIL_UUID);
             return ActionResultType.FAIL;
         }
 
@@ -58,7 +58,7 @@ public class ItemSoulkey extends BaseItem {
         }
         if(possibleAltars.isEmpty()) {
             ITextComponent message = new TranslationTextComponent("message.soulkey.none");
-            player.sendMessage(message, Util.DUMMY_UUID);
+            player.sendMessage(message, Util.NIL_UUID);
             return ActionResultType.FAIL;
         }
 
@@ -67,24 +67,24 @@ public class ItemSoulkey extends BaseItem {
             if(altarInfo.fullCheck(player, world, pos)) {
 
                 // Valid Altar:
-                if(!player.getEntityWorld().isRemote) {
+                if(!player.getCommandSenderWorld().isClientSide) {
                     if(!altarInfo.activate(player, world, pos, this.variant)) {
                         ITextComponent message = new TranslationTextComponent("message.soulkey.badlocation");
-                        player.sendMessage(message, Util.DUMMY_UUID);
+                        player.sendMessage(message, Util.NIL_UUID);
                         return ActionResultType.FAIL;
                     }
-                    if (!player.abilities.isCreativeMode)
+                    if (!player.abilities.instabuild)
                         itemStack.setCount(Math.max(0, itemStack.getCount() - 1));
                     if (itemStack.getCount() <= 0)
-                        player.inventory.setInventorySlotContents(player.inventory.currentItem, ItemStack.EMPTY);
+                        player.inventory.setItem(player.inventory.selected, ItemStack.EMPTY);
                     ITextComponent message = new TranslationTextComponent("message.soulkey.active");
-                    player.sendMessage(message, Util.DUMMY_UUID);
+                    player.sendMessage(message, Util.NIL_UUID);
                 }
                 return ActionResultType.SUCCESS;
             }
         }
         ITextComponent message = new TranslationTextComponent("message.soulkey.invalid");
-        player.sendMessage(message, Util.DUMMY_UUID);
+        player.sendMessage(message, Util.NIL_UUID);
 
         return ActionResultType.FAIL;
     }

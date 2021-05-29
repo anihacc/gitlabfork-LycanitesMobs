@@ -174,7 +174,7 @@ public class MobEvent {
 
 		BlockPos position = null;
 		if(player != null) {
-			position = player.getPosition();
+			position = player.blockPosition();
 		}
 
 		// Global Conditions:
@@ -271,7 +271,7 @@ public class MobEvent {
 			entityCreature.onFirstSpawn();
 			int levelBoost = this.levelBoostMin;
 			if(this.levelBoostMax > this.levelBoostMin) {
-				levelBoost += entityCreature.getRNG().nextInt(this.levelBoostMax - this.levelBoostMin + 1);
+				levelBoost += entityCreature.getRandom().nextInt(this.levelBoostMax - this.levelBoostMin + 1);
 			}
 			entityCreature.addLevel(levelBoost);
 

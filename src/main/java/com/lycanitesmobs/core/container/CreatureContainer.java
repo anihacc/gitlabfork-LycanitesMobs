@@ -20,7 +20,7 @@ public class CreatureContainer extends BaseContainer {
 	 * @param extraData A packet sent from the server to create the Container from.
 	 */
 	public CreatureContainer(int windowId, PlayerInventory playerInventory, PacketBuffer extraData) {
-		this(windowId, playerInventory, (BaseCreatureEntity)playerInventory.player.getEntityWorld().getEntityByID(extraData.readInt()));
+		this(windowId, playerInventory, (BaseCreatureEntity)playerInventory.player.getCommandSenderWorld().getEntity(extraData.readInt()));
 	}
 
 	/**
@@ -37,15 +37,15 @@ public class CreatureContainer extends BaseContainer {
 		this.addPlayerSlots(playerInventory, 0, 0);
 
 		// Creature Equipment:
-		this.specialStart = this.inventorySlots.size();
+		this.specialStart = this.slots.size();
 		this.drawCreatureEquipment(creature, 8, 18);
-		this.specialFinish = this.inventorySlots.size() - 1;
+		this.specialFinish = this.slots.size() - 1;
 
 		// Creature Inventory
-		this.inventoryStart = this.inventorySlots.size();
+		this.inventoryStart = this.slots.size();
 		if(creature.inventory.getItemSlotsSize() > 0)
 			this.addSlotsByColumn(creature.inventory, 8 + (18 * 4), 18, 5, 0, creature.inventory.getActiveItemSlotsSize() - 1);
-		this.inventoryFinish = this.inventorySlots.size() - 1;
+		this.inventoryFinish = this.slots.size() - 1;
 	}
 
 
@@ -89,7 +89,7 @@ public class CreatureContainer extends BaseContainer {
   	//                  Container Closed
   	// ==================================================
 	@Override
-	public void onContainerClosed(PlayerEntity player) {
-		super.onContainerClosed(player);
+	public void removed(PlayerEntity player) {
+		super.removed(player);
 	}
 }

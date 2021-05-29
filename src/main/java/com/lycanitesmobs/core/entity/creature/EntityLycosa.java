@@ -37,28 +37,28 @@ public class EntityLycosa extends TameableCreatureEntity implements IMob {
     // ==================================================
 	// ========== Living Update ==========
 	@Override
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
         
         // Random Leaping:
-        if(this.onGround && !this.getEntityWorld().isRemote) {
+        if(this.onGround && !this.getCommandSenderWorld().isClientSide) {
         	if(this.hasAttackTarget()) {
-        		if(this.rand.nextInt(10) == 0)
-        			this.leap(6.0F, 0.6D, this.getAttackTarget());
+        		if(this.random.nextInt(10) == 0)
+        			this.leap(6.0F, 0.6D, this.getTarget());
         	}
         	else {
-        		if(this.rand.nextInt(50) == 0 && this.isMoving())
+        		if(this.random.nextInt(50) == 0 && this.isMoving())
         			this.leap(1.0D, 1.0D);
         	}
         }
         
         // Trail:
-        if(!this.getEntityWorld().isRemote && (this.ticksExisted % 10 == 0 || this.isMoving() && this.ticksExisted % 5 == 0)) {
+        if(!this.getCommandSenderWorld().isClientSide && (this.tickCount % 10 == 0 || this.isMoving() && this.tickCount % 5 == 0)) {
             int trailHeight = 1;
             for(int y = 0; y < trailHeight; y++) {
-                Block block = this.getEntityWorld().getBlockState(this.getPosition().add(0, y, 0)).getBlock();
+                Block block = this.getCommandSenderWorld().getBlockState(this.blockPosition().offset(0, y, 0)).getBlock();
                 if(block == Blocks.AIR || block == Blocks.SNOW || block == ObjectManager.getBlock("quickweb"))
-                    this.getEntityWorld().setBlockState(this.getPosition().add(0, y, 0), ObjectManager.getBlock("quickweb").getDefaultState());
+                    this.getCommandSenderWorld().setBlockAndUpdate(this.blockPosition().offset(0, y, 0), ObjectManager.getBlock("quickweb").defaultBlockState());
             }
         }
     }

@@ -55,10 +55,10 @@ public class EntityDevilGatling extends BaseProjectileEntity {
     public void tick() {
     	super.tick();
 
-    	if(this.getPositionVec().getY() > this.getEntityWorld().getHeight() + 20)
+    	if(this.position().y() > this.getCommandSenderWorld().getMaxBuildHeight() + 20)
     		this.remove();
     	
-    	if(this.ticksExisted >= this.expireTime * 20)
+    	if(this.tickCount >= this.expireTime * 20)
     		this.remove();
     }
 	
@@ -68,7 +68,7 @@ public class EntityDevilGatling extends BaseProjectileEntity {
  	// ==================================================
     // ========== Gravity ==========
     @Override
-    protected float getGravityVelocity() {
+    protected float getGravity() {
         return 0F;
     }
     
@@ -82,11 +82,11 @@ public class EntityDevilGatling extends BaseProjectileEntity {
     	super.onDamage(target, damage, attackSuccess);
 
         // Remove Buffs:
-        if(this.rand.nextBoolean()) {
+        if(this.random.nextBoolean()) {
             List<Effect> goodEffects = new ArrayList<>();
-            for (Object potionEffectObj : target.getActivePotionEffects()) {
+            for (Object potionEffectObj : target.getActiveEffects()) {
                 if (potionEffectObj instanceof EffectInstance) {
-                    Effect effect = ((EffectInstance) potionEffectObj).getPotion();
+                    Effect effect = ((EffectInstance) potionEffectObj).getEffect();
                     if (effect != null) {
                         if (ObjectLists.inEffectList("buffs", effect))
                             goodEffects.add(effect);
@@ -95,14 +95,14 @@ public class EntityDevilGatling extends BaseProjectileEntity {
             }
             if (!goodEffects.isEmpty()) {
                 if (goodEffects.size() > 1)
-                    target.removePotionEffect(goodEffects.get(this.rand.nextInt(goodEffects.size())));
+                    target.removeEffect(goodEffects.get(this.random.nextInt(goodEffects.size())));
                 else
-                    target.removePotionEffect(goodEffects.get(0));
+                    target.removeEffect(goodEffects.get(0));
             }
         }
 
 		if(ObjectManager.getEffect("decay") != null) {
-			target.addPotionEffect(new EffectInstance(ObjectManager.getEffect("decay"), this.getEffectDuration(60), 0));
+			target.addEffect(new EffectInstance(ObjectManager.getEffect("decay"), this.getEffectDuration(60), 0));
 		}
     }
     
@@ -110,7 +110,7 @@ public class EntityDevilGatling extends BaseProjectileEntity {
     @Override
     public void onImpactVisuals() {
     	for(int i = 0; i < 8; ++i)
-    		this.getEntityWorld().addParticle(ParticleTypes.EXPLOSION, this.getPositionVec().getX(), this.getPositionVec().getY(), this.getPositionVec().getZ(), 0.0D, 0.0D, 0.0D);
+    		this.getCommandSenderWorld().addParticle(ParticleTypes.EXPLOSION, this.position().x(), this.position().y(), this.position().z(), 0.0D, 0.0D, 0.0D);
     }
     
     

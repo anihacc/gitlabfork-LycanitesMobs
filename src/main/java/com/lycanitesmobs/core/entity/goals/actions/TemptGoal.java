@@ -15,6 +15,8 @@ import net.minecraft.util.math.BlockPos;
 
 import java.util.EnumSet;
 
+import net.minecraft.entity.ai.goal.Goal.Flag;
+
 public class TemptGoal extends Goal {
     // Targets:
     private BaseCreatureEntity host;
@@ -47,7 +49,7 @@ public class TemptGoal extends Goal {
  	// ==================================================
     public TemptGoal(BaseCreatureEntity setHost) {
         this.host = setHost;
-        this.setMutexFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
+        this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
     }
     
     
@@ -104,7 +106,7 @@ public class TemptGoal extends Goal {
   	//                  Should Execute
   	// ==================================================
 	@Override
-    public boolean shouldExecute() {
+    public boolean canUse() {
         if(this.retemptTime > 0) {
             --this.retemptTime;
             return false;
@@ -120,20 +122,20 @@ public class TemptGoal extends Goal {
 
         if(this.player == null) {
             // Find New Player:
-            this.player = this.host.getEntityWorld().getClosestPlayer(this.host.getPositionVec().getX(), this.host.getPositionVec().getY(), this.host.getPositionVec().getZ(), this.temptDistanceMax, entity -> true);
+            this.player = this.host.getCommandSenderWorld().getNearestPlayer(this.host.position().x(), this.host.position().y(), this.host.position().z(), this.temptDistanceMax, entity -> true);
             if(this.player == null) {
                 return false;
             }
         }
         else {
             // Check Current Player:
-            if(this.host.getDistanceSq(this.player) > this.temptDistanceMax * this.temptDistanceMax) {
+            if(this.host.distanceToSqr(this.player) > this.temptDistanceMax * this.temptDistanceMax) {
                 this.player = null;
                 return false;
             }
         }
 
-        if(!this.alwaysTempted && !this.isTemptStack(this.player.getHeldItemMainhand()) && !this.isTemptStack(this.player.getHeldItemOffhand())) {
+        if(!this.alwaysTempted && !this.isTemptStack(this.player.getMainHandItem()) && !this.isTemptStack(this.player.getOffhandItem())) {
             this.player = null;
             return false;
         }
@@ -182,24 +184,24 @@ public class TemptGoal extends Goal {
   	//                 Continue Executing
   	// ==================================================
 	@Override
-    public boolean shouldContinueExecuting() {
+    public boolean canContinueToUse() {
         if(this.scaredByPlayerMovement) {
-            if(this.host.getDistance(this.player) < 36.0D) {
-                if(this.player.getDistanceSq(this.targetX, this.targetY, this.targetZ) > 0.010000000000000002D)
+            if(this.host.distanceTo(this.player) < 36.0D) {
+                if(this.player.distanceToSqr(this.targetX, this.targetY, this.targetZ) > 0.010000000000000002D)
                     return false;
-                if(Math.abs((double)this.player.rotationPitch - this.targetPitch) > 5.0D || Math.abs((double)this.player.rotationYaw - this.targetYaw) > 5.0D)
+                if(Math.abs((double)this.player.xRot - this.targetPitch) > 5.0D || Math.abs((double)this.player.yRot - this.targetYaw) > 5.0D)
                     return false;
             }
             else {
-                this.targetX = this.player.getPositionVec().getX();
-                this.targetY = this.player.getPositionVec().getY();
-                this.targetZ = this.player.getPositionVec().getZ();
+                this.targetX = this.player.position().x();
+                this.targetY = this.player.position().y();
+                this.targetZ = this.player.position().z();
             }
 
-            this.targetPitch = (double)this.player.rotationPitch;
-            this.targetYaw = (double)this.player.rotationYaw;
+            this.targetPitch = (double)this.player.xRot;
+            this.targetYaw = (double)this.player.yRot;
         }
-        return this.shouldExecute();
+        return this.canUse();
     }
     
     
@@ -207,18 +209,18 @@ public class TemptGoal extends Goal {
   	//                      Start
   	// ==================================================
 	@Override
-    public void startExecuting() {
-        this.targetX = this.player.getPositionVec().getX();
-        this.targetY = this.player.getPositionVec().getY();
-        this.targetZ = this.player.getPositionVec().getZ();
+    public void start() {
+        this.targetX = this.player.position().x();
+        this.targetY = this.player.position().y();
+        this.targetZ = this.player.position().z();
         this.isRunning = true;
-        if (this.host.getNavigator() instanceof GroundPathNavigator || this.host.getNavigator() instanceof CreaturePathNavigator) {
-            PathNavigator navigateGround = this.host.getNavigator();
-            this.canSwim = !navigateGround.getCanSwim();
-            navigateGround.setCanSwim(true);
+        if (this.host.getNavigation() instanceof GroundPathNavigator || this.host.getNavigation() instanceof CreaturePathNavigator) {
+            PathNavigator navigateGround = this.host.getNavigation();
+            this.canSwim = !navigateGround.canFloat();
+            navigateGround.setCanFloat(true);
         }
         if(this.stopAttack) {
-            this.host.setAttackTarget(null);
+            this.host.setTarget(null);
         }
     }
     
@@ -227,20 +229,20 @@ public class TemptGoal extends Goal {
   	//                      Reset
   	// ==================================================
 	@Override
-    public void resetTask() {
+    public void stop() {
         this.player = null;
-        this.host.getNavigator().clearPath();
+        this.host.getNavigation().stop();
         this.retemptTime = this.retemptTimeMax;
         if(this.host instanceof AgeableCreatureEntity) {
             AgeableCreatureEntity ageable = (AgeableCreatureEntity)this.host;
-            if(!ageable.isChild() && !ageable.canBreed()) {
+            if(!ageable.isBaby() && !ageable.canBreed()) {
                 Math.max(this.retemptTime *= 10, 100);
             }
         }
         this.isRunning = false;
-        if (this.host.getNavigator() instanceof GroundPathNavigator || this.host.getNavigator() instanceof CreaturePathNavigator) {
-            PathNavigator navigateGround = this.host.getNavigator();
-            navigateGround.setCanSwim(this.canSwim);
+        if (this.host.getNavigation() instanceof GroundPathNavigator || this.host.getNavigation() instanceof CreaturePathNavigator) {
+            PathNavigator navigateGround = this.host.getNavigation();
+            navigateGround.setCanFloat(this.canSwim);
         }
     }
     
@@ -251,18 +253,18 @@ public class TemptGoal extends Goal {
 	@Override
     public void tick() {
         if(this.stopAttack) {
-            this.host.setAttackTarget(null);
+            this.host.setTarget(null);
         }
-        this.host.getLookController().setLookPositionWithEntity(this.player, 30.0F, (float)this.host.getVerticalFaceSpeed());
-        if(this.host.getDistanceSq(this.player) < this.temptDistanceMin * this.temptDistanceMin) {
+        this.host.getLookControl().setLookAt(this.player, 30.0F, (float)this.host.getMaxHeadXRot());
+        if(this.host.distanceToSqr(this.player) < this.temptDistanceMin * this.temptDistanceMin) {
             this.host.clearMovement();
         }
         else {
         	if(!this.host.useDirectNavigator()) {
-                this.host.getNavigator().tryMoveToEntityLiving(this.player, this.speed);
+                this.host.getNavigation().moveTo(this.player, this.speed);
             }
         	else {
-                this.host.directNavigator.setTargetPosition(new BlockPos((int) this.player.getPositionVec().getX(), (int) this.player.getPositionVec().getY(), (int) this.player.getPositionVec().getZ()), speed);
+                this.host.directNavigator.setTargetPosition(new BlockPos((int) this.player.position().x(), (int) this.player.position().y(), (int) this.player.position().z()), speed);
             }
         }
     }

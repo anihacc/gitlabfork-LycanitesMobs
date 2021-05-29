@@ -34,7 +34,7 @@ public abstract class BaseScreen extends Screen implements Button.IPressable {
 
     @Override
 	public void init(Minecraft minecraft, int width, int height) {
-		this.drawHelper = new DrawHelper(minecraft, minecraft.fontRenderer);
+		this.drawHelper = new DrawHelper(minecraft, minecraft.font);
     	this.minecraft = minecraft;
     	super.init(minecraft, width, height);
 		this.initWidgets();
@@ -116,13 +116,13 @@ public abstract class BaseScreen extends Screen implements Button.IPressable {
 	 */
 	public int getScaledX(float x) {
 		if(this.scaledResolution == null) {
-			this.scaledResolution = this.minecraft.getMainWindow();
+			this.scaledResolution = this.minecraft.getWindow();
 		}
 
 		// Aspect Ratio:
 		float targetAspect = 0.5625f; // 16:9
-		float scaledHeight = scaledResolution.getScaledHeight();
-		float scaledWidth = scaledResolution.getScaledWidth();
+		float scaledHeight = scaledResolution.getGuiScaledHeight();
+		float scaledWidth = scaledResolution.getGuiScaledWidth();
 		float currentAspect = (scaledHeight * x) / (scaledWidth * x);
 
 		// Wider Than target:
@@ -155,7 +155,7 @@ public abstract class BaseScreen extends Screen implements Button.IPressable {
 	 */
 	protected void openURI(URI uri) {
 		try {
-			Util.getOSType().openURI(uri);
+			Util.getPlatform().openUri(uri);
 		} catch (Exception e) {
 			LycanitesMobs.logWarning("", "Unable to open link: " + uri.toString());
 			e.printStackTrace();

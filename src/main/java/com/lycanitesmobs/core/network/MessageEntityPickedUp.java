@@ -18,8 +18,8 @@ public class MessageEntityPickedUp {
 	
 	public MessageEntityPickedUp() {}
 	public MessageEntityPickedUp(Entity pickedUpEntity, Entity pickedUpByEntity) {
-		this.pickedUpEntityID = pickedUpEntity.getEntityId();
-		this.pickedUpByEntityID = pickedUpByEntity != null ? pickedUpByEntity.getEntityId() : 0;
+		this.pickedUpEntityID = pickedUpEntity.getId();
+		this.pickedUpByEntityID = pickedUpByEntity != null ? pickedUpByEntity.getId() : 0;
 	}
 	
 	/**
@@ -31,9 +31,9 @@ public class MessageEntityPickedUp {
 			return;
 
 		PlayerEntity player = ClientManager.getInstance().getClientPlayer();
-		World world = player.getEntityWorld();
-		Entity pickedUpEntity = world.getEntityByID(message.pickedUpEntityID);
-		Entity pickedUpByEntity = message.pickedUpByEntityID != 0 ? world.getEntityByID(message.pickedUpByEntityID) : null;
+		World world = player.getCommandSenderWorld();
+		Entity pickedUpEntity = world.getEntity(message.pickedUpEntityID);
+		Entity pickedUpByEntity = message.pickedUpByEntityID != 0 ? world.getEntity(message.pickedUpByEntityID) : null;
 
         if(!(pickedUpEntity instanceof LivingEntity))
             return;

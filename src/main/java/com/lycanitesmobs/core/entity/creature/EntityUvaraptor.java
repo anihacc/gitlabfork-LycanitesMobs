@@ -29,7 +29,7 @@ public class EntityUvaraptor extends RideableCreatureEntity {
         this.setupMob();
         
         // Stats:
-        this.stepHeight = 1.0F;
+        this.maxUpStep = 1.0F;
     }
 
     // ========== Init AI ==========
@@ -46,17 +46,17 @@ public class EntityUvaraptor extends RideableCreatureEntity {
     // ==================================================
 	// ========== Living Update ==========
 	@Override
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
         
         // Random Leaping:
-        if(!this.isTamed() && this.onGround && !this.getEntityWorld().isRemote) {
+        if(!this.isTamed() && this.onGround && !this.getCommandSenderWorld().isClientSide) {
         	if(this.hasAttackTarget()) {
-        		if(this.rand.nextInt(10) == 0)
-        			this.leap(6.0F, 1.0D, this.getAttackTarget());
+        		if(this.random.nextInt(10) == 0)
+        			this.leap(6.0F, 1.0D, this.getTarget());
         	}
         	else {
-        		if(this.rand.nextInt(50) == 0 && this.isMoving())
+        		if(this.random.nextInt(50) == 0 && this.isMoving())
         			this.leap(1.0D, 1.0D);
     		}
         }
@@ -81,8 +81,8 @@ public class EntityUvaraptor extends RideableCreatureEntity {
     }
     
     @Override
-    public double getMountedYOffset() {
-        return (double)this.getSize(Pose.STANDING).height * 0.9D;
+    public double getPassengersRidingOffset() {
+        return (double)this.getDimensions(Pose.STANDING).height * 0.9D;
     }
     
     
@@ -90,7 +90,7 @@ public class EntityUvaraptor extends RideableCreatureEntity {
     //                   Mount Ability
     // ==================================================
     public void mountAbility(Entity rider) {
-    	if(this.getEntityWorld().isRemote)
+    	if(this.getCommandSenderWorld().isClientSide)
     		return;
     	
     	if(this.abilityToggled)

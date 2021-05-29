@@ -33,7 +33,7 @@ public class EntityFeradon extends RideableCreatureEntity {
         this.setupMob();
         
         // Stats:
-        this.stepHeight = 1.0F;
+        this.maxUpStep = 1.0F;
     }
 
     // ========== Init AI ==========
@@ -50,31 +50,31 @@ public class EntityFeradon extends RideableCreatureEntity {
     // ==================================================
 	// ========== Living Update ==========
 	@Override
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
         
         // Random Leaping:
-        if(!this.isTamed() && this.onGround && !this.getEntityWorld().isRemote) {
+        if(!this.isTamed() && this.onGround && !this.getCommandSenderWorld().isClientSide) {
         	if(this.hasAttackTarget()) {
-        		if(this.rand.nextInt(10) == 0)
-        			this.leap(6.0F, 0.5D, this.getAttackTarget());
+        		if(this.random.nextInt(10) == 0)
+        			this.leap(6.0F, 0.5D, this.getTarget());
         	}
         }
 
         // Leap Landing Paralysis:
-        if(this.leapedAbilityQueued && !this.onGround && !this.getEntityWorld().isRemote) {
+        if(this.leapedAbilityQueued && !this.onGround && !this.getCommandSenderWorld().isClientSide) {
             this.leapedAbilityQueued = false;
             this.leapedAbilityReady = true;
         }
-        if(this.leapedAbilityReady && this.onGround && !this.getEntityWorld().isRemote) {
+        if(this.leapedAbilityReady && this.onGround && !this.getCommandSenderWorld().isClientSide) {
             this.leapedAbilityReady = false;
             double distance = 4.0D;
-            List<LivingEntity> possibleTargets = this.getEntityWorld().getEntitiesWithinAABB(LivingEntity.class, this.getBoundingBox().grow(distance, distance, distance), possibleTarget -> {
+            List<LivingEntity> possibleTargets = this.getCommandSenderWorld().getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(distance, distance, distance), possibleTarget -> {
 				if (!possibleTarget.isAlive()
 						|| possibleTarget == EntityFeradon.this
-						|| EntityFeradon.this.isRidingOrBeingRiddenBy(possibleTarget)
-						|| EntityFeradon.this.isOnSameTeam(possibleTarget)
-						|| !EntityFeradon.this.canAttack(possibleTarget.getType())
+						|| EntityFeradon.this.hasIndirectPassenger(possibleTarget)
+						|| EntityFeradon.this.isAlliedTo(possibleTarget)
+						|| !EntityFeradon.this.canAttackType(possibleTarget.getType())
 						|| !EntityFeradon.this.canAttack(possibleTarget))
 					return false;
 
@@ -89,7 +89,7 @@ public class EntityFeradon extends RideableCreatureEntity {
                         }
                     }
                     if(doDamage) {
-                        possibleTarget.addPotionEffect(new EffectInstance(Effects.WEAKNESS, 10 * 20, 0));
+                        possibleTarget.addEffect(new EffectInstance(Effects.WEAKNESS, 10 * 20, 0));
                     }
                 }
             }
@@ -99,10 +99,10 @@ public class EntityFeradon extends RideableCreatureEntity {
 
     @Override
     public void riderEffects(LivingEntity rider) {
-        if(rider.isPotionActive(Effects.WEAKNESS))
-            rider.removePotionEffect(Effects.WEAKNESS);
-        if(rider.isPotionActive(Effects.MINING_FATIGUE))
-            rider.removePotionEffect(Effects.MINING_FATIGUE);
+        if(rider.hasEffect(Effects.WEAKNESS))
+            rider.removeEffect(Effects.WEAKNESS);
+        if(rider.hasEffect(Effects.DIG_SLOWDOWN))
+            rider.removeEffect(Effects.DIG_SLOWDOWN);
     }
 
 	
@@ -119,15 +119,15 @@ public class EntityFeradon extends RideableCreatureEntity {
 
     // ========== Mounted Offset ==========
     @Override
-    public double getMountedYOffset() {
-        return (double)this.getSize(Pose.STANDING).height * 0.9D;
+    public double getPassengersRidingOffset() {
+        return (double)this.getDimensions(Pose.STANDING).height * 0.9D;
     }
 
     // ========== Leap ==========
     @Override
     public void leap(double distance, double leapHeight) {
         super.leap(distance, leapHeight);
-        if(!this.getEntityWorld().isRemote)
+        if(!this.getCommandSenderWorld().isClientSide)
             this.leapedAbilityQueued = true;
     }
 
@@ -135,7 +135,7 @@ public class EntityFeradon extends RideableCreatureEntity {
     @Override
     public void leap(float range, double leapHeight, Entity target) {
         super.leap(range, leapHeight, target);
-        if(!this.getEntityWorld().isRemote)
+        if(!this.getCommandSenderWorld().isClientSide)
             this.leapedAbilityQueued = true;
     }
 
@@ -145,7 +145,7 @@ public class EntityFeradon extends RideableCreatureEntity {
     // ==================================================
     @Override
     public void mountAbility(Entity rider) {
-        if(this.getEntityWorld().isRemote)
+        if(this.getCommandSenderWorld().isClientSide)
             return;
 
         if(!this.onGround)

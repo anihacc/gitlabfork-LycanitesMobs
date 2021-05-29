@@ -18,8 +18,8 @@ public class PaddleGoal extends Goal {
    	// ==================================================
     public PaddleGoal(BaseCreatureEntity setEntity) {
         this.host = setEntity;
-        if(setEntity.getNavigator() instanceof GroundPathNavigator || setEntity.getNavigator() instanceof CreaturePathNavigator)
-            setEntity.getNavigator().setCanSwim(true);
+        if(setEntity.getNavigation() instanceof GroundPathNavigator || setEntity.getNavigation() instanceof CreaturePathNavigator)
+            setEntity.getNavigation().setCanFloat(true);
 		this.sink = this.host.canBreatheUnderwater() || (this.host.canBreatheUnderlava() && this.host.isLavaCreature);
     }
     
@@ -37,10 +37,10 @@ public class PaddleGoal extends Goal {
    	//                  Should Execute
    	// ==================================================
 	@Override
-    public boolean shouldExecute() {
+    public boolean canUse() {
     	if(this.host.isStrongSwimmer())
     		return false;
-        if(this.host.getControllingPassenger() != null && this.host.getControllingPassenger() instanceof PlayerEntity && this.host.canBeSteered())
+        if(this.host.getControllingPassenger() != null && this.host.getControllingPassenger() instanceof PlayerEntity && this.host.canBeControlledByRider())
             return false;
         return this.host.isInWater() || this.host.isInLava();
     }
@@ -52,16 +52,16 @@ public class PaddleGoal extends Goal {
 	@Override
     public void tick() {
     	if(this.sink) {
-	    	double targetY = this.host.getPositionVec().getY();
+	    	double targetY = this.host.position().y();
 	    	if(!this.host.useDirectNavigator()) {
-	    		if(!this.host.getNavigator().noPath()) {
-                    targetY = this.host.getNavigator().getPath().getFinalPathPoint().y;
+	    		if(!this.host.getNavigation().isDone()) {
+                    targetY = this.host.getNavigation().getPath().getEndNode().y;
                     if(this.host.hasAttackTarget())
-                        targetY = this.host.getAttackTarget().getPositionVec().getY();
+                        targetY = this.host.getTarget().position().y();
                     else if(this.host.hasParent())
-                        targetY = this.host.getParentTarget().getPositionVec().getY();
+                        targetY = this.host.getParentTarget().position().y();
                     else if(this.host.hasMaster())
-                        targetY = this.host.getMasterTarget().getPositionVec().getY();
+                        targetY = this.host.getMasterTarget().position().y();
                 }
 	    	}
 	    	else {
@@ -70,15 +70,15 @@ public class PaddleGoal extends Goal {
                 }
 	    	}
 
-			if (this.host.getPositionVec().getY() < targetY) {
-				this.host.getJumpController().setJumping();
+			if (this.host.position().y() < targetY) {
+				this.host.getJumpControl().jump();
 			}
 			else {
-				this.host.addVelocity(0, -(0.01F + this.host.getAIMoveSpeed() * 0.25F), 0);
+				this.host.push(0, -(0.01F + this.host.getSpeed() * 0.25F), 0);
 			}
     	}
-    	else if(this.host.getRNG().nextFloat() < 0.8F) {
-			this.host.getJumpController().setJumping();
+    	else if(this.host.getRandom().nextFloat() < 0.8F) {
+			this.host.getJumpControl().jump();
 		}
     }
 }

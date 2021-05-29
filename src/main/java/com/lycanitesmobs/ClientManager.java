@@ -56,10 +56,10 @@ public class ClientManager {
 	 * Registers all GUI Screens, etc used by this mod.
 	 */
 	public void registerScreens() {
-		ScreenManager.registerFactory(CreatureContainer.TYPE, CreatureInventoryScreen::new);
-		ScreenManager.registerFactory(SummoningPedestalContainer.TYPE, SummoningPedestalScreen::new);
-		ScreenManager.registerFactory(EquipmentForgeContainer.TYPE, EquipmentForgeScreen::new);
-		ScreenManager.registerFactory(EquipmentInfuserContainer.TYPE, EquipmentInfuserScreen::new);
+		ScreenManager.register(CreatureContainer.TYPE, CreatureInventoryScreen::new);
+		ScreenManager.register(SummoningPedestalContainer.TYPE, SummoningPedestalScreen::new);
+		ScreenManager.register(EquipmentForgeContainer.TYPE, EquipmentForgeScreen::new);
+		ScreenManager.register(EquipmentInfuserContainer.TYPE, EquipmentInfuserScreen::new);
 	}
 
 	/**
@@ -72,7 +72,7 @@ public class ClientManager {
 		MinecraftForge.EVENT_BUS.register(new ClientEventListener());
 		IResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
 		if(resourceManager instanceof IReloadableResourceManager) {
-			((IReloadableResourceManager)resourceManager).addReloadListener(LanguageLoader.getInstance());
+			((IReloadableResourceManager)resourceManager).registerReloadListener(LanguageLoader.getInstance());
 		}
 	}
 
@@ -99,7 +99,7 @@ public class ClientManager {
 	 */
 	public void displayGuiScreen(String screenName, PlayerEntity player) {
 		if("beastiary".equals(screenName)) {
-			Minecraft.getInstance().displayGuiScreen(new SummoningBeastiaryScreen(player));
+			Minecraft.getInstance().setScreen(new SummoningBeastiaryScreen(player));
 		}
 	}
 
@@ -108,7 +108,7 @@ public class ClientManager {
 	 * @return A sexy Font Renderer, thanks for the heads up CedKilleur!
 	 */
     public FontRenderer getFontRenderer() {
-    	return Minecraft.getInstance().fontRenderer;
+    	return Minecraft.getInstance().font;
 		/*if(this.fontRenderer == null) {
 			ResourceLocation fontResource = new ResourceLocation(LycanitesMobs.MODID, "fonts/diavlo_light.otf");
 			this.fontRenderer = new FontRenderer(Minecraft.getInstance().getTextureManager(), new Font(Minecraft.getInstance().getTextureManager(), fontResource));

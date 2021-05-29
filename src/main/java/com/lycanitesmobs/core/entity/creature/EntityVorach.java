@@ -17,7 +17,7 @@ public class EntityVorach extends TameableCreatureEntity implements IMob {
 		this.spreadFire = true;
 		this.setupMob();
 
-		this.stepHeight = 1.0F;
+		this.maxUpStep = 1.0F;
 	}
 
 	@Override

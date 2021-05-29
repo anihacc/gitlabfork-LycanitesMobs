@@ -33,7 +33,7 @@ public class EntitySkylus extends TameableCreatureEntity implements IMob {
         this.setupMob();
 
         // Stats:
-        this.stepHeight = 1.0F;
+        this.maxUpStep = 1.0F;
     }
 
     // ========== Init AI ==========
@@ -49,17 +49,17 @@ public class EntitySkylus extends TameableCreatureEntity implements IMob {
     // ==================================================
 	// ========== Living Update ==========
 	@Override
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
 
         // Entity Pickup Update:
-        if(!this.getEntityWorld().isRemote && this.getControllingPassenger() == null && this.hasPickupEntity()) {
+        if(!this.getCommandSenderWorld().isClientSide && this.getControllingPassenger() == null && this.hasPickupEntity()) {
 
             // Random Dropping:
             ExtendedEntity extendedEntity = ExtendedEntity.getForEntity(this.getPickupEntity());
             if (extendedEntity != null)
                 extendedEntity.setPickedUpByEntity(this);
-            if (this.ticksExisted % 100 == 0 && this.getRNG().nextBoolean()) {
+            if (this.tickCount % 100 == 0 && this.getRandom().nextBoolean()) {
                 this.dropPickupEntity();
             }
         }
@@ -82,13 +82,13 @@ public class EntitySkylus extends TameableCreatureEntity implements IMob {
 	public float getBlockPathWeight(int x, int y, int z) {
         int waterWeight = 10;
 
-        Block block = this.getEntityWorld().getBlockState(new BlockPos(x, y, z)).getBlock();
+        Block block = this.getCommandSenderWorld().getBlockState(new BlockPos(x, y, z)).getBlock();
         if(block == Blocks.WATER)
             return (super.getBlockPathWeight(x, y, z) + 1) * (waterWeight + 1);
-        if(this.getEntityWorld().isRaining() && this.getEntityWorld().canBlockSeeSky(new BlockPos(x, y, z)))
+        if(this.getCommandSenderWorld().isRaining() && this.getCommandSenderWorld().canSeeSkyFromBelowWater(new BlockPos(x, y, z)))
             return (super.getBlockPathWeight(x, y, z) + 1) * (waterWeight + 1);
 
-        if(this.getAttackTarget() != null)
+        if(this.getTarget() != null)
             return super.getBlockPathWeight(x, y, z);
         if(this.waterContact())
             return -999999.0F;

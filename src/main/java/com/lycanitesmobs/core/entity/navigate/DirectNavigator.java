@@ -52,7 +52,7 @@ public class DirectNavigator {
 	}
 	
 	public boolean setTargetPosition(Entity targetEntity, double setSpeedMod) {
-		return this.setTargetPosition(new BlockPos((int)targetEntity.getPositionVec().getX(), (int)targetEntity.getPositionVec().getY(), (int)targetEntity.getPositionVec().getZ()), setSpeedMod);
+		return this.setTargetPosition(new BlockPos((int)targetEntity.position().x(), (int)targetEntity.position().y(), (int)targetEntity.position().z()), setSpeedMod);
 	}
 
 	// ========== Clear Target Position ===========
@@ -81,14 +81,14 @@ public class DirectNavigator {
 
     // ========== DistanceTo Target Position ==========
     public double distanceToTargetPosition(){
-        return this.host.getDistanceSq(this.targetPosition.getX(), this.targetPosition.getY(), this.targetPosition.getZ());
+        return this.host.distanceToSqr(this.targetPosition.getX(), this.targetPosition.getY(), this.targetPosition.getZ());
     }
 	
 	// ========== Is At Target Position ==========
 	public boolean atTargetPosition(){
 		if(targetPosition != null) {
 			double speed = this.host.getAttribute(Attributes.MOVEMENT_SPEED).getValue() * 2;
-			return this.distanceToTargetPosition() <= (this.host.getSize(Pose.STANDING).width + speed);
+			return this.distanceToTargetPosition() <= (this.host.getDimensions(Pose.STANDING).width + speed);
 		}
 		return true;
 	}
@@ -110,21 +110,21 @@ public class DirectNavigator {
 
 		BlockPos pos = this.host.getFacingPosition(this.targetPosition.getX(), this.targetPosition.getY(), this.targetPosition.getZ(), 1.0D, this.randomStrafeAngle);
 		//double dirX = (double)this.targetPosition.getX() + 0.5D - this.host.getPositionVec().getX();
-		double dirX = pos.getX() - this.host.getPositionVec().getX();
-		double dirY = (double)this.targetPosition.getY() + 0.1D - this.host.getPositionVec().getY();
+		double dirX = pos.getX() - this.host.position().x();
+		double dirY = (double)this.targetPosition.getY() + 0.1D - this.host.position().y();
 		//double dirZ = (double)this.targetPosition.getZ() + 0.5D - this.host.getPositionVec().getZ();
-		double dirZ = pos.getZ() - this.host.getPositionVec().getZ();
+		double dirZ = pos.getZ() - this.host.position().z();
 
-		double motionX = ((Math.signum(dirX) * speed - this.host.getMotion().getX()) * 0.10000000149011612D*0.3D) * this.speedModifier;
-		double motionY = ((Math.signum(dirY) * speed - this.host.getMotion().getY()) * 0.10000000149011612D*0.3D) * this.speedModifier;
-		double motionZ = ((Math.signum(dirZ) * speed - this.host.getMotion().getZ()) * 0.10000000149011612D*0.3D) * this.speedModifier;
-		this.host.setMotion(this.host.getMotion().add(motionX, motionY, motionZ));
+		double motionX = ((Math.signum(dirX) * speed - this.host.getDeltaMovement().x()) * 0.10000000149011612D*0.3D) * this.speedModifier;
+		double motionY = ((Math.signum(dirY) * speed - this.host.getDeltaMovement().y()) * 0.10000000149011612D*0.3D) * this.speedModifier;
+		double motionZ = ((Math.signum(dirZ) * speed - this.host.getDeltaMovement().z()) * 0.10000000149011612D*0.3D) * this.speedModifier;
+		this.host.setDeltaMovement(this.host.getDeltaMovement().add(motionX, motionY, motionZ));
 		
-		float fullAngle = (float)(Math.atan2(this.host.getMotion().getZ(), this.host.getMotion().getX()) * 180.0D / Math.PI) - 90.0F;
-		float angle = MathHelper.wrapDegrees(fullAngle - this.host.rotationYaw);
-		this.host.moveForward = 0.5F;
-		if(this.faceMovement && this.host.getAttackTarget() != null && (this.host.getMotion().getX() > 0.025F || this.host.getMotion().getZ() > 0.025F))
-			this.host.rotationYaw += angle;
+		float fullAngle = (float)(Math.atan2(this.host.getDeltaMovement().z(), this.host.getDeltaMovement().x()) * 180.0D / Math.PI) - 90.0F;
+		float angle = MathHelper.wrapDegrees(fullAngle - this.host.yRot);
+		this.host.zza = 0.5F;
+		if(this.faceMovement && this.host.getTarget() != null && (this.host.getDeltaMovement().x() > 0.025F || this.host.getDeltaMovement().z() > 0.025F))
+			this.host.yRot += angle;
 	}
 	
 	
@@ -132,7 +132,7 @@ public class DirectNavigator {
   	//                      Movement
   	// ==================================================
 	public void flightMovement(double moveStrafe, double moveForward) {
-		if(this.host.canSwim()) {
+		if(this.host.isUnderWater()) {
             this.host.travelSwimming(new Vector3d(moveStrafe, 0, moveForward));
         }
         else if(this.host.lavaContact()) {
@@ -150,21 +150,21 @@ public class DirectNavigator {
   	// ==================================================
 	// ========== Rotate to Waypoint ==========
     protected void adjustRotationToWaypoint() {		
-		double distX = targetPosition.getX() - this.host.getPositionVec().getX();
-		double distZ = targetPosition.getZ() - this.host.getPositionVec().getZ();
+		double distX = targetPosition.getX() - this.host.position().x();
+		double distZ = targetPosition.getZ() - this.host.position().z();
 		float fullAngle = (float)(Math.atan2(distZ, distX) * 180.0D / Math.PI);// - 90.0F;
-		float angle = MathHelper.wrapDegrees(fullAngle - this.host.rotationYaw);
+		float angle = MathHelper.wrapDegrees(fullAngle - this.host.yRot);
 		if(angle > 30.0F) angle = 30.0F;
 		if(angle < -30.0F) angle = -30.0F;
-		this.host.renderYawOffset = this.host.rotationYaw += angle;
+		this.host.yBodyRot = this.host.yRot += angle;
 	}
 
 	// ========== Rotate to Target ==========
     public void adjustRotationToTarget(BlockPos target) {
-		double distX = target.getX() - this.host.getPositionVec().getX();
-		double distZ = target.getZ() - this.host.getPositionVec().getZ();
+		double distX = target.getX() - this.host.position().x();
+		double distZ = target.getZ() - this.host.position().z();
 		float fullAngle = (float)(Math.atan2(distZ, distX) * 180.0D / Math.PI) - 90.0F;
-		float angle = MathHelper.wrapDegrees(fullAngle - this.host.rotationYaw);
-		this.host.rotationYaw += angle; 
+		float angle = MathHelper.wrapDegrees(fullAngle - this.host.yRot);
+		this.host.yRot += angle; 
     }
 }

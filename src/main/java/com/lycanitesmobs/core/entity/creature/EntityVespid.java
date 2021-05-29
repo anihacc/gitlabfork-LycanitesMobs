@@ -38,7 +38,7 @@ public class EntityVespid extends AgeableCreatureEntity implements IMob {
         this.canGrow = true;
         this.babySpawnChance = 0.1D;
 
-        this.stepHeight = 1.0F;
+        this.maxUpStep = 1.0F;
         this.setAttackCooldownMax(10);
     }
 
@@ -63,7 +63,7 @@ public class EntityVespid extends AgeableCreatureEntity implements IMob {
   	// ==================================================
     @Override
     public boolean isPersistant() {
-    	if(this.hasMaster() && this.getEntityWorld().getDifficulty() != Difficulty.PEACEFUL)
+    	if(this.hasMaster() && this.getCommandSenderWorld().getDifficulty() != Difficulty.PEACEFUL)
     		return true;
     	return super.isPersistant();
     }
@@ -74,22 +74,22 @@ public class EntityVespid extends AgeableCreatureEntity implements IMob {
     // ==================================================
 	// ========== Living Update ==========
 	@Override
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
         
         // Hive No Clip:
-        if(!this.getEntityWorld().isRemote) {
-	        if(!this.noClip) {
-	        	if(this.isHiveBlock(this.getPosition()))
-	        		this.noClip = true;
+        if(!this.getCommandSenderWorld().isClientSide) {
+	        if(!this.noPhysics) {
+	        	if(this.isHiveBlock(this.blockPosition()))
+	        		this.noPhysics = true;
 	        }
-	        else if(!this.isHiveBlock(this.getPosition())) {
-	        	this.noClip = false;
+	        else if(!this.isHiveBlock(this.blockPosition())) {
+	        	this.noPhysics = false;
 	        }
         }
         
         // Building AI:
-        if(!this.getEntityWorld().isRemote && this.hiveBuilding && this.hasMaster() && this.getMasterTarget() instanceof EntityVespidQueen && this.aiPlaceBlock.blockState == null) {
+        if(!this.getCommandSenderWorld().isClientSide && this.hiveBuilding && this.hasMaster() && this.getMasterTarget() instanceof EntityVespidQueen && this.aiPlaceBlock.blockState == null) {
         	EntityVespidQueen queen = (EntityVespidQueen)this.getMasterTarget();
         	
         	// Build Hive Foundations:
@@ -123,7 +123,7 @@ public class EntityVespid extends AgeableCreatureEntity implements IMob {
         		if(directions.size() == 1)
         			direction = directions.get(0);
         		else if(directions.size() > 1)
-        			direction = directions.get(this.getRNG().nextInt(directions.size()));
+        			direction = directions.get(this.getRandom().nextInt(directions.size()));
         		
             	if(direction == 0) {
             		int endX = hivePos.getX();
@@ -134,7 +134,7 @@ public class EntityVespid extends AgeableCreatureEntity implements IMob {
             		}
             		if(endX >= hivePos.getX() + hiveMin) {
 	            		this.aiPlaceBlock.setMetadata(5); // East Block Facing WEST
-	            		this.aiPlaceBlock.setBlockPlacement(ObjectManager.getBlock("veswax").getDefaultState(), new BlockPos(endX, hivePos.getY(), hivePos.getZ()));
+	            		this.aiPlaceBlock.setBlockPlacement(ObjectManager.getBlock("veswax").defaultBlockState(), new BlockPos(endX, hivePos.getY(), hivePos.getZ()));
             		}
             	}
             	
@@ -147,7 +147,7 @@ public class EntityVespid extends AgeableCreatureEntity implements IMob {
             		}
             		if(endX <= hivePos.getX() - hiveMin) {
 	            		this.aiPlaceBlock.setMetadata(4); // West Block Facing EAST
-	            		this.aiPlaceBlock.setBlockPlacement(ObjectManager.getBlock("veswax").getDefaultState(), new BlockPos(endX, hivePos.getY(), hivePos.getZ()));
+	            		this.aiPlaceBlock.setBlockPlacement(ObjectManager.getBlock("veswax").defaultBlockState(), new BlockPos(endX, hivePos.getY(), hivePos.getZ()));
             		}
             	}
         		
@@ -160,7 +160,7 @@ public class EntityVespid extends AgeableCreatureEntity implements IMob {
             		}
             		if(endY >= ((int) hivePos.getY() + hiveMin)) {
 	            		this.aiPlaceBlock.setMetadata(0); // Top Block Facing DOWN
-	            		this.aiPlaceBlock.setBlockPlacement(ObjectManager.getBlock("propolis").getDefaultState(), new BlockPos(hivePos.getX(), endY, hivePos.getZ()));
+	            		this.aiPlaceBlock.setBlockPlacement(ObjectManager.getBlock("propolis").defaultBlockState(), new BlockPos(hivePos.getX(), endY, hivePos.getZ()));
             		}
             	}
             	
@@ -173,7 +173,7 @@ public class EntityVespid extends AgeableCreatureEntity implements IMob {
             		}
             		if(endY <= hivePos.getY() - hiveMin) {
 	            		this.aiPlaceBlock.setMetadata(1); // Bottom Block Facing UP
-	            		this.aiPlaceBlock.setBlockPlacement(ObjectManager.getBlock("propolis").getDefaultState(), new BlockPos(hivePos.getX(), endY, hivePos.getZ()));
+	            		this.aiPlaceBlock.setBlockPlacement(ObjectManager.getBlock("propolis").defaultBlockState(), new BlockPos(hivePos.getX(), endY, hivePos.getZ()));
             		}
             	}
         		
@@ -186,7 +186,7 @@ public class EntityVespid extends AgeableCreatureEntity implements IMob {
             		}
             		if(endZ >= hivePos.getZ() + hiveMin) {
 	            		this.aiPlaceBlock.setMetadata(2); // South Block Facing NORTH
-	            		this.aiPlaceBlock.setBlockPlacement(ObjectManager.getBlock("veswax").getDefaultState(), new BlockPos(hivePos.getX(), hivePos.getY(), endZ));
+	            		this.aiPlaceBlock.setBlockPlacement(ObjectManager.getBlock("veswax").defaultBlockState(), new BlockPos(hivePos.getX(), hivePos.getY(), endZ));
             		}
             	}
             	
@@ -199,7 +199,7 @@ public class EntityVespid extends AgeableCreatureEntity implements IMob {
             		}
             		if(endZ <= hivePos.getZ() - hiveMin) {
 	            		this.aiPlaceBlock.setMetadata(3); // North Block Facing SOUTH
-	            		this.aiPlaceBlock.setBlockPlacement(ObjectManager.getBlock("veswax").getDefaultState(), new BlockPos(hivePos.getX(), hivePos.getY(), endZ));
+	            		this.aiPlaceBlock.setBlockPlacement(ObjectManager.getBlock("veswax").defaultBlockState(), new BlockPos(hivePos.getX(), hivePos.getY(), endZ));
             		}
             	}
         	}
@@ -210,19 +210,19 @@ public class EntityVespid extends AgeableCreatureEntity implements IMob {
         		if(hiveExposedCoordsList.size() > 0) {
         			EntityVespidQueen.HiveExposedCoordinates hiveExposedCoords;
         			if(hiveExposedCoordsList.size() > 1)
-        				hiveExposedCoords = hiveExposedCoordsList.get(this.getRNG().nextInt(hiveExposedCoordsList.size()));
+        				hiveExposedCoords = hiveExposedCoordsList.get(this.getRandom().nextInt(hiveExposedCoordsList.size()));
         			else
         				hiveExposedCoords = hiveExposedCoordsList.get(0);
         			this.aiPlaceBlock.setMetadata(hiveExposedCoords.orientationMeta);
-	        		this.aiPlaceBlock.setBlockPlacement(hiveExposedCoords.block.getDefaultState(), hiveExposedCoords.pos);
+	        		this.aiPlaceBlock.setBlockPlacement(hiveExposedCoords.block.defaultBlockState(), hiveExposedCoords.pos);
         		}
         	}
         }
         
         // Don't Keep Infected Conbas Targeted:
-        if(!this.getEntityWorld().isRemote && this.getAttackTarget() instanceof EntityConba) {
-        	if(((EntityConba)this.getAttackTarget()).vespidInfection) {
-        		this.setAttackTarget(null);
+        if(!this.getCommandSenderWorld().isClientSide && this.getTarget() instanceof EntityConba) {
+        	if(((EntityConba)this.getTarget()).vespidInfection) {
+        		this.setTarget(null);
         	}
         }
     }
@@ -235,7 +235,7 @@ public class EntityVespid extends AgeableCreatureEntity implements IMob {
     }
 
     public boolean isHiveWall(BlockPos searchPos) {
-        BlockState searchState = this.getEntityWorld().getBlockState(searchPos);
+        BlockState searchState = this.getCommandSenderWorld().getBlockState(searchPos);
         Block searchBlock = searchState.getBlock();
 		if(searchBlock == ObjectManager.getBlock("veswax"))
 			return true;
@@ -243,7 +243,7 @@ public class EntityVespid extends AgeableCreatureEntity implements IMob {
     }
 
     public boolean isHiveFloor(BlockPos searchPos) {
-        BlockState searchState = this.getEntityWorld().getBlockState(searchPos);
+        BlockState searchState = this.getCommandSenderWorld().getBlockState(searchPos);
         Block searchBlock = searchState.getBlock();
 		if(searchBlock == ObjectManager.getBlock("veswax"))
 			return true;
@@ -285,7 +285,7 @@ public class EntityVespid extends AgeableCreatureEntity implements IMob {
    	// ==================================================
     // ========== Damage Modifier ==========
     public float getDamageModifier(DamageSource damageSrc) {
-    	if(damageSrc.isFireDamage())
+    	if(damageSrc.isFire())
     		return 4.0F;
     	return 1.0F;
     }

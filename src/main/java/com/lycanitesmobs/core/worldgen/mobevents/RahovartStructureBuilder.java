@@ -36,17 +36,17 @@ public class RahovartStructureBuilder extends StructureBuilder {
 		int height = 40;
 		if(originY < 5)
 			originY = 5;
-		if(world.getHeight() <= height)
+		if(world.getMaxBuildHeight() <= height)
 			originY = 5;
-		else if(originY + height >= world.getHeight())
-			originY = Math.max(5, world.getHeight() - height - 1);
+		else if(originY + height >= world.getMaxBuildHeight())
+			originY = Math.max(5, world.getMaxBuildHeight() - height - 1);
 
 		// Effects:
 		if(ticks == 1) {
 			for(int i = 0; i < 5; i++) {
 				BaseProjectileEntity baseProjectileEntity = new EntityHellfireWall(ProjectileManager.getInstance().oldProjectileTypes.get(EntityHellfireWall.class), world, originX, originY + (10 * i), originZ);
 				baseProjectileEntity.projectileLife = 20 * 20;
-				world.addEntity(baseProjectileEntity);
+				world.addFreshEntity(baseProjectileEntity);
 				if(worldExt != null) {
 					worldExt.bossUpdate(baseProjectileEntity);
 				}
@@ -65,14 +65,14 @@ public class RahovartStructureBuilder extends StructureBuilder {
 
 		// Explosions:
 		if(ticks >= 10 * 20 && ticks % 10 == 0) {
-			world.createExplosion(null, originX - 20 + world.rand.nextInt(40), originY + 25 + world.rand.nextInt(10), originZ - 20 + world.rand.nextInt(40), 2, Explosion.Mode.NONE);
+			world.explode(null, originX - 20 + world.random.nextInt(40), originY + 25 + world.random.nextInt(10), originZ - 20 + world.random.nextInt(40), 2, Explosion.Mode.NONE);
 		}
 
 		// Spawn Boss:
 		if(ticks == 20 * 20) {
 			BaseCreatureEntity baseCreatureEntity = (BaseCreatureEntity) CreatureManager.getInstance().getCreature("rahovart").createEntity(world);
-			baseCreatureEntity.setLocationAndAngles(originX, originY + 1, originZ, 0, 0);
-			world.addEntity(baseCreatureEntity);
+			baseCreatureEntity.moveTo(originX, originY + 1, originZ, 0, 0);
+			world.addFreshEntity(baseCreatureEntity);
 			baseCreatureEntity.setArenaCenter(new BlockPos(originX, originY + 1, originZ));
 			if(worldExt != null) {
 				MobEventPlayerServer mobEventPlayerServer = worldExt.getMobEventPlayerServer(this.name);
@@ -106,14 +106,14 @@ public class RahovartStructureBuilder extends StructureBuilder {
 				int y = originY;
 				// Build Floor:
 				Block buildBlock = primaryBlock;
-				if(world.rand.nextDouble() <= secondaryChance)
+				if(world.random.nextDouble() <= secondaryChance)
 					buildBlock = secondaryBlock;
-				world.setBlockState(new BlockPos(x, y, z), buildBlock.getDefaultState(), 2);
-				world.setBlockState(new BlockPos(x, y - 1, z), buildBlock.getDefaultState(), 2);
-				world.setBlockState(new BlockPos(x, y - 2, z), buildBlock.getDefaultState(), 2);
+				world.setBlock(new BlockPos(x, y, z), buildBlock.defaultBlockState(), 2);
+				world.setBlock(new BlockPos(x, y - 1, z), buildBlock.defaultBlockState(), 2);
+				world.setBlock(new BlockPos(x, y - 2, z), buildBlock.defaultBlockState(), 2);
 				y++;
-				while(y <= originY + height && y < world.getHeight()) {
-					world.setBlockState(new BlockPos(x, y, z), Blocks.AIR.getDefaultState(), 2);
+				while(y <= originY + height && y < world.getMaxBuildHeight()) {
+					world.setBlock(new BlockPos(x, y, z), Blocks.AIR.defaultBlockState(), 2);
 					y++;
 				}
 			}
@@ -132,7 +132,7 @@ public class RahovartStructureBuilder extends StructureBuilder {
 		List<int[]> decorationCoords = new ArrayList<>();
 
 		while(angle < 360) {
-			angle += 5 + (5 * world.rand.nextDouble());
+			angle += 5 + (5 * world.random.nextDouble());
 			double angleRadians = Math.toRadians(angle);
 			double x = radius * Math.cos(angleRadians) - Math.sin(angleRadians);
 			double z = radius * Math.sin(angleRadians) + Math.cos(angleRadians);
@@ -146,7 +146,7 @@ public class RahovartStructureBuilder extends StructureBuilder {
 	/** Builds an actual pillar. **/
 	public int[] buildPillar(World world, int originX, int originY, int originZ) {
 		int radiusMax = 5;
-		int height = 20 + Math.round(20 * world.rand.nextFloat());
+		int height = 20 + Math.round(20 * world.random.nextFloat());
 		Block primaryBlock = ObjectManager.getBlock("demonstonebrick");
 		Block secondaryBlock = ObjectManager.getBlock("demonstone");
 		Block tetriaryBlock = ObjectManager.getBlock("demonstonechiseled");
@@ -168,15 +168,15 @@ public class RahovartStructureBuilder extends StructureBuilder {
 
 					for (int z = originZ - stripRadius; z <= originZ + stripRadius; z++) {
 						if(x == originX && z == originZ) {
-							world.setBlockState(new BlockPos(x, y, z), pillarBlock.getDefaultState(), 2);
+							world.setBlock(new BlockPos(x, y, z), pillarBlock.defaultBlockState(), 2);
 						}
 						else {
-							if (world.rand.nextDouble() > secondaryChance)
-								world.setBlockState(new BlockPos(x, y, z), primaryBlock.getDefaultState(), 2);
-							else if (world.rand.nextDouble() > tetriaryChance)
-								world.setBlockState(new BlockPos(x, y, z), secondaryBlock.getDefaultState(), 2);
+							if (world.random.nextDouble() > secondaryChance)
+								world.setBlock(new BlockPos(x, y, z), primaryBlock.defaultBlockState(), 2);
+							else if (world.random.nextDouble() > tetriaryChance)
+								world.setBlock(new BlockPos(x, y, z), secondaryBlock.defaultBlockState(), 2);
 							else
-								world.setBlockState(new BlockPos(x, y, z), tetriaryBlock.getDefaultState(), 2);
+								world.setBlock(new BlockPos(x, y, z), tetriaryBlock.defaultBlockState(), 2);
 						}
 					}
 
@@ -184,7 +184,7 @@ public class RahovartStructureBuilder extends StructureBuilder {
 				}
 			}
 			else {
-				world.setBlockState(new BlockPos(originX, y, originZ), pillarBlock.getDefaultState(), 2);
+				world.setBlock(new BlockPos(originX, y, originZ), pillarBlock.defaultBlockState(), 2);
 				decorationCoord = new int[] {originX, y, originZ};
 			}
 			if(--radiusHeight <= 0) {
@@ -200,16 +200,16 @@ public class RahovartStructureBuilder extends StructureBuilder {
 	public void buildDecoration(World world, int originX, int originY, int originZ) {
 		Block primaryBlock = Blocks.OBSIDIAN;
 		Block hazardBlock = ObjectManager.getBlock("hellfire");
-		world.setBlockState(new BlockPos(originX, originY + 1, originZ), primaryBlock.getDefaultState(), 2);
-		world.setBlockState(new BlockPos(originX, originY + 2, originZ), primaryBlock.getDefaultState(), 2);
-		world.setBlockState(new BlockPos(originX, originY + 3, originZ), hazardBlock.getDefaultState(), 2);
-		world.setBlockState(new BlockPos(originX + 1, originY + 1, originZ), primaryBlock.getDefaultState(), 2);
-		world.setBlockState(new BlockPos(originX + 1, originY + 2, originZ), hazardBlock.getDefaultState(), 2);
-		world.setBlockState(new BlockPos(originX - 1, originY + 1, originZ), primaryBlock.getDefaultState(), 2);
-		world.setBlockState(new BlockPos(originX - 1, originY + 2, originZ), hazardBlock.getDefaultState(), 2);
-		world.setBlockState(new BlockPos(originX, originY + 1, originZ + 1), primaryBlock.getDefaultState(), 2);
-		world.setBlockState(new BlockPos(originX, originY + 2, originZ + 1), hazardBlock.getDefaultState(), 2);
-		world.setBlockState(new BlockPos(originX, originY + 1, originZ - 1), primaryBlock.getDefaultState(), 2);
-		world.setBlockState(new BlockPos(originX, originY + 2, originZ - 1), hazardBlock.getDefaultState(), 2);
+		world.setBlock(new BlockPos(originX, originY + 1, originZ), primaryBlock.defaultBlockState(), 2);
+		world.setBlock(new BlockPos(originX, originY + 2, originZ), primaryBlock.defaultBlockState(), 2);
+		world.setBlock(new BlockPos(originX, originY + 3, originZ), hazardBlock.defaultBlockState(), 2);
+		world.setBlock(new BlockPos(originX + 1, originY + 1, originZ), primaryBlock.defaultBlockState(), 2);
+		world.setBlock(new BlockPos(originX + 1, originY + 2, originZ), hazardBlock.defaultBlockState(), 2);
+		world.setBlock(new BlockPos(originX - 1, originY + 1, originZ), primaryBlock.defaultBlockState(), 2);
+		world.setBlock(new BlockPos(originX - 1, originY + 2, originZ), hazardBlock.defaultBlockState(), 2);
+		world.setBlock(new BlockPos(originX, originY + 1, originZ + 1), primaryBlock.defaultBlockState(), 2);
+		world.setBlock(new BlockPos(originX, originY + 2, originZ + 1), hazardBlock.defaultBlockState(), 2);
+		world.setBlock(new BlockPos(originX, originY + 1, originZ - 1), primaryBlock.defaultBlockState(), 2);
+		world.setBlock(new BlockPos(originX, originY + 2, originZ - 1), hazardBlock.defaultBlockState(), 2);
 	}
 }

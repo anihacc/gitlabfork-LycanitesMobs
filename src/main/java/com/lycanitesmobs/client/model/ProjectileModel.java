@@ -22,15 +22,15 @@ public class ProjectileModel extends EntityModel<BaseProjectileEntity> implement
     }
     
     public ProjectileModel(float shadowSize) {
-    	this.textureWidth = 128;
-		this.textureHeight = 128;
+    	this.texWidth = 128;
+		this.texHeight = 128;
     }
 
 	@Override
-	public void setRotationAngles(BaseProjectileEntity entity, float time, float distance, float loop, float lookY, float lookX) {}
+	public void setupAnim(BaseProjectileEntity entity, float time, float distance, float loop, float lookY, float lookX) {}
 
 	@Override
-	public void render(MatrixStack matrixStack, IVertexBuilder iVertexBuilder, int i, int i1, float v, float v1, float v2, float v3) {}
+	public void renderToBuffer(MatrixStack matrixStack, IVertexBuilder iVertexBuilder, int i, int i1, float v, float v1, float v2, float v3) {}
 
 	/**
 	 * Called by the renderer to add custom layers to it.
@@ -173,14 +173,14 @@ public class ProjectileModel extends EntityModel<BaseProjectileEntity> implement
 
 	@Override
 	public void doRotate(float rotX, float rotY, float rotZ) {
-		this.matrixStack.rotate(new Vector3f(1F, 0F, 0F).rotationDegrees(rotX));
-		this.matrixStack.rotate(new Vector3f(0F, 1F, 0F).rotationDegrees(rotY));
-		this.matrixStack.rotate(new Vector3f(0F, 0F, 1F).rotationDegrees(rotZ));
+		this.matrixStack.mulPose(new Vector3f(1F, 0F, 0F).rotationDegrees(rotX));
+		this.matrixStack.mulPose(new Vector3f(0F, 1F, 0F).rotationDegrees(rotY));
+		this.matrixStack.mulPose(new Vector3f(0F, 0F, 1F).rotationDegrees(rotZ));
 	}
 
 	@Override
 	public void doAngle(float rotation, float angleX, float angleY, float angleZ) {
-		this.matrixStack.rotate(new Vector3f(angleX, angleY, angleZ).rotationDegrees(rotation));
+		this.matrixStack.mulPose(new Vector3f(angleX, angleY, angleZ).rotationDegrees(rotation));
 	}
 
 	@Override

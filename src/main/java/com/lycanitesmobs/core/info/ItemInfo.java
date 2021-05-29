@@ -64,14 +64,14 @@ public class ItemInfo {
 		if(json.has("food")) {
 			JsonObject foodJson = json.get("food").getAsJsonObject();
 			Food.Builder foodBuilder = new Food.Builder();
-			foodBuilder.hunger(foodJson.get("hunger").getAsInt());
-			foodBuilder.saturation(foodJson.get("saturation").getAsFloat());
+			foodBuilder.nutrition(foodJson.get("hunger").getAsInt());
+			foodBuilder.saturationMod(foodJson.get("saturation").getAsFloat());
 
 			if(!foodJson.has("alwaysEdible") || foodJson.get("alwaysEdible").getAsBoolean())
-				foodBuilder.setAlwaysEdible();
+				foodBuilder.alwaysEat();
 
 			if(foodJson.has("fast") && foodJson.get("fast").getAsBoolean())
-				foodBuilder.fastToEat();
+				foodBuilder.fast();
 
 			if(foodJson.has("meat") && foodJson.get("meat").getAsBoolean())
 				foodBuilder.meat();
@@ -109,8 +109,8 @@ public class ItemInfo {
 		Item.Properties properties = new Item.Properties();
 		/*if(modelName != null) TODO Generic Item Model Renderer
 			properties.setTEISR(() -> com.lycanitesmobs.core.renderer.EquipmentRenderer::new);*/
-		properties.group(group);
-		properties.maxStackSize(maxStackSize);
+		properties.tab(group);
+		properties.stacksTo(maxStackSize);
 		if(food != null)
 			properties.food(food);
 

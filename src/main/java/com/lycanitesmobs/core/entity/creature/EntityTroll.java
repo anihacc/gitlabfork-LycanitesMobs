@@ -43,9 +43,9 @@ public class EntityTroll extends TameableCreatureEntity implements IMob {
 		this.goalSelector.addGoal(this.nextDistractionGoalIndex++, new BreakDoorGoal(this));
 		this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackRangedGoal(this).setSpeed(0.75D).setRange(40.0F).setMinChaseDistance(10.0F).setLongMemory(false));
 
-		if(this.getNavigator() instanceof GroundPathNavigator) {
-			GroundPathNavigator pathNavigateGround = (GroundPathNavigator)this.getNavigator();
-			pathNavigateGround.setBreakDoors(true);
+		if(this.getNavigation() instanceof GroundPathNavigator) {
+			GroundPathNavigator pathNavigateGround = (GroundPathNavigator)this.getNavigation();
+			pathNavigateGround.setCanOpenDoors(true);
 		}
     }
 
@@ -70,27 +70,27 @@ public class EntityTroll extends TameableCreatureEntity implements IMob {
     // ==================================================
 	// ========== Living Update ==========
 	@Override
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
         
         // Daylight Stone Form:
         if(!this.stoneForm) {
-        	if(this.isDaytime() && this.getEntityWorld().canBlockSeeSky(this.getPosition())) {
+        	if(this.isDaytime() && this.getCommandSenderWorld().canSeeSkyFromBelowWater(this.blockPosition())) {
         		this.stoneForm = true;
         	}
         }
         else {
-        	if(!this.isDaytime() || !this.getEntityWorld().canBlockSeeSky(this.getPosition())) {
+        	if(!this.isDaytime() || !this.getCommandSenderWorld().canSeeSkyFromBelowWater(this.blockPosition())) {
                 this.stoneForm = false;
             }
         }
         
         // Destroy Blocks:
- 		if(!this.getEntityWorld().isRemote)
- 	        if(this.getAttackTarget() != null && this.getEntityWorld().getGameRules().getBoolean(GameRules.MOB_GRIEFING) && this.griefing) {
- 		    	float distance = this.getAttackTarget().getDistance(this);
- 		    		if(distance <= this.getSize(Pose.STANDING).width + 4.0F)
- 		    			this.destroyArea((int)this.getPositionVec().getX(), (int)this.getPositionVec().getY(), (int)this.getPositionVec().getZ(), 0.5F, true);
+ 		if(!this.getCommandSenderWorld().isClientSide)
+ 	        if(this.getTarget() != null && this.getCommandSenderWorld().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING) && this.griefing) {
+ 		    	float distance = this.getTarget().distanceTo(this);
+ 		    		if(distance <= this.getDimensions(Pose.STANDING).width + 4.0F)
+ 		    			this.destroyArea((int)this.position().x(), (int)this.position().y(), (int)this.position().z(), 0.5F, true);
  	        }
     }
 
@@ -124,12 +124,12 @@ public class EntityTroll extends TameableCreatureEntity implements IMob {
     // ========== Damage Modifier ==========
     /** A multiplier that alters how much damage this mob receives from the given DamageSource, use for resistances and weaknesses. Note: The defense multiplier is handled before this. **/
     public float getDamageModifier(DamageSource damageSrc) {
-		if(damageSrc.getTrueSource() != null) {
+		if(damageSrc.getEntity() != null) {
 			ItemStack heldItem = ItemStack.EMPTY;
-			if(damageSrc.getTrueSource() instanceof LivingEntity) {
-				LivingEntity entityLiving = (LivingEntity)damageSrc.getTrueSource();
-				if(!entityLiving.getHeldItem(Hand.MAIN_HAND).isEmpty()) {
-					heldItem = entityLiving.getHeldItem(Hand.MAIN_HAND);
+			if(damageSrc.getEntity() instanceof LivingEntity) {
+				LivingEntity entityLiving = (LivingEntity)damageSrc.getEntity();
+				if(!entityLiving.getItemInHand(Hand.MAIN_HAND).isEmpty()) {
+					heldItem = entityLiving.getItemInHand(Hand.MAIN_HAND);
 				}
 			}
 			if(ObjectLists.isPickaxe(heldItem)) {

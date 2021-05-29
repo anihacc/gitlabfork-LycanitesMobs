@@ -57,14 +57,14 @@ public class ObjModel {
 		Vector3f output = new Vector3f();
 
 		// Calculate Edges:
-		Vector3f calU = new Vector3f(p2.getX() - p1.getX(), p2.getY() - p1.getY(), p2.getZ() - p1.getZ());
-		Vector3f calV = new Vector3f(p3.getX() - p1.getX(), p3.getY() - p1.getY(), p3.getZ() - p1.getZ());
+		Vector3f calU = new Vector3f(p2.x() - p1.x(), p2.y() - p1.y(), p2.z() - p1.z());
+		Vector3f calV = new Vector3f(p3.x() - p1.x(), p3.y() - p1.y(), p3.z() - p1.z());
 
 		// Cross Edges
 		output.set(
-				calU.getY() * calV.getZ() - calU.getZ() * calV.getY(),
-				calU.getZ() * calV.getX() - calU.getX() * calV.getZ(),
-				calU.getX() * calV.getY() - calU.getY() * calV.getX()
+				calU.y() * calV.z() - calU.z() * calV.y(),
+				calU.z() * calV.x() - calU.x() * calV.z(),
+				calU.x() * calV.y() - calU.y() * calV.x()
 		);
 
 		output.normalize(); // normalize()
@@ -73,9 +73,9 @@ public class ObjModel {
 
     public void renderAll(IVertexBuilder vertexBuilder, Matrix3f matrix3f, Matrix4f matrix4f, int brightness, int fade, Vector4f color, Vector2f textureOffset) {
         Collections.sort(this.objParts, (a, b) -> {
-			Vector3d v = Minecraft.getInstance().getRenderViewEntity().getPositionVec();
-			double aDist = v.distanceTo(new Vector3d(a.center.getX(), a.center.getY(), a.center.getZ()));
-			double bDist = v.distanceTo(new Vector3d(b.center.getX(), b.center.getY(), b.center.getZ()));
+			Vector3d v = Minecraft.getInstance().getCameraEntity().position();
+			double aDist = v.distanceTo(new Vector3d(a.center.x(), a.center.y(), a.center.z()));
+			double bDist = v.distanceTo(new Vector3d(b.center.x(), b.center.y(), b.center.z()));
 			return Double.compare(aDist, bDist);
 		});
         for(ObjPart objPart : this.objParts) {
@@ -120,12 +120,12 @@ public class ObjModel {
 			for(int iv = 0; iv < 3; iv++) {
 				Vertex v = objPart.mesh.vertices[indices[i + iv]];
 				vertexBuilder
-						.pos(matrix4f, v.getPos().getX(), v.getPos().getY(), v.getPos().getZ())
-						.color(color.getX(), color.getY(), color.getZ(), color.getW())
-						.tex(v.getTexCoords().x + (textureOffset.x * 0.01f), 1f - (v.getTexCoords().y + (textureOffset.y * 0.01f)))
-						.overlay(0, 10 - fade)
-						.lightmap(brightness)
-						.normal(matrix3f, normal.getX(), normal.getY(), normal.getZ())
+						.vertex(matrix4f, v.getPos().x(), v.getPos().y(), v.getPos().z())
+						.color(color.x(), color.y(), color.z(), color.w())
+						.uv(v.getTexCoords().x + (textureOffset.x * 0.01f), 1f - (v.getTexCoords().y + (textureOffset.y * 0.01f)))
+						.overlayCoords(0, 10 - fade)
+						.uv2(brightness)
+						.normal(matrix3f, normal.x(), normal.y(), normal.z())
 						.endVertex();
 			}
 		}

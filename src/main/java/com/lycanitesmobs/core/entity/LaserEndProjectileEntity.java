@@ -21,9 +21,9 @@ public class LaserEndProjectileEntity extends BaseProjectileEntity {
 	private double projectileSpeed;
 
     // Datawatcher:
-    protected static final DataParameter<Float> POS_X = EntityDataManager.createKey(LaserEndProjectileEntity.class, DataSerializers.FLOAT);
-    protected static final DataParameter<Float> POS_Y = EntityDataManager.createKey(LaserEndProjectileEntity.class, DataSerializers.FLOAT);
-    protected static final DataParameter<Float> POS_Z = EntityDataManager.createKey(LaserEndProjectileEntity.class, DataSerializers.FLOAT);
+    protected static final DataParameter<Float> POS_X = EntityDataManager.defineId(LaserEndProjectileEntity.class, DataSerializers.FLOAT);
+    protected static final DataParameter<Float> POS_Y = EntityDataManager.defineId(LaserEndProjectileEntity.class, DataSerializers.FLOAT);
+    protected static final DataParameter<Float> POS_Z = EntityDataManager.defineId(LaserEndProjectileEntity.class, DataSerializers.FLOAT);
 	
     // ==================================================
  	//                   Constructors
@@ -50,14 +50,14 @@ public class LaserEndProjectileEntity extends BaseProjectileEntity {
         this.setSpeed(1.0D);
         //this.setSize(projectileWidth, projectileHeight);
         if(laserEntity != null) {
-	        this.targetX = this.laserEntity.getPositionVec().getX();
-	        this.targetY = this.laserEntity.getPositionVec().getY();
-	        this.targetZ = this.laserEntity.getPositionVec().getZ();
+	        this.targetX = this.laserEntity.position().x();
+	        this.targetY = this.laserEntity.position().y();
+	        this.targetZ = this.laserEntity.position().z();
         }
-        this.dataManager.register(POS_X, (float) this.getPositionVec().getX());
-        this.dataManager.register(POS_Y, (float) this.getPositionVec().getY());
-        this.dataManager.register(POS_Z, (float)this.getPositionVec().getZ());
-        this.noClip = true;
+        this.entityData.define(POS_X, (float) this.position().x());
+        this.entityData.define(POS_Y, (float) this.position().y());
+        this.entityData.define(POS_Z, (float)this.position().z());
+        this.noPhysics = true;
     }
     
     
@@ -67,8 +67,8 @@ public class LaserEndProjectileEntity extends BaseProjectileEntity {
     // ========== Main Update ==========
     @Override
     public void tick() {
-    	if(this.getEntityWorld().isRemote) {
-    		this.setPosition(this.dataManager.get(POS_X), this.dataManager.get(POS_Y), this.dataManager.get(POS_Z));
+    	if(this.getCommandSenderWorld().isClientSide) {
+    		this.setPos(this.entityData.get(POS_X), this.entityData.get(POS_Y), this.entityData.get(POS_Z));
     		return;
     	}
     	
@@ -78,14 +78,14 @@ public class LaserEndProjectileEntity extends BaseProjectileEntity {
     	if(this.isAlive())
     		this.moveToTarget();
     	
-    	this.dataManager.set(POS_X, (float) this.getPositionVec().getX());
-    	this.dataManager.set(POS_Y, (float) this.getPositionVec().getY());
-    	this.dataManager.set(POS_Z, (float) this.getPositionVec().getZ());
+    	this.entityData.set(POS_X, (float) this.position().x());
+    	this.entityData.set(POS_Y, (float) this.position().y());
+    	this.entityData.set(POS_Z, (float) this.position().z());
     }
     
     // ========== End Update ==========
 	public void onUpdateEnd(double newTargetX, double newTargetY, double newTargetZ) {
-		if(this.getEntityWorld().isRemote)
+		if(this.getCommandSenderWorld().isClientSide)
 			return;
 		
 		this.targetX = newTargetX;
@@ -93,7 +93,7 @@ public class LaserEndProjectileEntity extends BaseProjectileEntity {
 		this.targetZ = newTargetZ;
 		
 		if(this.getLaunchSound() != null)
-			this.playSound(this.getLaunchSound(), 1.0F, 1.0F / (this.rand.nextFloat() * 0.4F + 0.8F));
+			this.playSound(this.getLaunchSound(), 1.0F, 1.0F / (this.random.nextFloat() * 0.4F + 0.8F));
 	}
 	
     
@@ -102,13 +102,13 @@ public class LaserEndProjectileEntity extends BaseProjectileEntity {
  	// ==================================================
     // ========== Gravity ==========
     @Override
-    protected float getGravityVelocity() {
+    protected float getGravity() {
         return 0.0F;
     }
     
     // ========== Move to Target ==========
     public void moveToTarget() {
-    	this.setPosition(this.targetX, this.targetY, this.targetZ);
+    	this.setPos(this.targetX, this.targetY, this.targetZ);
     	/*this.setPosition(
     			this.moveCoordToTarget(this.getPositionVec().getX(), this.targetX, this.laserEntity.getPositionVec().getX()),
     			this.moveCoordToTarget(this.getPositionVec().getY(), this.targetY, this.laserEntity.getPositionVec().getY()),
@@ -144,7 +144,7 @@ public class LaserEndProjectileEntity extends BaseProjectileEntity {
  	//                     Impact
  	// ==================================================
     @Override
-    protected void onImpact(RayTraceResult rayTraceResult) {}
+    protected void onHit(RayTraceResult rayTraceResult) {}
     
     
     // ==================================================

@@ -29,7 +29,7 @@ public class EntityShade extends RideableCreatureEntity {
         this.canGrow = false;
         this.setupMob();
 
-        this.stepHeight = 1.0F;
+        this.maxUpStep = 1.0F;
         this.attackCooldownMax = 40;
     }
 
@@ -46,7 +46,7 @@ public class EntityShade extends RideableCreatureEntity {
     // ==================================================
     @Override
     public void mountAbility(Entity rider) {
-        if(this.getEntityWorld().isRemote)
+        if(this.getCommandSenderWorld().isClientSide)
             return;
 
         if(this.abilityToggled)
@@ -76,13 +76,13 @@ public class EntityShade extends RideableCreatureEntity {
     // ==================================================
     // Mounted Y Offset:
     @Override
-    public double getMountedYOffset() {
-        return (double)this.getSize(Pose.STANDING).height * 0.85D;
+    public double getPassengersRidingOffset() {
+        return (double)this.getDimensions(Pose.STANDING).height * 0.85D;
     }
 
     @Override
     public double getMountedZOffset() {
-        return (double)this.getSize(Pose.STANDING).width * 0.25D;
+        return (double)this.getDimensions(Pose.STANDING).width * 0.25D;
     }
 	
 	
@@ -99,7 +99,7 @@ public class EntityShade extends RideableCreatureEntity {
         float leeching = this.getEffectStrength(this.getAttackDamage(damageScale) / 4);
         this.heal(leeching);
 
-        if(this.getRNG().nextFloat() <= 0.1F)
+        if(this.getRandom().nextFloat() <= 0.1F)
             this.specialAttack();
     	
         return true;
@@ -109,12 +109,12 @@ public class EntityShade extends RideableCreatureEntity {
     public void specialAttack() {
         // Horrific Howl:
         double distance = 5.0D;
-        List<LivingEntity> possibleTargets = this.getEntityWorld().getEntitiesWithinAABB(LivingEntity.class, this.getBoundingBox().grow(distance, distance, distance), possibleTarget -> {
+        List<LivingEntity> possibleTargets = this.getCommandSenderWorld().getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(distance, distance, distance), possibleTarget -> {
 			if(!possibleTarget.isAlive()
 					|| possibleTarget == EntityShade.this
-					|| EntityShade.this.isRidingOrBeingRiddenBy(possibleTarget)
-					|| EntityShade.this.isOnSameTeam(possibleTarget)
-					|| !EntityShade.this.canAttack(possibleTarget.getType())
+					|| EntityShade.this.hasIndirectPassenger(possibleTarget)
+					|| EntityShade.this.isAlliedTo(possibleTarget)
+					|| !EntityShade.this.canAttackType(possibleTarget.getType())
 					|| !EntityShade.this.canAttack(possibleTarget))
 				return false;
 			return true;
@@ -129,9 +129,9 @@ public class EntityShade extends RideableCreatureEntity {
                 }
                 if(doDamage) {
                     if (ObjectManager.getEffect("fear") != null)
-                        possibleTarget.addPotionEffect(new EffectInstance(ObjectManager.getEffect("fear"), this.getEffectDuration(5), 1));
+                        possibleTarget.addEffect(new EffectInstance(ObjectManager.getEffect("fear"), this.getEffectDuration(5), 1));
                     else
-                        possibleTarget.addPotionEffect(new EffectInstance(Effects.WEAKNESS, 10 * 20, 0));
+                        possibleTarget.addEffect(new EffectInstance(Effects.WEAKNESS, 10 * 20, 0));
                 }
             }
         }

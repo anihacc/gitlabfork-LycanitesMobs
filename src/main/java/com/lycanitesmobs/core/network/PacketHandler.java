@@ -62,7 +62,7 @@ public class PacketHandler {
 	 * @param player The player to send to.
 	 */
 	public <MSG> void sendToPlayer(MSG message, ServerPlayerEntity player) {
-		HANDLER.sendTo(message, player.connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT);
+		HANDLER.sendTo(message, player.connection.getConnection(), NetworkDirection.PLAY_TO_CLIENT);
 	}
 	
 	
@@ -76,8 +76,8 @@ public class PacketHandler {
 	 * @param range The range to find players within.
 	 */
 	public <MSG> void sendToAllAround(MSG message, World world, Vector3d pos, double range) {
-		for(PlayerEntity player : world.getPlayers()) {
-			if(player instanceof ServerPlayerEntity && player.getDistanceSq(pos) <= (range * range)) {
+		for(PlayerEntity player : world.players()) {
+			if(player instanceof ServerPlayerEntity && player.distanceToSqr(pos) <= (range * range)) {
 				ServerPlayerEntity serverPlayer = (ServerPlayerEntity) player;
 				this.sendToPlayer(message, serverPlayer);
 			}
@@ -94,10 +94,10 @@ public class PacketHandler {
 	 * @param world The world to find players to send packets to.
 	 */
 	public <MSG> void sendToWorld(MSG message, World world) {
-		for(PlayerEntity player : world.getPlayers()) {
+		for(PlayerEntity player : world.players()) {
 			if(player instanceof ServerPlayerEntity) {
 				ServerPlayerEntity serverPlayer = (ServerPlayerEntity) player;
-				HANDLER.sendTo(message, serverPlayer.connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT);
+				HANDLER.sendTo(message, serverPlayer.connection.getConnection(), NetworkDirection.PLAY_TO_CLIENT);
 			}
 		}
 	}

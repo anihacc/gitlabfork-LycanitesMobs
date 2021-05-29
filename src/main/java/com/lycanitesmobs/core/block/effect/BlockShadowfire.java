@@ -79,8 +79,8 @@ public class BlockShadowfire extends BlockFireBase {
     //                Collision Effects
     // ==================================================
     @Override
-	public void onEntityCollision(BlockState blockState, World world, BlockPos pos, Entity entity) {
-		super.onEntityCollision(blockState, world, pos, entity);
+	public void entityInside(BlockState blockState, World world, BlockPos pos, Entity entity) {
+		super.entityInside(blockState, world, pos, entity);
 
 		if(entity instanceof ItemEntity)
 			return;
@@ -91,20 +91,20 @@ public class BlockShadowfire extends BlockFireBase {
 			Effect decay = ObjectManager.getEffect("decay");
 			if(decay != null) {
 				EffectInstance effect = new EffectInstance(decay, 5 * 20, 0);
-				if(livingEntity.isPotionApplicable(effect))
-					livingEntity.addPotionEffect(effect);
+				if(livingEntity.canBeAffected(effect))
+					livingEntity.addEffect(effect);
 			}
 
 			EffectInstance blindness = new EffectInstance(Effects.BLINDNESS, 5 * 20, 0);
-			if(this.blindness && livingEntity.isPotionApplicable(blindness)) {
-				livingEntity.addPotionEffect(blindness);
+			if(this.blindness && livingEntity.canBeAffected(blindness)) {
+				livingEntity.addEffect(blindness);
 			}
 		}
 
 		if(entity instanceof BaseCreatureEntity && ((BaseCreatureEntity)entity).hasElement(ElementManager.getInstance().getElement("shadow")))
 			return;
 
-		entity.attackEntityFrom(DamageSource.WITHER, 1);
+		entity.hurt(DamageSource.WITHER, 1);
 	}
     
     
@@ -118,7 +118,7 @@ public class BlockShadowfire extends BlockFireBase {
 		double y = pos.getY();
 		double z = pos.getZ();
 		if(random.nextInt(24) == 0)
-			world.playSound((double)((float)x + 0.5F), (double)((float)y + 0.5F), (double)((float)z + 0.5F), ObjectManager.getSound("shadowfire"), SoundCategory.BLOCKS, 0.5F + random.nextFloat(), random.nextFloat() * 0.7F + 0.3F, false);
+			world.playLocalSound((double)((float)x + 0.5F), (double)((float)y + 0.5F), (double)((float)z + 0.5F), ObjectManager.getSound("shadowfire"), SoundCategory.BLOCKS, 0.5F + random.nextFloat(), random.nextFloat() * 0.7F + 0.3F, false);
 
 		if (random.nextInt(100) == 0) {
 			x = pos.getX() + random.nextFloat();

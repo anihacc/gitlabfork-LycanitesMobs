@@ -49,26 +49,26 @@ public class DamageEquipmentFeature extends EquipmentFeature {
 			return null;
 		}
 		TextComponent description = (TextComponent) new TranslationTextComponent("equipment.feature." + this.featureType)
-			.appendString(" " + this.damageAmount);
+			.append(" " + this.damageAmount);
 		if(this.damageCooldown > 0) {
-			description.appendString("\n")
+			description.append("\n")
 					.append(new TranslationTextComponent("equipment.feature.damage.cooldown"))
-					.appendString(" " + String.format("%.1f", this.damageCooldown));
+					.append(" " + String.format("%.1f", this.damageCooldown));
 		}
 		if(this.damageKnockback > 0) {
-			description.appendString("\n")
+			description.append("\n")
 					.append(new TranslationTextComponent("equipment.feature.damage.knockback"))
-					.appendString(" " + String.format("%.0f", this.damageKnockback));
+					.append(" " + String.format("%.0f", this.damageKnockback));
 		}
 		if(this.damageRange > 0) {
-			description.appendString("\n")
+			description.append("\n")
 					.append(new TranslationTextComponent("equipment.feature.damage.range"))
-					.appendString(" " + String.format("%.1f", this.damageRange));
+					.append(" " + String.format("%.1f", this.damageRange));
 		}
 		if(this.damageSweep > 0) {
-			description.appendString("\n")
+			description.append("\n")
 					.append(new TranslationTextComponent("equipment.feature.damage.sweep"))
-					.appendString(" " + String.format("%.0f", this.damageSweep));
+					.append(" " + String.format("%.0f", this.damageSweep));
 		}
 		return description;
 	}

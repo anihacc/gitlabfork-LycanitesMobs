@@ -92,7 +92,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
 		}
 
         // Client Side:
-		if(player.getEntityWorld().isRemote) {
+		if(player.getCommandSenderWorld().isClientSide) {
             if(clientExtendedPlayers.containsKey(player)) {
                 ExtendedPlayer extendedPlayer = clientExtendedPlayers.get(player);
                 extendedPlayer.setPlayer(player);
@@ -134,10 +134,10 @@ public class ExtendedPlayer implements IExtendedPlayer {
     // ==================================================
     /** Called when the player entity is being cloned, backups all data so that it can be loaded into a new ExtendedPlayer for the clone. **/
     public void backupPlayer() {
-        if(this.player != null && !this.player.getEntityWorld().isRemote()) {
+        if(this.player != null && !this.player.getCommandSenderWorld().isClientSide()) {
             CompoundNBT nbtTagCompound = new CompoundNBT();
             this.writeNBT(nbtTagCompound);
-            backupNBTTags.put(this.player.getUniqueID(), nbtTagCompound);
+            backupNBTTags.put(this.player.getUUID(), nbtTagCompound);
         }
     }
 
@@ -145,12 +145,12 @@ public class ExtendedPlayer implements IExtendedPlayer {
 	public void setPlayer(PlayerEntity player) {
         this.player = player;
         this.petManager.host = player;
-		this.player.getEntityWorld();
-		if(this.player.getEntityWorld().isRemote)
+		this.player.getCommandSenderWorld();
+		if(this.player.getCommandSenderWorld().isClientSide)
             return;
-        if(backupNBTTags.containsKey(this.player.getUniqueID())) {
-            this.readNBT(backupNBTTags.get(this.player.getUniqueID()));
-            backupNBTTags.remove(this.player.getUniqueID());
+        if(backupNBTTags.containsKey(this.player.getUUID())) {
+            this.readNBT(backupNBTTags.get(this.player.getUUID()));
+            backupNBTTags.remove(this.player.getUUID());
         }
 	}
 
@@ -162,8 +162,8 @@ public class ExtendedPlayer implements IExtendedPlayer {
     public boolean canMeleeBigEntity(Entity targetEntity) {
         if(!(targetEntity instanceof LivingEntity))
             return false;
-        float targetWidth = targetEntity.getWidth();
-        float targetHeight = targetEntity.getHeight();
+        float targetWidth = targetEntity.getBbWidth();
+        float targetHeight = targetEntity.getBbHeight();
         if(targetEntity instanceof BaseCreatureEntity) {
         	BaseCreatureEntity targetCreature = (BaseCreatureEntity)targetEntity;
         	targetWidth *= targetCreature.hitAreaWidthScale;
@@ -171,21 +171,21 @@ public class ExtendedPlayer implements IExtendedPlayer {
 		}
         if(targetWidth <= 4 && targetHeight <= 4)
             return false;
-        double heightOffset = this.player.getPositionVec().getY() - targetEntity.getPositionVec().getY();
+        double heightOffset = this.player.position().y() - targetEntity.position().y();
         double heightCompensation = 0;
         if(heightOffset > 0)
             heightCompensation = Math.min(heightOffset, targetHeight);
-        double distance = Math.sqrt(this.player.getDistance(targetEntity));
+        double distance = Math.sqrt(this.player.distanceTo(targetEntity));
         double range = 6 + heightCompensation + (targetWidth / 2);
         return distance <= range;
     }
 
     /** Makes this player attempt to melee attack. This is typically used for when the vanilla attack range fails on big entities. **/
     public void meleeAttack(Entity targetEntity) {
-        if(!this.hasAttacked && !this.player.getHeldItemMainhand().isEmpty() && this.canMeleeBigEntity(targetEntity)) {
-            this.player.attackTargetEntityWithCurrentItem(targetEntity);
-            this.player.resetCooldown();
-            this.player.swingArm(Hand.MAIN_HAND);
+        if(!this.hasAttacked && !this.player.getMainHandItem().isEmpty() && this.canMeleeBigEntity(targetEntity)) {
+            this.player.attack(targetEntity);
+            this.player.resetAttackStrengthTicker();
+            this.player.swing(Hand.MAIN_HAND);
         }
     }
 
@@ -197,7 +197,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
 	public void onUpdate() {
 		this.timePlayed++;
         this.hasAttacked = false;
-		boolean creative = this.player.abilities.isCreativeMode;
+		boolean creative = this.player.abilities.instabuild;
 
 		// Stats:
 		boolean sync = false;
@@ -211,7 +211,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
 		this.spirit = Math.min(Math.max(this.spirit, 0), this.spiritMax - this.spiritReserved);
 		if(this.spirit < this.spiritMax - this.spiritReserved) {
 			this.spirit += 10;
-			if(!this.player.getEntityWorld().isRemote && this.currentTick % 20 == 0 || this.spirit == this.spiritMax - this.spiritReserved) {
+			if(!this.player.getCommandSenderWorld().isClientSide && this.currentTick % 20 == 0 || this.spirit == this.spiritMax - this.spiritReserved) {
 				sync = true;
 			}
 		}
@@ -220,16 +220,16 @@ public class ExtendedPlayer implements IExtendedPlayer {
 		this.summonFocus = Math.min(Math.max(this.summonFocus, 0), this.summonFocusMax);
 		if(this.summonFocus < this.summonFocusMax) {
 			this.summonFocus += 10;
-			if(!this.player.getEntityWorld().isRemote && !creative && this.currentTick % 20 == 0
+			if(!this.player.getCommandSenderWorld().isClientSide && !creative && this.currentTick % 20 == 0
 					|| this.summonFocus < this.summonFocusMax
-					|| this.player.getHeldItemMainhand().getItem() instanceof ItemStaffSummoning
-                    || this.player.getHeldItemOffhand().getItem() instanceof ItemStaffSummoning) {
+					|| this.player.getMainHandItem().getItem() instanceof ItemStaffSummoning
+                    || this.player.getOffhandItem().getItem() instanceof ItemStaffSummoning) {
 				sync = true;
 			}
 		}
 
 		// Sync Stats To Client:
-		if(!this.player.getEntityWorld().isRemote) {
+		if(!this.player.getCommandSenderWorld().isClientSide) {
 			if(sync) {
 				MessagePlayerStats message = new MessagePlayerStats(this);
 				LycanitesMobs.packetHandler.sendToPlayer(message, (ServerPlayerEntity)this.player);
@@ -240,17 +240,17 @@ public class ExtendedPlayer implements IExtendedPlayer {
 		if(!this.initialSetup) {
 
 			// Pet Manager Setup:
-			if (!this.player.getEntityWorld().isRemote) {
+			if (!this.player.getCommandSenderWorld().isClientSide) {
 				this.loadFamiliars();
 			}
 
 			// Mod Version Check:
-			if (this.player.getEntityWorld().isRemote) {
+			if (this.player.getCommandSenderWorld().isClientSide) {
 				VersionChecker.VersionInfo latestVersion = VersionChecker.getLatestVersion(true);
 				VersionChecker.enabled = ConfigExtra.INSTANCE.versionCheckerEnabled.get();
 				if (latestVersion != null && latestVersion.isNewer && VersionChecker.enabled) {
 					String versionText = new TranslationTextComponent("lyc.version.newer").getString().replace("{current}", LycanitesMobs.versionNumber).replace("{latest}", latestVersion.versionNumber);
-					this.player.sendMessage(new StringTextComponent(versionText), Util.DUMMY_UUID);
+					this.player.sendMessage(new StringTextComponent(versionText), Util.NIL_UUID);
 				}
 			}
 
@@ -258,7 +258,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
 		}
 		
 		// Initial Network Sync:
-		if(!this.player.getEntityWorld().isRemote && this.needsFirstSync) {
+		if(!this.player.getCommandSenderWorld().isClientSide && this.needsFirstSync) {
 			this.beastiary.sendAllToClient();
 			this.sendAllSummonSetsToPlayer();
 			MessageSummonSetSelection message = new MessageSummonSetSelection(this);
@@ -267,7 +267,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
 		}
 
         // Pet Manager:
-        this.petManager.onUpdate(this.player.getEntityWorld());
+        this.petManager.onUpdate(this.player.getCommandSenderWorld());
 		
 		this.currentTick++;
 		this.needsFirstSync = false;
@@ -361,7 +361,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
     //                    Network Sync
     // ==================================================
 	public void sendPetEntriesToPlayer(String entryType) {
-		if(this.player.getEntityWorld().isRemote) return;
+		if(this.player.getCommandSenderWorld().isClientSide) return;
 		for(PetEntry petEntry : this.petManager.entries.values()) {
             if(entryType.equals(petEntry.getType()) || "".equals(entryType)) {
                 MessagePetEntry message = new MessagePetEntry(this, petEntry);
@@ -371,26 +371,26 @@ public class ExtendedPlayer implements IExtendedPlayer {
 	}
 
     public void sendPetEntryToPlayer(PetEntry petEntry) {
-        if(this.player.getEntityWorld().isRemote) return;
+        if(this.player.getCommandSenderWorld().isClientSide) return;
         MessagePetEntry message = new MessagePetEntry(this, petEntry);
         LycanitesMobs.packetHandler.sendToPlayer(message, (ServerPlayerEntity)this.player);
     }
 
 	public void sendPetEntryToServer(PetEntry petEntry) {
-		if(!this.player.getEntityWorld().isRemote) return;
+		if(!this.player.getCommandSenderWorld().isClientSide) return;
         MessagePetEntry message = new MessagePetEntry(this, petEntry);
 		LycanitesMobs.packetHandler.sendToServer(message);
 	}
 
 	public void sendPetEntryRemoveRequest(PetEntry petEntry) {
-		if(!this.player.getEntityWorld().isRemote) return;
+		if(!this.player.getCommandSenderWorld().isClientSide) return;
 		petEntry.remove();
 		MessagePetEntryRemove message = new MessagePetEntryRemove(this, petEntry);
 		LycanitesMobs.packetHandler.sendToServer(message);
 	}
 
     public void sendAllSummonSetsToPlayer() {
-        if(this.player.getEntityWorld().isRemote) return;
+        if(this.player.getCommandSenderWorld().isClientSide) return;
         for(byte setID = 1; setID <= this.summonSetMax; setID++) {
             MessageSummonSet message = new MessageSummonSet(this, setID);
             LycanitesMobs.packetHandler.sendToPlayer(message, (ServerPlayerEntity)this.player);
@@ -398,7 +398,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
     }
 
     public void sendSummonSetToServer(byte setID) {
-        if(!this.player.getEntityWorld().isRemote) return;
+        if(!this.player.getCommandSenderWorld().isClientSide) return;
         MessageSummonSet message = new MessageSummonSet(this, setID);
         LycanitesMobs.packetHandler.sendToServer(message);
     }

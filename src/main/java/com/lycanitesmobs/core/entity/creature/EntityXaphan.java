@@ -19,6 +19,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.HashMap;
 
+import com.lycanitesmobs.core.entity.BaseCreatureEntity.COMMAND_PIORITIES;
+
 public class EntityXaphan extends TameableCreatureEntity implements IMob {
 	private int nextSplash = 20;
 
@@ -34,7 +36,7 @@ public class EntityXaphan extends TameableCreatureEntity implements IMob {
         this.hasAttackSound = false;
         this.setupMob();
 
-        this.stepHeight = 1.0F;
+        this.maxUpStep = 1.0F;
     }
 
     // ========== Init AI ==========
@@ -50,18 +52,18 @@ public class EntityXaphan extends TameableCreatureEntity implements IMob {
     // ==================================================
 	// ========== Living Update ==========
 	@Override
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
 
-		if(!this.getEntityWorld().isRemote && this.updateTick % this.nextSplash == 0) {
-			this.fireProjectile("acidsplash", null, 0, 0, new Vector3d(0.5D - this.getRNG().nextDouble(), 0, 0.5D - this.getRNG().nextDouble()), 0f, (float)this.nextSplash / 20, 1F);
-			this.nextSplash = 20 + this.getRNG().nextInt(20);
+		if(!this.getCommandSenderWorld().isClientSide && this.updateTick % this.nextSplash == 0) {
+			this.fireProjectile("acidsplash", null, 0, 0, new Vector3d(0.5D - this.getRandom().nextDouble(), 0, 0.5D - this.getRandom().nextDouble()), 0f, (float)this.nextSplash / 20, 1F);
+			this.nextSplash = 20 + this.getRandom().nextInt(20);
 		}
 
         // Particles:
-        if(this.getEntityWorld().isRemote)
+        if(this.getCommandSenderWorld().isClientSide)
 	        for(int i = 0; i < 2; ++i) {
-                this.getEntityWorld().addParticle(ParticleTypes.BUBBLE_POP, this.getPositionVec().getX() + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, this.getPositionVec().getY() + this.rand.nextDouble() * (double)this.getSize(Pose.STANDING).height, this.getPositionVec().getZ() + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
+                this.getCommandSenderWorld().addParticle(ParticleTypes.BUBBLE_POP, this.position().x() + (this.random.nextDouble() - 0.5D) * (double)this.getDimensions(Pose.STANDING).width, this.position().y() + this.random.nextDouble() * (double)this.getDimensions(Pose.STANDING).height, this.position().z() + (this.random.nextDouble() - 0.5D) * (double)this.getDimensions(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
             }
     }
     

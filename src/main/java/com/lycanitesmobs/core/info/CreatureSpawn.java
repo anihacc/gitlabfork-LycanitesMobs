@@ -215,7 +215,7 @@ public class CreatureSpawn {
 		}
 
 		// Check IDs:
-		String targetDimensionId = world.getDimensionKey().getLocation().toString();
+		String targetDimensionId = world.dimension().location().toString();
 		for(String dimensionId : this.dimensionIds) {
 			if(dimensionId.equals(targetDimensionId)) {
 				return this.dimensionListType.equalsIgnoreCase("whitelist");

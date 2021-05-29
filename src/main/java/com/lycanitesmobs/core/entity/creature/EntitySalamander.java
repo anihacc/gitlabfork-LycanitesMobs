@@ -42,9 +42,9 @@ public class EntitySalamander extends RideableCreatureEntity implements IMob {
         this.setupMob();
 
         // Stats:
-        this.stepHeight = 1.0F;
+        this.maxUpStep = 1.0F;
 
-        this.setPathPriority(PathNodeType.LAVA, 0F);
+        this.setPathfindingMalus(PathNodeType.LAVA, 0F);
     }
 
     // ========== Init AI ==========
@@ -60,17 +60,17 @@ public class EntitySalamander extends RideableCreatureEntity implements IMob {
     // ==================================================
 	// ========== Living Update ==========
 	@Override
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
     }
 
     @Override
     public void riderEffects(LivingEntity rider) {
-        rider.addPotionEffect(new EffectInstance(Effects.FIRE_RESISTANCE, (5 * 20) + 5, 1));
-        if(rider.isPotionActive(ObjectManager.getEffect("penetration")))
-            rider.removePotionEffect(ObjectManager.getEffect("penetration"));
-        if(rider.isBurning())
-            rider.extinguish();
+        rider.addEffect(new EffectInstance(Effects.FIRE_RESISTANCE, (5 * 20) + 5, 1));
+        if(rider.hasEffect(ObjectManager.getEffect("penetration")))
+            rider.removeEffect(ObjectManager.getEffect("penetration"));
+        if(rider.isOnFire())
+            rider.clearFire();
     }
 
 
@@ -90,7 +90,7 @@ public class EntitySalamander extends RideableCreatureEntity implements IMob {
     public float getBlockPathWeight(int x, int y, int z) {
         int waterWeight = 10;
         BlockPos pos = new BlockPos(x, y, z);
-        if(this.getEntityWorld().getBlockState(pos).getBlock() == Blocks.LAVA)
+        if(this.getCommandSenderWorld().getBlockState(pos).getBlock() == Blocks.LAVA)
             return (super.getBlockPathWeight(x, y, z) + 1) * (waterWeight + 1);
 
         return super.getBlockPathWeight(x, y, z);
@@ -98,14 +98,14 @@ public class EntitySalamander extends RideableCreatureEntity implements IMob {
 
     // Pushed By Water:
     @Override
-    public boolean isPushedByWater() {
+    public boolean isPushedByFluid() {
         return false;
     }
 
     // ========== Mounted Offset ==========
     @Override
-    public double getMountedYOffset() {
-        return (double)this.getSize(Pose.STANDING).height * 0.85D;
+    public double getPassengersRidingOffset() {
+        return (double)this.getDimensions(Pose.STANDING).height * 0.85D;
     }
     
     
@@ -116,14 +116,14 @@ public class EntitySalamander extends RideableCreatureEntity implements IMob {
     public void specialAttack() {
         // Firey Burst:
         double distance = 5.0D;
-        List<LivingEntity> possibleTargets = this.getEntityWorld().getEntitiesWithinAABB(LivingEntity.class, this.getBoundingBox().grow(distance, distance, distance), new Predicate<LivingEntity>() {
+        List<LivingEntity> possibleTargets = this.getCommandSenderWorld().getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(distance, distance, distance), new Predicate<LivingEntity>() {
             @Override
             public boolean apply(LivingEntity possibleTarget) {
                 if(!possibleTarget.isAlive()
                         || possibleTarget == EntitySalamander.this
-                        || EntitySalamander.this.isRidingOrBeingRiddenBy(possibleTarget)
-                        || EntitySalamander.this.isOnSameTeam(possibleTarget)
-                        || !EntitySalamander.this.canAttack(possibleTarget.getType())
+                        || EntitySalamander.this.hasIndirectPassenger(possibleTarget)
+                        || EntitySalamander.this.isAlliedTo(possibleTarget)
+                        || !EntitySalamander.this.canAttackType(possibleTarget.getType())
                         || !EntitySalamander.this.canAttack(possibleTarget))
                     return false;
                 return true;
@@ -138,7 +138,7 @@ public class EntitySalamander extends RideableCreatureEntity implements IMob {
                     }
                 }
                 if(doDamage) {
-                    possibleTarget.setFire(5);
+                    possibleTarget.setSecondsOnFire(5);
                 }
             }
         }
@@ -152,7 +152,7 @@ public class EntitySalamander extends RideableCreatureEntity implements IMob {
     // ==================================================
     @Override
     public void mountAbility(Entity rider) {
-        if(this.getEntityWorld().isRemote)
+        if(this.getCommandSenderWorld().isClientSide)
             return;
 
         if(this.abilityToggled)
@@ -184,7 +184,7 @@ public class EntitySalamander extends RideableCreatureEntity implements IMob {
     public void onDismounted(Entity entity) {
         super.onDismounted(entity);
         if(entity != null && entity instanceof LivingEntity) {
-            ((LivingEntity)entity).addPotionEffect(new EffectInstance(Effects.FIRE_RESISTANCE, 5 * 20, 1));
+            ((LivingEntity)entity).addEffect(new EffectInstance(Effects.FIRE_RESISTANCE, 5 * 20, 1));
         }
     }
 
@@ -228,7 +228,7 @@ public class EntitySalamander extends RideableCreatureEntity implements IMob {
    	// ==================================================
     // ========== Damage Modifier ==========
     public float getDamageModifier(DamageSource damageSrc) {
-    	if(damageSrc.isFireDamage())
+    	if(damageSrc.isFire())
     		return 0F;
     	else return super.getDamageModifier(damageSrc);
     }

@@ -116,12 +116,12 @@ public class ProjectileManager extends JSONLoader {
 	 * @return The projectile's Entity Type.
 	 */
 	public EntityType createEntityType(String entityName, Class<? extends Entity> entityClass) {
-		EntityType.Builder entityTypeBuilder = EntityType.Builder.create(EntityFactory.getInstance(), EntityClassification.MISC);
+		EntityType.Builder entityTypeBuilder = EntityType.Builder.of(EntityFactory.getInstance(), EntityClassification.MISC);
 		entityTypeBuilder.setTrackingRange(40);
 		entityTypeBuilder.setUpdateInterval(3);
 		entityTypeBuilder.setShouldReceiveVelocityUpdates(true);
-		entityTypeBuilder.size(0.25F, 0.25F);
-		entityTypeBuilder.disableSummoning();
+		entityTypeBuilder.sized(0.25F, 0.25F);
+		entityTypeBuilder.noSummon();
 		EntityType entityType = entityTypeBuilder.build(entityName);
 		entityType.setRegistryName(LycanitesMobs.MODID, entityName);
 		try {

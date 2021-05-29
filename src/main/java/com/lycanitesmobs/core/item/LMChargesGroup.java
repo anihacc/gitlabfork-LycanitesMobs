@@ -18,7 +18,7 @@ public class LMChargesGroup extends ItemGroup {
 	// ========== Tab Icon ==========
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public ItemStack createIcon() {
+	public ItemStack makeIcon() {
 		if(ObjectManager.getItem("hellfireballcharge") != null)
 			return new ItemStack(ObjectManager.getItem("hellfireballcharge"));
 		else if(ObjectManager.getItem("venomshotcharge") != null)

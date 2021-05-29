@@ -65,7 +65,7 @@ public class ExtendedEntity implements IExtendedEntity {
 		}
 
         // Client Side:
-		if(entity.getEntityWorld().isRemote) {
+		if(entity.getCommandSenderWorld().isClientSide) {
             if(clientExtendedEntities.containsKey(entity)) {
                 ExtendedEntity extendedEntity = clientExtendedEntities.get(entity);
                 extendedEntity.setEntity(entity);
@@ -110,7 +110,7 @@ public class ExtendedEntity implements IExtendedEntity {
 
 	public void setLastAttackedEntity(LivingEntity target) {
 		this.lastAttackedEntity = target;
-		this.lastAttackedTime = this.entity.ticksExisted;
+		this.lastAttackedTime = this.entity.tickCount;
 	}
 	
 	
@@ -138,7 +138,7 @@ public class ExtendedEntity implements IExtendedEntity {
         // Force Remove Entity:
 		ExtendedEntity.FORCE_REMOVE_ENTITY_IDS = ConfigAdmin.INSTANCE.forceRemoveEntityIds.get();
 		ExtendedEntity.FORCE_REMOVE_ENTITY_TICKS = 40;
-        if (!this.entity.getEntityWorld().isRemote && FORCE_REMOVE_ENTITY_IDS != null && FORCE_REMOVE_ENTITY_IDS.size() > 0 && !this.forceRemoveChecked) {
+        if (!this.entity.getCommandSenderWorld().isClientSide && FORCE_REMOVE_ENTITY_IDS != null && FORCE_REMOVE_ENTITY_IDS.size() > 0 && !this.forceRemoveChecked) {
             LycanitesMobs.logDebug("ForceRemoveEntity", "Forced entity removal, checking: " + this.entity.getName());
             for (String forceRemoveID : FORCE_REMOVE_ENTITY_IDS) {
                 if (forceRemoveID.equalsIgnoreCase(this.entity.getType().getRegistryName().toString())) {
@@ -153,10 +153,10 @@ public class ExtendedEntity implements IExtendedEntity {
 
         // Safe Position:
 		if (this.lastSafePos == null) {
-			this.lastSafePos = new Vector3d(this.entity.getPositionVec().getX(), this.entity.getPositionVec().getY(), this.entity.getPositionVec().getZ());
+			this.lastSafePos = new Vector3d(this.entity.position().x(), this.entity.position().y(), this.entity.position().z());
 		}
-		if (!this.entity.getEntityWorld().getBlockState(this.entity.getPosition()).getMaterial().isSolid()) {
-			this.lastSafePos = new Vector3d(Math.floor(this.entity.getPositionVec().getX()) + 0.5D, this.entity.getPosition().getY(), Math.floor(this.entity.getPositionVec().getZ()) + 0.5D);
+		if (!this.entity.getCommandSenderWorld().getBlockState(this.entity.blockPosition()).getMaterial().isSolid()) {
+			this.lastSafePos = new Vector3d(Math.floor(this.entity.position().x()) + 0.5D, this.entity.blockPosition().getY(), Math.floor(this.entity.position().z()) + 0.5D);
 		}
 
         // Fear Entity:
@@ -193,7 +193,7 @@ public class ExtendedEntity implements IExtendedEntity {
             return;
 
         // Check:
-		if(!this.entity.getEntityWorld().isRemote) {
+		if(!this.entity.getCommandSenderWorld().isClientSide) {
 			if (!this.pickedUpByEntity.isAlive()) {
 				this.setPickedUpByEntity(null);
 				return;
@@ -206,12 +206,12 @@ public class ExtendedEntity implements IExtendedEntity {
 			}
 			Effect weight = ObjectManager.getEffect("weight");
 			if (weight != null) {
-				if (this.entity.isPotionActive(weight)) {
+				if (this.entity.hasEffect(weight)) {
 					this.setPickedUpByEntity(null);
 					return;
 				}
 			}
-			if (this.entity.getDistance(this.pickedUpByEntity) > 32D) {
+			if (this.entity.distanceTo(this.pickedUpByEntity) > 32D) {
 				this.setPickedUpByEntity(null);
 				return;
 			}
@@ -220,13 +220,13 @@ public class ExtendedEntity implements IExtendedEntity {
         // Movement:
 		if(this.pickedUpByEntity != null) {
 			double[] pickupOffset = this.getPickedUpOffset();
-			this.entity.setPosition(this.pickedUpByEntity.getPositionVec().getX() + pickupOffset[0], this.pickedUpByEntity.getPositionVec().getY() + pickupOffset[1], this.pickedUpByEntity.getPositionVec().getZ() + pickupOffset[2]);
-			this.entity.setMotion(this.pickedUpByEntity.getMotion());
+			this.entity.setPos(this.pickedUpByEntity.position().x() + pickupOffset[0], this.pickedUpByEntity.position().y() + pickupOffset[1], this.pickedUpByEntity.position().z() + pickupOffset[2]);
+			this.entity.setDeltaMovement(this.pickedUpByEntity.getDeltaMovement());
 			this.entity.fallDistance = 0;
-			if (!this.entity.getEntityWorld().isRemote && this.entity instanceof PlayerEntity) {
+			if (!this.entity.getCommandSenderWorld().isClientSide && this.entity instanceof PlayerEntity) {
 				PlayerEntity player = (PlayerEntity) this.entity;
-				player.abilities.allowFlying = true;
-				this.entity.noClip = true;
+				player.abilities.mayfly = true;
+				this.entity.noPhysics = true;
 			}
 		}
     }
@@ -239,37 +239,37 @@ public class ExtendedEntity implements IExtendedEntity {
 		this.pickedUpByEntity = pickedUpByEntity;
 
         // Server Side:
-		if(!this.entity.getEntityWorld().isRemote) {
+		if(!this.entity.getCommandSenderWorld().isClientSide) {
 
             // Player Flying:
 			if(this.entity instanceof PlayerEntity) {
 				if(pickedUpByEntity != null) {
-                    this.playerAllowFlyingSnapshot = ((PlayerEntity) this.entity).abilities.allowFlying;
-                    this.playerIsFlyingSnapshot = ((PlayerEntity)this.entity).abilities.isFlying;
+                    this.playerAllowFlyingSnapshot = ((PlayerEntity) this.entity).abilities.mayfly;
+                    this.playerIsFlyingSnapshot = ((PlayerEntity)this.entity).abilities.flying;
                 }
 				else {
-                    ((PlayerEntity)this.entity).abilities.allowFlying = this.playerAllowFlyingSnapshot;
-                    ((PlayerEntity)this.entity).abilities.isFlying = this.playerIsFlyingSnapshot;
-                    this.entity.noClip = false;
+                    ((PlayerEntity)this.entity).abilities.mayfly = this.playerAllowFlyingSnapshot;
+                    ((PlayerEntity)this.entity).abilities.flying = this.playerIsFlyingSnapshot;
+                    this.entity.noPhysics = false;
                 }
 			}
 
             // Teleport To Initial Pickup Position:
             if(this.pickedUpByEntity != null && !(this.entity instanceof PlayerEntity)) {
                 double[] pickupOffset = this.getPickedUpOffset();
-                this.entity.teleportKeepLoaded(this.pickedUpByEntity.getPositionVec().getX() + pickupOffset[0], this.pickedUpByEntity.getPositionVec().getY() + pickupOffset[1], this.pickedUpByEntity.getPositionVec().getZ() + pickupOffset[2]);
+                this.entity.teleportToWithTicket(this.pickedUpByEntity.position().x() + pickupOffset[0], this.pickedUpByEntity.position().y() + pickupOffset[1], this.pickedUpByEntity.position().z() + pickupOffset[2]);
             }
 
 			MessageEntityPickedUp message = new MessageEntityPickedUp(this.entity, pickedUpByEntity);
-			LycanitesMobs.packetHandler.sendToWorld(message, this.entity.getEntityWorld());
+			LycanitesMobs.packetHandler.sendToWorld(message, this.entity.getCommandSenderWorld());
 		}
 
         // Safe Drop Position:
         if(pickedUpByEntity == null) {
             if(this.lastSafePos != null) {
-                this.entity.setPosition(this.lastSafePos.getX(), this.lastSafePos.getY(), this.lastSafePos.getZ());
+                this.entity.setPos(this.lastSafePos.x(), this.lastSafePos.y(), this.lastSafePos.z());
             }
-            this.entity.setMotion(0, 0, 0);
+            this.entity.setDeltaMovement(0, 0, 0);
             this.entity.fallDistance = 0;
         }
 	}
@@ -303,7 +303,7 @@ public class ExtendedEntity implements IExtendedEntity {
 	 */
 	public void setPerchedByEntity(Entity perchedByEntity) {
 		if(this.perchedByEntity != null) {
-			this.perchedByEntity.noClip = this.perchedEntityNoclip;
+			this.perchedByEntity.noPhysics = this.perchedEntityNoclip;
 			if(this.perchedByEntity instanceof BaseCreatureEntity) {
 				((BaseCreatureEntity) this.perchedByEntity).setPerchTarget(null);
 			}
@@ -311,16 +311,16 @@ public class ExtendedEntity implements IExtendedEntity {
 
 		this.perchedByEntity = perchedByEntity;
 		if(perchedByEntity != null) {
-			this.perchedEntityNoclip = perchedByEntity.noClip;
-			perchedByEntity.noClip = true;
+			this.perchedEntityNoclip = perchedByEntity.noPhysics;
+			perchedByEntity.noPhysics = true;
 			if(perchedByEntity instanceof BaseCreatureEntity) {
 				((BaseCreatureEntity)perchedByEntity).setPerchTarget(this.entity);
 			}
 		}
 
-		if(!this.entity.getEntityWorld().isRemote) {
+		if(!this.entity.getCommandSenderWorld().isClientSide) {
 			MessageEntityPerched message = new MessageEntityPerched(this.entity, this.perchedByEntity);
-			LycanitesMobs.packetHandler.sendToWorld(message, this.entity.getEntityWorld());
+			LycanitesMobs.packetHandler.sendToWorld(message, this.entity.getCommandSenderWorld());
 		}
 	}
 
@@ -337,12 +337,12 @@ public class ExtendedEntity implements IExtendedEntity {
 	 * @return The perch position.
 	 */
 	public Vector3d getPerchPosition() {
-		double entityWidth = this.entity.getSize(this.entity.getPose()).width;
-		double entityHeight = this.entity.getSize(this.entity.getPose()).height;
+		double entityWidth = this.entity.getDimensions(this.entity.getPose()).width;
+		double entityHeight = this.entity.getDimensions(this.entity.getPose()).height;
 
-		double angle = Math.toRadians(this.entity.rotationYaw) + 90;
-		double xPerchPos = this.entity.getPositionVec().getX();
-		double zPerchPos = this.entity.getPositionVec().getZ();
+		double angle = Math.toRadians(this.entity.yRot) + 90;
+		double xPerchPos = this.entity.position().x();
+		double zPerchPos = this.entity.position().z();
 		double distance = entityWidth * 0.7D;
 		if(distance != 0) {
 			xPerchPos += distance * -Math.sin(angle);
@@ -351,7 +351,7 @@ public class ExtendedEntity implements IExtendedEntity {
 
 		return new Vector3d(
 				xPerchPos,
-				this.entity.getPositionVec().getY() + entityHeight * 0.78D,
+				this.entity.position().y() + entityHeight * 0.78D,
 				zPerchPos
 		);
 	}
@@ -363,10 +363,10 @@ public class ExtendedEntity implements IExtendedEntity {
 		Entity perchedByEntity = this.getPerchedByEntity();
 		if(perchedByEntity != null) {
 			Vector3d perchPosition = this.getPerchPosition();
-			perchedByEntity.setPosition(perchPosition.getX(), perchPosition.getY(), perchPosition.getZ());
-			perchedByEntity.setMotion(this.entity.getMotion());
-			perchedByEntity.rotationYaw = this.entity.rotationYaw;
-			perchedByEntity.noClip = true;
+			perchedByEntity.setPos(perchPosition.x(), perchPosition.y(), perchPosition.z());
+			perchedByEntity.setDeltaMovement(this.entity.getDeltaMovement());
+			perchedByEntity.yRot = this.entity.yRot;
+			perchedByEntity.noPhysics = true;
 		}
 	}
 

@@ -17,8 +17,8 @@ public class BlockMaker {
      * @param stoneName The name of the stone block, such as "demon" or "shadow", etc. (stone and crystal are appended).
      * **/
     public static void addStoneBlocks(ModInfo group, String stoneName) {
-        Block.Properties properties = Block.Properties.create(Material.ROCK).sound(SoundType.STONE).hardnessAndResistance(2F, 1200.0F);
-        Block.Properties crystalProperties = Block.Properties.create(Material.GLASS).sound(SoundType.GLASS).hardnessAndResistance(0.5F, 1200.0F).setLightLevel((BlockState blockState) -> { return 15; });
+        Block.Properties properties = Block.Properties.of(Material.STONE).sound(SoundType.STONE).strength(2F, 1200.0F);
+        Block.Properties crystalProperties = Block.Properties.of(Material.GLASS).sound(SoundType.GLASS).strength(0.5F, 1200.0F).lightLevel((BlockState blockState) -> { return 15; });
 
         BlockBase stoneBlock = new BlockBase(properties, group, stoneName + "stone");
         ObjectManager.addBlock(stoneName + "stone", stoneBlock);

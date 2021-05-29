@@ -34,17 +34,17 @@ public class AsmodeusStructureBuilder extends StructureBuilder {
 		int height = 40;
 		if(originY < 5)
 			originY = 5;
-		if(world.getHeight() <= height)
+		if(world.getMaxBuildHeight() <= height)
 			originY = 5;
-		else if(originY + height >= world.getHeight())
-			originY = Math.max(5, world.getHeight() - height - 1);
+		else if(originY + height >= world.getMaxBuildHeight())
+			originY = Math.max(5, world.getMaxBuildHeight() - height - 1);
 
 		// Effects:
 		if(ticks == 1) {
 			for(int i = 0; i < 5; i++) {
 				BaseProjectileEntity baseProjectileEntity = new EntityHellfireWall(ProjectileManager.getInstance().oldProjectileTypes.get(EntityHellfireWall.class), world, originX, originY + (10 * i), originZ);
 				baseProjectileEntity.projectileLife = 20 * 20;
-				world.addEntity(baseProjectileEntity);
+				world.addFreshEntity(baseProjectileEntity);
 				if(worldExt != null) {
 					worldExt.bossUpdate(baseProjectileEntity);
 					worldExt.overrideBossRange(baseProjectileEntity, CreatureManager.getInstance().getCreature("asmodeus").bossNearbyRange);
@@ -69,14 +69,14 @@ public class AsmodeusStructureBuilder extends StructureBuilder {
 
 		// Explosions:
 		if(ticks >= 10 * 20 && ticks % 10 == 0) {
-			world.createExplosion(null, originX - 20 + world.rand.nextInt(40), originY + 25 + world.rand.nextInt(10), originZ - 20 + world.rand.nextInt(40), 2, Explosion.Mode.NONE);
+			world.explode(null, originX - 20 + world.random.nextInt(40), originY + 25 + world.random.nextInt(10), originZ - 20 + world.random.nextInt(40), 2, Explosion.Mode.NONE);
 		}
 
 		// Spawn Boss:
 		if(ticks == 20 * 20) {
 			BaseCreatureEntity baseCreatureEntity = (BaseCreatureEntity) CreatureManager.getInstance().getCreature("asmodeus").createEntity(world);
-			baseCreatureEntity.setLocationAndAngles(originX, originY + 1, originZ, 0, 0);
-			world.addEntity(baseCreatureEntity);
+			baseCreatureEntity.moveTo(originX, originY + 1, originZ, 0, 0);
+			world.addFreshEntity(baseCreatureEntity);
 			baseCreatureEntity.setArenaCenter(new BlockPos(originX, originY + 1, originZ));
 			if(worldExt != null) {
 				MobEventPlayerServer mobEventPlayerServer = worldExt.getMobEventPlayerServer(this.name);
@@ -100,27 +100,27 @@ public class AsmodeusStructureBuilder extends StructureBuilder {
 		int maxY = originY + height;
 		int minZ = originZ - radius;
 		int maxZ = originZ + radius;
-		BlockState floor = ObjectManager.getBlock("aberrantstonetile").getDefaultState();
-		BlockState light = ObjectManager.getBlock("aberrantcrystal").getDefaultState();
-		BlockState trimming = ObjectManager.getBlock("aberrantstonechiseled").getDefaultState();
+		BlockState floor = ObjectManager.getBlock("aberrantstonetile").defaultBlockState();
+		BlockState light = ObjectManager.getBlock("aberrantcrystal").defaultBlockState();
+		BlockState trimming = ObjectManager.getBlock("aberrantstonechiseled").defaultBlockState();
 
 		for(int x = minX; x <= maxX; x++) {
 			for(int z = minZ; z <= maxZ; z++) {
-				int topY = world.getHeight(Heightmap.Type.WORLD_SURFACE, new BlockPos(x, 0, z)).getY();
+				int topY = world.getHeightmapPos(Heightmap.Type.WORLD_SURFACE, new BlockPos(x, 0, z)).getY();
 				for(int y = minY; y <= maxY; y++) {
 					BlockPos buildPos = new BlockPos(x, y, z);
 					if(y == minY) {
 						if(x == minX || x == maxX || z == minZ || z == maxZ)
-							world.setBlockState(buildPos, trimming, 2);
+							world.setBlock(buildPos, trimming, 2);
 						else if(x % 6 == 0 && z % 6 == 0)
-							world.setBlockState(buildPos, light, 2);
+							world.setBlock(buildPos, light, 2);
 						else
-							world.setBlockState(buildPos, floor, 2);
+							world.setBlock(buildPos, floor, 2);
 					}
 					else {
 						if (y > minY + 5 && y >= topY)
 							break;
-						world.setBlockState(buildPos, Blocks.AIR.getDefaultState(), 2);
+						world.setBlock(buildPos, Blocks.AIR.defaultBlockState(), 2);
 					}
 				}
 			}
@@ -141,12 +141,12 @@ public class AsmodeusStructureBuilder extends StructureBuilder {
 		int maxY = originY + height;
 		int minZ = originZ - (radius + thickness);
 		int maxZ = originZ + (radius + thickness);
-		BlockState base = ObjectManager.getBlock("aberrantstonebrick").getDefaultState();
-		BlockState light = ObjectManager.getBlock("aberrantcrystal").getDefaultState();
-		BlockState trimming = ObjectManager.getBlock("aberrantstonechiseled").getDefaultState();
-		BlockState top = ObjectManager.getBlock("aberrantstonepolished").getDefaultState();
-		BlockState fireBase = Blocks.OBSIDIAN.getDefaultState();
-		BlockState fire = ObjectManager.getBlock("hellfire").getDefaultState();
+		BlockState base = ObjectManager.getBlock("aberrantstonebrick").defaultBlockState();
+		BlockState light = ObjectManager.getBlock("aberrantcrystal").defaultBlockState();
+		BlockState trimming = ObjectManager.getBlock("aberrantstonechiseled").defaultBlockState();
+		BlockState top = ObjectManager.getBlock("aberrantstonepolished").defaultBlockState();
+		BlockState fireBase = Blocks.OBSIDIAN.defaultBlockState();
+		BlockState fire = ObjectManager.getBlock("hellfire").defaultBlockState();
 
 		for (int x = minX; x <= maxX; x++) {
 			for (int z = minZ; z <= maxZ; z++) {
@@ -156,18 +156,18 @@ public class AsmodeusStructureBuilder extends StructureBuilder {
 					BlockPos buildPos = new BlockPos(x, y, z);
 					if(y < maxY - 2) {
 						if (y - 1 % 8 == 0)
-							world.setBlockState(buildPos, light, 2);
+							world.setBlock(buildPos, light, 2);
 						else if (y % 8 == 0)
-							world.setBlockState(buildPos, trimming, 2);
+							world.setBlock(buildPos, trimming, 2);
 						else
-							world.setBlockState(buildPos, base, 2);
+							world.setBlock(buildPos, base, 2);
 					}
 					else if(y == maxY - 2)
-						world.setBlockState(buildPos, top, 2);
+						world.setBlock(buildPos, top, 2);
 					else if(y == maxY - 1)
-						world.setBlockState(buildPos, fireBase, 2);
+						world.setBlock(buildPos, fireBase, 2);
 					else
-						world.setBlockState(buildPos, fire, 2);
+						world.setBlock(buildPos, fire, 2);
 				}
 			}
 		}
@@ -198,12 +198,12 @@ public class AsmodeusStructureBuilder extends StructureBuilder {
 		int maxY = originY + height;
 		int minZ = originZ - radius;
 		int maxZ = originZ + radius;
-		BlockState base = ObjectManager.getBlock("aberrantstonepillar").getDefaultState();
-		BlockState light = ObjectManager.getBlock("aberrantcrystal").getDefaultState();
-		BlockState trimming = ObjectManager.getBlock("aberrantstonechiseled").getDefaultState();
-		BlockState top = ObjectManager.getBlock("aberrantstonepolished").getDefaultState();
-		BlockState fireBase = Blocks.OBSIDIAN.getDefaultState();
-		BlockState fire = ObjectManager.getBlock("hellfire").getDefaultState();
+		BlockState base = ObjectManager.getBlock("aberrantstonepillar").defaultBlockState();
+		BlockState light = ObjectManager.getBlock("aberrantcrystal").defaultBlockState();
+		BlockState trimming = ObjectManager.getBlock("aberrantstonechiseled").defaultBlockState();
+		BlockState top = ObjectManager.getBlock("aberrantstonepolished").defaultBlockState();
+		BlockState fireBase = Blocks.OBSIDIAN.defaultBlockState();
+		BlockState fire = ObjectManager.getBlock("hellfire").defaultBlockState();
 
 		for(int x = minX; x <= maxX; x++) {
 			for(int z = minZ; z <= maxZ; z++) {
@@ -211,18 +211,18 @@ public class AsmodeusStructureBuilder extends StructureBuilder {
 					BlockPos buildPos = new BlockPos(x, y, z);
 					if(y < maxY - 2) {
 						if (y % 7 == 0)
-							world.setBlockState(buildPos, light, 2);
+							world.setBlock(buildPos, light, 2);
 						else if (y % 8 == 0)
-							world.setBlockState(buildPos, trimming, 2);
+							world.setBlock(buildPos, trimming, 2);
 						else
-							world.setBlockState(buildPos, base, 2);
+							world.setBlock(buildPos, base, 2);
 					}
 					else if(y == maxY - 2)
-						world.setBlockState(buildPos, top, 2);
+						world.setBlock(buildPos, top, 2);
 					else if(y == maxY - 1)
-						world.setBlockState(buildPos, fireBase, 2);
+						world.setBlock(buildPos, fireBase, 2);
 					else
-						world.setBlockState(buildPos, fire, 2);
+						world.setBlock(buildPos, fire, 2);
 				}
 			}
 		}

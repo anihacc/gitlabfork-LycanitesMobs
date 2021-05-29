@@ -139,7 +139,7 @@ public class ElementInfo {
 		for(String buff : this.buffs) {
 			Effect effect = GameRegistry.findRegistry(Effect.class).getValue(new ResourceLocation(buff));
 			if(effect != null) {
-				targetEntity.addPotionEffect(new EffectInstance(effect, duration, amplifier));
+				targetEntity.addEffect(new EffectInstance(effect, duration, amplifier));
 			}
 		}
 	}
@@ -158,12 +158,12 @@ public class ElementInfo {
 		duration = Math.round((float)duration * (float)this.debuffDurationMultiplier);
 		for(String debuff : this.debuffs) {
 			if("burning".equalsIgnoreCase(debuff)) {
-				targetEntity.setFire(duration / 20);
+				targetEntity.setSecondsOnFire(duration / 20);
 				continue;
 			}
 			Effect effect = GameRegistry.findRegistry(Effect.class).getValue(new ResourceLocation(debuff));
 			if(effect != null) {
-				targetEntity.addPotionEffect(new EffectInstance(effect, duration, amplifier));
+				targetEntity.addEffect(new EffectInstance(effect, duration, amplifier));
 			}
 		}
 	}
@@ -175,13 +175,13 @@ public class ElementInfo {
 	 * @return True if the effect can be applied.
 	 */
 	public boolean isEffectApplicable(EffectInstance effect) {
-		if(effect == null || effect.getPotion() == null || effect.getPotion().getRegistryName() == null) {
+		if(effect == null || effect.getEffect() == null || effect.getEffect().getRegistryName() == null) {
 			return false;
 		}
-		if(this.debuffs.contains(effect.getPotion().getRegistryName().toString())) {
+		if(this.debuffs.contains(effect.getEffect().getRegistryName().toString())) {
 			return false;
 		}
-		if(this.immunities.contains(effect.getPotion().getRegistryName().toString())) {
+		if(this.immunities.contains(effect.getEffect().getRegistryName().toString())) {
 			return false;
 		}
 		/*for(ElementInfo element : this.components) {

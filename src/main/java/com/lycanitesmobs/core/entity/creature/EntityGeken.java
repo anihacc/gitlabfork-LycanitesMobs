@@ -41,17 +41,17 @@ public class EntityGeken extends TameableCreatureEntity implements IMob {
     // ==================================================
 	// ========== Living Update ==========
 	@Override
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
         
         // Random Leaping:
-        if(this.onGround && !this.getEntityWorld().isRemote) {
+        if(this.onGround && !this.getCommandSenderWorld().isClientSide) {
         	if(this.hasAttackTarget()) {
-        		if(this.rand.nextInt(10) == 0)
-        			this.leap(6.0F, 0.6D, this.getAttackTarget());
+        		if(this.random.nextInt(10) == 0)
+        			this.leap(6.0F, 0.6D, this.getTarget());
         	}
         	else {
-        		if(this.isMoving() && this.rand.nextInt(50) == 0)
+        		if(this.isMoving() && this.random.nextInt(50) == 0)
         			this.leap(1.0D, 1.0D);
         	}
         }

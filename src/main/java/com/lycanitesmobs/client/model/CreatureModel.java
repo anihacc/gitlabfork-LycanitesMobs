@@ -28,15 +28,15 @@ public abstract class CreatureModel extends EntityModel<BaseCreatureEntity> impl
 
 	public CreatureModel(float shadowSize) {
     	// Texture:
-    	this.textureWidth = 128;
-		this.textureHeight = 128;
+    	this.texWidth = 128;
+		this.texHeight = 128;
     }
 
     @Override
-    public void setRotationAngles(BaseCreatureEntity entity, float time, float distance, float loop, float lookY, float lookX) {}
+    public void setupAnim(BaseCreatureEntity entity, float time, float distance, float loop, float lookY, float lookX) {}
 
 	@Override
-	public void render(MatrixStack matrixStack, IVertexBuilder vertexBuilder, int someIntA, int someIntB, float someFloatA, float someFloatB, float someFloatC, float someFloatD) {}
+	public void renderToBuffer(MatrixStack matrixStack, IVertexBuilder vertexBuilder, int someIntA, int someIntB, float someFloatA, float someFloatB, float someFloatC, float someFloatD) {}
 
 	/**
 	 * Generates all animation frames for a render tick.
@@ -218,14 +218,14 @@ public abstract class CreatureModel extends EntityModel<BaseCreatureEntity> impl
 
 	@Override
 	public void doRotate(float rotX, float rotY, float rotZ) {
-		this.matrixStack.rotate(new Vector3f(1F, 0F, 0F).rotationDegrees(rotX));
-		this.matrixStack.rotate(new Vector3f(0F, 1F, 0F).rotationDegrees(rotY));
-		this.matrixStack.rotate(new Vector3f(0F, 0F, 1F).rotationDegrees(rotZ));
+		this.matrixStack.mulPose(new Vector3f(1F, 0F, 0F).rotationDegrees(rotX));
+		this.matrixStack.mulPose(new Vector3f(0F, 1F, 0F).rotationDegrees(rotY));
+		this.matrixStack.mulPose(new Vector3f(0F, 0F, 1F).rotationDegrees(rotZ));
 	}
 
 	@Override
 	public void doAngle(float rotation, float angleX, float angleY, float angleZ) {
-		this.matrixStack.rotate(new Vector3f(angleX, angleY, angleZ).rotationDegrees(rotation));
+		this.matrixStack.mulPose(new Vector3f(angleX, angleY, angleZ).rotationDegrees(rotation));
 	}
 
 	@Override

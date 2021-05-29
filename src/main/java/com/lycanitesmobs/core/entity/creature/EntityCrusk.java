@@ -47,15 +47,15 @@ public class EntityCrusk extends TameableCreatureEntity implements IGroupHeavy {
     public boolean canStealth() {
     	if(this.isTamed() && this.isSitting())
     		return false;
-        BlockState blockState = this.getEntityWorld().getBlockState(this.getPosition().add(0, -1, 0));
+        BlockState blockState = this.getCommandSenderWorld().getBlockState(this.blockPosition().offset(0, -1, 0));
         if(blockState.getBlock() != Blocks.AIR) {
-        	if(blockState.getMaterial() == Material.EARTH) return true;
-        	if(blockState.getMaterial() == Material.ORGANIC) return true;
+        	if(blockState.getMaterial() == Material.DIRT) return true;
+        	if(blockState.getMaterial() == Material.GRASS) return true;
         	if(blockState.getMaterial() == Material.LEAVES) return true;
         	if(blockState.getMaterial() == Material.SAND) return true;
         	if(blockState.getMaterial() == Material.CLAY) return true;
+        	if(blockState.getMaterial() == Material.TOP_SNOW) return true;
         	if(blockState.getMaterial() == Material.SNOW) return true;
-        	if(blockState.getMaterial() == Material.SNOW_BLOCK) return true;
         }
         if(blockState.getBlock() == Blocks.NETHERRACK)
             return true;
@@ -67,7 +67,7 @@ public class EntityCrusk extends TameableCreatureEntity implements IGroupHeavy {
    	//                     Abilities
    	// ==================================================
     public boolean canBeTempted() {
-    	return this.isChild();
+    	return this.isBaby();
     }
     
     

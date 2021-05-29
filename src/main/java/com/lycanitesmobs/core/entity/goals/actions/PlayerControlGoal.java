@@ -6,6 +6,8 @@ import net.minecraft.entity.ai.goal.Goal;
 
 import java.util.EnumSet;
 
+import net.minecraft.entity.ai.goal.Goal.Flag;
+
 public class PlayerControlGoal extends Goal {
     // Targets:
     private RideableCreatureEntity host;
@@ -21,7 +23,7 @@ public class PlayerControlGoal extends Goal {
  	// ==================================================
     public PlayerControlGoal(RideableCreatureEntity setHost) {
         this.host = setHost;
-		this.setMutexFlags(EnumSet.of(Flag.MOVE, Flag.LOOK, Flag.JUMP));
+		this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK, Flag.JUMP));
     }
     
     
@@ -53,7 +55,7 @@ public class PlayerControlGoal extends Goal {
  	//                  Should Execute
  	// ==================================================
 	@Override
-    public boolean shouldExecute() {
+    public boolean canUse() {
     	if(!this.enabled)
     		return false;
     	if(!this.host.isTamed())
@@ -70,8 +72,8 @@ public class PlayerControlGoal extends Goal {
  	//                 Continue Executing
  	// ==================================================
 	@Override
-    public boolean shouldContinueExecuting() {
-    	return this.shouldExecute();
+    public boolean canContinueToUse() {
+    	return this.canUse();
     }
     
     
@@ -79,7 +81,7 @@ public class PlayerControlGoal extends Goal {
  	//                      Start
  	// ==================================================
 	@Override
-    public void startExecuting() {
+    public void start() {
 
     }
 	
@@ -88,7 +90,7 @@ public class PlayerControlGoal extends Goal {
  	//                      Reset
  	// ==================================================
 	@Override
-    public void resetTask() {
+    public void stop() {
     	
     }
 	

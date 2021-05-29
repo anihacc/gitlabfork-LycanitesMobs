@@ -44,13 +44,13 @@ public class ExplosionSpawnTrigger extends EntitySpawnTrigger {
 		}
 
 		// Chance:
-		if(this.chance < 1 && world.rand.nextDouble() > this.chance) {
+		if(this.chance < 1 && world.random.nextDouble() > this.chance) {
 			return false;
 		}
 
 		// Entity Check:
-		if(!this.playerOnly && explosion.getExplosivePlacedBy() != null) {
-			if(!this.isMatchingEntity(explosion.getExplosivePlacedBy())) {
+		if(!this.playerOnly && explosion.getSourceMob() != null) {
+			if(!this.isMatchingEntity(explosion.getSourceMob())) {
 				return false;
 			}
 		}

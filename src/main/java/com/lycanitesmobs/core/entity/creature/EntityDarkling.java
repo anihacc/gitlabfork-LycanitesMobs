@@ -22,9 +22,9 @@ import net.minecraft.world.World;
 public class EntityDarkling extends TameableCreatureEntity implements IMob {
 
     // Data Manager:
-    protected static final DataParameter<Integer> LATCH_TARGET = EntityDataManager.createKey(EntityDarkling.class, DataSerializers.VARINT);
-    protected static final DataParameter<Float> LATCH_HEIGHT = EntityDataManager.createKey(EntityDarkling.class, DataSerializers.FLOAT);
-    protected static final DataParameter<Float> LATCH_ANGLE = EntityDataManager.createKey(EntityDarkling.class, DataSerializers.FLOAT);
+    protected static final DataParameter<Integer> LATCH_TARGET = EntityDataManager.defineId(EntityDarkling.class, DataSerializers.INT);
+    protected static final DataParameter<Float> LATCH_HEIGHT = EntityDataManager.defineId(EntityDarkling.class, DataSerializers.FLOAT);
+    protected static final DataParameter<Float> LATCH_ANGLE = EntityDataManager.defineId(EntityDarkling.class, DataSerializers.FLOAT);
 
     // Latching
     LivingEntity latchEntity = null;
@@ -57,11 +57,11 @@ public class EntityDarkling extends TameableCreatureEntity implements IMob {
 
     /** Initiates the entity setting all the values to be watched by the datawatcher. **/
     @Override
-    protected void registerData() {
-        super.registerData();
-        this.dataManager.register(LATCH_TARGET, 0);
-        this.dataManager.register(LATCH_HEIGHT, (float)this.latchHeight);
-        this.dataManager.register(LATCH_ANGLE, (float)this.latchAngle);
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(LATCH_TARGET, 0);
+        this.entityData.define(LATCH_HEIGHT, (float)this.latchHeight);
+        this.entityData.define(LATCH_ANGLE, (float)this.latchAngle);
     }
 	
 	
@@ -70,28 +70,28 @@ public class EntityDarkling extends TameableCreatureEntity implements IMob {
     // ==================================================
 	// ========== Living Update ==========
 	@Override
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
         
         // Leap:
-        if(!this.getEntityWorld().isRemote && this.hasAttackTarget() && !this.hasLatchTarget() && this.onGround && !this.getEntityWorld().isRemote && this.rand.nextInt(10) == 0)
-        	this.leap(6.0F, 0.6D, this.getAttackTarget());
+        if(!this.getCommandSenderWorld().isClientSide && this.hasAttackTarget() && !this.hasLatchTarget() && this.onGround && !this.getCommandSenderWorld().isClientSide && this.random.nextInt(10) == 0)
+        	this.leap(6.0F, 0.6D, this.getTarget());
 
         // Latch:
         if(this.hasLatchTarget()) {
-            this.noClip = true;
+            this.noPhysics = true;
 
             // Movement:
-            Vector3d latchPos = this.getFacingPositionDouble(this.getLatchTarget().getPositionVec().getX(), this.getLatchTarget().getPositionVec().getY() + (this.getLatchTarget().getSize(Pose.STANDING).height * this.latchHeight), this.getLatchTarget().getPositionVec().getZ(), this.getLatchTarget().getSize(Pose.STANDING).width * 0.5D, this.latchAngle);
-            this.setPosition(latchPos.x, latchPos.y, latchPos.z);
-            double distanceX = this.getLatchTarget().getPositionVec().getX() - this.getPositionVec().getX();
-            double distanceZ = this.getLatchTarget().getPositionVec().getZ() - this.getPositionVec().getZ();
-            this.renderYawOffset = this.rotationYaw = -((float) MathHelper.atan2(distanceX, distanceZ)) * (180F / (float)Math.PI);
+            Vector3d latchPos = this.getFacingPositionDouble(this.getLatchTarget().position().x(), this.getLatchTarget().position().y() + (this.getLatchTarget().getDimensions(Pose.STANDING).height * this.latchHeight), this.getLatchTarget().position().z(), this.getLatchTarget().getDimensions(Pose.STANDING).width * 0.5D, this.latchAngle);
+            this.setPos(latchPos.x, latchPos.y, latchPos.z);
+            double distanceX = this.getLatchTarget().position().x() - this.position().x();
+            double distanceZ = this.getLatchTarget().position().z() - this.position().z();
+            this.yBodyRot = this.yRot = -((float) MathHelper.atan2(distanceX, distanceZ)) * (180F / (float)Math.PI);
 
             // Server:
-            if(!this.getEntityWorld().isRemote) {
+            if(!this.getCommandSenderWorld().isClientSide) {
                 if(this.getLatchTarget().isAlive() && !this.isInWater()) {
-                    this.setAttackTarget(this.getLatchTarget());
+                    this.setTarget(this.getLatchTarget());
                     if (this.updateTick % 40 == 0) {
                         float damage = this.getAttackDamage(1);
                         if (this.attackMelee(this.getLatchTarget(), damage))
@@ -99,21 +99,21 @@ public class EntityDarkling extends TameableCreatureEntity implements IMob {
                     }
                 }
                 else {
-                    this.setPosition(this.getLatchTarget().getPositionVec().getX(), this.getLatchTarget().getPositionVec().getY(), this.getLatchTarget().getPositionVec().getZ());
+                    this.setPos(this.getLatchTarget().position().x(), this.getLatchTarget().position().y(), this.getLatchTarget().position().z());
                     this.setLatchTarget(null);
-                    this.noClip = false;
+                    this.noPhysics = false;
                 }
             }
 
             // Client:
             else {
                 for(int i = 0; i < 2; ++i) {
-                    this.getEntityWorld().addParticle(RedstoneParticleData.REDSTONE_DUST, this.getPositionVec().getX() + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, this.getPositionVec().getY() + this.rand.nextDouble() * (double)this.getSize(Pose.STANDING).height, this.getPositionVec().getZ() + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
+                    this.getCommandSenderWorld().addParticle(RedstoneParticleData.REDSTONE, this.position().x() + (this.random.nextDouble() - 0.5D) * (double)this.getDimensions(Pose.STANDING).width, this.position().y() + this.random.nextDouble() * (double)this.getDimensions(Pose.STANDING).height, this.position().z() + (this.random.nextDouble() - 0.5D) * (double)this.getDimensions(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
                 }
             }
         }
         else
-            this.noClip = false;
+            this.noPhysics = false;
     }
 
 
@@ -122,15 +122,15 @@ public class EntityDarkling extends TameableCreatureEntity implements IMob {
     // ==================================================
     public LivingEntity getLatchTarget() {
         try {
-            if (this.getEntityWorld().isRemote) {
-                this.latchHeight = this.dataManager.get(LATCH_HEIGHT);
-                this.latchAngle = this.dataManager.get(LATCH_ANGLE);
-                int latchEntityID = this.getDataManager().get(LATCH_TARGET);
+            if (this.getCommandSenderWorld().isClientSide) {
+                this.latchHeight = this.entityData.get(LATCH_HEIGHT);
+                this.latchAngle = this.entityData.get(LATCH_ANGLE);
+                int latchEntityID = this.getEntityData().get(LATCH_TARGET);
                 if (latchEntityID != this.latchEntityID) {
                     this.latchEntity = null;
                     this.latchEntityID = latchEntityID;
                     if (latchEntityID != 0) {
-                        Entity possilbeLatchEntity = this.getEntityWorld().getEntityByID(latchEntityID);
+                        Entity possilbeLatchEntity = this.getCommandSenderWorld().getEntity(latchEntityID);
                         if (possilbeLatchEntity != null && possilbeLatchEntity instanceof LivingEntity)
                             this.latchEntity = (LivingEntity) possilbeLatchEntity;
                     }
@@ -143,24 +143,24 @@ public class EntityDarkling extends TameableCreatureEntity implements IMob {
 
     public void setLatchTarget(LivingEntity entity) {
         this.latchEntity = entity;
-        if(this.getEntityWorld().isRemote)
+        if(this.getCommandSenderWorld().isClientSide)
             return;
         if(entity == null) {
-            this.getDataManager().set(LATCH_TARGET, 0);
+            this.getEntityData().set(LATCH_TARGET, 0);
             return;
         }
         if(ObjectManager.getEffect("repulsion") != null) {
-            if ((entity).isPotionActive(ObjectManager.getEffect("repulsion"))) {
-                this.getDataManager().set(LATCH_TARGET, 0);
+            if ((entity).hasEffect(ObjectManager.getEffect("repulsion"))) {
+                this.getEntityData().set(LATCH_TARGET, 0);
                 this.latchEntity = null;
                 return;
             }
         }
-        this.getDataManager().set(LATCH_TARGET, entity.getEntityId());
-        this.latchHeight = 0.25D + (0.75D * this.getRNG().nextDouble());
-        this.latchAngle = 360 * this.getRNG().nextDouble();
-        this.dataManager.set(LATCH_HEIGHT, (float) this.latchHeight);
-        this.dataManager.set(LATCH_ANGLE, (float) this.latchAngle);
+        this.getEntityData().set(LATCH_TARGET, entity.getId());
+        this.latchHeight = 0.25D + (0.75D * this.getRandom().nextDouble());
+        this.latchAngle = 360 * this.getRandom().nextDouble();
+        this.entityData.set(LATCH_HEIGHT, (float) this.latchHeight);
+        this.entityData.set(LATCH_ANGLE, (float) this.latchAngle);
     }
 
     public boolean hasLatchTarget() {
@@ -173,10 +173,10 @@ public class EntityDarkling extends TameableCreatureEntity implements IMob {
    	// ==================================================
     // ========== Can Attack Class ==========
     @Override
-    public boolean canAttack(EntityType targetType) {
+    public boolean canAttackType(EntityType targetType) {
         if(this.hasLatchTarget())
             return false;
-        return super.canAttack(targetType);
+        return super.canAttackType(targetType);
     }
 
     // ========== Melee Attack ==========
@@ -225,20 +225,20 @@ public class EntityDarkling extends TameableCreatureEntity implements IMob {
     // ==================================================
     @Override
     public boolean canStealth() {
-        if(this.getEntityWorld().isRemote) return false;
+        if(this.getCommandSenderWorld().isClientSide) return false;
         if(this.isMoving()) return false;
         return this.testLightLevel() <= 0;
     }
 
     @Override
     public void startStealth() {
-        if(this.getEntityWorld().isRemote) {
+        if(this.getCommandSenderWorld().isClientSide) {
             IParticleData particle = ParticleTypes.WITCH;
-            double d0 = this.rand.nextGaussian() * 0.02D;
-            double d1 = this.rand.nextGaussian() * 0.02D;
-            double d2 = this.rand.nextGaussian() * 0.02D;
+            double d0 = this.random.nextGaussian() * 0.02D;
+            double d1 = this.random.nextGaussian() * 0.02D;
+            double d2 = this.random.nextGaussian() * 0.02D;
             for(int i = 0; i < 100; i++)
-                this.getEntityWorld().addParticle(particle, this.getPositionVec().getX() + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).width * 2.0F) - (double)this.getSize(Pose.STANDING).width, this.getPositionVec().getY() + 0.5D + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).height), this.getPositionVec().getZ() + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).width * 2.0F) - (double)this.getSize(Pose.STANDING).width, d0, d1, d2);
+                this.getCommandSenderWorld().addParticle(particle, this.position().x() + (double)(this.random.nextFloat() * this.getDimensions(Pose.STANDING).width * 2.0F) - (double)this.getDimensions(Pose.STANDING).width, this.position().y() + 0.5D + (double)(this.random.nextFloat() * this.getDimensions(Pose.STANDING).height), this.position().z() + (double)(this.random.nextFloat() * this.getDimensions(Pose.STANDING).width * 2.0F) - (double)this.getDimensions(Pose.STANDING).width, d0, d1, d2);
         }
         super.startStealth();
     }

@@ -36,8 +36,8 @@ public abstract class TileEntityBase extends TileEntity implements ITickableTile
      * Removes this Tile Entity.
      */
     @Override
-    public void remove() {
-        super.remove();
+    public void setRemoved() {
+        super.setRemoved();
     }
 
     /**
@@ -47,7 +47,7 @@ public abstract class TileEntityBase extends TileEntity implements ITickableTile
      * @return
      */
     @Override
-    public boolean receiveClientEvent(int eventID, int eventArg) {
+    public boolean triggerEvent(int eventID, int eventArg) {
         return false;
     }
 
@@ -82,8 +82,8 @@ public abstract class TileEntityBase extends TileEntity implements ITickableTile
      * @param nbtTagCompound The NBT to read from.
      */
     @Override
-    public void read(BlockState blockState, CompoundNBT nbtTagCompound) {
-        super.read(blockState, nbtTagCompound);
+    public void load(BlockState blockState, CompoundNBT nbtTagCompound) {
+        super.load(blockState, nbtTagCompound);
     }
 
     /**
@@ -92,8 +92,8 @@ public abstract class TileEntityBase extends TileEntity implements ITickableTile
      * @return The written to NBT data.
      */
     @Override
-    public CompoundNBT write(CompoundNBT nbtTagCompound) {
-        return super.write(nbtTagCompound);
+    public CompoundNBT save(CompoundNBT nbtTagCompound) {
+        return super.save(nbtTagCompound);
     }
 
     protected void read(CompoundNBT nbtTagCompound) {

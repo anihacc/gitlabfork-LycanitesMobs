@@ -143,7 +143,7 @@ public class AltarInfoCelestialGeonach extends AltarInfo {
     /** Called when this Altar should activate. This will typically destroy the Altar and summon a rare mob or activate an event such as a boss event. If false is returned then the activation did not work, this is the place to check for things like dimensions. **/
     @Override
     public boolean activate(Entity entity, World world, BlockPos pos, int variant) {
-        if(world.isRemote)
+        if(world.isClientSide)
             return true;
 
         int x = pos.getX();
@@ -168,7 +168,7 @@ public class AltarInfoCelestialGeonach extends AltarInfo {
 
         // Offset:
         if(entity != null)
-            pos = this.getFacingPosition(pos, 10, entity.rotationYaw);
+            pos = this.getFacingPosition(pos, 10, entity.yRot);
 
         // Clear Spawn Area:
         for (int xTarget = x - size; xTarget <= x + size; xTarget++) {
@@ -184,8 +184,8 @@ public class AltarInfoCelestialGeonach extends AltarInfo {
         entityGeonach.altarSummoned = true;
         entityGeonach.forceBossHealthBar = true;
         entityGeonach.applyVariant(3);
-        entityGeonach.setLocationAndAngles(x, y - 2, z, 0, 0);
-        world.addEntity(entityGeonach);
+        entityGeonach.moveTo(x, y - 2, z, 0, 0);
+        world.addFreshEntity(entityGeonach);
         entityGeonach.destroyArea(x, y, z, 10000, false, 2);
 
         return true;

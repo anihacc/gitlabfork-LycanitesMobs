@@ -30,7 +30,7 @@ public class EntityNymph extends TameableCreatureEntity {
 		this.isAggressiveByDefault = false;
         this.setupMob();
 
-        this.stepHeight = 1.0F;
+        this.maxUpStep = 1.0F;
     }
 
     @Override
@@ -50,18 +50,18 @@ public class EntityNymph extends TameableCreatureEntity {
 	private int farmingTick = 0;
     // ========== Living Update ==========
     @Override
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
 
-		if(!this.getEntityWorld().isRemote) {
+		if(!this.getCommandSenderWorld().isClientSide) {
 			// Healing Aura:
 			if(this.healingRate > 0 && !this.isPetType("familiar")) {
 				if (this.updateTick % this.healingRate == 0) {
 					List aoeTargets = this.getNearbyEntities(LivingEntity.class, null, 4);
 					for (Object entityObj : aoeTargets) {
 						LivingEntity target = (LivingEntity) entityObj;
-						if (target != this && !(target instanceof EntityNymph) && target != this.getAttackTarget() && target != this.getAvoidTarget()) {
-							target.addPotionEffect(new EffectInstance(Effects.REGENERATION, 3 * 20, 0));
+						if (target != this && !(target instanceof EntityNymph) && target != this.getTarget() && target != this.getAvoidTarget()) {
+							target.addEffect(new EffectInstance(Effects.REGENERATION, 3 * 20, 0));
 						}
 					}
 				}
@@ -70,12 +70,12 @@ public class EntityNymph extends TameableCreatureEntity {
 			// Ranged Attack:
 			if(this.hasAvoidTarget()) {
 				if(this.updateTick % this.getRangedCooldown() == 0) {
-					this.attackRanged(this.getAvoidTarget(), this.getDistance(this.getAvoidTarget()));
+					this.attackRanged(this.getAvoidTarget(), this.distanceTo(this.getAvoidTarget()));
 				}
 			}
 			else if(this.hasAttackTarget()) {
 				if(this.updateTick % this.getRangedCooldown() == 0) {
-					this.attackRanged(this.getAttackTarget(), this.getDistance(this.getAttackTarget()));
+					this.attackRanged(this.getTarget(), this.distanceTo(this.getTarget()));
 				}
 			}
 		}

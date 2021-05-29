@@ -117,7 +117,7 @@ public class ObjectLists {
 			return false;
 		for(ItemStack listStack : itemLists.get(list))
 			if(testStack.getItem() == listStack.getItem()
-			&& testStack.getDamage() == listStack.getDamage())
+			&& testStack.getDamageValue() == listStack.getDamageValue())
 				return true;
 		return false;
 	}
@@ -205,16 +205,16 @@ public class ObjectLists {
 		
 		// ========== Effects ==========
 		// Buffs:
-		ObjectLists.addEffect("buffs", Effects.STRENGTH, "strength");
-		ObjectLists.addEffect("buffs", Effects.HASTE, "haste");
+		ObjectLists.addEffect("buffs", Effects.DAMAGE_BOOST, "strength");
+		ObjectLists.addEffect("buffs", Effects.DIG_SPEED, "haste");
 		ObjectLists.addEffect("buffs", Effects.FIRE_RESISTANCE, "fire_resistance");
-		ObjectLists.addEffect("buffs", Effects.INSTANT_HEALTH, "instant_health");
+		ObjectLists.addEffect("buffs", Effects.HEAL, "instant_health");
 		ObjectLists.addEffect("buffs", Effects.INVISIBILITY, "invisibility");
-		ObjectLists.addEffect("buffs", Effects.JUMP_BOOST, "jump_boost");
-		ObjectLists.addEffect("buffs", Effects.SPEED, "speed");
+		ObjectLists.addEffect("buffs", Effects.JUMP, "jump_boost");
+		ObjectLists.addEffect("buffs", Effects.MOVEMENT_SPEED, "speed");
 		ObjectLists.addEffect("buffs", Effects.NIGHT_VISION, "night_vision");
 		ObjectLists.addEffect("buffs", Effects.REGENERATION, "regeneration");
-		ObjectLists.addEffect("buffs", Effects.RESISTANCE, "resistance");
+		ObjectLists.addEffect("buffs", Effects.DAMAGE_RESISTANCE, "resistance");
 		ObjectLists.addEffect("buffs", Effects.WATER_BREATHING, "water_breathing");
 		ObjectLists.addEffect("buffs", Effects.HEALTH_BOOST, "health_boost");
 		ObjectLists.addEffect("buffs", Effects.ABSORPTION, "absorption");
@@ -226,11 +226,11 @@ public class ObjectLists {
 
 		// Debuffs:
         ObjectLists.addEffect("debuffs", Effects.BLINDNESS, "blindness");
-        ObjectLists.addEffect("debuffs", Effects.NAUSEA, "nausea");
-        ObjectLists.addEffect("debuffs", Effects.MINING_FATIGUE, "mining_fatigue");
-        ObjectLists.addEffect("debuffs", Effects.INSTANT_DAMAGE, "instant_damage");
+        ObjectLists.addEffect("debuffs", Effects.CONFUSION, "nausea");
+        ObjectLists.addEffect("debuffs", Effects.DIG_SLOWDOWN, "mining_fatigue");
+        ObjectLists.addEffect("debuffs", Effects.HARM, "instant_damage");
         ObjectLists.addEffect("debuffs", Effects.HUNGER, "hunger");
-        ObjectLists.addEffect("debuffs", Effects.SLOWNESS, "slowness");
+        ObjectLists.addEffect("debuffs", Effects.MOVEMENT_SLOWDOWN, "slowness");
         ObjectLists.addEffect("debuffs", Effects.POISON, "poison");
         ObjectLists.addEffect("debuffs", Effects.WEAKNESS, "weakness");
         ObjectLists.addEffect("debuffs", Effects.WITHER, "wither");
@@ -313,7 +313,7 @@ public class ObjectLists {
 	public static boolean isName(Item item, String name) {
 		if(item == null)
 			return false;
-		String itemName = item.getTranslationKey().toLowerCase();
+		String itemName = item.getDescriptionId().toLowerCase();
 		if(itemName.contains(name))
 			return true;
 		return false;
@@ -323,7 +323,7 @@ public class ObjectLists {
 		if(block == null)
 			return false;
 		name = name.toLowerCase();
-		String blockName = block.getTranslationKey().toLowerCase();
+		String blockName = block.getDescriptionId().toLowerCase();
 		if(blockName.contains(name)) {
 			return true;
 		}

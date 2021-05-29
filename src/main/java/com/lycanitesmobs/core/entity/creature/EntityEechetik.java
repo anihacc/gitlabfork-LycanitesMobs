@@ -33,7 +33,7 @@ public class EntityEechetik extends TameableCreatureEntity implements IMob {
         
         this.setupMob();
 
-        this.stepHeight = 1.0F;
+        this.maxUpStep = 1.0F;
     }
 
     @Override
@@ -53,35 +53,35 @@ public class EntityEechetik extends TameableCreatureEntity implements IMob {
     // ==================================================
 	// ========== Living Update ==========
 	@Override
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
 
 		// Plague Aura Attack:
-		if(!this.getEntityWorld().isRemote && this.updateTick % 40 == 0 && this.hasAttackTarget()) {
+		if(!this.getCommandSenderWorld().isClientSide && this.updateTick % 40 == 0 && this.hasAttackTarget()) {
 			EffectBase plague = ObjectManager.getEffect("plague");
 			if(plague != null) {
 				EffectInstance potionEffect = new EffectInstance(plague, this.getEffectDuration(2), 1);
 				List aoeTargets = this.getNearbyEntities(LivingEntity.class, null, 2);
 				for(Object entityObj : aoeTargets) {
 					LivingEntity target = (LivingEntity) entityObj;
-					if (target != this && this.canAttack(target.getType()) && this.canAttack(target) && this.getEntitySenses().canSee(target) && target.isPotionApplicable(potionEffect)) {
-						target.addPotionEffect(potionEffect);
+					if (target != this && this.canAttackType(target.getType()) && this.canAttack(target) && this.getSensing().canSee(target) && target.canBeAffected(potionEffect)) {
+						target.addEffect(potionEffect);
 					}
 				}
 			}
 		}
 
 		// Grow Mycelium:
-		if(!this.getEntityWorld().isRemote && this.updateTick % 100 == 0 && this.myceliumRadius > 0 && !this.isTamed() && this.getEntityWorld().getGameRules().getBoolean(GameRules.MOB_GRIEFING)) {
+		if(!this.getCommandSenderWorld().isClientSide && this.updateTick % 100 == 0 && this.myceliumRadius > 0 && !this.isTamed() && this.getCommandSenderWorld().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) {
 			int range = this.myceliumRadius;
-			for (int w = -((int) Math.ceil(this.getSize(Pose.STANDING).width) + range); w <= (Math.ceil(this.getSize(Pose.STANDING).width) + range); w++) {
-				for (int d = -((int) Math.ceil(this.getSize(Pose.STANDING).width) + range); d <= (Math.ceil(this.getSize(Pose.STANDING).width) + range); d++) {
-					for (int h = -((int) Math.ceil(this.getSize(Pose.STANDING).height) + range); h <= Math.ceil(this.getSize(Pose.STANDING).height); h++) {
-						BlockPos blockPos = this.getPosition().add(w, h, d);
-						BlockState blockState = this.getEntityWorld().getBlockState(blockPos);
-						BlockState upperBlockState = this.getEntityWorld().getBlockState(blockPos.up());
+			for (int w = -((int) Math.ceil(this.getDimensions(Pose.STANDING).width) + range); w <= (Math.ceil(this.getDimensions(Pose.STANDING).width) + range); w++) {
+				for (int d = -((int) Math.ceil(this.getDimensions(Pose.STANDING).width) + range); d <= (Math.ceil(this.getDimensions(Pose.STANDING).width) + range); d++) {
+					for (int h = -((int) Math.ceil(this.getDimensions(Pose.STANDING).height) + range); h <= Math.ceil(this.getDimensions(Pose.STANDING).height); h++) {
+						BlockPos blockPos = this.blockPosition().offset(w, h, d);
+						BlockState blockState = this.getCommandSenderWorld().getBlockState(blockPos);
+						BlockState upperBlockState = this.getCommandSenderWorld().getBlockState(blockPos.above());
 						if (upperBlockState.getBlock() == Blocks.AIR && blockState.getBlock() == Blocks.DIRT) {
-							this.getEntityWorld().setBlockState(blockPos, Blocks.MYCELIUM.getDefaultState());
+							this.getCommandSenderWorld().setBlockAndUpdate(blockPos, Blocks.MYCELIUM.defaultBlockState());
 						}
 					}
 				}
@@ -89,10 +89,10 @@ public class EntityEechetik extends TameableCreatureEntity implements IMob {
 		}
 
 		// Particles:
-		if(this.getEntityWorld().isRemote) {
+		if(this.getCommandSenderWorld().isClientSide) {
 			for(int i = 0; i < 2; ++i) {
-				this.getEntityWorld().addParticle(ParticleTypes.PORTAL, this.getPositionVec().getX() + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width * 2, this.getPositionVec().getY() + this.rand.nextDouble() * (double)this.getSize(Pose.STANDING).height, this.getPositionVec().getZ() + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width * 2, 0.0D, 0.0D, 0.0D);
-				this.getEntityWorld().addParticle(ParticleTypes.MYCELIUM, this.getPositionVec().getX() + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width * 2, this.getPositionVec().getY() + this.rand.nextDouble() * (double)this.getSize(Pose.STANDING).height, this.getPositionVec().getZ() + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width * 2, 0.0D, 0.0D, 0.0D);
+				this.getCommandSenderWorld().addParticle(ParticleTypes.PORTAL, this.position().x() + (this.random.nextDouble() - 0.5D) * (double)this.getDimensions(Pose.STANDING).width * 2, this.position().y() + this.random.nextDouble() * (double)this.getDimensions(Pose.STANDING).height, this.position().z() + (this.random.nextDouble() - 0.5D) * (double)this.getDimensions(Pose.STANDING).width * 2, 0.0D, 0.0D, 0.0D);
+				this.getCommandSenderWorld().addParticle(ParticleTypes.MYCELIUM, this.position().x() + (this.random.nextDouble() - 0.5D) * (double)this.getDimensions(Pose.STANDING).width * 2, this.position().y() + this.random.nextDouble() * (double)this.getDimensions(Pose.STANDING).height, this.position().z() + (this.random.nextDouble() - 0.5D) * (double)this.getDimensions(Pose.STANDING).width * 2, 0.0D, 0.0D, 0.0D);
 			}
 		}
     }
@@ -137,7 +137,7 @@ public class EntityEechetik extends TameableCreatureEntity implements IMob {
    	// ==================================================
 	// ========== Damage Modifier ==========
 	public float getDamageModifier(DamageSource damageSrc) {
-		if(damageSrc.isFireDamage())
+		if(damageSrc.isFire())
 			return 0F;
 		else return super.getDamageModifier(damageSrc);
 	}

@@ -10,9 +10,9 @@ public class WorldGenerator {
 	@SubscribeEvent
 	public void registerFeatures(BiomeLoadingEvent event) {
 		WorldGenManager manager = WorldGenManager.getInstance();
-		event.getGeneration().withFeature(GenerationStage.Decoration.TOP_LAYER_MODIFICATION.ordinal(),
-				() -> manager.chunkSpawnFeature.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(manager.alwaysPlacement.configure(NoPlacementConfig.INSTANCE)));
-		event.getGeneration().withFeature(GenerationStage.Decoration.UNDERGROUND_STRUCTURES.ordinal(),
-				() -> manager.dungeonFeature.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(manager.alwaysPlacement.configure(NoPlacementConfig.INSTANCE)));
+		event.getGeneration().addFeature(GenerationStage.Decoration.TOP_LAYER_MODIFICATION.ordinal(),
+				() -> manager.chunkSpawnFeature.configured(IFeatureConfig.NONE).decorated(manager.alwaysPlacement.configured(NoPlacementConfig.INSTANCE)));
+		event.getGeneration().addFeature(GenerationStage.Decoration.UNDERGROUND_STRUCTURES.ordinal(),
+				() -> manager.dungeonFeature.configured(IFeatureConfig.NONE).decorated(manager.alwaysPlacement.configured(NoPlacementConfig.INSTANCE)));
 	}
 }

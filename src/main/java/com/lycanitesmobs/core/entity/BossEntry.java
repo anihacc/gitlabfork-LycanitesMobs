@@ -15,9 +15,9 @@ public class BossEntry {
      * @param entity The entity to update this boss entry with.
      */
     public void update(Entity entity) {
-        this.uuid = entity.getUniqueID();
+        this.uuid = entity.getUUID();
         this.entity = entity;
-        this.lastUpdated = entity.getEntityWorld().getGameTime();
+        this.lastUpdated = entity.getCommandSenderWorld().getGameTime();
         if(entity instanceof BaseCreatureEntity) {
             BaseCreatureEntity creatureEntity = (BaseCreatureEntity)entity;
             if(creatureEntity.creatureInfo != null) {

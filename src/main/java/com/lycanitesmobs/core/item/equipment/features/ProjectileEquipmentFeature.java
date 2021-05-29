@@ -102,25 +102,25 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 		}
 
 		ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile(this.projectileName);
-		TextComponent description = (TextComponent) new TranslationTextComponent("equipment.feature." + this.featureType).appendString(" ")
+		TextComponent description = (TextComponent) new TranslationTextComponent("equipment.feature." + this.featureType).append(" ")
 				.append(projectileInfo.getTitle());
 
 		if(this.bonusDamage != 0) {
-			description.appendString(" +" + this.bonusDamage);
+			description.append(" +" + this.bonusDamage);
 		}
 
 		if(!"simple".equals(this.projectilePattern)) {
-			description.appendString(" ")
+			description.append(" ")
 					.append(new TranslationTextComponent("equipment.feature.projectile.pattern." + this.projectilePattern));
 		}
 
-		description.appendString(" ")
+		description.append(" ")
 				.append( new TranslationTextComponent("equipment.feature.projectile.trigger." + this.projectileTrigger));
 		if("hit".equals(this.projectileTrigger)) {
-			description.appendString(" " + String.format("%.0f", this.hitChance * 100) + "%");
+			description.append(" " + String.format("%.0f", this.hitChance * 100) + "%");
 		}
 		else {
-			description.appendString(" " + String.format("%.1f", (float)this.cooldown / 20) + "s");
+			description.append(" " + String.format("%.1f", (float)this.cooldown / 20) + "s");
 		}
 
 		return description;
@@ -134,7 +134,7 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 		ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile(this.projectileName);
 		TextComponent summary = projectileInfo.getTitle();
 		if(this.bonusDamage != 0) {
-			summary.appendString(" +" + this.bonusDamage);
+			summary.append(" +" + this.bonusDamage);
 		}
 		return summary;
 	}
@@ -198,12 +198,12 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 	 * @param attacker The entity using this item to hit.
 	 */
 	public void onHitEntity(ItemStack itemStack, LivingEntity target, LivingEntity attacker) {
-		if(target == null || attacker == null || attacker.getEntityWorld().isRemote || attacker.isSneaking() || !"hit".equals(this.projectileTrigger)) { // isSneaking()
+		if(target == null || attacker == null || attacker.getCommandSenderWorld().isClientSide || attacker.isShiftKeyDown() || !"hit".equals(this.projectileTrigger)) { // isSneaking()
 			return;
 		}
 
 		// Fire Projectile:
-		if(attacker.getRNG().nextDouble() <= this.hitChance) {
+		if(attacker.getRandom().nextDouble() <= this.hitChance) {
 			this.fireProjectile(attacker);
 		}
 	}
@@ -213,7 +213,7 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 	 * @param shooter The entity firing the projectile.
 	 */
 	public void fireProjectile(LivingEntity shooter) {
-		if(shooter == null || shooter.getEntityWorld().isRemote|| this.count <= 0) {
+		if(shooter == null || shooter.getCommandSenderWorld().isClientSide|| this.count <= 0) {
 			return;
 		}
 
@@ -228,9 +228,9 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 			}
 		}
 
-		World world = shooter.getEntityWorld();
+		World world = shooter.getCommandSenderWorld();
 		BaseProjectileEntity mainProjectile = null;
-		Vector3d firePos = new Vector3d(shooter.getPositionVec().getX(), shooter.getPositionVec().getY() + (shooter.getSize(Pose.STANDING).height * 0.65), shooter.getPositionVec().getZ());
+		Vector3d firePos = new Vector3d(shooter.position().x(), shooter.position().y() + (shooter.getDimensions(Pose.STANDING).height * 0.65), shooter.position().z());
 		double offsetX = 0;
 		/*if(shooter.isHandActive()) {
 			offsetX = 0.75D;
@@ -247,40 +247,40 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 			this.spreadX = 45;
 			this.spreadY = 10;
 			for(int i = 0; i < this.count; i++) {
-				double yaw = shooter.rotationYaw + (this.spreadX * shooter.getRNG().nextDouble()) - (this.spreadX / 2);
-				double pitch = shooter.rotationPitch + (this.spreadY * shooter.getRNG().nextDouble()) - (this.spreadY / 2);
+				double yaw = shooter.yRot + (this.spreadX * shooter.getRandom().nextDouble()) - (this.spreadX / 2);
+				double pitch = shooter.xRot + (this.spreadY * shooter.getRandom().nextDouble()) - (this.spreadY / 2);
 				ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile(this.projectileName);
 				BaseProjectileEntity projectile = projectileInfo.createProjectile(world, shooter);
-				projectile.setPosition(firePos.x, firePos.y, firePos.z);
-				projectile.func_234612_a_(shooter, (float)pitch, (float)yaw - (float)offsetX, 0, (float)projectileInfo.velocity, 0);
-				projectile.setShooter(shooter);
+				projectile.setPos(firePos.x, firePos.y, firePos.z);
+				projectile.shootFromRotation(shooter, (float)pitch, (float)yaw - (float)offsetX, 0, (float)projectileInfo.velocity, 0);
+				projectile.setOwner(shooter);
 				projectile.setBonusDamage(this.bonusDamage);
-				world.addEntity(projectile);
+				world.addFreshEntity(projectile);
 				mainProjectile = projectile;
 			}
 		}
 		else if("ring".equals(this.projectilePattern)) {
 			double angle = this.ringRange / this.count;
 			for(int i = 0; i < this.count; i++) {
-				double yaw = shooter.rotationYaw + (angle * i) - (this.ringRange / 2);
+				double yaw = shooter.yRot + (angle * i) - (this.ringRange / 2);
 				ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile(this.projectileName);
 				BaseProjectileEntity projectile = projectileInfo.createProjectile(world, shooter);
-				projectile.setPosition(firePos.x, firePos.y, firePos.z);
+				projectile.setPos(firePos.x, firePos.y, firePos.z);
 				projectile.setBonusDamage(this.bonusDamage);
-				world.addEntity(projectile);
-				projectile.func_234612_a_(shooter, shooter.rotationPitch, (float)yaw - (float)offsetX, 0, (float)projectileInfo.velocity, 0);
-				projectile.setShooter(shooter);
+				world.addFreshEntity(projectile);
+				projectile.shootFromRotation(shooter, shooter.xRot, (float)yaw - (float)offsetX, 0, (float)projectileInfo.velocity, 0);
+				projectile.setOwner(shooter);
 				mainProjectile = projectile;
 			}
 		}
 		else {
 			ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile(this.projectileName);
 			mainProjectile = projectileInfo.createProjectile(world, shooter);
-			mainProjectile.setPosition(firePos.x, firePos.y, firePos.z);
-			mainProjectile.func_234612_a_(shooter, shooter.rotationPitch, shooter.rotationYaw - (float)offsetX, 0, (float)projectileInfo.velocity, 0);
-			mainProjectile.setShooter(shooter);
+			mainProjectile.setPos(firePos.x, firePos.y, firePos.z);
+			mainProjectile.shootFromRotation(shooter, shooter.xRot, shooter.yRot - (float)offsetX, 0, (float)projectileInfo.velocity, 0);
+			mainProjectile.setOwner(shooter);
 			mainProjectile.setBonusDamage(this.bonusDamage);
-			world.addEntity(mainProjectile);
+			world.addFreshEntity(mainProjectile);
 		}
 
 		// Channeling:
@@ -292,7 +292,7 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 		}
 
 		if(shooter instanceof PlayerEntity && mainProjectile != null) {
-			world.playSound(null, shooter.getPosition(), mainProjectile.getLaunchSound(), SoundCategory.NEUTRAL, 0.5F, 0.4F / (shooter.getRNG().nextFloat() * 0.4F + 0.8F));
+			world.playSound(null, shooter.blockPosition(), mainProjectile.getLaunchSound(), SoundCategory.NEUTRAL, 0.5F, 0.4F / (shooter.getRandom().nextFloat() * 0.4F + 0.8F));
 		}
 	}
 
@@ -301,6 +301,6 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 		angle = Math.toRadians(angle);
 		double xAmount = -Math.sin(angle);
 		double zAmount = Math.cos(angle);
-		return new Vector3d(entity.getPositionVec().getX() + (distance * xAmount), entity.getPositionVec().getY(), entity.getPositionVec().getZ() + (distance * zAmount));
+		return new Vector3d(entity.position().x() + (distance * xAmount), entity.position().y(), entity.position().z() + (distance * zAmount));
 	}
 }

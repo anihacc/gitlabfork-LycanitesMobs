@@ -39,7 +39,7 @@ public class EntityTreant extends BaseCreatureEntity implements IMob, IGroupHeav
         this.setupMob();
         this.hitAreaWidthScale = 1.5F;
 
-        this.stepHeight = 2.0F;
+        this.maxUpStep = 2.0F;
     }
 
     // ========== Init AI ==========
@@ -56,15 +56,15 @@ public class EntityTreant extends BaseCreatureEntity implements IMob, IGroupHeav
     // ==================================================
 	// ========== Living Update ==========
 	@Override
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
 
         // Water Healing:
-		if(this.getAir() >= 0) {
+		if(this.getAirSupply() >= 0) {
 			if (this.isInWater())
-				this.addPotionEffect(new EffectInstance(Effects.REGENERATION, 3 * 20, 1));
-			else if (this.isInWaterRainOrBubbleColumn())
-				this.addPotionEffect(new EffectInstance(Effects.REGENERATION, 3 * 20, 0));
+				this.addEffect(new EffectInstance(Effects.REGENERATION, 3 * 20, 1));
+			else if (this.isInWaterRainOrBubble())
+				this.addEffect(new EffectInstance(Effects.REGENERATION, 3 * 20, 0));
 		}
     }
     
@@ -97,14 +97,14 @@ public class EntityTreant extends BaseCreatureEntity implements IMob, IGroupHeav
    	// ==================================================
     // ========== Damage Modifier ==========
     public float getDamageModifier(DamageSource damageSrc) {
-    	if(damageSrc.isFireDamage())
+    	if(damageSrc.isFire())
     		return 2.0F;
-		if(damageSrc.getTrueSource() != null) {
+		if(damageSrc.getEntity() != null) {
 			ItemStack heldItem = ItemStack.EMPTY;
-			if(damageSrc.getTrueSource() instanceof LivingEntity) {
-				LivingEntity entityLiving = (LivingEntity)damageSrc.getTrueSource();
-				if(!entityLiving.getHeldItem(Hand.MAIN_HAND).isEmpty()) {
-					heldItem = entityLiving.getHeldItem(Hand.MAIN_HAND);
+			if(damageSrc.getEntity() instanceof LivingEntity) {
+				LivingEntity entityLiving = (LivingEntity)damageSrc.getEntity();
+				if(!entityLiving.getItemInHand(Hand.MAIN_HAND).isEmpty()) {
+					heldItem = entityLiving.getItemInHand(Hand.MAIN_HAND);
 				}
 			}
 			if(ObjectLists.isAxe(heldItem)) {
@@ -161,7 +161,7 @@ public class EntityTreant extends BaseCreatureEntity implements IMob, IGroupHeav
     // ========== Rendering Distance ==========
     /** Returns a larger bounding box for rendering this large entity. **/
     @OnlyIn(Dist.CLIENT)
-    public AxisAlignedBB getRenderBoundingBox() {
-        return this.getBoundingBox().grow(50, 20, 50).offset(0, -10, 0);
+    public AxisAlignedBB getBoundingBoxForCulling() {
+        return this.getBoundingBox().inflate(50, 20, 50).move(0, -10, 0);
     }
 }

@@ -87,10 +87,10 @@ public class BlockFluidMoglava extends FlowingFluidBlock {
 	//                      Collision
 	// ==================================================
 	@Override
-	public void onEntityCollision(BlockState blockState, World world, BlockPos pos, Entity entity) {
+	public void entityInside(BlockState blockState, World world, BlockPos pos, Entity entity) {
 		if(entity instanceof ItemEntity)
-			entity.attackEntityFrom(DamageSource.LAVA, 10F);
-		super.onEntityCollision(blockState, world, pos, entity);
+			entity.hurt(DamageSource.LAVA, 10F);
+		super.entityInside(blockState, world, pos, entity);
 	}
     
     

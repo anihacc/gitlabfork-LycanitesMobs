@@ -26,7 +26,7 @@ public class EntitySylph extends TameableCreatureEntity implements IMob {
         this.hasAttackSound = false;
         this.setupMob();
 
-        this.stepHeight = 1.0F;
+        this.maxUpStep = 1.0F;
     }
 
     // ========== Init AI ==========
@@ -44,8 +44,8 @@ public class EntitySylph extends TameableCreatureEntity implements IMob {
     // ==================================================
 	// ========== Living Update ==========
 	@Override
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
     }
     
     
@@ -94,7 +94,7 @@ public class EntitySylph extends TameableCreatureEntity implements IMob {
     public boolean isVulnerableTo(String type, DamageSource source, float damage) {
         if(type.equals("cactus") || type.equals("inWall"))
             return false;
-        if(source.isFireDamage()) {
+        if(source.isFire()) {
             this.fireDamageAbsorbed += damage;
             return false;
         }

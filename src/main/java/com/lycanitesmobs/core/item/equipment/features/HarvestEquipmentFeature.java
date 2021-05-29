@@ -33,7 +33,7 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 	private static final Set<Block> SPADE_HARVEST = Sets.newHashSet(Blocks.CLAY, Blocks.DIRT, Blocks.FARMLAND, Blocks.GRASS_BLOCK, Blocks.GRAVEL, Blocks.MYCELIUM, Blocks.SAND, Blocks.SNOW, Blocks.SOUL_SAND, Blocks.GRASS_PATH, Blocks.GRAY_CONCRETE_POWDER);
 	private static final Set<Block> PICKAXE_HARVEST = Sets.newHashSet(Blocks.ACTIVATOR_RAIL, Blocks.COAL_ORE, Blocks.COBBLESTONE, Blocks.DETECTOR_RAIL, Blocks.DIAMOND_BLOCK, Blocks.DIAMOND_ORE, Blocks.POWERED_RAIL, Blocks.GOLD_BLOCK, Blocks.GOLD_ORE, Blocks.ICE, Blocks.IRON_BLOCK, Blocks.IRON_ORE, Blocks.LAPIS_BLOCK, Blocks.LAPIS_ORE, Blocks.MOSSY_COBBLESTONE, Blocks.NETHERRACK, Blocks.PACKED_ICE, Blocks.RAIL, Blocks.REDSTONE_ORE, Blocks.SANDSTONE, Blocks.RED_SANDSTONE, Blocks.STONE, Blocks.STONE_SLAB, Blocks.STONE_BUTTON, Blocks.STONE_PRESSURE_PLATE);
 	private static final Set<Block> AXE_HARVEST = Sets.newHashSet(Blocks.OAK_PLANKS, Blocks.BOOKSHELF, Blocks.CHEST, Blocks.PUMPKIN, Blocks.MELON, Blocks.LADDER, Blocks.OAK_BUTTON, Blocks.OAK_PRESSURE_PLATE);
-	private static final Map<Block, BlockState> HOE_LOOKUP = Maps.newHashMap(ImmutableMap.of(Blocks.GRASS_BLOCK, Blocks.FARMLAND.getDefaultState(), Blocks.GRASS_PATH, Blocks.FARMLAND.getDefaultState(), Blocks.DIRT, Blocks.FARMLAND.getDefaultState(), Blocks.COARSE_DIRT, Blocks.DIRT.getDefaultState()));
+	private static final Map<Block, BlockState> HOE_LOOKUP = Maps.newHashMap(ImmutableMap.of(Blocks.GRASS_BLOCK, Blocks.FARMLAND.defaultBlockState(), Blocks.GRASS_PATH, Blocks.FARMLAND.defaultBlockState(), Blocks.DIRT, Blocks.FARMLAND.defaultBlockState(), Blocks.COARSE_DIRT, Blocks.DIRT.defaultBlockState()));
 
 	/** The type of tool to harvest as. Can be: pickaxe, axe, shovel, hoe, sword or shears. **/
 	public String harvestType;
@@ -80,7 +80,7 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 		if(!this.isActive(itemStack, level)) {
 			return null;
 		}
-		return new TranslationTextComponent("equipment.feature." + this.featureType).appendString(" ")
+		return new TranslationTextComponent("equipment.feature." + this.featureType).append(" ")
 				.append(this.getSummary(itemStack, level));
 	}
 
@@ -90,10 +90,10 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 			return null;
 		}
 		StringTextComponent summary = new StringTextComponent(this.harvestType);
-		if(this.harvestRange.distanceSq(0, 0, 0, false) > 0) {
-			summary.appendString(" (" + this.harvestShape);
-			summary.appendString(" " + this.getHarvestRangeString(level));
-			summary.appendString(")");
+		if(this.harvestRange.distSqr(0, 0, 0, false) > 0) {
+			summary.append(" (" + this.harvestShape);
+			summary.append(" " + this.getHarvestRangeString(level));
+			summary.append(")");
 		}
 		return summary;
 	}
@@ -129,7 +129,7 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 		Material material = blockState.getMaterial();
 
 		// Stone:
-		if(material == Material.IRON || material == Material.ANVIL || material == Material.ROCK || PICKAXE_HARVEST.contains(block)) {
+		if(material == Material.METAL || material == Material.HEAVY_METAL || material == Material.STONE || PICKAXE_HARVEST.contains(block)) {
 			return this.harvestType.equalsIgnoreCase("pickaxe");
 		}
 
@@ -139,22 +139,22 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 		}
 
 		// Plants:
-		if(material == Material.PLANTS || material == Material.TALL_PLANTS) {
+		if(material == Material.PLANT || material == Material.REPLACEABLE_PLANT) {
 			return this.harvestType.equalsIgnoreCase("axe") || this.harvestType.equalsIgnoreCase("sword") || this.harvestType.equalsIgnoreCase("shears");
 		}
 
 		// Web and Leaves:
-		if(material == Material.WEB || material == Material.LEAVES || material == Material.SEA_GRASS) {
+		if(material == Material.WEB || material == Material.LEAVES || material == Material.REPLACEABLE_WATER_PLANT) {
 			return this.harvestType.equalsIgnoreCase("sword") || this.harvestType.equalsIgnoreCase("shears");
 		}
 
 		// Dirt:
-		if(material == Material.EARTH || material == Material.CLAY || material == Material.SAND || material == Material.ORGANIC || SPADE_HARVEST.contains(block)) {
+		if(material == Material.DIRT || material == Material.CLAY || material == Material.SAND || material == Material.GRASS || SPADE_HARVEST.contains(block)) {
 			return this.harvestType.equalsIgnoreCase("shovel");
 		}
 
 		// Growth:
-		if(material == Material.CORAL || material == Material.GOURD) {
+		if(material == Material.CORAL || material == Material.VEGETABLE) {
 			return this.harvestType.equalsIgnoreCase("sword");
 		}
 
@@ -195,7 +195,7 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 		}
 
 		// Shears:
-		if((material == Material.LEAVES || material == Material.TALL_PLANTS) && this.harvestType.equalsIgnoreCase("shears")) {
+		if((material == Material.LEAVES || material == Material.REPLACEABLE_PLANT) && this.harvestType.equalsIgnoreCase("shears")) {
 			return 10;
 		}
 
@@ -211,18 +211,18 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 	 * @param livingEntity The entity that destroyed the block.
 	 */
 	public void onBlockDestroyed(World world, BlockState harvestedBlockState, BlockPos harvestedPos, LivingEntity livingEntity) {
-		if(livingEntity == null || livingEntity.isSneaking()) {
+		if(livingEntity == null || livingEntity.isShiftKeyDown()) {
 			return;
 		}
 
 		// Get Facing:
-		Direction facingH = livingEntity.getHorizontalFacing();
-		Direction facingLat = facingH.rotateY();
+		Direction facingH = livingEntity.getDirection();
+		Direction facingLat = facingH.getClockWise();
 		Direction facing = facingH;
-		if(livingEntity.rotationPitch > 45) {
+		if(livingEntity.xRot > 45) {
 			facing = Direction.DOWN;
 		}
-		else if(livingEntity.rotationPitch < -45) {
+		else if(livingEntity.xRot < -45) {
 			facing = Direction.UP;
 		}
 		Vector3i[][] selectionRanges = new Vector3i[3][2];
@@ -234,26 +234,26 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 
 		// Get Longitudinal (Z):
 		selectionRanges[lon][min] = new Vector3i(
-				Math.min(0, this.harvestRange.getZ() * facing.getXOffset()),
-				Math.min(0, this.harvestRange.getZ() * facing.getYOffset()),
-				Math.min(0, this.harvestRange.getZ() * facing.getZOffset())
+				Math.min(0, this.harvestRange.getZ() * facing.getStepX()),
+				Math.min(0, this.harvestRange.getZ() * facing.getStepY()),
+				Math.min(0, this.harvestRange.getZ() * facing.getStepZ())
 		);
 		selectionRanges[lon][max] = new Vector3i(
-				Math.max(0, this.harvestRange.getZ() * facing.getXOffset()),
-				Math.max(0, this.harvestRange.getZ() * facing.getYOffset()),
-				Math.max(0, this.harvestRange.getZ() * facing.getZOffset())
+				Math.max(0, this.harvestRange.getZ() * facing.getStepX()),
+				Math.max(0, this.harvestRange.getZ() * facing.getStepY()),
+				Math.max(0, this.harvestRange.getZ() * facing.getStepZ())
 		);
 
 		// Get Lateral (X):
 		selectionRanges[lat][min] = new Vector3i(
-				this.harvestRange.getX() * -Math.abs(facingLat.getXOffset()),
-				this.harvestRange.getX() * -Math.abs(facingLat.getYOffset()),
-				this.harvestRange.getX() * -Math.abs(facingLat.getZOffset())
+				this.harvestRange.getX() * -Math.abs(facingLat.getStepX()),
+				this.harvestRange.getX() * -Math.abs(facingLat.getStepY()),
+				this.harvestRange.getX() * -Math.abs(facingLat.getStepZ())
 		);
 		selectionRanges[lat][max] = new Vector3i(
-				this.harvestRange.getX() * Math.abs(facingLat.getXOffset()),
-				this.harvestRange.getX() * Math.abs(facingLat.getYOffset()),
-				this.harvestRange.getX() * Math.abs(facingLat.getZOffset())
+				this.harvestRange.getX() * Math.abs(facingLat.getStepX()),
+				this.harvestRange.getX() * Math.abs(facingLat.getStepY()),
+				this.harvestRange.getX() * Math.abs(facingLat.getStepZ())
 		);
 
 		// Get Vertical (Y):
@@ -264,14 +264,14 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 		}
 		else {
 			selectionRanges[vert][min] = new Vector3i(
-					this.harvestRange.getY() * -Math.abs(facingH.getXOffset()) * 0.5F,
-					this.harvestRange.getY() * -Math.abs(facingH.getYOffset()) * 0.5F,
-					this.harvestRange.getY() * -Math.abs(facingH.getZOffset()) * 0.5F
+					this.harvestRange.getY() * -Math.abs(facingH.getStepX()) * 0.5F,
+					this.harvestRange.getY() * -Math.abs(facingH.getStepY()) * 0.5F,
+					this.harvestRange.getY() * -Math.abs(facingH.getStepZ()) * 0.5F
 			);
 			selectionRanges[vert][max] = new Vector3i(
-					this.harvestRange.getY() * Math.abs(facingH.getXOffset()) * 0.5F,
-					this.harvestRange.getY() * Math.abs(facingH.getYOffset()) * 0.5F,
-					this.harvestRange.getY() * Math.abs(facingH.getZOffset()) * 0.5F
+					this.harvestRange.getY() * Math.abs(facingH.getStepX()) * 0.5F,
+					this.harvestRange.getY() * Math.abs(facingH.getStepY()) * 0.5F,
+					this.harvestRange.getY() * Math.abs(facingH.getStepZ()) * 0.5F
 			);
 		}
 
@@ -294,8 +294,8 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 										for (int vertY = selectionRanges[vert][min].getY(); vertY <= selectionRanges[vert][max].getY(); vertY++) {
 											for (int vertZ = selectionRanges[vert][min].getZ(); vertZ <= selectionRanges[vert][max].getZ(); vertZ++) {
 
-												BlockPos destroyPos = harvestedPos.add(longX, longY, longZ).add(latX, latY, latZ).add(vertX, vertY, vertZ);
-												if (this.shouldHarvestBlock(world, harvestedBlockState, harvestedPos, destroyPos) && (!random || world.rand.nextBoolean())) {
+												BlockPos destroyPos = harvestedPos.offset(longX, longY, longZ).offset(latX, latY, latZ).offset(vertX, vertY, vertZ);
+												if (this.shouldHarvestBlock(world, harvestedBlockState, harvestedPos, destroyPos) && (!random || world.random.nextBoolean())) {
 													world.destroyBlock(destroyPos, true);
 												}
 
@@ -326,7 +326,7 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 						for (int latX = selectionRanges[lat][min].getX(); latX <= selectionRanges[lat][max].getX(); latX++) {
 							for (int latY = selectionRanges[lat][min].getY(); latY <= selectionRanges[lat][max].getY(); latY++) {
 								for (int latZ = selectionRanges[lat][min].getZ(); latZ <= selectionRanges[lat][max].getZ(); latZ++) {
-									BlockPos destroyPos = harvestedPos.add(longX, longY, longZ).add(latX, latY, latZ);
+									BlockPos destroyPos = harvestedPos.offset(longX, longY, longZ).offset(latX, latY, latZ);
 									if (this.shouldHarvestBlock(world, harvestedBlockState, harvestedPos, destroyPos)) {
 										world.destroyBlock(destroyPos, true);
 									}
@@ -338,7 +338,7 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 						for (int vertX = selectionRanges[vert][min].getX(); vertX <= selectionRanges[vert][max].getX(); vertX++) {
 							for (int vertY = selectionRanges[vert][min].getY(); vertY <= selectionRanges[vert][max].getY(); vertY++) {
 								for (int vertZ = selectionRanges[vert][min].getZ(); vertZ <= selectionRanges[vert][max].getZ(); vertZ++) {
-									BlockPos destroyPos = harvestedPos.add(longX, longY, longZ).add(vertX, vertY, vertZ);
+									BlockPos destroyPos = harvestedPos.offset(longX, longY, longZ).offset(vertX, vertY, vertZ);
 									if (this.shouldHarvestBlock(world, harvestedBlockState, harvestedPos, destroyPos)) {
 										world.destroyBlock(destroyPos, true);
 									}
@@ -382,15 +382,15 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 
 		int hook = net.minecraftforge.event.ForgeEventFactory.onHoeUse(context);
 		if (hook != 0) return false;
-		World world = context.getWorld();
-		BlockPos blockPos = context.getPos();
-		if (context.getFace() != Direction.DOWN && world.isAirBlock(blockPos.up())) {
+		World world = context.getLevel();
+		BlockPos blockPos = context.getClickedPos();
+		if (context.getClickedFace() != Direction.DOWN && world.isEmptyBlock(blockPos.above())) {
 			BlockState blockstate = HOE_LOOKUP.get(world.getBlockState(blockPos).getBlock());
 			if (blockstate != null) {
 				PlayerEntity playerentity = context.getPlayer();
-				world.playSound(playerentity, blockPos, SoundEvents.ITEM_HOE_TILL, SoundCategory.BLOCKS, 1.0F, 1.0F);
-				if (!world.isRemote) {
-					world.setBlockState(blockPos, blockstate, 11);
+				world.playSound(playerentity, blockPos, SoundEvents.HOE_TILL, SoundCategory.BLOCKS, 1.0F, 1.0F);
+				if (!world.isClientSide) {
+					world.setBlock(blockPos, blockstate, 11);
 				}
 				return true;
 			}
@@ -406,20 +406,20 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 	 * @param itemStack The equipment itemstack.
 	 */
 	public boolean onEntityInteraction(PlayerEntity player, LivingEntity entity, ItemStack itemStack) {
-		if(!"shears".equals(this.harvestType) || player.getEntityWorld().isRemote) {
+		if(!"shears".equals(this.harvestType) || player.getCommandSenderWorld().isClientSide) {
 			return false;
 		}
 
 		if (entity instanceof net.minecraftforge.common.IForgeShearable) {
 			net.minecraftforge.common.IForgeShearable target = (net.minecraftforge.common.IForgeShearable)entity;
-			BlockPos pos = new BlockPos(entity.getPosX(), entity.getPosY(), entity.getPosZ());
-			if (target.isShearable(itemStack, entity.world, pos)) {
-				java.util.List<ItemStack> drops = target.onSheared(player, itemStack, entity.world, pos,
-						net.minecraft.enchantment.EnchantmentHelper.getEnchantmentLevel(net.minecraft.enchantment.Enchantments.FORTUNE, itemStack));
+			BlockPos pos = new BlockPos(entity.getX(), entity.getY(), entity.getZ());
+			if (target.isShearable(itemStack, entity.level, pos)) {
+				java.util.List<ItemStack> drops = target.onSheared(player, itemStack, entity.level, pos,
+						net.minecraft.enchantment.EnchantmentHelper.getItemEnchantmentLevel(net.minecraft.enchantment.Enchantments.BLOCK_FORTUNE, itemStack));
 				java.util.Random rand = new java.util.Random();
 				drops.forEach(d -> {
-					net.minecraft.entity.item.ItemEntity ent = entity.entityDropItem(d, 1.0F);
-					ent.setMotion(ent.getMotion().add((rand.nextFloat() - rand.nextFloat()) * 0.1F, rand.nextFloat() * 0.05F, (rand.nextFloat() - rand.nextFloat()) * 0.1F));
+					net.minecraft.entity.item.ItemEntity ent = entity.spawnAtLocation(d, 1.0F);
+					ent.setDeltaMovement(ent.getDeltaMovement().add((rand.nextFloat() - rand.nextFloat()) * 0.1F, rand.nextFloat() * 0.05F, (rand.nextFloat() - rand.nextFloat()) * 0.1F));
 				});
 			}
 			return true;

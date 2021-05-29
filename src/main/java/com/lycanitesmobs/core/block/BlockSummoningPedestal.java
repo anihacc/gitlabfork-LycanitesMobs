@@ -49,17 +49,17 @@ public class BlockSummoningPedestal extends BlockBase {
         this.group = group;
         this.blockName = "summoningpedestal";
         this.setRegistryName(this.group.modid, this.blockName.toLowerCase());
-        this.setDefaultState(this.getStateContainer().getBaseState().with(PROPERTY_OWNER, EnumSummoningPedestal.NONE.ownerId));
+        this.registerDefaultState(this.getStateDefinition().any().setValue(PROPERTY_OWNER, EnumSummoningPedestal.NONE.ownerId));
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
         builder.add(PROPERTY_OWNER);
     }
 
     @Override
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
-        TileEntity tileentity = worldIn.getTileEntity(pos);
+    public void setPlacedBy(World worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
+        TileEntity tileentity = worldIn.getBlockEntity(pos);
         if(tileentity instanceof TileEntitySummoningPedestal) {
             TileEntitySummoningPedestal tileEntitySummoningPedestal = (TileEntitySummoningPedestal)tileentity;
             tileEntitySummoningPedestal.setOwner(placer);
@@ -85,21 +85,21 @@ public class BlockSummoningPedestal extends BlockBase {
 
     public static void setState(EnumSummoningPedestal owner, World worldIn, BlockPos pos) {
         BlockState blockState = worldIn.getBlockState(pos);
-        TileEntity tileentity = worldIn.getTileEntity(pos);
-        worldIn.setBlockState(pos, blockState.getBlock().getDefaultState().with(PROPERTY_OWNER, owner.getOwnerId()), 3);
+        TileEntity tileentity = worldIn.getBlockEntity(pos);
+        worldIn.setBlock(pos, blockState.getBlock().defaultBlockState().setValue(PROPERTY_OWNER, owner.getOwnerId()), 3);
 
         if (tileentity != null) {
-            tileentity.validate();
-            worldIn.setTileEntity(pos, tileentity);
+            tileentity.clearRemoved();
+            worldIn.setBlockEntity(pos, tileentity);
         }
     }
 
     @Override //onBlockActivated()
-    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
-        if(!world.isRemote() && player instanceof ServerPlayerEntity) {
-            TileEntity tileEntity = world.getTileEntity(pos);
+    public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+        if(!world.isClientSide() && player instanceof ServerPlayerEntity) {
+            TileEntity tileEntity = world.getBlockEntity(pos);
             if(tileEntity instanceof TileEntitySummoningPedestal) {
-                ((ServerPlayerEntity)player).connection.sendPacket(tileEntity.getUpdatePacket());
+                ((ServerPlayerEntity)player).connection.send(tileEntity.getUpdatePacket());
                 NetworkHooks.openGui((ServerPlayerEntity)player, new SummoningPedestalContainerProvider((TileEntitySummoningPedestal)tileEntity), buf -> buf.writeBlockPos(pos));
             }
         }
@@ -107,8 +107,8 @@ public class BlockSummoningPedestal extends BlockBase {
     }
 
     @Override
-    public boolean eventReceived(BlockState state, World worldIn, BlockPos pos, int eventID, int eventParam) {
-        TileEntity tileEntity = worldIn.getTileEntity(pos);
-        return tileEntity != null && tileEntity.receiveClientEvent(eventID, eventParam);
+    public boolean triggerEvent(BlockState state, World worldIn, BlockPos pos, int eventID, int eventParam) {
+        TileEntity tileEntity = worldIn.getBlockEntity(pos);
+        return tileEntity != null && tileEntity.triggerEvent(eventID, eventParam);
     }
 }

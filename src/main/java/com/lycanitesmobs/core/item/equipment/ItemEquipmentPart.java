@@ -105,7 +105,7 @@ public class ItemEquipmentPart extends BaseItem {
 		for(String elementName : elementNames) {
 			ElementInfo element = ElementManager.getInstance().getElement(elementName);
 			if (element == null) {
-				throw new RuntimeException("[Equipment] Unable to initialise Equipment Part " + this.getName().getString() + " as the element " + elementName + " cannot be found.");
+				throw new RuntimeException("[Equipment] Unable to initialise Equipment Part " + this.getDescription().getString() + " as the element " + elementName + " cannot be found.");
 			}
 			this.elements.add(element);
 		}
@@ -129,18 +129,18 @@ public class ItemEquipmentPart extends BaseItem {
 	}
 
 	@Override
-	public ITextComponent getDisplayName(ItemStack itemStack) {
-		TextComponent displayName = new TranslationTextComponent(this.getTranslationKey(itemStack).replace("equipmentpart_", ""));
-		displayName.appendString(" ")
+	public ITextComponent getName(ItemStack itemStack) {
+		TextComponent displayName = new TranslationTextComponent(this.getDescriptionId(itemStack).replace("equipmentpart_", ""));
+		displayName.append(" ")
 			.append(new TranslationTextComponent("equipment.level"))
-			.appendString(" " + this.getLevel(itemStack));
+			.append(" " + this.getPartLevel(itemStack));
 		return displayName;
 	}
 
 	@Override
-	public void addInformation(ItemStack itemStack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag tooltipFlag) {
-		super.addInformation(itemStack, world, tooltip, tooltipFlag);
-		FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
+	public void appendHoverText(ItemStack itemStack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag tooltipFlag) {
+		super.appendHoverText(itemStack, world, tooltip, tooltipFlag);
+		FontRenderer fontRenderer = Minecraft.getInstance().font;
 		for(ITextComponent description : this.getAdditionalDescriptions(itemStack, world, tooltipFlag)) {
 			tooltip.add(description);
 		}
@@ -153,24 +153,24 @@ public class ItemEquipmentPart extends BaseItem {
 
 	public List<ITextComponent> getAdditionalDescriptions(ItemStack itemStack, @Nullable World world, ITooltipFlag tooltipFlag) {
 		List<ITextComponent> descriptions = new ArrayList<>();
-		int level = this.getLevel(itemStack);
+		int level = this.getPartLevel(itemStack);
 		int experience = this.getExperience(itemStack);
 		int experienceMax = this.getExperienceForNextLevel(itemStack);
 
 		// Base Stats:
 		TextComponent baseFeature = (TextComponent) new TranslationTextComponent("equipment.slottype")
-				.appendString(" " + this.slotType)
-				.appendString("\n").append(new TranslationTextComponent("equipment.level"))
-				.appendString(" " + level + "/" + this.levelMax);
+				.append(" " + this.slotType)
+				.append("\n").append(new TranslationTextComponent("equipment.level"))
+				.append(" " + level + "/" + this.levelMax);
 		if(level < this.levelMax) {
-			baseFeature.appendString("\n").append(new TranslationTextComponent("entity.experience"))
-					.appendString(": " + experience + "/" + experienceMax);
+			baseFeature.append("\n").append(new TranslationTextComponent("entity.experience"))
+					.append(": " + experience + "/" + experienceMax);
 		}
 		descriptions.add(new StringTextComponent("-------------------\n"));
 		descriptions.add(baseFeature);
 		if(!this.elements.isEmpty()) {
 			ITextComponent elementFeature = new TranslationTextComponent("equipment.element")
-					.appendString(" ").append(this.getElementNames());
+					.append(" ").append(this.getElementNames());
 			descriptions.add(elementFeature);
 		}
 		descriptions.add(new StringTextComponent("-------------------\n"));
@@ -204,7 +204,7 @@ public class ItemEquipmentPart extends BaseItem {
 	public void randomizeLevel(World world, ItemStack itemStack) {
 		int level = this.levelMax;
 		if(this.levelMin < this.levelMax) {
-			level = this.levelMin + world.rand.nextInt(this.levelMax - this.levelMin + 1);
+			level = this.levelMin + world.random.nextInt(this.levelMax - this.levelMin + 1);
 		}
 		this.setLevel(itemStack, level);
 	}
@@ -240,7 +240,7 @@ public class ItemEquipmentPart extends BaseItem {
 	}
 
 	/** Returns an Equipment Part Level for the provided ItemStack. **/
-	public int getLevel(ItemStack itemStack) {
+	public int getPartLevel(ItemStack itemStack) {
 		CompoundNBT nbt = this.getTagCompound(itemStack);
 		int level = 1;
 		if(nbt.contains("equipmentLevel")) {
@@ -258,7 +258,7 @@ public class ItemEquipmentPart extends BaseItem {
 
 	/** Increases the experience of the provided Equipment Item Stack. This will also level up the part if the experience is enough. **/
 	public void addExperience(ItemStack itemStack, int experience) {
-		int currentLevel = this.getLevel(itemStack);
+		int currentLevel = this.getPartLevel(itemStack);
 		if(currentLevel >= this.levelMax) {
 			this.setExperience(itemStack, 0);
 		}
@@ -286,7 +286,7 @@ public class ItemEquipmentPart extends BaseItem {
 	 * @return Experience required for a level up.
 	 */
 	public int getExperienceForNextLevel(ItemStack itemStack) {
-		return BASE_LEVELUP_EXPERIENCE + Math.round(BASE_LEVELUP_EXPERIENCE * (this.getLevel(itemStack) - 1) * 0.25F);
+		return BASE_LEVELUP_EXPERIENCE + Math.round(BASE_LEVELUP_EXPERIENCE * (this.getPartLevel(itemStack) - 1) * 0.25F);
 	}
 
 	/**
@@ -352,8 +352,8 @@ public class ItemEquipmentPart extends BaseItem {
 	}
 
 	@Override
-	public void fillItemGroup(ItemGroup tab, NonNullList<ItemStack> items) {
-		if(!this.isInGroup(tab)) {
+	public void fillItemCategory(ItemGroup tab, NonNullList<ItemStack> items) {
+		if(!this.allowdedIn(tab)) {
 			return;
 		}
 
@@ -382,7 +382,7 @@ public class ItemEquipmentPart extends BaseItem {
 		boolean firstElement = true;
 		for(ElementInfo element : this.elements) {
 			if(!firstElement) {
-				elementNames.appendString(", ");
+				elementNames.append(", ");
 			}
 			firstElement = false;
 			elementNames.append(element.getTitle());

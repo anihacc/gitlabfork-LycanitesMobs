@@ -30,7 +30,7 @@ public class MessageTileEntityButton {
 
 		ctx.get().enqueueWork(() -> {
 			PlayerEntity player = ctx.get().getSender();
-			TileEntity tileEntity = player.getEntityWorld().getTileEntity(message.tileEntityPos);
+			TileEntity tileEntity = player.getCommandSenderWorld().getBlockEntity(message.tileEntityPos);
 			if(!(tileEntity instanceof TileEntityBase)) {
 				return;
 			}

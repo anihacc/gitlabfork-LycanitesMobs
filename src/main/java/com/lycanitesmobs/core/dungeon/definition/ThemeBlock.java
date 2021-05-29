@@ -52,6 +52,6 @@ public class ThemeBlock {
 	 * @return A new block state.
 	 */
 	public BlockState getBlockState() {
-		return this.getBlock().getDefaultState();
+		return this.getBlock().defaultBlockState();
 	}
 }

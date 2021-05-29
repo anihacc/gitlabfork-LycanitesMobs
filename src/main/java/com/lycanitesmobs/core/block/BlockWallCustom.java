@@ -27,17 +27,17 @@ public class BlockWallCustom extends WallBlock {
 	}
 
 	@Override
-	public IFormattableTextComponent getTranslatedName() {
-		return new TranslationTextComponent(this.getTranslationKey());
+	public IFormattableTextComponent getName() {
+		return new TranslationTextComponent(this.getDescriptionId());
 	}
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void addInformation(ItemStack stack, @Nullable IBlockReader world, List<ITextComponent> tooltip, ITooltipFlag flag) {
+	public void appendHoverText(ItemStack stack, @Nullable IBlockReader world, List<ITextComponent> tooltip, ITooltipFlag flag) {
 		tooltip.add(this.getDescription(stack, world));
 	}
 
 	public ITextComponent getDescription(ItemStack itemStack, @Nullable IBlockReader world) {
-		return new TranslationTextComponent(this.getTranslationKey() + ".description");
+		return new TranslationTextComponent(this.getDescriptionId() + ".description");
 	}
 }

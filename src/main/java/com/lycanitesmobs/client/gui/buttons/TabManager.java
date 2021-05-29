@@ -43,7 +43,7 @@ public class TabManager {
 
     public static void openInventoryGui () {
 		InventoryScreen inventory = new InventoryScreen(mc.player);
-        mc.displayGuiScreen(inventory);
+        mc.setScreen(inventory);
         TabManager.addTabsToInventory(inventory);
     }
 

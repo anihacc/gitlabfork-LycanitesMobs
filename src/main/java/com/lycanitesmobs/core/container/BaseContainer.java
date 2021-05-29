@@ -43,12 +43,12 @@ public abstract class BaseContainer extends Container {
 	
 	public void addPlayerSlots(PlayerInventory playerInventory, int offsetX, int offsetY) {
 		// Player Hotbar:
-		this.playerInventoryStart = this.inventorySlots.size();
+		this.playerInventoryStart = this.slots.size();
 		this.addSlotGrid(playerInventory, 8, 142, 1, 0, 8);
 		
 		// Player Inventory:
 		this.addSlotGrid(playerInventory, 8, 84, 3, 9, 35);
-		this.playerInventoryFinish = this.inventorySlots.size() - 1;
+		this.playerInventoryFinish = this.slots.size() - 1;
 	}
 	
 	
@@ -91,7 +91,7 @@ public abstract class BaseContainer extends Container {
 		this.addSlotGrid(inventory, x, y, totalRows, 0);
 	}
 	public void addSlotGrid(IInventory inventory, int x, int y, int totalRows, int start) {
-		this.addSlotGrid(inventory, x, y, totalRows, start, inventory.getSizeInventory() - 1);
+		this.addSlotGrid(inventory, x, y, totalRows, start, inventory.getContainerSize() - 1);
 	}
 	
 	/**
@@ -120,23 +120,23 @@ public abstract class BaseContainer extends Container {
   	//                   Auto Placing
   	// ==================================================
 	@Override
-	public ItemStack transferStackInSlot(PlayerEntity player, int slotID) {
+	public ItemStack quickMoveStack(PlayerEntity player, int slotID) {
 		ItemStack itemStack = ItemStack.EMPTY;
-		Slot slot = this.inventorySlots.get(slotID);
-		if(slot == null || !slot.getHasStack())
+		Slot slot = this.slots.get(slotID);
+		if(slot == null || !slot.hasItem())
 			return itemStack;
 		
-        ItemStack slotStack = slot.getStack();
+        ItemStack slotStack = slot.getItem();
         itemStack = slotStack.copy();
         
         // Player Slots (Sort to Inventory):
         if(this.isPlayerSlot(slotID)) {
         	if(this.specialStart >= 0 && this.specialFinish >= 0) {
         		for(int i = this.specialStart; i <= this.specialFinish; i++) {
-        			if(i < this.inventorySlots.size()) {
-        				Slot targetSlot = this.inventorySlots.get(i);
-	        			if(targetSlot.isItemValid(itemStack)) {
-		        			if(!this.mergeItemStack(slotStack, i, i + 1, false)) {
+        			if(i < this.slots.size()) {
+        				Slot targetSlot = this.slots.get(i);
+	        			if(targetSlot.mayPlace(itemStack)) {
+		        			if(!this.moveItemStackTo(slotStack, i, i + 1, false)) {
 			        			return ItemStack.EMPTY;
 		        			}
 	        			}
@@ -144,7 +144,7 @@ public abstract class BaseContainer extends Container {
         		}
         	}
         	if(this.inventoryStart >= 0 && this.inventoryFinish >= 0 && this.inventoryStart < this.inventoryFinish) {
-        		if(!this.mergeItemStack(slotStack, this.inventoryStart, this.inventoryFinish + 1, false))
+        		if(!this.moveItemStackTo(slotStack, this.inventoryStart, this.inventoryFinish + 1, false))
         			return ItemStack.EMPTY;
         	}
         }
@@ -152,14 +152,14 @@ public abstract class BaseContainer extends Container {
         // Inventory Slots (Sort to Player):
         else {
 	        if(this.playerInventoryFinish >= 0)
-	        	if(!this.mergeItemStack(slotStack, this.playerInventoryStart, this.playerInventoryFinish, true))
+	        	if(!this.moveItemStackTo(slotStack, this.playerInventoryStart, this.playerInventoryFinish, true))
 		        	return ItemStack.EMPTY;
         }
         
         if(slotStack.getCount() == 0)
-            slot.putStack(ItemStack.EMPTY);
+            slot.set(ItemStack.EMPTY);
         else
-            slot.onSlotChanged();
+            slot.setChanged();
         
         return ItemStack.EMPTY;
 	}
@@ -183,7 +183,7 @@ public abstract class BaseContainer extends Container {
   	//                     Interact
   	// ==================================================
 	@Override
-	public boolean canInteractWith(PlayerEntity entityplayer) {
+	public boolean stillValid(PlayerEntity entityplayer) {
 		return true;
 	}
 }

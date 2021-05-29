@@ -44,14 +44,14 @@ public class EntityOstimien extends TameableCreatureEntity {
     // ==================================================
 	// ========== Living Update ==========
 	@Override
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
         
         // Lurker Blind Stalking:
-        if(this.getAttackTarget() != null) {
+        if(this.getTarget() != null) {
         	EffectBase stalkingEffect = ObjectManager.getEffect("plague");
-        	if(stalkingEffect != null && this.getAttackTarget().isPotionActive(stalkingEffect))
-        		this.setAvoidTarget(this.getAttackTarget());
+        	if(stalkingEffect != null && this.getTarget().hasEffect(stalkingEffect))
+        		this.setAvoidTarget(this.getTarget());
         	else
         		this.setAvoidTarget(null);
         }
@@ -59,9 +59,9 @@ public class EntityOstimien extends TameableCreatureEntity {
         	this.setAvoidTarget(null);
         
         // Leap:
-        if(this.onGround && !this.getEntityWorld().isRemote && this.rand.nextInt(10) == 0) {
+        if(this.onGround && !this.getCommandSenderWorld().isClientSide && this.random.nextInt(10) == 0) {
         	if(this.hasAttackTarget())
-        		this.leap(6.0F, 0.4D, this.getAttackTarget());
+        		this.leap(6.0F, 0.4D, this.getTarget());
         	else if(this.hasAvoidTarget())
         		this.leap(4.0F, 0.4D);
         }
@@ -73,21 +73,21 @@ public class EntityOstimien extends TameableCreatureEntity {
    	// ==================================================
     @Override
     public boolean canStealth() {
-    	if(this.getEntityWorld().isRemote) return false;
+    	if(this.getCommandSenderWorld().isClientSide) return false;
     	else {
 	    	if(this.hasAttackTarget()) {
-	    		if(this.getAttackTarget() instanceof PlayerEntity) {
-	    			PlayerEntity playerTarget = (PlayerEntity)this.getAttackTarget();
-	    			ItemStack itemstack = playerTarget.inventory.getCurrentItem();
+	    		if(this.getTarget() instanceof PlayerEntity) {
+	    			PlayerEntity playerTarget = (PlayerEntity)this.getTarget();
+	    			ItemStack itemstack = playerTarget.inventory.getSelected();
 	    			if(this.isTamingItem(itemstack))
 	    				return false;
 	    		}
 				EffectBase stalkingEffect = ObjectManager.getEffect("plague");
 	    		if(stalkingEffect != null) {
-					if(!this.getAttackTarget().isPotionActive(stalkingEffect))
+					if(!this.getTarget().hasEffect(stalkingEffect))
 						return false;
 				}
-	    		if(this.getDistance(this.getAttackTarget()) < (5.0D * 5.0D))
+	    		if(this.distanceTo(this.getTarget()) < (5.0D * 5.0D))
 	    			return false;
 	    	}
 	    	else {
@@ -100,13 +100,13 @@ public class EntityOstimien extends TameableCreatureEntity {
     
     @Override
     public void startStealth() {
-    	if(this.getEntityWorld().isRemote) {
+    	if(this.getCommandSenderWorld().isClientSide) {
             IParticleData particle = ParticleTypes.SMOKE;
-            double d0 = this.rand.nextGaussian() * 0.02D;
-            double d1 = this.rand.nextGaussian() * 0.02D;
-            double d2 = this.rand.nextGaussian() * 0.02D;
+            double d0 = this.random.nextGaussian() * 0.02D;
+            double d1 = this.random.nextGaussian() * 0.02D;
+            double d2 = this.random.nextGaussian() * 0.02D;
             for(int i = 0; i < 100; i++)
-            	this.getEntityWorld().addParticle(particle, this.getPositionVec().getX() + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).width * 2.0F) - (double)this.getSize(Pose.STANDING).width, this.getPositionVec().getY() + 0.5D + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).height), this.getPositionVec().getZ() + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).width * 2.0F) - (double)this.getSize(Pose.STANDING).width, d0, d1, d2);
+            	this.getCommandSenderWorld().addParticle(particle, this.position().x() + (double)(this.random.nextFloat() * this.getDimensions(Pose.STANDING).width * 2.0F) - (double)this.getDimensions(Pose.STANDING).width, this.position().y() + 0.5D + (double)(this.random.nextFloat() * this.getDimensions(Pose.STANDING).height), this.position().z() + (double)(this.random.nextFloat() * this.getDimensions(Pose.STANDING).width * 2.0F) - (double)this.getDimensions(Pose.STANDING).width, d0, d1, d2);
         }
     	super.startStealth();
     }
@@ -139,7 +139,7 @@ public class EntityOstimien extends TameableCreatureEntity {
     // ==================================================
     @OnlyIn(Dist.CLIENT)
     @Override
-    public boolean isInvisibleToPlayer(PlayerEntity player) {
+    public boolean isInvisibleTo(PlayerEntity player) {
     	if(this.isTamed() && this.getOwner() == player)
     		return false;
         return this.isInvisible();

@@ -246,14 +246,14 @@ public class ProjectileInfo {
 			this.chargeItem = ObjectManager.getItem(this.chargeItemName);
 			if (this.chargeItem == null) {
 				Item.Properties properties = new Item.Properties();
-				properties.group(ItemManager.getInstance().chargesGroup);
+				properties.tab(ItemManager.getInstance().chargesGroup);
 				this.chargeItem = new ChargeItem(properties, this);
 				ObjectManager.addItem(this.chargeItemName, this.chargeItem);
 			}
 
 			// Dispenser:
 			this.dispenserBehaviour = new BaseProjectileDispenseBehaviour(this);
-			DispenserBlock.registerDispenseBehavior(this.chargeItem, this.dispenserBehaviour);
+			DispenserBlock.registerBehavior(this.chargeItem, this.dispenserBehaviour);
 		}
 
 		// Sounds:
@@ -288,13 +288,13 @@ public class ProjectileInfo {
 	@Nonnull
 	public EntityType<? extends BaseProjectileEntity> getEntityType() {
 		if(this.entityType == null) {
-			EntityType.Builder entityTypeBuilder = EntityType.Builder.create(EntityFactory.getInstance(), EntityClassification.MISC);
+			EntityType.Builder entityTypeBuilder = EntityType.Builder.of(EntityFactory.getInstance(), EntityClassification.MISC);
 			//entityTypeBuilder.setCustomClientFactory(EntityFactory.getInstance().createOnClientFunction);
 			entityTypeBuilder.setTrackingRange(40);
 			entityTypeBuilder.setUpdateInterval(3);
 			entityTypeBuilder.setShouldReceiveVelocityUpdates(true);
-			entityTypeBuilder.size(this.width, this.height);
-			entityTypeBuilder.disableSummoning();
+			entityTypeBuilder.sized(this.width, this.height);
+			entityTypeBuilder.noSummon();
 			this.entityType = entityTypeBuilder.build(this.getName());
 			this.entityType.setRegistryName(this.modInfo.modid, this.getName());
 			EntityFactory.getInstance().addEntityType(this.entityType, this.entityConstructor, this.getName());

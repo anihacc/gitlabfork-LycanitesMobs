@@ -64,7 +64,7 @@ public class CreatureDescriptionList extends BaseList {
 		protected void onClicked() {}
 
 		@Override
-		public List<? extends IGuiEventListener> getEventListeners() {
+		public List<? extends IGuiEventListener> children() {
 			return null;
 		}
 	}
@@ -82,152 +82,152 @@ public class CreatureDescriptionList extends BaseList {
 		if(creatureInfo.creatureType != null) {
 			// Taming:
 			if(creatureInfo.isTameable() && creatureInfo.creatureType.getTreatItem() != null) {
-				text.appendString("\u00A7l")
+				text.append("\u00A7l")
 						.append(new TranslationTextComponent("gui.beastiary.tameable"))
-						.appendString(": " + "\u00A7r")
-						.append(creatureInfo.creatureType.getTreatItem().getName())
-						.appendString("\n");
+						.append(": " + "\u00A7r")
+						.append(creatureInfo.creatureType.getTreatItem().getDescription())
+						.append("\n");
 
 				// Mounting:
 				if(creatureInfo.isMountable()) {
-					text.appendString("\n\u00A7l")
+					text.append("\n\u00A7l")
 							.append(new TranslationTextComponent("gui.beastiary.mountable"))
-							.appendString("\u00A7r\n");
+							.append("\u00A7r\n");
 				}
 			}
 
 			// Summoning:
 			if(creatureInfo.isSummonable()) {
-				text.appendString("\u00A7l")
+				text.append("\u00A7l")
 						.append(new TranslationTextComponent("gui.beastiary.summonable"))
-						.appendString("\u00A7r\n");
+						.append("\u00A7r\n");
 			}
 
 			// Perching:
 			if((creatureInfo.isTameable() || creatureInfo.isSummonable()) && creatureInfo.isPerchable()) {
-				text.appendString("\u00A7l")
+				text.append("\u00A7l")
 						.append(new TranslationTextComponent("gui.beastiary.perchable"))
-						.appendString("\u00A7r\n");
+						.append("\u00A7r\n");
 			}
 		}
 
 		if (this.drawHelper.getStringWidth(text.getString()) > 0) {
-			text.appendString("\n");
+			text.append("\n");
 		}
 
 		// Diet:
-		text.appendString("\u00A7l")
+		text.append("\u00A7l")
 				.append(new TranslationTextComponent("gui.beastiary.diet"))
-				.appendString(": " + "\u00A7r")
-				.appendString("\n").append(creatureInfo.getDietNames());
+				.append(": " + "\u00A7r")
+				.append("\n").append(creatureInfo.getDietNames());
 
 		// Summary:
-		text.appendString("\n\n\u00A7l")
+		text.append("\n\n\u00A7l")
 				.append(new TranslationTextComponent("gui.beastiary.summary"))
-				.appendString(": " + "\u00A7r")
-				.appendString("\n")
+				.append(": " + "\u00A7r")
+				.append("\n")
 				.append(creatureInfo.getDescription());
 
 		// Stats:
-		text.appendString("\n\n\u00A7l")
+		text.append("\n\n\u00A7l")
 				.append(new TranslationTextComponent("creature.stat.base"))
-				.appendString(": " + "\u00A7r");
+				.append(": " + "\u00A7r");
 		if(this.creatureKnowledge.rank >= 2) {
-			text.appendString("\n")
+			text.append("\n")
 					.append(new TranslationTextComponent("creature.stat.health"))
-					.appendString(": " + creatureInfo.health);
-			text.appendString("\n")
+					.append(": " + creatureInfo.health);
+			text.append("\n")
 					.append(new TranslationTextComponent("creature.stat.defense"))
-					.appendString(": " + creatureInfo.defense);
+					.append(": " + creatureInfo.defense);
 
-			text.appendString("\n")
+			text.append("\n")
 					.append(new TranslationTextComponent("creature.stat.speed"))
-					.appendString(": " + creatureInfo.speed);
-			text.appendString("\n")
+					.append(": " + creatureInfo.speed);
+			text.append("\n")
 					.append(new TranslationTextComponent("creature.stat.damage"))
-					.appendString(": " + creatureInfo.damage);
+					.append(": " + creatureInfo.damage);
 
-			text.appendString("\n")
+			text.append("\n")
 					.append(new TranslationTextComponent("creature.stat.pierce"))
-					.appendString(": " + creatureInfo.pierce);
+					.append(": " + creatureInfo.pierce);
 			ITextComponent effectText = new StringTextComponent(creatureInfo.effectDuration + "s " + creatureInfo.effectAmplifier + "X");
 			if(creatureInfo.effectDuration <= 0 || creatureInfo.effectAmplifier < 0) {
 				effectText = new TranslationTextComponent("common.none");
 			}
-			text.appendString("\n")
+			text.append("\n")
 					.append(new TranslationTextComponent("creature.stat.effect"))
-					.appendString(": ")
+					.append(": ")
 					.append(effectText);
 		}
 		else {
-			text.appendString("\n")
+			text.append("\n")
 					.append(new TranslationTextComponent("gui.beastiary.unlockedat"))
-					.appendString(" ")
+					.append(" ")
 					.append(new TranslationTextComponent("creature.stat.knowledge"))
-					.appendString(" " + 2);
+					.append(" " + 2);
 		}
 
 		// Combat:
-		text.appendString("\n\n\u00A7l")
+		text.append("\n\n\u00A7l")
 				.append(new TranslationTextComponent("gui.beastiary.combat"))
-				.appendString(": " + "\u00A7r");
+				.append(": " + "\u00A7r");
 		if(this.creatureKnowledge.rank >= 2) {
-			text.appendString("\n").append(creatureInfo.getCombatDescription());
+			text.append("\n").append(creatureInfo.getCombatDescription());
 		}
 		else {
-			text.appendString("\n")
+			text.append("\n")
 					.append(new TranslationTextComponent("gui.beastiary.unlockedat"))
-					.appendString(" ")
+					.append(" ")
 					.append(new TranslationTextComponent("creature.stat.knowledge"))
-					.appendString(" " + 2);
+					.append(" " + 2);
 		}
 
 		// Habitat:
-		text.appendString("\n\n\u00A7l")
+		text.append("\n\n\u00A7l")
 				.append(new TranslationTextComponent("gui.beastiary.habitat"))
-				.appendString(": " + "\u00A7r");
+				.append(": " + "\u00A7r");
 		if(this.creatureKnowledge.rank >= 2) {
-			text.appendString("\n")
+			text.append("\n")
 					.append(creatureInfo.getHabitatDescription());
 		}
 		else {
-			text.appendString("\n")
+			text.append("\n")
 					.append(new TranslationTextComponent("gui.beastiary.unlockedat"))
-					.appendString(" ")
+					.append(" ")
 					.append(new TranslationTextComponent("creature.stat.knowledge"))
-					.appendString(" " + 2);
+					.append(" " + 2);
 		}
 
 		// Biomes:
-		text.appendString("\n\n\u00A7l")
+		text.append("\n\n\u00A7l")
 				.append(new TranslationTextComponent("gui.beastiary.biomes"))
-				.appendString(": " + "\u00A7r");
+				.append(": " + "\u00A7r");
 		if(this.creatureKnowledge.rank >= 2) {
-			text.appendString("\n")
+			text.append("\n")
 					.append(creatureInfo.getBiomeNames());
 		}
 		else {
-			text.appendString("\n")
+			text.append("\n")
 					.append(new TranslationTextComponent("gui.beastiary.unlockedat"))
-					.appendString(" ")
+					.append(" ")
 					.append(new TranslationTextComponent("creature.stat.knowledge"))
-					.appendString(" " + 2);
+					.append(" " + 2);
 		}
 
 		// Drops:
-		text.appendString("\n\n\u00A7l")
+		text.append("\n\n\u00A7l")
 				.append(new TranslationTextComponent("gui.beastiary.drops"))
-				.appendString(": " + "\u00A7r");
+				.append(": " + "\u00A7r");
 		if(this.creatureKnowledge.rank >= 2) {
-			text.appendString("\n")
+			text.append("\n")
 					.append(creatureInfo.getDropNames());
 		}
 		else {
-			text.appendString("\n")
+			text.append("\n")
 					.append(new TranslationTextComponent("gui.beastiary.unlockedat"))
-					.appendString(" ")
+					.append(" ")
 					.append(new TranslationTextComponent("creature.stat.knowledge"))
-					.appendString(" " + 2);
+					.append(" " + 2);
 		}
 
 		return text.getString();

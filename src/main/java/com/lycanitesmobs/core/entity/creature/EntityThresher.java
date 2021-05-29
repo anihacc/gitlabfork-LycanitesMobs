@@ -44,7 +44,7 @@ public class EntityThresher extends RideableCreatureEntity implements IMob, IGro
         this.hitAreaHeightScale = 1F;
 
         // Stats:
-        this.entityCollisionReduction = 0.9F;
+        this.pushthrough = 0.9F;
     }
 
     @Override
@@ -64,11 +64,11 @@ public class EntityThresher extends RideableCreatureEntity implements IMob, IGro
     // ==================================================
 	// ========== Living Update ==========
 	@Override
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
 
 		// Whirlpool:
-        if(!this.getEntityWorld().isRemote) {
+        if(!this.getCommandSenderWorld().isClientSide) {
             if(this.whirlpoolRecharging) {
                 if(++this.whirlpoolEnergy >= this.whirlpoolEnergyMax)
                     this.whirlpoolRecharging = false;
@@ -80,26 +80,26 @@ public class EntityThresher extends RideableCreatureEntity implements IMob, IGro
                         continue;
                     if(entity instanceof LivingEntity) {
                         LivingEntity entityLivingBase = (LivingEntity)entity;
-                        if(entityLivingBase.isPotionActive(ObjectManager.getEffect("weight")) || !this.canAttack(entityLivingBase))
+                        if(entityLivingBase.hasEffect(ObjectManager.getEffect("weight")) || !this.canAttack(entityLivingBase))
                             continue;
                     }
                     ServerPlayerEntity player = null;
                     if (entity instanceof ServerPlayerEntity) {
                         player = (ServerPlayerEntity) entity;
-                        if (player.abilities.isCreativeMode)
+                        if (player.abilities.instabuild)
                             continue;
                     }
-                    double xDist = this.getPositionVec().getX() - entity.getPositionVec().getX();
-                    double zDist = this.getPositionVec().getZ() - entity.getPositionVec().getZ();
+                    double xDist = this.position().x() - entity.position().x();
+                    double zDist = this.position().z() - entity.position().z();
                     double xzDist = Math.max(MathHelper.sqrt(xDist * xDist + zDist * zDist), 0.01D);
                     double factor = 0.1D;
-                    entity.addVelocity(
-                            xDist / xzDist * factor + entity.getMotion().getX() * factor,
+                    entity.push(
+                            xDist / xzDist * factor + entity.getDeltaMovement().x() * factor,
                             factor,
-                            zDist / xzDist * factor + entity.getMotion().getZ() * factor
+                            zDist / xzDist * factor + entity.getDeltaMovement().z() * factor
                     );
                     if (player != null)
-                        player.connection.sendPacket(new SEntityVelocityPacket(entity));
+                        player.connection.send(new SEntityVelocityPacket(entity));
                 }
                 if(--this.whirlpoolEnergy <= 0)
                     this.whirlpoolRecharging = true;
@@ -112,17 +112,17 @@ public class EntityThresher extends RideableCreatureEntity implements IMob, IGro
 
     @Override
     public void riderEffects(LivingEntity rider) {
-        rider.addPotionEffect(new EffectInstance(Effects.WATER_BREATHING, (5 * 20) + 5, 1));
-        if(rider.isPotionActive(ObjectManager.getEffect("paralysis")))
-            rider.removePotionEffect(ObjectManager.getEffect("paralysis"));
-        if(rider.isPotionActive(ObjectManager.getEffect("penetration")))
-            rider.removePotionEffect(ObjectManager.getEffect("penetration"));
+        rider.addEffect(new EffectInstance(Effects.WATER_BREATHING, (5 * 20) + 5, 1));
+        if(rider.hasEffect(ObjectManager.getEffect("paralysis")))
+            rider.removeEffect(ObjectManager.getEffect("paralysis"));
+        if(rider.hasEffect(ObjectManager.getEffect("penetration")))
+            rider.removeEffect(ObjectManager.getEffect("penetration"));
     }
 
     // ========== Extra Animations ==========
     /** An additional animation boolean that is passed to all clients through the animation mask. **/
     public boolean extraAnimation01() {
-        if(this.getEntityWorld().isRemote) {
+        if(this.getCommandSenderWorld().isClientSide) {
             return super.extraAnimation01();
         }
         return this.canWhirlpool();
@@ -130,7 +130,7 @@ public class EntityThresher extends RideableCreatureEntity implements IMob, IGro
 
     // ========== Whirlpool ==========
     public boolean canWhirlpool() {
-        if(this.getEntityWorld().isRemote) {
+        if(this.getCommandSenderWorld().isClientSide) {
             return this.extraAnimation01();
         }
 
@@ -145,7 +145,7 @@ public class EntityThresher extends RideableCreatureEntity implements IMob, IGro
         }
 
         // Attack Target:
-        return !this.whirlpoolRecharging && this.hasAttackTarget() && this.getDistance(this.getAttackTarget()) <= (this.whirlpoolRange * 3);
+        return !this.whirlpoolRecharging && this.hasAttackTarget() && this.distanceTo(this.getTarget()) <= (this.whirlpoolRange * 3);
     }
 
 	
@@ -157,13 +157,13 @@ public class EntityThresher extends RideableCreatureEntity implements IMob, IGro
 	public float getBlockPathWeight(int x, int y, int z) {
         int waterWeight = 10;
 
-        Block block = this.getEntityWorld().getBlockState(new BlockPos(x, y, z)).getBlock();
+        Block block = this.getCommandSenderWorld().getBlockState(new BlockPos(x, y, z)).getBlock();
         if(block == Blocks.WATER)
             return (super.getBlockPathWeight(x, y, z) + 1) * (waterWeight + 1);
-        if(this.getEntityWorld().isRaining() && this.getEntityWorld().canBlockSeeSky(new BlockPos(x, y, z)))
+        if(this.getCommandSenderWorld().isRaining() && this.getCommandSenderWorld().canSeeSkyFromBelowWater(new BlockPos(x, y, z)))
             return (super.getBlockPathWeight(x, y, z) + 1) * (waterWeight + 1);
 
-        if(this.getAttackTarget() != null)
+        if(this.getTarget() != null)
             return super.getBlockPathWeight(x, y, z);
         if(this.waterContact())
             return -999999.0F;
@@ -185,8 +185,8 @@ public class EntityThresher extends RideableCreatureEntity implements IMob, IGro
 
     // ========== Mounted Offset ==========
     @Override
-    public double getMountedYOffset() {
-        return (double)this.getSize(Pose.STANDING).height * 0.5D;
+    public double getPassengersRidingOffset() {
+        return (double)this.getDimensions(Pose.STANDING).height * 0.5D;
     }
     
     
@@ -209,7 +209,7 @@ public class EntityThresher extends RideableCreatureEntity implements IMob, IGro
     // ==================================================
     @Override
     public void mountAbility(Entity rider) {
-        if(this.getEntityWorld().isRemote)
+        if(this.getCommandSenderWorld().isClientSide)
             return;
 
         if(this.getStamina() < this.getStaminaCost()) {
@@ -240,7 +240,7 @@ public class EntityThresher extends RideableCreatureEntity implements IMob, IGro
     public void onDismounted(Entity entity) {
         super.onDismounted(entity);
         if(entity != null && entity instanceof LivingEntity) {
-            ((LivingEntity)entity).addPotionEffect(new EffectInstance(Effects.WATER_BREATHING, 5 * 20, 1));
+            ((LivingEntity)entity).addEffect(new EffectInstance(Effects.WATER_BREATHING, 5 * 20, 1));
         }
     }
 

@@ -22,16 +22,16 @@ public class ParticleEntity extends ThrowableEntity {
     // ==================================================
 	public ParticleEntity(World world, double x, double y, double z, String texture, ModInfo group) {
 		super(EntityType.SNOWBALL, world);
-		this.setPosition(x, y, z);
-        this.lastTickPosX = x;
-        this.lastTickPosY = y;
-        this.lastTickPosZ = z;
+		this.setPos(x, y, z);
+        this.xOld = x;
+        this.yOld = y;
+        this.zOld = z;
 		this.texture = texture;
 		this.group = group;
 	}
 
 	@Override
-	public void registerData() {}
+	public void defineSynchedData() {}
 	
 	
     // ==================================================
@@ -40,9 +40,9 @@ public class ParticleEntity extends ThrowableEntity {
 	@Override
     public void tick() {
 		System.out.println("Doing something!");
-        this.prevPosX = this.getPositionVec().getX();
-        this.prevPosY = this.getPositionVec().getY();
-        this.prevPosZ = this.getPositionVec().getZ();
+        this.xo = this.position().x();
+        this.yo = this.position().y();
+        this.zo = this.position().z();
 
         if(this.particleAge++ >= this.particleAgeMax)
             this.remove();
@@ -67,12 +67,12 @@ public class ParticleEntity extends ThrowableEntity {
         return false;
     }
 	
-	protected boolean canTriggerWalking() {
+	protected boolean isMovementNoisy() {
         return false;
     }
 	
 	@Override
-	protected void onImpact(RayTraceResult rayTraceResult) {
+	protected void onHit(RayTraceResult rayTraceResult) {
 		return;
 	}
 	
@@ -81,10 +81,10 @@ public class ParticleEntity extends ThrowableEntity {
     //                        NBT
     // ==================================================
 	@Override
-	public void writeAdditional(CompoundNBT par1NBTTagCompound) {}
+	public void addAdditionalSaveData(CompoundNBT par1NBTTagCompound) {}
 
 	@Override
-    public void readAdditional(CompoundNBT par1NBTTagCompound) {}
+    public void readAdditionalSaveData(CompoundNBT par1NBTTagCompound) {}
 	
 	
     // ==================================================

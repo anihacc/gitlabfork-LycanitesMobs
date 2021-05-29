@@ -9,6 +9,8 @@ import net.minecraft.util.math.BlockPos;
 
 import java.util.EnumSet;
 
+import net.minecraft.entity.ai.goal.Goal.Flag;
+
 public class AttackRangedGoal extends Goal {
     // Targets:
 	private final BaseCreatureEntity host;
@@ -44,7 +46,7 @@ public class AttackRangedGoal extends Goal {
   	// ==================================================
     public AttackRangedGoal(BaseCreatureEntity setHost) {
     	this.host = setHost;
-		this.setMutexFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
+		this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
     }
     
     
@@ -110,7 +112,7 @@ public class AttackRangedGoal extends Goal {
   	//                  Should Execute
   	// ==================================================
 	@Override
-    public boolean shouldExecute() {
+    public boolean canUse() {
     	// Attack Stamina/Cooldown Recovery:
         if(this.attackStaminaMax > 0) {
         	if(this.attackOnCooldown) {
@@ -137,7 +139,7 @@ public class AttackRangedGoal extends Goal {
                 return false;
         }
 
-        LivingEntity possibleAttackTarget = this.host.getAttackTarget();
+        LivingEntity possibleAttackTarget = this.host.getTarget();
         if(possibleAttackTarget == null)
             return false;
 		if(!possibleAttackTarget.isAlive())
@@ -152,17 +154,17 @@ public class AttackRangedGoal extends Goal {
   	//                Continue Executing
   	// ==================================================
 	@Override
-    public boolean shouldContinueExecuting() {
+    public boolean canContinueToUse() {
     	if(!this.longMemory)
-	    	if(!this.host.useDirectNavigator() && !this.host.getNavigator().noPath())
-                return this.shouldExecute();
+	    	if(!this.host.useDirectNavigator() && !this.host.getNavigation().isDone())
+                return this.canUse();
 	    	else if(this.host.useDirectNavigator() && this.host.directNavigator.targetPosition == null)
-                return this.shouldExecute();
+                return this.canUse();
 
     	// Should Execute:
     	if(!this.enabled)
     		return false;
-        LivingEntity possibleAttackTarget = this.host.getAttackTarget();
+        LivingEntity possibleAttackTarget = this.host.getTarget();
         if(possibleAttackTarget == null)
             return false;
         if(!possibleAttackTarget.isAlive())
@@ -176,7 +178,7 @@ public class AttackRangedGoal extends Goal {
   	//                      Reset
   	// ==================================================
 	@Override
-    public void resetTask() {
+    public void stop() {
         this.attackTarget = null;
         this.chaseTime = 0;
         this.attackTime = -1;
@@ -189,8 +191,8 @@ public class AttackRangedGoal extends Goal {
 	@Override
     public void tick() {
     	boolean fixated = this.host.hasFixateTarget() && this.host.getFixateTarget() == this.attackTarget;
-        double distance = this.host.getDistance(this.attackTarget) - (this.attackTarget.getSize(this.attackTarget.getPose()).width / 2);
-        boolean hasSight = fixated || this.host.getEntitySenses().canSee(this.attackTarget);
+        double distance = this.host.distanceTo(this.attackTarget) - (this.attackTarget.getDimensions(this.attackTarget.getPose()).width / 2);
+        boolean hasSight = fixated || this.host.getSensing().canSee(this.attackTarget);
         float flyingHeightOffset = this.flyingHeight;
         
         if(hasSight && this.chaseTimeMax >= 0 && !fixated)
@@ -204,22 +206,22 @@ public class AttackRangedGoal extends Goal {
         // If within min range or chase timed out:
         if(distance <= this.minChaseDistance || (this.chaseTimeMax >= 0 && distance <= (double)this.attackDistance && this.chaseTime >= this.chaseTimeMax)) {
             if(!this.host.useDirectNavigator())
-                this.host.getNavigator().clearPath();
+                this.host.getNavigation().stop();
             else
                 this.host.directNavigator.clearTargetPosition(1.0D);
         }
         else if(--this.repathTime <= 0) {
         	this.repathTime = this.repathTimeMax;
-            BlockPos targetPosition = this.attackTarget.getPosition();
+            BlockPos targetPosition = this.attackTarget.blockPosition();
             if(this.host.isFlying())
-                targetPosition = targetPosition.add(0, flyingHeightOffset, 0);
+                targetPosition = targetPosition.offset(0, flyingHeightOffset, 0);
             if(!this.host.useDirectNavigator())
-                this.host.getNavigator().tryMoveToXYZ(targetPosition.getX(), targetPosition.getY(), targetPosition.getZ(), this.speed);
+                this.host.getNavigation().moveTo(targetPosition.getX(), targetPosition.getY(), targetPosition.getZ(), this.speed);
             else
                 this.host.directNavigator.setTargetPosition(targetPosition, this.speed);
         }
 
-        this.host.getLookController().setLookPositionWithEntity(this.attackTarget, 30.0F, 30.0F);
+        this.host.getLookControl().setLookAt(this.attackTarget, 30.0F, 30.0F);
         float rangeFactor;
         
         // Attack Stamina/Cooldown:

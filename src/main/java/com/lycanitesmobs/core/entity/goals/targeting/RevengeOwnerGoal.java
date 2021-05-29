@@ -45,7 +45,7 @@ public class RevengeOwnerGoal extends FindAttackTargetGoal {
 	// ==================================================
  	//                  Should Execute
  	// ==================================================
-    public boolean shouldExecute() {
+    public boolean canUse() {
     	if(!this.host.isTamed())
     		return false;
     	if(this.host.getOwner() == null)
@@ -53,10 +53,10 @@ public class RevengeOwnerGoal extends FindAttackTargetGoal {
         if (!(this.host.getOwner() instanceof LivingEntity))
             return false;
         LivingEntity owner = (LivingEntity)this.host.getOwner();
-        int i = owner.getRevengeTimer();
+        int i = owner.getLastHurtByMobTimestamp();
         if(i == this.revengeTime)
         	return false;
-        if(!this.isEntityTargetable(owner.getRevengeTarget(), false))
+        if(!this.isEntityTargetable(owner.getLastHurtByMob(), false))
         	return false;
         return true;
     }
@@ -65,13 +65,13 @@ public class RevengeOwnerGoal extends FindAttackTargetGoal {
 	// ==================================================
  	//                 Start Executing
  	// ==================================================
-    public void startExecuting() {
+    public void start() {
         LivingEntity owner = (LivingEntity)this.host.getOwner();
-        this.target = owner.getRevengeTarget();
-        this.revengeTime = owner.getRevengeTimer();
+        this.target = owner.getLastHurtByMob();
+        this.revengeTime = owner.getLastHurtByMobTimestamp();
         if(this.callForHelp) {
             this.callNearbyForHelp();
         }
-        super.startExecuting();
+        super.start();
     }
 }

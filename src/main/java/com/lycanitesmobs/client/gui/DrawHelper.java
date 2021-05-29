@@ -53,10 +53,10 @@ public class DrawHelper {
 	 */
 	public void drawString(MatrixStack matrixStack, String text, int x, int y, int color, boolean shadow) {
 		if (shadow) {
-			this.getFontRenderer().drawStringWithShadow(matrixStack, text, x, y, color);
+			this.getFontRenderer().drawShadow(matrixStack, text, x, y, color);
 			return;
 		}
-		this.getFontRenderer().drawString(matrixStack, text, x, y, color);
+		this.getFontRenderer().draw(matrixStack, text, x, y, color);
 	}
 
 	public void drawString(MatrixStack matrixStack, String text, int x, int y, int color) {
@@ -90,15 +90,15 @@ public class DrawHelper {
 	 */
 	public void drawStringWrapped(MatrixStack matrixStack, String text, int x, int y, int wrapWidth, int color, boolean shadow) {
 		StringTextComponent textComponent = new StringTextComponent(text);
-		List<IReorderingProcessor> textLines = this.getFontRenderer().trimStringToWidth(textComponent, wrapWidth);
+		List<IReorderingProcessor> textLines = this.getFontRenderer().split(textComponent, wrapWidth);
 		int lineY = y;
 		for(IReorderingProcessor textLine : textLines) {
 			if (shadow) {
-				this.getFontRenderer().func_238407_a_(matrixStack, textLine, (float)x, (float)lineY, color);
+				this.getFontRenderer().drawShadow(matrixStack, textLine, (float)x, (float)lineY, color);
 				lineY += 10;
 				continue;
 			}
-			this.getFontRenderer().func_238422_b_(matrixStack, textLine, (float)x, (float)lineY, color);
+			this.getFontRenderer().draw(matrixStack, textLine, (float)x, (float)lineY, color);
 			lineY += 10;
 		}
 	}
@@ -109,7 +109,7 @@ public class DrawHelper {
 	 * @return The width (in pixels) the the provided text would have.
 	 */
 	public int getStringWidth(String text) {
-		return this.getFontRenderer().getStringWidth(text);
+		return this.getFontRenderer().width(text);
 	}
 
 	/**
@@ -119,7 +119,7 @@ public class DrawHelper {
 	 * @return The height (in pixels) the the provided text would have with word wrapping.
 	 */
 	public int getWordWrappedHeight(String text, int wrapWidth) {
-		return this.getFontRenderer().getWordWrappedHeight(text, wrapWidth);
+		return this.getFontRenderer().wordWrapHeight(text, wrapWidth);
 	}
 
 	/**
@@ -137,17 +137,17 @@ public class DrawHelper {
 	public void drawTexture(MatrixStack matrixStack, ResourceLocation texture, float x, float y, float z, float u, float v, float width, float height) {
 		this.preDraw();
 
-		this.getMinecraft().getTextureManager().bindTexture(texture);
-		Matrix3f normal = matrixStack.getLast().getNormal();
-		Matrix4f matrix = matrixStack.getLast().getMatrix();
+		this.getMinecraft().getTextureManager().bind(texture);
+		Matrix3f normal = matrixStack.last().normal();
+		Matrix4f matrix = matrixStack.last().pose();
 		Tessellator tessellator = Tessellator.getInstance();
-		BufferBuilder buffer = tessellator.getBuffer();
+		BufferBuilder buffer = tessellator.getBuilder();
 		buffer.begin(7, DefaultVertexFormats.POSITION_TEX);
-		buffer.pos(matrix, x, y + height, z).tex(0, v).endVertex();
-		buffer.pos(matrix, x + width, y + height, z).tex(u, v).endVertex();
-		buffer.pos(matrix, x + width, y, z).tex(u, 0).endVertex();
-		buffer.pos(matrix, x, y, z).tex(0, 0).endVertex();
-		tessellator.draw();
+		buffer.vertex(matrix, x, y + height, z).uv(0, v).endVertex();
+		buffer.vertex(matrix, x + width, y + height, z).uv(u, v).endVertex();
+		buffer.vertex(matrix, x + width, y, z).uv(u, 0).endVertex();
+		buffer.vertex(matrix, x, y, z).uv(0, 0).endVertex();
+		tessellator.end();
 
 		this.postDraw();
 	}
@@ -167,21 +167,21 @@ public class DrawHelper {
 	public void drawTextureTiled(MatrixStack matrixStack, ResourceLocation texture, float x, float y, float z, float u, float v, float width, float height, float resolution) {
 		this.preDraw();
 
-		this.getMinecraft().getTextureManager().bindTexture(texture);
+		this.getMinecraft().getTextureManager().bind(texture);
 		float scaleX = 0.00390625F * resolution;
 		float scaleY = scaleX;
 		Tessellator tessellator = Tessellator.getInstance();
-		BufferBuilder buffer = tessellator.getBuffer();
+		BufferBuilder buffer = tessellator.getBuilder();
 		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-		buffer.pos((double)(x + 0), (double)(y + height), z)
-				.tex(((u + 0) * scaleX), (v + height) * scaleY).endVertex();
-		buffer.pos((double)(x + width), (double)(y + height), z)
-				.tex(((u + width) * scaleX), ((v + height) * scaleY)).endVertex();
-		buffer.pos((double)(x + width), (double)(y + 0), z)
-				.tex(((u + width) * scaleX), ((v + 0) * scaleY)).endVertex();
-		buffer.pos((double)(x + 0), (double)(y + 0), z)
-				.tex(((u + 0) * scaleX), ((v + 0) * scaleY)).endVertex();
-		tessellator.draw();
+		buffer.vertex((double)(x + 0), (double)(y + height), z)
+				.uv(((u + 0) * scaleX), (v + height) * scaleY).endVertex();
+		buffer.vertex((double)(x + width), (double)(y + height), z)
+				.uv(((u + width) * scaleX), ((v + height) * scaleY)).endVertex();
+		buffer.vertex((double)(x + width), (double)(y + 0), z)
+				.uv(((u + width) * scaleX), ((v + 0) * scaleY)).endVertex();
+		buffer.vertex((double)(x + 0), (double)(y + 0), z)
+				.uv(((u + 0) * scaleX), ((v + 0) * scaleY)).endVertex();
+		tessellator.end();
 
 		this.postDraw();
 	}
@@ -241,20 +241,20 @@ public class DrawHelper {
 		float scaleX = 0.00390625F * resolution;
 		float scaleY = scaleX;
 
-		Matrix3f normal = matrixStack.getLast().getNormal();
-		Matrix4f matrix = matrixStack.getLast().getMatrix();
+		Matrix3f normal = matrixStack.last().normal();
+		Matrix4f matrix = matrixStack.last().pose();
 		Tessellator tessellator = Tessellator.getInstance();
-		BufferBuilder buffer = tessellator.getBuffer();
+		BufferBuilder buffer = tessellator.getBuilder();
 		buffer.begin(7, DefaultVertexFormats.POSITION_TEX);
-		buffer.pos(matrix, (float)(x), (float)(y + height), 0)
-				.tex(((float)u * scaleX), ((float)(v + height) * scaleY)).endVertex();
-		buffer.pos(matrix, (float)(x + width), (float)(y + height), 0)
-				.tex(((float)(u + width) * scaleX), ((float)(v + height) * scaleY)).endVertex();
-		buffer.pos(matrix, (float)(x + width), (float)(y), 0)
-				.tex(((float)(u + width) * scaleX), ((float)(v) * scaleY)).endVertex();
-		buffer.pos(matrix, (float)x, (float)(y), 0)
-				.tex(((float)u * scaleX), ((float)(v) * scaleY)).endVertex();
-		tessellator.draw();
+		buffer.vertex(matrix, (float)(x), (float)(y + height), 0)
+				.uv(((float)u * scaleX), ((float)(v + height) * scaleY)).endVertex();
+		buffer.vertex(matrix, (float)(x + width), (float)(y + height), 0)
+				.uv(((float)(u + width) * scaleX), ((float)(v + height) * scaleY)).endVertex();
+		buffer.vertex(matrix, (float)(x + width), (float)(y), 0)
+				.uv(((float)(u + width) * scaleX), ((float)(v) * scaleY)).endVertex();
+		buffer.vertex(matrix, (float)x, (float)(y), 0)
+				.uv(((float)u * scaleX), ((float)(v) * scaleY)).endVertex();
+		tessellator.end();
 
 		this.postDraw();
 	}

@@ -30,6 +30,6 @@ public class CoordSorterFurthest implements Comparator {
   	//                  Get Distance
   	// ==================================================
     public double getDistanceSqCoord(BlockPos targetCoord) {
-        return this.coord.distanceSq(targetCoord);
+        return this.coord.distSqr(targetCoord);
     }
 }

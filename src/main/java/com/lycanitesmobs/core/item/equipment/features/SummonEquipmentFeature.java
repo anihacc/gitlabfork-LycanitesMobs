@@ -65,19 +65,19 @@ public class SummonEquipmentFeature extends EquipmentFeature {
 			return null;
 		}
 		TextComponent description = (TextComponent) new TranslationTextComponent("equipment.feature." + this.featureType)
-			.appendString(" ").append(new TranslationTextComponent("entity." + this.summonMobId));
+			.append(" ").append(new TranslationTextComponent("entity." + this.summonMobId));
 
 		if(this.summonCountMin != this.summonCountMax) {
-			description.appendString(" x" + (this.summonCountMin + " - " + this.summonCountMax));
+			description.append(" x" + (this.summonCountMin + " - " + this.summonCountMax));
 		}
 		else {
-			description.appendString(" x" + this.summonCountMax);
+			description.append(" x" + this.summonCountMax);
 		}
 
-		description.appendString(" " + Math.round(this.summonChance * 100) + "%");
+		description.append(" " + Math.round(this.summonChance * 100) + "%");
 
 		if(this.summonDuration > 0) {
-			description.appendString(" " + ((float)this.summonDuration / 20) + "s");
+			description.append(" " + ((float)this.summonDuration / 20) + "s");
 		}
 
 		return description;
@@ -98,7 +98,7 @@ public class SummonEquipmentFeature extends EquipmentFeature {
 	 * @param attacker The entity using this item to hit.
 	 */
 	public void onHitEntity(ItemStack itemStack, LivingEntity target, LivingEntity attacker) {
-		if(target == null || attacker == null || attacker.getEntityWorld().isRemote) {
+		if(target == null || attacker == null || attacker.getCommandSenderWorld().isClientSide) {
 			return;
 		}
 
@@ -120,13 +120,13 @@ public class SummonEquipmentFeature extends EquipmentFeature {
 
 		int summonCount = this.summonCountMin;
 		if(this.summonCountMax > this.summonCountMin) {
-			summonCount = this.summonCountMin + attacker.getRNG().nextInt(this.summonCountMax - this.summonCountMin);
+			summonCount = this.summonCountMin + attacker.getRandom().nextInt(this.summonCountMax - this.summonCountMin);
 		}
 		for(int i = 0; i < summonCount; i++) {
-			if (attacker.getRNG().nextDouble() <= this.summonChance) {
+			if (attacker.getRandom().nextDouble() <= this.summonChance) {
 				try {
-					Entity entity = entityType.create(attacker.getEntityWorld());
-					entity.setLocationAndAngles(attacker.getPosition().getX(), attacker.getPosition().getY(), attacker.getPosition().getZ(), attacker.rotationYaw, 0.0F);
+					Entity entity = entityType.create(attacker.getCommandSenderWorld());
+					entity.moveTo(attacker.blockPosition().getX(), attacker.blockPosition().getY(), attacker.blockPosition().getZ(), attacker.yRot, 0.0F);
 					if (entity instanceof BaseCreatureEntity) {
 						BaseCreatureEntity entityCreature = (BaseCreatureEntity) entity;
 						entityCreature.setMinion(true);
@@ -144,14 +144,14 @@ public class SummonEquipmentFeature extends EquipmentFeature {
 							entityTameable.setPVP(target instanceof PlayerEntity);
 						}
 
-						float randomAngle = 45F + (45F * attacker.getRNG().nextFloat());
-						if (attacker.getRNG().nextBoolean()) {
+						float randomAngle = 45F + (45F * attacker.getRandom().nextFloat());
+						if (attacker.getRandom().nextBoolean()) {
 							randomAngle = -randomAngle;
 						}
 						BlockPos spawnPos = entityCreature.getFacingPosition(attacker, -1, randomAngle);
-						entity.setLocationAndAngles(spawnPos.getX(), spawnPos.getY(), spawnPos.getZ(), attacker.rotationYaw, 0.0F);
-						entityCreature.setAttackTarget(target);
-						entity.getEntityWorld().addEntity(entity);
+						entity.moveTo(spawnPos.getX(), spawnPos.getY(), spawnPos.getZ(), attacker.yRot, 0.0F);
+						entityCreature.setTarget(target);
+						entity.getCommandSenderWorld().addFreshEntity(entity);
 					}
 				} catch (Exception e) {
 					e.printStackTrace();

@@ -59,11 +59,11 @@ public abstract class TameableCreatureEntity extends AgeableCreatureEntity {
 	public UUID ownerUUID;
 
     // Datawatcher:
-    protected static final DataParameter<Byte> TAMED = EntityDataManager.createKey(TameableCreatureEntity.class, DataSerializers.BYTE); // TODO Tame Type IDs.
-    protected static final DataParameter<Optional<UUID>> OWNER_ID = EntityDataManager.createKey(TameableCreatureEntity.class, DataSerializers.OPTIONAL_UNIQUE_ID);
-    protected static final DataParameter<Float> HUNGER = EntityDataManager.createKey(TameableCreatureEntity.class, DataSerializers.FLOAT);
-    protected static final DataParameter<Float> STAMINA = EntityDataManager.createKey(TameableCreatureEntity.class, DataSerializers.FLOAT);
-	protected static final DataParameter<Integer> LOYALTY = EntityDataManager.createKey(TameableCreatureEntity.class, DataSerializers.VARINT);
+    protected static final DataParameter<Byte> TAMED = EntityDataManager.defineId(TameableCreatureEntity.class, DataSerializers.BYTE); // TODO Tame Type IDs.
+    protected static final DataParameter<Optional<UUID>> OWNER_ID = EntityDataManager.defineId(TameableCreatureEntity.class, DataSerializers.OPTIONAL_UUID);
+    protected static final DataParameter<Float> HUNGER = EntityDataManager.defineId(TameableCreatureEntity.class, DataSerializers.FLOAT);
+    protected static final DataParameter<Float> STAMINA = EntityDataManager.defineId(TameableCreatureEntity.class, DataSerializers.FLOAT);
+	protected static final DataParameter<Integer> LOYALTY = EntityDataManager.defineId(TameableCreatureEntity.class, DataSerializers.INT);
 
     /** Used for the TAMED WATCHER_ID, this holds a series of booleans that describe the tamed status as well as instructed behaviour. **/
 	public static enum TAMED_ID {
@@ -83,12 +83,12 @@ public abstract class TameableCreatureEntity extends AgeableCreatureEntity {
 	
 	// ========== Init ==========
     @Override
-    protected void registerData() {
-        super.registerData();
-        this.dataManager.register(TAMED, (byte)0);
-        this.dataManager.register(OWNER_ID, Optional.empty());
-        this.dataManager.register(HUNGER, this.getCreatureHungerMax());
-        this.dataManager.register(STAMINA, this.getStaminaMax());
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(TAMED, (byte)0);
+        this.entityData.define(OWNER_ID, Optional.empty());
+        this.entityData.define(HUNGER, this.getCreatureHungerMax());
+        this.entityData.define(STAMINA, this.getStaminaMax());
     }
 
     // ========== Init AI ==========
@@ -121,7 +121,7 @@ public abstract class TameableCreatureEntity extends AgeableCreatureEntity {
 		TextComponent ownedName = new StringTextComponent("");
     	boolean customName = this.hasCustomName();
 		if(customName) {
-			ownedName.append(super.getName()).appendString(" (");
+			ownedName.append(super.getName()).append(" (");
 		}
 
 		ITextComponent ownerName = this.getOwnerName();
@@ -131,9 +131,9 @@ public abstract class TameableCreatureEntity extends AgeableCreatureEntity {
             if ("s".equalsIgnoreCase(ownerFormatted.substring(ownerFormatted.length() - 1)))
                 ownerSuffix = "' ";
         }
-		ownedName.append(ownerName).appendString(ownerSuffix).append(this.getTitle());
+		ownedName.append(ownerName).append(ownerSuffix).append(this.getTitle());
         if(customName) {
-			ownedName.appendString(")");
+			ownedName.append(")");
 		}
 
     	return ownedName;
@@ -154,7 +154,7 @@ public abstract class TameableCreatureEntity extends AgeableCreatureEntity {
     
     @Override
     public boolean despawnCheck() {
-        if(this.getEntityWorld().isRemote)
+        if(this.getCommandSenderWorld().isClientSide)
         	return false;
 
         // Bound Pet:
@@ -183,17 +183,17 @@ public abstract class TameableCreatureEntity extends AgeableCreatureEntity {
   	// ==================================================
     // ========== Can leash ==========
     @Override
-    public boolean canBeLeashedTo(PlayerEntity player) {
+    public boolean canBeLeashed(PlayerEntity player) {
 	    if(this.isTamed() && player == this.getPlayerOwner())
 	        return true;
-	    return super.canBeLeashedTo(player);
+	    return super.canBeLeashed(player);
     }
     
     // ========== Test Leash ==========
     @Override
     public void testLeash(float distance) {
     	if(this.isSitting() && distance > 10.0F)
-    		this.clearLeashed(true, true);
+    		this.dropLeash(true, true);
     	else
     		super.testLeash(distance);
     }
@@ -203,18 +203,18 @@ public abstract class TameableCreatureEntity extends AgeableCreatureEntity {
     //                       Update
     // ==================================================
     @Override
-    public void livingTick() {
-    	super.livingTick();
+    public void aiStep() {
+    	super.aiStep();
     	this.staminaUpdate();
 
     	// Owner Buffs:
-    	if(!this.getEntityWorld().isRemote() && this.isPet() && this.getDistanceSq(this.getPlayerOwner()) <= 64) {
+    	if(!this.getCommandSenderWorld().isClientSide() && this.isPet() && this.distanceToSqr(this.getPlayerOwner()) <= 64) {
     		this.ownerEffects();
 		}
 	}
     
     public void staminaUpdate() {
-    	if(this.getEntityWorld().isRemote)
+    	if(this.getCommandSenderWorld().isClientSide)
     		return;
     	if(this.stamina < this.getStaminaMax() && this.staminaRecovery >= this.getStaminaRecoveryMax() / 2)
     		this.setStamina(Math.min(this.stamina + this.staminaRecovery, this.getStaminaMax()));
@@ -228,13 +228,13 @@ public abstract class TameableCreatureEntity extends AgeableCreatureEntity {
 	public void ownerEffects() {
 		// Protect Owner from Effects:
 		if(!this.canBurn()) {
-			this.getPlayerOwner().addPotionEffect(new EffectInstance(Effects.FIRE_RESISTANCE, (5 * 20) + 5, 1));
+			this.getPlayerOwner().addEffect(new EffectInstance(Effects.FIRE_RESISTANCE, (5 * 20) + 5, 1));
 		}
-		for(Object possibleEffect : this.getPlayerOwner().getActivePotionEffects().toArray(new Object[0])) {
+		for(Object possibleEffect : this.getPlayerOwner().getActiveEffects().toArray(new Object[0])) {
 			if(possibleEffect instanceof EffectInstance) {
 				EffectInstance effectInstance = (EffectInstance)possibleEffect;
-				if(!this.isPotionApplicable(effectInstance))
-					this.getPlayerOwner().removePotionEffect(effectInstance.getPotion());
+				if(!this.canBeAffected(effectInstance))
+					this.getPlayerOwner().removeEffect(effectInstance.getEffect());
 			}
 		}
 	}
@@ -292,16 +292,16 @@ public abstract class TameableCreatureEntity extends AgeableCreatureEntity {
     	commands.putAll(super.getInteractCommands(player, itemStack));
 
 		// Perch:
-		if(this.canPerch(player) && !player.isSneaking() && !this.getEntityWorld().isRemote)
+		if(this.canPerch(player) && !player.isShiftKeyDown() && !this.getCommandSenderWorld().isClientSide)
 			commands.put(COMMAND_PIORITIES.MAIN.id, "Perch");
 		
 		// Open GUI:
-		else if(!this.getEntityWorld().isRemote && this.isTamed() && (itemStack.isEmpty() || player.isSneaking()) && player == this.getPlayerOwner()) {
+		else if(!this.getCommandSenderWorld().isClientSide && this.isTamed() && (itemStack.isEmpty() || player.isShiftKeyDown()) && player == this.getPlayerOwner()) {
 			commands.put(COMMAND_PIORITIES.MAIN.id, "GUI");
 		}
     	
     	// Server Item Commands:
-    	if(!this.getEntityWorld().isRemote && !itemStack.isEmpty() && !player.isSneaking()) {
+    	if(!this.getCommandSenderWorld().isClientSide && !itemStack.isEmpty() && !player.isShiftKeyDown()) {
     		
     		// Taming:
     		if(!this.isTamed() && isTamingItem(itemStack) && CreatureManager.getInstance().config.tamingEnabled) {
@@ -319,12 +319,12 @@ public abstract class TameableCreatureEntity extends AgeableCreatureEntity {
 					commands.put(COMMAND_PIORITIES.ITEM_USE.id, "Charge");
 				}
 				else {
-					player.sendMessage(new TranslationTextComponent("item.lycanitesmobs.charge.creature.invalid"), Util.DUMMY_UUID);
+					player.sendMessage(new TranslationTextComponent("item.lycanitesmobs.charge.creature.invalid"), Util.NIL_UUID);
 				}
 			}
     		
     		// Equipment:
-    		if(this.isTamed() && !this.isChild() && this.canEquip() && player == this.getPlayerOwner()) {
+    		if(this.isTamed() && !this.isBaby() && this.canEquip() && player == this.getPlayerOwner()) {
 	    		String equipSlot = this.inventory.getSlotForEquipment(itemStack);
 	    		if(equipSlot != null && (this.inventory.getEquipmentStack(equipSlot) == null || this.inventory.getEquipmentStack(equipSlot).getItem() != itemStack.getItem()))
 	    			commands.put(COMMAND_PIORITIES.EQUIPPING.id, "Equip Item");
@@ -363,18 +363,18 @@ public abstract class TameableCreatureEntity extends AgeableCreatureEntity {
     	// Feed:
     	if(command.equals("Feed")) {
     		int healAmount = 4;
-    		if(itemStack.getItem().isFood()) {
-    			healAmount = itemStack.getItem().getFood().getHealing();
+    		if(itemStack.getItem().isEdible()) {
+    			healAmount = itemStack.getItem().getFoodProperties().getNutrition();
     		}
     		this.heal((float)healAmount);
             this.playEatSound();
-            if(this.getEntityWorld().isRemote) {
+            if(this.getCommandSenderWorld().isClientSide) {
                 IParticleData particle = ParticleTypes.HEART;
-                double d0 = this.rand.nextGaussian() * 0.02D;
-                double d1 = this.rand.nextGaussian() * 0.02D;
-                double d2 = this.rand.nextGaussian() * 0.02D;
+                double d0 = this.random.nextGaussian() * 0.02D;
+                double d1 = this.random.nextGaussian() * 0.02D;
+                double d2 = this.random.nextGaussian() * 0.02D;
                 for(int i = 0; i < 25; i++)
-                	this.getEntityWorld().addParticle(particle, this.getPositionVec().getX() + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).width * 2.0F) - (double)this.getSize(Pose.STANDING).width, this.getPositionVec().getY() + 0.5D + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).height), this.getPositionVec().getZ() + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).width * 2.0F) - (double)this.getSize(Pose.STANDING).width, d0, d1, d2);
+                	this.getCommandSenderWorld().addParticle(particle, this.position().x() + (double)(this.random.nextFloat() * this.getDimensions(Pose.STANDING).width * 2.0F) - (double)this.getDimensions(Pose.STANDING).width, this.position().y() + 0.5D + (double)(this.random.nextFloat() * this.getDimensions(Pose.STANDING).height), this.position().z() + (double)(this.random.nextFloat() * this.getDimensions(Pose.STANDING).width * 2.0F) - (double)this.getDimensions(Pose.STANDING).width, d0, d1, d2);
             }
     		this.consumePlayersItem(player, itemStack);
             return true;
@@ -407,10 +407,10 @@ public abstract class TameableCreatureEntity extends AgeableCreatureEntity {
     	// Sit:
     	if(command.equals("Sit")) {
     		this.playTameSound();
-            this.setAttackTarget(null);
+            this.setTarget(null);
             this.clearMovement();
         	this.setSitting(!this.isSitting());
-            this.isJumping = false;
+            this.jumping = false;
 			return true;
     	}
 
@@ -508,9 +508,9 @@ public abstract class TameableCreatureEntity extends AgeableCreatureEntity {
 	 * @return True when on the same team.
 	 */
 	@Override
-    public boolean isOnSameTeam(Entity target) {
-		if(this.getEntityWorld().isRemote) {
-			return super.isOnSameTeam(target);
+    public boolean isAlliedTo(Entity target) {
+		if(this.getCommandSenderWorld().isClientSide) {
+			return super.isAlliedTo(target);
 		}
 
         if(this.isTamed()) {
@@ -519,7 +519,7 @@ public abstract class TameableCreatureEntity extends AgeableCreatureEntity {
                 return true;
 
             // Check Player PvP:
-			if(target instanceof PlayerEntity && (!this.getEntityWorld().getServer().isPVPEnabled() || !this.isPVP())) {
+			if(target instanceof PlayerEntity && (!this.getCommandSenderWorld().getServer().isPvpAllowed() || !this.isPVP())) {
 				return true;
 			}
 
@@ -527,7 +527,7 @@ public abstract class TameableCreatureEntity extends AgeableCreatureEntity {
             if(target instanceof TameableCreatureEntity) {
             	TameableCreatureEntity tamedTarget = (TameableCreatureEntity)target;
             	if(tamedTarget.isTamed()) {
-            		if(!this.getEntityWorld().getServer().isPVPEnabled() || !this.isPVP() || tamedTarget.getPlayerOwner() == this.getPlayerOwner()) {
+            		if(!this.getCommandSenderWorld().getServer().isPvpAllowed() || !this.isPVP() || tamedTarget.getPlayerOwner() == this.getPlayerOwner()) {
 						return true;
 					}
 				}
@@ -535,7 +535,7 @@ public abstract class TameableCreatureEntity extends AgeableCreatureEntity {
 			else if(target instanceof TameableEntity) {
 				TameableEntity tamedTarget = (TameableEntity)target;
 				if(tamedTarget.getOwner() != null) {
-					if(!this.getEntityWorld().getServer().isPVPEnabled() || !this.isPVP() || tamedTarget.getOwner() == this.getOwner()) {
+					if(!this.getCommandSenderWorld().getServer().isPvpAllowed() || !this.isPVP() || tamedTarget.getOwner() == this.getOwner()) {
 						return true;
 					}
 				}
@@ -543,21 +543,21 @@ public abstract class TameableCreatureEntity extends AgeableCreatureEntity {
 
 			// Check Owner Teams:
 			if(this.getPlayerOwner() != null) {
-				if(this.getPlayerOwner().getRidingEntity() == target) {
+				if(this.getPlayerOwner().getVehicle() == target) {
 					return true;
 				}
-				return this.getPlayerOwner().isOnSameTeam(target);
+				return this.getPlayerOwner().isAlliedTo(target);
 			}
             else if(this.getOwner() != null) {
-				if(this.getOwner().getRidingEntity() == target) {
+				if(this.getOwner().getVehicle() == target) {
 					return true;
 				}
-				return this.getOwner().isOnSameTeam(target);
+				return this.getOwner().isAlliedTo(target);
 			}
 
 			return false;
         }
-        return super.isOnSameTeam(target);
+        return super.isAlliedTo(target);
     }
     
     
@@ -566,12 +566,12 @@ public abstract class TameableCreatureEntity extends AgeableCreatureEntity {
     // ==================================================
     // ========== Can Attack ==========
 	@Override
-	public boolean canAttack(EntityType targetType) {
+	public boolean canAttackType(EntityType targetType) {
 		if(this.isPassive())
 			return false;
 		if(this.isTamed())
 			return true;
-		return super.canAttack(targetType);
+		return super.canAttackType(targetType);
 	}
 	
 	@Override
@@ -581,8 +581,8 @@ public abstract class TameableCreatureEntity extends AgeableCreatureEntity {
 		if(this.isTamed()) {
             if(this.getOwner() == targetEntity || this.getPlayerOwner() == targetEntity)
                 return false;
-            if(!this.getEntityWorld().isRemote) {
-                boolean canPVP = this.getEntityWorld().getServer().isPVPEnabled() && this.isPVP();
+            if(!this.getCommandSenderWorld().isClientSide) {
+                boolean canPVP = this.getCommandSenderWorld().getServer().isPvpAllowed() && this.isPVP();
                 if(targetEntity instanceof PlayerEntity && !canPVP)
                     return false;
                 if(targetEntity instanceof TameableCreatureEntity) {
@@ -610,7 +610,7 @@ public abstract class TameableCreatureEntity extends AgeableCreatureEntity {
     public DamageSource getDamageSource(EntityDamageSource nestedDamageSource) {
         if(this.isTamed() && this.getOwner() != null) {
             if(nestedDamageSource == null)
-                nestedDamageSource = (EntityDamageSource)DamageSource.causeMobDamage(this);
+                nestedDamageSource = (EntityDamageSource)DamageSource.mobAttack(this);
             return new MinionEntityDamageSource(nestedDamageSource, this.getOwner());
         }
         return super.getDamageSource(nestedDamageSource);
@@ -618,21 +618,21 @@ public abstract class TameableCreatureEntity extends AgeableCreatureEntity {
 	
     // ========== Attacked From ==========
     @Override
-    public boolean attackEntityFrom(DamageSource damageSrc, float damageAmount) {
+    public boolean hurt(DamageSource damageSrc, float damageAmount) {
         if (this.isInvulnerableTo(damageSrc))
             return false;
         else {
             if(!this.isPassive())
             	this.setSitting(false);
 
-            Entity entity = damageSrc.getImmediateSource();
+            Entity entity = damageSrc.getDirectEntity();
             if(entity instanceof ThrowableEntity)
-            	entity = ((ThrowableEntity)entity).func_234616_v_();
+            	entity = ((ThrowableEntity)entity).getOwner();
             
             if(this.isTamed() && this.getOwner() == entity)
             	return false;
 
-            return super.attackEntityFrom(damageSrc, damageAmount);
+            return super.hurt(damageSrc, damageAmount);
         }
     }
 
@@ -644,8 +644,8 @@ public abstract class TameableCreatureEntity extends AgeableCreatureEntity {
 	@Override
 	public boolean isVulnerableTo(String type, DamageSource source, float damage) {
 		if(this.isTamed()) {
-			Entity entity = source.getTrueSource();
-			if(entity instanceof PlayerEntity && this.getEntityWorld().getServer() != null && !this.getEntityWorld().getServer().isPVPEnabled()) {
+			Entity entity = source.getEntity();
+			if(entity instanceof PlayerEntity && this.getCommandSenderWorld().getServer() != null && !this.getCommandSenderWorld().getServer().isPvpAllowed()) {
 				return false;
 			}
 			if(entity == this.getPlayerOwner()) {
@@ -667,7 +667,7 @@ public abstract class TameableCreatureEntity extends AgeableCreatureEntity {
 	 */
 	public void setOwnerId(UUID ownerUUID) {
 		this.ownerUUID = ownerUUID;
-		this.dataManager.set(OWNER_ID, Optional.ofNullable(ownerUUID));
+		this.entityData.set(OWNER_ID, Optional.ofNullable(ownerUUID));
 		this.setTamed(ownerUUID != null);
 	}
 
@@ -677,7 +677,7 @@ public abstract class TameableCreatureEntity extends AgeableCreatureEntity {
 		if(uuid == null) {
 			return super.getOwner();
 		}
-		return this.getEntityWorld().getPlayerByUuid(uuid);
+		return this.getCommandSenderWorld().getPlayerByUUID(uuid);
 	}
 
 	/**
@@ -685,12 +685,12 @@ public abstract class TameableCreatureEntity extends AgeableCreatureEntity {
 	 * @param player The player to become the owner.
 	 */
 	public void setPlayerOwner(PlayerEntity player) {
-		this.setOwnerId(player.getUniqueID());
+		this.setOwnerId(player.getUUID());
 	}
 
 	@Override
 	public UUID getOwnerId() {
-		if(this.getEntityWorld().isRemote) {
+		if(this.getCommandSenderWorld().isClientSide) {
 			try {
 				return this.getUUIDFromDataManager(OWNER_ID).orElse(null);
 			} catch (Exception ignored) {}
@@ -703,7 +703,7 @@ public abstract class TameableCreatureEntity extends AgeableCreatureEntity {
 	 * @return The player owner.
 	 */
 	public PlayerEntity getPlayerOwner() {
-		if(this.getEntityWorld().isRemote) {
+		if(this.getCommandSenderWorld().isClientSide) {
 			Entity owner = this.getOwner();
 			if(owner instanceof PlayerEntity) {
 				return (PlayerEntity)owner;
@@ -713,7 +713,7 @@ public abstract class TameableCreatureEntity extends AgeableCreatureEntity {
 		if(this.ownerUUID == null) {
 			return null;
 		}
-		return this.getEntityWorld().getPlayerByUuid(this.ownerUUID);
+		return this.getCommandSenderWorld().getPlayerByUUID(this.ownerUUID);
 	}
 
 	/**
@@ -745,11 +745,11 @@ public abstract class TameableCreatureEntity extends AgeableCreatureEntity {
     public void setTamed(boolean isTamed) {
         byte tamed = this.getByteFromDataManager(TAMED);
         if(isTamed) {
-            this.dataManager.set(TAMED, (byte) (tamed | TAMED_ID.IS_TAMED.id));
+            this.entityData.set(TAMED, (byte) (tamed | TAMED_ID.IS_TAMED.id));
             this.spawnEventType = "";
         }
         else {
-            this.dataManager.set(TAMED, (byte) (tamed - (tamed & TAMED_ID.IS_TAMED.id)));
+            this.entityData.set(TAMED, (byte) (tamed - (tamed & TAMED_ID.IS_TAMED.id)));
         }
         this.setCustomNameVisible(isTamed);
     }
@@ -776,21 +776,21 @@ public abstract class TameableCreatureEntity extends AgeableCreatureEntity {
 	 * @return True if the entity is tamed, false on failure.
 	 */
     public boolean tame(PlayerEntity player) {
-    	if(!this.getEntityWorld().isRemote && !this.isRareVariant() && !this.isBoss()) {
-			if (this.rand.nextInt(3) == 0) {
+    	if(!this.getCommandSenderWorld().isClientSide && !this.isRareVariant() && !this.isBoss()) {
+			if (this.random.nextInt(3) == 0) {
 				this.setPlayerOwner(player);
 				this.onTamedByPlayer();
 				this.unsetTemporary();
 				ITextComponent tameMessage = new TranslationTextComponent("message.pet.tamed.prefix")
-						.appendString(" ")
+						.append(" ")
 						.append(this.getSpeciesName())
-						.appendString(" ")
+						.append(" ")
 						.append(new TranslationTextComponent("message.pet.tamed.suffix"));
-				player.sendMessage(tameMessage, Util.DUMMY_UUID);
+				player.sendMessage(tameMessage, Util.NIL_UUID);
 				this.playTameEffect(this.isTamed());
 				//player.addStat(ObjectManager.getStat(this.creatureInfo.getName() + ".tame"), 1); TODO Player Stats
-				if (this.portalCounter > this.getPortalCooldown()) {
-					this.portalCounter = this.getPortalCooldown();
+				if (this.portalTime > this.getDimensionChangingDelay()) {
+					this.portalTime = this.getDimensionChangingDelay();
 				}
 				ExtendedPlayer extendedPlayer = ExtendedPlayer.getForPlayer(player);
 				if(extendedPlayer != null) {
@@ -799,11 +799,11 @@ public abstract class TameableCreatureEntity extends AgeableCreatureEntity {
 			}
 			else {
 				ITextComponent tameMessage = new TranslationTextComponent("message.pet.tamefail.prefix")
-						.appendString(" ")
+						.append(" ")
 						.append(this.getSpeciesName())
-						.appendString(" ")
+						.append(" ")
 						.append(new TranslationTextComponent("message.pet.tamefail.suffix"));
-				player.sendMessage(tameMessage, Util.DUMMY_UUID);
+				player.sendMessage(tameMessage, Util.NIL_UUID);
 				this.playTameEffect(this.isTamed());
 			}
 		}
@@ -816,7 +816,7 @@ public abstract class TameableCreatureEntity extends AgeableCreatureEntity {
 	public void onTamedByPlayer() {
 		this.refreshAttributes();
 		this.clearMovement();
-		this.setAttackTarget(null);
+		this.setTarget(null);
 		this.setSitting(false);
 		this.setFollowing(true);
 		this.setPassive(false);
@@ -840,13 +840,13 @@ public abstract class TameableCreatureEntity extends AgeableCreatureEntity {
     
 
     @OnlyIn(Dist.CLIENT)
-    public void handleStatusUpdate(byte status) {
+    public void handleEntityEvent(byte status) {
         if(status == 7)
             this.playTameEffect(true);
         else if(status == 6)
             this.playTameEffect(false);
         else
-            super.handleStatusUpdate(status);
+            super.handleEntityEvent(status);
     }
 
 	/**
@@ -938,12 +938,12 @@ public abstract class TameableCreatureEntity extends AgeableCreatureEntity {
     		set = false;
         byte tamedStatus = this.getByteFromDataManager(TAMED);
         if(set) {
-            this.dataManager.set(TAMED, (byte) (tamedStatus | TAMED_ID.MOVE_SIT.id));
-            this.setHome((int)this.getPositionVec().getX(), (int)this.getPositionVec().getY(), (int)this.getPositionVec().getZ(), this.sittingGuardRange);
+            this.entityData.set(TAMED, (byte) (tamedStatus | TAMED_ID.MOVE_SIT.id));
+            this.setHome((int)this.position().x(), (int)this.position().y(), (int)this.position().z(), this.sittingGuardRange);
         }
         else {
-            this.dataManager.set(TAMED, (byte) (tamedStatus - (tamedStatus & TAMED_ID.MOVE_SIT.id)));
-            this.detachHome();
+            this.entityData.set(TAMED, (byte) (tamedStatus - (tamedStatus & TAMED_ID.MOVE_SIT.id)));
+            this.hasRestriction();
         }
     }
     
@@ -961,9 +961,9 @@ public abstract class TameableCreatureEntity extends AgeableCreatureEntity {
     		set = false;
         byte tamedStatus = this.getByteFromDataManager(TAMED);
         if(set)
-            this.dataManager.set(TAMED, (byte) (tamedStatus | TAMED_ID.MOVE_FOLLOW.id));
+            this.entityData.set(TAMED, (byte) (tamedStatus | TAMED_ID.MOVE_FOLLOW.id));
         else
-            this.dataManager.set(TAMED, (byte) (tamedStatus - (tamedStatus & TAMED_ID.MOVE_FOLLOW.id)));
+            this.entityData.set(TAMED, (byte) (tamedStatus - (tamedStatus & TAMED_ID.MOVE_FOLLOW.id)));
     }
     
     // ========== Passiveness ==========
@@ -978,12 +978,12 @@ public abstract class TameableCreatureEntity extends AgeableCreatureEntity {
     		set = false;
         byte tamedStatus = this.getByteFromDataManager(TAMED);
         if(set) {
-            this.dataManager.set(TAMED, (byte) (tamedStatus | TAMED_ID.STANCE_PASSIVE.id));
-            this.setAttackTarget(null);
+            this.entityData.set(TAMED, (byte) (tamedStatus | TAMED_ID.STANCE_PASSIVE.id));
+            this.setTarget(null);
             this.setStealth(0);
         }
         else
-            this.dataManager.set(TAMED, (byte) (tamedStatus - (tamedStatus & TAMED_ID.STANCE_PASSIVE.id)));
+            this.entityData.set(TAMED, (byte) (tamedStatus - (tamedStatus & TAMED_ID.STANCE_PASSIVE.id)));
     }
     
     // ========== Agressiveness ==========
@@ -1000,9 +1000,9 @@ public abstract class TameableCreatureEntity extends AgeableCreatureEntity {
 		}
         byte tamedStatus = this.getByteFromDataManager(TAMED);
         if(set)
-            this.dataManager.set(TAMED, (byte) (tamedStatus | TAMED_ID.STANCE_AGGRESSIVE.id));
+            this.entityData.set(TAMED, (byte) (tamedStatus | TAMED_ID.STANCE_AGGRESSIVE.id));
         else
-            this.dataManager.set(TAMED, (byte) (tamedStatus - (tamedStatus & TAMED_ID.STANCE_AGGRESSIVE.id)));
+            this.entityData.set(TAMED, (byte) (tamedStatus - (tamedStatus & TAMED_ID.STANCE_AGGRESSIVE.id)));
     }
 
 	// ========== Assist ==========
@@ -1019,9 +1019,9 @@ public abstract class TameableCreatureEntity extends AgeableCreatureEntity {
 		}
 		byte tamedStatus = this.getByteFromDataManager(TAMED);
 		if(set)
-			this.dataManager.set(TAMED, (byte) (tamedStatus | TAMED_ID.STANCE_ASSIST.id));
+			this.entityData.set(TAMED, (byte) (tamedStatus | TAMED_ID.STANCE_ASSIST.id));
 		else
-			this.dataManager.set(TAMED, (byte) (tamedStatus - (tamedStatus & TAMED_ID.STANCE_ASSIST.id)));
+			this.entityData.set(TAMED, (byte) (tamedStatus - (tamedStatus & TAMED_ID.STANCE_ASSIST.id)));
 	}
     
     // ========== PvP ==========
@@ -1034,11 +1034,11 @@ public abstract class TameableCreatureEntity extends AgeableCreatureEntity {
     		set = false;
         byte tamedStatus = this.getByteFromDataManager(TAMED);
         if(set) {
-			this.dataManager.set(TAMED, (byte) (tamedStatus | TAMED_ID.PVP.id));
+			this.entityData.set(TAMED, (byte) (tamedStatus | TAMED_ID.PVP.id));
 		}
         else {
-			this.setAttackTarget(null);
-			this.dataManager.set(TAMED, (byte) (tamedStatus - (tamedStatus & TAMED_ID.PVP.id)));
+			this.setTarget(null);
+			this.entityData.set(TAMED, (byte) (tamedStatus - (tamedStatus & TAMED_ID.PVP.id)));
 		}
     }
     
@@ -1047,9 +1047,9 @@ public abstract class TameableCreatureEntity extends AgeableCreatureEntity {
     //                       Hunger
     // ==================================================
     public float getCreatureHunger() {
-    	if(this.getEntityWorld() == null)
+    	if(this.getCommandSenderWorld() == null)
     		return this.getCreatureHungerMax();
-    	if(!this.getEntityWorld().isRemote)
+    	if(!this.getCommandSenderWorld().isClientSide)
     		return this.hunger;
     	else {
             try {
@@ -1073,7 +1073,7 @@ public abstract class TameableCreatureEntity extends AgeableCreatureEntity {
     //                       Stamina
     // ==================================================
     public float getStamina() {
-    	if(this.getEntityWorld() != null && this.getEntityWorld().isRemote) {
+    	if(this.getCommandSenderWorld() != null && this.getCommandSenderWorld().isClientSide) {
             try {
                 this.stamina = this.getFloatFromDataManager(STAMINA);
             } catch (Exception e) {}
@@ -1083,8 +1083,8 @@ public abstract class TameableCreatureEntity extends AgeableCreatureEntity {
     
     public void setStamina(float setStamina) {
     	this.stamina = setStamina;
-    	if(this.getEntityWorld() != null && !this.getEntityWorld().isRemote) {
-    		this.dataManager.set(STAMINA, setStamina);
+    	if(this.getCommandSenderWorld() != null && !this.getCommandSenderWorld().isClientSide) {
+    		this.entityData.set(STAMINA, setStamina);
     	}
     }
     
@@ -1148,7 +1148,7 @@ public abstract class TameableCreatureEntity extends AgeableCreatureEntity {
     }*/
 
 	@Override
-	public boolean canBeSteered() {
+	public boolean canBeControlledByRider() {
 		return this.isTamed();
 	}
     
@@ -1162,10 +1162,10 @@ public abstract class TameableCreatureEntity extends AgeableCreatureEntity {
         	particle = ParticleTypes.SMOKE;
 
         for(int i = 0; i < 7; ++i) {
-            double d0 = this.rand.nextGaussian() * 0.02D;
-            double d1 = this.rand.nextGaussian() * 0.02D;
-            double d2 = this.rand.nextGaussian() * 0.02D;
-            this.getEntityWorld().addParticle(particle, this.getPositionVec().getX() + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).width * 2.0F) - (double)this.getSize(Pose.STANDING).width, this.getPositionVec().getY() + 0.5D + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).height), this.getPositionVec().getZ() + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).width * 2.0F) - (double)this.getSize(Pose.STANDING).width, d0, d1, d2);
+            double d0 = this.random.nextGaussian() * 0.02D;
+            double d1 = this.random.nextGaussian() * 0.02D;
+            double d2 = this.random.nextGaussian() * 0.02D;
+            this.getCommandSenderWorld().addParticle(particle, this.position().x() + (double)(this.random.nextFloat() * this.getDimensions(Pose.STANDING).width * 2.0F) - (double)this.getDimensions(Pose.STANDING).width, this.position().y() + 0.5D + (double)(this.random.nextFloat() * this.getDimensions(Pose.STANDING).height), this.position().z() + (double)(this.random.nextFloat() * this.getDimensions(Pose.STANDING).width * 2.0F) - (double)this.getDimensions(Pose.STANDING).width, d0, d1, d2);
         }
     }
     
@@ -1198,12 +1198,12 @@ public abstract class TameableCreatureEntity extends AgeableCreatureEntity {
     // ==================================================
    	// ========== Read ===========
     @Override
-    public void readAdditional(CompoundNBT nbtTagCompound) {
-        super.readAdditional(nbtTagCompound);
+    public void readAdditionalSaveData(CompoundNBT nbtTagCompound) {
+        super.readAdditionalSaveData(nbtTagCompound);
 
 		// UUID NBT:
-        if(nbtTagCompound.hasUniqueId("OwnerId")) {
-            this.setOwnerId(nbtTagCompound.getUniqueId("OwnerId"));
+        if(nbtTagCompound.hasUUID("OwnerId")) {
+            this.setOwnerId(nbtTagCompound.getUUID("OwnerId"));
         }
         else {
 			this.setOwnerId(null);
@@ -1258,10 +1258,10 @@ public abstract class TameableCreatureEntity extends AgeableCreatureEntity {
     
     // ========== Write ==========
     @Override
-    public void writeAdditional(CompoundNBT nbtTagCompound) {
-        super.writeAdditional(nbtTagCompound);
+    public void addAdditionalSaveData(CompoundNBT nbtTagCompound) {
+        super.addAdditionalSaveData(nbtTagCompound);
         if(this.getOwnerId() != null) {
-            nbtTagCompound.putUniqueId("OwnerId", this.getOwnerId());
+            nbtTagCompound.putUUID("OwnerId", this.getOwnerId());
         }
         nbtTagCompound.putBoolean("Sitting", this.isSitting());
         nbtTagCompound.putBoolean("Following", this.isFollowing());
@@ -1279,10 +1279,10 @@ public abstract class TameableCreatureEntity extends AgeableCreatureEntity {
     // ========== Idle ==========
     /** Get number of ticks, at least during which the living entity will be silent. **/
     @Override
-    public int getTalkInterval() {
+    public int getAmbientSoundInterval() {
         if(this.isTamed())
             return 600;
-        return super.getTalkInterval();
+        return super.getAmbientSoundInterval();
     }
     @Override
     protected SoundEvent getAmbientSound() {
@@ -1294,11 +1294,11 @@ public abstract class TameableCreatureEntity extends AgeableCreatureEntity {
     
     // ========== Tame ==========
     public void playTameSound() {
-    	this.playSound(ObjectManager.getSound(this.getSoundName() + "_tame"), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
+    	this.playSound(ObjectManager.getSound(this.getSoundName() + "_tame"), 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
     }
     
     // ========== Eat ==========
     public void playEatSound() {
-    	this.playSound(ObjectManager.getSound(this.getSoundName() + "_eat"), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
+    	this.playSound(ObjectManager.getSound(this.getSoundName() + "_eat"), 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
     }
 }

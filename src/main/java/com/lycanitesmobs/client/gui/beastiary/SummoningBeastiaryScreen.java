@@ -307,7 +307,7 @@ public class SummoningBeastiaryScreen extends BeastiaryScreen {
 
 				this.playerExt.sendSummonSetToServer((byte) this.playerExt.selectedSummonSet);
 				if (this.playerExt.selectedPet == null) {
-					this.mc.displayGuiScreen(new SummoningBeastiaryScreen(this.mc.player));
+					this.mc.setScreen(new SummoningBeastiaryScreen(this.mc.player));
 				}
 				return;
 			}
@@ -337,6 +337,6 @@ public class SummoningBeastiaryScreen extends BeastiaryScreen {
 
 	@Override
 	public void playCreatureSelectSound(CreatureInfo creatureInfo) {
-		this.player.getEntityWorld().playSound(this.player, this.player.getPositionVec().getX(), this.player.getPositionVec().getY(), this.player.getPositionVec().getZ(), ObjectManager.getSound(creatureInfo.getName() + "_tame"), SoundCategory.NEUTRAL, 1, 1);
+		this.player.getCommandSenderWorld().playSound(this.player, this.player.position().x(), this.player.position().y(), this.player.position().z(), ObjectManager.getSound(creatureInfo.getName() + "_tame"), SoundCategory.NEUTRAL, 1, 1);
 	}
 }

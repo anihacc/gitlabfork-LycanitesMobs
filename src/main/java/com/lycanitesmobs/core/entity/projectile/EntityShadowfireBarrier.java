@@ -55,13 +55,13 @@ public class EntityShadowfireBarrier extends BaseProjectileEntity {
         this.projectileLife = 2 * 20;
         this.animationFrameMax = 19;
         this.textureTiling = 2;
-        this.noClip = true;
+        this.noPhysics = true;
         this.waterProof = true;
         this.lavaProof = true;
     }
 
     @Override
-    public boolean isBurning() { return false; }
+    public boolean isOnFire() { return false; }
 
 
     // ==================================================
@@ -71,12 +71,12 @@ public class EntityShadowfireBarrier extends BaseProjectileEntity {
     public void tick() {
     	super.tick();
 
-    	if (!this.getEntityWorld().isRemote) {
-            List list = this.getEntityWorld().getEntitiesWithinAABBExcludingEntity(this, this.getBoundingBox().grow(this.getMotion().getX(), this.getMotion().getY(), this.getMotion().getZ()).expand(1.0D, 1.0D, 1.0D));
+    	if (!this.getCommandSenderWorld().isClientSide) {
+            List list = this.getCommandSenderWorld().getEntities(this, this.getBoundingBox().inflate(this.getDeltaMovement().x(), this.getDeltaMovement().y(), this.getDeltaMovement().z()).expandTowards(1.0D, 1.0D, 1.0D));
 
             for (int j = 0; j < list.size(); ++j) {
                 Entity entity = (Entity)list.get(j);
-                this.onImpact(new EntityRayTraceResult(entity));
+                this.onHit(new EntityRayTraceResult(entity));
             }
         }
     }
@@ -91,13 +91,13 @@ public class EntityShadowfireBarrier extends BaseProjectileEntity {
         Effect decay = ObjectManager.getEffect("decay");
         if(decay != null) {
             EffectInstance effect = new EffectInstance(decay, 5 * 20, 0);
-            if(livingEntity.isPotionApplicable(effect))
-                livingEntity.addPotionEffect(effect);
+            if(livingEntity.canBeAffected(effect))
+                livingEntity.addEffect(effect);
         }
 
         EffectInstance blindness = new EffectInstance(Effects.BLINDNESS, 5 * 20, 0);
-        if(livingEntity.isPotionApplicable(blindness)) {
-            livingEntity.addPotionEffect(blindness);
+        if(livingEntity.canBeAffected(blindness)) {
+            livingEntity.addEffect(blindness);
         }
     	return true;
     }
@@ -118,9 +118,9 @@ public class EntityShadowfireBarrier extends BaseProjectileEntity {
     public void onDamage(LivingEntity target, float damage, boolean attackSuccess) {
 
         // Remove Good Potion Effects:
-        for(EffectInstance potionEffect : target.getActivePotionEffects().toArray(new EffectInstance[target.getActivePotionEffects().size()])) {
-            if(ObjectLists.inEffectList("buffs", potionEffect.getPotion()))
-                target.removePotionEffect(potionEffect.getPotion());
+        for(EffectInstance potionEffect : target.getActiveEffects().toArray(new EffectInstance[target.getActiveEffects().size()])) {
+            if(ObjectLists.inEffectList("buffs", potionEffect.getEffect()))
+                target.removeEffect(potionEffect.getEffect());
         }
 
         boolean obliterate = true;

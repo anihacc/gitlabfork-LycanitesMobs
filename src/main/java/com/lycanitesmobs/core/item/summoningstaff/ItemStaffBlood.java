@@ -55,8 +55,8 @@ public class ItemStaffBlood extends ItemStaffSummoning {
 	//                     Repairs
 	// ==================================================
     @Override
-    public boolean getIsRepairable(ItemStack itemStack, ItemStack repairStack) {
+    public boolean isValidRepairItem(ItemStack itemStack, ItemStack repairStack) {
         if(repairStack.getItem() == Items.GOLD_INGOT) return true;
-        return super.getIsRepairable(itemStack, repairStack);
+        return super.isValidRepairItem(itemStack, repairStack);
     }
 }

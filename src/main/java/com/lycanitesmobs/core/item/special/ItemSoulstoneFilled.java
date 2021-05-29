@@ -27,8 +27,8 @@ public class ItemSoulstoneFilled extends ItemSoulstone {
     public void setup() {}
     
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
-        ItemStack itemStack = player.getHeldItem(hand);
+    public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
+        ItemStack itemStack = player.getItemInHand(hand);
     	ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
     	if(playerExt == null) {
             return new ActionResult(ActionResultType.SUCCESS, itemStack);
@@ -38,16 +38,16 @@ public class ItemSoulstoneFilled extends ItemSoulstone {
             return new ActionResult(ActionResultType.FAIL, itemStack);
         }
 
-        if(!player.getEntityWorld().isRemote) {
+        if(!player.getCommandSenderWorld().isClientSide) {
             int creatureIndex = 0;
             if(this.creatureType.tameableCreatures.size() > 1) {
-                creatureIndex = player.getRNG().nextInt(this.creatureType.tameableCreatures.size());
+                creatureIndex = player.getRandom().nextInt(this.creatureType.tameableCreatures.size());
             }
             TameableCreatureEntity entity = (TameableCreatureEntity)this.creatureType.tameableCreatures.get(creatureIndex).createEntity(world);
-            entity.setLocationAndAngles(player.getPosX(), player.getPosY(), player.getPosZ(), player.rotationYaw, player.rotationPitch);
-            world.addEntity(entity);
+            entity.moveTo(player.getX(), player.getY(), player.getZ(), player.yRot, player.xRot);
+            world.addFreshEntity(entity);
             entity.setPlayerOwner(player);
-            super.itemInteractionForEntity(itemStack, player, entity, hand);
+            super.interactLivingEntity(itemStack, player, entity, hand);
         }
 
         return new ActionResult(ActionResultType.SUCCESS, itemStack);
@@ -55,9 +55,9 @@ public class ItemSoulstoneFilled extends ItemSoulstone {
 
 
     @Override
-    public ActionResultType itemInteractionForEntity(ItemStack stack, PlayerEntity player, LivingEntity entity, Hand hand) {
+    public ActionResultType interactLivingEntity(ItemStack stack, PlayerEntity player, LivingEntity entity, Hand hand) {
         if(this.creatureType.tameableCreatures.isEmpty()) {
-            return super.itemInteractionForEntity(stack, player, entity, hand);
+            return super.interactLivingEntity(stack, player, entity, hand);
         }
         return ActionResultType.FAIL;
     }

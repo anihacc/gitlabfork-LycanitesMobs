@@ -25,7 +25,7 @@ public class EquipmentInfuserContainer extends BaseContainer {
 	 * @param extraData A packet sent from the server to create the Container from.
 	 */
 	public EquipmentInfuserContainer(int windowId, PlayerInventory playerInventory, PacketBuffer extraData) {
-		this(windowId, playerInventory, (EquipmentInfuserTileEntity)playerInventory.player.getEntityWorld().getTileEntity(BlockPos.fromLong(extraData.readLong())));
+		this(windowId, playerInventory, (EquipmentInfuserTileEntity)playerInventory.player.getCommandSenderWorld().getBlockEntity(BlockPos.of(extraData.readLong())));
 	}
 
 	/**
@@ -41,9 +41,9 @@ public class EquipmentInfuserContainer extends BaseContainer {
 		this.addPlayerSlots(playerInventory, 0, 0);
 
 		// Forge Inventory
-		this.inventoryStart = this.inventorySlots.size();
+		this.inventoryStart = this.slots.size();
 		int slots = 0;
-		if(equipmentInfuser.getSizeInventory() > 0) {
+		if(equipmentInfuser.getContainerSize() > 0) {
 			int y = 28;
 
 			this.chargeSlot = new EquipmentInfuserChargeSlot(this, slots++, 50, y);
@@ -56,7 +56,7 @@ public class EquipmentInfuserContainer extends BaseContainer {
 	}
 
 	@Override
-	public boolean canInteractWith(PlayerEntity player) {
+	public boolean stillValid(PlayerEntity player) {
 		if(this.equipmentInfuser == null) {
 			return false;
 		}
@@ -68,46 +68,46 @@ public class EquipmentInfuserContainer extends BaseContainer {
 	 */
 	public void attemptInfusion() {
 		// Equipment Part:
-		if(this.partSlot.getStack().getItem() instanceof ItemEquipmentPart) {
-			ItemEquipmentPart equipmentPart = (ItemEquipmentPart) this.partSlot.getStack().getItem();
+		if(this.partSlot.getItem().getItem() instanceof ItemEquipmentPart) {
+			ItemEquipmentPart equipmentPart = (ItemEquipmentPart) this.partSlot.getItem().getItem();
 
 			// Charge Experience:
-			if (this.chargeSlot.getStack().getItem() instanceof ChargeItem) {
-				if (equipmentPart.getLevel(this.partSlot.getStack()) >= equipmentPart.levelMax) {
+			if (this.chargeSlot.getItem().getItem() instanceof ChargeItem) {
+				if (equipmentPart.getPartLevel(this.partSlot.getItem()) >= equipmentPart.levelMax) {
 					return;
 				}
-				ChargeItem chargeItem = (ChargeItem) this.chargeSlot.getStack().getItem();
-				if (equipmentPart.isLevelingChargeItem(this.chargeSlot.getStack())) {
-					int experienceGained = equipmentPart.getExperienceFromChargeItem(this.chargeSlot.getStack());
-					equipmentPart.addExperience(this.partSlot.getStack(), experienceGained);
-					this.chargeSlot.decrStackSize(1);
+				ChargeItem chargeItem = (ChargeItem) this.chargeSlot.getItem().getItem();
+				if (equipmentPart.isLevelingChargeItem(this.chargeSlot.getItem())) {
+					int experienceGained = equipmentPart.getExperienceFromChargeItem(this.chargeSlot.getItem());
+					equipmentPart.addExperience(this.partSlot.getItem(), experienceGained);
+					this.chargeSlot.remove(1);
 					this.attemptInfusion();
 				}
 				return;
 			}
 
 			// Dye Part:
-			if (this.chargeSlot.getStack().getItem() instanceof DyeItem) {
-				DyeItem dyeItem = (DyeItem) this.chargeSlot.getStack().getItem();
+			if (this.chargeSlot.getItem().getItem() instanceof DyeItem) {
+				DyeItem dyeItem = (DyeItem) this.chargeSlot.getItem().getItem();
 				DyeColor dyeColor = dyeItem.getDyeColor();
-				equipmentPart.setColor(this.partSlot.getStack(), dyeColor.getColorComponentValues()[0], dyeColor.getColorComponentValues()[1], dyeColor.getColorComponentValues()[2]);
-				this.chargeSlot.decrStackSize(1);
+				equipmentPart.setColor(this.partSlot.getItem(), dyeColor.getTextureDiffuseColors()[0], dyeColor.getTextureDiffuseColors()[1], dyeColor.getTextureDiffuseColors()[2]);
+				this.chargeSlot.remove(1);
 				return;
 			}
 
 			// Remove Part Dye:
-			if (this.chargeSlot.getStack().getItem() == Items.WATER_BUCKET) {
-				equipmentPart.setColor(this.partSlot.getStack(), 1, 1, 1);
-				this.chargeSlot.putStack(new ItemStack(Items.BUCKET));
+			if (this.chargeSlot.getItem().getItem() == Items.WATER_BUCKET) {
+				equipmentPart.setColor(this.partSlot.getItem(), 1, 1, 1);
+				this.chargeSlot.set(new ItemStack(Items.BUCKET));
 				return;
 			}
 		}
 
 		// Experience Bottle:
-		if (this.partSlot.getStack().getItem() == Items.GLASS_BOTTLE) {
-			if (this.chargeSlot.getStack().getItem() instanceof ChargeItem) {
-				this.partSlot.putStack(new ItemStack(Items.EXPERIENCE_BOTTLE));
-				this.chargeSlot.decrStackSize(1);
+		if (this.partSlot.getItem().getItem() == Items.GLASS_BOTTLE) {
+			if (this.chargeSlot.getItem().getItem() instanceof ChargeItem) {
+				this.partSlot.set(new ItemStack(Items.EXPERIENCE_BOTTLE));
+				this.chargeSlot.remove(1);
 			}
 		}
 	}
@@ -116,7 +116,7 @@ public class EquipmentInfuserContainer extends BaseContainer {
 	 * Disabled until fixed later.
 	 */
 	@Override
-	public ItemStack transferStackInSlot(PlayerEntity player, int slotID) {
+	public ItemStack quickMoveStack(PlayerEntity player, int slotID) {
 		return ItemStack.EMPTY;
 	}
 }

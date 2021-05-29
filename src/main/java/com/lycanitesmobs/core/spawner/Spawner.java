@@ -266,7 +266,7 @@ public class Spawner {
 
 	/** Returns true if this Spawner is considered enabled, this is checked first before major logging and more in depth checks are done in canSpawn(). **/
 	public boolean isEnabled(World world, PlayerEntity player) {
-		if(!this.enabled || CreatureManager.getInstance().spawnConfig.disableAllSpawning || !world.getGameRules().getBoolean(GameRules.DO_MOB_SPAWNING)) {
+		if(!this.enabled || CreatureManager.getInstance().spawnConfig.disableAllSpawning || !world.getGameRules().getBoolean(GameRules.RULE_DOMOBSPAWNING)) {
 			return false;
 		}
 
@@ -370,7 +370,7 @@ public class Spawner {
 		if(currentCount != lastCount) {
 			if(this.triggerCountMessages.containsKey(currentCount)) {
 				ITextComponent message = new TranslationTextComponent(this.triggerCountMessages.get(currentCount));
-				player.sendMessage(message, Util.DUMMY_UUID);
+				player.sendMessage(message, Util.NIL_UUID);
 			}
 		}
 
@@ -400,17 +400,17 @@ public class Spawner {
 		// Get Amount of Mobs To Spawn:
 		int mobCount = this.mobCountMin;
     	if(this.mobCountMax > this.mobCountMin) {
-    		mobCount = world.rand.nextInt(this.mobCountMax - this.mobCountMin) + 1 + this.mobCountMin;
+    		mobCount = world.random.nextInt(this.mobCountMax - this.mobCountMin) + 1 + this.mobCountMin;
 		}
 		if(player != null && this.mobCountPlayerScaling) {
 			int nearbyPlayers = 0;
-			List<? extends PlayerEntity> allPlayers = world.getPlayers();
+			List<? extends PlayerEntity> allPlayers = world.players();
 			for(PlayerEntity targetPlayer : allPlayers) {
 				if(targetPlayer.isCreative() || targetPlayer.isSpectator()) {
 					if(!SpawnerEventListener.testOnCreative)
 						break;
 				}
-				if(targetPlayer.getDistance(player) > this.mobCountPlayerRange) {
+				if(targetPlayer.distanceTo(player) > this.mobCountPlayerRange) {
 					break;
 				}
 				nearbyPlayers++;
@@ -424,7 +424,7 @@ public class Spawner {
 		ExtendedWorld worldExt = ExtendedWorld.getForWorld(world);
 		LycanitesMobs.logDebug("JSONSpawner", "Spawning Wave: " + mobCount + " Mob(s)");
 		LycanitesMobs.logDebug("JSONSpawner", "Trigger World: " + world);
-		LycanitesMobs.logDebug("JSONSpawner", "Trigger Dimension: " + world.getDimensionKey().getLocation());
+		LycanitesMobs.logDebug("JSONSpawner", "Trigger Dimension: " + world.dimension().location());
 		LycanitesMobs.logDebug("JSONSpawner", "Trigger Player: " + player);
 		LycanitesMobs.logDebug("JSONSpawner", "Trigger Position: " + triggerPos);
 
@@ -516,7 +516,7 @@ public class Spawner {
 
 			// Attempt To Spawn LivingEntity:
 			LycanitesMobs.logDebug("JSONSpawner", "Attempting to spawn " + entityLiving + "...");
-			entityLiving.setLocationAndAngles((double) spawnPos.getX() + 0.5D, (double) spawnPos.getY(), (double) spawnPos.getZ() + 0.5D, world.rand.nextFloat() * 360.0F, 0.0F);
+			entityLiving.moveTo((double) spawnPos.getX() + 0.5D, (double) spawnPos.getY(), (double) spawnPos.getZ() + 0.5D, world.random.nextFloat() * 360.0F, 0.0F);
 
 			// Forge Can Spawn Event:
 			Event.Result canSpawn = Event.Result.ALLOW;
@@ -540,7 +540,7 @@ public class Spawner {
 			// Call Entity's Initial Spawn:
 			if (entityLiving instanceof MobEntity) {
 				if (!ForgeEventFactory.doSpecialSpawn((MobEntity)entityLiving, world, (float) spawnPos.getX() + 0.5F, (float) spawnPos.getY(), (float) spawnPos.getZ() + 0.5F, null, SpawnReason.NATURAL)) {
-					((MobEntity)entityLiving).onInitialSpawn((IServerWorld) world, world.getDifficultyForLocation(spawnPos), SpawnReason.NATURAL, null, null);
+					((MobEntity)entityLiving).finalizeSpawn((IServerWorld) world, world.getCurrentDifficultyAt(spawnPos), SpawnReason.NATURAL, null, null);
 				}
 			}
 
@@ -597,7 +597,7 @@ public class Spawner {
 			if(possibleSpawnPosLists.size() == 1) {
 				return possibleSpawnPosLists.get(0);
 			}
-			int randomIndex = world.rand.nextInt(possibleSpawnPosLists.size());
+			int randomIndex = world.random.nextInt(possibleSpawnPosLists.size());
 			return possibleSpawnPosLists.get(randomIndex);
 		}
 
@@ -683,7 +683,7 @@ public class Spawner {
 		// Pick Random Spawn Using Weights:
 		int randomWeight = 1;
 		if(totalWeights > 1) {
-			randomWeight = world.rand.nextInt(totalWeights);
+			randomWeight = world.random.nextInt(totalWeights);
 		}
 		int searchWeight = 0;
 		MobSpawn chosenMobSpawn = null;
@@ -748,7 +748,7 @@ public class Spawner {
 		// Vanilla or Other Mod Mob:
 		if(!mobSpawn.ignoreMobInstanceConditions && entityLiving instanceof MobEntity) {
 			LycanitesMobs.logDebug("JSONSpawner", "None Lycanites Mobs Checks...");
-			return ((MobEntity)entityLiving).canSpawn(world, SpawnReason.NATURAL);
+			return ((MobEntity)entityLiving).checkSpawnRules(world, SpawnReason.NATURAL);
 		}
 		LycanitesMobs.logDebug("JSONSpawner", "All Mob Instance Checks Ignored");
 		return true;
@@ -761,7 +761,7 @@ public class Spawner {
 	 */
 	public void spawnEntity(World world, ExtendedWorld worldExt, LivingEntity entityLiving, int level, MobSpawn mobSpawn, PlayerEntity player, int chain) {
 		// Before Spawn:
-		entityLiving.func_242279_ag(); // Start Portal Cooldown
+		entityLiving.setPortalCooldown(); // Start Portal Cooldown
 
 		BaseCreatureEntity entityCreature;
 		if(entityLiving instanceof BaseCreatureEntity) {
@@ -769,7 +769,7 @@ public class Spawner {
 			entityCreature.forceNoDespawn = this.forceNoDespawn;
 			entityCreature.spawnedRare = level > 0;
 			if (this.blockBreakRadius > -1 && chain == 0) {
-				entityCreature.destroyArea((int) entityLiving.getPositionVec().getX(), (int) entityLiving.getPositionVec().getY(), (int) entityLiving.getPositionVec().getZ() - 1, 100, true, this.blockBreakRadius, this.chainSpawning ? player : null, chain + 1);
+				entityCreature.destroyArea((int) entityLiving.position().x(), (int) entityLiving.position().y(), (int) entityLiving.position().z() - 1, 100, true, this.blockBreakRadius, this.chainSpawning ? player : null, chain + 1);
 			}
 
 			// Apply Mob Event:
@@ -788,7 +788,7 @@ public class Spawner {
 
 		// Spawn:
 		LycanitesMobs.logDebug("JSONSpawner", "Adding Entity To World: " + world + " - " + entityLiving);
-		world.addEntity(entityLiving);
+		world.addFreshEntity(entityLiving);
 
 		// After Spawn:
 		mobSpawn.onSpawned(entityLiving, player);

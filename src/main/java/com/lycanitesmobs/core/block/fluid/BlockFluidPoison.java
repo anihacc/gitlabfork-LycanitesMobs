@@ -18,6 +18,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import java.util.Random;
 import java.util.function.Supplier;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class BlockFluidPoison extends FlowingFluidBlock {
 
 	// ==================================================
@@ -73,20 +75,20 @@ public class BlockFluidPoison extends FlowingFluidBlock {
 	//                      Collision
 	// ==================================================
     @Override
-    public void onEntityCollision(BlockState blockState, World world, BlockPos pos, Entity entity) {
+    public void entityInside(BlockState blockState, World world, BlockPos pos, Entity entity) {
         // Extinguish:
-        if(entity.isBurning())
-            entity.extinguish();
+        if(entity.isOnFire())
+            entity.clearFire();
 
         // Effects:
         if(entity instanceof LivingEntity) {
             Effect effect = ObjectManager.getEffect("plague");
             if(effect != null) {
-                ((LivingEntity) entity).addPotionEffect(new EffectInstance(effect, 5 * 20, 0));
+                ((LivingEntity) entity).addEffect(new EffectInstance(effect, 5 * 20, 0));
             }
         }
 
-        super.onEntityCollision(blockState, world, pos, entity);
+        super.entityInside(blockState, world, pos, entity);
     }
     
     

@@ -52,7 +52,7 @@ public class GrowGoal extends Goal {
 	}
 
 	@Override
-    public boolean shouldExecute() {
+    public boolean canUse() {
 		if(!this.host.isAlive() ) {
 			return false;
 		}
@@ -60,7 +60,7 @@ public class GrowGoal extends Goal {
     }
 
     @Override
-	public void startExecuting() {
+	public void start() {
 		this.abilityTime = 0;
 	}
 

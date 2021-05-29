@@ -24,7 +24,7 @@ public class EntityEyewig extends RideableCreatureEntity {
         this.attribute = CreatureAttribute.ARTHROPOD;
         this.hasAttackSound = true;
         this.setupMob();
-        this.stepHeight = 1.0F;
+        this.maxUpStep = 1.0F;
     }
 
     // ========== Init AI ==========
@@ -41,7 +41,7 @@ public class EntityEyewig extends RideableCreatureEntity {
     // ==================================================
     // Pushed By Water:
     @Override
-    public boolean isPushedByWater() {
+    public boolean isPushedByFluid() {
         return false;
     }
 
@@ -69,11 +69,11 @@ public class EntityEyewig extends RideableCreatureEntity {
 		// Create New Laser:
 		if(this.projectile == null) {
 			// Type:
-			this.projectile = projectileInfo.createProjectile(this.getEntityWorld(), this);
+			this.projectile = projectileInfo.createProjectile(this.getCommandSenderWorld(), this);
 
 			// Launch:
-			this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
-			this.getEntityWorld().addEntity(projectile);
+			this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
+			this.getCommandSenderWorld().addFreshEntity(projectile);
 		}
 
 		super.attackRanged(target, range);
@@ -90,14 +90,14 @@ public class EntityEyewig extends RideableCreatureEntity {
 			return;
 		}
 
-    	if(this.getEntityWorld().isRemote)
+    	if(this.getCommandSenderWorld().isClientSide)
     		return;
     	
     	if(this.getStamina() < this.getStaminaRecoveryMax() * 2)
     		return;
 
         if(this.hasAttackTarget())
-            this.setAttackTarget(null);
+            this.setTarget(null);
 
     	// Update Laser:
     	if(this.abilityProjectile != null && this.abilityProjectile.isAlive()) {
@@ -113,11 +113,11 @@ public class EntityEyewig extends RideableCreatureEntity {
 			if(this.getControllingPassenger() == null || !(this.getControllingPassenger() instanceof LivingEntity))
     			return;
 
-			this.abilityProjectile = projectileInfo.createProjectile(this.getEntityWorld(), this);
+			this.abilityProjectile = projectileInfo.createProjectile(this.getCommandSenderWorld(), this);
 	    	
 	    	// Launch:
-	        this.playSound(this.abilityProjectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
-	        this.getEntityWorld().addEntity(this.abilityProjectile);
+	        this.playSound(this.abilityProjectile.getLaunchSound(), 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
+	        this.getCommandSenderWorld().addFreshEntity(this.abilityProjectile);
     	}
     	
     	this.applyStaminaCost();
@@ -132,7 +132,7 @@ public class EntityEyewig extends RideableCreatureEntity {
 		if(this.isTamed()) {
 			return super.isAggressive();
 		}
-    	if(this.getEntityWorld() != null && this.getEntityWorld().isDaytime())
+    	if(this.getCommandSenderWorld() != null && this.getCommandSenderWorld().isDay())
     		return this.testLightLevel() < 2;
     	else
     		return super.isAggressive();

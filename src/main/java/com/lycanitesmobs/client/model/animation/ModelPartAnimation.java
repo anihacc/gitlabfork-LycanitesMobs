@@ -159,16 +159,16 @@ public class ModelPartAnimation {
 		}
 
 		// Translate:
-		model.translate(this.translate.getX() * progress, this.translate.getY() * progress, this.translate.getZ() * progress);
+		model.translate(this.translate.x() * progress, this.translate.y() * progress, this.translate.z() * progress);
 
 		// Angle:
-		model.angle(this.angle.getW() * progress, this.angle.getX(), this.angle.getY(), this.angle.getZ());
+		model.angle(this.angle.w() * progress, this.angle.x(), this.angle.y(), this.angle.z());
 
 		// Rotate:
-		model.rotate(this.rotate.getX() * progress, this.rotate.getY() * progress, this.rotate.getZ() * progress);
+		model.rotate(this.rotate.x() * progress, this.rotate.y() * progress, this.rotate.z() * progress);
 
 		// Scale:
-		model.scale(1 + this.scale.getX() * progress, 1 + this.scale.getY() * progress, 1 + this.scale.getZ() * progress);
+		model.scale(1 + this.scale.x() * progress, 1 + this.scale.y() * progress, 1 + this.scale.z() * progress);
 	}
 
 

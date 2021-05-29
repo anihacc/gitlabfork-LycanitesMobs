@@ -88,7 +88,7 @@ public abstract class EntitySpawnTrigger extends SpawnTrigger {
 
 		// Check Entity Type:
 		if(!this.creatureAttributes.isEmpty()) {
-			if (this.creatureAttributes.contains(killedEntity.getCreatureAttribute())) {
+			if (this.creatureAttributes.contains(killedEntity.getMobType())) {
 				if ("blacklist".equalsIgnoreCase(this.entityTypesListType)) {
 					return false;
 				}

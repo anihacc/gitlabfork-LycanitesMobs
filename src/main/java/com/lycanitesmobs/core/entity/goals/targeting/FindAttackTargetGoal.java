@@ -9,6 +9,8 @@ import net.minecraft.entity.player.PlayerEntity;
 
 import java.util.*;
 
+import net.minecraft.entity.ai.goal.Goal.Flag;
+
 public class FindAttackTargetGoal extends TargetingGoal {
 	// Targets:
     private List<EntityType> targetTypes = new ArrayList<>();
@@ -24,7 +26,7 @@ public class FindAttackTargetGoal extends TargetingGoal {
   	// ==================================================
     public FindAttackTargetGoal(BaseCreatureEntity setHost) {
         super(setHost);
-        this.setMutexFlags(EnumSet.of(Flag.TARGET));
+        this.setFlags(EnumSet.of(Flag.TARGET));
     }
 
 
@@ -92,9 +94,9 @@ public class FindAttackTargetGoal extends TargetingGoal {
  	//                    Host Target
  	// ==================================================
     @Override
-    protected LivingEntity getTarget() { return this.host.getAttackTarget(); }
+    protected LivingEntity getTarget() { return this.host.getTarget(); }
     @Override
-    protected void setTarget(LivingEntity newTarget) { this.host.setAttackTarget(newTarget); }
+    protected void setTarget(LivingEntity newTarget) { this.host.setTarget(newTarget); }
     
     
     // ==================================================
@@ -127,7 +129,7 @@ public class FindAttackTargetGoal extends TargetingGoal {
 		}
     	
     	// Type Check:
-    	if(!this.host.canAttack(target.getType())) {
+    	if(!this.host.canAttackType(target.getType())) {
 			return false;
 		}
 
@@ -148,7 +150,7 @@ public class FindAttackTargetGoal extends TargetingGoal {
   	//                   Should Execute
   	// ==================================================
     @Override
-    public boolean shouldExecute() {
+    public boolean canUse() {
 		if(!this.host.isAggressive() || this.host.hasFixateTarget()) {
 			return false;
 		}
@@ -167,7 +169,7 @@ public class FindAttackTargetGoal extends TargetingGoal {
 		this.target = null;
         
         double distance = this.getTargetDistance();
-        double heightDistance = 4.0D + this.host.getHeight();
+        double heightDistance = 4.0D + this.host.getBbHeight();
         if(this.host.useDirectNavigator())
             heightDistance = distance;
 
@@ -196,7 +198,7 @@ public class FindAttackTargetGoal extends TargetingGoal {
 		if(this.targetPlayers) {
 			LivingEntity newTarget = null;
 			try {
-				List<? extends PlayerEntity> players = this.host.getEntityWorld().getPlayers();
+				List<? extends PlayerEntity> players = this.host.getCommandSenderWorld().players();
 				if(!players.isEmpty()) {
 					List<PlayerEntity> possibleTargets = new ArrayList<>();
 					for (PlayerEntity player : players) {

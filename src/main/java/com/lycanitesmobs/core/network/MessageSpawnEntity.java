@@ -31,13 +31,13 @@ public class MessageSpawnEntity {
         	if(serverEntity instanceof BaseProjectileEntity) {
         		this.entityTypeName = ((BaseProjectileEntity)serverEntity).entityName;
 			}
-			this.entityId = serverEntity.getEntityId();
-			this.uuid = serverEntity.getUniqueID();
-			this.pitch = serverEntity.rotationPitch;
-			this.yaw = serverEntity.rotationYaw;
-			this.x = serverEntity.getPositionVec().getX();
-			this.y = serverEntity.getPositionVec().getY();
-			this.z = serverEntity.getPositionVec().getZ();
+			this.entityId = serverEntity.getId();
+			this.uuid = serverEntity.getUUID();
+			this.pitch = serverEntity.xRot;
+			this.yaw = serverEntity.yRot;
+			this.x = serverEntity.position().x();
+			this.y = serverEntity.position().y();
+			this.z = serverEntity.position().z();
 		}
 	}
 	
@@ -60,11 +60,11 @@ public class MessageSpawnEntity {
 				LycanitesMobs.logWarning("", "Unable to create client entity from packet: " + message.entityTypeName);
 				return;
 			}
-			entity.setPosition(message.x, message.y, message.z);
-			entity.rotationPitch = message.pitch;
-			entity.rotationYaw = message.yaw;
-			entity.setEntityId(message.entityId);
-			entity.setUniqueId(message.uuid);
+			entity.setPos(message.x, message.y, message.z);
+			entity.xRot = message.pitch;
+			entity.yRot = message.yaw;
+			entity.setId(message.entityId);
+			entity.setUUID(message.uuid);
 
 			// Projectiles:
 			if(entity instanceof BaseProjectileEntity) {
@@ -87,9 +87,9 @@ public class MessageSpawnEntity {
 	 */
 	public static MessageSpawnEntity decode(PacketBuffer packet) {
 		MessageSpawnEntity message = new MessageSpawnEntity();
-		message.entityTypeName = packet.readString();
+		message.entityTypeName = packet.readUtf();
         message.entityId = packet.readInt();
-        message.uuid = packet.readUniqueId();
+        message.uuid = packet.readUUID();
 		message.pitch = packet.readFloat();
 		message.yaw = packet.readFloat();
 		message.x = packet.readDouble();
@@ -102,9 +102,9 @@ public class MessageSpawnEntity {
 	 * Writes the message into bytes.
 	 */
 	public static void encode(MessageSpawnEntity message, PacketBuffer packet) {
-		packet.writeString(message.entityTypeName);
+		packet.writeUtf(message.entityTypeName);
         packet.writeInt(message.entityId);
-		packet.writeUniqueId(message.uuid);
+		packet.writeUUID(message.uuid);
 		packet.writeFloat(message.pitch);
 		packet.writeFloat(message.yaw);
 		packet.writeDouble(message.x);

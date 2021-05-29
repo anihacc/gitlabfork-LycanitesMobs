@@ -42,10 +42,10 @@ public class ItemCustomFood extends BaseItem {
 
 		// Food: TODO Better Food Management in ItemManager
 		Food.Builder foodBuilder = new Food.Builder();
-		foodBuilder.hunger(feed);
-		foodBuilder.saturation(saturation);
-		foodBuilder.setAlwaysEdible();
-		foodBuilder.effect(new EffectInstance(Effects.INSTANT_HEALTH, 1 * 20, 0, false, false), 1.0F); // Additive Effects, float is chance.
+		foodBuilder.nutrition(feed);
+		foodBuilder.saturationMod(saturation);
+		foodBuilder.alwaysEat();
+		foodBuilder.effect(new EffectInstance(Effects.HEAL, 1 * 20, 0, false, false), 1.0F); // Additive Effects, float is chance.
 		properties.food(foodBuilder.build());
 	}
 

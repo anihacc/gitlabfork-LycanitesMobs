@@ -72,7 +72,7 @@ public class BlockSpawnLocation extends SpawnLocation {
             if (y < yMin) {
             	y = yMin;
 			}
-			int yMax = world.getHeight();
+			int yMax = world.getMaxBuildHeight();
 			if(this.yMax >= 0) {
 				yMax = Math.min(this.yMax, yMax);
 			}
@@ -138,7 +138,7 @@ public class BlockSpawnLocation extends SpawnLocation {
 	public boolean isValidBlock(World world, BlockPos blockPos) {
 		Block block = world.getBlockState(blockPos).getBlock();
 		if(!this.surface || !this.underground) {
-			if(world.canBlockSeeSky(blockPos)) {
+			if(world.canSeeSkyFromBelowWater(blockPos)) {
 				if(!this.surface) {
 					return false;
 				}

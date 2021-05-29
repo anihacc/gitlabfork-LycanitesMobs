@@ -36,13 +36,13 @@ public class BlockFrostweb extends BlockBase {
 		this.noBreakCollision = false;
 
 		this.setRegistryName(this.group.modid, this.blockName.toLowerCase());
-		this.setDefaultState(this.getStateContainer().getBaseState().with(AGE, 0));
+		this.registerDefaultState(this.getStateDefinition().any().setValue(AGE, 0));
 
 		ItemManager.getInstance().cutoutBlocks.add(this);
 	}
 
 	@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
 		builder.add(AGE);
 	}
 
@@ -70,9 +70,9 @@ public class BlockFrostweb extends BlockBase {
 	//                Collision Effects
 	// ==================================================
 	@Override
-	public void onEntityCollision(BlockState blockState, World world, BlockPos pos, Entity entity) {
-		super.onEntityCollision(blockState, world, pos, entity);
-		entity.setMotionMultiplier(blockState, new Vector3d(0.25D, (double)0.05F, 0.25D));
+	public void entityInside(BlockState blockState, World world, BlockPos pos, Entity entity) {
+		super.entityInside(blockState, world, pos, entity);
+		entity.makeStuckInBlock(blockState, new Vector3d(0.25D, (double)0.05F, 0.25D));
 	}
     
     

@@ -141,7 +141,7 @@ public class AltarInfoUmberLobber extends AltarInfo {
     /** Called when this Altar should activate. This will typically destroy the Altar and summon a rare mob or activate an event such as a boss event. If false is returned then the activation did not work, this is the place to check for things like dimensions. **/
     @Override
     public boolean activate(Entity entity, World world, BlockPos pos, int variant) {
-        if(world.isRemote)
+        if(world.isClientSide)
             return true;
 
         int x = pos.getX();
@@ -166,7 +166,7 @@ public class AltarInfoUmberLobber extends AltarInfo {
 
         // Offset:
         if(entity != null)
-            pos = this.getFacingPosition(pos, 10, entity.rotationYaw);
+            pos = this.getFacingPosition(pos, 10, entity.yRot);
 
         // Clear Spawn Area:
         for (int xTarget = x - size; xTarget <= x + size; xTarget++) {
@@ -182,8 +182,8 @@ public class AltarInfoUmberLobber extends AltarInfo {
         entityLobber.altarSummoned = true;
         entityLobber.forceBossHealthBar = true;
         entityLobber.applyVariant(3);
-        entityLobber.setLocationAndAngles(x, y - 2, z, 0, 0);
-        world.addEntity(entityLobber);
+        entityLobber.moveTo(x, y - 2, z, 0, 0);
+        world.addFreshEntity(entityLobber);
         entityLobber.destroyArea(x, y, z, 10000, false, 2);
 
         return true;

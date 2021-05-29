@@ -77,7 +77,7 @@ public class FindParentGoal extends TargetingGoal {
         if(this.targetClass != null && !this.targetClass.isAssignableFrom(target.getClass()))
             return false;
 
-		if(target.isChild()) {
+		if(target.isBaby()) {
 			return false;
 		}
         
@@ -104,7 +104,7 @@ public class FindParentGoal extends TargetingGoal {
   	//                   Should Execute
   	// ==================================================
     @Override
-    public boolean shouldExecute() {
+    public boolean canUse() {
 		if (this.host.updateTick % 20 != 0 || !this.host.shouldFindParent()) {
 			return false;
 		}
@@ -119,7 +119,7 @@ public class FindParentGoal extends TargetingGoal {
 			return false;
 		}
     	
-        if(this.host.updateTick % 20 != 0 && this.targetChance > 0 && this.host.getRNG().nextInt(this.targetChance) != 0)
+        if(this.host.updateTick % 20 != 0 && this.targetChance > 0 && this.host.getRandom().nextInt(this.targetChance) != 0)
             return false;
         
         double distance = this.getTargetDistance();
@@ -134,12 +134,12 @@ public class FindParentGoal extends TargetingGoal {
     // ==================================================
  	//                  Continue Executing
  	// ==================================================
-    public boolean shouldContinueExecuting() {
+    public boolean canContinueToUse() {
     	if(this.host.getGrowingAge() >= 0) {
     		this.host.setParentTarget(null);
     		return false;
     	}
     	
-    	return super.shouldContinueExecuting();
+    	return super.canContinueToUse();
     }
 }

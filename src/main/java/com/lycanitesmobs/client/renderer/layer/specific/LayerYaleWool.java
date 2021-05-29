@@ -44,6 +44,6 @@ public class LayerYaleWool extends LayerCreatureBase {
     @Override
     public Vector4f getPartColor(String partName, BaseCreatureEntity entity, boolean trophy) {
         DyeColor color = entity.getColor();
-        return new Vector4f(color.getColorComponentValues()[0], color.getColorComponentValues()[1], color.getColorComponentValues()[2], 1.0F);
+        return new Vector4f(color.getTextureDiffuseColors()[0], color.getTextureDiffuseColors()[1], color.getTextureDiffuseColors()[2], 1.0F);
     }
 }

@@ -37,13 +37,13 @@ public class BaseGoal extends Goal {
     }
 
     @Override
-    public boolean shouldExecute() {
+    public boolean canUse() {
         return this.host.isAlive() && (this.goalConditions == null || this.goalConditions.isMet(this.host));
     }
 
     public LivingEntity getTarget() {
         if(this.targetBit == BaseCreatureEntity.TARGET_BITS.ATTACK) {
-            return this.host.getAttackTarget();
+            return this.host.getTarget();
         }
         if(this.targetBit == BaseCreatureEntity.TARGET_BITS.AVOID) {
             return this.host.getAvoidTarget();

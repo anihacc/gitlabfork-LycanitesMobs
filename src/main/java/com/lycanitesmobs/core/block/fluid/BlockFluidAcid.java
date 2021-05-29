@@ -20,6 +20,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import java.util.Random;
 import java.util.function.Supplier;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class BlockFluidAcid extends FlowingFluidBlock {
 
 	// ==================================================
@@ -75,21 +77,21 @@ public class BlockFluidAcid extends FlowingFluidBlock {
 	//                      Collision
 	// ==================================================
     @Override
-    public void onEntityCollision(BlockState blockState, World world, BlockPos pos, Entity entity) {
+    public void entityInside(BlockState blockState, World world, BlockPos pos, Entity entity) {
         // Damage:
         if (!(entity instanceof ItemEntity) && !(entity instanceof ExperienceOrbEntity)) {
-            entity.attackEntityFrom(ObjectManager.getDamageSource("acid"), 1F);
+            entity.hurt(ObjectManager.getDamageSource("acid"), 1F);
         }
 
         // Effects:
         if(entity instanceof LivingEntity) {
             Effect effect = ObjectManager.getEffect("penetration");
             if(effect != null) {
-                ((LivingEntity) entity).addPotionEffect(new EffectInstance(effect, 5 * 20, 0));
+                ((LivingEntity) entity).addEffect(new EffectInstance(effect, 5 * 20, 0));
             }
         }
 
-        super.onEntityCollision(blockState, world, pos, entity);
+        super.entityInside(blockState, world, pos, entity);
     }
     
     

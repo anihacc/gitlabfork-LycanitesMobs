@@ -18,16 +18,16 @@ public class FaceTargetGoal extends Goal {
     }
 
 	@Override
-    public boolean shouldExecute() {
+    public boolean canUse() {
 		if(!this.host.isAlive()) {
 			return false;
 		}
-		this.target = this.host.getAttackTarget();
+		this.target = this.host.getTarget();
 		return this.target != null;
     }
 
 	@Override
     public void tick() {
-		this.host.getLookController().setLookPositionWithEntity(this.target, 10.0F, this.host.getVerticalFaceSpeed());
+		this.host.getLookControl().setLookAt(this.target, 10.0F, this.host.getMaxHeadXRot());
     }
 }

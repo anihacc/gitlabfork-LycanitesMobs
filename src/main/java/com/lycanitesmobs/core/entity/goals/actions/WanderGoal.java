@@ -7,6 +7,8 @@ import net.minecraft.util.math.vector.Vector3d;
 
 import java.util.EnumSet;
 
+import net.minecraft.entity.ai.goal.Goal.Flag;
+
 public class WanderGoal extends Goal {
 	// Targets:
 	private BaseCreatureEntity host;
@@ -23,7 +25,7 @@ public class WanderGoal extends Goal {
 	// ==================================================
 	public WanderGoal(BaseCreatureEntity setHost) {
 		this.host = setHost;
-		this.setMutexFlags(EnumSet.of(Flag.MOVE));
+		this.setFlags(EnumSet.of(Flag.MOVE));
 	}
 
 
@@ -40,7 +42,7 @@ public class WanderGoal extends Goal {
 	//                  Should Execute
 	// ==================================================
 	@Override
-	public boolean shouldExecute() {
+	public boolean canUse() {
 		if (this.host.hasAttackTarget())
 			return false;
 		if (this.host.getAge() >= 100)
@@ -68,13 +70,13 @@ public class WanderGoal extends Goal {
 	//                Continue Executing
 	// ==================================================
 	@Override
-	public boolean shouldContinueExecuting() {
+	public boolean canContinueToUse() {
 		if (!this.host.useDirectNavigator()) {
-			if (this.host.getNavigator().noPath()) {
+			if (this.host.getNavigation().isDone()) {
 				return false;
 			}
-			else if (this.host.getDistanceSq(new Vector3d(this.xPosition, this.yPosition, this.zPosition)) < 4) {
-				this.host.getNavigator().clearPath();
+			else if (this.host.distanceToSqr(new Vector3d(this.xPosition, this.yPosition, this.zPosition)) < 4) {
+				this.host.getNavigation().stop();
 				return false;
 			}
 			else {
@@ -92,9 +94,9 @@ public class WanderGoal extends Goal {
 	//                     Start
 	// ==================================================
 	@Override
-	public void startExecuting() {
+	public void start() {
 		if (!host.useDirectNavigator()) {
-			this.host.getNavigator().tryMoveToXYZ(this.xPosition, this.yPosition, this.zPosition, this.speed);
+			this.host.getNavigation().moveTo(this.xPosition, this.yPosition, this.zPosition, this.speed);
 		}
 		else
 			this.host.directNavigator.setTargetPosition(new BlockPos((int) this.xPosition, (int) this.yPosition, (int) this.zPosition), this.speed);

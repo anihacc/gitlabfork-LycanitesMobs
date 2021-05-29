@@ -28,18 +28,18 @@ public class Utilities {
 		float maxZ = (float)(z > tz ? z : tz);
 
 		// Get Block Collision:
-        RayTraceResult collision = world.rayTraceBlocks(new RayTraceContext(startVec, endVec, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, entity));
+        RayTraceResult collision = world.clip(new RayTraceContext(startVec, endVec, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, entity));
 		startVec = new Vector3d(x, y, z);
 
 		// Get Entity Collision:
 		if(excluded != null) {
-			AxisAlignedBB bb = new AxisAlignedBB(minX, minY, minZ, maxX, maxY, maxZ).expand(borderSize, borderSize, borderSize);
-			List<Entity> allHitEntities = world.getEntitiesWithinAABBExcludingEntity(null, bb);
+			AxisAlignedBB bb = new AxisAlignedBB(minX, minY, minZ, maxX, maxY, maxZ).expandTowards(borderSize, borderSize, borderSize);
+			List<Entity> allHitEntities = world.getEntities(null, bb);
 			Entity closestHitEntity = null;
 			double closestEntDistance = Float.POSITIVE_INFINITY;
 			for(Entity hitEntity : allHitEntities) {
-				if(hitEntity.canBeCollidedWith() && !excluded.contains(hitEntity)) {
-					double entDistance = startVec.distanceTo(hitEntity.getPositionVec());
+				if(hitEntity.isPickable() && !excluded.contains(hitEntity)) {
+					double entDistance = startVec.distanceTo(hitEntity.position());
 					if(entDistance < closestEntDistance) {
 						closestEntDistance = entDistance;
 						closestHitEntity = hitEntity;

@@ -43,7 +43,7 @@ public class EntityKhalk extends TameableCreatureEntity implements IMob, IGroupH
         this.solidCollision = true;
         this.setupMob();
 
-        this.setPathPriority(PathNodeType.LAVA, 0F);
+        this.setPathfindingMalus(PathNodeType.LAVA, 0F);
     }
 
     @Override
@@ -63,14 +63,14 @@ public class EntityKhalk extends TameableCreatureEntity implements IMob, IGroupH
     // ==================================================
 	// ========== Living Update ==========
 	@Override
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
         
         // Random Lunging:
-        if(this.onGround && !this.getEntityWorld().isRemote) {
+        if(this.onGround && !this.getCommandSenderWorld().isClientSide) {
         	if(this.hasAttackTarget()) {
-        		if(this.rand.nextInt(10) == 0)
-        			this.leap(6.0F, 0.1D, this.getAttackTarget());
+        		if(this.random.nextInt(10) == 0)
+        			this.leap(6.0F, 0.1D, this.getTarget());
         	}
         }
     }
@@ -92,10 +92,10 @@ public class EntityKhalk extends TameableCreatureEntity implements IMob, IGroupH
     public float getBlockPathWeight(int x, int y, int z) {
         int waterWeight = 10;
         BlockPos pos = new BlockPos(x, y, z);
-        if(this.getEntityWorld().getBlockState(pos).getBlock() == Blocks.LAVA)
+        if(this.getCommandSenderWorld().getBlockState(pos).getBlock() == Blocks.LAVA)
             return (super.getBlockPathWeight(x, y, z) + 1) * (waterWeight + 1);
 
-        if(this.getAttackTarget() != null)
+        if(this.getTarget() != null)
             return super.getBlockPathWeight(x, y, z);
         if(this.lavaContact())
             return -999999.0F;
@@ -105,7 +105,7 @@ public class EntityKhalk extends TameableCreatureEntity implements IMob, IGroupH
 
     // Pushed By Water:
     @Override
-    public boolean isPushedByWater() {
+    public boolean isPushedByFluid() {
         return false;
     }
     
@@ -114,25 +114,25 @@ public class EntityKhalk extends TameableCreatureEntity implements IMob, IGroupH
    	//                      Death
    	// ==================================================
     @Override
-    public void onDeath(DamageSource damageSource) {
-		if(!this.getEntityWorld().isRemote && this.getEntityWorld().getGameRules().getBoolean(GameRules.MOB_GRIEFING) && this.lavaDeath && !this.isTamed()) {
-			int lavaWidth = (int)Math.floor(this.getSize(Pose.STANDING).width) - 1;
-			int lavaHeight = (int)Math.floor(this.getSize(Pose.STANDING).height) - 1;
-			for(int x = (int)this.getPositionVec().getX() - lavaWidth; x <= (int)this.getPositionVec().getX() + lavaWidth; x++) {
-				for(int y = (int)this.getPositionVec().getY(); y <= (int)this.getPositionVec().getY() + lavaHeight; y++) {
-					for(int z = (int)this.getPositionVec().getZ() - lavaWidth; z <= (int)this.getPositionVec().getZ() + lavaWidth; z++) {
-						Block block = this.getEntityWorld().getBlockState(new BlockPos(x, y, z)).getBlock();
+    public void die(DamageSource damageSource) {
+		if(!this.getCommandSenderWorld().isClientSide && this.getCommandSenderWorld().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING) && this.lavaDeath && !this.isTamed()) {
+			int lavaWidth = (int)Math.floor(this.getDimensions(Pose.STANDING).width) - 1;
+			int lavaHeight = (int)Math.floor(this.getDimensions(Pose.STANDING).height) - 1;
+			for(int x = (int)this.position().x() - lavaWidth; x <= (int)this.position().x() + lavaWidth; x++) {
+				for(int y = (int)this.position().y(); y <= (int)this.position().y() + lavaHeight; y++) {
+					for(int z = (int)this.position().z() - lavaWidth; z <= (int)this.position().z() + lavaWidth; z++) {
+						Block block = this.getCommandSenderWorld().getBlockState(new BlockPos(x, y, z)).getBlock();
 						if(block == Blocks.AIR) {
-							BlockState blockState = Blocks.LAVA.getDefaultState().with(FlowingFluidBlock.LEVEL, 4);
-							if(x == (int)this.getPositionVec().getX() && y == (int)this.getPositionVec().getY() && z == (int)this.getPositionVec().getZ())
-								blockState = blockState = Blocks.LAVA.getDefaultState().with(FlowingFluidBlock.LEVEL, 5);
-							this.getEntityWorld().setBlockState(new BlockPos(x, y, z), blockState, 3);
+							BlockState blockState = Blocks.LAVA.defaultBlockState().setValue(FlowingFluidBlock.LEVEL, 4);
+							if(x == (int)this.position().x() && y == (int)this.position().y() && z == (int)this.position().z())
+								blockState = blockState = Blocks.LAVA.defaultBlockState().setValue(FlowingFluidBlock.LEVEL, 5);
+							this.getCommandSenderWorld().setBlock(new BlockPos(x, y, z), blockState, 3);
 						}
 					}
 				}
 			}
 		}
-        super.onDeath(damageSource);
+        super.die(damageSource);
     }
 
     // ==================================================
@@ -167,7 +167,7 @@ public class EntityKhalk extends TameableCreatureEntity implements IMob, IGroupH
    	// ==================================================
     // ========== Damage Modifier ==========
     public float getDamageModifier(DamageSource damageSrc) {
-    	if(damageSrc.isFireDamage())
+    	if(damageSrc.isFire())
     		return 0F;
     	else return super.getDamageModifier(damageSrc);
     }

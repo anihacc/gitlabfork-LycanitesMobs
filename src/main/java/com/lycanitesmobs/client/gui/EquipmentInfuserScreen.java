@@ -29,8 +29,8 @@ public class EquipmentInfuserScreen extends BaseContainerScreen<EquipmentInfuser
 	@Override
 	public void init() {
 		super.init();
-		this.xSize = 176;
-        this.ySize = 166;
+		this.imageWidth = 176;
+        this.imageHeight = 166;
 	}
 
 	@Override
@@ -41,12 +41,12 @@ public class EquipmentInfuserScreen extends BaseContainerScreen<EquipmentInfuser
 	@Override
 	protected void renderBackground(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		this.getMinecraft().getTextureManager().bindTexture(TextureManager.getTexture("GUIEquipmentForge"));
-		this.xSize = 176;
-		this.ySize = 166;
-		int backX = (this.width - this.xSize) / 2;
-		int backY = (this.height - this.ySize) / 2;
-		this.drawHelper.drawTexturedModalRect(matrixStack, backX, backY, 0, 0, this.xSize, this.ySize);
+		this.getMinecraft().getTextureManager().bind(TextureManager.getTexture("GUIEquipmentForge"));
+		this.imageWidth = 176;
+		this.imageHeight = 166;
+		int backX = (this.width - this.imageWidth) / 2;
+		int backY = (this.height - this.imageHeight) / 2;
+		this.drawHelper.drawTexturedModalRect(matrixStack, backX, backY, 0, 0, this.imageWidth, this.imageHeight);
 
 		this.drawSlots(matrixStack, backX, backY);
 	}
@@ -58,17 +58,17 @@ public class EquipmentInfuserScreen extends BaseContainerScreen<EquipmentInfuser
 	 */
 	protected void drawSlots(MatrixStack matrixStack, int backX, int backY) {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		this.getMinecraft().getTextureManager().bindTexture(TextureManager.getTexture("GUIEquipmentForge"));
+		this.getMinecraft().getTextureManager().bind(TextureManager.getTexture("GUIEquipmentForge"));
 
-		BaseContainer container = this.getContainer();
-		List<Slot> forgeSlots = container.inventorySlots.subList(container.inventoryStart, container.inventoryFinish);
+		BaseContainer container = this.getMenu();
+		List<Slot> forgeSlots = container.slots.subList(container.inventoryStart, container.inventoryFinish);
 		int slotWidth = 18;
 		int slotHeight = 18;
 		int slotU = 238;
 		int slotVBase = 0;
 		for(Slot forgeSlot : forgeSlots) {
-			int slotX = backX + forgeSlot.xPos - 1;
-			int slotY = backY + forgeSlot.yPos - 1;
+			int slotX = backX + forgeSlot.x - 1;
+			int slotY = backY + forgeSlot.y - 1;
 			int slotV = slotVBase;
 
 			if(forgeSlot instanceof EquipmentInfuserChargeSlot) {
@@ -81,9 +81,9 @@ public class EquipmentInfuserScreen extends BaseContainerScreen<EquipmentInfuser
 
 	@Override
 	protected void renderForeground(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
-        this.drawHelper.drawString(matrixStack, this.playerInventory.getName().getString(), this.guiLeft + 8, this.guiTop + this.ySize - 96 + 2, 4210752);
-		int backX = (this.width - this.xSize) / 2;
-		int backY = (this.height - this.ySize) / 2;
+        this.drawHelper.drawString(matrixStack, this.inventory.getName().getString(), this.leftPos + 8, this.topPos + this.imageHeight - 96 + 2, 4210752);
+		int backX = (this.width - this.imageWidth) / 2;
+		int backY = (this.height - this.imageHeight) / 2;
 		this.drawBars(matrixStack, backX, backY);
     }
 
@@ -94,12 +94,12 @@ public class EquipmentInfuserScreen extends BaseContainerScreen<EquipmentInfuser
 		int barY = backY + 58;
 		int barCenter = barX + (barWidth / 2);
 		this.drawHelper.drawTexture(matrixStack, TextureManager.getTexture("GUIPetBarEmpty"), barX, barY, 0, 1, 1, barWidth, barHeight);
-		ItemStack partStack = this.equipmentInfuser.getStackInSlot(1);
+		ItemStack partStack = this.equipmentInfuser.getItem(1);
 		if(!(partStack.getItem() instanceof ItemEquipmentPart)) {
 			return;
 		}
 		ItemEquipmentPart partItem = (ItemEquipmentPart)partStack.getItem();
-		if(partItem.getLevel(partStack) >= partItem.levelMax) {
+		if(partItem.getPartLevel(partStack) >= partItem.levelMax) {
 			return;
 		}
 		int experience = partItem.getExperience(partStack);
@@ -112,7 +112,7 @@ public class EquipmentInfuserScreen extends BaseContainerScreen<EquipmentInfuser
     
 	@Override
 	public void actionPerformed(int buttonid) {
-		MessageTileEntityButton message = new MessageTileEntityButton(buttonid, this.equipmentInfuser.getPos());
+		MessageTileEntityButton message = new MessageTileEntityButton(buttonid, this.equipmentInfuser.getBlockPos());
 		LycanitesMobs.packetHandler.sendToServer(message);
 	}
 }

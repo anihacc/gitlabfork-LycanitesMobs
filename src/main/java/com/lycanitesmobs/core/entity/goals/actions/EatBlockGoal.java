@@ -11,6 +11,8 @@ import net.minecraft.util.math.MathHelper;
 
 import java.util.EnumSet;
 
+import net.minecraft.entity.ai.goal.Goal.Flag;
+
 public class EatBlockGoal extends Goal {
 	// Targets:
     private BaseCreatureEntity host;
@@ -27,7 +29,7 @@ public class EatBlockGoal extends Goal {
  	// ==================================================
     public EatBlockGoal(BaseCreatureEntity setHost) {
         this.host = setHost;
-		this.setMutexFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
+		this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
     }
     
     
@@ -59,15 +61,15 @@ public class EatBlockGoal extends Goal {
   	//                   Should Execute
   	// ==================================================
  	@Override
-    public boolean shouldExecute() {
-    	 if(this.host.getRNG().nextInt(this.host.isChild() ? 50 : 1000) != 0)
+    public boolean canUse() {
+    	 if(this.host.getRandom().nextInt(this.host.isBaby() ? 50 : 1000) != 0)
              return false;
     	 
-    	 int i = MathHelper.floor(this.host.getPositionVec().getX());
-         int j = MathHelper.floor(this.host.getPositionVec().getY());
-         int k = MathHelper.floor(this.host.getPositionVec().getZ());
+    	 int i = MathHelper.floor(this.host.position().x());
+         int j = MathHelper.floor(this.host.position().y());
+         int k = MathHelper.floor(this.host.position().z());
 
-         BlockState blockState = this.host.getEntityWorld().getBlockState(new BlockPos(i, j - 1, k));
+         BlockState blockState = this.host.getCommandSenderWorld().getBlockState(new BlockPos(i, j - 1, k));
          return this.isValidBlock(blockState);
      }
   	
@@ -95,7 +97,7 @@ public class EatBlockGoal extends Goal {
   	//                      Start
   	// ==================================================
  	@Override
-    public void startExecuting() {
+    public void start() {
     	 this.eatTime = this.eatTimeMax;
          this.host.clearMovement();
      }
@@ -105,7 +107,7 @@ public class EatBlockGoal extends Goal {
   	//                       Reset
   	// ==================================================
  	@Override
-    public void resetTask() {
+    public void stop() {
     	 this.eatTime = this.eatTimeMax;
      }
   	
@@ -114,7 +116,7 @@ public class EatBlockGoal extends Goal {
    	//                      Continue
    	// ==================================================
   	@Override
-    public boolean shouldContinueExecuting() {
+    public boolean canContinueToUse() {
     	  return this.eatTime > 0;
       }
  	
@@ -126,18 +128,18 @@ public class EatBlockGoal extends Goal {
     public void tick() {
          if(--this.eatTime != 0) return;
          
-         int i = MathHelper.floor(this.host.getPositionVec().getX());
-         int j = MathHelper.floor(this.host.getPositionVec().getY());
-         int k = MathHelper.floor(this.host.getPositionVec().getZ());
-         BlockState blockState = this.host.getEntityWorld().getBlockState(new BlockPos(i, j - 1, k));
+         int i = MathHelper.floor(this.host.position().x());
+         int j = MathHelper.floor(this.host.position().y());
+         int k = MathHelper.floor(this.host.position().z());
+         BlockState blockState = this.host.getCommandSenderWorld().getBlockState(new BlockPos(i, j - 1, k));
          
          if(this.isValidBlock(blockState)) {
              //if(this.host.getEntityWorld().getGameRules().getGameRuleBooleanValue("mobGriefing"))
-        	 this.host.getEntityWorld().removeBlock(new BlockPos(i, j - 1, k), true); // Might be something else was x, y, z, false
+        	 this.host.getCommandSenderWorld().removeBlock(new BlockPos(i, j - 1, k), true); // Might be something else was x, y, z, false
          }
 
-         this.host.getEntityWorld().playEvent(2001, new BlockPos(i, j - 1, k), Block.getStateId(blockState));
-         this.host.getEntityWorld().setBlockState(new BlockPos(i, j - 1, k), this.replaceBlock.getDefaultState(), 2);
+         this.host.getCommandSenderWorld().levelEvent(2001, new BlockPos(i, j - 1, k), Block.getId(blockState));
+         this.host.getCommandSenderWorld().setBlock(new BlockPos(i, j - 1, k), this.replaceBlock.defaultBlockState(), 2);
          this.host.onEat();
      }
 }

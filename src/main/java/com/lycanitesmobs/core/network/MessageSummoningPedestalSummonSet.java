@@ -41,7 +41,7 @@ public class MessageSummoningPedestalSummonSet {
 
 		ctx.get().enqueueWork(() -> {
 			PlayerEntity player = ctx.get().getSender();
-			TileEntity tileEntity = player.getEntityWorld().getTileEntity(new BlockPos(message.x, message.y, message.z));
+			TileEntity tileEntity = player.getCommandSenderWorld().getBlockEntity(new BlockPos(message.x, message.y, message.z));
 			TileEntitySummoningPedestal summoningPedestal = null;
 			if(tileEntity instanceof TileEntitySummoningPedestal)
 				summoningPedestal = (TileEntitySummoningPedestal)tileEntity;
@@ -61,7 +61,7 @@ public class MessageSummoningPedestalSummonSet {
         message.x = packet.readInt();
         message.y = packet.readInt();
         message.z = packet.readInt();
-        message.summonType = packet.readString(256);
+        message.summonType = packet.readUtf(256);
         message.subpsecies = packet.readInt();
         message.variant = packet.readInt();
         message.behaviour = packet.readByte();
@@ -75,7 +75,7 @@ public class MessageSummoningPedestalSummonSet {
         packet.writeInt(message.x);
         packet.writeInt(message.y);
         packet.writeInt(message.z);
-        packet.writeString(message.summonType);
+        packet.writeUtf(message.summonType);
         packet.writeInt(message.subpsecies);
         packet.writeInt(message.variant);
         packet.writeByte(message.behaviour);

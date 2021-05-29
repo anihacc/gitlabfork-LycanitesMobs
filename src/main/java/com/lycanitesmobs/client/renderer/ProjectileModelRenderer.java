@@ -58,7 +58,7 @@ public class ProjectileModelRenderer extends EntityRenderer<BaseProjectileEntity
 		// Model States:
 		float time = 0;
 		float distance = 0;
-		float loop = (float)entity.ticksExisted + (partialTicks % 1.0F);
+		float loop = (float)entity.tickCount + (partialTicks % 1.0F);
 		float lookYaw = 0;
 		float lookPitch = 0;
 		float scale = 1;
@@ -69,22 +69,22 @@ public class ProjectileModelRenderer extends EntityRenderer<BaseProjectileEntity
 		try {
 			matrixStack.translate(0, -0.25F, 0); // translate
 			matrixStack.scale(0.25F, 0.25F, 0.25F); // scale
-			matrixStack.rotate(new Vector3f(0.0F, 1.0F, 0.0F).rotationDegrees(entity.rotationYaw)); // rotate
+			matrixStack.mulPose(new Vector3f(0.0F, 1.0F, 0.0F).rotationDegrees(entity.yRot)); // rotate
 
-			if(this.getEntityModel() == null) {
+			if(this.getModel() == null) {
 				LycanitesMobs.logWarning("", "Missing Projectile Model: " + entity);
 			}
-			else if (!(this.getEntityModel() instanceof ProjectileObjModel)) {
-				ResourceLocation texture = this.getEntityTexture(entity);
+			else if (!(this.getModel() instanceof ProjectileObjModel)) {
+				ResourceLocation texture = this.getTextureLocation(entity);
 				if(texture == null) {
 					return;
 				}
 				RenderType renderType = CustomRenderStates.getObjRenderType(texture, this.renderModel.getBlending(entity, null), this.renderModel.getGlow(entity, null));
-				this.getEntityModel().render(entity, matrixStack, renderTypeBuffer.getBuffer(renderType), null, 0, 0, loop, 0, 0, scale, brightness);
+				this.getModel().render(entity, matrixStack, renderTypeBuffer.getBuffer(renderType), null, 0, 0, loop, 0, 0, scale, brightness);
 			}
 			else {
 
-				this.getEntityModel().generateAnimationFrames(entity, time, distance, loop, lookYaw, lookPitch, 1, brightness);
+				this.getModel().generateAnimationFrames(entity, time, distance, loop, lookYaw, lookPitch, 1, brightness);
 				this.renderModel(entity, matrixStack, renderTypeBuffer, null, time, distance, loop, lookYaw, lookPitch, 1, brightness, invisible, allyInvisible);
 				for(LayerRenderer<BaseProjectileEntity, ProjectileModel> layer : this.renderLayers) {
 					if(!(layer instanceof LayerProjectileBase)) {
@@ -96,7 +96,7 @@ public class ProjectileModelRenderer extends EntityRenderer<BaseProjectileEntity
 					}
 					this.renderModel(entity, matrixStack, renderTypeBuffer, layerCreatureBase, time, distance, loop, lookYaw, lookPitch, scale, brightness, invisible, allyInvisible);
 				}
-				this.getEntityModel().clearAnimationFrames();
+				this.getModel().clearAnimationFrames();
 			}
 		}
 		catch (Exception exception) {
@@ -127,19 +127,19 @@ public class ProjectileModelRenderer extends EntityRenderer<BaseProjectileEntity
 		}
 		RenderType rendertype;
 		if (allyInvisible) {
-			rendertype = RenderType.getEntityTranslucent(texture);
+			rendertype = RenderType.entityTranslucent(texture);
 		}
 		else if (invisible) {
-			rendertype = RenderType.getOutline(texture);
+			rendertype = RenderType.outline(texture);
 		}
 		else {
-			rendertype = CustomRenderStates.getObjRenderType(texture, this.getEntityModel().getBlending(entity, layer), this.getEntityModel().getGlow(entity, layer));
+			rendertype = CustomRenderStates.getObjRenderType(texture, this.getModel().getBlending(entity, layer), this.getModel().getGlow(entity, layer));
 		}
-		this.getEntityModel().render(entity, matrixStack, renderTypeBuffer.getBuffer(rendertype), layer, time, distance, loop, lookY, lookX, 1, brightness);
+		this.getModel().render(entity, matrixStack, renderTypeBuffer.getBuffer(rendertype), layer, time, distance, loop, lookY, lookX, 1, brightness);
 	}
 
 	@Override
-	public ProjectileModel getEntityModel() {
+	public ProjectileModel getModel() {
 		return this.renderModel;
 	}
 
@@ -155,14 +155,14 @@ public class ProjectileModelRenderer extends EntityRenderer<BaseProjectileEntity
 	 */
 	public ResourceLocation getEntityTexture(BaseProjectileEntity entity, LayerProjectileBase layer) {
 		if(layer == null) {
-			return this.getEntityTexture(entity);
+			return this.getTextureLocation(entity);
 		}
 		ResourceLocation layerTexture = layer.getLayerTexture(entity);
-		return layerTexture != null ? layerTexture : this.getEntityTexture(entity);
+		return layerTexture != null ? layerTexture : this.getTextureLocation(entity);
 	}
 
 	@Override
-	public ResourceLocation getEntityTexture(BaseProjectileEntity entity) {
+	public ResourceLocation getTextureLocation(BaseProjectileEntity entity) {
 		return entity.getTexture();
 	}
 }

@@ -45,7 +45,7 @@ public class EntityCherufe extends BaseCreatureEntity implements IMob {
 
         this.setupMob();
 
-        this.setPathPriority(PathNodeType.LAVA, 0F);
+        this.setPathfindingMalus(PathNodeType.LAVA, 0F);
     }
 
     @Override
@@ -65,24 +65,24 @@ public class EntityCherufe extends BaseCreatureEntity implements IMob {
     // ==================================================
 	// ========== Living Update ==========
 	@Override
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
         
         // Trail:
-        if(!this.getEntityWorld().isRemote && this.isMoving() && this.ticksExisted % 5 == 0) {
+        if(!this.getCommandSenderWorld().isClientSide && this.isMoving() && this.tickCount % 5 == 0) {
         	int trailHeight = 1;
             int trailWidth = 1;
             if(this.isRareVariant())
                 trailWidth = 3;
         	for(int y = 0; y < trailHeight; y++) {
-        		Block block = this.getEntityWorld().getBlockState(this.getPosition().add(0, y, 0)).getBlock();
+        		Block block = this.getCommandSenderWorld().getBlockState(this.blockPosition().offset(0, y, 0)).getBlock();
         		if(block == Blocks.AIR || block == Blocks.FIRE || block == Blocks.SNOW || block == Blocks.TALL_GRASS || block == ObjectManager.getBlock("frostfire") || block == ObjectManager.getBlock("icefire")) {
                     if(trailWidth == 1)
-                        this.getEntityWorld().setBlockState(this.getPosition().add(0, y, 0), Blocks.FIRE.getDefaultState());
+                        this.getCommandSenderWorld().setBlockAndUpdate(this.blockPosition().offset(0, y, 0), Blocks.FIRE.defaultBlockState());
                     else
                         for(int x = -(trailWidth / 2); x < (trailWidth / 2) + 1; x++) {
                             for(int z = -(trailWidth / 2); z < (trailWidth / 2) + 1; z++) {
-                                this.getEntityWorld().setBlockState(this.getPosition().add(x, y, z), Blocks.FIRE.getDefaultState());
+                                this.getCommandSenderWorld().setBlockAndUpdate(this.blockPosition().offset(x, y, z), Blocks.FIRE.defaultBlockState());
                             }
                         }
                 }
@@ -90,44 +90,44 @@ public class EntityCherufe extends BaseCreatureEntity implements IMob {
 		}
 
         // Rare Subspecies Powers:
-        if(!this.getEntityWorld().isRemote && this.isRareVariant() && this.getEntityWorld().getGameRules().getBoolean(GameRules.MOB_GRIEFING) && this.blockMeltingRadius > 0 && this.ticksExisted % 10 == 0) {
+        if(!this.getCommandSenderWorld().isClientSide && this.isRareVariant() && this.getCommandSenderWorld().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING) && this.blockMeltingRadius > 0 && this.tickCount % 10 == 0) {
 
             // Melt Blocks:
             int range = this.blockMeltingRadius;
-            for(int w = -((int)Math.ceil(this.getSize(Pose.STANDING).width) + range); w <= (Math.ceil(this.getSize(Pose.STANDING).width) + range); w++)
-                for(int d = -((int)Math.ceil(this.getSize(Pose.STANDING).width) + range); d <= (Math.ceil(this.getSize(Pose.STANDING).width) + range); d++)
-                    for(int h = 0; h <= Math.ceil(this.getSize(Pose.STANDING).height); h++) {
-                        Block block = this.getEntityWorld().getBlockState(this.getPosition().add(w, h, d)).getBlock();
+            for(int w = -((int)Math.ceil(this.getDimensions(Pose.STANDING).width) + range); w <= (Math.ceil(this.getDimensions(Pose.STANDING).width) + range); w++)
+                for(int d = -((int)Math.ceil(this.getDimensions(Pose.STANDING).width) + range); d <= (Math.ceil(this.getDimensions(Pose.STANDING).width) + range); d++)
+                    for(int h = 0; h <= Math.ceil(this.getDimensions(Pose.STANDING).height); h++) {
+                        Block block = this.getCommandSenderWorld().getBlockState(this.blockPosition().offset(w, h, d)).getBlock();
                         if(block == Blocks.OBSIDIAN || block == Blocks.COBBLESTONE || block == Blocks.DIRT || block == Blocks.GRAVEL || block == Blocks.SAND) {
-							BlockState blockState = Blocks.LAVA.getDefaultState().with(FlowingFluidBlock.LEVEL, 5);
+							BlockState blockState = Blocks.LAVA.defaultBlockState().setValue(FlowingFluidBlock.LEVEL, 5);
                             if(block == Blocks.OBSIDIAN)
-                                blockState = Blocks.LAVA.getDefaultState();
-                            this.getEntityWorld().setBlockState(this.getPosition().add(w, h, d), blockState);
+                                blockState = Blocks.LAVA.defaultBlockState();
+                            this.getCommandSenderWorld().setBlockAndUpdate(this.blockPosition().offset(w, h, d), blockState);
                         }
                     }
 
             // Random Projectiles:
-            if(this.ticksExisted % 40 == 0) {
+            if(this.tickCount % 40 == 0) {
 				ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile("magma");
 				if(projectileInfo != null) {
-					BaseProjectileEntity projectile = projectileInfo.createProjectile(this.getEntityWorld(), this);
+					BaseProjectileEntity projectile = projectileInfo.createProjectile(this.getCommandSenderWorld(), this);
 					projectile.setProjectileScale(2f);
-					projectile.shoot((2 * this.getRNG().nextFloat()) - 1, this.getRNG().nextFloat(), (2 * this.getRNG().nextFloat()) - 1, 1.2F, 6.0F);
-					this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
-					this.getEntityWorld().addEntity(projectile);
+					projectile.shoot((2 * this.getRandom().nextFloat()) - 1, this.getRandom().nextFloat(), (2 * this.getRandom().nextFloat()) - 1, 1.2F, 6.0F);
+					this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
+					this.getCommandSenderWorld().addFreshEntity(projectile);
 				}
             }
         }
         
         // Particles:
-        if(this.getEntityWorld().isRemote) {
+        if(this.getCommandSenderWorld().isClientSide) {
 	        for(int i = 0; i < 2; ++i) {
-	            this.getEntityWorld().addParticle(ParticleTypes.FLAME, this.getPositionVec().getX() + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, this.getPositionVec().getY() + this.rand.nextDouble() * (double)this.getSize(Pose.STANDING).height, this.getPositionVec().getZ() + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
-	            this.getEntityWorld().addParticle(ParticleTypes.DRIPPING_LAVA, this.getPositionVec().getX() + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, this.getPositionVec().getY() + this.rand.nextDouble() * (double)this.getSize(Pose.STANDING).height, this.getPositionVec().getZ() + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
+	            this.getCommandSenderWorld().addParticle(ParticleTypes.FLAME, this.position().x() + (this.random.nextDouble() - 0.5D) * (double)this.getDimensions(Pose.STANDING).width, this.position().y() + this.random.nextDouble() * (double)this.getDimensions(Pose.STANDING).height, this.position().z() + (this.random.nextDouble() - 0.5D) * (double)this.getDimensions(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
+	            this.getCommandSenderWorld().addParticle(ParticleTypes.DRIPPING_LAVA, this.position().x() + (this.random.nextDouble() - 0.5D) * (double)this.getDimensions(Pose.STANDING).width, this.position().y() + this.random.nextDouble() * (double)this.getDimensions(Pose.STANDING).height, this.position().z() + (this.random.nextDouble() - 0.5D) * (double)this.getDimensions(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
 	        }
-	        if(this.ticksExisted % 10 == 0)
+	        if(this.tickCount % 10 == 0)
 		        for(int i = 0; i < 2; ++i) {
-		            this.getEntityWorld().addParticle(ParticleTypes.FLAME, this.getPositionVec().getX() + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, this.getPositionVec().getY() + this.rand.nextDouble() * (double)this.getSize(Pose.STANDING).height, this.getPositionVec().getZ() + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
+		            this.getCommandSenderWorld().addParticle(ParticleTypes.FLAME, this.position().x() + (this.random.nextDouble() - 0.5D) * (double)this.getDimensions(Pose.STANDING).width, this.position().y() + this.random.nextDouble() * (double)this.getDimensions(Pose.STANDING).height, this.position().z() + (this.random.nextDouble() - 0.5D) * (double)this.getDimensions(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
 		        }
         }
     }
@@ -149,10 +149,10 @@ public class EntityCherufe extends BaseCreatureEntity implements IMob {
 	public float getBlockPathWeight(int x, int y, int z) {
 		int waterWeight = 10;
 		BlockPos pos = new BlockPos(x, y, z);
-        if(this.getEntityWorld().getBlockState(pos).getBlock() == Blocks.LAVA)
+        if(this.getCommandSenderWorld().getBlockState(pos).getBlock() == Blocks.LAVA)
         	return (super.getBlockPathWeight(x, y, z) + 1) * (waterWeight + 1);
         
-        if(this.getAttackTarget() != null)
+        if(this.getTarget() != null)
         	return super.getBlockPathWeight(x, y, z);
         if(this.lavaContact())
 			return -999999.0F;
@@ -162,7 +162,7 @@ public class EntityCherufe extends BaseCreatureEntity implements IMob {
 	
 	// Pushed By Water:
 	@Override
-	public boolean isPushedByWater() {
+	public boolean isPushedByFluid() {
         return false;
     }
     
@@ -180,7 +180,7 @@ public class EntityCherufe extends BaseCreatureEntity implements IMob {
     // ========== Is Aggressive ==========
     @Override
     public boolean isAggressive() {
-    	if(this.getAir() <= -100)
+    	if(this.getAirSupply() <= -100)
     		return false;
     	return super.isAggressive();
     }
@@ -217,7 +217,7 @@ public class EntityCherufe extends BaseCreatureEntity implements IMob {
    	// ==================================================
     // ========== Damage Modifier ==========
     public float getDamageModifier(DamageSource damageSrc) {
-    	if(damageSrc.isFireDamage())
+    	if(damageSrc.isFire())
     		return 0F;
     	else return super.getDamageModifier(damageSrc);
     }

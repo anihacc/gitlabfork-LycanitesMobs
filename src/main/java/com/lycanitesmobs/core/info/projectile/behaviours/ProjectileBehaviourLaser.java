@@ -46,21 +46,21 @@ public class ProjectileBehaviourLaser extends ProjectileBehaviour {
 		((CustomProjectileEntity)projectile).laserWidth = this.width;
 
 		// Follow Thrower/Parent Projectile:
-		if(projectile.func_234616_v_() != null) {
-			Entity entityToFollow = projectile.func_234616_v_();
+		if(projectile.getOwner() != null) {
+			Entity entityToFollow = projectile.getOwner();
 			if(((CustomProjectileEntity)projectile).getParent() != null) {
 				entityToFollow = ((CustomProjectileEntity)projectile).getParent();
 			}
-			double xPos = entityToFollow.getPositionVec().getX();
-			double yPos = entityToFollow.getPositionVec().getY() + entityToFollow.getSize(entityToFollow.getPose()).height * 0.5D;
-			double zPos = entityToFollow.getPositionVec().getZ();
+			double xPos = entityToFollow.position().x();
+			double yPos = entityToFollow.position().y() + entityToFollow.getDimensions(entityToFollow.getPose()).height * 0.5D;
+			double zPos = entityToFollow.position().z();
 			/*if(entityToFollow instanceof BaseCreatureEntity) {
 				BaseCreatureEntity creatureToFollow = (BaseCreatureEntity)entityToFollow;
 				xPos = creatureToFollow.getFacingPosition(creatureToFollow, 0, creatureToFollow.rotationYaw + 90F).getX();
 				zPos = creatureToFollow.getFacingPosition(creatureToFollow, 0, creatureToFollow.rotationYaw).getZ();
 			}*/
-			projectile.setPosition(xPos, yPos, zPos);
-			projectile.setMotion(entityToFollow.getMotion());
+			projectile.setPos(xPos, yPos, zPos);
+			projectile.setDeltaMovement(entityToFollow.getDeltaMovement());
 		}
 
 		// Update Laser End:
@@ -74,9 +74,9 @@ public class ProjectileBehaviourLaser extends ProjectileBehaviour {
 	 */
 	public void updateEnd(BaseProjectileEntity projectile) {
 		// Laser Aiming:
-		double targetX = projectile.getPositionVec().getX();
-		double targetY = projectile.getPositionVec().getY();
-		double targetZ = projectile.getPositionVec().getZ();
+		double targetX = projectile.position().x();
+		double targetY = projectile.position().y();
+		double targetZ = projectile.position().z();
 
 		// Entity Laser Aiming:
 		boolean lockedLaser = false;
@@ -86,44 +86,44 @@ public class ProjectileBehaviourLaser extends ProjectileBehaviour {
 			targetY = target[1] + (((MathHelper.cos((projectile.updateTick + ((CustomProjectileEntity)projectile).laserAngle) * 0.25F) * 1.0F) - 0.5F) * 10);
 			targetZ = target[2] + ((MathHelper.cos((projectile.updateTick + ((CustomProjectileEntity)projectile).laserAngle) * 0.25F) * 1.0F) - 0.5F);
 		}
-		else if(projectile.func_234616_v_() != null) {
-			if(projectile.func_234616_v_() instanceof BaseCreatureEntity && ((BaseCreatureEntity)projectile.func_234616_v_()).getAttackTarget() != null) {
-				((CustomProjectileEntity)projectile).setTarget(((BaseCreatureEntity) projectile.func_234616_v_()).getAttackTarget());
+		else if(projectile.getOwner() != null) {
+			if(projectile.getOwner() instanceof BaseCreatureEntity && ((BaseCreatureEntity)projectile.getOwner()).getTarget() != null) {
+				((CustomProjectileEntity)projectile).setTarget(((BaseCreatureEntity) projectile.getOwner()).getTarget());
 			}
 			Entity attackTarget = ((CustomProjectileEntity)projectile).getTarget();
 			if(attackTarget != null) {
-				targetX = attackTarget.getPositionVec().getX();
-				targetY = attackTarget.getPositionVec().getY() + (attackTarget.getSize(attackTarget.getPose()).height / 2);
-				targetZ = attackTarget.getPositionVec().getZ();
+				targetX = attackTarget.position().x();
+				targetY = attackTarget.position().y() + (attackTarget.getDimensions(attackTarget.getPose()).height / 2);
+				targetZ = attackTarget.position().z();
 				lockedLaser = true;
 			}
 			else {
-				Vector3d lookDirection = projectile.func_234616_v_().getLookVec();
-				targetX = projectile.func_234616_v_().getPositionVec().getX() + (lookDirection.x * this.range);
-				targetY = projectile.func_234616_v_().getPositionVec().getY() + projectile.func_234616_v_().getEyeHeight() + (lookDirection.y * this.range);
-				targetZ = projectile.func_234616_v_().getPositionVec().getZ() + (lookDirection.z * this.range);
+				Vector3d lookDirection = projectile.getOwner().getLookAngle();
+				targetX = projectile.getOwner().position().x() + (lookDirection.x * this.range);
+				targetY = projectile.getOwner().position().y() + projectile.getOwner().getEyeHeight() + (lookDirection.y * this.range);
+				targetZ = projectile.getOwner().position().z() + (lookDirection.z * this.range);
 			}
 		}
 
 		// Raytracing:
 		HashSet<Entity> excludedEntities = new HashSet<>();
 		excludedEntities.add(projectile);
-		if(projectile.func_234616_v_() != null) {
-			excludedEntities.add(projectile.func_234616_v_());
-			if(projectile.func_234616_v_().getControllingPassenger() != null) {
-				excludedEntities.add(projectile.func_234616_v_().getControllingPassenger());
+		if(projectile.getOwner() != null) {
+			excludedEntities.add(projectile.getOwner());
+			if(projectile.getOwner().getControllingPassenger() != null) {
+				excludedEntities.add(projectile.getOwner().getControllingPassenger());
 			}
 		}
-		RayTraceResult rayTraceResult = Utilities.raytrace(projectile.getEntityWorld(), projectile.getPositionVec().getX(), projectile.getPositionVec().getY(), projectile.getPositionVec().getZ(), targetX, targetY, targetZ, this.width, projectile, excludedEntities);
+		RayTraceResult rayTraceResult = Utilities.raytrace(projectile.getCommandSenderWorld(), projectile.position().x(), projectile.position().y(), projectile.position().z(), targetX, targetY, targetZ, this.width, projectile, excludedEntities);
 
 		// Update Laser End Position:
 		if(rayTraceResult != null && !lockedLaser) {
-			targetX = rayTraceResult.getHitVec().x;
-			targetY = rayTraceResult.getHitVec().y;
-			targetZ = rayTraceResult.getHitVec().z;
+			targetX = rayTraceResult.getLocation().x;
+			targetY = rayTraceResult.getLocation().y;
+			targetZ = rayTraceResult.getLocation().z;
 			if(rayTraceResult instanceof EntityRayTraceResult) {
 				Entity entityHit = ((EntityRayTraceResult)rayTraceResult).getEntity();
-				targetY += entityHit.getSize(entityHit.getPose()).height / 2;
+				targetY += entityHit.getDimensions(entityHit.getPose()).height / 2;
 			}
 		}
 
@@ -132,7 +132,7 @@ public class ProjectileBehaviourLaser extends ProjectileBehaviour {
 		// Laser Damage:
 		if(projectile.updateTick % 10 == 0 && projectile.isAlive() && rayTraceResult instanceof EntityRayTraceResult) {
 			EntityRayTraceResult entityRayTraceResult = (EntityRayTraceResult)rayTraceResult;
-			if(((CustomProjectileEntity)projectile).getLaserEnd().distanceTo(entityRayTraceResult.getEntity().getPositionVec()) <= (this.width * 10)) {
+			if(((CustomProjectileEntity)projectile).getLaserEnd().distanceTo(entityRayTraceResult.getEntity().position()) <= (this.width * 10)) {
 				boolean doDamage = true;
 				if (entityRayTraceResult.getEntity() instanceof LivingEntity) {
 					doDamage = projectile.canDamage((LivingEntity) entityRayTraceResult.getEntity());
@@ -143,7 +143,7 @@ public class ProjectileBehaviourLaser extends ProjectileBehaviour {
 			}
 		}
 
-		projectile.playSound(projectile.getBeamSound(), 1.0F, 1.0F / (projectile.getEntityWorld().getRandom().nextFloat() * 0.4F + 0.8F));
+		projectile.playSound(projectile.getBeamSound(), 1.0F, 1.0F / (projectile.getCommandSenderWorld().getRandom().nextFloat() * 0.4F + 0.8F));
 	}
 
 
@@ -155,7 +155,7 @@ public class ProjectileBehaviourLaser extends ProjectileBehaviour {
 		// Prevent Knockback:
 		double targetKnockbackResistance = 0;
 		if(projectile.knockbackChance < 1) {
-			if(projectile.knockbackChance <= 0 || projectile.getEntityWorld().getRandom().nextDouble() <= projectile.knockbackChance) {
+			if(projectile.knockbackChance <= 0 || projectile.getCommandSenderWorld().getRandom().nextDouble() <= projectile.knockbackChance) {
 				if(target instanceof LivingEntity) {
 					targetKnockbackResistance = ((LivingEntity)target).getAttribute(Attributes.KNOCKBACK_RESISTANCE).getValue();
 					((LivingEntity)target).getAttribute(Attributes.KNOCKBACK_RESISTANCE).setBaseValue(1);
@@ -164,20 +164,20 @@ public class ProjectileBehaviourLaser extends ProjectileBehaviour {
 		}
 
 		// Deal Damage:
-		if(projectile.func_234616_v_() instanceof BaseCreatureEntity) {
-			BaseCreatureEntity creatureThrower = (BaseCreatureEntity)projectile.func_234616_v_();
+		if(projectile.getOwner() instanceof BaseCreatureEntity) {
+			BaseCreatureEntity creatureThrower = (BaseCreatureEntity)projectile.getOwner();
 			attackSuccess = creatureThrower.doRangedDamage(target, projectile, damage);
 		}
 		else {
 			double pierceDamage = 1;
 			if(damage <= pierceDamage)
-				attackSuccess = target.attackEntityFrom(DamageSource.causeThrownDamage(projectile, projectile.func_234616_v_()).setDamageBypassesArmor().setDamageIsAbsolute(), damage);
+				attackSuccess = target.hurt(DamageSource.thrown(projectile, projectile.getOwner()).bypassArmor().bypassMagic(), damage);
 			else {
-				int hurtResistantTimeBefore = target.hurtResistantTime;
-				target.attackEntityFrom(DamageSource.causeThrownDamage(projectile, projectile.func_234616_v_()).setDamageBypassesArmor().setDamageIsAbsolute(), (float)pierceDamage);
-				target.hurtResistantTime = hurtResistantTimeBefore;
+				int hurtResistantTimeBefore = target.invulnerableTime;
+				target.hurt(DamageSource.thrown(projectile, projectile.getOwner()).bypassArmor().bypassMagic(), (float)pierceDamage);
+				target.invulnerableTime = hurtResistantTimeBefore;
 				damage -= pierceDamage;
-				attackSuccess = target.attackEntityFrom(DamageSource.causeThrownDamage(projectile, projectile.func_234616_v_()), damage);
+				attackSuccess = target.hurt(DamageSource.thrown(projectile, projectile.getOwner()), damage);
 			}
 		}
 
@@ -187,7 +187,7 @@ public class ProjectileBehaviourLaser extends ProjectileBehaviour {
 
 		// Restore Knockback:
 		if(projectile.knockbackChance < 1) {
-			if(projectile.knockbackChance <= 0 || projectile.getEntityWorld().getRandom().nextDouble() <= projectile.knockbackChance) {
+			if(projectile.knockbackChance <= 0 || projectile.getCommandSenderWorld().getRandom().nextDouble() <= projectile.knockbackChance) {
 				if(target instanceof LivingEntity)
 					((LivingEntity)target).getAttribute(Attributes.KNOCKBACK_RESISTANCE).setBaseValue(targetKnockbackResistance);
 			}

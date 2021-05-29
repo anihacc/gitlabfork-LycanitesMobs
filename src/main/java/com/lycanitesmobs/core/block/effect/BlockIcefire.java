@@ -32,7 +32,7 @@ public class BlockIcefire extends BlockFrostfire {
 		double y = pos.getY();
 		double z = pos.getZ();
 		if(random.nextInt(24) == 0)
-			world.playSound((double)((float)x + 0.5F), (double)((float)y + 0.5F), (double)((float)z + 0.5F), ObjectManager.getSound("icefire"), SoundCategory.BLOCKS, 0.5F + random.nextFloat(), random.nextFloat() * 0.7F + 0.3F, false);
+			world.playLocalSound((double)((float)x + 0.5F), (double)((float)y + 0.5F), (double)((float)z + 0.5F), ObjectManager.getSound("icefire"), SoundCategory.BLOCKS, 0.5F + random.nextFloat(), random.nextFloat() * 0.7F + 0.3F, false);
 
 		if (random.nextInt(100) == 0) {
 			x = pos.getX() + random.nextFloat();

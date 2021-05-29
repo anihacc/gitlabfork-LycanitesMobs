@@ -31,7 +31,7 @@ public class EffectBase extends Effect {
 	//                    Effects
 	// ==================================================
 	@Override
-	public boolean isInstant() {
+	public boolean isInstantenous() {
         return false;
     }
 	
@@ -47,7 +47,7 @@ public class EffectBase extends Effect {
 			return;
 		}
 
-		Minecraft.getInstance().getTextureManager().bindTexture(texture);
+		Minecraft.getInstance().getTextureManager().bind(texture);
 		gui.blit(mStack, x + 6, y + 7, 0, 0, 18, 18, 18, 18);
 		super.renderInventoryEffect(effect, gui, mStack, x, y, z);
 	}
@@ -60,7 +60,7 @@ public class EffectBase extends Effect {
 			return;
 		}
 
-		Minecraft.getInstance().getTextureManager().bindTexture(texture);
+		Minecraft.getInstance().getTextureManager().bind(texture);
 		gui.blit(mStack, x + 3, y + 3, 0, 0, 18, 18, 18, 18);
 	}
 }

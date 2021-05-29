@@ -69,7 +69,7 @@ public class MobEventListener {
 	@SubscribeEvent
 	public void onWorldUpdate(TickEvent.WorldTickEvent event) {
 		World world = event.world;
-		if(world.isRemote) {
+		if(world.isClientSide) {
 			return;
 		}
 		ExtendedWorld worldExt = ExtendedWorld.getForWorld(world);
@@ -111,7 +111,7 @@ public class MobEventListener {
 				return;
 			}
 			if (worldExt.getWorldEventStartTargetTime() <= 0 || worldExt.getWorldEventStartTargetTime() > world.getGameTime() + MobEventManager.getInstance().maxTicksUntilEvent) {
-				worldExt.setWorldEventStartTargetTime(world.getGameTime() + worldExt.getRandomEventDelay(world.rand));
+				worldExt.setWorldEventStartTargetTime(world.getGameTime() + worldExt.getRandomEventDelay(world.random));
 			}
 			if (world.getGameTime() == worldExt.getWorldEventStartTargetTime()) {
 				this.triggerRandomMobEvent(world, worldExt, 1);
@@ -149,7 +149,7 @@ public class MobEventListener {
 		// Fire Random Trigger Using Weights:
 		int randomWeight = 1;
 		if(totalWeights > 1) {
-			randomWeight = world.rand.nextInt(totalWeights - 1) + 1;
+			randomWeight = world.random.nextInt(totalWeights - 1) + 1;
 		}
 		int searchWeight = 0;
 		for(RandomMobEventTrigger mobEventTrigger : validTriggers) {

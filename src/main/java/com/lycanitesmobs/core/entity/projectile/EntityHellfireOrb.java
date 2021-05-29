@@ -40,11 +40,11 @@ public class EntityHellfireOrb extends BaseProjectileEntity {
         this.pierceBlocks = true;
         this.projectileLife = 5;
         this.animationFrameMax = 4;
-        this.noClip = true;
+        this.noPhysics = true;
     }
 
     @Override
-    public boolean isBurning() { return false; }
+    public boolean isOnFire() { return false; }
 
 
     // ==================================================
@@ -63,7 +63,7 @@ public class EntityHellfireOrb extends BaseProjectileEntity {
     @Override
     public boolean onEntityLivingDamage(LivingEntity entityLiving) {
     	if(!entityLiving.isInvulnerableTo(DamageSource.ON_FIRE))
-    		entityLiving.setFire(this.getEffectDuration(10) / 20);
+    		entityLiving.setSecondsOnFire(this.getEffectDuration(10) / 20);
     	return true;
     }
 

@@ -28,7 +28,7 @@ public class EntityBanshee extends TameableCreatureEntity implements IMob {
         this.setupMob();
 
 		// No Block Collision:
-		this.noClip = true;
+		this.noPhysics = true;
     }
 
     // ========== Init AI ==========
@@ -44,21 +44,21 @@ public class EntityBanshee extends TameableCreatureEntity implements IMob {
     // ==================================================
 	// ========== Living Update ==========
 	@Override
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
         
         // Random Strafing:
-        if(!this.getEntityWorld().isRemote && this.hasAttackTarget()) {
+        if(!this.getCommandSenderWorld().isClientSide && this.hasAttackTarget()) {
 	        if(this.strafeTime-- <= 0) {
-	        	this.strafeTime = 60 + this.getRNG().nextInt(40);
-				this.strafe(this.getRNG().nextBoolean() ? -1F : 1F, 0D);
+	        	this.strafeTime = 60 + this.getRandom().nextInt(40);
+				this.strafe(this.getRandom().nextBoolean() ? -1F : 1F, 0D);
 	        }
         }
         
         // Particles:
-        if(this.getEntityWorld().isRemote)
+        if(this.getCommandSenderWorld().isClientSide)
 	        for(int i = 0; i < 2; ++i) {
-	            this.getEntityWorld().addParticle(ParticleTypes.WITCH, this.getPositionVec().getX() + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, this.getPositionVec().getY() + this.rand.nextDouble() * (double)this.getSize(Pose.STANDING).height, this.getPositionVec().getZ() + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
+	            this.getCommandSenderWorld().addParticle(ParticleTypes.WITCH, this.position().x() + (this.random.nextDouble() - 0.5D) * (double)this.getDimensions(Pose.STANDING).width, this.position().y() + this.random.nextDouble() * (double)this.getDimensions(Pose.STANDING).height, this.position().z() + (this.random.nextDouble() - 0.5D) * (double)this.getDimensions(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
 	        }
     }
     
@@ -75,7 +75,7 @@ public class EntityBanshee extends TameableCreatureEntity implements IMob {
 	}
 
 	@Override
-	public boolean canEntityBeSeen(Entity target) {
+	public boolean canSee(Entity target) {
 		return true;
 	}
     

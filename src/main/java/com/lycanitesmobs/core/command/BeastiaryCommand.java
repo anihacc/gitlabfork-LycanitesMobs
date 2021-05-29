@@ -39,7 +39,7 @@ public class BeastiaryCommand {
 		}
 		beastiary.sendAllToClient();
 
-		context.getSource().sendFeedback(new TranslationTextComponent("lyc.command.beastiary.complete"), true);
+		context.getSource().sendSuccess(new TranslationTextComponent("lyc.command.beastiary.complete"), true);
 		return 0;
 	}
 
@@ -57,7 +57,7 @@ public class BeastiaryCommand {
 		beastiary.creatureKnowledgeList.clear();
 		beastiary.sendAllToClient();
 
-		context.getSource().sendFeedback(new TranslationTextComponent("lyc.command.beastiary.clear"), true);
+		context.getSource().sendSuccess(new TranslationTextComponent("lyc.command.beastiary.clear"), true);
 		return 0;
 	}
 
@@ -76,7 +76,7 @@ public class BeastiaryCommand {
 		Beastiary beastiary = extendedPlayer.getBeastiary();
 		CreatureInfo creatureInfo = CreatureManager.getInstance().getCreature(creatureName);
 		if(creatureInfo == null) {
-			context.getSource().sendFeedback(new TranslationTextComponent("lyc.command.beastiary.add.unknown"), true);
+			context.getSource().sendSuccess(new TranslationTextComponent("lyc.command.beastiary.add.unknown"), true);
 			return 0;
 		}
 

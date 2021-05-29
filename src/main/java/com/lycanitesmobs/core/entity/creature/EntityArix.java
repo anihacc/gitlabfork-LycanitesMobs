@@ -31,7 +31,7 @@ public class EntityArix extends TameableCreatureEntity implements IMob {
         this.spawnsInWater = true;
         this.hasAttackSound = false;
         this.flySoundSpeed = 20;
-        this.stepHeight = 1.0F;
+        this.maxUpStep = 1.0F;
         this.setupMob();
     }
 
@@ -48,14 +48,14 @@ public class EntityArix extends TameableCreatureEntity implements IMob {
     // ==================================================
 	// ========== Living Update ==========
 	@Override
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
 
         // Land/Fly:
-        if(!this.getEntityWorld().isRemote) {
+        if(!this.getCommandSenderWorld().isClientSide) {
             if(this.isLanded) {
                 this.wantsToLand = false;
-                if(!this.isSitting() && this.updateTick % (5 * 20) == 0 && this.getRNG().nextBoolean()) {
+                if(!this.isSitting() && this.updateTick % (5 * 20) == 0 && this.getRandom().nextBoolean()) {
                     this.leap(1.0D, 1.0D);
                     this.isLanded = false;
                 }
@@ -67,7 +67,7 @@ public class EntityArix extends TameableCreatureEntity implements IMob {
                     }
                 }
                 else {
-                    if (this.updateTick % (5 * 20) == 0 && this.getRNG().nextBoolean()) {
+                    if (this.updateTick % (5 * 20) == 0 && this.getRandom().nextBoolean()) {
                         this.wantsToLand = true;
                     }
                 }
@@ -75,9 +75,9 @@ public class EntityArix extends TameableCreatureEntity implements IMob {
         }
         
         // Particles:
-        if(this.getEntityWorld().isRemote && !this.hasPerchTarget())
+        if(this.getCommandSenderWorld().isClientSide && !this.hasPerchTarget())
 	        for(int i = 0; i < 2; ++i) {
-	            this.getEntityWorld().addParticle(ParticleTypes.ITEM_SNOWBALL, this.getPositionVec().getX() + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, this.getPositionVec().getY() + this.rand.nextDouble() * (double)this.getSize(Pose.STANDING).height, this.getPositionVec().getZ() + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
+	            this.getCommandSenderWorld().addParticle(ParticleTypes.ITEM_SNOWBALL, this.position().x() + (this.random.nextDouble() - 0.5D) * (double)this.getDimensions(Pose.STANDING).width, this.position().y() + this.random.nextDouble() * (double)this.getDimensions(Pose.STANDING).height, this.position().z() + (this.random.nextDouble() - 0.5D) * (double)this.getDimensions(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
 	        }
     }
 
@@ -89,9 +89,9 @@ public class EntityArix extends TameableCreatureEntity implements IMob {
     public BlockPos getWanderPosition(BlockPos wanderPosition) {
         if(this.wantsToLand || !this.isLanded) {
             BlockPos groundPos;
-            for(groundPos = wanderPosition.down(); groundPos.getY() > 0 && this.getEntityWorld().getBlockState(groundPos).getBlock() == Blocks.AIR; groundPos = groundPos.down()) {}
-            if(this.getEntityWorld().getBlockState(groundPos).getMaterial().isSolid()) {
-                return groundPos.up();
+            for(groundPos = wanderPosition.below(); groundPos.getY() > 0 && this.getCommandSenderWorld().getBlockState(groundPos).getBlock() == Blocks.AIR; groundPos = groundPos.below()) {}
+            if(this.getCommandSenderWorld().getBlockState(groundPos).getMaterial().isSolid()) {
+                return groundPos.above();
             }
         }
         return super.getWanderPosition(wanderPosition);
@@ -111,8 +111,8 @@ public class EntityArix extends TameableCreatureEntity implements IMob {
     // ==================================================
     // ========== Set Attack Target ==========
     @Override
-    public boolean canAttack(EntityType targetType) {
-        return super.canAttack(targetType);
+    public boolean canAttackType(EntityType targetType) {
+        return super.canAttackType(targetType);
     }
     
     // ========== Ranged Attack ==========

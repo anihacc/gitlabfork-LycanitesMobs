@@ -159,7 +159,7 @@ public class EffectAuraGoal extends BaseGoal {
 	}
 
 	@Override
-    public void startExecuting() {
+    public void start() {
 		this.cooldownTime = this.cooldownDuration;
 		this.abilityTime = 0;
 	}
@@ -207,7 +207,7 @@ public class EffectAuraGoal extends BaseGoal {
 					}
 				}
 				if ((this.targetTypes & BaseCreatureEntity.TARGET_TYPES.ENEMY.id) > 0) {
-					if (this.host.canAttack(entity.getType()) || this.host.canAttack((LivingEntity) entity)) {
+					if (this.host.canAttackType(entity.getType()) || this.host.canAttack((LivingEntity) entity)) {
 						validTarget = true;
 					}
 				}
@@ -222,7 +222,7 @@ public class EffectAuraGoal extends BaseGoal {
 				}
 				return false;
 			}
-			if(this.checkSight && !this.host.getEntitySenses().canSee(entity)) {
+			if(this.checkSight && !this.host.getSensing().canSee(entity)) {
 				return false;
 			}
 			return true;
@@ -232,18 +232,18 @@ public class EffectAuraGoal extends BaseGoal {
 
 			// Apply Effect:
 			if(effectInstance != null) {
-				if (!target.isPotionApplicable(effectInstance)) {
+				if (!target.canBeAffected(effectInstance)) {
 					continue;
 				}
-				target.addPotionEffect(effectInstance);
+				target.addEffect(effectInstance);
 			}
 
 			// Apply Damage:
 			if(this.damageAmount != 0) {
 				DamageSource damageSource = new EntityDamageSource("mob", this.host);
-				damageSource.setDamageIsAbsolute();
-				damageSource.setDamageBypassesArmor();
-				target.attackEntityFrom(damageSource, this.damageAmount);
+				damageSource.bypassMagic();
+				damageSource.bypassArmor();
+				target.hurt(damageSource, this.damageAmount);
 				if(this.host.minions.contains(target)) {
 					this.host.onTryToDamageMinion(target, this.damageAmount);
 				}

@@ -27,6 +27,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import net.minecraft.item.Item.Properties;
+
 public class BaseItem extends Item {
 	public static int DESCRIPTION_WIDTH = 200;
 	
@@ -46,7 +48,7 @@ public class BaseItem extends Item {
 
     @Override
 	@Nonnull
-	public String getTranslationKey() {
+	public String getDescriptionId() {
     	return "item." + this.modInfo.modid + "." + this.itemName;
 	}
     
@@ -55,21 +57,21 @@ public class BaseItem extends Item {
 	//                      Info
 	// ==================================================
 	@Override
-	public ITextComponent getDisplayName(ItemStack stack) {
-		return new TranslationTextComponent(this.getTranslationKey(stack));
+	public ITextComponent getName(ItemStack stack) {
+		return new TranslationTextComponent(this.getDescriptionId(stack));
 	}
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flag) {
 		ITextComponent description = this.getDescription(stack, worldIn, tooltip, flag);
     	if(!"".equalsIgnoreCase(description.getString())) {
 			tooltip.add(description);
     	}
-    	super.addInformation(stack, worldIn, tooltip, flag);
+    	super.appendHoverText(stack, worldIn, tooltip, flag);
     }
 
     public ITextComponent getDescription(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flag) {
-    	return new TranslationTextComponent(this.getTranslationKey() + ".description");
+    	return new TranslationTextComponent(this.getDescriptionId() + ".description");
     }
 	
     
@@ -87,14 +89,14 @@ public class BaseItem extends Item {
 	// ==================================================
     // ========== Use ==========
     @Override
-    public ActionResultType onItemUse(ItemUseContext context) {
-    	return super.onItemUse(context);
+    public ActionResultType useOn(ItemUseContext context) {
+    	return super.useOn(context);
     }
     
     // ========== Start ==========
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
-    	return super.onItemRightClick(world, player, hand);
+    public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
+    	return super.use(world, player, hand);
     }
 
 	public boolean onLeftClickEntity(ItemStack stack, PlayerEntity player, Entity entity) {
@@ -102,8 +104,8 @@ public class BaseItem extends Item {
 	}
 
 	@Override
-	public ActionResultType itemInteractionForEntity(ItemStack stack, PlayerEntity player, LivingEntity entity, Hand hand) {
-    	return super.itemInteractionForEntity(stack, player, entity, hand);
+	public ActionResultType interactLivingEntity(ItemStack stack, PlayerEntity player, LivingEntity entity, Hand hand) {
+    	return super.interactLivingEntity(stack, player, entity, hand);
 	}
 
     // ========== Using ==========
@@ -114,14 +116,14 @@ public class BaseItem extends Item {
     
     // ========== Stop ==========
     @Override
-    public void onPlayerStoppedUsing(ItemStack stack, World worldIn, LivingEntity entityLiving, int timeLeft) {
-    	super.onPlayerStoppedUsing(stack, worldIn, entityLiving, timeLeft);
+    public void releaseUsing(ItemStack stack, World worldIn, LivingEntity entityLiving, int timeLeft) {
+    	super.releaseUsing(stack, worldIn, entityLiving, timeLeft);
     }
 
     // ========== Animation ==========
     @Override
-    public UseAction getUseAction(ItemStack itemStack) {
-        return super.getUseAction(itemStack);
+    public UseAction getUseAnimation(ItemStack itemStack) {
+        return super.getUseAnimation(itemStack);
     }
 
 	
@@ -129,7 +131,7 @@ public class BaseItem extends Item {
 	//                     Enchanting
 	// ==================================================
     @Override
-    public int getItemEnchantability() {
+    public int getEnchantmentValue() {
         return 0;
     }
 
@@ -138,8 +140,8 @@ public class BaseItem extends Item {
 	//                     Repairs
 	// ==================================================
     @Override
-    public boolean getIsRepairable(ItemStack itemStack, ItemStack repairStack) {
-        return super.getIsRepairable(itemStack, repairStack);
+    public boolean isValidRepairItem(ItemStack itemStack, ItemStack repairStack) {
+        return super.isValidRepairItem(itemStack, repairStack);
     }
 
 

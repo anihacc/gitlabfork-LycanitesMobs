@@ -27,7 +27,7 @@ public class EntityAegis extends TameableCreatureEntity implements IFusable {
         this.hasAttackSound = true;
         
         this.setupMob();
-        this.stepHeight = 1.0F;
+        this.maxUpStep = 1.0F;
 	}
 
     // ========== Init AI ==========
@@ -46,10 +46,10 @@ public class EntityAegis extends TameableCreatureEntity implements IFusable {
     // ==================================================
 	// ========== Living Update ==========
 	@Override
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
 
-        if(!this.getEntityWorld().isRemote) {
+        if(!this.getCommandSenderWorld().isClientSide) {
 			if(!this.hasAttackTarget() && this.currentBlockingTime < 2) {
 				this.setBlocking();
 			}
@@ -115,10 +115,10 @@ public class EntityAegis extends TameableCreatureEntity implements IFusable {
 	/** Called when this mob has received damage. Here a random blocking chance is applied. **/
 	@Override
 	public void onDamage(DamageSource damageSrc, float damage) {
-		if(this.getRNG().nextDouble() > 0.75D && this.getHealth() / this.getMaxHealth() > 0.25F)
+		if(this.getRandom().nextDouble() > 0.75D && this.getHealth() / this.getMaxHealth() > 0.25F)
 			this.setBlocking();
-		if(damageSrc.getTrueSource() != null) {
-			if(damageSrc.getTrueSource() instanceof MonsterEntity)
+		if(damageSrc.getEntity() != null) {
+			if(damageSrc.getEntity() instanceof MonsterEntity)
 				damage *= 0.5F;
 		}
 		super.onDamage(damageSrc, damage);
@@ -126,7 +126,7 @@ public class EntityAegis extends TameableCreatureEntity implements IFusable {
 
 	// ========== Blocking ==========
 	public void setBlocking() {
-		this.currentBlockingTime = this.blockingTime + this.getRNG().nextInt(this.blockingTime / 2);
+		this.currentBlockingTime = this.blockingTime + this.getRandom().nextInt(this.blockingTime / 2);
 	}
 
 

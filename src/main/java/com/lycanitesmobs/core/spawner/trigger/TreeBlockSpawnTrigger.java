@@ -37,10 +37,10 @@ public class TreeBlockSpawnTrigger extends BlockSpawnTrigger {
 			int z = pos.getZ();
 			for(int searchX = x - 1; searchX <= x + 1; searchX++) {
 				for(int searchZ = z - 1; searchZ <= z + 1; searchZ++) {
-					for(int searchY = y; searchY <= Math.min(world.getHeight(), y + 32); searchY++) {
+					for(int searchY = y; searchY <= Math.min(world.getMaxBuildHeight(), y + 32); searchY++) {
 						if(this.isLeaves(world.getBlockState(new BlockPos(searchX, searchY, searchZ))))
 							return true;
-						if(!world.isAirBlock(new BlockPos(x, searchY, z)))
+						if(!world.isEmptyBlock(new BlockPos(x, searchY, z)))
 							break;
 					}
 				}
@@ -63,7 +63,7 @@ public class TreeBlockSpawnTrigger extends BlockSpawnTrigger {
 					for(int searchY = y; searchY >= Math.max(0, y - 32); searchY--) {
 						if(this.isLog(world.getBlockState(new BlockPos(searchX, searchY, searchZ))))
 							return true;
-						if(!world.isAirBlock(new BlockPos(x, searchY, z)))
+						if(!world.isEmptyBlock(new BlockPos(x, searchY, z)))
 							break;
 					}
 				}
@@ -78,7 +78,7 @@ public class TreeBlockSpawnTrigger extends BlockSpawnTrigger {
 
 	public boolean isLog(BlockState blockState) {
 		Block block = blockState.getBlock();
-		if(block.isIn(BlockTags.LOGS)) {
+		if(block.is(BlockTags.LOGS)) {
 			return true;
 		}
 		return false;
@@ -86,7 +86,7 @@ public class TreeBlockSpawnTrigger extends BlockSpawnTrigger {
 
 	public boolean isLeaves(BlockState blockState) {
 		Block block = blockState.getBlock();
-		if(block instanceof LeavesBlock || block.isIn(BlockTags.LEAVES)) {
+		if(block instanceof LeavesBlock || block.is(BlockTags.LEAVES)) {
 			return true;
 		}
 		return false;

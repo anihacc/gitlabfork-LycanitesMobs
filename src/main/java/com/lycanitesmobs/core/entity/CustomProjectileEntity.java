@@ -53,11 +53,11 @@ public class CustomProjectileEntity extends BaseProjectileEntity {
 	public List<BaseProjectileEntity> spawnedProjectiles = new ArrayList<>();
 
 	// Data Parameters:
-	protected static final DataParameter<String> PROJECTILE_NAME = EntityDataManager.createKey(CustomProjectileEntity.class, DataSerializers.STRING);
-	protected static final DataParameter<Integer> THROWING_ENTITY_ID = EntityDataManager.createKey(CustomProjectileEntity.class, DataSerializers.VARINT);
-	protected static final DataParameter<Integer> PARENT_PROJECTILE_ID = EntityDataManager.createKey(CustomProjectileEntity.class, DataSerializers.VARINT);
-	protected static final DataParameter<Integer> TARGET_ID = EntityDataManager.createKey(CustomProjectileEntity.class, DataSerializers.VARINT);
-	protected static final DataParameter<Float> LASER_ANGLE = EntityDataManager.createKey(CustomProjectileEntity.class, DataSerializers.FLOAT);
+	protected static final DataParameter<String> PROJECTILE_NAME = EntityDataManager.defineId(CustomProjectileEntity.class, DataSerializers.STRING);
+	protected static final DataParameter<Integer> THROWING_ENTITY_ID = EntityDataManager.defineId(CustomProjectileEntity.class, DataSerializers.INT);
+	protected static final DataParameter<Integer> PARENT_PROJECTILE_ID = EntityDataManager.defineId(CustomProjectileEntity.class, DataSerializers.INT);
+	protected static final DataParameter<Integer> TARGET_ID = EntityDataManager.defineId(CustomProjectileEntity.class, DataSerializers.INT);
+	protected static final DataParameter<Float> LASER_ANGLE = EntityDataManager.defineId(CustomProjectileEntity.class, DataSerializers.FLOAT);
 
 
 	// ==================================================
@@ -77,7 +77,7 @@ public class CustomProjectileEntity extends BaseProjectileEntity {
 	public CustomProjectileEntity(EntityType<? extends BaseProjectileEntity> entityType, World world, LivingEntity entityLiving, ProjectileInfo projectileInfo) {
 		super(entityType, world, entityLiving);
 		if(projectileInfo != null)
-			this.func_234612_a_(entityLiving, entityLiving.rotationPitch, entityLiving.rotationYaw, 0.0F, (float)projectileInfo.velocity, 1.0F); // Shoot from Entity
+			this.shootFromRotation(entityLiving, entityLiving.xRot, entityLiving.yRot, 0.0F, (float)projectileInfo.velocity, 1.0F); // Shoot from Entity
 		this.modInfo = LycanitesMobs.modInfo;
 		this.setProjectileInfo(projectileInfo);
 	}
@@ -97,13 +97,13 @@ public class CustomProjectileEntity extends BaseProjectileEntity {
 	}
 
 	@Override
-	public void registerData() {
-		super.registerData();
-		this.dataManager.register(PROJECTILE_NAME, "");
-		this.dataManager.register(THROWING_ENTITY_ID, this.throwerId);
-		this.dataManager.register(PARENT_PROJECTILE_ID, this.parentId);
-		this.dataManager.register(TARGET_ID, this.targetId);
-		this.dataManager.register(LASER_ANGLE, this.laserAngle);
+	public void defineSynchedData() {
+		super.defineSynchedData();
+		this.entityData.define(PROJECTILE_NAME, "");
+		this.entityData.define(THROWING_ENTITY_ID, this.throwerId);
+		this.entityData.define(PARENT_PROJECTILE_ID, this.parentId);
+		this.entityData.define(TARGET_ID, this.targetId);
+		this.entityData.define(LASER_ANGLE, this.laserAngle);
 	}
 
 
@@ -127,8 +127,8 @@ public class CustomProjectileEntity extends BaseProjectileEntity {
 		if(this.projectileInfo == null) {
 			return;
 		}
-		if(!this.getEntityWorld().isRemote) {
-			this.dataManager.set(PROJECTILE_NAME, this.projectileInfo.getName());
+		if(!this.getCommandSenderWorld().isClientSide) {
+			this.entityData.set(PROJECTILE_NAME, this.projectileInfo.getName());
 		}
 		this.modInfo = this.projectileInfo.modInfo;
 		this.entityName = this.projectileInfo.getName();
@@ -143,7 +143,7 @@ public class CustomProjectileEntity extends BaseProjectileEntity {
 
 		// Visual:
 		this.rollSpeed = this.projectileInfo.rollSpeed;
-		if(this.rollSpeed > 0 && this.rand.nextBoolean()) {
+		if(this.rollSpeed > 0 && this.random.nextBoolean()) {
 			this.rollSpeed = -this.rollSpeed;
 		}
 
@@ -161,7 +161,7 @@ public class CustomProjectileEntity extends BaseProjectileEntity {
 	// ==================================================
 	@Override
 	public void tick() {
-		if(this.getEntityWorld().isRemote) {
+		if(this.getCommandSenderWorld().isClientSide) {
 			if (this.projectileInfo == null) {
 				this.loadProjectileInfo(this.getStringFromDataManager(PROJECTILE_NAME));
 			}
@@ -181,7 +181,7 @@ public class CustomProjectileEntity extends BaseProjectileEntity {
 		boolean canDamage = super.canDamage(targetEntity);
 		if(this.projectileInfo != null) {
 			for(ProjectileBehaviour behaviour : this.projectileInfo.behaviours) {
-				if(!behaviour.canDamage(this, this.getEntityWorld(), targetEntity, canDamage)) {
+				if(!behaviour.canDamage(this, this.getCommandSenderWorld(), targetEntity, canDamage)) {
 					canDamage = false;
 				}
 			}
@@ -193,17 +193,17 @@ public class CustomProjectileEntity extends BaseProjectileEntity {
 	 * Syncs the Throwing Entity from server to client.
 	 */
 	public void syncThrower() {
-		if(!this.getEntityWorld().isRemote) {
-			this.throwerId = this.func_234616_v_() != null ? this.func_234616_v_().getEntityId() : -1;
-			this.dataManager.set(THROWING_ENTITY_ID, this.throwerId);
+		if(!this.getCommandSenderWorld().isClientSide) {
+			this.throwerId = this.getOwner() != null ? this.getOwner().getId() : -1;
+			this.entityData.set(THROWING_ENTITY_ID, this.throwerId);
 		}
 		else {
-			this.throwerId = this.dataManager.get(THROWING_ENTITY_ID);
+			this.throwerId = this.entityData.get(THROWING_ENTITY_ID);
 			if(this.throwerId == -1) {
 				this.owner = null;
 			}
-			else if(this.func_234616_v_() == null || this.func_234616_v_().getEntityId() != this.throwerId) {
-				Entity possibleThrower = this.getEntityWorld().getEntityByID(this.throwerId);
+			else if(this.getOwner() == null || this.getOwner().getId() != this.throwerId) {
+				Entity possibleThrower = this.getCommandSenderWorld().getEntity(this.throwerId);
 				if(possibleThrower instanceof LivingEntity) {
 					this.owner = (LivingEntity)possibleThrower;
 				}
@@ -236,7 +236,7 @@ public class CustomProjectileEntity extends BaseProjectileEntity {
 	@Override
 	public void onDamage(LivingEntity target, float damage, boolean attackSuccess) {
 		super.onDamage(target, damage, attackSuccess);
-		if(!this.getEntityWorld().isRemote && attackSuccess && this.projectileInfo != null) {
+		if(!this.getCommandSenderWorld().isClientSide && attackSuccess && this.projectileInfo != null) {
 			for(ElementInfo element : this.projectileInfo.elements) {
 				element.debuffEntity(target, this.projectileInfo.effectDuration * 20, this.projectileInfo.effectAmplifier);
 			}
@@ -244,7 +244,7 @@ public class CustomProjectileEntity extends BaseProjectileEntity {
 
 		if(attackSuccess && this.projectileInfo != null) {
 			for(ProjectileBehaviour behaviour : this.projectileInfo.behaviours) {
-				behaviour.onProjectileDamage(this, this.getEntityWorld(), target, damage);
+				behaviour.onProjectileDamage(this, this.getCommandSenderWorld(), target, damage);
 			}
 		}
 	}
@@ -257,7 +257,7 @@ public class CustomProjectileEntity extends BaseProjectileEntity {
 		}
 
 		for(ProjectileBehaviour behaviour : this.projectileInfo.behaviours) {
-			behaviour.onProjectileImpact(this, this.getEntityWorld(), impactPos);
+			behaviour.onProjectileImpact(this, this.getCommandSenderWorld(), impactPos);
 		}
 	}
 
@@ -266,9 +266,9 @@ public class CustomProjectileEntity extends BaseProjectileEntity {
 	 */
 	public void setParent(BaseProjectileEntity parent) {
 		this.parent = parent;
-		if(!this.getEntityWorld().isRemote) {
-			this.parentId = this.parent != null ? this.parent.getEntityId() : -1;
-			this.dataManager.set(PARENT_PROJECTILE_ID, this.parentId);
+		if(!this.getCommandSenderWorld().isClientSide) {
+			this.parentId = this.parent != null ? this.parent.getId() : -1;
+			this.entityData.set(PARENT_PROJECTILE_ID, this.parentId);
 		}
 	}
 
@@ -277,13 +277,13 @@ public class CustomProjectileEntity extends BaseProjectileEntity {
 	 * @return The projectile that fired this projectile or null.
 	 */
 	public BaseProjectileEntity getParent() {
-		if(this.getEntityWorld().isRemote) {
-			this.parentId = this.dataManager.get(PARENT_PROJECTILE_ID);
+		if(this.getCommandSenderWorld().isClientSide) {
+			this.parentId = this.entityData.get(PARENT_PROJECTILE_ID);
 			if(this.parentId == -1) {
 				this.parent = null;
 			}
-			else if(this.parent == null || this.parent.getEntityId() != this.parentId) {
-				Entity possibleParent = this.getEntityWorld().getEntityByID(this.parentId);
+			else if(this.parent == null || this.parent.getId() != this.parentId) {
+				Entity possibleParent = this.getCommandSenderWorld().getEntity(this.parentId);
 				if(possibleParent instanceof BaseProjectileEntity) {
 					this.parent = (BaseProjectileEntity)possibleParent;
 				}
@@ -297,9 +297,9 @@ public class CustomProjectileEntity extends BaseProjectileEntity {
 	 */
 	public void setTarget(Entity target) {
 		this.target = target;
-		if(!this.getEntityWorld().isRemote) {
-			this.targetId = this.target != null ? this.target.getEntityId() : -1;
-			this.dataManager.set(TARGET_ID, this.targetId);
+		if(!this.getCommandSenderWorld().isClientSide) {
+			this.targetId = this.target != null ? this.target.getId() : -1;
+			this.entityData.set(TARGET_ID, this.targetId);
 		}
 	}
 
@@ -308,13 +308,13 @@ public class CustomProjectileEntity extends BaseProjectileEntity {
 	 * @return The projectile target entity if any.
 	 */
 	public Entity getTarget() {
-		if(this.getEntityWorld().isRemote) {
-			this.targetId = this.dataManager.get(TARGET_ID);
+		if(this.getCommandSenderWorld().isClientSide) {
+			this.targetId = this.entityData.get(TARGET_ID);
 			if(this.targetId == -1) {
 				this.target = null;
 			}
-			else if(this.target == null || this.target.getEntityId() != this.targetId) {
-				this.target = this.getEntityWorld().getEntityByID(this.targetId);
+			else if(this.target == null || this.target.getId() != this.targetId) {
+				this.target = this.getCommandSenderWorld().getEntity(this.targetId);
 			}
 		}
 		return this.target;
@@ -325,8 +325,8 @@ public class CustomProjectileEntity extends BaseProjectileEntity {
 	 */
 	public void setLaserEnd(Vector3d laserEnd) {
 		this.laserEnd = laserEnd;
-		if(!this.getEntityWorld().isRemote) {
-			this.dataManager.set(LASER_ANGLE, this.laserAngle);
+		if(!this.getCommandSenderWorld().isClientSide) {
+			this.entityData.set(LASER_ANGLE, this.laserAngle);
 		}
 	}
 
@@ -335,8 +335,8 @@ public class CustomProjectileEntity extends BaseProjectileEntity {
 	 * @return The laser end for laser projectile behaviours.
 	 */
 	public Vector3d getLaserEnd() {
-		if(this.getEntityWorld().isRemote) {
-			this.laserAngle = this.dataManager.get(LASER_ANGLE);
+		if(this.getCommandSenderWorld().isClientSide) {
+			this.laserAngle = this.entityData.get(LASER_ANGLE);
 		}
 		return this.laserEnd;
 	}
@@ -346,8 +346,8 @@ public class CustomProjectileEntity extends BaseProjectileEntity {
 	//                       NBT
 	// ==================================================
 	@Override
-	public void writeAdditional(CompoundNBT compound) {
-		super.writeAdditional(compound);
+	public void addAdditionalSaveData(CompoundNBT compound) {
+		super.addAdditionalSaveData(compound);
 
 		if(this.projectileInfo != null) {
 			compound.putString("ProjectileName", this.projectileInfo.getName());
@@ -355,8 +355,8 @@ public class CustomProjectileEntity extends BaseProjectileEntity {
 	}
 
 	@Override
-	public void readAdditional(CompoundNBT compound) {
-		super.readAdditional(compound);
+	public void readAdditionalSaveData(CompoundNBT compound) {
+		super.readAdditionalSaveData(compound);
 
 		if(compound.contains("ProjectileName")) {
 			this.loadProjectileInfo(compound.getString("ProjectileName"));

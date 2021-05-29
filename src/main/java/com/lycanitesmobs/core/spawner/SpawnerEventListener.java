@@ -161,7 +161,7 @@ public class SpawnerEventListener {
 	@SubscribeEvent
 	public void onWorldUpdate(TickEvent.WorldTickEvent event) {
 		World world = event.world;
-		if(world.isRemote)
+		if(world.isClientSide)
 			return;
 		ExtendedWorld worldExt = ExtendedWorld.getForWorld(world);
 		if(worldExt == null)
@@ -175,19 +175,19 @@ public class SpawnerEventListener {
 
 		// World Tick:
 		List<BlockPos> triggerPositions = new ArrayList<>();
-		for(PlayerEntity player : world.getPlayers()) {
+		for(PlayerEntity player : world.players()) {
 			if(triggerPositions.isEmpty()) {
-				triggerPositions.add(player.getPosition());
+				triggerPositions.add(player.blockPosition());
 				continue;
 			}
 			boolean nearOtherPlayers = false;
 			for(BlockPos triggerPosition : triggerPositions) {
-				if(player.getDistanceSq(Vector3d.copy(triggerPosition)) <= 100 * 100) {
+				if(player.distanceToSqr(Vector3d.atLowerCornerOf(triggerPosition)) <= 100 * 100) {
 					nearOtherPlayers = true;
 				}
 			}
 			if(!nearOtherPlayers) {
-				triggerPositions.add(player.getPosition());
+				triggerPositions.add(player.blockPosition());
 			}
 		}
 		for(BlockPos triggerPosition : triggerPositions) {
@@ -215,7 +215,7 @@ public class SpawnerEventListener {
 	@SubscribeEvent
 	public void onEntityUpdate(LivingUpdateEvent event) {
 		LivingEntity entity = event.getEntityLiving();
-		if(entity == null || !(entity instanceof PlayerEntity) || entity.getEntityWorld() == null || entity.getEntityWorld().isRemote || event.isCanceled())
+		if(entity == null || !(entity instanceof PlayerEntity) || entity.getCommandSenderWorld() == null || entity.getCommandSenderWorld().isClientSide || event.isCanceled())
 			return;
 		
 		// ========== Spawn Near Players ==========
@@ -244,12 +244,12 @@ public class SpawnerEventListener {
 	public void onEntityDeath(LivingDeathEvent event) {
 		// Get Killed:
 		LivingEntity killedEntity = event.getEntityLiving();
-		if(killedEntity == null || killedEntity.getEntityWorld().isRemote || event.isCanceled()) {
+		if(killedEntity == null || killedEntity.getCommandSenderWorld().isClientSide || event.isCanceled()) {
 			return;
 		}
 		
 		// Get Killer:
-		Entity killerEntity = event.getSource().getTrueSource();
+		Entity killerEntity = event.getSource().getEntity();
 		if(!(killerEntity instanceof PlayerEntity)) {
 			return;
 		}
@@ -269,7 +269,7 @@ public class SpawnerEventListener {
 	public void onEntitySpawn(LivingSpawnEvent event) {
 		// Get Spawned:
 		LivingEntity spawnedEntity = event.getEntityLiving();
-		if(spawnedEntity == null || spawnedEntity.getEntityWorld().isRemote || event.isCanceled()) {
+		if(spawnedEntity == null || spawnedEntity.getCommandSenderWorld().isClientSide || event.isCanceled()) {
 			return;
 		}
 
@@ -300,7 +300,7 @@ public class SpawnerEventListener {
 
 	/** Called on World Tick, checks for any fresh chunks to spawn in. **/
 	public void checkFreshChunks(World world) {
-		String dimensionId = world.getDimensionKey().getLocation().toString();
+		String dimensionId = world.dimension().location().toString();
 		if (!this.freshChunks.containsKey(dimensionId)) {
 			this.freshChunks.put(dimensionId, new ArrayList<>());
 			return;
@@ -309,7 +309,7 @@ public class SpawnerEventListener {
 		List<ChunkPos> freshChunks = new ArrayList<>(this.freshChunks.get(dimensionId));
 		for(ChunkPos chunkPos : freshChunks) {
 			// Check If Loaded:
-			if(!world.getChunkProvider().isChunkLoaded(chunkPos)) {
+			if(!world.getChunkSource().isEntityTickingChunk(chunkPos)) {
 				continue;
 			}
 			this.freshChunks.get(dimensionId).remove(chunkPos);
@@ -338,11 +338,11 @@ public class SpawnerEventListener {
 	@SubscribeEvent
 	public void onHarvestDrops(BlockEvent.BlockToolInteractEvent event) {
 		PlayerEntity player = event.getPlayer();
-		if(event.getState() == null || !(event.getWorld() instanceof World) || event.getWorld().isRemote() || event.isCanceled()) {
+		if(event.getState() == null || !(event.getWorld() instanceof World) || event.getWorld().isClientSide() || event.isCanceled()) {
 			return;
 		}
 		World world = (World)event.getWorld();
-		if(player != null && (!testOnCreative && player.abilities.isCreativeMode)) { // No Spawning for Creative Players
+		if(player != null && (!testOnCreative && player.abilities.instabuild)) { // No Spawning for Creative Players
 			return;
 		}
 		
@@ -352,8 +352,8 @@ public class SpawnerEventListener {
 		int bonusLevel = 0;
 		int silklevel = 0;
 		if(player != null) {
-			bonusLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, player.getHeldItemMainhand());
-			silklevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, player.getHeldItemMainhand());
+			bonusLevel = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, player.getMainHandItem());
+			silklevel = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.SILK_TOUCH, player.getMainHandItem());
 		}
 
         for(BlockSpawnTrigger spawnTrigger : this.blockSpawnTriggers) {
@@ -368,7 +368,7 @@ public class SpawnerEventListener {
 	/** This uses the block break events to update Block Spawn Triggers. **/
     @SubscribeEvent
     public void onBlockBreak(BlockEvent.BreakEvent event) {
-		if(event.getState() == null || !(event.getWorld() instanceof World) || event.getWorld().isRemote() || event.isCanceled()) {
+		if(event.getState() == null || !(event.getWorld() instanceof World) || event.getWorld().isClientSide() || event.isCanceled()) {
 			return;
 		}
 		World world = (World)event.getWorld();
@@ -376,7 +376,7 @@ public class SpawnerEventListener {
     }
 
 	public void onBlockBreak(World world, BlockPos blockPos, BlockState blockState, PlayerEntity player, int chain) {
-		if(player != null && (!testOnCreative && player.abilities.isCreativeMode)) {
+		if(player != null && (!testOnCreative && player.abilities.instabuild)) {
 			return;
 		}
 
@@ -393,7 +393,7 @@ public class SpawnerEventListener {
 	/** This uses the block place events to update Block Spawn Triggers. **/
 	@SubscribeEvent
 	public void onBlockPlace(BlockEvent.EntityPlaceEvent.EntityPlaceEvent event) {
-		if(event.getState() == null || !(event.getWorld() instanceof World) || event.getWorld().isRemote() || event.isCanceled()) {
+		if(event.getState() == null || !(event.getWorld() instanceof World) || event.getWorld().isClientSide() || event.isCanceled()) {
 			return;
 		}
 		World world = (World)event.getWorld();
@@ -403,7 +403,7 @@ public class SpawnerEventListener {
 	}
 
 	public void onBlockPlace(World world, BlockPos blockPos, BlockState blockState, PlayerEntity player, int chain) {
-		if(player != null && (!testOnCreative && player.abilities.isCreativeMode)) {
+		if(player != null && (!testOnCreative && player.abilities.instabuild)) {
 			return;
 		}
 
@@ -421,20 +421,20 @@ public class SpawnerEventListener {
 	@SubscribeEvent
 	public void onSleep(PlayerSleepInBedEvent event) {
 		PlayerEntity player = event.getPlayer();
-		if(player == null || player.getEntityWorld().isRemote || event.isCanceled())
+		if(player == null || player.getCommandSenderWorld().isClientSide || event.isCanceled())
 			return;
 		
 		// Get Coords:
-		World world = player.getEntityWorld();
-        BlockPos spawnPos = player.getPosition().add(0, 0, 1);
+		World world = player.getCommandSenderWorld();
+        BlockPos spawnPos = player.blockPosition().offset(0, 0, 1);
 		
-		if(world.isRemote || world.isDaytime())
+		if(world.isClientSide || world.isDay())
 			return;
 		
 		// Run Spawners:
 		boolean interrupted = false;
 		for(SleepSpawnTrigger spawnTrigger : this.sleepSpawnTriggers) {
-			if(spawnTrigger.onSleep(world, player, spawnPos, world.getBlockState(player.getPosition()))) {
+			if(spawnTrigger.onSleep(world, player, spawnPos, world.getBlockState(player.blockPosition()))) {
 				interrupted = true;
 			}
 		}
@@ -453,13 +453,13 @@ public class SpawnerEventListener {
 	@SubscribeEvent
 	public void onFished(ItemFishedEvent event) {
 		PlayerEntity player = event.getPlayer();
-		if(player == null || player.getEntityWorld().isRemote || event.isCanceled())
+		if(player == null || player.getCommandSenderWorld().isClientSide || event.isCanceled())
 			return;
-		if(!testOnCreative && player.abilities.isCreativeMode) { // No Spawning for Creative Players
+		if(!testOnCreative && player.abilities.instabuild) { // No Spawning for Creative Players
 			return;
 		}
 
-		World world = player.getEntityWorld();
+		World world = player.getCommandSenderWorld();
 		Entity hookEntity = event.getHookEntity();
 		for(FishingSpawnTrigger spawnTrigger : this.fishingSpawnTriggers) {
 			spawnTrigger.onFished(world, player, hookEntity);
@@ -480,11 +480,11 @@ public class SpawnerEventListener {
 
 		World world = event.getWorld();
 		PlayerEntity player = null;
-		if(explosion.getExplosivePlacedBy() instanceof PlayerEntity) {
-			player = (PlayerEntity)explosion.getExplosivePlacedBy();
+		if(explosion.getSourceMob() instanceof PlayerEntity) {
+			player = (PlayerEntity)explosion.getSourceMob();
 		}
 
-		if(player != null && (!testOnCreative && player.abilities.isCreativeMode)) { // No Spawning for Creative Players
+		if(player != null && (!testOnCreative && player.abilities.instabuild)) { // No Spawning for Creative Players
 			return;
 		}
 
@@ -510,9 +510,9 @@ public class SpawnerEventListener {
 
 		// Only If Players Are Nearby (Big Performance Saving):
 		boolean playerNearby = false;
-		Vector3d posVec = Vector3d.copy(event.getPos());
-		for(PlayerEntity playerEntity : world.getPlayers()) {
-			if(playerEntity.getDistanceSq(posVec) <= 20 * 20) {
+		Vector3d posVec = Vector3d.atLowerCornerOf(event.getPos());
+		for(PlayerEntity playerEntity : world.players()) {
+			if(playerEntity.distanceToSqr(posVec) <= 20 * 20) {
 				playerNearby = true;
 				break;
 			}
@@ -522,15 +522,15 @@ public class SpawnerEventListener {
 		}
 
 		if(event.getState().getBlock() == Blocks.WATER) {
-			BlockState sideBlockState = event.getWorld().getBlockState(event.getPos().down());
-			if(sideBlockState.getBlock() == Blocks.LAVA && sideBlockState.get(FlowingFluidBlock.LEVEL) == 0) {
+			BlockState sideBlockState = event.getWorld().getBlockState(event.getPos().below());
+			if(sideBlockState.getBlock() == Blocks.LAVA && sideBlockState.getValue(FlowingFluidBlock.LEVEL) == 0) {
 				trigger = true;
 			}
 		}
 
 		else if(event.getState().getBlock() == Blocks.LAVA) {
-			BlockState sideBlockState = event.getWorld().getBlockState(event.getPos().down());
-			if(sideBlockState.getBlock() == Blocks.WATER && sideBlockState.get(FlowingFluidBlock.LEVEL) == 0) {
+			BlockState sideBlockState = event.getWorld().getBlockState(event.getPos().below());
+			if(sideBlockState.getBlock() == Blocks.WATER && sideBlockState.getValue(FlowingFluidBlock.LEVEL) == 0) {
 				trigger = true;
 			}
 		}

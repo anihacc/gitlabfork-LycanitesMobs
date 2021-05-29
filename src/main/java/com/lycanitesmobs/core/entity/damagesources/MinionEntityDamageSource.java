@@ -13,7 +13,7 @@ public class MinionEntityDamageSource extends EntityDamageSource {
   	//                     Constructor
   	// ==================================================
 	public MinionEntityDamageSource(EntityDamageSource minionDamageSource, Entity owner) {
-		super(minionDamageSource.damageType, minionDamageSource.getTrueSource());
+		super(minionDamageSource.msgId, minionDamageSource.getEntity());
         this.minionDamageSource = minionDamageSource;
         this.minionOwner = owner;
 	}
@@ -24,13 +24,13 @@ public class MinionEntityDamageSource extends EntityDamageSource {
     // ==================================================
     // This Entity Caused The Damage:
     @Override
-    public Entity getImmediateSource() {
-        return this.damageSourceEntity;
+    public Entity getDirectEntity() {
+        return this.entity;
     }
 
     // This Entity Gets Credit for The Kill:
     @Override
-    public Entity getTrueSource() {
+    public Entity getEntity() {
         return this.minionOwner;
     }
 
@@ -38,7 +38,7 @@ public class MinionEntityDamageSource extends EntityDamageSource {
     //                    Chat Message
     // ==================================================
     @Override
-    public ITextComponent getDeathMessage(LivingEntity slainEntity) {
-        return this.minionDamageSource.getDeathMessage(slainEntity);
+    public ITextComponent getLocalizedDeathMessage(LivingEntity slainEntity) {
+        return this.minionDamageSource.getLocalizedDeathMessage(slainEntity);
     }
 }

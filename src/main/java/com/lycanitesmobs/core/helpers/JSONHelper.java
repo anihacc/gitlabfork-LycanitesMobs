@@ -117,10 +117,10 @@ public class JSONHelper {
 					material = Material.WATER;
 				}
 				else if("ground".equalsIgnoreCase(materialName)) {
-					material = Material.EARTH;
+					material = Material.DIRT;
 				}
 				else if("earth".equalsIgnoreCase(materialName)) {
-					material = Material.EARTH;
+					material = Material.DIRT;
 				}
 				else if("sand".equalsIgnoreCase(materialName)) {
 					material = Material.SAND;
@@ -132,19 +132,19 @@ public class JSONHelper {
 					material = Material.WOOD;
 				}
 				else if("rock".equalsIgnoreCase(materialName)) {
-					material = Material.ROCK;
+					material = Material.STONE;
 				}
 				else if("grass".equalsIgnoreCase(materialName)) {
-					material = Material.TALL_PLANTS;
+					material = Material.REPLACEABLE_PLANT;
 				}
 				else if("tallplants".equalsIgnoreCase(materialName)) {
-					material = Material.TALL_PLANTS;
+					material = Material.REPLACEABLE_PLANT;
 				}
 				else if("vine".equalsIgnoreCase(materialName)) {
-					material = Material.TALL_PLANTS;
+					material = Material.REPLACEABLE_PLANT;
 				}
 				else if("plants".equalsIgnoreCase(materialName)) {
-					material = Material.PLANTS;
+					material = Material.PLANT;
 				}
 				else if("leaves".equalsIgnoreCase(materialName)) {
 					material = Material.LEAVES;
@@ -153,13 +153,13 @@ public class JSONHelper {
 					material = Material.CACTUS;
 				}
 				else if("snow".equalsIgnoreCase(materialName)) {
-					material = Material.SNOW;
+					material = Material.TOP_SNOW;
 				}
 				else if("ice".equalsIgnoreCase(materialName)) {
 					material = Material.ICE;
 				}
 				else if("iron".equalsIgnoreCase(materialName)) {
-					material = Material.IRON;
+					material = Material.METAL;
 				}
 				else if("web".equalsIgnoreCase(materialName)) {
 					material = Material.WEB;
@@ -191,7 +191,7 @@ public class JSONHelper {
 				for (BiomeDictionary.Type biomeType : BiomeDictionary.Type.getAll()) {
 					Set<RegistryKey<Biome>> selectedBiomesSet = BiomeDictionary.getBiomes(biomeType);
 					for (RegistryKey<Biome> selectedBiomesKey : selectedBiomesSet) {
-						Biome biome = ForgeRegistries.BIOMES.getValue(selectedBiomesKey.getLocation());
+						Biome biome = ForgeRegistries.BIOMES.getValue(selectedBiomesKey.location());
 						if(biome != null) {
 							selectedBiomes.add(biome);
 						}
@@ -208,7 +208,7 @@ public class JSONHelper {
 				if (biomeType != null) {
 					Set<RegistryKey<Biome>> selectedBiomesSet = BiomeDictionary.getBiomes(biomeType);
 					for (RegistryKey<Biome> selectedBiomesKey : selectedBiomesSet) {
-						Biome biome = ForgeRegistries.BIOMES.getValue(selectedBiomesKey.getLocation());
+						Biome biome = ForgeRegistries.BIOMES.getValue(selectedBiomesKey.location());
 						if(biome != null) {
 							selectedBiomes.add(biome);
 						}

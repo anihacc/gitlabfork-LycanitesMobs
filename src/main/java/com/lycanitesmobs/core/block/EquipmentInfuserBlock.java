@@ -22,6 +22,8 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class EquipmentInfuserBlock extends BlockBase {
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
@@ -32,37 +34,37 @@ public class EquipmentInfuserBlock extends BlockBase {
 		this.group = group;
 		this.blockName = "equipment_infuser";
 		this.setRegistryName(this.group.modid, this.blockName.toLowerCase());
-		this.setDefaultState(this.getStateContainer().getBaseState().with(FACING, Direction.NORTH));
+		this.registerDefaultState(this.getStateDefinition().any().setValue(FACING, Direction.NORTH));
 	}
 
 	@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
 		builder.add(FACING);
 	}
 
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context) {
-		return this.getDefaultState().with(FACING, context.getPlacementHorizontalFacing().getOpposite());
+		return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
 	}
 
 	@Override
-	public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
-		super.onReplaced(state, worldIn, pos, newState, isMoving);
+	public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+		super.onRemove(state, worldIn, pos, newState, isMoving);
 	}
 
 	@Override
 	public BlockState rotate(BlockState state, IWorld world, BlockPos pos, Rotation direction) {
-		return state.with(FACING, direction.rotate(state.get(FACING)));
+		return state.setValue(FACING, direction.rotate(state.getValue(FACING)));
 	}
 
 	@Override
 	public BlockState mirror(BlockState state, Mirror mirrorIn) {
-		return state.rotate(mirrorIn.toRotation(state.get(FACING)));
+		return state.rotate(mirrorIn.getRotation(state.getValue(FACING)));
 	}
 
 	@Override
-	public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, LivingEntity entity, ItemStack itemStack) {
-		super.onBlockPlacedBy(world, pos, state, entity, itemStack);
+	public void setPlacedBy(World world, BlockPos pos, BlockState state, LivingEntity entity, ItemStack itemStack) {
+		super.setPlacedBy(world, pos, state, entity, itemStack);
 	}
 
 	@Override
@@ -77,9 +79,9 @@ public class EquipmentInfuserBlock extends BlockBase {
 	}
 
 	@Override //onBlockActivated()
-	public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
-		if(!world.isRemote() && player instanceof ServerPlayerEntity) {
-			TileEntity tileEntity = world.getTileEntity(pos);
+	public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+		if(!world.isClientSide() && player instanceof ServerPlayerEntity) {
+			TileEntity tileEntity = world.getBlockEntity(pos);
 			if(tileEntity instanceof EquipmentInfuserTileEntity) {
 				NetworkHooks.openGui((ServerPlayerEntity) player, new EquipmentInfuserContainerProvider((EquipmentInfuserTileEntity)tileEntity), buf -> buf.writeBlockPos(pos));
 			}
@@ -88,8 +90,8 @@ public class EquipmentInfuserBlock extends BlockBase {
 	}
 
     @Override
-    public boolean eventReceived(BlockState state, World worldIn, BlockPos pos, int eventID, int eventParam) {
-        TileEntity tileEntity = worldIn.getTileEntity(pos);
-        return tileEntity != null && tileEntity.receiveClientEvent(eventID, eventParam);
+    public boolean triggerEvent(BlockState state, World worldIn, BlockPos pos, int eventID, int eventParam) {
+        TileEntity tileEntity = worldIn.getBlockEntity(pos);
+        return tileEntity != null && tileEntity.triggerEvent(eventID, eventParam);
     }
 }

@@ -8,6 +8,8 @@ import net.minecraft.entity.LivingEntity;
 
 import java.util.EnumSet;
 
+import net.minecraft.entity.ai.goal.Goal.Flag;
+
 public class FindFuseTargetGoal extends TargetingGoal {
 	// Targets:
     private Class<IFusable> targetClass = IFusable.class;
@@ -21,7 +23,7 @@ public class FindFuseTargetGoal extends TargetingGoal {
   	// ==================================================
     public FindFuseTargetGoal(BaseCreatureEntity setHost) {
         super(setHost);
-		this.setMutexFlags(EnumSet.of(Flag.TARGET));
+		this.setFlags(EnumSet.of(Flag.TARGET));
     }
     
     
@@ -124,7 +126,7 @@ public class FindFuseTargetGoal extends TargetingGoal {
   	//                   Should Execute
   	// ==================================================
     @Override
-    public boolean shouldExecute() {
+    public boolean canUse() {
 		if(!CreatureManager.getInstance().config.elementalFusion) {
 			return false;
 		}
@@ -135,7 +137,7 @@ public class FindFuseTargetGoal extends TargetingGoal {
 		if(this.host.isPetType("familiar")) {
 			return false;
 		}
-		if(this.targetChance > 0 && this.host.getRNG().nextInt(this.targetChance) != 0) {
+		if(this.targetChance > 0 && this.host.getRandom().nextInt(this.targetChance) != 0) {
 			return false;
 		}
 

@@ -47,7 +47,7 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
     public List<EntityHellfireOrb> hellfireOrbs = new ArrayList<>();
 
     // Data Manager:
-    protected static final DataParameter<Integer> HELLFIRE_ENERGY = EntityDataManager.createKey(EntityRahovart.class, DataSerializers.VARINT);
+    protected static final DataParameter<Integer> HELLFIRE_ENERGY = EntityDataManager.defineId(EntityRahovart.class, DataSerializers.INT);
 
     // First Phase:
     public List<EntityBelphegor> hellfireBelphMinions = new ArrayList<>();
@@ -76,7 +76,7 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
         this.hasAttackSound = false;
         this.setAttackCooldownMax(40);
         this.solidCollision = true;
-        this.entityCollisionReduction = 1.0F;
+        this.pushthrough = 1.0F;
         this.setupMob();
         this.hitAreaWidthScale = 2F;
 
@@ -107,16 +107,16 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
     // ========== Init ==========
     /** Initiates the entity setting all the values to be watched by the data manager. **/
     @Override
-    protected void registerData() {
-        super.registerData();
-        this.dataManager.register(EntityRahovart.HELLFIRE_ENERGY, this.hellfireEnergy);
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(EntityRahovart.HELLFIRE_ENERGY, this.hellfireEnergy);
     }
 
     // ========== Rendering Distance ==========
     /** Returns a larger bounding box for rendering this large entity. **/
     @OnlyIn(Dist.CLIENT)
-    public AxisAlignedBB getRenderBoundingBox() {
-        return this.getBoundingBox().grow(200, 50, 200).offset(0, -25, 0);
+    public AxisAlignedBB getBoundingBoxForCulling() {
+        return this.getBoundingBox().inflate(200, 50, 200).move(0, -25, 0);
     }
 
     // ========== First Spawn ==========
@@ -124,7 +124,7 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
     public void onFirstSpawn() {
         super.onFirstSpawn();
         if(this.getArenaCenter() == null) {
-            this.setArenaCenter(this.getPosition());
+            this.setArenaCenter(this.blockPosition());
         }
     }
 
@@ -144,38 +144,38 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
     // ==================================================
 	// ========== Living Update ==========
 	@Override
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
 
         // Look At Target:
-        if(this.hasAttackTarget() && !this.getEntityWorld().isRemote) {
-            this.getLookController().setLookPositionWithEntity(this.getAttackTarget(), 30.0F, 30.0F);
+        if(this.hasAttackTarget() && !this.getCommandSenderWorld().isClientSide) {
+            this.getLookControl().setLookAt(this.getTarget(), 30.0F, 30.0F);
         }
 
         // Arena Snapping:
         if(this.hasArenaCenter()) {
             BlockPos arenaPos = this.getArenaCenter();
-            double arenaY = this.getPositionVec().getY();
-            if (this.getEntityWorld().isAirBlock(arenaPos))
+            double arenaY = this.position().y();
+            if (this.getCommandSenderWorld().isEmptyBlock(arenaPos))
                 arenaY = arenaPos.getY();
-            else if (this.getEntityWorld().isAirBlock(arenaPos.add(0, 1, 0)))
-                arenaY = arenaPos.add(0, 1, 0).getY();
+            else if (this.getCommandSenderWorld().isEmptyBlock(arenaPos.offset(0, 1, 0)))
+                arenaY = arenaPos.offset(0, 1, 0).getY();
 
-            if (this.getPositionVec().getX() != arenaPos.getX() || this.getPositionVec().getY() != arenaY || this.getPositionVec().getZ() != arenaPos.getZ())
-                this.setPosition(arenaPos.getX(), arenaY, arenaPos.getZ());
+            if (this.position().x() != arenaPos.getX() || this.position().y() != arenaY || this.position().z() != arenaPos.getZ())
+                this.setPos(arenaPos.getX(), arenaY, arenaPos.getZ());
         }
 
         // Sync Hellfire Energy:
-        if(!this.getEntityWorld().isRemote)
-            this.dataManager.set(HELLFIRE_ENERGY, this.hellfireEnergy);
+        if(!this.getCommandSenderWorld().isClientSide)
+            this.entityData.set(HELLFIRE_ENERGY, this.hellfireEnergy);
         else
-            this.hellfireEnergy = this.dataManager.get(HELLFIRE_ENERGY);
+            this.hellfireEnergy = this.entityData.get(HELLFIRE_ENERGY);
 
         // Hellfire Update:
         updateHellfireOrbs(this, this.updateTick, 5, this.hellfireEnergy, 10, this.hellfireOrbs);
 
         // Update Phases:
-        if(!this.getEntityWorld().isRemote) {
+        if(!this.getCommandSenderWorld().isClientSide) {
 			this.updatePhases();
 		}
     }
@@ -211,7 +211,7 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
                     if (minion.hellfireEnergy >= 100) {
                         this.hellfireEnergy += 20;
                         this.onMinionDeath(minion, null);
-                        this.getEntityWorld().createExplosion(minion, minion.getPositionVec().getX(), minion.getPositionVec().getY(), minion.getPositionVec().getZ(), 1, Explosion.Mode.NONE);
+                        this.getCommandSenderWorld().explode(minion, minion.position().x(), minion.position().y(), minion.position().z(), 1, Explosion.Mode.NONE);
                         minion.hellfireEnergy = 0;
                         minion.remove();
                         continue;
@@ -222,10 +222,10 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
             // Hellfire Charged:
             if(this.hellfireEnergy >= 100) {
                 this.hellfireEnergy = 0;
-                double angle = this.getRNG().nextFloat() * 360;
+                double angle = this.getRandom().nextFloat() * 360;
                 if(this.hasAttackTarget()) {
-                    double deltaX = this.getAttackTarget().getPositionVec().getX() - this.getPositionVec().getX();
-                    double deltaZ = this.getAttackTarget().getPositionVec().getZ() - this.getPositionVec().getZ();
+                    double deltaX = this.getTarget().position().x() - this.position().x();
+                    double deltaZ = this.getTarget().position().z() - this.position().z();
                     angle = Math.atan2(deltaZ, deltaX) * 180 / Math.PI;
                 }
                 this.hellfireWaveAttack(angle);
@@ -233,12 +233,12 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
 
             // Every 5 Secs:
             if(this.updateTick % 100 == 0) {
-                int summonAmount = this.getRNG().nextInt(4); // 0-3 Hellfire Belphs
+                int summonAmount = this.getRandom().nextInt(4); // 0-3 Hellfire Belphs
                 summonAmount *= this.playerTargets.size();
                 if(summonAmount > 0)
                     for(int summonCount = 0; summonCount <= summonAmount; summonCount++) {
-                        EntityBelphegor minion = (EntityBelphegor)CreatureManager.getInstance().getCreature("belph").createEntity(this.getEntityWorld());
-                        this.summonMinion(minion, this.getRNG().nextDouble() * 360, 5);
+                        EntityBelphegor minion = (EntityBelphegor)CreatureManager.getInstance().getCreature("belph").createEntity(this.getCommandSenderWorld());
+                        this.summonMinion(minion, this.getRandom().nextDouble() * 360, 5);
                         this.hellfireBelphMinions.add(minion);
                     }
             }
@@ -266,7 +266,7 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
                     if (minion.hellfireEnergy >= 100) {
                         this.hellfireEnergy += 20;
                         this.onMinionDeath(minion, null);
-                        this.getEntityWorld().createExplosion(minion, minion.getPositionVec().getX(), minion.getPositionVec().getY(), minion.getPositionVec().getZ(), 1, Explosion.Mode.NONE);
+                        this.getCommandSenderWorld().explode(minion, minion.position().x(), minion.position().y(), minion.position().z(), 1, Explosion.Mode.NONE);
                         minion.hellfireEnergy = 0;
                         minion.remove();
                         continue;
@@ -277,7 +277,7 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
             // Hellfire Charged:
             if(this.hellfireEnergy >= 100) {
                 this.hellfireEnergy = 0;
-                this.hellfireWallAttack(this.rotationYaw);
+                this.hellfireWallAttack(this.yRot);
             }
 
             // Hellfire Wall:
@@ -292,18 +292,18 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
                 summonAmount *= this.playerTargets.size();
                 if(summonAmount > 0)
                     for(int summonCount = 0; summonCount <= summonAmount; summonCount++) {
-                        EntityBehemophet minion = (EntityBehemophet)CreatureManager.getInstance().getCreature("behemoth").createEntity(this.getEntityWorld());
-                        this.summonMinion(minion, this.getRNG().nextDouble() * 360, 5);
+                        EntityBehemophet minion = (EntityBehemophet)CreatureManager.getInstance().getCreature("behemoth").createEntity(this.getCommandSenderWorld());
+                        this.summonMinion(minion, this.getRandom().nextDouble() * 360, 5);
                         this.hellfireBehemothMinions.add(minion);
                     }
             }
 
             // Every 10 Secs:
             if(this.updateTick % 200 == 0) {
-                int summonAmount = this.getRNG().nextInt(4) - 1; // 0-2 Belphs with 50% fail chance.
+                int summonAmount = this.getRandom().nextInt(4) - 1; // 0-2 Belphs with 50% fail chance.
                 for(int summonCount = 0; summonCount <= summonAmount; summonCount++) {
-                    EntityBelphegor minion = (EntityBelphegor)CreatureManager.getInstance().getCreature("belph").createEntity(this.getEntityWorld());
-                    this.summonMinion(minion, this.getRNG().nextDouble() * 360, 5);
+                    EntityBelphegor minion = (EntityBelphegor)CreatureManager.getInstance().getCreature("belph").createEntity(this.getCommandSenderWorld());
+                    this.summonMinion(minion, this.getRandom().nextDouble() * 360, 5);
                 }
             }
         }
@@ -334,7 +334,7 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
             // Hellfire Charged:
             if(this.hellfireEnergy >= 100 && this.hellfireBarriers.size() < 20) {
                 this.hellfireEnergy = 0;
-                this.hellfireBarrierAttack(360F * this.getRNG().nextFloat());
+                this.hellfireBarrierAttack(360F * this.getRandom().nextFloat());
             }
 
             // Hellfire Barriers:
@@ -343,31 +343,31 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
 
             // Every 10 Secs:
             if(this.updateTick % 200 == 0) {
-                int summonAmount = this.getRNG().nextInt(2); // 0-1 Hellfire Behemoth
+                int summonAmount = this.getRandom().nextInt(2); // 0-1 Hellfire Behemoth
                 summonAmount *= this.playerTargets.size();
                 if(summonAmount > 0)
                     for(int summonCount = 0; summonCount <= summonAmount; summonCount++) {
-                        EntityBehemophet minion = (EntityBehemophet)CreatureManager.getInstance().getCreature("behemoth").createEntity(this.getEntityWorld());
-                        this.summonMinion(minion, this.getRNG().nextDouble() * 360, 5);
+                        EntityBehemophet minion = (EntityBehemophet)CreatureManager.getInstance().getCreature("behemoth").createEntity(this.getCommandSenderWorld());
+                        this.summonMinion(minion, this.getRandom().nextDouble() * 360, 5);
                         this.hellfireBehemothMinions.add(minion);
                     }
             }
 
             // Every 20 Secs:
             if(this.updateTick % 400 == 0) {
-                int summonAmount = this.getRNG().nextInt(4); // 0-3 Belphs
+                int summonAmount = this.getRandom().nextInt(4); // 0-3 Belphs
                 summonAmount *= this.playerTargets.size();
                 if(summonAmount > 0)
                 for(int summonCount = 0; summonCount <= summonAmount; summonCount++) {
-                    EntityBelphegor minion = (EntityBelphegor)CreatureManager.getInstance().getCreature("belph").createEntity(this.getEntityWorld());
-                    this.summonMinion(minion, this.getRNG().nextDouble() * 360, 5);
+                    EntityBelphegor minion = (EntityBelphegor)CreatureManager.getInstance().getCreature("belph").createEntity(this.getCommandSenderWorld());
+                    this.summonMinion(minion, this.getRandom().nextDouble() * 360, 5);
                 }
-                summonAmount = this.getRNG().nextInt(3); // 0-2 Wraiths
+                summonAmount = this.getRandom().nextInt(3); // 0-2 Wraiths
                 summonAmount *= this.playerTargets.size();
                 if(summonAmount > 0)
                 for(int summonCount = 0; summonCount <= summonAmount; summonCount++) {
-                    EntityWraith minion = (EntityWraith)CreatureManager.getInstance().getCreature("wraith").createEntity(this.getEntityWorld());
-                    this.summonMinion(minion, this.getRNG().nextDouble() * 360, 5);
+                    EntityWraith minion = (EntityWraith)CreatureManager.getInstance().getCreature("wraith").createEntity(this.getCommandSenderWorld());
+                    this.summonMinion(minion, this.getRandom().nextDouble() * 360, 5);
                 }
             }
         }
@@ -419,7 +419,7 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
     //                     Hellfire
     // ==================================================
     public static void updateHellfireOrbs(LivingEntity entity, long orbTick, int hellfireOrbMax, int hellfireOrbEnergy, float orbSize, List<EntityHellfireOrb> hellfireOrbs) {
-        if(!entity.getEntityWorld().isRemote)
+        if(!entity.getCommandSenderWorld().isClientSide)
             return;
 
         int hellfireChargeCount = Math.round((float)Math.min(hellfireOrbEnergy, 100) / (100F / hellfireOrbMax));
@@ -429,10 +429,10 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
 
         // Add Required Orbs:
         while(hellfireOrbs.size() < hellfireChargeCount) {
-            EntityHellfireOrb hellfireOrb = new EntityHellfireOrb(ProjectileManager.getInstance().oldProjectileTypes.get(EntityHellfireOrb.class), entity.getEntityWorld(), entity);
+            EntityHellfireOrb hellfireOrb = new EntityHellfireOrb(ProjectileManager.getInstance().oldProjectileTypes.get(EntityHellfireOrb.class), entity.getCommandSenderWorld(), entity);
             hellfireOrb.clientOnly = true;
             hellfireOrbs.add(hellfireOrb);
-            entity.getEntityWorld().addEntity(hellfireOrb);
+            entity.getCommandSenderWorld().addFreshEntity(hellfireOrb);
             hellfireOrb.setProjectileScale(orbSize);
         }
 
@@ -446,14 +446,14 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
         for(int i = 0; i < hellfireOrbs.size(); i++) {
             EntityHellfireOrb hellfireOrb = hellfireOrbs.get(i);
             double rotationRadians = Math.toRadians((hellfireOrbAngle + (hellfireOrbAngleOffset * i)) % 360);
-            double x = (entity.getSize(Pose.STANDING).width * 1.25D) * Math.cos(rotationRadians) + Math.sin(rotationRadians);
-            double z = (entity.getSize(Pose.STANDING).width * 1.25D) * Math.sin(rotationRadians) - Math.cos(rotationRadians);
-            hellfireOrb.setPosition(
-                    entity.getPositionVec().getX() - x,
-                    entity.getPositionVec().getY() + (entity.getSize(Pose.STANDING).height * 0.75F),
-                    entity.getPositionVec().getZ() - z
+            double x = (entity.getDimensions(Pose.STANDING).width * 1.25D) * Math.cos(rotationRadians) + Math.sin(rotationRadians);
+            double z = (entity.getDimensions(Pose.STANDING).width * 1.25D) * Math.sin(rotationRadians) - Math.cos(rotationRadians);
+            hellfireOrb.setPos(
+                    entity.position().x() - x,
+                    entity.position().y() + (entity.getDimensions(Pose.STANDING).height * 0.75F),
+                    entity.position().z() - z
             );
-            hellfireOrb.setPosition(entity.getPositionVec().getX() - x, entity.getPositionVec().getY() + (entity.getSize(Pose.STANDING).height * 0.75F), entity.getPositionVec().getZ() - z);
+            hellfireOrb.setPos(entity.position().x() - x, entity.position().y() + (entity.getDimensions(Pose.STANDING).height * 0.75F), entity.position().z() - z);
             hellfireOrb.projectileLife = 5;
         }
     }
@@ -483,14 +483,14 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
     public void hellfireWaveAttack(double angle) {
         this.triggerAttackCooldown();
         this.playAttackSound();
-        EntityHellfireWave hellfireWave = new EntityHellfireWave(ProjectileManager.getInstance().oldProjectileTypes.get(EntityHellfireWave.class), this.getEntityWorld(), this);
-        hellfireWave.setPosition(
-                hellfireWave.getPositionVec().getX(),
-                this.getPositionVec().getY(),
-                hellfireWave.getPositionVec().getZ()
+        EntityHellfireWave hellfireWave = new EntityHellfireWave(ProjectileManager.getInstance().oldProjectileTypes.get(EntityHellfireWave.class), this.getCommandSenderWorld(), this);
+        hellfireWave.setPos(
+                hellfireWave.position().x(),
+                this.position().y(),
+                hellfireWave.position().z()
         );
         hellfireWave.rotation = angle;
-        this.getEntityWorld().addEntity(hellfireWave);
+        this.getCommandSenderWorld().addFreshEntity(hellfireWave);
     }
 
     // ========== Hellfire Wall ==========
@@ -499,7 +499,7 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
         this.triggerAttackCooldown();
 
         this.hellfireWallTime = this.hellfireWallTimeMax;
-        this.hellfireWallClockwise = this.getRNG().nextBoolean();
+        this.hellfireWallClockwise = this.getRandom().nextBoolean();
     }
 
     public void hellfireWallUpdate() {
@@ -512,29 +512,29 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
 
         // Left (Positive) Wall:
         if(this.hellfireWallLeft == null) {
-            this.hellfireWallLeft = new EntityHellfireBarrier(ProjectileManager.getInstance().oldProjectileTypes.get(EntityHellfireBarrier.class), this.getEntityWorld(), this);
+            this.hellfireWallLeft = new EntityHellfireBarrier(ProjectileManager.getInstance().oldProjectileTypes.get(EntityHellfireBarrier.class), this.getCommandSenderWorld(), this);
             this.hellfireWallLeft.wall = true;
-            this.getEntityWorld().addEntity(this.hellfireWallLeft);
+            this.getCommandSenderWorld().addFreshEntity(this.hellfireWallLeft);
         }
         this.hellfireWallLeft.time = 0;
-        this.hellfireWallLeft.setPosition(
-                this.getPositionVec().getX(),
-                this.getPositionVec().getY(),
-                this.getPositionVec().getZ()
+        this.hellfireWallLeft.setPos(
+                this.position().x(),
+                this.position().y(),
+                this.position().z()
         );
         this.hellfireWallLeft.rotation = hellfireWallNormal * hellfireWallAngle;
 
         // Right (Negative) Wall:
         if(this.hellfireWallRight == null) {
-            this.hellfireWallRight = new EntityHellfireBarrier(ProjectileManager.getInstance().oldProjectileTypes.get(EntityHellfireBarrier.class), this.getEntityWorld(), this);
+            this.hellfireWallRight = new EntityHellfireBarrier(ProjectileManager.getInstance().oldProjectileTypes.get(EntityHellfireBarrier.class), this.getCommandSenderWorld(), this);
             this.hellfireWallRight.wall = true;
-            this.getEntityWorld().addEntity(this.hellfireWallRight);
+            this.getCommandSenderWorld().addFreshEntity(this.hellfireWallRight);
         }
         this.hellfireWallRight.time = 0;
-        this.hellfireWallRight.setPosition(
-                this.getPositionVec().getX(),
-                this.getPositionVec().getY(),
-                this.getPositionVec().getZ()
+        this.hellfireWallRight.setPos(
+                this.position().x(),
+                this.position().y(),
+                this.position().z()
         );
         this.hellfireWallRight.rotation = 180 + (hellfireWallNormal * hellfireWallAngle);
     }
@@ -558,13 +558,13 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
         this.triggerAttackCooldown();
         this.playAttackSound();
 
-        EntityHellfireBarrier hellfireBarrier = new EntityHellfireBarrier(ProjectileManager.getInstance().oldProjectileTypes.get(EntityHellfireBarrier.class), this.getEntityWorld(), this);
-        this.getEntityWorld().addEntity(hellfireBarrier);
+        EntityHellfireBarrier hellfireBarrier = new EntityHellfireBarrier(ProjectileManager.getInstance().oldProjectileTypes.get(EntityHellfireBarrier.class), this.getCommandSenderWorld(), this);
+        this.getCommandSenderWorld().addFreshEntity(hellfireBarrier);
         hellfireBarrier.time = 0;
-        hellfireBarrier.setPosition(
-                this.getPositionVec().getX(),
-                this.getPositionVec().getY(),
-                this.getPositionVec().getZ()
+        hellfireBarrier.setPos(
+                this.position().x(),
+                this.position().y(),
+                this.position().z()
         );
         hellfireBarrier.rotation = angle;
         this.hellfireBarriers.add(hellfireBarrier);
@@ -581,16 +581,16 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
         }
         for(EntityHellfireBarrier hellfireBarrier : this.hellfireBarriers) {
             hellfireBarrier.time = 0;
-            hellfireBarrier.setPosition(
-                    this.getPositionVec().getX(),
-                    this.getPositionVec().getY(),
-                    this.getPositionVec().getZ()
+            hellfireBarrier.setPos(
+                    this.position().x(),
+                    this.position().y(),
+                    this.position().z()
             );
         }
     }
 
     public void hellfireBarrierCleanup() {
-        if(this.getEntityWorld().isRemote || this.hellfireBarriers.size() < 1)
+        if(this.getCommandSenderWorld().isClientSide || this.hellfireBarriers.size() < 1)
             return;
         for(EntityHellfireBarrier hellfireBarrier : this.hellfireBarriers) {
             hellfireBarrier.remove();
@@ -605,7 +605,7 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
     // ==================================================
     // ========== Can Be Pushed ==========
     @Override
-    public boolean canBePushed() {
+    public boolean isPushable() {
         return false;
     }
     
@@ -614,12 +614,12 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
     //                     Immunities
     // ==================================================
     @Override
-    public boolean isPotionApplicable(EffectInstance potionEffect) {
-        if(potionEffect.getPotion() == Effects.WITHER)
+    public boolean canBeAffected(EffectInstance potionEffect) {
+        if(potionEffect.getEffect() == Effects.WITHER)
             return false;
         if(ObjectManager.getEffect("decay") != null)
-            if(potionEffect.getPotion() == ObjectManager.getEffect("decay")) return false;
-        super.isPotionApplicable(potionEffect);
+            if(potionEffect.getEffect() == ObjectManager.getEffect("decay")) return false;
+        super.canBeAffected(potionEffect);
         return true;
     }
     
@@ -638,7 +638,7 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
         }
         if(entity instanceof PlayerEntity) {
             PlayerEntity player = (PlayerEntity)entity;
-            if (!player.abilities.disableDamage && player.getPositionVec().getY() > this.getPositionVec().getY() + CreatureManager.getInstance().config.bossAntiFlight) {
+            if (!player.abilities.invulnerable && player.position().y() > this.position().y() + CreatureManager.getInstance().config.bossAntiFlight) {
                 return false;
             }
         }
@@ -652,12 +652,12 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
     // ========== Attacked From ==========
     /** Called when this entity has been attacked, uses a DamageSource and damage value. **/
     @Override
-    public boolean attackEntityFrom(DamageSource damageSrc, float damageAmount) {
-        if(this.playerTargets != null && damageSrc.getTrueSource() != null && damageSrc.getTrueSource() instanceof PlayerEntity) {
-            if (!this.playerTargets.contains(damageSrc.getTrueSource()))
-                this.playerTargets.add((PlayerEntity)damageSrc.getTrueSource());
+    public boolean hurt(DamageSource damageSrc, float damageAmount) {
+        if(this.playerTargets != null && damageSrc.getEntity() != null && damageSrc.getEntity() instanceof PlayerEntity) {
+            if (!this.playerTargets.contains(damageSrc.getEntity()))
+                this.playerTargets.add((PlayerEntity)damageSrc.getEntity());
         }
-        return super.attackEntityFrom(damageSrc, damageAmount);
+        return super.hurt(damageSrc, damageAmount);
     }
 
     // ==================================================
@@ -672,8 +672,8 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
     // ==================================================
     // ========== Read ===========
     @Override
-    public void readAdditional(CompoundNBT nbtTagCompound) {
-        super.readAdditional(nbtTagCompound);
+    public void readAdditionalSaveData(CompoundNBT nbtTagCompound) {
+        super.readAdditionalSaveData(nbtTagCompound);
         if(nbtTagCompound.contains("HellfireEnergy")) {
             this.hellfireEnergy = nbtTagCompound.getInt("HellfireEnergy");
         }
@@ -685,7 +685,7 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
             for(int i = 0; i < belphIDs.size(); i++) {
                 CompoundNBT belphID = belphIDs.getCompound(i);
                 if(belphID.contains("ID")) {
-                    Entity entity = this.getEntityWorld().getEntityByID(belphID.getInt("ID"));
+                    Entity entity = this.getCommandSenderWorld().getEntity(belphID.getInt("ID"));
                     if(entity != null && entity instanceof EntityBelphegor)
                         this.hellfireBelphMinions.add((EntityBelphegor)entity);
                 }
@@ -696,7 +696,7 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
             for(int i = 0; i < behemothIDs.size(); i++) {
                 CompoundNBT behemothID = behemothIDs.getCompound(i);
                 if(behemothID.contains("ID")) {
-                    Entity entity = this.getEntityWorld().getEntityByID(behemothID.getInt("ID"));
+                    Entity entity = this.getCommandSenderWorld().getEntity(behemothID.getInt("ID"));
                     if(entity != null && entity instanceof EntityBehemophet)
                         this.hellfireBehemothMinions.add((EntityBehemophet)entity);
                 }
@@ -707,15 +707,15 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
     // ========== Write ==========
     /** Used when saving this mob to a chunk. **/
     @Override
-    public void writeAdditional(CompoundNBT nbtTagCompound) {
-        super.writeAdditional(nbtTagCompound);
+    public void addAdditionalSaveData(CompoundNBT nbtTagCompound) {
+        super.addAdditionalSaveData(nbtTagCompound);
         nbtTagCompound.putInt("HellfireEnergy", this.hellfireEnergy);
         nbtTagCompound.putInt("HellfireWallTime", this.hellfireWallTime);
         if(this.getBattlePhase() == 0) {
             ListNBT belphIDs = new ListNBT();
             for(EntityBelphegor entityBelphegor : this.hellfireBelphMinions) {
                 CompoundNBT belphID = new CompoundNBT();
-                belphID.putInt("ID", entityBelphegor.getEntityId());
+                belphID.putInt("ID", entityBelphegor.getId());
                 belphIDs.add(belphID);
             }
             nbtTagCompound.put("BelphIDs", belphIDs);
@@ -724,7 +724,7 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
             ListNBT behemothIDs = new ListNBT();
             for(EntityBehemophet entityBehemophet : this.hellfireBehemothMinions) {
                 CompoundNBT behemothID = new CompoundNBT();
-                behemothID.putInt("ID", entityBehemophet.getEntityId());
+                behemothID.putInt("ID", entityBehemophet.getId());
                 behemothIDs.add(behemothID);
             }
             nbtTagCompound.put("BehemothIDs", behemothIDs);

@@ -44,18 +44,18 @@ public class ProjectileBehaviourPlaceBlocks extends ProjectileBehaviour {
 		if(block == null) {
 			return;
 		}
-		BlockState blockState = block.getDefaultState();
+		BlockState blockState = block.defaultBlockState();
 		if(block instanceof FlowingFluidBlock) {
-			blockState = blockState.with(FlowingFluidBlock.LEVEL, 8);
+			blockState = blockState.setValue(FlowingFluidBlock.LEVEL, 8);
 		}
 
-		pos = pos.up();
+		pos = pos.above();
 		for(int x = -this.radius + 1; x < this.radius; x++) {
 			for(int y = this.height - 1; y < this.height; y++) {
 				for(int z = -this.radius + 1; z < this.radius; z++) {
-					BlockPos placePos = pos.add(x, y, z);
-					if(projectile.canDestroyBlock(placePos) && (this.chance >= 1 || this.chance >= world.rand.nextDouble())) {
-						world.setBlockState(placePos, blockState);
+					BlockPos placePos = pos.offset(x, y, z);
+					if(projectile.canDestroyBlock(placePos) && (this.chance >= 1 || this.chance >= world.random.nextDouble())) {
+						world.setBlockAndUpdate(placePos, blockState);
 					}
 				}
 			}

@@ -18,7 +18,7 @@ public class MessageEntityVelocity {
 
 	public MessageEntityVelocity() {}
 	public MessageEntityVelocity(Entity entity, double motionX, double motionY, double motionZ) {
-		this.entityID = entity.getEntityId();
+		this.entityID = entity.getId();
 
 		if (motionX < -3.9D) {
 			motionX = -3.9D;
@@ -58,9 +58,9 @@ public class MessageEntityVelocity {
 			return;
 
 		PlayerEntity player = ClientManager.getInstance().getClientPlayer();
-		World world = player.getEntityWorld();
-		Entity entity = world.getEntityByID(message.entityID);
-		entity.setMotion(entity.getMotion().add((double)message.motionX / 8000.0D, (double)message.motionY / 8000.0D, (double)message.motionZ / 8000.0D));
+		World world = player.getCommandSenderWorld();
+		Entity entity = world.getEntity(message.entityID);
+		entity.setDeltaMovement(entity.getDeltaMovement().add((double)message.motionX / 8000.0D, (double)message.motionY / 8000.0D, (double)message.motionZ / 8000.0D));
 	}
 
 	/**

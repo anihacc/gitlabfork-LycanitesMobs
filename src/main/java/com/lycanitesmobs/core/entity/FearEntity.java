@@ -47,7 +47,7 @@ public class FearEntity extends BaseCreatureEntity {
         //Set by feared entity instead.
 
         // Stats:
-        this.experienceValue = 0;
+        this.xpReward = 0;
         this.inventory = new InventoryCreature(this.getName().toString(), this);
     }
 	
@@ -71,11 +71,11 @@ public class FearEntity extends BaseCreatureEntity {
     // ==================================================
 	// ========== Living Update ==========
 	@Override
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
         
         // Server Side Only:
-        if(this.getEntityWorld().isRemote) {
+        if(this.getCommandSenderWorld().isClientSide) {
 			return;
 		}
         
@@ -94,34 +94,34 @@ public class FearEntity extends BaseCreatureEntity {
         
         // Set Rotation:
         if(this.hasPickupEntity() && !(this.getPickupEntity() instanceof PlayerEntity)) {
-        	this.getPickupEntity().rotationYaw = this.rotationYaw;
-        	this.getPickupEntity().rotationPitch = this.rotationPitch;
+        	this.getPickupEntity().yRot = this.yRot;
+        	this.getPickupEntity().xRot = this.xRot;
         }
         
         // Follow Fear Target If Not Picked Up:
         if(this.getPickupEntity() == null) {
-        	this.setPosition(this.fearedEntity.getPositionVec().getX(), this.fearedEntity.getPositionVec().getY(), this.fearedEntity.getPositionVec().getZ());
-			this.setMotion(this.fearedEntity.getMotion());
+        	this.setPos(this.fearedEntity.position().x(), this.fearedEntity.position().y(), this.fearedEntity.position().z());
+			this.setDeltaMovement(this.fearedEntity.getDeltaMovement());
 			this.fallDistance = 0;
         }
 
         // Remove When Fear is Over:
-        if(ObjectManager.getEffect("fear") == null || !fearedEntity.isPotionActive(ObjectManager.getEffect("fear"))) {
+        if(ObjectManager.getEffect("fear") == null || !fearedEntity.hasEffect(ObjectManager.getEffect("fear"))) {
             this.remove();
             return;
         }
 
         // Copy Movement Debuffs:
 		if(this.fearedEntity != null) {
-			if (fearedEntity.isPotionActive(Effects.LEVITATION)) {
-				EffectInstance activeDebuff = fearedEntity.getActivePotionEffect(Effects.LEVITATION);
-				this.addPotionEffect(new EffectInstance(Effects.LEVITATION, activeDebuff.getDuration(), activeDebuff.getAmplifier()));
+			if (fearedEntity.hasEffect(Effects.LEVITATION)) {
+				EffectInstance activeDebuff = fearedEntity.getEffect(Effects.LEVITATION);
+				this.addEffect(new EffectInstance(Effects.LEVITATION, activeDebuff.getDuration(), activeDebuff.getAmplifier()));
 			}
 
 			Effect instability = ObjectManager.getEffect("instability");
-			if (instability != null && fearedEntity.isPotionActive(instability)) {
-				EffectInstance activeDebuff = fearedEntity.getActivePotionEffect(instability);
-				this.addPotionEffect(new EffectInstance(instability, activeDebuff.getDuration(), activeDebuff.getAmplifier()));
+			if (instability != null && fearedEntity.hasEffect(instability)) {
+				EffectInstance activeDebuff = fearedEntity.getEffect(instability);
+				this.addEffect(new EffectInstance(instability, activeDebuff.getDuration(), activeDebuff.getAmplifier()));
 			}
 		}
     }
@@ -138,9 +138,9 @@ public class FearEntity extends BaseCreatureEntity {
     public void setFearedEntity(LivingEntity feared) {
     	this.fearedEntity = feared;
         //this.setSize(feared.width, feared.height); TODO Entity Type Size
-        this.noClip = feared.noClip;
-        this.stepHeight = feared.stepHeight;
-		this.setLocationAndAngles(feared.getPositionVec().getX(), feared.getPositionVec().getY(), feared.getPositionVec().getZ(), feared.rotationYaw, feared.rotationPitch);
+        this.noPhysics = feared.noPhysics;
+        this.maxUpStep = feared.maxUpStep;
+		this.moveTo(feared.position().x(), feared.position().y(), feared.position().z(), feared.yRot, feared.xRot);
 		
         if(!(feared instanceof PlayerEntity)) {
 	        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(feared.getAttribute(Attributes.MOVEMENT_SPEED).getBaseValue());
@@ -157,7 +157,7 @@ public class FearEntity extends BaseCreatureEntity {
     }
     
     @Override
-    public boolean isPotionApplicable(EffectInstance effectInstance) {
+    public boolean canBeAffected(EffectInstance effectInstance) {
         return false;
     }
     
@@ -173,7 +173,7 @@ public class FearEntity extends BaseCreatureEntity {
     		if(this.pickupEntity instanceof FlyingEntity)
     			return true;
     		if(this.pickupEntity instanceof PlayerEntity)
-    			return ((PlayerEntity)this.pickupEntity).abilities.isCreativeMode;
+    			return ((PlayerEntity)this.pickupEntity).abilities.instabuild;
     	}
     	return false;
     }
@@ -185,11 +185,11 @@ public class FearEntity extends BaseCreatureEntity {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public boolean isInvisibleToPlayer(PlayerEntity player) {
+    public boolean isInvisibleTo(PlayerEntity player) {
         return true;
     }
 
-    public boolean canBeCollidedWith()
+    public boolean isPickable()
     {
         return false;
     }

@@ -15,7 +15,7 @@ public class MessagePlayerAttack {
 	public MessagePlayerAttack() {}
 	public MessagePlayerAttack(Entity attackEntity) {
         if(attackEntity != null)
-            this.attackEntityID = attackEntity.getEntityId();
+            this.attackEntityID = attackEntity.getId();
 	}
 	
 	/**
@@ -30,7 +30,7 @@ public class MessagePlayerAttack {
 			PlayerEntity player = ctx.get().getSender();
 			ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
 			if(message.attackEntityID != 0)
-				playerExt.meleeAttack(player.getEntityWorld().getEntityByID(message.attackEntityID));
+				playerExt.meleeAttack(player.getCommandSenderWorld().getEntity(message.attackEntityID));
         });
 	}
 	

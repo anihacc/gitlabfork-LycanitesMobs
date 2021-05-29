@@ -18,7 +18,7 @@ public class EntityGrigori extends TameableCreatureEntity implements IMob {
         this.hasAttackSound = true;
         this.setupMob();
 
-        this.stepHeight = 1.0F;
+        this.maxUpStep = 1.0F;
     }
 
     @Override
@@ -32,7 +32,7 @@ public class EntityGrigori extends TameableCreatureEntity implements IMob {
 
 	@Override
 	public boolean rollWanderChance() {
-		return this.getRNG().nextDouble() <= 0.25D;
+		return this.getRandom().nextDouble() <= 0.25D;
 	}
 	
 	public boolean isFlying() { return true; }

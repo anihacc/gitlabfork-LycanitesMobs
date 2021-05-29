@@ -36,13 +36,13 @@ public class ItemWinterGiftLarge extends BaseItem {
  	//                    Item Use
  	// ==================================================
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
-        ItemStack itemStack = player.getHeldItem(hand);
-         if(!player.abilities.isCreativeMode) {
+    public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
+        ItemStack itemStack = player.getItemInHand(hand);
+         if(!player.abilities.instabuild) {
              itemStack.setCount(Math.max(0, itemStack.getCount() - 1));
          }
          
-         if(!world.isRemote) {
+         if(!world.isClientSide) {
          	this.open(itemStack, world, player);
          }
 
@@ -55,23 +55,23 @@ public class ItemWinterGiftLarge extends BaseItem {
   	// ==================================================
     public void open(ItemStack itemStack, World world, PlayerEntity player) {
         ITextComponent message = new TranslationTextComponent("item.lycanitesmobs." + this.itemName + ".bad");
-		player.sendMessage(message, Util.DUMMY_UUID);
-        this.playSound(world, player.getPosition(), ObjectManager.getSound(this.itemName + "_bad"), SoundCategory.AMBIENT, 5.0F, 1.0F);
+		player.sendMessage(message, Util.NIL_UUID);
+        this.playSound(world, player.blockPosition(), ObjectManager.getSound(this.itemName + "_bad"), SoundCategory.AMBIENT, 5.0F, 1.0F);
 		
 		// Lots of Random Tricks:
         List<EntityType> entityTypes = ObjectLists.getEntites("winter_tricks");
         if(entityTypes.isEmpty())
             return;
-        EntityType entityType = entityTypes.get(player.getRNG().nextInt(entityTypes.size()));
+        EntityType entityType = entityTypes.get(player.getRandom().nextInt(entityTypes.size()));
         if(entityType != null) {
             Entity entity = entityType.create(world);
             if (entity != null) {
-                entity.setLocationAndAngles(player.getPositionVec().getX(), player.getPositionVec().getY(), player.getPositionVec().getZ(), player.rotationYaw, player.rotationPitch);
+                entity.moveTo(player.position().x(), player.position().y(), player.position().z(), player.yRot, player.xRot);
 
                 // Themed Names:
                 if (entity instanceof BaseCreatureEntity) {
                     BaseCreatureEntity entityCreature = (BaseCreatureEntity) entity;
-                    entityCreature.addLevel(world.rand.nextInt(10));
+                    entityCreature.addLevel(world.random.nextInt(10));
                     if (entityCreature.creatureInfo.getName().equals("wildkin"))
                         entityCreature.setCustomName(new StringTextComponent("Gooderness"));
                     else if (entityCreature.creatureInfo.getName().equals("jabberwock"))
@@ -86,7 +86,7 @@ public class ItemWinterGiftLarge extends BaseItem {
                         entityCreature.setCustomName(new StringTextComponent("Krampus"));
                 }
 
-                world.addEntity(entity);
+                world.addFreshEntity(entity);
             }
         }
     }

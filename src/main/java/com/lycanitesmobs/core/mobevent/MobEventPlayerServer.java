@@ -44,7 +44,7 @@ public class MobEventPlayerServer {
 	public MobEventPlayerServer(MobEvent mobEvent, World world) {
 		this.mobEvent = mobEvent;
         this.world = world;
-        if(world.isRemote)
+        if(world.isClientSide)
             LycanitesMobs.logWarning("", "Created a MobEventServer with a client side world, this shouldn't happen, things are going to get weird!");
 	}
 
@@ -56,12 +56,12 @@ public class MobEventPlayerServer {
         this.startedWorldTime = world.getGameTime();
         this.ticks = 0;
 
-        LycanitesMobs.logInfo("", "Mob Event " + (this.extended ? "Extended" : "Started") + ": " + this.mobEvent.getTitle().getString() + " In Dimension: " + this.world.getDimensionKey().getLocation() + " Duration: " + (this.mobEvent.duration / 20) + "secs");
+        LycanitesMobs.logInfo("", "Mob Event " + (this.extended ? "Extended" : "Started") + ": " + this.mobEvent.getTitle().getString() + " In Dimension: " + this.world.dimension().location() + " Duration: " + (this.mobEvent.duration / 20) + "secs");
     }
 
     public void changeStartedWorldTime(long newStartedTime) {
         this.startedWorldTime = newStartedTime;
-        LycanitesMobs.logInfo("", "Mob Event Start Time Changed: " + this.mobEvent.getTitle().getString() + " In Dimension: " + this.world.getDimensionKey().getLocation().toString() + " Duration: " + (this.mobEvent.duration / 20) + "secs" + " Time Remaining: " + ((this.mobEvent.duration - (this.world.getGameTime() - this.startedWorldTime)) / 20) + "secs");
+        LycanitesMobs.logInfo("", "Mob Event Start Time Changed: " + this.mobEvent.getTitle().getString() + " In Dimension: " + this.world.dimension().location().toString() + " Duration: " + (this.mobEvent.duration / 20) + "secs" + " Time Remaining: " + ((this.mobEvent.duration - (this.world.getGameTime() - this.startedWorldTime)) / 20) + "secs");
     }
 
 
@@ -81,7 +81,7 @@ public class MobEventPlayerServer {
             LycanitesMobs.logWarning("", "MobEventBase was trying to update without a world object, stopped!");
             return;
         }
-        else if(this.world.isRemote) {
+        else if(this.world.isClientSide) {
             LycanitesMobs.logWarning("", "MobEventBase was trying to update with a client side world, stopped!");
             return;
         }

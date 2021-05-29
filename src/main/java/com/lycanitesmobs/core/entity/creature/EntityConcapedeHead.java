@@ -59,19 +59,19 @@ public class EntityConcapedeHead extends AgeableCreatureEntity {
 	@Override
 	public void onFirstSpawn() {
 		// Create Starting Segments:
-        if(!this.getEntityWorld().isRemote && this.backSegment == null) {
+        if(!this.getCommandSenderWorld().isClientSide && this.backSegment == null) {
         	this.setGrowingAge(-this.growthTime / 4);
-        	int segmentCount = this.getRNG().nextInt(CONCAPEDE_SIZE_MAX);
+        	int segmentCount = this.getRandom().nextInt(CONCAPEDE_SIZE_MAX);
     		AgeableCreatureEntity parentSegment = this;
         	for(int segment = 0; segment < segmentCount; segment++) {
-        		EntityConcapedeSegment segmentEntity = (EntityConcapedeSegment)CreatureManager.getInstance().getCreature("concapedesegment").createEntity(parentSegment.getEntityWorld());
-        		segmentEntity.setLocationAndAngles(parentSegment.getPositionVec().getX(), parentSegment.getPositionVec().getY(), parentSegment.getPositionVec().getZ(), 0.0F, 0.0F);
+        		EntityConcapedeSegment segmentEntity = (EntityConcapedeSegment)CreatureManager.getInstance().getCreature("concapedesegment").createEntity(parentSegment.getCommandSenderWorld());
+        		segmentEntity.moveTo(parentSegment.position().x(), parentSegment.position().y(), parentSegment.position().z(), 0.0F, 0.0F);
 				segmentEntity.setParentTarget(parentSegment);
 				segmentEntity.applyVariant(this.getVariantIndex());
 				segmentEntity.setSizeScale(this.sizeScale);
 				segmentEntity.spawnEventType = this.spawnEventType;
 				segmentEntity.firstSpawn = false;
-        		parentSegment.getEntityWorld().addEntity(segmentEntity);
+        		parentSegment.getCommandSenderWorld().addFreshEntity(segmentEntity);
 				parentSegment = segmentEntity;
         	}
         }
@@ -94,7 +94,7 @@ public class EntityConcapedeHead extends AgeableCreatureEntity {
 	@Override
 	public void setGrowingAge(int age) {
 		// Spawn Additional Segments:
-		if(!this.getEntityWorld().isRemote && !this.firstSpawn && age == 0 && !this.isHungry && CreatureManager.getInstance().getCreature("concapedesegment") != null) {
+		if(!this.getCommandSenderWorld().isClientSide && !this.firstSpawn && age == 0 && !this.isHungry && CreatureManager.getInstance().getCreature("concapedesegment") != null) {
 			age = -(this.growthTime / 4);
 			this.isHungry = true;
 
@@ -116,14 +116,14 @@ public class EntityConcapedeHead extends AgeableCreatureEntity {
 			}
 
 			if(size < CONCAPEDE_SIZE_MAX) {
-				EntityConcapedeSegment segmentEntity = (EntityConcapedeSegment)CreatureManager.getInstance().getCreature("concapedesegment").createEntity(lastSegment.getEntityWorld());
-	    		segmentEntity.setLocationAndAngles(lastSegment.getPositionVec().getX(), lastSegment.getPositionVec().getY(), lastSegment.getPositionVec().getZ(), 0.0F, 0.0F);
+				EntityConcapedeSegment segmentEntity = (EntityConcapedeSegment)CreatureManager.getInstance().getCreature("concapedesegment").createEntity(lastSegment.getCommandSenderWorld());
+	    		segmentEntity.moveTo(lastSegment.position().x(), lastSegment.position().y(), lastSegment.position().z(), 0.0F, 0.0F);
 				segmentEntity.setParentTarget(lastSegment);
 				segmentEntity.applyVariant(this.getVariantIndex());
 				segmentEntity.setSizeScale(this.sizeScale);
 				segmentEntity.spawnEventType = this.spawnEventType;
 				segmentEntity.firstSpawn = false;
-				lastSegment.getEntityWorld().addEntity(segmentEntity);
+				lastSegment.getCommandSenderWorld().addFreshEntity(segmentEntity);
 			}
 		}
         super.setGrowingAge(age);
@@ -136,12 +136,12 @@ public class EntityConcapedeHead extends AgeableCreatureEntity {
 	// ========== Pathing Weight ==========
     @Override
     public float getBlockPathWeight(int x, int y, int z) {
-        BlockState blockState = this.getEntityWorld().getBlockState(new BlockPos(x, y - 1, z));
+        BlockState blockState = this.getCommandSenderWorld().getBlockState(new BlockPos(x, y - 1, z));
         Block block = blockState.getBlock();
         if(block != Blocks.AIR) {
-            if(blockState.getMaterial() == Material.ORGANIC)
+            if(blockState.getMaterial() == Material.GRASS)
                 return 10F;
-            if(blockState.getMaterial() == Material.EARTH)
+            if(blockState.getMaterial() == Material.DIRT)
                 return 7F;
         }
         return super.getBlockPathWeight(x, y, z);
@@ -149,7 +149,7 @@ public class EntityConcapedeHead extends AgeableCreatureEntity {
 
     // ========== Can leash ==========
     @Override
-    public boolean canBeLeashedTo(PlayerEntity player) {
+    public boolean canBeLeashed(PlayerEntity player) {
         return true;
     }
 	
@@ -172,7 +172,7 @@ public class EntityConcapedeHead extends AgeableCreatureEntity {
     public boolean isAggressive() {
     	if(this.isInLove())
     		return false;
-		this.getEntityWorld();
+		this.getCommandSenderWorld();
 		if(this.isDaytime())
     		return this.testLightLevel() < 2;
     	else
@@ -263,18 +263,18 @@ public class EntityConcapedeHead extends AgeableCreatureEntity {
 	// ========== Read ===========
 	/** Used when loading this mob from a saved chunk. **/
 	@Override
-	public void readAdditional(CompoundNBT nbtTagCompound) {
+	public void readAdditionalSaveData(CompoundNBT nbtTagCompound) {
 		if(nbtTagCompound.contains("IsHungry")) {
 			this.isHungry = nbtTagCompound.getBoolean("IsHungry");
 		}
-		super.readAdditional(nbtTagCompound);
+		super.readAdditionalSaveData(nbtTagCompound);
 	}
 
 	// ========== Write ==========
 	/** Used when saving this mob to a chunk. **/
 	@Override
-	public void writeAdditional(CompoundNBT nbtTagCompound) {
-		super.writeAdditional(nbtTagCompound);
+	public void addAdditionalSaveData(CompoundNBT nbtTagCompound) {
+		super.addAdditionalSaveData(nbtTagCompound);
 		nbtTagCompound.putBoolean("IsHungry", this.isHungry);
 	}
 }

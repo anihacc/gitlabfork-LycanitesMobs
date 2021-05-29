@@ -123,7 +123,7 @@ public class ModelJoust extends CreatureObjModelOld {
 		float bob = MathHelper.cos(time * 0.6662F + (float)Math.PI) * walkSwing * distance;
 		if(bob < 0) bob += -bob * 2;
     	if(partName.equals("head") || partName.equals("mouth"))
-    		if(entity instanceof AgeableCreatureEntity && ((AgeableCreatureEntity)entity).isChild())
+    		if(entity instanceof AgeableCreatureEntity && ((AgeableCreatureEntity)entity).isBaby())
     			bob /= 2;
 		posY += bob;
 		

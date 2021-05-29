@@ -29,7 +29,7 @@ public class EntityArgus extends TameableCreatureEntity implements IMob, IFusabl
         this.spawnsInWater = true;
         this.setupMob();
 
-        this.stepHeight = 1.0F;
+        this.maxUpStep = 1.0F;
 
         this.setAttackCooldownMax(40);
     }
@@ -49,8 +49,8 @@ public class EntityArgus extends TameableCreatureEntity implements IMob, IFusabl
     // ==================================================
 	// ========== Living Update ==========
 	@Override
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
         
         /*/ Random Target Teleporting:
 		if(!this.getEntityWorld().isRemote && this.hasAttackTarget()) {
@@ -65,9 +65,9 @@ public class EntityArgus extends TameableCreatureEntity implements IMob, IFusabl
 		}*/
         
         // Particles:
-        if(this.getEntityWorld().isRemote)
+        if(this.getCommandSenderWorld().isClientSide)
 	        for(int i = 0; i < 2; ++i) {
-	            this.getEntityWorld().addParticle(ParticleTypes.PORTAL, this.getPositionVec().getX() + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, this.getPositionVec().getY() + this.rand.nextDouble() * (double)this.getSize(Pose.STANDING).height, this.getPositionVec().getZ() + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
+	            this.getCommandSenderWorld().addParticle(ParticleTypes.PORTAL, this.position().x() + (this.random.nextDouble() - 0.5D) * (double)this.getDimensions(Pose.STANDING).width, this.position().y() + this.random.nextDouble() * (double)this.getDimensions(Pose.STANDING).height, this.position().z() + (this.random.nextDouble() - 0.5D) * (double)this.getDimensions(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
 	        }
     }
 

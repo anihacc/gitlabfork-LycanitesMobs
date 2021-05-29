@@ -106,14 +106,14 @@ public class IndexedModel {
         Vector3f output = new Vector3f();
 
         // Calculate Edges:
-        Vector3f calU = new Vector3f(p2.getX() - p1.getX(), p2.getY() - p1.getY(), p2.getZ() - p1.getZ());
-        Vector3f calV = new Vector3f(p3.getX() - p1.getX(), p3.getY() - p1.getY(), p3.getZ() - p1.getZ());
+        Vector3f calU = new Vector3f(p2.x() - p1.x(), p2.y() - p1.y(), p2.z() - p1.z());
+        Vector3f calV = new Vector3f(p3.x() - p1.x(), p3.y() - p1.y(), p3.z() - p1.z());
 
         // Cross Edges:
         output.set(
-				calU.getY() * calV.getZ() - calU.getZ() * calV.getY(),
-				calU.getZ() * calV.getX() - calU.getX() * calV.getZ(),
-				calU.getX() * calV.getY() - calU.getY() * calV.getX()
+				calU.y() * calV.z() - calU.z() * calV.y(),
+				calU.z() * calV.x() - calU.x() * calV.z(),
+				calU.x() * calV.y() - calU.y() * calV.x()
 		);
 
         output.normalize(); // normalize()
@@ -145,7 +145,7 @@ public class IndexedModel {
 			double dividend = (deltaU1 * deltaV2 - deltaU2 * deltaV1);
 			double f = dividend == 0.0f ? 0.0f : 1.0f / dividend;
 
-			Vector3f tangent = new Vector3f((float)(f * (deltaV2 * edge1.getX() - deltaV1 * edge2.getX())), (float)(f * (deltaV2 * edge1.getY() - deltaV1 * edge2.getY())), (float)(f * (deltaV2 * edge1.getZ() - deltaV1 * edge2.getZ())));
+			Vector3f tangent = new Vector3f((float)(f * (deltaV2 * edge1.x() - deltaV1 * edge2.x())), (float)(f * (deltaV2 * edge1.y() - deltaV1 * edge2.y())), (float)(f * (deltaV2 * edge1.z() - deltaV1 * edge2.z())));
 
 			v = (Vector3f)tangents.get(i0).copy(); // clone()
 			v.add(tangent); // add()
@@ -172,9 +172,9 @@ public class IndexedModel {
         float z = 0;
         for(Vector3f position : vertices)
         {
-            x += position.getX();
-            y += position.getY();
-            z += position.getZ();
+            x += position.x();
+            y += position.y();
+            z += position.z();
         }
         x /= vertices.size();
         y /= vertices.size();

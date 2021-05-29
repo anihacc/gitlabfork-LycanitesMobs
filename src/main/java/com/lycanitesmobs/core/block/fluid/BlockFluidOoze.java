@@ -77,22 +77,22 @@ public class BlockFluidOoze extends FlowingFluidBlock {
 	//                      Collision
 	// ==================================================
     @Override
-    public void onEntityCollision(BlockState blockState, World world, BlockPos pos, Entity entity) {
+    public void entityInside(BlockState blockState, World world, BlockPos pos, Entity entity) {
         // Damage:
         if (!(entity instanceof ItemEntity) && !(entity instanceof ExperienceOrbEntity)) {
-            entity.attackEntityFrom(ObjectManager.getDamageSource("ooze"), 1F);
+            entity.hurt(ObjectManager.getDamageSource("ooze"), 1F);
         }
 
         // Extinguish:
-        if(entity.isBurning())
-            entity.extinguish();
+        if(entity.isOnFire())
+            entity.clearFire();
 
         // Effects:
         if(entity instanceof LivingEntity) {
-            ((LivingEntity)entity).addPotionEffect(new EffectInstance(Effects.SLOWNESS, 5 * 20, 0));
+            ((LivingEntity)entity).addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 5 * 20, 0));
         }
 
-        super.onEntityCollision(blockState, world, pos, entity);
+        super.entityInside(blockState, world, pos, entity);
     }
 
 
@@ -100,7 +100,7 @@ public class BlockFluidOoze extends FlowingFluidBlock {
     //                    Render Type
     // ==================================================
     @Override
-    public BlockRenderType getRenderType(BlockState state) {
+    public BlockRenderType getRenderShape(BlockState state) {
         return BlockRenderType.MODEL;
     }
     

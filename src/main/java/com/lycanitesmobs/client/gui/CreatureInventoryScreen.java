@@ -35,14 +35,14 @@ public class CreatureInventoryScreen extends BaseContainerScreen<CreatureContain
 	@Override
 	public void init() {
 		super.init();
-		this.xSize = 176;
-        this.ySize = 166;
+		this.imageWidth = 176;
+        this.imageHeight = 166;
 	}
 
 	@Override
 	protected void initWidgets() {
-		int backX = (this.width - this.xSize) / 2;
-		int backY = (this.height - this.ySize) / 2;
+		int backX = (this.width - this.imageWidth) / 2;
+		int backY = (this.height - this.imageHeight) / 2;
 
 		if(!(this.creature instanceof TameableCreatureEntity))
 			return;
@@ -53,7 +53,7 @@ public class CreatureInventoryScreen extends BaseContainerScreen<CreatureContain
 		int buttonSpacing = 2;
 		int buttonWidth = 128;
 		int buttonHeight = 20;
-		int buttonX = backX + this.xSize;
+		int buttonX = backX + this.imageWidth;
 		int buttonY = backY;
 
 		String buttonText = new TranslationTextComponent("gui.pet.follow").getString();
@@ -112,16 +112,16 @@ public class CreatureInventoryScreen extends BaseContainerScreen<CreatureContain
 		}
 		this.addButton(button);
 
-		buttonText = new TranslationTextComponent("gui.pet.pvp").appendString(": ").append(pet.isPVP() ? new TranslationTextComponent("common.yes") : new TranslationTextComponent("common.no")).getString();
+		buttonText = new TranslationTextComponent("gui.pet.pvp").append(": ").append(pet.isPVP() ? new TranslationTextComponent("common.yes") : new TranslationTextComponent("common.no")).getString();
 		buttonY += buttonHeight + (buttonSpacing * 2);
 		this.addButton(new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.PVP.id, buttonX + buttonSpacing, buttonY, buttonWidth, buttonHeight, new TranslationTextComponent(buttonText), this));
 	}
 
 	@Override
 	protected void renderForeground(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
-        this.drawHelper.drawString(matrixStack, this.playerInventory.getName().getString(), this.guiLeft + 8, this.guiTop + this.ySize - 96 + 2, 4210752);
-		int backX = (this.width - this.xSize) / 2;
-		int backY = (this.height - this.ySize) / 2;
+        this.drawHelper.drawString(matrixStack, this.inventory.getName().getString(), this.leftPos + 8, this.topPos + this.imageHeight - 96 + 2, 4210752);
+		int backX = (this.width - this.imageWidth) / 2;
+		int backY = (this.height - this.imageHeight) / 2;
 		this.drawBars(matrixStack, backX, backY);
     }
 
@@ -137,7 +137,7 @@ public class CreatureInventoryScreen extends BaseContainerScreen<CreatureContain
 		float healthNormal = Math.min(1, this.creature.getHealth() / this.creature.getMaxHealth());
 		this.drawHelper.drawTexture(matrixStack, TextureManager.getTexture("GUIPetBarHealth"), barX, barY, 0, healthNormal, 1, barWidth * healthNormal, barHeight);
 		String healthText = new TranslationTextComponent("entity.health").getString() + ": " + String.format("%.0f", this.creature.getHealth()) + "/" + String.format("%.0f", this.creature.getMaxHealth());
-		this.drawHelper.fontRenderer.drawString(matrixStack, healthText, barCenter - ((float)this.drawHelper.getStringWidth(healthText) / 2), barY + 2, 0xFFFFFF);
+		this.drawHelper.fontRenderer.draw(matrixStack, healthText, barCenter - ((float)this.drawHelper.getStringWidth(healthText) / 2), barY + 2, 0xFFFFFF);
 		barY += barHeight + 1;
 
 		// XP Bar:
@@ -145,23 +145,23 @@ public class CreatureInventoryScreen extends BaseContainerScreen<CreatureContain
 		float experienceNormal = Math.min(1, (float)this.creature.getExperience() / this.creature.creatureStats.getExperienceForNextLevel());
 		this.drawHelper.drawTexture(matrixStack, TextureManager.getTexture("GUIBarExperience"), barX, barY, 0, experienceNormal, 1, barWidth * experienceNormal, barHeight);
 		String experienceText = new TranslationTextComponent("entity.experience").getString() + ": " + this.creature.getExperience() + "/" + this.creature.creatureStats.getExperienceForNextLevel();
-		this.drawHelper.fontRenderer.drawString(matrixStack, experienceText, barCenter - ((float)this.drawHelper.getStringWidth(experienceText) / 2), barY + 2, 0xFFFFFF);
+		this.drawHelper.fontRenderer.draw(matrixStack, experienceText, barCenter - ((float)this.drawHelper.getStringWidth(experienceText) / 2), barY + 2, 0xFFFFFF);
 		barY += barHeight + 1;
 
 		// Level:
 		String levelText = new TranslationTextComponent("entity.level").getString() + ": " + this.creature.getLevel();
-		this.drawHelper.fontRenderer.drawString(matrixStack, levelText, barCenter - ((float)this.drawHelper.getStringWidth(levelText) / 2), barY + 2, 0xFFFFFF);
+		this.drawHelper.fontRenderer.draw(matrixStack, levelText, barCenter - ((float)this.drawHelper.getStringWidth(levelText) / 2), barY + 2, 0xFFFFFF);
 	}
 
 	@Override
 	protected void renderBackground(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.getMinecraft().getTextureManager().bindTexture(TextureManager.getTexture("GUIInventoryCreature"));
-        this.xSize = 176;
-        this.ySize = 166;
-        int backX = (this.width - this.xSize) / 2;
-        int backY = (this.height - this.ySize) / 2;
-        this.drawHelper.drawTexturedModalRect(matrixStack, backX, backY, 0, 0, this.xSize, this.ySize);
+        this.getMinecraft().getTextureManager().bind(TextureManager.getTexture("GUIInventoryCreature"));
+        this.imageWidth = 176;
+        this.imageHeight = 166;
+        int backX = (this.width - this.imageWidth) / 2;
+        int backY = (this.height - this.imageHeight) / 2;
+        this.drawHelper.drawTexturedModalRect(matrixStack, backX, backY, 0, 0, this.imageWidth, this.imageHeight);
 
 		this.drawFrames(matrixStack, backX, backY, mouseX, mouseY);
 		this.drawSlots(matrixStack, backX, backY);
@@ -169,7 +169,7 @@ public class CreatureInventoryScreen extends BaseContainerScreen<CreatureContain
 
 	protected void drawFrames(MatrixStack matrixStack, int backX, int backY, int mouseX, int mouseY) {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.getMinecraft().getTextureManager().bindTexture(TextureManager.getTexture("GUIInventoryCreature"));
+        this.getMinecraft().getTextureManager().bind(TextureManager.getTexture("GUIInventoryCreature"));
         
         // Status Frame:
         int statusWidth = 90;
@@ -180,25 +180,25 @@ public class CreatureInventoryScreen extends BaseContainerScreen<CreatureContain
         int creatureFrameWidth = 54;
         int creatureFrameHeight = 54;
         this.drawHelper.drawTexturedModalRect(matrixStack, backX - creatureFrameWidth + 1, backY + 17, statusWidth, 256 - creatureFrameHeight, creatureFrameWidth, creatureFrameHeight);
-		double creatureWidth = creature.getWidth();
-		double creatureHeight = creature.getHeight();
+		double creatureWidth = creature.getBbWidth();
+		double creatureHeight = creature.getBbHeight();
 		int scale = (int)Math.round((2.5F / Math.max(creatureWidth, creatureHeight)) * 6);
 		BaseGui.renderLivingEntity(matrixStack, backX + 26 - creatureFrameWidth + 1, backY + 60, scale, (float) backX - mouseX, (float) backY - mouseY, this.creature);
 	}
 
 	protected void drawSlots(MatrixStack matrixStack, int backX, int backY) {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.getMinecraft().getTextureManager().bindTexture(TextureManager.getTexture("GUIInventoryCreature"));
+        this.getMinecraft().getTextureManager().bind(TextureManager.getTexture("GUIInventoryCreature"));
         
-		BaseContainer container = this.getContainer();
-		List<Slot> creatureSlots = container.inventorySlots.subList(container.specialStart, container.inventoryFinish + 1);
+		BaseContainer container = this.getMenu();
+		List<Slot> creatureSlots = container.slots.subList(container.specialStart, container.inventoryFinish + 1);
 		int slotWidth = 18;
 		int slotHeight = 18;
 		int slotU = 238;
 		int slotVBase = 0;
 		for(Slot creatureSlot : creatureSlots) {
-			int slotX = backX + creatureSlot.xPos - 1;
-			int slotY = backY + creatureSlot.yPos - 1;
+			int slotX = backX + creatureSlot.x - 1;
+			int slotY = backY + creatureSlot.y - 1;
 			int slotV = slotVBase;
 			String slotType = creatureInventory.getTypeFromSlot(creatureSlot.getSlotIndex());
 			if(slotType != null) {

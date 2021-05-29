@@ -34,15 +34,15 @@ public class TargetSorterNearest implements Comparator {
   	//                   Compare Distance
   	// ==================================================
     public int compareDistanceSq(Entity targetA, Entity targetB) {
-        double distanceA = this.host.getDistance(targetA);
-        double distanceB = this.host.getDistance(targetB);
+        double distanceA = this.host.distanceTo(targetA);
+        double distanceB = this.host.distanceTo(targetB);
         return Double.compare(distanceA, distanceB);
     }
 
     public int compareDistanceSq(BlockPos targetA, BlockPos targetB) {
-        BlockPos hostCoords = new BlockPos((int)this.host.getPositionVec().getX(), (int)this.host.getPositionVec().getY(), (int)this.host.getPositionVec().getZ());
-        double distanceA = hostCoords.distanceSq(new Vector3i(targetA.getX(), targetA.getY(), targetA.getZ()));
-        double distanceB = hostCoords.distanceSq(new Vector3i(targetB.getX(), targetB.getY(), targetB.getZ()));
+        BlockPos hostCoords = new BlockPos((int)this.host.position().x(), (int)this.host.position().y(), (int)this.host.position().z());
+        double distanceA = hostCoords.distSqr(new Vector3i(targetA.getX(), targetA.getY(), targetA.getZ()));
+        double distanceB = hostCoords.distSqr(new Vector3i(targetB.getX(), targetB.getY(), targetB.getZ()));
         return Double.compare(distanceA, distanceB);
     }
 }

@@ -9,6 +9,8 @@ import net.minecraft.util.math.vector.Vector3d;
 
 import java.util.EnumSet;
 
+import net.minecraft.entity.ai.goal.Goal.Flag;
+
 public class AvoidGoal extends Goal {
     // Targets:
     private BaseCreatureEntity host;
@@ -30,7 +32,7 @@ public class AvoidGoal extends Goal {
  	// ==================================================
     public AvoidGoal(BaseCreatureEntity setHost) {
         this.host = setHost;
-		this.setMutexFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
+		this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
     }
     
     
@@ -63,7 +65,7 @@ public class AvoidGoal extends Goal {
  	//                  Should Execute
  	// ==================================================
 	@Override
-    public boolean shouldExecute() {
+    public boolean canUse() {
         this.avoidTarget = this.host.getAvoidTarget();
         if(this.avoidTarget == null) {
         	return false;
@@ -75,7 +77,7 @@ public class AvoidGoal extends Goal {
         if(this.targetClass != null && !this.targetClass.isAssignableFrom(this.avoidTarget.getClass()))
             return false;
 
-        if(this.host.getDistanceSq(this.avoidTarget) >= this.farDistance) {
+        if(this.host.distanceToSqr(this.avoidTarget) >= this.farDistance) {
         	return false;
         }
 
@@ -84,17 +86,17 @@ public class AvoidGoal extends Goal {
         	return false;
 		}
 
-        Vector3d avoidVector = RandomPositionGenerator.findRandomTargetAwayFrom(this.host, (int)Math.sqrt(this.farDistance), 7, new Vector3d(this.avoidTarget.getPositionVec().getX(), this.avoidTarget.getPositionVec().getY(), this.avoidTarget.getPositionVec().getZ()));
+        Vector3d avoidVector = RandomPositionGenerator.findRandomTargetAwayFrom(this.host, (int)Math.sqrt(this.farDistance), 7, new Vector3d(this.avoidTarget.position().x(), this.avoidTarget.position().y(), this.avoidTarget.position().z()));
 		if(avoidVector == null) {
 			this.findRandomTargetAwayFromCooldown = this.findRandomTargetAwayFromCooldownMax;
 			return false;
 		}
         
-        if(this.avoidTarget.getDistanceSq(avoidVector.x, avoidVector.y, avoidVector.z) < this.avoidTarget.getDistanceSq(this.host))
+        if(this.avoidTarget.distanceToSqr(avoidVector.x, avoidVector.y, avoidVector.z) < this.avoidTarget.distanceToSqr(this.host))
             return false;
 
         if(!this.host.useDirectNavigator()) {
-            this.pathEntity = this.host.getNavigator().getPathToPos(avoidVector.x, avoidVector.y, avoidVector.z, 0);
+            this.pathEntity = this.host.getNavigation().createPath(avoidVector.x, avoidVector.y, avoidVector.z, 0);
             if(this.pathEntity == null)// || !this.pathEntity.isDestinationSame(avoidVector))
                 return false;
         }
@@ -107,16 +109,16 @@ public class AvoidGoal extends Goal {
  	//                 Continue Executing
  	// ==================================================
 	@Override
-    public boolean shouldContinueExecuting() {
+    public boolean canContinueToUse() {
     	if(this.avoidTarget == null || this.host.getAvoidTarget() == null)
     		return false;
 
-        if(!this.host.useDirectNavigator() && this.host.getNavigator().noPath())
+        if(!this.host.useDirectNavigator() && this.host.getNavigation().isDone())
         	return false;
 		if(this.host.useDirectNavigator() && this.host.directNavigator.atTargetPosition())
 			return false;
 
-        if(this.host.getDistanceSq(this.avoidTarget) >= this.farDistance)
+        if(this.host.distanceToSqr(this.avoidTarget) >= this.farDistance)
         	return false;
 
     	return true;
@@ -127,9 +129,9 @@ public class AvoidGoal extends Goal {
  	//                      Start
  	// ==================================================
 	@Override
-    public void startExecuting() {
+    public void start() {
     	if(!this.host.useDirectNavigator())
-    		this.host.getNavigator().setPath(this.pathEntity, this.farSpeed);
+    		this.host.getNavigation().moveTo(this.pathEntity, this.farSpeed);
     	else
     		this.host.directNavigator.setTargetPosition(this.avoidTarget, this.farSpeed);
     }
@@ -139,7 +141,7 @@ public class AvoidGoal extends Goal {
  	//                      Reset
  	// ==================================================
 	@Override
-    public void resetTask() {
+    public void stop() {
         this.avoidTarget = null;
     }
 	
@@ -149,14 +151,14 @@ public class AvoidGoal extends Goal {
  	// ==================================================
 	@Override
     public void tick() {
-        if(this.host.getDistance(this.avoidTarget) < this.nearDistance)
+        if(this.host.distanceTo(this.avoidTarget) < this.nearDistance)
         	if(!this.host.useDirectNavigator())
-        		this.host.getNavigator().setSpeed(this.nearSpeed);
+        		this.host.getNavigation().setSpeedModifier(this.nearSpeed);
         	else
         		this.host.directNavigator.speedModifier = this.nearSpeed;
         else
         	if(!this.host.useDirectNavigator())
-        		this.host.getNavigator().setSpeed(this.farSpeed);
+        		this.host.getNavigation().setSpeedModifier(this.farSpeed);
         	else
         		this.host.directNavigator.speedModifier = this.farSpeed;
     }

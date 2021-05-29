@@ -49,26 +49,26 @@ public class LayerItem {
 	public Vector4f getPartColor(String partName, ItemStack itemStack, float loop) {
 		if(this.colorFadeSpeed != null) {
 			float red = 1;
-			if(this.colorFadeSpeed.getX() != 0)
-				red = (loop % this.colorFadeSpeed.getX() / this.colorFadeSpeed.getX()) * 2;
+			if(this.colorFadeSpeed.x() != 0)
+				red = (loop % this.colorFadeSpeed.x() / this.colorFadeSpeed.x()) * 2;
 			if(red > 1)
 				red = -(red - 1);
 
 			float green = 1;
-			if(this.colorFadeSpeed.getY() != 0)
-				green = (loop % this.colorFadeSpeed.getY() / this.colorFadeSpeed.getY()) * 2;
+			if(this.colorFadeSpeed.y() != 0)
+				green = (loop % this.colorFadeSpeed.y() / this.colorFadeSpeed.y()) * 2;
 			if(green > 1)
 				green = -(green - 1);
 
 			float blue = 1;
-			if(this.colorFadeSpeed.getZ() != 0)
-				blue = (loop % this.colorFadeSpeed.getZ() / this.colorFadeSpeed.getZ()) * 2;
+			if(this.colorFadeSpeed.z() != 0)
+				blue = (loop % this.colorFadeSpeed.z() / this.colorFadeSpeed.z()) * 2;
 			if(blue > 1)
 				blue = -(blue - 1);
 
 			float alpha = 1;
-			if(this.colorFadeSpeed.getW() != 0)
-				alpha = (loop % this.colorFadeSpeed.getW() / this.colorFadeSpeed.getW()) * 2;
+			if(this.colorFadeSpeed.w() != 0)
+				alpha = (loop % this.colorFadeSpeed.w() / this.colorFadeSpeed.w()) * 2;
 			if(alpha > 1)
 				alpha = -(alpha - 1);
 

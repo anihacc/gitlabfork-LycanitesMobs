@@ -275,13 +275,13 @@ public class ItemDrop {
 		ItemStack itemStack = this.getItemStack();
 
 		if(entity != null) {
-			if(entity.isBurning()) {
+			if(entity.isOnFire()) {
 				itemStack = this.getBurningItemStack();
 			}
 
-			for(Object potionEffect : entity.getActivePotionEffects()) {
+			for(Object potionEffect : entity.getActiveEffects()) {
 				if(potionEffect instanceof EffectInstance) {
-					int effectId = Effect.getId(((EffectInstance) potionEffect).getPotion());
+					int effectId = Effect.getId(((EffectInstance) potionEffect).getEffect());
 					ItemStack effectStack = this.getEffectItemStack(effectId);
 					if(!effectStack.isEmpty())
 						itemStack = effectStack;

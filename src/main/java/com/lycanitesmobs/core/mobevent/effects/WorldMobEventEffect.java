@@ -38,16 +38,16 @@ public class WorldMobEventEffect extends MobEventEffect {
 		if(ticks == 0) {
 			// Rain:
 			if ("start".equalsIgnoreCase(this.rain)) {
-				world.getWorldInfo().setRaining(true);
+				world.getLevelData().setRaining(true);
 			} else if ("stop".equalsIgnoreCase(this.rain)) {
-				world.getWorldInfo().setRaining(false);
+				world.getLevelData().setRaining(false);
 			}
 
 			// Lightning:
 			if ("start".equalsIgnoreCase(this.thunder)) {
-				world.setThunderStrength(1.0F);
+				world.setThunderLevel(1.0F);
 			} else if ("stop".equalsIgnoreCase(this.thunder)) {
-				world.setThunderStrength(1.0F);
+				world.setThunderLevel(1.0F);
 			}
 
 			// Day Time:
@@ -59,7 +59,7 @@ public class WorldMobEventEffect extends MobEventEffect {
 				if (excessTime > targetTime) {
 					targetTime += dayTime;
 				}
-				for (ServerWorld serverWorld : world.getServer().getWorlds()) {
+				for (ServerWorld serverWorld : world.getServer().getAllLevels()) {
 					serverWorld.setDayTime(currentTime - excessTime + targetTime);
 				}
 			}

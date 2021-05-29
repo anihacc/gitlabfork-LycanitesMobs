@@ -38,7 +38,7 @@ public class EntityCockatrice extends RideableCreatureEntity implements IMob {
         this.flySoundSpeed = 20;
         this.setupMob();
 
-        this.stepHeight = 1.0F;
+        this.maxUpStep = 1.0F;
     }
 
     // ========== Init AI ==========
@@ -57,14 +57,14 @@ public class EntityCockatrice extends RideableCreatureEntity implements IMob {
     // ==================================================
 	// ========== Living Update ==========
 	@Override
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
 
         // Land/Fly:
-        if(!this.getEntityWorld().isRemote && !this.isAIDisabled()) {
+        if(!this.getCommandSenderWorld().isClientSide && !this.isNoAi()) {
             if(this.isLanded) {
                 this.wantsToLand = false;
-                if(this.hasPickupEntity() || this.getControllingPassenger() != null || this.getLeashed() || this.isInWater() || (!this.isTamed() && this.updateTick % (5 * 20) == 0 && this.getRNG().nextBoolean())) {
+                if(this.hasPickupEntity() || this.getControllingPassenger() != null || this.isLeashed() || this.isInWater() || (!this.isTamed() && this.updateTick % (5 * 20) == 0 && this.getRandom().nextBoolean())) {
                     this.leap(1.0D, 1.0D);
                     this.isLanded = false;
                 }
@@ -76,7 +76,7 @@ public class EntityCockatrice extends RideableCreatureEntity implements IMob {
                     }
                 }
                 else {
-                    if (!this.hasPickupEntity() && !this.hasAttackTarget() && this.updateTick % (5 * 20) == 0 && this.getRNG().nextBoolean()) {
+                    if (!this.hasPickupEntity() && !this.hasAttackTarget() && this.updateTick % (5 * 20) == 0 && this.getRandom().nextBoolean()) {
                         this.wantsToLand = true;
                     }
                 }
@@ -84,19 +84,19 @@ public class EntityCockatrice extends RideableCreatureEntity implements IMob {
             if(this.hasPickupEntity() || this.getControllingPassenger() != null || this.hasAttackTarget() || this.isInWater()) {
                 this.wantsToLand = false;
             }
-            else if(this.isTamed() && !this.getLeashed()) {
+            else if(this.isTamed() && !this.isLeashed()) {
                 this.wantsToLand = true;
             }
         }
 
         // Random Leaping:
-        if(!this.isTamed() && !this.getEntityWorld().isRemote) {
+        if(!this.isTamed() && !this.getCommandSenderWorld().isClientSide) {
             if(this.hasAttackTarget()) {
-                if(this.rand.nextInt(10) == 0)
-                    this.leap(2.0F, 1D, this.getAttackTarget());
+                if(this.random.nextInt(10) == 0)
+                    this.leap(2.0F, 1D, this.getTarget());
             }
             else {
-                if(this.rand.nextInt(50) == 0 && this.isMoving())
+                if(this.random.nextInt(50) == 0 && this.isMoving())
                     this.leap(1.0D, 1D);
             }
         }
@@ -110,9 +110,9 @@ public class EntityCockatrice extends RideableCreatureEntity implements IMob {
     public BlockPos getWanderPosition(BlockPos wanderPosition) {
         if(this.wantsToLand || !this.isLanded) {
             BlockPos groundPos;
-            for(groundPos = wanderPosition.down(); groundPos.getY() > 0 && this.getEntityWorld().getBlockState(groundPos).getBlock() == Blocks.AIR; groundPos = groundPos.down()) {}
-            if(this.getEntityWorld().getBlockState(groundPos).getMaterial().isSolid()) {
-                return groundPos.up();
+            for(groundPos = wanderPosition.below(); groundPos.getY() > 0 && this.getCommandSenderWorld().getBlockState(groundPos).getBlock() == Blocks.AIR; groundPos = groundPos.below()) {}
+            if(this.getCommandSenderWorld().getBlockState(groundPos).getMaterial().isSolid()) {
+                return groundPos.above();
             }
         }
         if(this.hasPickupEntity() && this.getPickupEntity() instanceof PlayerEntity)
@@ -150,12 +150,12 @@ public class EntityCockatrice extends RideableCreatureEntity implements IMob {
 	public void specialAttack() {
 		// Petrifying Caw:
 		double distance = 5.0D;
-		List<LivingEntity> possibleTargets = this.getEntityWorld().getEntitiesWithinAABB(LivingEntity.class, this.getBoundingBox().grow(distance, distance, distance), possibleTarget -> {
+		List<LivingEntity> possibleTargets = this.getCommandSenderWorld().getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(distance, distance, distance), possibleTarget -> {
 				if(!possibleTarget.isAlive()
 						|| possibleTarget == EntityCockatrice.this
-						|| EntityCockatrice.this.isRidingOrBeingRiddenBy(possibleTarget)
-						|| EntityCockatrice.this.isOnSameTeam(possibleTarget)
-						|| !EntityCockatrice.this.canAttack(possibleTarget.getType())
+						|| EntityCockatrice.this.hasIndirectPassenger(possibleTarget)
+						|| EntityCockatrice.this.isAlliedTo(possibleTarget)
+						|| !EntityCockatrice.this.canAttackType(possibleTarget.getType())
 						|| !EntityCockatrice.this.canAttack(possibleTarget))
 					return false;
 			return true;
@@ -170,12 +170,12 @@ public class EntityCockatrice extends RideableCreatureEntity implements IMob {
 				}
 				if(doDamage) {
 					if (ObjectManager.getEffect("paralysis") != null)
-						possibleTarget.addPotionEffect(new EffectInstance(ObjectManager.getEffect("paralysis"), this.getEffectDuration(5), 1));
+						possibleTarget.addEffect(new EffectInstance(ObjectManager.getEffect("paralysis"), this.getEffectDuration(5), 1));
 
 					if (ObjectManager.getEffect("aphagia") != null)
-						possibleTarget.addPotionEffect(new EffectInstance(ObjectManager.getEffect("aphagia"), this.getEffectDuration(5), 1));
+						possibleTarget.addEffect(new EffectInstance(ObjectManager.getEffect("aphagia"), this.getEffectDuration(5), 1));
 					else
-						possibleTarget.addPotionEffect(new EffectInstance(Effects.WEAKNESS, 10 * 20, 0));
+						possibleTarget.addEffect(new EffectInstance(Effects.WEAKNESS, 10 * 20, 0));
 				}
 			}
 		}
@@ -221,13 +221,13 @@ public class EntityCockatrice extends RideableCreatureEntity implements IMob {
     //                      Movement
     // ==================================================
     @Override
-    public double getMountedYOffset() {
-        return (double)this.getSize(Pose.STANDING).height * 0.7D;
+    public double getPassengersRidingOffset() {
+        return (double)this.getDimensions(Pose.STANDING).height * 0.7D;
     }
 
 	@Override
 	public double getMountedZOffset() {
-		return -(double)this.getSize(Pose.STANDING).width * 0.01D;
+		return -(double)this.getDimensions(Pose.STANDING).width * 0.01D;
 	}
 
 
@@ -236,7 +236,7 @@ public class EntityCockatrice extends RideableCreatureEntity implements IMob {
     // ==================================================
 	@Override
 	public void mountAbility(Entity rider) {
-		if(this.getEntityWorld().isRemote)
+		if(this.getCommandSenderWorld().isClientSide)
 			return;
 
 		if(this.abilityToggled)

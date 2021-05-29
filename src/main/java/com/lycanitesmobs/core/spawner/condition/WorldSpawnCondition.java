@@ -204,7 +204,7 @@ public class WorldSpawnCondition extends SpawnCondition {
 	 * @return True if the biome is allowed, false if not.
 	 */
 	public boolean isAllowedDimension(World world) {
-		String dimension = world.getDimensionKey().getLocation().toString();
+		String dimension = world.dimension().location().toString();
 
 		// Dimension IDs:
 		if (!this.dimensionIds.isEmpty()) {

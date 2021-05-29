@@ -159,7 +159,7 @@ public class PetEntry {
     public PetEntry setSpawningActive(boolean spawningActive) {
         if(this.spawningActive == spawningActive)
             return this;
-        if(!this.host.getEntityWorld().isRemote) {
+        if(!this.host.getCommandSenderWorld().isClientSide) {
             if(!spawningActive)
                 this.despawnEntity();
             else if(this.usesSpirit() && this.summonSet.playerExt != null) {
@@ -245,7 +245,7 @@ public class PetEntry {
         if(this.entityName != null && !"".equals(this.entityName)) {
             displayName = new StringTextComponent(this.entityName + " (")
                     .append(displayName)
-                    .appendString(")");
+                    .append(")");
         }
         return displayName;
     }
@@ -280,7 +280,7 @@ public class PetEntry {
 	/** Called by the PetManager, runs any logic for this entry. This is normally called from an entity update. **/
 	public void onUpdate(World world) {
         // Client Side Update:
-        if(world.isRemote) {
+        if(world.isClientSide) {
             if(this.isRespawning && this.respawnTime > 0) {
                 this.respawnTime--;
             }
@@ -327,9 +327,9 @@ public class PetEntry {
                 // Teleport Entity:
                 try {
                     if (this.teleportEntity) {
-                        if (this.entity.getEntityWorld() != this.host.getEntityWorld())
-                            this.entity.changeDimension(this.host.getServer().getWorld(this.host.getEntityWorld().getDimensionKey()));
-                        this.entity.setPosition(this.host.getPositionVec().getX(), this.host.getPositionVec().getY(), this.host.getPositionVec().getZ());
+                        if (this.entity.getCommandSenderWorld() != this.host.getCommandSenderWorld())
+                            this.entity.changeDimension(this.host.getServer().getLevel(this.host.getCommandSenderWorld().dimension()));
+                        this.entity.setPos(this.host.position().x(), this.host.position().y(), this.host.position().z());
                     }
                 }
                 catch(Exception e) {
@@ -399,7 +399,7 @@ public class PetEntry {
         if(this.entity != null || this.host == null)
             return;
         try {
-            this.entity = this.summonSet.getCreatureType().create(this.host.getEntityWorld());
+            this.entity = this.summonSet.getCreatureType().create(this.host.getCommandSenderWorld());
         }
         catch (Exception e) {
             LycanitesMobs.logWarning("Pets", "[Pet Entry] Unable to find an entity class for pet entry. " + " Type: " + this.summonSet.summonType + " Class: " + this.summonSet.getCreatureType() + " UUID: " + this.petEntryID);
@@ -413,7 +413,7 @@ public class PetEntry {
         this.loadEntityNBT();
 
         // Spawn Location:
-        this.entity.setLocationAndAngles(this.host.getPositionVec().getX(), this.host.getPositionVec().getY(), this.host.getPositionVec().getZ(), this.host.rotationYaw, 0.0F);
+        this.entity.moveTo(this.host.position().x(), this.host.position().y(), this.host.position().z(), this.host.yRot, 0.0F);
 
         if(this.entity instanceof BaseCreatureEntity) {
             BaseCreatureEntity entityCreature = (BaseCreatureEntity)this.entity;
@@ -428,16 +428,16 @@ public class PetEntry {
             }
 
             // Better Spawn Location and Angle:
-            float randomAngle = 45F + (45F * this.host.getRNG().nextFloat());
-            if(this.host.getRNG().nextBoolean())
+            float randomAngle = 45F + (45F * this.host.getRandom().nextFloat());
+            if(this.host.getRandom().nextBoolean())
                 randomAngle = -randomAngle;
             BlockPos spawnPos = entityCreature.getFacingPosition(this.host, -1, randomAngle);
-            if(this.entity.getEntityWorld().getBlockState(spawnPos).canEntitySpawn(this.entity.getEntityWorld(), spawnPos, this.entity.getType()))
-                this.entity.setLocationAndAngles(spawnPos.getX(), spawnPos.getY(), spawnPos.getZ(), this.host.rotationYaw, 0.0F);
+            if(this.entity.getCommandSenderWorld().getBlockState(spawnPos).isValidSpawn(this.entity.getCommandSenderWorld(), spawnPos, this.entity.getType()))
+                this.entity.moveTo(spawnPos.getX(), spawnPos.getY(), spawnPos.getZ(), this.host.yRot, 0.0F);
             else {
                 spawnPos = entityCreature.getFacingPosition(this.host, -1, -randomAngle);
-                if(this.entity.getEntityWorld().getBlockState(spawnPos).canEntitySpawn(this.entity.getEntityWorld(), spawnPos, this.entity.getType()))
-                    this.entity.setLocationAndAngles(spawnPos.getX(), spawnPos.getY(), spawnPos.getZ(), this.host.rotationYaw, 0.0F);
+                if(this.entity.getCommandSenderWorld().getBlockState(spawnPos).isValidSpawn(this.entity.getCommandSenderWorld(), spawnPos, this.entity.getType()))
+                    this.entity.moveTo(spawnPos.getX(), spawnPos.getY(), spawnPos.getZ(), this.host.yRot, 0.0F);
             }
 
             // Temporary:
@@ -469,7 +469,7 @@ public class PetEntry {
         }
 
         this.onSpawnEntity(this.entity);
-        this.host.getEntityWorld().addEntity(this.entity);
+        this.host.getCommandSenderWorld().addFreshEntity(this.entity);
         if(this.summonSet.playerExt != null)
             this.summonSet.playerExt.sendPetEntryToPlayer(this);
     }
@@ -566,8 +566,8 @@ public class PetEntry {
     // ========== Read ===========
     /** Reads pet entry from NBTTag. Should be called by PetManagers or other classes that store PetEntries and NBT Data for them. **/
     public void readFromNBT(CompoundNBT nbtTagCompound) {
-        if(nbtTagCompound.hasUniqueId("UUID"))
-            this.petEntryID = nbtTagCompound.getUniqueId("UUID");
+        if(nbtTagCompound.hasUUID("UUID"))
+            this.petEntryID = nbtTagCompound.getUUID("UUID");
         if(nbtTagCompound.contains("Type"))
             this.type = nbtTagCompound.getString("Type");
 
@@ -607,7 +607,7 @@ public class PetEntry {
     // ========== Write ==========
     /** Writes pet entry to NBTTag. **/
     public void writeToNBT(CompoundNBT nbtTagCompound) {
-        nbtTagCompound.putUniqueId("UUID", this.petEntryID);
+        nbtTagCompound.putUUID("UUID", this.petEntryID);
         nbtTagCompound.putString("Type", this.getType());
 
         nbtTagCompound.putBoolean("Active", this.active);
@@ -654,7 +654,7 @@ public class PetEntry {
             }
 
             try {
-                this.entity.writeWithoutTypeId(this.entityNBT);
+                this.entity.saveWithoutId(this.entityNBT);
             }
             catch (Throwable t) {
                 LycanitesMobs.logError("Failed to save data for a Pet Entry.");

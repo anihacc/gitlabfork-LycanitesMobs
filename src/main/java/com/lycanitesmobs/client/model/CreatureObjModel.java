@@ -200,9 +200,9 @@ public class CreatureObjModel extends CreatureModel {
 	public void generateAnimationFrames(BaseCreatureEntity entity, float time, float distance, float loop, float lookY, float lookX, float scale, int brightness) {
 		// Assess Scale and Check if Trophy:
 		boolean renderAsTrophy = false;
-		this.isChild = false;
+		this.young = false;
 		if(entity != null) {
-			this.isChild = entity.isChild();
+			this.young = entity.isBaby();
 		}
 		if(scale < 0) {
 			renderAsTrophy = true;
@@ -210,7 +210,7 @@ public class CreatureObjModel extends CreatureModel {
 		}
 		else {
 			if(entity != null) {
-				scale *= entity.getRenderScale();
+				scale *= entity.getScale();
 			}
 		}
 
@@ -301,9 +301,9 @@ public class CreatureObjModel extends CreatureModel {
 
 		// Assess Scale and Check if Trophy:
 		boolean renderAsTrophy = false;
-		this.isChild = false;
+		this.young = false;
 		if(entity != null) {
-			this.isChild = entity.isChild();
+			this.young = entity.isBaby();
 		}
 		if(scale < 0) {
 			renderAsTrophy = true;
@@ -311,7 +311,7 @@ public class CreatureObjModel extends CreatureModel {
 		}
 		else {
 			if(entity != null) {
-				scale *= entity.getRenderScale();
+				scale *= entity.getScale();
 			}
 		}
 
@@ -327,14 +327,14 @@ public class CreatureObjModel extends CreatureModel {
 			}
 
 			// Begin Rendering Part:
-			matrixStack.push();
+			matrixStack.pushPose();
 
 			// Apply Initial Offsets: (To Match Blender OBJ Export)
 			this.doAngle(MODEL_OFFSET_ROT_X, 1F, 0F, 0F);
 			this.doTranslate(0F, MODEL_OFFSET_POS_Y, 0F);
 
 			// Child Scaling:
-			if(this.isChild && !renderAsTrophy) {
+			if(this.young && !renderAsTrophy) {
 				this.childScale(partName);
 				if(this.bigChildHead && (partName.contains("head") || partName.contains("mouth")))
 					this.doTranslate(-(this.currentAnimationPart.centerX / 2), -(this.currentAnimationPart.centerY / 2), -(this.currentAnimationPart.centerZ / 2));
@@ -351,8 +351,8 @@ public class CreatureObjModel extends CreatureModel {
 			this.currentAnimationPart.applyAnimationFrames(this.animator);
 
 			// Render Part:
-			this.objModel.renderPart(vertexBuilder, matrixStack.getLast().getNormal(), matrixStack.getLast().getMatrix(), this.getBrightness(partName, layer, entity, brightness), fade, part, this.getPartColor(partName, entity, layer, renderAsTrophy, loop), this.getPartTextureOffset(partName, entity, layer, renderAsTrophy, loop));
-			matrixStack.pop();
+			this.objModel.renderPart(vertexBuilder, matrixStack.last().normal(), matrixStack.last().pose(), this.getBrightness(partName, layer, entity, brightness), fade, part, this.getPartColor(partName, entity, layer, renderAsTrophy, loop), this.getPartTextureOffset(partName, entity, layer, renderAsTrophy, loop));
+			matrixStack.popPose();
 		}
     }
 

@@ -58,10 +58,10 @@ public class EntityJoust extends AgeableCreatureEntity {
         CreatureInfo alphaInfo = CreatureManager.getInstance().getCreature("joustalpha");
         if(alphaInfo != null) {
             float alphaChance = (float)alphaInfo.creatureSpawn.spawnWeight / Math.max(this.creatureInfo.creatureSpawn.spawnWeight, 1);
-            if (this.getRNG().nextFloat() <= alphaChance) {
-                EntityJoustAlpha alpha = (EntityJoustAlpha)CreatureManager.getInstance().getCreature("joustalpha").createEntity(this.getEntityWorld());
-                alpha.copyLocationAndAnglesFrom(this);
-                this.getEntityWorld().addEntity(alpha);
+            if (this.getRandom().nextFloat() <= alphaChance) {
+                EntityJoustAlpha alpha = (EntityJoustAlpha)CreatureManager.getInstance().getCreature("joustalpha").createEntity(this.getCommandSenderWorld());
+                alpha.copyPosition(this);
+                this.getCommandSenderWorld().addFreshEntity(alpha);
                 this.remove();
             }
         }
@@ -75,13 +75,13 @@ public class EntityJoust extends AgeableCreatureEntity {
 	// ========== Pathing Weight ==========
 	@Override
 	public float getBlockPathWeight(int x, int y, int z) {
-        BlockState blockState = this.getEntityWorld().getBlockState(new BlockPos(x, y - 1, z));
+        BlockState blockState = this.getCommandSenderWorld().getBlockState(new BlockPos(x, y - 1, z));
 		if(blockState.getBlock() != Blocks.AIR) {
 			if(blockState.getMaterial() == Material.SAND)
 				return 10F;
 			if(blockState.getMaterial() == Material.CLAY)
 				return 7F;
-			if(blockState.getMaterial() == Material.ROCK)
+			if(blockState.getMaterial() == Material.STONE)
 				return 5F;
 		}
         return super.getBlockPathWeight(x, y, z);
@@ -89,10 +89,10 @@ public class EntityJoust extends AgeableCreatureEntity {
     
 	// ========== Can leash ==========
     @Override
-    public boolean canBeLeashedTo(PlayerEntity player) {
+    public boolean canBeLeashed(PlayerEntity player) {
 	    if(!this.hasAttackTarget() && !this.hasMaster())
 	        return true;
-	    return super.canBeLeashedTo(player);
+	    return super.canBeLeashed(player);
     }
 	
 	
@@ -137,10 +137,10 @@ public class EntityJoust extends AgeableCreatureEntity {
 	@Override
 	public void setGrowingAge(int age) {
 		if(age == 0 && this.getAge() < 0)
-			if(this.getRNG().nextFloat() >= 0.9F) {
-				EntityJoustAlpha alpha = (EntityJoustAlpha)CreatureManager.getInstance().getCreature("joustalpha").createEntity(this.getEntityWorld());
-				alpha.copyLocationAndAnglesFrom(this);
-				this.getEntityWorld().addEntity(alpha);
+			if(this.getRandom().nextFloat() >= 0.9F) {
+				EntityJoustAlpha alpha = (EntityJoustAlpha)CreatureManager.getInstance().getCreature("joustalpha").createEntity(this.getCommandSenderWorld());
+				alpha.copyPosition(this);
+				this.getCommandSenderWorld().addFreshEntity(alpha);
 				this.remove();
 			}
         super.setGrowingAge(age);

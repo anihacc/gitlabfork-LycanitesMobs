@@ -91,7 +91,7 @@ public class GameEventListener {
     // ==================================================
 	@SubscribeEvent
 	public void onEntityConstructing(EntityConstructing event) {
-		if(event.getEntity() == null || event.getEntity().getEntityWorld() == null || event.getEntity().getEntityWorld().isRemote)
+		if(event.getEntity() == null || event.getEntity().getCommandSenderWorld() == null || event.getEntity().getCommandSenderWorld().isClientSide)
 			return;
 
         // ========== Force Remove Entity ==========
@@ -164,7 +164,7 @@ public class GameEventListener {
 		if(player == null)
 			return;
 
-		ItemStack itemStack = player.getHeldItem(event.getHand());
+		ItemStack itemStack = player.getItemInHand(event.getHand());
 		Item item = itemStack.getItem();
 		if (item instanceof ItemEquipment) {
 			MessagePlayerLeftClick message = new MessagePlayerLeftClick();
@@ -178,7 +178,7 @@ public class GameEventListener {
 		if(player == null || event.getSide().isClient())
 			return;
 
-		ItemStack itemStack = player.getHeldItem(event.getHand());
+		ItemStack itemStack = player.getItemInHand(event.getHand());
 		Item item = itemStack.getItem();
 		if (item instanceof ItemEquipment) {
 			((ItemEquipment)item).onItemLeftClick(event.getWorld(), player, event.getHand());
@@ -218,7 +218,7 @@ public class GameEventListener {
 		}
 
 		// Better Invisibility:
-		if(!event.getEntityLiving().isPotionActive(Effects.INVISIBILITY)) {
+		if(!event.getEntityLiving().hasEffect(Effects.INVISIBILITY)) {
 			if(targetEntity.isInvisible()) {
 				if(event.isCancelable())
 					event.setCanceled(true);
@@ -257,8 +257,8 @@ public class GameEventListener {
 		EntityDamageSource entityDamageSource;
 		if(event.getSource() instanceof EntityDamageSource) {
 			entityDamageSource = (EntityDamageSource) event.getSource();
-			if(entityDamageSource.getTrueSource() != null && entityDamageSource.getTrueSource() instanceof LivingEntity) {
-				ExtendedEntity attackerExtendedEntity = ExtendedEntity.getForEntity((LivingEntity) entityDamageSource.getTrueSource());
+			if(entityDamageSource.getEntity() != null && entityDamageSource.getEntity() instanceof LivingEntity) {
+				ExtendedEntity attackerExtendedEntity = ExtendedEntity.getForEntity((LivingEntity) entityDamageSource.getEntity());
 				if(attackerExtendedEntity != null) {
 					attackerExtendedEntity.setLastAttackedEntity(damagedEntity);
 				}
@@ -266,9 +266,9 @@ public class GameEventListener {
 		}
 
 		// ========== Mounted Protection ==========
-		if(damagedEntity.getRidingEntity() != null) {
-			if(damagedEntity.getRidingEntity() instanceof RideableCreatureEntity) {
-				RideableCreatureEntity creatureRideable = (RideableCreatureEntity)event.getEntityLiving().getRidingEntity();
+		if(damagedEntity.getVehicle() != null) {
+			if(damagedEntity.getVehicle() instanceof RideableCreatureEntity) {
+				RideableCreatureEntity creatureRideable = (RideableCreatureEntity)event.getEntityLiving().getVehicle();
 
 				// Shielding:
 				if(creatureRideable.isBlocking()) {
@@ -278,14 +278,14 @@ public class GameEventListener {
 				}
 
 				// Prevent Mounted Entities from Suffocating:
-				if("inWall".equals(event.getSource().damageType)) {
+				if("inWall".equals(event.getSource().msgId)) {
 					event.setAmount(0);
 					event.setCanceled(true);
 					return;
 				}
 
 				// Copy Mount Immunities to Rider:
-				if(!creatureRideable.isVulnerableTo(event.getSource().damageType, event.getSource(), event.getAmount())) {
+				if(!creatureRideable.isVulnerableTo(event.getSource().msgId, event.getSource(), event.getAmount())) {
 					event.setAmount(0);
 					event.setCanceled(true);
 					return;
@@ -296,7 +296,7 @@ public class GameEventListener {
         // ========== Picked Up/Feared Protection ==========
         if(damagedEntityExt != null && damagedEntityExt.isPickedUp()) {
             // Prevent Picked Up and Feared Entities from Suffocating:
-            if("inWall".equals(event.getSource().damageType)) {
+            if("inWall".equals(event.getSource().msgId)) {
                 event.setAmount(0);
                 event.setCanceled(true);
                 return;
@@ -310,7 +310,7 @@ public class GameEventListener {
     // ==================================================
 	@SubscribeEvent
     public void onLivingDrops(LivingDropsEvent event) {
-		World world = event.getEntityLiving().getEntityWorld();
+		World world = event.getEntityLiving().getCommandSenderWorld();
 
 		// Seasonal Items:
         if(ItemConfig.seasonalItemDropChance > 0
@@ -329,15 +329,15 @@ public class GameEventListener {
                 seasonalItem = ObjectManager.getItem("halloweentreat");
             if(Utilities.isYuletide()) {
                 seasonalItem = ObjectManager.getItem("wintergift");
-                if(Utilities.isYuletidePeak() && world.rand.nextBoolean())
+                if(Utilities.isYuletidePeak() && world.random.nextBoolean())
                     seasonalItem = ObjectManager.getItem("wintergiftlarge");
             }
 
-            if(seasonalItem != null && !noSeaonalDrop && (alwaysDrop || event.getEntityLiving().getRNG().nextFloat() < ItemConfig.seasonalItemDropChance)) {
+            if(seasonalItem != null && !noSeaonalDrop && (alwaysDrop || event.getEntityLiving().getRandom().nextFloat() < ItemConfig.seasonalItemDropChance)) {
                 ItemStack dropStack = new ItemStack(seasonalItem, 1);
-                CustomItemEntity entityItem = new CustomItemEntity(world, event.getEntityLiving().getPositionVec().getX(), event.getEntityLiving().getPositionVec().getY(), event.getEntityLiving().getPositionVec().getZ(), dropStack);
-                entityItem.setPickupDelay(10);
-                world.addEntity(entityItem);
+                CustomItemEntity entityItem = new CustomItemEntity(world, event.getEntityLiving().position().x(), event.getEntityLiving().position().y(), event.getEntityLiving().position().z(), dropStack);
+                entityItem.setPickUpDelay(10);
+                world.addFreshEntity(entityItem);
             }
         }
 	}
@@ -352,10 +352,10 @@ public class GameEventListener {
         RayTraceResult target = event.getTarget();
         if(target == null || !(target instanceof BlockRayTraceResult))
             return;
-        BlockPos pos = ((BlockRayTraceResult)target).getPos();
+        BlockPos pos = ((BlockRayTraceResult)target).getBlockPos();
         Block block = world.getBlockState(pos).getBlock();
         Item bucket = ObjectManager.buckets.get(block);
-        if(bucket != null && world.getFluidState(pos).getLevel() == 0) {
+        if(bucket != null && world.getFluidState(pos).getAmount() == 0) {
             world.removeBlock(pos, true);
         }
         
@@ -372,17 +372,17 @@ public class GameEventListener {
 	// ==================================================
 	@SubscribeEvent
 	public void onBlockBreak(BlockEvent.BreakEvent event) {
-		if(event.getState() == null || event.getWorld() == null || event.getWorld().isRemote() || event.isCanceled()) {
+		if(event.getState() == null || event.getWorld() == null || event.getWorld().isClientSide() || event.isCanceled()) {
 			return;
 		}
 
 		if(event.getPlayer() != null && !event.getPlayer().isCreative()) {
 			if (event.getWorld() instanceof World) {
 				ExtendedWorld extendedWorld = ExtendedWorld.getForWorld((World) event.getWorld());
-				if (!(event.getState().getBlock() instanceof BlockFireBase) && extendedWorld.isBossNearby(Vector3d.copy(event.getPos()))) {
+				if (!(event.getState().getBlock() instanceof BlockFireBase) && extendedWorld.isBossNearby(Vector3d.atLowerCornerOf(event.getPos()))) {
 					event.setCanceled(true);
 					event.setResult(Event.Result.DENY);
-					event.getPlayer().sendStatusMessage(new TranslationTextComponent("boss.block.protection.break"), true);
+					event.getPlayer().displayClientMessage(new TranslationTextComponent("boss.block.protection.break"), true);
 					return;
 				}
 			}
@@ -404,17 +404,17 @@ public class GameEventListener {
 	/** This uses the block place events to update Block Spawn Triggers. **/
 	@SubscribeEvent
 	public void onBlockPlace(BlockEvent.EntityPlaceEvent event) {
-		if(event.getState() == null || event.getWorld() == null || event.getWorld().isRemote() || event.isCanceled()) {
+		if(event.getState() == null || event.getWorld() == null || event.getWorld().isClientSide() || event.isCanceled()) {
 			return;
 		}
 
 		if(event.getEntity() instanceof PlayerEntity && !((PlayerEntity)event.getEntity()).isCreative()) {
 			if (event.getWorld() instanceof World) {
 				ExtendedWorld extendedWorld = ExtendedWorld.getForWorld((World) event.getWorld());
-				if (extendedWorld.isBossNearby(Vector3d.copy(event.getPos()))) {
+				if (extendedWorld.isBossNearby(Vector3d.atLowerCornerOf(event.getPos()))) {
 					event.setCanceled(true);
 					event.setResult(Event.Result.DENY);
-					((PlayerEntity)event.getEntity()).sendStatusMessage(new TranslationTextComponent("boss.block.protection.place"), true);
+					((PlayerEntity)event.getEntity()).displayClientMessage(new TranslationTextComponent("boss.block.protection.place"), true);
 					return;
 				}
 			}
@@ -431,7 +431,7 @@ public class GameEventListener {
 			LivingEntity entity = event.getEntityLiving();
 			if(entity instanceof BaseCreatureEntity && event.getWorld() instanceof World) {
 				BaseCreatureEntity baseCreatureEntity = (BaseCreatureEntity)entity;
-				if(!baseCreatureEntity.checkSpawnGroupLimit((World) event.getWorld(), event.getSpawner().getSpawnerPosition(), 16)) {
+				if(!baseCreatureEntity.checkSpawnGroupLimit((World) event.getWorld(), event.getSpawner().getPos(), 16)) {
 					event.setResult(Event.Result.DENY);
 				}
 			}
@@ -454,6 +454,6 @@ public class GameEventListener {
 		if(extendedPlayer == null) {
 			return;
 		}
-		event.setCanceled(event.getEntityMounting().isSneaking() && !extendedPlayer.isControlActive(ExtendedPlayer.CONTROL_ID.MOUNT_DISMOUNT));
+		event.setCanceled(event.getEntityMounting().isShiftKeyDown() && !extendedPlayer.isControlActive(ExtendedPlayer.CONTROL_ID.MOUNT_DISMOUNT));
 	}
 }

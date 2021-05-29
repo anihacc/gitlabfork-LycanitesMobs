@@ -74,8 +74,8 @@ public class Beastiary {
 	public boolean discoverCreature(Entity entity, int rank, boolean knownMessage) {
 		// Invalid Entity:
 		if(!(entity instanceof BaseCreatureEntity)) {
-			if (!this.extendedPlayer.player.getEntityWorld().isRemote) {
-				this.extendedPlayer.player.sendMessage(new TranslationTextComponent("message.beastiary.unknown"), Util.DUMMY_UUID);
+			if (!this.extendedPlayer.player.getCommandSenderWorld().isClientSide) {
+				this.extendedPlayer.player.sendMessage(new TranslationTextComponent("message.beastiary.unknown"), Util.NIL_UUID);
 			}
 			return false;
 		}
@@ -99,12 +99,12 @@ public class Beastiary {
 		//this.extendedPlayer.player.addStat(StatManager.getInstance().getStat("learn", creatureInfo.name), 1); TODO Stats
 		this.sendAddedMessage(newKnowledge);
 		this.sendToClient(newKnowledge);
-		if(this.extendedPlayer.player.getEntityWorld().isRemote) {
+		if(this.extendedPlayer.player.getCommandSenderWorld().isClientSide) {
 			for(int i = 0; i < 32; ++i) {
-				entity.getEntityWorld().addParticle(ParticleTypes.HAPPY_VILLAGER,
-						entity.getPositionVec().getX() + (4.0F * this.extendedPlayer.player.getRNG().nextFloat()) - 2.0F,
-						entity.getPositionVec().getY() + (4.0F * this.extendedPlayer.player.getRNG().nextFloat()) - 2.0F,
-						entity.getPositionVec().getZ() + (4.0F * this.extendedPlayer.player.getRNG().nextFloat()) - 2.0F,
+				entity.getCommandSenderWorld().addParticle(ParticleTypes.HAPPY_VILLAGER,
+						entity.position().x() + (4.0F * this.extendedPlayer.player.getRandom().nextFloat()) - 2.0F,
+						entity.position().y() + (4.0F * this.extendedPlayer.player.getRandom().nextFloat()) - 2.0F,
+						entity.position().z() + (4.0F * this.extendedPlayer.player.getRandom().nextFloat()) - 2.0F,
 						0.0D, 0.0D, 0.0D);
 			}
 		}
@@ -117,44 +117,44 @@ public class Beastiary {
 	 * @param creatureKnowledge The creature knowledge that was added.
 	 */
 	public void sendAddedMessage(CreatureKnowledge creatureKnowledge) {
-		if(this.extendedPlayer.player.getEntityWorld().isRemote || !CreatureManager.getInstance().config.beastiaryKnowledgeMessages) {
+		if(this.extendedPlayer.player.getCommandSenderWorld().isClientSide || !CreatureManager.getInstance().config.beastiaryKnowledgeMessages) {
 			return;
 		}
 		CreatureInfo creatureInfo = creatureKnowledge.getCreatureInfo();
 		ITextComponent message = new TranslationTextComponent("message.beastiary.new.prefix")
-				.appendString(" " + creatureKnowledge.rank + " ")
+				.append(" " + creatureKnowledge.rank + " ")
 				.append(new TranslationTextComponent("message.beastiary.new.of"))
-				.appendString(" ")
+				.append(" ")
 				.append(creatureInfo.getTitle())
-				.appendString(" ")
+				.append(" ")
 				.append(new TranslationTextComponent("message.beastiary.new.suffix"));
-		this.extendedPlayer.player.sendMessage(message, Util.DUMMY_UUID);
+		this.extendedPlayer.player.sendMessage(message, Util.NIL_UUID);
 
 		if(creatureInfo.isSummonable()) {
 
 			ITextComponent summonMessage = new TranslationTextComponent("message.beastiary.summonable.prefix")
-					.appendString(" ")
+					.append(" ")
 					.append(creatureInfo.getTitle())
-					.appendString(" ")
+					.append(" ")
 					.append(new TranslationTextComponent("message.beastiary.summonable.suffix"));
 
 			if(creatureKnowledge.rank >= 3) {
 				summonMessage = new TranslationTextComponent("message.beastiary.summonable.skins.prefix")
-						.appendString(" ")
+						.append(" ")
 						.append(creatureInfo.getTitle())
-						.appendString(" ")
+						.append(" ")
 						.append(new TranslationTextComponent("message.beastiary.summonable.skins.suffix"));
 			}
 
 			else if(creatureKnowledge.rank == 2) {
 				summonMessage = new TranslationTextComponent("message.beastiary.summonable.colors.prefix")
-						.appendString(" ")
+						.append(" ")
 						.append(creatureInfo.getTitle())
-						.appendString(" ")
+						.append(" ")
 						.append(new TranslationTextComponent("message.beastiary.summonable.colors.suffix"));
 			}
 
-			this.extendedPlayer.player.sendMessage(summonMessage, Util.DUMMY_UUID);
+			this.extendedPlayer.player.sendMessage(summonMessage, Util.NIL_UUID);
 		}
 	}
 
@@ -164,19 +164,19 @@ public class Beastiary {
 	 * @param creatureKnowledge The creature knowledge that was trying to be added.
 	 */
 	public void sendKnownMessage(CreatureKnowledge creatureKnowledge) {
-		if(this.extendedPlayer.player.getEntityWorld().isRemote) {
+		if(this.extendedPlayer.player.getCommandSenderWorld().isClientSide) {
 			return;
 		}
 		CreatureInfo creatureInfo = creatureKnowledge.getCreatureInfo();
 		CreatureKnowledge currentKnowledge = this.extendedPlayer.getBeastiary().getCreatureKnowledge(creatureInfo.getName());
 		ITextComponent message = new TranslationTextComponent("message.beastiary.known.prefix")
-				.appendString(" " + currentKnowledge.rank + " ")
+				.append(" " + currentKnowledge.rank + " ")
 				.append(new TranslationTextComponent("message.beastiary.known.of"))
-				.appendString(" ")
+				.append(" ")
 				.append(creatureInfo.getTitle())
-				.appendString(" ")
+				.append(" ")
 				.append(new TranslationTextComponent("message.beastiary.known.suffix"));
-		this.extendedPlayer.player.sendMessage(message, Util.DUMMY_UUID);
+		this.extendedPlayer.player.sendMessage(message, Util.NIL_UUID);
 	}
 
 
@@ -251,7 +251,7 @@ public class Beastiary {
     // ==================================================
 	/** Sends CreatureKnowledge to the client. For when it's added or changed server side but needs updated client side. **/
 	public void sendToClient(CreatureKnowledge newKnowledge) {
-		if(this.extendedPlayer.player.getEntityWorld().isRemote) {
+		if(this.extendedPlayer.player.getCommandSenderWorld().isClientSide) {
 			return;
 		}
 		MessageCreatureKnowledge message = new MessageCreatureKnowledge(newKnowledge);

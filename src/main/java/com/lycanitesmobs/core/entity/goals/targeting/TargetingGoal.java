@@ -48,13 +48,13 @@ public abstract class TargetingGoal extends Goal {
             if(entity == null) {
                 return false;
             }
-            if(entity.getDistance(TargetingGoal.this.host) > TargetingGoal.this.getTargetDistance()) {
+            if(entity.distanceTo(TargetingGoal.this.host) > TargetingGoal.this.getTargetDistance()) {
                 return false;
             }
             if(!TargetingGoal.this.isEntityTargetable(entity, false)) {
                 return false;
             }
-            if(this.shouldCheckSight() && !entity.isGlowing() && !this.host.canEntityBeSeen(entity)) {
+            if(this.shouldCheckSight() && !entity.isGlowing() && !this.host.canSee(entity)) {
                 return false;
             }
             return true;
@@ -64,13 +64,13 @@ public abstract class TargetingGoal extends Goal {
             if(entity == null) {
                 return false;
             }
-            if(entity.getDistance(TargetingGoal.this.host) > TargetingGoal.this.getTargetDistance()) {
+            if(entity.distanceTo(TargetingGoal.this.host) > TargetingGoal.this.getTargetDistance()) {
                 return false;
             }
             if(!TargetingGoal.this.isAllyTarget(entity)) {
                 return false;
             }
-            if(this.shouldCheckSight() && !entity.isGlowing() && !this.host.canEntityBeSeen(entity)) {
+            if(this.shouldCheckSight() && !entity.isGlowing() && !this.host.canSee(entity)) {
                 return false;
             }
             return true;
@@ -84,7 +84,7 @@ public abstract class TargetingGoal extends Goal {
  	//                  Start Executing
  	// ==================================================
     @Override
-    public void startExecuting() {
+    public void start() {
     	this.setTarget(this.target);
         this.targetSearchStatus = 0;
         this.targetSearchDelay = 0;
@@ -96,7 +96,7 @@ public abstract class TargetingGoal extends Goal {
  	//                  Continue Executing
  	// ==================================================
     @Override
-    public boolean shouldContinueExecuting() {
+    public boolean canContinueToUse() {
         if(this.getTarget() == null)
             return false;
         if(!this.getTarget().isAlive())
@@ -106,11 +106,11 @@ public abstract class TargetingGoal extends Goal {
 
         // Target Out of Range:
         double distance = this.getTargetDistance() + 2;
-        if(this.host.getDistance(this.getTarget()) > distance)
+        if(this.host.distanceTo(this.getTarget()) > distance)
             return false;
         
         if(this.shouldCheckSight())
-            if(this.host.getEntitySenses().canSee(this.getTarget()))
+            if(this.host.getSensing().canSee(this.getTarget()))
                 this.cantSeeTime = 0;
             else if(++this.cantSeeTime > this.cantSeeTimeMax)
                 return false;
@@ -127,7 +127,7 @@ public abstract class TargetingGoal extends Goal {
  	//                      Reset
  	// ==================================================
     @Override
-    public void resetTask() {
+    public void stop() {
         this.setTarget(null);
     }
     
@@ -164,7 +164,7 @@ public abstract class TargetingGoal extends Goal {
     //               Get Possible Targets
     // ==================================================
     public <T extends LivingEntity> List<T> getPossibleTargets(Class <? extends T > clazz, double rangeX, double rangeY, double rangeZ) {
-        return this.host.getEntityWorld().getEntitiesWithinAABB(clazz, this.host.getBoundingBox().grow(rangeX, rangeY, rangeZ), this.targetSelector);
+        return this.host.getCommandSenderWorld().getEntitiesOfClass(clazz, this.host.getBoundingBox().inflate(rangeX, rangeY, rangeZ), this.targetSelector);
     }
     
     
@@ -187,20 +187,20 @@ public abstract class TargetingGoal extends Goal {
             return;
         try {
             double targetDistance = this.getTargetDistance();
-            List allies = this.host.getEntityWorld().getEntitiesWithinAABB(BaseCreatureEntity.class, this.host.getBoundingBox().grow(targetDistance, 4.0D, targetDistance), this.allySelector);
+            List allies = this.host.getCommandSenderWorld().getEntitiesOfClass(BaseCreatureEntity.class, this.host.getBoundingBox().inflate(targetDistance, 4.0D, targetDistance), this.allySelector);
             Iterator possibleAllies = allies.iterator();
 
             while(possibleAllies.hasNext()) {
                 LivingEntity possibleAlly = (LivingEntity)possibleAllies.next();
-                if(!possibleAlly.isOnSameTeam(this.target) && possibleAlly.canAttack(this.target.getType())) {
+                if(!possibleAlly.isAlliedTo(this.target) && possibleAlly.canAttackType(this.target.getType())) {
                     if (possibleAlly instanceof BaseCreatureEntity) {
                         BaseCreatureEntity possibleCreatureAlly = (BaseCreatureEntity) possibleAlly;
-                        if (possibleCreatureAlly.getAttackTarget() == null && possibleCreatureAlly.canAttack(this.target) && possibleCreatureAlly.shouldCreatureGroupRevenge(this.target))
-                            possibleCreatureAlly.setRevengeTarget(this.target);
+                        if (possibleCreatureAlly.getTarget() == null && possibleCreatureAlly.canAttack(this.target) && possibleCreatureAlly.shouldCreatureGroupRevenge(this.target))
+                            possibleCreatureAlly.setLastHurtByMob(this.target);
                     }
                     else {
-                        if (possibleAlly.getRevengeTarget() == null)
-                            possibleAlly.setRevengeTarget(this.target);
+                        if (possibleAlly.getLastHurtByMob() == null)
+                            possibleAlly.setLastHurtByMob(this.target);
                     }
                 }
             }
@@ -243,11 +243,11 @@ public abstract class TargetingGoal extends Goal {
         }
         
         // Home Check:
-        if(!this.host.positionNearHome(MathHelper.floor(checkTarget.getPositionVec().getX()), MathHelper.floor(checkTarget.getPositionVec().getY()), MathHelper.floor(checkTarget.getPositionVec().getZ())))
+        if(!this.host.positionNearHome(MathHelper.floor(checkTarget.position().x()), MathHelper.floor(checkTarget.position().y()), MathHelper.floor(checkTarget.position().z())))
             return false;
         
         // Sight Check:
-        if(this.shouldCheckSight() && !checkTarget.isPotionActive(Effects.GLOWING) && !this.host.getEntitySenses().canSee(checkTarget)) // Glowing
+        if(this.shouldCheckSight() && !checkTarget.hasEffect(Effects.GLOWING) && !this.host.getSensing().canSee(checkTarget)) // Glowing
             return false;
         
         // Nearby Check:
@@ -307,7 +307,7 @@ public abstract class TargetingGoal extends Goal {
         }
 
         // Sight Check:
-        return !this.shouldCheckSight() || this.host.getEntitySenses().canSee(checkTarget);
+        return !this.shouldCheckSight() || this.host.getSensing().canSee(checkTarget);
     }
     
     
@@ -315,18 +315,18 @@ public abstract class TargetingGoal extends Goal {
  	//                     Is Nearby
  	// ==================================================
     private boolean isNearby(LivingEntity target) {
-        this.targetSearchDelay = 10 + this.host.getRNG().nextInt(5);
-        Path path = this.host.getNavigator().getPathToEntity(target, 0);
+        this.targetSearchDelay = 10 + this.host.getRandom().nextInt(5);
+        Path path = this.host.getNavigation().createPath(target, 0);
 
         if(path == null)
             return false;
         else {
-            PathPoint pathpoint = path.getFinalPathPoint();
+            PathPoint pathpoint = path.getEndNode();
             if(pathpoint == null)
                 return false;
             else {
-                int i = pathpoint.x - MathHelper.floor(target.getPositionVec().getX());
-                int j = pathpoint.z - MathHelper.floor(target.getPositionVec().getZ());
+                int i = pathpoint.x - MathHelper.floor(target.position().x());
+                int j = pathpoint.z - MathHelper.floor(target.position().z());
                 return (double)(i * i + j * j) <= 2.25D;
             }
         }

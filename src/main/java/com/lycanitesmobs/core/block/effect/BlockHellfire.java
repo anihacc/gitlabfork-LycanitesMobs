@@ -56,16 +56,16 @@ public class BlockHellfire extends BlockFireBase {
     //                Collision Effects
     // ==================================================
     @Override
-    public void onEntityCollision(BlockState blockState, World world, BlockPos pos, Entity entity) {
-        super.onEntityCollision(blockState, world, pos, entity);
+    public void entityInside(BlockState blockState, World world, BlockPos pos, Entity entity) {
+        super.entityInside(blockState, world, pos, entity);
 
         if(entity instanceof LivingEntity) {
             Effect decay = ObjectManager.getEffect("decay");
             if(decay != null) {
                 EffectInstance effect = new EffectInstance(decay, 5 * 20, 0);
                 LivingEntity entityLiving = (LivingEntity)entity;
-                if(entityLiving.isPotionApplicable(effect))
-                    entityLiving.addPotionEffect(effect);
+                if(entityLiving.canBeAffected(effect))
+                    entityLiving.addEffect(effect);
             }
         }
 
@@ -76,8 +76,8 @@ public class BlockHellfire extends BlockFireBase {
         if(entity.isInvulnerableTo(DamageSource.IN_FIRE))
             return;
 
-        entity.attackEntityFrom(DamageSource.IN_FIRE, 2);
-        entity.setFire(5);
+        entity.hurt(DamageSource.IN_FIRE, 2);
+        entity.setSecondsOnFire(5);
     }
 
 
@@ -102,12 +102,12 @@ public class BlockHellfire extends BlockFireBase {
         double y = pos.getY();
         double z = pos.getZ();
         if(random.nextInt(24) == 0)
-            world.playSound((double)((float)x + 0.5F), (double)((float)y + 0.5F), (double)((float)z + 0.5F), ObjectManager.getSound("hellfire"), SoundCategory.BLOCKS, 0.5F + random.nextFloat(), random.nextFloat() * 0.7F + 0.3F, false);
+            world.playLocalSound((double)((float)x + 0.5F), (double)((float)y + 0.5F), (double)((float)z + 0.5F), ObjectManager.getSound("hellfire"), SoundCategory.BLOCKS, 0.5F + random.nextFloat(), random.nextFloat() * 0.7F + 0.3F, false);
 
         if (random.nextInt(100) == 0) {
             x = pos.getX() + random.nextFloat();
             z = pos.getZ() + random.nextFloat();
-            world.addParticle(RedstoneParticleData.REDSTONE_DUST, x, y, z, 0.0D, 0.0D, 0.0D);
+            world.addParticle(RedstoneParticleData.REDSTONE, x, y, z, 0.0D, 0.0D, 0.0D);
         }
         super.animateTick(state, world, pos, random);
     }

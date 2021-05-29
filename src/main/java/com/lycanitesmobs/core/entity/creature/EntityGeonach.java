@@ -36,7 +36,7 @@ public class EntityGeonach extends TameableCreatureEntity implements IMob, IFusa
         
         this.setupMob();
 
-        this.stepHeight = 1.0F;
+        this.maxUpStep = 1.0F;
         this.attackPhaseMax = 3;
         this.setAttackCooldownMax(10);
     }
@@ -59,21 +59,21 @@ public class EntityGeonach extends TameableCreatureEntity implements IMob, IFusa
     // ==================================================
 	// ========== Living Update ==========
 	@Override
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
 
-        if(!this.getEntityWorld().isRemote) {
+        if(!this.getCommandSenderWorld().isClientSide) {
 			if (this.isRareVariant() && !this.isPetType("familiar")){
 				// Random Charging:
-				if (this.hasAttackTarget() && this.getDistance(this.getAttackTarget()) > 1 && this.getRNG().nextInt(20) == 0) {
-					if (this.getPositionVec().getY() - 1 > this.getAttackTarget().getPositionVec().getY())
-						this.leap(6.0F, -1.0D, this.getAttackTarget());
-					else if (this.getPositionVec().getY() + 1 < this.getAttackTarget().getPositionVec().getY())
-						this.leap(6.0F, 1.0D, this.getAttackTarget());
+				if (this.hasAttackTarget() && this.distanceTo(this.getTarget()) > 1 && this.getRandom().nextInt(20) == 0) {
+					if (this.position().y() - 1 > this.getTarget().position().y())
+						this.leap(6.0F, -1.0D, this.getTarget());
+					else if (this.position().y() + 1 < this.getTarget().position().y())
+						this.leap(6.0F, 1.0D, this.getTarget());
 					else
-						this.leap(6.0F, 0D, this.getAttackTarget());
-					if (this.getEntityWorld().getGameRules().getBoolean(GameRules.MOB_GRIEFING) && this.blockBreakRadius > -1 && !this.isTamed()) {
-						this.destroyArea((int) this.getPositionVec().getX(), (int) this.getPositionVec().getY(), (int) this.getPositionVec().getZ(), 10, true, this.blockBreakRadius);
+						this.leap(6.0F, 0D, this.getTarget());
+					if (this.getCommandSenderWorld().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING) && this.blockBreakRadius > -1 && !this.isTamed()) {
+						this.destroyArea((int) this.position().x(), (int) this.position().y(), (int) this.position().z(), 10, true, this.blockBreakRadius);
 					}
 				}
 			}
@@ -90,12 +90,12 @@ public class EntityGeonach extends TameableCreatureEntity implements IMob, IFusa
 		}
 
         // Particles:
-        if(this.getEntityWorld().isRemote && !CreatureManager.getInstance().config.disableBlockParticles)
+        if(this.getCommandSenderWorld().isClientSide && !CreatureManager.getInstance().config.disableBlockParticles)
             for(int i = 0; i < 2; ++i) {
-                this.getEntityWorld().addParticle(new BlockParticleData(ParticleTypes.BLOCK, Blocks.STONE.getDefaultState()),
-                        this.getPositionVec().getX() + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width,
-                        this.getPositionVec().getY() + this.rand.nextDouble() * (double) this.getSize(Pose.STANDING).height,
-                        this.getPositionVec().getZ() + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width,
+                this.getCommandSenderWorld().addParticle(new BlockParticleData(ParticleTypes.BLOCK, Blocks.STONE.defaultBlockState()),
+                        this.position().x() + (this.random.nextDouble() - 0.5D) * (double) this.getDimensions(Pose.STANDING).width,
+                        this.position().y() + this.random.nextDouble() * (double) this.getDimensions(Pose.STANDING).height,
+                        this.position().z() + (this.random.nextDouble() - 0.5D) * (double) this.getDimensions(Pose.STANDING).width,
                         0.0D, 0.0D, 0.0D);
             }
     }
@@ -108,7 +108,7 @@ public class EntityGeonach extends TameableCreatureEntity implements IMob, IFusa
     @Override
     public float getAISpeedModifier() {
         // Silverfish Extermination:
-        if(this.hasAttackTarget() && this.getAttackTarget() instanceof SilverfishEntity)
+        if(this.hasAttackTarget() && this.getTarget() instanceof SilverfishEntity)
             return 4.0F;
         return super.getAISpeedModifier();
     }
@@ -166,12 +166,12 @@ public class EntityGeonach extends TameableCreatureEntity implements IMob, IFusa
     // ========== Damage Modifier ==========
     @Override
     public float getDamageModifier(DamageSource damageSrc) {
-		if(damageSrc.getTrueSource() != null) {
+		if(damageSrc.getEntity() != null) {
 			ItemStack heldItem = ItemStack.EMPTY;
-			if(damageSrc.getTrueSource() instanceof LivingEntity) {
-				LivingEntity entityLiving = (LivingEntity)damageSrc.getTrueSource();
-				if(!entityLiving.getHeldItem(Hand.MAIN_HAND).isEmpty()) {
-					heldItem = entityLiving.getHeldItem(Hand.MAIN_HAND);
+			if(damageSrc.getEntity() instanceof LivingEntity) {
+				LivingEntity entityLiving = (LivingEntity)damageSrc.getEntity();
+				if(!entityLiving.getItemInHand(Hand.MAIN_HAND).isEmpty()) {
+					heldItem = entityLiving.getItemInHand(Hand.MAIN_HAND);
 				}
 			}
 			if(ObjectLists.isPickaxe(heldItem)) {
@@ -195,7 +195,7 @@ public class EntityGeonach extends TameableCreatureEntity implements IMob, IFusa
     public boolean isVulnerableTo(String type, DamageSource source, float damage) {
     	if(type.equals("cactus") || type.equals("inWall"))
     		return false;
-    	if(source.isFireDamage()) {
+    	if(source.isFire()) {
     		this.fireDamageAbsorbed += damage;
     		return false;
 		}

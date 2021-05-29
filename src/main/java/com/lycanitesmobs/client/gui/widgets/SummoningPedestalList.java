@@ -61,7 +61,7 @@ public class SummoningPedestalList extends BaseList<SummoningPedestalScreen> {
 				this.parentGUI.screen.drawHelper.drawBar(matrixStack, TextureManager.getTexture("GUIPetLevel"), levelBarX, levelBarY, 0, levelBarWidth, levelBarHeight, level, 10);
 			}
 
-			this.parentGUI.screen.drawHelper.getFontRenderer().drawString(matrixStack, creatureInfo.getTitle().getString(), left + 20 , top + 4, 0xFFFFFF);
+			this.parentGUI.screen.drawHelper.getFontRenderer().draw(matrixStack, creatureInfo.getTitle().getString(), left + 20 , top + 4, 0xFFFFFF);
 			this.parentGUI.screen.drawHelper.drawTexture(matrixStack, creatureInfo.getIcon(), left + 2, top + 4, 0, 1, 1, 16, 16);
 		}
 
@@ -73,11 +73,6 @@ public class SummoningPedestalList extends BaseList<SummoningPedestalScreen> {
 		@Override
 		protected void onClicked() {
 			this.parentGUI.screen.selectMinion(this.minionName);
-		}
-
-		@Override
-		public List<? extends IGuiEventListener> getEventListeners() {
-			return null;
 		}
 	}
 }

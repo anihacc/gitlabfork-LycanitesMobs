@@ -38,12 +38,12 @@ public class EntityTrite extends TameableCreatureEntity implements IMob {
     // ==================================================
 	// ========== Living Update ==========
 	@Override
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
 
         // Leap:
-        if(this.hasAttackTarget() && this.onGround && !this.getEntityWorld().isRemote && this.rand.nextInt(10) == 0)
-        	this.leap(6.0F, 0.6D, this.getAttackTarget());
+        if(this.hasAttackTarget() && this.onGround && !this.getCommandSenderWorld().isClientSide && this.random.nextInt(10) == 0)
+        	this.leap(6.0F, 0.6D, this.getTarget());
     }
     
     
@@ -76,12 +76,12 @@ public class EntityTrite extends TameableCreatureEntity implements IMob {
   	//                     Immunities
   	// ==================================================
     @Override
-    public boolean isPotionApplicable(EffectInstance potionEffect) {
-		if(potionEffect.getPotion() == Effects.WITHER)
+    public boolean canBeAffected(EffectInstance potionEffect) {
+		if(potionEffect.getEffect() == Effects.WITHER)
 			return false;
 		if(ObjectManager.getEffect("decay") != null)
-			if(potionEffect.getPotion() == ObjectManager.getEffect("decay")) return false;
-        super.isPotionApplicable(potionEffect);
+			if(potionEffect.getEffect() == ObjectManager.getEffect("decay")) return false;
+        super.canBeAffected(potionEffect);
         return true;
     }
     

@@ -69,7 +69,7 @@ public class MessageBeastiary {
 			message.creatureNames = new String[message.entryAmount];
 			message.ranks = new int[message.entryAmount];
             for(int i = 0; i < message.entryAmount; i++) {
-				message.creatureNames[i] = packet.readString(32767);
+				message.creatureNames[i] = packet.readUtf(32767);
 				message.ranks[i] = packet.readInt();
             }
         }
@@ -83,7 +83,7 @@ public class MessageBeastiary {
         packet.writeInt(message.entryAmount);
         if(message.entryAmount > 0) {
             for(int i = 0; i < message.entryAmount; i++) {
-                packet.writeString(message.creatureNames[i]);
+                packet.writeUtf(message.creatureNames[i]);
                 packet.writeInt(message.ranks[i]);
             }
         }

@@ -184,7 +184,7 @@ public abstract class ItemObjModel implements IAnimationModel {
 			this.currentAnimationPart = this.animationParts.get(partName);
 
 			// Begin Rendering Part:
-			matrixStack.push();
+			matrixStack.pushPose();
 
 			// Apply Initial Offsets: (To Match Blender OBJ Export)
 			this.doAngle(ROT_OFFSET_X, 1F, 0F, 0F);
@@ -194,8 +194,8 @@ public abstract class ItemObjModel implements IAnimationModel {
 			this.currentAnimationPart.applyAnimationFrames(this.animator);
 
 			// Render Part:
-			this.objModel.renderPart(vertexBuilder, matrixStack.getLast().getNormal(), matrixStack.getLast().getMatrix(), this.getBrightness(partName, layer, itemStack, brightness), 0, part, this.getPartColor(partName, itemStack, layer, loop), this.getPartTextureOffset(partName, itemStack, layer, loop));
-			matrixStack.pop();
+			this.objModel.renderPart(vertexBuilder, matrixStack.last().normal(), matrixStack.last().pose(), this.getBrightness(partName, layer, itemStack, brightness), 0, part, this.getPartColor(partName, itemStack, layer, loop), this.getPartTextureOffset(partName, itemStack, layer, loop));
+			matrixStack.popPose();
 		}
 	}
 
@@ -317,14 +317,14 @@ public abstract class ItemObjModel implements IAnimationModel {
 
 	@Override
 	public void doRotate(float rotX, float rotY, float rotZ) {
-		this.matrixStack.rotate(new Vector3f(1F, 0F, 0F).rotationDegrees(rotX));
-		this.matrixStack.rotate(new Vector3f(0F, 1F, 0F).rotationDegrees(rotY));
-		this.matrixStack.rotate(new Vector3f(0F, 0F, 1F).rotationDegrees(rotZ));
+		this.matrixStack.mulPose(new Vector3f(1F, 0F, 0F).rotationDegrees(rotX));
+		this.matrixStack.mulPose(new Vector3f(0F, 1F, 0F).rotationDegrees(rotY));
+		this.matrixStack.mulPose(new Vector3f(0F, 0F, 1F).rotationDegrees(rotZ));
 	}
 
 	@Override
 	public void doAngle(float rotation, float angleX, float angleY, float angleZ) {
-		this.matrixStack.rotate(new Vector3f(angleX, angleY, angleZ).rotationDegrees(rotation));
+		this.matrixStack.mulPose(new Vector3f(angleX, angleY, angleZ).rotationDegrees(rotation));
 	}
 
 	@Override

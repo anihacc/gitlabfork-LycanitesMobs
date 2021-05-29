@@ -25,10 +25,10 @@ public class MessagePlayerLeftClick {
 			PlayerEntity player = ctx.get().getSender();
 
 			// Equipment:
-			Hand activeHand = player.getActiveHand();
-			ItemStack activeStack = player.getHeldItem(activeHand);
+			Hand activeHand = player.getUsedItemHand();
+			ItemStack activeStack = player.getItemInHand(activeHand);
 			if(activeStack.getItem() instanceof ItemEquipment) {
-				((ItemEquipment)activeStack.getItem()).onItemLeftClick(player.getEntityWorld(), player, activeHand);
+				((ItemEquipment)activeStack.getItem()).onItemLeftClick(player.getCommandSenderWorld(), player, activeHand);
 			}
         });
 	}

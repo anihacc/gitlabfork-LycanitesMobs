@@ -27,17 +27,17 @@ public class ProjectileBehaviourExplosion extends ProjectileBehaviour {
 
 	@Override
 	public void onProjectileImpact(BaseProjectileEntity projectile, World world, BlockPos pos) {
-		if(this.radius <= 0 || projectile.getEntityWorld().isRemote) {
+		if(this.radius <= 0 || projectile.getCommandSenderWorld().isClientSide) {
 			return;
 		}
 
-		if(!world.getGameRules().getBoolean(GameRules.MOB_GRIEFING)) {
+		if(!world.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) {
 			return;
 		}
 
 		int explosionRadius = this.radius;
-		if (projectile.func_234616_v_() != null && projectile.func_234616_v_() instanceof BaseCreatureEntity) {
-			BaseCreatureEntity baseCreatureEntity = (BaseCreatureEntity)projectile.func_234616_v_();
+		if (projectile.getOwner() != null && projectile.getOwner() instanceof BaseCreatureEntity) {
+			BaseCreatureEntity baseCreatureEntity = (BaseCreatureEntity)projectile.getOwner();
 			if (baseCreatureEntity.isRareVariant()) {
 				explosionRadius += 2;
 			}
@@ -51,6 +51,6 @@ public class ProjectileBehaviourExplosion extends ProjectileBehaviour {
 			explosionMode = Explosion.Mode.DESTROY;
 		}
 
-		world.createExplosion(projectile, projectile.getPositionVec().getX(), projectile.getPositionVec().getY(), projectile.getPositionVec().getZ(), explosionRadius, explosionMode);
+		world.explode(projectile, projectile.position().x(), projectile.position().y(), projectile.position().z(), explosionRadius, explosionMode);
 	}
 }

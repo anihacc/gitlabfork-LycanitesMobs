@@ -120,7 +120,7 @@ public class SectorConnector {
 		int startX = this.position.getX();
 		int stopX = this.position.getX();
 		int startY = Math.max(1, this.position.getY() + 1);
-		int stopY = Math.min(world.getHeight() - 1, this.position.getY() + 1 + entranceHeight);
+		int stopY = Math.min(world.getMaxBuildHeight() - 1, this.position.getY() + 1 + entranceHeight);
 		int startZ = this.position.getZ();
 		int stopZ = this.position.getZ();
 
@@ -148,7 +148,7 @@ public class SectorConnector {
 		for(int x = startX; x <= stopX; x++) {
 			for(int y = startY; y <= stopY; y++) {
 				for(int z = startZ; z <= stopZ; z++) {
-					sectorInstance.placeBlock(worldWriter, chunkPos, new BlockPos(x, y, z), Blocks.CAVE_AIR.getDefaultState(), this.facing, random);
+					sectorInstance.placeBlock(worldWriter, chunkPos, new BlockPos(x, y, z), Blocks.CAVE_AIR.defaultBlockState(), this.facing, random);
 				}
 			}
 		}
@@ -172,24 +172,24 @@ public class SectorConnector {
 		}
 
 		// Build Center Block Marker:
-		sectorInstance.placeBlock(worldWriter, chunkPos, this.position.add(0, 1, 0), Blocks.GOLD_BLOCK.getDefaultState(), Direction.SOUTH, random);
+		sectorInstance.placeBlock(worldWriter, chunkPos, this.position.offset(0, 1, 0), Blocks.GOLD_BLOCK.defaultBlockState(), Direction.SOUTH, random);
 
 		// Build Rotation Block Markers:
 		if(this.facing == Direction.SOUTH) {
 			for(int z = 1; z <= 3; z++)
-				sectorInstance.placeBlock(worldWriter, chunkPos, this.position.add(0, 1, z), Blocks.REDSTONE_BLOCK.getDefaultState(), Direction.SOUTH, random);
+				sectorInstance.placeBlock(worldWriter, chunkPos, this.position.offset(0, 1, z), Blocks.REDSTONE_BLOCK.defaultBlockState(), Direction.SOUTH, random);
 		}
 		else if(this.facing == Direction.EAST) {
 			for(int x = 1; x <= 3; x++)
-				sectorInstance.placeBlock(worldWriter, chunkPos, this.position.add(x, 1, 0), Blocks.REDSTONE_BLOCK.getDefaultState(), Direction.SOUTH, random);
+				sectorInstance.placeBlock(worldWriter, chunkPos, this.position.offset(x, 1, 0), Blocks.REDSTONE_BLOCK.defaultBlockState(), Direction.SOUTH, random);
 		}
 		else if(this.facing == Direction.NORTH) {
 			for(int z = -1; z >= -3; z--)
-				sectorInstance.placeBlock(worldWriter, chunkPos, this.position.add(0, 1, z), Blocks.REDSTONE_BLOCK.getDefaultState(), Direction.SOUTH, random);
+				sectorInstance.placeBlock(worldWriter, chunkPos, this.position.offset(0, 1, z), Blocks.REDSTONE_BLOCK.defaultBlockState(), Direction.SOUTH, random);
 		}
 		else {
 			for(int x = -1; x >= -3; x--)
-				sectorInstance.placeBlock(worldWriter, chunkPos, this.position.add(x, 1, 0), Blocks.REDSTONE_BLOCK.getDefaultState(), Direction.SOUTH, random);
+				sectorInstance.placeBlock(worldWriter, chunkPos, this.position.offset(x, 1, 0), Blocks.REDSTONE_BLOCK.defaultBlockState(), Direction.SOUTH, random);
 		}
 	}
 }

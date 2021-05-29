@@ -44,30 +44,30 @@ public class EntityRaidra extends TameableCreatureEntity implements IMob {
     // ==================================================
 	// ========== Living Update ==========
 	@Override
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
 
         // Static Aura Attack:
-        if(!this.getEntityWorld().isRemote && this.hasAttackTarget() && ++this.aoeAttackTick == (this.isPetType("familiar") ? 100 : 40)) {
+        if(!this.getCommandSenderWorld().isClientSide && this.hasAttackTarget() && ++this.aoeAttackTick == (this.isPetType("familiar") ? 100 : 40)) {
             this.aoeAttackTick = 0;
             List aoeTargets = this.getNearbyEntities(LivingEntity.class, null, 4);
             for(Object entityObj : aoeTargets) {
                 LivingEntity target = (LivingEntity)entityObj;
-                if(target != this && this.canAttack(target.getType()) && this.canAttack(target) && this.getEntitySenses().canSee(target)) {
-                    target.attackEntityFrom(ElementDamageSource.causeElementDamage(this, ElementManager.getInstance().getElement("lightning")), this.getAttackDamage(1));
+                if(target != this && this.canAttackType(target.getType()) && this.canAttack(target) && this.getSensing().canSee(target)) {
+                    target.hurt(ElementDamageSource.causeElementDamage(this, ElementManager.getInstance().getElement("lightning")), this.getAttackDamage(1));
                 }
             }
         }
         
         // Particles:
-        if(this.getEntityWorld().isRemote && this.hasAttackTarget()) {
+        if(this.getCommandSenderWorld().isClientSide && this.hasAttackTarget()) {
             //this.getEntityWorld().addParticle(ParticleTypes.CLOUD, this.getPositionVec().getX() + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width, this.getPositionVec().getY() + this.rand.nextDouble() * (double) this.getSize(Pose.STANDING).height, this.getPositionVec().getZ() + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
             
             List aoeTargets = this.getNearbyEntities(LivingEntity.class, null, 4);
             for(Object entityObj : aoeTargets) {
                 LivingEntity target = (LivingEntity)entityObj;
-                if(this.canAttack(target.getType()) && this.canAttack(target) && this.getEntitySenses().canSee(target)) {
-                    this.getEntityWorld().addParticle(ParticleTypes.CRIT, target.getPositionVec().getX() + (this.rand.nextDouble() - 0.5D) * (double) target.getSize(Pose.STANDING).width, target.getPositionVec().getY() + this.rand.nextDouble() * (double) target.getSize(Pose.STANDING).height, target.getPositionVec().getZ() + (this.rand.nextDouble() - 0.5D) * (double) target.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
+                if(this.canAttackType(target.getType()) && this.canAttack(target) && this.getSensing().canSee(target)) {
+                    this.getCommandSenderWorld().addParticle(ParticleTypes.CRIT, target.position().x() + (this.random.nextDouble() - 0.5D) * (double) target.getDimensions(Pose.STANDING).width, target.position().y() + this.random.nextDouble() * (double) target.getDimensions(Pose.STANDING).height, target.position().z() + (this.random.nextDouble() - 0.5D) * (double) target.getDimensions(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
                 }
             }
         }

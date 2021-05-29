@@ -65,25 +65,25 @@ public class EntityKobold extends TameableCreatureEntity implements IMob {
 
     private int torchLootingTime = 20;
 	@Override
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
         
         // Torch Looting:
-        if(!this.isTamed() && this.getEntityWorld().getGameRules().getBoolean(GameRules.MOB_GRIEFING) && this.griefing) {
+        if(!this.isTamed() && this.getCommandSenderWorld().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING) && this.griefing) {
 	        if(this.torchLootingTime-- <= 0) {
 	        	this.torchLootingTime = 60;
 	        	int distance = 2;
 	        	String targetName = "torch";
 	        	List possibleTargets = new ArrayList<BlockPos>();
-	            for(int x = (int)this.getPositionVec().getX() - distance; x < (int)this.getPositionVec().getX() + distance; x++) {
-	            	for(int y = (int)this.getPositionVec().getY() - distance; y < (int)this.getPositionVec().getY() + distance; y++) {
-	            		for(int z = (int)this.getPositionVec().getZ() - distance; z < (int)this.getPositionVec().getZ() + distance; z++) {
+	            for(int x = (int)this.position().x() - distance; x < (int)this.position().x() + distance; x++) {
+	            	for(int y = (int)this.position().y() - distance; y < (int)this.position().y() + distance; y++) {
+	            		for(int z = (int)this.position().z() - distance; z < (int)this.position().z() + distance; z++) {
                             BlockPos pos = new BlockPos(x, y, z);
-	            			Block searchBlock = this.getEntityWorld().getBlockState(pos).getBlock();
+	            			Block searchBlock = this.getCommandSenderWorld().getBlockState(pos).getBlock();
 	                    	if(searchBlock != null && searchBlock != Blocks.AIR) {
 	                    		BlockPos possibleTarget = null;
 	                			if(ObjectLists.isName(searchBlock, targetName)) {
-	                				this.getEntityWorld().destroyBlock(pos, true);
+	                				this.getCommandSenderWorld().destroyBlock(pos, true);
 	                				break;
 	                			}
 	                    	}

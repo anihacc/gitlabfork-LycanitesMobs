@@ -110,7 +110,7 @@ public class SummoningPedestalScreen extends BaseContainerScreen<SummoningPedest
     @Override
     protected void renderBackground(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         GL11.glColor4f(255, 255, 255, 1.0F);
-        Minecraft.getInstance().getTextureManager().bindTexture(this.getTexture());
+        Minecraft.getInstance().getTextureManager().bind(this.getTexture());
 
         this.drawHelper.drawTexturedModalRect(matrixStack, this.windowX, this.windowY, 0, 0, this.windowWidth, this.windowHeight);
         this.drawHelper.drawTexturedModalRect(matrixStack, this.windowX + 40, this.windowY + this.windowHeight, 40, 224, this.windowWidth - 80, 29);
@@ -170,7 +170,7 @@ public class SummoningPedestalScreen extends BaseContainerScreen<SummoningPedest
     @Override
     protected void renderForeground(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         GL11.glColor4f(255, 255, 255, 1.0F);
-        Minecraft.getInstance().getTextureManager().bindTexture(this.getTexture());
+        Minecraft.getInstance().getTextureManager().bind(this.getTexture());
 
         // No Pets:
         if (!this.hasPets()) {

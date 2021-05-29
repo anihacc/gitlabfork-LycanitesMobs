@@ -69,66 +69,66 @@ public class KeyHandler {
 		
 		// ========== GUI Keys ==========
 		// Player Inventory: Adds extra buttons to the GUI.
-		if(!this.inventoryOpen && mc.currentScreen != null && mc.currentScreen.getClass() == InventoryScreen.class) {
-			TabManager.addTabsToInventory(mc.currentScreen);
+		if(!this.inventoryOpen && mc.screen != null && mc.screen.getClass() == InventoryScreen.class) {
+			TabManager.addTabsToInventory(mc.screen);
 			this.inventoryOpen = true;
 		}
-		if(this.inventoryOpen && (mc.currentScreen == null || mc.currentScreen.getClass() != InventoryScreen.class)) {
+		if(this.inventoryOpen && (mc.screen == null || mc.screen.getClass() != InventoryScreen.class)) {
 			this.inventoryOpen = false;
 		}
 		
 		// Mount Inventory: Adds to control states.
-		if(this.mountInventory.isPressed()) {
+		if(this.mountInventory.consumeClick()) {
 			controlStates += ExtendedPlayer.CONTROL_ID.MOUNT_INVENTORY.id;
 		}
 
 		// Beastiary Index:
-		if(this.index.isPressed()) {
-			this.mc.displayGuiScreen(new IndexBeastiaryScreen(this.mc.player));
+		if(this.index.consumeClick()) {
+			this.mc.setScreen(new IndexBeastiaryScreen(this.mc.player));
 		}
 
 		// Beastiary Creatures:
-		if(this.beastiary.isPressed()) {
-			this.mc.displayGuiScreen(new CreaturesBeastiaryScreen(this.mc.player));
+		if(this.beastiary.consumeClick()) {
+			this.mc.setScreen(new CreaturesBeastiaryScreen(this.mc.player));
 		}
 
 		// Beastiary Pets:
-		if(this.pets.isPressed()) {
-			this.mc.displayGuiScreen(new PetsBeastiaryScreen(this.mc.player));
+		if(this.pets.consumeClick()) {
+			this.mc.setScreen(new PetsBeastiaryScreen(this.mc.player));
 		}
 
 		// Beastiary Summoning:
-		if(this.summoning.isPressed()) {
-			this.mc.displayGuiScreen(new SummoningBeastiaryScreen(this.mc.player));
+		if(this.summoning.consumeClick()) {
+			this.mc.setScreen(new SummoningBeastiaryScreen(this.mc.player));
 		}
 		
 		
-		if(this.mc.isGameFocused()) {
+		if(this.mc.isWindowActive()) {
 			// ========== HUD Controls ==========
 			// Minion Selection:
-			if(this.minionSelection.isPressed()) {
-				this.mc.displayGuiScreen(new MinionSelectionOverlay(this.mc.player));
+			if(this.minionSelection.consumeClick()) {
+				this.mc.setScreen(new MinionSelectionOverlay(this.mc.player));
 			}
 
 			// ========== Action Controls ==========
 			// Vanilla Jump: Adds to control states.
-			if(this.mc.gameSettings.keyBindJump.isKeyDown())
+			if(this.mc.options.keyJump.isDown())
 				controlStates += ExtendedPlayer.CONTROL_ID.JUMP.id;
 
 			// Descend: Adds to control states.
-			if(this.descend.isKeyDown())
+			if(this.descend.isDown())
 				controlStates += ExtendedPlayer.CONTROL_ID.DESCEND.id;
 			
 			// Mount Ability: Adds to control states.
-			if(this.dismount.isKeyDown())
+			if(this.dismount.isDown())
 				controlStates += ExtendedPlayer.CONTROL_ID.MOUNT_DISMOUNT.id;
 
 			// Mount Ability: Adds to control states.
-			if(this.mountAbility.isKeyDown())
+			if(this.mountAbility.isDown())
 				controlStates += ExtendedPlayer.CONTROL_ID.MOUNT_ABILITY.id;
 
             // Attack Key Pressed:
-            if(Minecraft.getInstance().gameSettings.keyBindAttack.isKeyDown()) {
+            if(Minecraft.getInstance().options.keyAttack.isDown()) {
                 controlStates += ExtendedPlayer.CONTROL_ID.ATTACK.id;
             }
 		}
@@ -150,9 +150,9 @@ public class KeyHandler {
 			return;
 
 		// Minion Selection - Closes If Not Holding:
-		if(event.getKey() == this.minionSelection.getKey().getKeyCode() && this.mc.currentScreen instanceof MinionSelectionOverlay) {
+		if(event.getKey() == this.minionSelection.getKey().getValue() && this.mc.screen instanceof MinionSelectionOverlay) {
 			if (event.getAction() == GLFW.GLFW_RELEASE) {
-				this.mc.player.closeScreen();
+				this.mc.player.closeContainer();
 			}
 		}
 	}
@@ -162,14 +162,14 @@ public class KeyHandler {
     @SubscribeEvent
     public void onMouseEvent(InputEvent.MouseInputEvent event) {
         ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(this.mc.player);
-        if(this.mc.player == null || playerExt == null || this.mc.objectMouseOver == null)
+        if(this.mc.player == null || playerExt == null || this.mc.hitResult == null)
             return;
 
         // Left (Attack):
         if(event.getButton() == 0) {
             // Disable attack for large entity reach override:
-            if(!this.mc.player.isSpectator() && !this.mc.player.isRowingBoat() && this.mc.objectMouseOver.getType() == RayTraceResult.Type.ENTITY) {
-                Entity entityHit = ((EntityRayTraceResult)this.mc.objectMouseOver).getEntity();
+            if(!this.mc.player.isSpectator() && !this.mc.player.isHandsBusy() && this.mc.hitResult.getType() == RayTraceResult.Type.ENTITY) {
+                Entity entityHit = ((EntityRayTraceResult)this.mc.hitResult).getEntity();
                 if(playerExt.canMeleeBigEntity(entityHit)) {
                     MessagePlayerAttack message = new MessagePlayerAttack(entityHit);
                     LycanitesMobs.packetHandler.sendToServer(message);

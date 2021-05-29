@@ -27,7 +27,7 @@ public class EntityGrell extends RideableCreatureEntity {
 
         this.setupMob();
 
-        this.stepHeight = 1.0F;
+        this.maxUpStep = 1.0F;
         this.hitAreaWidthScale = 1.5F;
     }
 
@@ -60,13 +60,13 @@ public class EntityGrell extends RideableCreatureEntity {
     public boolean canBurn() { return false; }
 
     @Override
-    public double getMountedYOffset() {
-        return (double)this.getSize(Pose.STANDING).height * 0.9D;
+    public double getPassengersRidingOffset() {
+        return (double)this.getDimensions(Pose.STANDING).height * 0.9D;
     }
 
     @Override
     public void mountAbility(Entity rider) {
-        if(this.getEntityWorld().isRemote)
+        if(this.getCommandSenderWorld().isClientSide)
             return;
 
         if(this.abilityToggled)
@@ -84,9 +84,9 @@ public class EntityGrell extends RideableCreatureEntity {
             PlayerEntity player = (PlayerEntity)rider;
             ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile("acidglob");
             if(projectileInfo != null) {
-                BaseProjectileEntity projectile = projectileInfo.createProjectile(this.getEntityWorld(), player);
-                this.getEntityWorld().addEntity(projectile);
-                this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
+                BaseProjectileEntity projectile = projectileInfo.createProjectile(this.getCommandSenderWorld(), player);
+                this.getCommandSenderWorld().addFreshEntity(projectile);
+                this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
                 this.triggerAttackCooldown();
             }
         }

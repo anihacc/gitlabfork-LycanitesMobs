@@ -21,7 +21,7 @@ public abstract class BaseList<S> extends ExtendedList<BaseListEntry> {
 	public BaseList(S screen, int width, int height, int top, int bottom, int left, int slotHeight) {
 		super(Minecraft.getInstance(), width, height, top, bottom, slotHeight);
 		Minecraft minecraft = Minecraft.getInstance();
-		this.drawHelper = new DrawHelper(minecraft, minecraft.fontRenderer);
+		this.drawHelper = new DrawHelper(minecraft, minecraft.font);
 		this.setLeftPos(left);
 		this.screen = screen;
 		this.createEntries();
@@ -66,10 +66,10 @@ public abstract class BaseList<S> extends ExtendedList<BaseListEntry> {
 
 		// Scissor Start:
 		GL11.glEnable(GL11.GL_SCISSOR_TEST);
-		double scaleFactor = Minecraft.getInstance().getMainWindow().getGuiScaleFactor();
+		double scaleFactor = Minecraft.getInstance().getWindow().getGuiScale();
 		int scissorX = (int)((float)this.getLeft() * scaleFactor);
-		int scissorTop = Minecraft.getInstance().getMainWindow().getHeight() - (int)((float)this.getTop() * scaleFactor);
-		int scissorBottom = Minecraft.getInstance().getMainWindow().getHeight() - (int)((float)this.getBottom() * scaleFactor);
+		int scissorTop = Minecraft.getInstance().getWindow().getScreenHeight() - (int)((float)this.getTop() * scaleFactor);
+		int scissorBottom = Minecraft.getInstance().getWindow().getScreenHeight() - (int)((float)this.getBottom() * scaleFactor);
 		int scissorWidth = (int)((float)this.getWidth() * scaleFactor);
 		int scissorHeight = scissorTop - scissorBottom;
 		GL11.glScissor(scissorX, scissorBottom, scissorWidth, scissorHeight); // Scissor starts at bottom right.
@@ -86,15 +86,15 @@ public abstract class BaseList<S> extends ExtendedList<BaseListEntry> {
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
 		Tessellator tessellator = Tessellator.getInstance();
-		BufferBuilder bufferbuilder = tessellator.getBuffer();
-		Matrix4f matrix = matrixStack.getLast().getMatrix();
+		BufferBuilder bufferbuilder = tessellator.getBuilder();
+		Matrix4f matrix = matrixStack.last().pose();
 
 		bufferbuilder.begin(7, DefaultVertexFormats.POSITION_COLOR);
-		bufferbuilder.pos(matrix, (float)this.x0, (float)this.y1, 0.0F).color(0, 0, 0, 64).endVertex();
-		bufferbuilder.pos(matrix, (float)this.x1, (float)this.y1, 0.0F).color(0, 0, 0, 64).endVertex();
-		bufferbuilder.pos(matrix, (float)this.x1, (float)this.y0, 0.0F).color(0, 0, 0, 64).endVertex();
-		bufferbuilder.pos(matrix, (float)this.x0, (float)this.y0, 0.0F).color(0, 0, 0, 64).endVertex();
-		tessellator.draw();
+		bufferbuilder.vertex(matrix, (float)this.x0, (float)this.y1, 0.0F).color(0, 0, 0, 64).endVertex();
+		bufferbuilder.vertex(matrix, (float)this.x1, (float)this.y1, 0.0F).color(0, 0, 0, 64).endVertex();
+		bufferbuilder.vertex(matrix, (float)this.x1, (float)this.y0, 0.0F).color(0, 0, 0, 64).endVertex();
+		bufferbuilder.vertex(matrix, (float)this.x0, (float)this.y0, 0.0F).color(0, 0, 0, 64).endVertex();
+		tessellator.end();
 
 		// Test Box:
 		/*bufferbuilder.begin(7, DefaultVertexFormats.POSITION_COLOR);
@@ -153,25 +153,25 @@ public abstract class BaseList<S> extends ExtendedList<BaseListEntry> {
 			int scrollbarRight = scrollbarLeft + this.getScrollbarWidth();
 
 			bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
-			bufferbuilder.pos(matrix, (float)scrollbarLeft, (float)this.y1, 0.0F).tex(0.0F, 1.0F).color(0, 0, 0, 255).endVertex();
-			bufferbuilder.pos(matrix, (float)scrollbarRight, (float)this.y1, 0.0F).tex(1.0F, 1.0F).color(0, 0, 0, 255).endVertex();
-			bufferbuilder.pos(matrix, (float)scrollbarRight, (float)this.y0, 0.0F).tex(1.0F, 0.0F).color(0, 0, 0, 255).endVertex();
-			bufferbuilder.pos(matrix, (float)scrollbarLeft, (float)this.y0, 0.0F).tex(0.0F, 0.0F).color(0, 0, 0, 255).endVertex();
-			tessellator.draw();
+			bufferbuilder.vertex(matrix, (float)scrollbarLeft, (float)this.y1, 0.0F).uv(0.0F, 1.0F).color(0, 0, 0, 255).endVertex();
+			bufferbuilder.vertex(matrix, (float)scrollbarRight, (float)this.y1, 0.0F).uv(1.0F, 1.0F).color(0, 0, 0, 255).endVertex();
+			bufferbuilder.vertex(matrix, (float)scrollbarRight, (float)this.y0, 0.0F).uv(1.0F, 0.0F).color(0, 0, 0, 255).endVertex();
+			bufferbuilder.vertex(matrix, (float)scrollbarLeft, (float)this.y0, 0.0F).uv(0.0F, 0.0F).color(0, 0, 0, 255).endVertex();
+			tessellator.end();
 
 			bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
-			bufferbuilder.pos(matrix, (float)scrollbarLeft, (float)(scrollY + contentMax), 0.0F).tex(0.0F, 1.0F).color(128, 128, 128, 255).endVertex();
-			bufferbuilder.pos(matrix, (float)scrollbarRight, (float)(scrollY + contentMax), 0.0F).tex(1.0F, 1.0F).color(128, 128, 128, 255).endVertex();
-			bufferbuilder.pos(matrix, (float)scrollbarRight, (float)scrollY, 0.0F).tex(1.0F, 0.0F).color(128, 128, 128, 255).endVertex();
-			bufferbuilder.pos(matrix, (float)scrollbarLeft, (float)scrollY, 0.0F).tex(0.0F, 0.0F).color(128, 128, 128, 255).endVertex();
-			tessellator.draw();
+			bufferbuilder.vertex(matrix, (float)scrollbarLeft, (float)(scrollY + contentMax), 0.0F).uv(0.0F, 1.0F).color(128, 128, 128, 255).endVertex();
+			bufferbuilder.vertex(matrix, (float)scrollbarRight, (float)(scrollY + contentMax), 0.0F).uv(1.0F, 1.0F).color(128, 128, 128, 255).endVertex();
+			bufferbuilder.vertex(matrix, (float)scrollbarRight, (float)scrollY, 0.0F).uv(1.0F, 0.0F).color(128, 128, 128, 255).endVertex();
+			bufferbuilder.vertex(matrix, (float)scrollbarLeft, (float)scrollY, 0.0F).uv(0.0F, 0.0F).color(128, 128, 128, 255).endVertex();
+			tessellator.end();
 
 			bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
-			bufferbuilder.pos(matrix, (float)scrollbarLeft, (float)(scrollY + contentMax - 1), 0.0F).tex(0.0F, 1.0F).color(192, 192, 192, 255).endVertex();
-			bufferbuilder.pos(matrix, (float)(scrollbarRight - 1), (float)(scrollY + contentMax - 1), 0.0F).tex(1.0F, 1.0F).color(192, 192, 192, 255).endVertex();
-			bufferbuilder.pos(matrix, (float)(scrollbarRight - 1), (float)scrollY, 0.0F).tex(1.0F, 0.0F).color(192, 192, 192, 255).endVertex();
-			bufferbuilder.pos(matrix, (float)scrollbarLeft, (float)scrollY, 0.0F).tex(0.0F, 0.0F).color(192, 192, 192, 255).endVertex();
-			tessellator.draw();
+			bufferbuilder.vertex(matrix, (float)scrollbarLeft, (float)(scrollY + contentMax - 1), 0.0F).uv(0.0F, 1.0F).color(192, 192, 192, 255).endVertex();
+			bufferbuilder.vertex(matrix, (float)(scrollbarRight - 1), (float)(scrollY + contentMax - 1), 0.0F).uv(1.0F, 1.0F).color(192, 192, 192, 255).endVertex();
+			bufferbuilder.vertex(matrix, (float)(scrollbarRight - 1), (float)scrollY, 0.0F).uv(1.0F, 0.0F).color(192, 192, 192, 255).endVertex();
+			bufferbuilder.vertex(matrix, (float)scrollbarLeft, (float)scrollY, 0.0F).uv(0.0F, 0.0F).color(192, 192, 192, 255).endVertex();
+			tessellator.end();
 		}
 
 		RenderSystem.enableTexture();

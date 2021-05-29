@@ -47,8 +47,8 @@ public abstract class AgeableCreatureEntity extends BaseCreatureEntity {
     public boolean hasBeenFarmed = false;
 
     // Datawatcher:
-    protected static final DataParameter<Integer> AGE = EntityDataManager.createKey(AgeableCreatureEntity.class, DataSerializers.VARINT);
-    protected static final DataParameter<Integer> LOVE = EntityDataManager.createKey(AgeableCreatureEntity.class, DataSerializers.VARINT);
+    protected static final DataParameter<Integer> AGE = EntityDataManager.defineId(AgeableCreatureEntity.class, DataSerializers.INT);
+    protected static final DataParameter<Integer> LOVE = EntityDataManager.defineId(AgeableCreatureEntity.class, DataSerializers.INT);
     
 	// ==================================================
   	//                    Constructor
@@ -59,10 +59,10 @@ public abstract class AgeableCreatureEntity extends BaseCreatureEntity {
 
 	// ========== Init ==========
 	@Override
-	protected void registerData() {
-		super.registerData();
-		this.dataManager.register(AGE, 0);
-		this.dataManager.register(LOVE, 0);
+	protected void defineSynchedData() {
+		super.defineSynchedData();
+		this.entityData.define(AGE, 0);
+		this.entityData.define(LOVE, 0);
 	}
 
 	// ========== Init AI ==========
@@ -83,7 +83,7 @@ public abstract class AgeableCreatureEntity extends BaseCreatureEntity {
     // ========== Setup ==========
 	@Override
     public void setupMob() {
-        if(this.babySpawnChance > 0D && this.rand.nextDouble() < this.babySpawnChance)
+        if(this.babySpawnChance > 0D && this.random.nextDouble() < this.babySpawnChance)
         	this.setGrowingAge(growthTime);
         super.setupMob();
     }
@@ -91,7 +91,7 @@ public abstract class AgeableCreatureEntity extends BaseCreatureEntity {
     // ========== Name ==========
     @Override
     public TextComponent getAgeName() {
-    	if(this.isChild())
+    	if(this.isBaby())
     		return new TranslationTextComponent("entity.baby");
     	else
     		return super.getAgeName();
@@ -109,21 +109,21 @@ public abstract class AgeableCreatureEntity extends BaseCreatureEntity {
     
     public void setFarmed() {
     	this.hasBeenFarmed = true;
-        if(this.portalCounter > this.getPortalCooldown())
-            this.portalCounter = this.getPortalCooldown();
+        if(this.portalTime > this.getDimensionChangingDelay())
+            this.portalTime = this.getDimensionChangingDelay();
     }
     
     // ========== Get Random Subspecies ==========
 	@Override
 	public void getRandomSubspecies() {
-		if(this.isChild())
+		if(this.isBaby())
 			return;
 		super.getRandomSubspecies();
 	}
 
     @Override
     public void getRandomVariant() {
-    	if(this.isChild())
+    	if(this.isBaby())
     		return;
     	super.getRandomVariant();
     }
@@ -134,12 +134,12 @@ public abstract class AgeableCreatureEntity extends BaseCreatureEntity {
   	// ==================================================
     // ========== Living Update ==========
     @Override
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
 
         // Growing:
-        if(this.getEntityWorld().isRemote)
-            this.setScaleForAge(this.isChild());
+        if(this.getCommandSenderWorld().isClientSide)
+            this.setScaleForAge(this.isBaby());
         else if(this.canGrow) {
             int age = this.getGrowingAge();
             if(age < 0) {
@@ -156,21 +156,21 @@ public abstract class AgeableCreatureEntity extends BaseCreatureEntity {
         if(!this.canBreed())
             this.loveTime = 0;
 
-        if(!this.getEntityWorld().isRemote)
-        	this.dataManager.set(LOVE, this.loveTime);
-        if(this.getEntityWorld().isRemote)
+        if(!this.getCommandSenderWorld().isClientSide)
+        	this.entityData.set(LOVE, this.loveTime);
+        if(this.getCommandSenderWorld().isClientSide)
         	this.loveTime = this.getIntFromDataManager(LOVE);
         
         if(this.isInLove()) {
         	this.setFarmed();
             --this.loveTime;
-            if(this.getEntityWorld().isRemote) {
+            if(this.getCommandSenderWorld().isClientSide) {
 	            IParticleData particle = ParticleTypes.HEART;
 	            if(this.loveTime % 10 == 0) {
-	                double d0 = this.rand.nextGaussian() * 0.02D;
-	                double d1 = this.rand.nextGaussian() * 0.02D;
-	                double d2 = this.rand.nextGaussian() * 0.02D;
-	                this.getEntityWorld().addParticle(particle, this.getPositionVec().getX() + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).width * 2.0F) - (double)this.getSize(Pose.STANDING).width, this.getPositionVec().getY() + 0.5D + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).height), this.getPositionVec().getZ() + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).width * 2.0F) - (double)this.getSize(Pose.STANDING).width, d0, d1, d2);
+	                double d0 = this.random.nextGaussian() * 0.02D;
+	                double d1 = this.random.nextGaussian() * 0.02D;
+	                double d2 = this.random.nextGaussian() * 0.02D;
+	                this.getCommandSenderWorld().addParticle(particle, this.position().x() + (double)(this.random.nextFloat() * this.getDimensions(Pose.STANDING).width * 2.0F) - (double)this.getDimensions(Pose.STANDING).width, this.position().y() + 0.5D + (double)(this.random.nextFloat() * this.getDimensions(Pose.STANDING).height), this.position().z() + (double)(this.random.nextFloat() * this.getDimensions(Pose.STANDING).width * 2.0F) - (double)this.getDimensions(Pose.STANDING).width, d0, d1, d2);
 	            }
             }
         }
@@ -178,15 +178,15 @@ public abstract class AgeableCreatureEntity extends BaseCreatureEntity {
     
     // ========== AI Update ==========
     @Override
-    protected void updateAITasks() {
+    protected void customServerAiStep() {
         if(!this.canBreed())
             this.loveTime = 0;
-        super.updateAITasks();
+        super.customServerAiStep();
     }
 
 	@Override
 	public boolean canDropItem(ItemDrop itemDrop) {
-		if(itemDrop.adultOnly && this.isChild()) {
+		if(itemDrop.adultOnly && this.isBaby()) {
 			return false;
 		}
 		return super.canDropItem(itemDrop);
@@ -225,7 +225,7 @@ public abstract class AgeableCreatureEntity extends BaseCreatureEntity {
     public boolean performCommand(String command, PlayerEntity player, ItemStack itemStack) {
     	
     	// Spawn Baby:
-    	if(command.equals("Spawn Baby") && !this.getEntityWorld().isRemote && itemStack.getItem() instanceof ItemCustomSpawnEgg) {
+    	if(command.equals("Spawn Baby") && !this.getCommandSenderWorld().isClientSide && itemStack.getItem() instanceof ItemCustomSpawnEgg) {
             ItemCustomSpawnEgg itemCustomSpawnEgg = (ItemCustomSpawnEgg)itemStack.getItem();
 			CreatureInfo spawnEggCreatureInfo = itemCustomSpawnEgg.getCreatureInfo(itemStack);
 			if(spawnEggCreatureInfo != null) {
@@ -233,11 +233,11 @@ public abstract class AgeableCreatureEntity extends BaseCreatureEntity {
 					AgeableCreatureEntity baby = this.createChild(this);
 					if (baby != null) {
 						baby.setGrowingAge(baby.growthTime);
-						baby.setLocationAndAngles(this.getPositionVec().getX(), this.getPositionVec().getY(), this.getPositionVec().getZ(), 0.0F, 0.0F);
+						baby.moveTo(this.position().x(), this.position().y(), this.position().z(), 0.0F, 0.0F);
 						baby.setFarmed();
-						this.getEntityWorld().addEntity(baby);
-						if (itemStack.hasDisplayName()) {
-							baby.setCustomName(itemStack.getDisplayName());
+						this.getCommandSenderWorld().addFreshEntity(baby);
+						if (itemStack.hasCustomHoverName()) {
+							baby.setCustomName(itemStack.getHoverName());
 						}
 						this.consumePlayersItem(player, itemStack);
 					}
@@ -266,8 +266,8 @@ public abstract class AgeableCreatureEntity extends BaseCreatureEntity {
     }
 	
 	public void setGrowingAge(int age) {
-		this.dataManager.set(AGE, age);
-        this.setScaleForAge(this.isChild());
+		this.entityData.set(AGE, age);
+        this.setScaleForAge(this.isBaby());
     }
 	
 	public void addGrowth(int growth) {
@@ -279,7 +279,7 @@ public abstract class AgeableCreatureEntity extends BaseCreatureEntity {
     }
 	
 	@Override
-	public boolean isChild() {
+	public boolean isBaby() {
         return this.getGrowingAge() < 0;
     }
 
@@ -288,7 +288,7 @@ public abstract class AgeableCreatureEntity extends BaseCreatureEntity {
 	 * @return Returns true if parents should be searched for and followed.
 	 */
 	public boolean shouldFollowParent() {
-		return this.isChild();
+		return this.isBaby();
 	}
 
 	/**
@@ -296,7 +296,7 @@ public abstract class AgeableCreatureEntity extends BaseCreatureEntity {
 	 * @return True if this creature should actively seek parents.
 	 */
 	public boolean shouldFindParent() {
-		return this.isChild();
+		return this.isBaby();
 	}
 
 	
@@ -322,12 +322,12 @@ public abstract class AgeableCreatureEntity extends BaseCreatureEntity {
 	
     // ========== Create Child ==========
 	public AgeableCreatureEntity createChild(AgeableCreatureEntity partner) {
-    	return (AgeableCreatureEntity)this.creatureInfo.createEntity(this.getEntityWorld());
+    	return (AgeableCreatureEntity)this.creatureInfo.createEntity(this.getCommandSenderWorld());
 	}
 	
 	// ========== Breeding Item ==========
 	public boolean isBreedingItem(ItemStack itemStack) {
-		if(!this.creatureInfo.isFarmable() || this.getAir() <= -100) {
+		if(!this.creatureInfo.isFarmable() || this.getAirSupply() <= -100) {
 			return false;
 		}
 		return this.creatureInfo.canEat(itemStack);
@@ -378,18 +378,18 @@ public abstract class AgeableCreatureEntity extends BaseCreatureEntity {
 			baby.setSubspecies(this.getSubspeciesIndex());
 			Variant babyVariant = this.getSubspecies().getChildVariant(this, this.getVariant(), partner.getVariant());
             baby.applyVariant(babyVariant != null ? babyVariant.index : 0);
-            baby.setLocationAndAngles(this.getPositionVec().getX(), this.getPositionVec().getY(), this.getPositionVec().getZ(), this.rotationYaw, this.rotationPitch);
+            baby.moveTo(this.position().x(), this.position().y(), this.position().z(), this.yRot, this.xRot);
 
             for(int i = 0; i < 7; ++i) {
-                double d0 = this.rand.nextGaussian() * 0.02D;
-                double d1 = this.rand.nextGaussian() * 0.02D;
-                double d2 = this.rand.nextGaussian() * 0.02D;
-                this.getEntityWorld().addParticle(ParticleTypes.HEART, this.getPositionVec().getX() + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).width * 2.0F) - (double)this.getSize(Pose.STANDING).width, this.getPositionVec().getY() + 0.5D + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).height), this.getPositionVec().getZ() + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).width * 2.0F) - (double)this.getSize(Pose.STANDING).width, d0, d1, d2);
+                double d0 = this.random.nextGaussian() * 0.02D;
+                double d1 = this.random.nextGaussian() * 0.02D;
+                double d2 = this.random.nextGaussian() * 0.02D;
+                this.getCommandSenderWorld().addParticle(ParticleTypes.HEART, this.position().x() + (double)(this.random.nextFloat() * this.getDimensions(Pose.STANDING).width * 2.0F) - (double)this.getDimensions(Pose.STANDING).width, this.position().y() + 0.5D + (double)(this.random.nextFloat() * this.getDimensions(Pose.STANDING).height), this.position().z() + (double)(this.random.nextFloat() * this.getDimensions(Pose.STANDING).width * 2.0F) - (double)this.getDimensions(Pose.STANDING).width, d0, d1, d2);
             }
 
             this.onCreateBaby(partner, baby);
 
-            this.getEntityWorld().addEntity(baby);
+            this.getCommandSenderWorld().addFreshEntity(baby);
         }
     }
 
@@ -409,8 +409,8 @@ public abstract class AgeableCreatureEntity extends BaseCreatureEntity {
   	// ==================================================
 	// ========== Read ==========
     @Override
-	public void readAdditional(CompoundNBT nbtTagCompound) {
-        super.readAdditional(nbtTagCompound);
+	public void readAdditionalSaveData(CompoundNBT nbtTagCompound) {
+        super.readAdditionalSaveData(nbtTagCompound);
         if(nbtTagCompound.contains("Age")) {
         	this.setGrowingAge(nbtTagCompound.getInt("Age"));
         }
@@ -434,8 +434,8 @@ public abstract class AgeableCreatureEntity extends BaseCreatureEntity {
 	
 	// ========== Write ==========
     @Override
-	public void writeAdditional(CompoundNBT nbtTagCompound) {
-        super.writeAdditional(nbtTagCompound);
+	public void addAdditionalSaveData(CompoundNBT nbtTagCompound) {
+        super.addAdditionalSaveData(nbtTagCompound);
         nbtTagCompound.putInt("Age", this.getGrowingAge());
         nbtTagCompound.putInt("InLove", this.loveTime);
         nbtTagCompound.putBoolean("HasBeenFarmed", this.hasBeenFarmed);

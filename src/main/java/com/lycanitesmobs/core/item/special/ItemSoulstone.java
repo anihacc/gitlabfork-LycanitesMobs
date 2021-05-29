@@ -45,23 +45,23 @@ public class ItemSoulstone extends BaseItem {
 	//                       Use
 	// ==================================================
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
-    	return super.onItemRightClick(world, player, hand);
+	public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
+    	return super.use(world, player, hand);
 	}
 
 	@Override
-	public ActionResultType itemInteractionForEntity(ItemStack stack, PlayerEntity player, LivingEntity entity, Hand hand) {
+	public ActionResultType interactLivingEntity(ItemStack stack, PlayerEntity player, LivingEntity entity, Hand hand) {
     	if(this.applySoulstoneToEntity(player, entity)) {
 			// Consume Soulstone:
-			if (!player.abilities.isCreativeMode)
+			if (!player.abilities.instabuild)
 				stack.setCount(Math.max(0, stack.getCount() - 1));
 			if (stack.getCount() <= 0)
-				player.inventory.setInventorySlotContents(player.inventory.currentItem, ItemStack.EMPTY);
+				player.inventory.setItem(player.inventory.selected, ItemStack.EMPTY);
 
 			return ActionResultType.SUCCESS;
 		}
 
-    	return super.itemInteractionForEntity(stack, player, entity, hand);
+    	return super.interactLivingEntity(stack, player, entity, hand);
 	}
 
 	/**
@@ -75,48 +75,48 @@ public class ItemSoulstone extends BaseItem {
 		if(playerExt == null)
 			return false;
 		if(!(entity instanceof TameableCreatureEntity)) {
-			if(!player.getEntityWorld().isRemote)
-				player.sendMessage(new TranslationTextComponent("message.soulstone.invalid"), Util.DUMMY_UUID);
+			if(!player.getCommandSenderWorld().isClientSide)
+				player.sendMessage(new TranslationTextComponent("message.soulstone.invalid"), Util.NIL_UUID);
 			return false;
 		}
 
 		TameableCreatureEntity entityTameable = (TameableCreatureEntity)entity;
 		CreatureInfo creatureInfo = entityTameable.creatureInfo;
 		if(!creatureInfo.isTameable() || entityTameable.getOwner() != player) {
-			if(!player.getEntityWorld().isRemote)
-				player.sendMessage(new TranslationTextComponent("message.soulstone.untamed"), Util.DUMMY_UUID);
+			if(!player.getCommandSenderWorld().isClientSide)
+				player.sendMessage(new TranslationTextComponent("message.soulstone.untamed"), Util.NIL_UUID);
 			return false;
 		}
 		if(entityTameable.getPetEntry() != null) {
-			if(!player.getEntityWorld().isRemote)
-				player.sendMessage(new TranslationTextComponent("message.soulstone.exists"), Util.DUMMY_UUID);
+			if(!player.getCommandSenderWorld().isClientSide)
+				player.sendMessage(new TranslationTextComponent("message.soulstone.exists"), Util.NIL_UUID);
 			return false;
 		}
 
 		// Particle Effect:
-		if(player.getEntityWorld().isRemote) {
+		if(player.getCommandSenderWorld().isClientSide) {
 			for(int i = 0; i < 32; ++i) {
-				entity.getEntityWorld().addParticle(ParticleTypes.HAPPY_VILLAGER,
-						entity.getPositionVec().getX() + (4.0F * player.getRNG().nextFloat()) - 2.0F,
-						entity.getPositionVec().getY() + (4.0F * player.getRNG().nextFloat()) - 2.0F,
-						entity.getPositionVec().getZ() + (4.0F * player.getRNG().nextFloat()) - 2.0F,
+				entity.getCommandSenderWorld().addParticle(ParticleTypes.HAPPY_VILLAGER,
+						entity.position().x() + (4.0F * player.getRandom().nextFloat()) - 2.0F,
+						entity.position().y() + (4.0F * player.getRandom().nextFloat()) - 2.0F,
+						entity.position().z() + (4.0F * player.getRandom().nextFloat()) - 2.0F,
 						0.0D, 0.0D, 0.0D);
 			}
 		}
 
 		// Store Pet:
-		if(!player.getEntityWorld().isRemote) {
+		if(!player.getCommandSenderWorld().isClientSide) {
 			String petType = "pet";
 			if(entityTameable.creatureInfo.isMountable()) {
 				petType = "mount";
 			}
 
 			ITextComponent message = new TranslationTextComponent("message.soulstone." + petType + ".added.prefix")
-					.appendString(" ")
+					.append(" ")
 					.append(creatureInfo.getTitle())
-					.appendString(" ")
+					.append(" ")
 					.append(new TranslationTextComponent("message.soulstone." + petType + ".added.suffix"));
-			player.sendMessage(message, Util.DUMMY_UUID);
+			player.sendMessage(message, Util.NIL_UUID);
 			//player.addStat(ObjectManager.getStat("soulstone"), 1);
 
 			// Add Pet Entry:

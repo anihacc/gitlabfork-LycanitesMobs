@@ -73,7 +73,7 @@ public class ExtendedWorld extends WorldSavedData {
 		if(world instanceof ServerWorld) {
 			ServerWorld serverWorld = (ServerWorld) world;
 			world.increaseMaxEntityRadius(25);
-			ExtendedWorld worldSavedData = serverWorld.getSavedData().get(ExtendedWorld::new, EXT_PROP_NAME);
+			ExtendedWorld worldSavedData = serverWorld.getDataStorage().get(ExtendedWorld::new, EXT_PROP_NAME);
 			if (worldSavedData != null) {
 				worldExt = worldSavedData;
 				worldExt.world = world;
@@ -81,7 +81,7 @@ public class ExtendedWorld extends WorldSavedData {
 			}
 			else {
 				worldExt = new ExtendedWorld(world);
-				serverWorld.getSavedData().set(worldExt);
+				serverWorld.getDataStorage().set(worldExt);
 			}
 		}
 
@@ -123,7 +123,7 @@ public class ExtendedWorld extends WorldSavedData {
 		this.lastEventUpdateTime = this.world.getGameTime() - 1;
 
 		// Start Saved Events:
-		if (!this.world.isRemote && !"".equals(this.getWorldEventName()) && this.serverWorldEventPlayer == null) {
+		if (!this.world.isClientSide && !"".equals(this.getWorldEventName()) && this.serverWorldEventPlayer == null) {
 			long savedLastStartedTime = this.getWorldEventLastStartedTime();
 			this.startMobEvent(this.getWorldEventName(), null, new BlockPos(0, 0, 0), 1, -1); // TODO Swap to read/write from NBT on Server Players.
 			if (this.serverWorldEventPlayer != null) {
@@ -165,7 +165,7 @@ public class ExtendedWorld extends WorldSavedData {
     // ==================================================
 	public void setWorldEventStartTargetTime(long setLong) {
 		if(this.worldEventStartTargetTime != setLong)
-			this.markDirty();
+			this.setDirty();
 		this.worldEventStartTargetTime = setLong;
         if(setLong > 0)
             LycanitesMobs.logDebug("MobEvents", "Next random mob will start after " + ((this.worldEventStartTargetTime - this.world.getGameTime()) / 20) + "secs.");
@@ -173,13 +173,13 @@ public class ExtendedWorld extends WorldSavedData {
 
     public void setWorldEventLastStartedTime(long setLong) {
         if(this.worldEventLastStartedTime != setLong)
-            this.markDirty();
+            this.setDirty();
         this.worldEventLastStartedTime = setLong;
     }
 
 	public void setWorldEventName(String setString) {
 		if(!this.worldEventName.equals(setString))
-			this.markDirty();
+			this.setDirty();
 		this.worldEventName = setString;
 	}
 
@@ -216,7 +216,7 @@ public class ExtendedWorld extends WorldSavedData {
         }
 
         // Server Side:
-        if(!this.world.isRemote) {
+        if(!this.world.isClientSide) {
 			boolean extended = false;
 			if(this.serverWorldEventPlayer != null) {
 				extended = this.serverWorldEventPlayer.mobEvent == mobEvent;
@@ -235,7 +235,7 @@ public class ExtendedWorld extends WorldSavedData {
         }
 
         // Client Side:
-        if(this.world.isRemote) {
+        if(this.world.isClientSide) {
             boolean extended = false;
             if(this.clientWorldEventPlayer != null) {
 				extended = this.clientWorldEventPlayer.mobEvent == mobEvent;
@@ -284,7 +284,7 @@ public class ExtendedWorld extends WorldSavedData {
         }
 
         // Server Side:
-        if(!this.world.isRemote) {
+        if(!this.world.isClientSide) {
             MobEventPlayerServer mobEventPlayerServer = mobEvent.getServerEventPlayer(this.world);
             this.serverMobEventPlayers.put(mobEvent.name, mobEventPlayerServer);
 			mobEventPlayerServer.player = player;
@@ -296,7 +296,7 @@ public class ExtendedWorld extends WorldSavedData {
         }
 
         // Client Side:
-        if(this.world.isRemote) {
+        if(this.world.isClientSide) {
 			MobEventPlayerClient mobEventPlayerClient;
             if(this.clientMobEventPlayers.containsKey(mobEvent.name)) {
 				mobEventPlayerClient = this.clientMobEventPlayers.get(mobEvent.name);
@@ -319,12 +319,12 @@ public class ExtendedWorld extends WorldSavedData {
         if(MobEventManager.getInstance().mobEvents.containsKey(mobEventName)) {
             mobEvent = MobEventManager.getInstance().mobEvents.get(mobEventName);
             if(!mobEvent.isEnabled()) {
-                LycanitesMobs.logWarning("", "Tried to start a mob event that was disabled with the name: '" + mobEventName + "' on " + (this.world.isRemote ? "Client" : "Server"));
+                LycanitesMobs.logWarning("", "Tried to start a mob event that was disabled with the name: '" + mobEventName + "' on " + (this.world.isClientSide ? "Client" : "Server"));
                 return null;
             }
         }
         else {
-            LycanitesMobs.logWarning("", "Tried to start a mob event with the invalid name: '" + mobEventName + "' on " + (this.world.isRemote ? "Client" : "Server"));
+            LycanitesMobs.logWarning("", "Tried to start a mob event with the invalid name: '" + mobEventName + "' on " + (this.world.isClientSide ? "Client" : "Server"));
             return null;
         }
 
@@ -337,7 +337,7 @@ public class ExtendedWorld extends WorldSavedData {
      *  **/
     public void stopMobEvent(String mobEventName) {
 		// Server Side:
-		if(!this.world.isRemote) {
+		if(!this.world.isClientSide) {
 			if (this.serverMobEventPlayers.containsKey(mobEventName)) {
 				this.serverMobEventPlayers.get(mobEventName).onFinish();
 				this.serverMobEventPlayers.remove(mobEventName);
@@ -346,7 +346,7 @@ public class ExtendedWorld extends WorldSavedData {
 		}
 
         // Client Side:
-		if(this.world.isRemote) {
+		if(this.world.isClientSide) {
 			if (this.clientMobEventPlayers.containsKey(mobEventName)) {
 				if(ClientManager.getInstance().getClientPlayer() != null) {
 					this.clientMobEventPlayers.get(mobEventName).onFinish(ClientManager.getInstance().getClientPlayer());
@@ -401,23 +401,23 @@ public class ExtendedWorld extends WorldSavedData {
 	/** Called by bosses to let this world know that they are active, this will add them to the boss list if they are not already in it. **/
 	public void bossUpdate(Entity entity) {
 		if(entity.isAlive()) {
-			if(!this.bosses.containsKey(entity.getUniqueID())) {
-				this.bosses.put(entity.getUniqueID(), new BossEntry());
+			if(!this.bosses.containsKey(entity.getUUID())) {
+				this.bosses.put(entity.getUUID(), new BossEntry());
 			}
-			this.bosses.get(entity.getUniqueID()).update(entity);
+			this.bosses.get(entity.getUUID()).update(entity);
 		}
 	}
 
 	/** Overrides the boss nearby range for the provided entity. **/
 	public void overrideBossRange(Entity entity, int rangeOverride) {
-		if(this.bosses.containsKey(entity.getUniqueID())) {
-			this.bosses.get(entity.getUniqueID()).nearbyRange = rangeOverride;
+		if(this.bosses.containsKey(entity.getUUID())) {
+			this.bosses.get(entity.getUUID()).nearbyRange = rangeOverride;
 		}
 	}
 
 	/** Called by bosses to let this world know that they are being removed. **/
 	public void bossRemoved(Entity entity) {
-		this.bosses.remove(entity.getUniqueID());
+		this.bosses.remove(entity.getUUID());
 	}
 
 	/**
@@ -430,7 +430,7 @@ public class ExtendedWorld extends WorldSavedData {
 			if(bossEntry == null || bossEntry.entity == null || !bossEntry.entity.isAlive()) {
 				continue;
 			}
-			if(bossEntry.entity.getDistanceSq(pos) <= bossEntry.nearbyRange * bossEntry.nearbyRange) {
+			if(bossEntry.entity.distanceToSqr(pos) <= bossEntry.nearbyRange * bossEntry.nearbyRange) {
 				return true;
 			}
 		}
@@ -466,7 +466,7 @@ public class ExtendedWorld extends WorldSavedData {
 	public void addDungeonInstance(DungeonInstance dungeonInstance, UUID uuid) {
 		dungeonInstance.uuid = uuid;
 		this.dungeons.put(dungeonInstance.uuid, dungeonInstance);
-		this.markDirty();
+		this.setDirty();
 	}
 
 
@@ -494,7 +494,7 @@ public class ExtendedWorld extends WorldSavedData {
     //                    Read From NBT
     // ==================================================
 	@Override
-	public void read(CompoundNBT nbtTagCompound) {
+	public void load(CompoundNBT nbtTagCompound) {
 		// Events:
 		if(nbtTagCompound.contains("WorldEventStartTargetTime"))  {
 			this.worldEventStartTargetTime = nbtTagCompound.getInt("WorldEventStartTargetTime");
@@ -534,7 +534,7 @@ public class ExtendedWorld extends WorldSavedData {
     //                    Write To NBT
     // ==================================================
 	@Override
-	public CompoundNBT write(CompoundNBT nbtTagCompound) {
+	public CompoundNBT save(CompoundNBT nbtTagCompound) {
     	// Events:
 		nbtTagCompound.putLong("WorldEventStartTargetTime", this.worldEventStartTargetTime);
 		nbtTagCompound.putLong("WorldEventLastStartedTime", this.worldEventLastStartedTime);

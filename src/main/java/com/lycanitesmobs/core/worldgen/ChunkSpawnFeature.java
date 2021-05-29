@@ -25,17 +25,17 @@ public class ChunkSpawnFeature extends Feature<NoFeatureConfig> {
 	}
 
 	@Override
-	protected void setBlockState(IWorldWriter worldWriter, BlockPos pos, BlockState state) {
+	protected void setBlock(IWorldWriter worldWriter, BlockPos pos, BlockState state) {
 //		if(worldWriter instanceof World) {
 //			SpawnerEventListener.getInstance().onChunkGenerate(((World) worldWriter).getDimensionKey().getLocation().toString(), new ChunkPos(pos));
 //		}
 	}
 
 	@Override
-	public boolean generate(ISeedReader reader, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config) {
-		reader.setBlockState(pos, Blocks.AIR.getDefaultState(), 0);
+	public boolean place(ISeedReader reader, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config) {
+		reader.setBlock(pos, Blocks.AIR.defaultBlockState(), 0);
 		if (reader instanceof WorldGenRegion) {
-			SpawnerEventListener.getInstance().onChunkGenerate(((WorldGenRegion)reader).getWorld().getDimensionKey().getLocation().toString(), new ChunkPos(pos));
+			SpawnerEventListener.getInstance().onChunkGenerate(((WorldGenRegion)reader).getLevel().dimension().location().toString(), new ChunkPos(pos));
 		}
 		return true;
 	}

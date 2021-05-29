@@ -49,26 +49,26 @@ public class AvoidIfHitGoal extends FindAvoidTargetGoal {
 	// ==================================================
  	//                  Should Execute
  	// ==================================================
-    public boolean shouldExecute() {
-    	if(this.host.getRevengeTarget() == null)
+    public boolean canUse() {
+    	if(this.host.getLastHurtByMob() == null)
     		return false;
 
 		// Group Check:
-		if(this.host.shouldCreatureGroupRevenge(this.host.getRevengeTarget())) {
+		if(this.host.shouldCreatureGroupRevenge(this.host.getLastHurtByMob())) {
 			return false;
 		}
 
-        return this.host.getRevengeTimer() != this.revengeTime;
+        return this.host.getLastHurtByMobTimestamp() != this.revengeTime;
     }
 	
     
 	// ==================================================
  	//                 Start Executing
  	// ==================================================
-    public void startExecuting() {
-        this.target = this.host.getRevengeTarget();
-        this.revengeTime = this.host.getRevengeTimer();
+    public void start() {
+        this.target = this.host.getLastHurtByMob();
+        this.revengeTime = this.host.getLastHurtByMobTimestamp();
 		this.callNearbyForHelp();
-        super.startExecuting();
+        super.start();
     }
 }

@@ -43,7 +43,7 @@ public class MessageCreatureKnowledge {
 	public static MessageCreatureKnowledge decode(PacketBuffer packet) {
 		MessageCreatureKnowledge message = new MessageCreatureKnowledge();
 		try {
-			message.creatureName = packet.readString(256);
+			message.creatureName = packet.readUtf(256);
 			message.rank = packet.readInt();
 		}
 		catch(Exception e) {
@@ -57,7 +57,7 @@ public class MessageCreatureKnowledge {
 	 * Writes the message into bytes.
 	 */
 	public static void encode(MessageCreatureKnowledge message, PacketBuffer packet) {
-		packet.writeString(message.creatureName);
+		packet.writeUtf(message.creatureName);
         packet.writeInt(message.rank);
 	}
 	

@@ -58,7 +58,7 @@ public class MobEventSchedule {
 			return false;
 		}
 
-		if(!world.getDimensionKey().getLocation().toString().equals(this.dimensionId)) {
+		if(!world.dimension().location().toString().equals(this.dimensionId)) {
 			return false;
 		}
 

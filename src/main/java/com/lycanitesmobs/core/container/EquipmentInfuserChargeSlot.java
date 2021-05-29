@@ -22,7 +22,7 @@ public class EquipmentInfuserChargeSlot extends BaseSlot {
 	}
 
 	@Override
-	public boolean isItemValid(ItemStack itemStack) {
+	public boolean mayPlace(ItemStack itemStack) {
 		return itemStack.getItem() instanceof ChargeItem || itemStack.getItem() instanceof DyeItem || itemStack.getItem() == Items.WATER_BUCKET || itemStack.getItem() == Items.BUCKET;
 	}
 
@@ -31,12 +31,12 @@ public class EquipmentInfuserChargeSlot extends BaseSlot {
 	 * @return True if this slot has a valid item stack.
 	 */
 	@Override
-	public boolean getHasStack() {
-		return super.getHasStack();
+	public boolean hasItem() {
+		return super.hasItem();
 	}
 
 	@Override
-	public int getSlotStackLimit() {
+	public int getMaxStackSize() {
 		return 64;
     }
 
@@ -45,8 +45,8 @@ public class EquipmentInfuserChargeSlot extends BaseSlot {
 	 * @param itemStack The ItemStack being inserted.
 	 */
 	@Override
-	public void putStack(ItemStack itemStack) {
-		super.putStack(itemStack);
+	public void set(ItemStack itemStack) {
+		super.set(itemStack);
 		this.container.attemptInfusion();
 	}
 
@@ -60,7 +60,7 @@ public class EquipmentInfuserChargeSlot extends BaseSlot {
 	}
 
 	@Override
-	public boolean canTakeStack(PlayerEntity player) {
+	public boolean mayPickup(PlayerEntity player) {
 		return true;
 	}
 }

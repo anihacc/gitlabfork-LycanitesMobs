@@ -6,6 +6,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TranslationTextComponent;
 
+import net.minecraft.client.gui.widget.button.Button.IPressable;
+
 public class MainTab extends Tab {
 
 	public MainTab(int id, IPressable pressable) {
@@ -18,7 +20,7 @@ public class MainTab extends Tab {
 
     @Override
     public void onTabClicked () {
-	    Minecraft.getInstance().displayGuiScreen(new IndexBeastiaryScreen(Minecraft.getInstance().player));
+	    Minecraft.getInstance().setScreen(new IndexBeastiaryScreen(Minecraft.getInstance().player));
     }
 
     @Override

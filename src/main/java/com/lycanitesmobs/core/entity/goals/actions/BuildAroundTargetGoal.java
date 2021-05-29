@@ -60,15 +60,15 @@ public class BuildAroundTargetGoal extends BaseGoal {
     }
     
     @Override
-    public boolean shouldExecute() {
-        if(!super.shouldExecute()) {
+    public boolean canUse() {
+        if(!super.canUse()) {
             return false;
         }
         return this.block == null || this.getTarget() != null;
     }
     
     @Override
-    public void startExecuting() {
+    public void start() {
         this.currentTick = 0;
     }
 
@@ -81,15 +81,15 @@ public class BuildAroundTargetGoal extends BaseGoal {
 
         int range = this.range;
         int enclosement = 0;
-        BlockPos targetPos = this.getTarget().getPosition();
+        BlockPos targetPos = this.getTarget().blockPosition();
 
         // Enclose:
         if(this.enclose) {
             int smallestRange = range;
             for (int x = -range; x <= range; x++) {
                 for (int z = -range; z <= range; z++) {
-                    BlockPos blockPos = targetPos.add(x, 0, z);
-                    BlockState blockState = this.host.getEntityWorld().getBlockState(blockPos);
+                    BlockPos blockPos = targetPos.offset(x, 0, z);
+                    BlockState blockState = this.host.getCommandSenderWorld().getBlockState(blockPos);
                     if (blockState.getBlock() == this.block) {
                         smallestRange = Math.min(Math.max(Math.abs(x), Math.abs(z)), smallestRange);
                     }
@@ -105,10 +105,10 @@ public class BuildAroundTargetGoal extends BaseGoal {
                     if (Math.abs(x) != currentRange && Math.abs(z) != currentRange) {
                         continue;
                     }
-                    BlockPos blockPos = targetPos.add(x, 0, z);
-                    BlockState blockState = this.host.getEntityWorld().getBlockState(blockPos);
+                    BlockPos blockPos = targetPos.offset(x, 0, z);
+                    BlockState blockState = this.host.getCommandSenderWorld().getBlockState(blockPos);
                     if (blockState.getBlock() == Blocks.AIR || blockState.getBlock() == this.block) {
-                        this.host.getEntityWorld().setBlockState(blockPos, this.block.getDefaultState());
+                        this.host.getCommandSenderWorld().setBlockAndUpdate(blockPos, this.block.defaultBlockState());
                     }
                 }
             }

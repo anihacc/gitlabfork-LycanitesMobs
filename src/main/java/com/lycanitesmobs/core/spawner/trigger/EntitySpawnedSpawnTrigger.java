@@ -27,10 +27,10 @@ public class EntitySpawnedSpawnTrigger extends EntitySpawnTrigger {
 		}
 
 		// Chance:
-		if(this.chance < 1 && spawnedEntity.getRNG().nextDouble() > this.chance) {
+		if(this.chance < 1 && spawnedEntity.getRandom().nextDouble() > this.chance) {
 			return;
 		}
 
-		this.trigger(spawnedEntity.getEntityWorld(), null, spawnedEntity.getPosition(), 0, 0);
+		this.trigger(spawnedEntity.getCommandSenderWorld(), null, spawnedEntity.blockPosition(), 0, 0);
 	}
 }

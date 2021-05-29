@@ -28,7 +28,7 @@ public class EntityMorock extends RideableCreatureEntity implements IMob, IGroup
         this.flySoundSpeed = 20;
         this.setupMob();
 
-        this.stepHeight = 1.0F;
+        this.maxUpStep = 1.0F;
     }
 
     // ========== Init AI ==========
@@ -44,14 +44,14 @@ public class EntityMorock extends RideableCreatureEntity implements IMob, IGroup
     // ==================================================
 	// ========== Living Update ==========
 	@Override
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
 
         // Land/Fly:
-        if(!this.getEntityWorld().isRemote) {
+        if(!this.getCommandSenderWorld().isClientSide) {
             if(this.isLanded) {
                 this.wantsToLand = false;
-                if(this.hasPickupEntity() || this.getControllingPassenger() != null || this.getLeashed() || this.isInWater() || (!this.isTamed() && this.updateTick % (5 * 20) == 0 && this.getRNG().nextBoolean())) {
+                if(this.hasPickupEntity() || this.getControllingPassenger() != null || this.isLeashed() || this.isInWater() || (!this.isTamed() && this.updateTick % (5 * 20) == 0 && this.getRandom().nextBoolean())) {
                     this.leap(1.0D, 1.0D);
                     this.isLanded = false;
                 }
@@ -63,7 +63,7 @@ public class EntityMorock extends RideableCreatureEntity implements IMob, IGroup
                     }
                 }
                 else {
-                    if (!this.hasPickupEntity() && !this.hasAttackTarget() && this.updateTick % (5 * 20) == 0 && this.getRNG().nextBoolean()) {
+                    if (!this.hasPickupEntity() && !this.hasAttackTarget() && this.updateTick % (5 * 20) == 0 && this.getRandom().nextBoolean()) {
                         this.wantsToLand = true;
                     }
                 }
@@ -71,19 +71,19 @@ public class EntityMorock extends RideableCreatureEntity implements IMob, IGroup
             if(this.hasPickupEntity() || this.getControllingPassenger() != null || this.hasAttackTarget() || this.isInWater()) {
                 this.wantsToLand = false;
             }
-            else if(this.isTamed() && !this.getLeashed()) {
+            else if(this.isTamed() && !this.isLeashed()) {
                 this.wantsToLand = true;
             }
         }
 
         // Random Leaping:
-        if(!this.isTamed() && !this.getEntityWorld().isRemote) {
+        if(!this.isTamed() && !this.getCommandSenderWorld().isClientSide) {
             if(this.hasAttackTarget()) {
-                if(this.rand.nextInt(10) == 0)
-                    this.leap(6.0F, 0D, this.getAttackTarget());
+                if(this.random.nextInt(10) == 0)
+                    this.leap(6.0F, 0D, this.getTarget());
             }
             else {
-                if(this.rand.nextInt(50) == 0 && this.isMoving())
+                if(this.random.nextInt(50) == 0 && this.isMoving())
                     this.leap(2.0D, 0D);
             }
         }
@@ -91,10 +91,10 @@ public class EntityMorock extends RideableCreatureEntity implements IMob, IGroup
 
     @Override
     public void riderEffects(LivingEntity rider) {
-        if(rider.isPotionActive(Effects.WEAKNESS))
-            rider.removePotionEffect(Effects.WEAKNESS);
-        if(rider.isPotionActive(Effects.MINING_FATIGUE))
-            rider.removePotionEffect(Effects.MINING_FATIGUE);
+        if(rider.hasEffect(Effects.WEAKNESS))
+            rider.removeEffect(Effects.WEAKNESS);
+        if(rider.hasEffect(Effects.DIG_SLOWDOWN))
+            rider.removeEffect(Effects.DIG_SLOWDOWN);
     }
 
 
@@ -105,9 +105,9 @@ public class EntityMorock extends RideableCreatureEntity implements IMob, IGroup
     public BlockPos getWanderPosition(BlockPos wanderPosition) {
         if(this.wantsToLand || !this.isLanded) {
             BlockPos groundPos;
-            for(groundPos = wanderPosition.down(); groundPos.getY() > 0 && this.getEntityWorld().getBlockState(groundPos).getBlock() == Blocks.AIR; groundPos = groundPos.down()) {}
-            if(this.getEntityWorld().getBlockState(groundPos).getMaterial().isSolid()) {
-                return groundPos.up();
+            for(groundPos = wanderPosition.below(); groundPos.getY() > 0 && this.getCommandSenderWorld().getBlockState(groundPos).getBlock() == Blocks.AIR; groundPos = groundPos.below()) {}
+            if(this.getCommandSenderWorld().getBlockState(groundPos).getMaterial().isSolid()) {
+                return groundPos.above();
             }
         }
         if(this.hasPickupEntity() && this.getPickupEntity() instanceof PlayerEntity)
@@ -126,8 +126,8 @@ public class EntityMorock extends RideableCreatureEntity implements IMob, IGroup
     @Override
     public boolean rollWanderChance() {
         if(this.isFlying())
-            return this.getRNG().nextDouble() <= 0.25D;
-        return this.getRNG().nextDouble() <= 0.008D;
+            return this.getRandom().nextDouble() <= 0.25D;
+        return this.getRandom().nextDouble() <= 0.008D;
     }
     
     
@@ -167,8 +167,8 @@ public class EntityMorock extends RideableCreatureEntity implements IMob, IGroup
     //                      Movement
     // ==================================================
     @Override
-    public double getMountedYOffset() {
-        return (double)this.getSize(Pose.STANDING).height * 0.8D;
+    public double getPassengersRidingOffset() {
+        return (double)this.getDimensions(Pose.STANDING).height * 0.8D;
     }
 
 
@@ -177,7 +177,7 @@ public class EntityMorock extends RideableCreatureEntity implements IMob, IGroup
     // ==================================================
     @Override
     public void mountAbility(Entity rider) {
-        if(this.getEntityWorld().isRemote)
+        if(this.getCommandSenderWorld().isClientSide)
             return;
 
         if(this.abilityToggled)

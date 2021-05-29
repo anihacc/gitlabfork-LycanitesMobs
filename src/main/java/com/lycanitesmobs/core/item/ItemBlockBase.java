@@ -13,7 +13,7 @@ public class ItemBlockBase extends BlockItem {
 	}
 
 	@Override
-	public ITextComponent getDisplayName(ItemStack stack) {
-		return this.getBlock().getTranslatedName();
+	public ITextComponent getName(ItemStack stack) {
+		return this.getBlock().getName();
 	}
 }

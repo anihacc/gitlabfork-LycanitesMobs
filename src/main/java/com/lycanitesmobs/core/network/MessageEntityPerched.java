@@ -18,8 +18,8 @@ public class MessageEntityPerched {
 	
 	public MessageEntityPerched() {}
 	public MessageEntityPerched(Entity perchedOnEntityID, Entity perchedByEntity) {
-		this.perchedOnEntityID = perchedOnEntityID.getEntityId();
-		this.perchedByEntityID = perchedByEntity != null ? perchedByEntity.getEntityId() : 0;
+		this.perchedOnEntityID = perchedOnEntityID.getId();
+		this.perchedByEntityID = perchedByEntity != null ? perchedByEntity.getId() : 0;
 	}
 	
 	/**
@@ -31,9 +31,9 @@ public class MessageEntityPerched {
 			return;
 
 		PlayerEntity player = ClientManager.getInstance().getClientPlayer();
-		World world = player.getEntityWorld();
-		Entity perchedOnEntity = world.getEntityByID(message.perchedOnEntityID);
-		Entity perchedByEntity = message.perchedByEntityID != 0 ? world.getEntityByID(message.perchedByEntityID) : null;
+		World world = player.getCommandSenderWorld();
+		Entity perchedOnEntity = world.getEntity(message.perchedOnEntityID);
+		Entity perchedByEntity = message.perchedByEntityID != 0 ? world.getEntity(message.perchedByEntityID) : null;
 
 		if(!(perchedOnEntity instanceof LivingEntity))
 			return;

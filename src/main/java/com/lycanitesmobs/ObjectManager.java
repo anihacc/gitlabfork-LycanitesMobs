@@ -228,7 +228,7 @@ public class ObjectManager {
             event.getRegistry().register(item);
         }
 
-	    Item.Properties blockItemProperties = new Item.Properties().group(ItemManager.getInstance().blocksGroup);
+	    Item.Properties blockItemProperties = new Item.Properties().tab(ItemManager.getInstance().blocksGroup);
 		for(Block block : blocks.values()) {
 			BlockItem blockItem = new BlockItem(block, blockItemProperties);
 			blockItem.setRegistryName(block.getRegistryName());
@@ -252,11 +252,11 @@ public class ObjectManager {
 	@SubscribeEvent
 	public void registerEntities(RegistryEvent.Register<EntityType<?>> event) {
 		for(String entityName : specialEntities.keySet()) {
-			EntityType.Builder entityTypeBuilder = EntityType.Builder.create(EntityFactory.getInstance(), EntityClassification.MISC);
+			EntityType.Builder entityTypeBuilder = EntityType.Builder.of(EntityFactory.getInstance(), EntityClassification.MISC);
 			entityTypeBuilder.setTrackingRange(10);
 			entityTypeBuilder.setUpdateInterval(3);
 			entityTypeBuilder.setShouldReceiveVelocityUpdates(true);
-			entityTypeBuilder.disableSummoning();
+			entityTypeBuilder.noSummon();
 
 			EntityType entityType = entityTypeBuilder.build(entityName);
 			entityType.setRegistryName(LycanitesMobs.MODID, entityName);
@@ -289,14 +289,14 @@ public class ObjectManager {
 	// ========== Tile Entities ==========
 	@SubscribeEvent
 	public void registerTileEntities(RegistryEvent.Register<TileEntityType<?>> event) {
-		TileEntityType<TileEntity> summoningPedestalType = TileEntityType.Builder.create((Supplier<TileEntity>) TileEntitySummoningPedestal::new,
+		TileEntityType<TileEntity> summoningPedestalType = TileEntityType.Builder.of((Supplier<TileEntity>) TileEntitySummoningPedestal::new,
 				getBlock("summoningpedestal")
 		).build(null);
 		summoningPedestalType.setRegistryName(LycanitesMobs.MODID, "summoningpedestal");
 		event.getRegistry().register(summoningPedestalType);
 		tileEntityTypes.put(TileEntitySummoningPedestal.class, summoningPedestalType);
 
-		TileEntityType<TileEntity> equipmentForgeType = TileEntityType.Builder.create((Supplier<TileEntity>) TileEntityEquipmentForge::new,
+		TileEntityType<TileEntity> equipmentForgeType = TileEntityType.Builder.of((Supplier<TileEntity>) TileEntityEquipmentForge::new,
 				getBlock("equipmentforge_lesser"),
 				getBlock("equipmentforge_greater"),
 				getBlock("equipmentforge_master")
@@ -305,7 +305,7 @@ public class ObjectManager {
 		event.getRegistry().register(equipmentForgeType);
 		tileEntityTypes.put(TileEntityEquipmentForge.class, equipmentForgeType);
 
-		TileEntityType<TileEntity> equipmentInfuserType = TileEntityType.Builder.create((Supplier<TileEntity>) EquipmentInfuserTileEntity::new,
+		TileEntityType<TileEntity> equipmentInfuserType = TileEntityType.Builder.of((Supplier<TileEntity>) EquipmentInfuserTileEntity::new,
 				getBlock("equipment_infuser")
 		).build(null);
 		equipmentInfuserType.setRegistryName(LycanitesMobs.MODID, "equipment_infuser");

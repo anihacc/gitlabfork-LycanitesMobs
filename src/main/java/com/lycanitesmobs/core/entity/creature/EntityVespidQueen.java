@@ -60,7 +60,7 @@ public class EntityVespidQueen extends AgeableCreatureEntity implements IMob {
         this.canGrow = true;
         this.babySpawnChance = 0D;
 
-        this.stepHeight = 1.0F;
+        this.maxUpStep = 1.0F;
         this.setAttackCooldownMax(10);
     }
 
@@ -87,7 +87,7 @@ public class EntityVespidQueen extends AgeableCreatureEntity implements IMob {
   	// ==================================================
     @Override
     public boolean isPersistant() {
-    	if(this.hasHome() && this.getEntityWorld().getDifficulty() != Difficulty.PEACEFUL)
+    	if(this.hasHome() && this.getCommandSenderWorld().getDifficulty() != Difficulty.PEACEFUL)
     		return true;
     	return super.isPersistant();
     }
@@ -98,8 +98,8 @@ public class EntityVespidQueen extends AgeableCreatureEntity implements IMob {
     // ==================================================
 	// ========== Living Update ==========
 	@Override
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
 
 		// Hive Cache Times:
 		this.hiveCheckCacheTime--;
@@ -110,40 +110,40 @@ public class EntityVespidQueen extends AgeableCreatureEntity implements IMob {
 			this.hiveExposedBlockCacheTime = 0;
 
 		// Set Home In Hive:
-		if(!this.getEntityWorld().isRemote && !this.hasHome()) {
+		if(!this.getCommandSenderWorld().isClientSide && !this.hasHome()) {
 			if(this.hiveFoundationsSet()) {
-				this.setHome((int)this.getPositionVec().getX(), (int)this.getPositionVec().getY(), (int)this.getPositionVec().getZ(), 16F);
+				this.setHome((int)this.position().x(), (int)this.position().y(), (int)this.position().z(), 16F);
 			}
 		}
 
 		// Spawn Babies:
-		if(!this.getEntityWorld().isRemote && this.hiveFoundationsSet() && this.ticksExisted % 60 == 0) {
+		if(!this.getCommandSenderWorld().isClientSide && this.hiveFoundationsSet() && this.tickCount % 60 == 0) {
 			this.allyUpdate();
 		}
         
         // Don't Keep Infected Conbas Targeted:
-        if(!this.getEntityWorld().isRemote && this.getAttackTarget() instanceof EntityConba) {
-        	if(((EntityConba)this.getAttackTarget()).vespidInfection) {
-        		this.setAttackTarget(null);
+        if(!this.getCommandSenderWorld().isClientSide && this.getTarget() instanceof EntityConba) {
+        	if(((EntityConba)this.getTarget()).vespidInfection) {
+        		this.setTarget(null);
         	}
         }
     }
 
 	@Override
 	public boolean rollWanderChance() {
-		return this.getRNG().nextDouble() <= 0.0008D;
+		return this.getRandom().nextDouble() <= 0.0008D;
 	}
     
     // ========== Spawn Babies ==========
 	public void allyUpdate() {
-		if(this.getEntityWorld().isRemote)
+		if(this.getCommandSenderWorld().isClientSide)
 			return;
 		
 		// Spawn Babies:
 		if(this.swarmLimit > 0 && this.nearbyCreatureCount(CreatureManager.getInstance().getCreature("vespid").getEntityType(), 32D) < this.swarmLimit) {
-			float random = this.rand.nextFloat();
+			float random = this.random.nextFloat();
 			if(random <= 0.05F) {
-				LivingEntity minion = this.spawnAlly(this.getPositionVec().getX() - 2 + (random * 4), this.getPositionVec().getY(), this.getPositionVec().getZ() - 2 + (random * 4));
+				LivingEntity minion = this.spawnAlly(this.position().x() - 2 + (random * 4), this.position().y(), this.position().z() - 2 + (random * 4));
 				if(minion instanceof AgeableCreatureEntity) {
 		    		((AgeableCreatureEntity)minion).setGrowingAge(((AgeableCreatureEntity) minion).growthTime);
 		    	}
@@ -152,22 +152,22 @@ public class EntityVespidQueen extends AgeableCreatureEntity implements IMob {
 	}
 	
     public LivingEntity spawnAlly(double x, double y, double z) {
-		LivingEntity minion = CreatureManager.getInstance().getCreature("vespid").createEntity(this.getEntityWorld());
-    	minion.setLocationAndAngles(x, y, z, this.rand.nextFloat() * 360.0F, 0.0F);
+		LivingEntity minion = CreatureManager.getInstance().getCreature("vespid").createEntity(this.getCommandSenderWorld());
+    	minion.moveTo(x, y, z, this.random.nextFloat() * 360.0F, 0.0F);
     	if(minion instanceof BaseCreatureEntity) {
     		((BaseCreatureEntity)minion).applyVariant(this.getVariantIndex());
     	}
-    	this.getEntityWorld().addEntity(minion);
-        if(this.getAttackTarget() != null)
-        	minion.setRevengeTarget(this.getAttackTarget());
+    	this.getCommandSenderWorld().addFreshEntity(minion);
+        if(this.getTarget() != null)
+        	minion.setLastHurtByMob(this.getTarget());
         return minion;
     }
 
 	// ========== Hive ==========
     public BlockPos getHivePosition() {
         if(this.hasHome())
-            return this.getHomePosition();
-        return this.getPosition();
+            return this.getRestrictCenter();
+        return this.blockPosition();
     }
 
 	public boolean hiveFoundationsSet() {
@@ -221,7 +221,7 @@ public class EntityVespidQueen extends AgeableCreatureEntity implements IMob {
     }
 
     public boolean isHiveWall(BlockPos searchPos) {
-        BlockState searchState = this.getEntityWorld().getBlockState(searchPos);
+        BlockState searchState = this.getCommandSenderWorld().getBlockState(searchPos);
         Block searchBlock = searchState.getBlock();
         if(searchBlock != null)
             if(searchBlock == ObjectManager.getBlock("veswax"))
@@ -230,7 +230,7 @@ public class EntityVespidQueen extends AgeableCreatureEntity implements IMob {
     }
 
     public boolean isHiveFloor(BlockPos searchPos) {
-        BlockState searchState = this.getEntityWorld().getBlockState(searchPos);
+        BlockState searchState = this.getCommandSenderWorld().getBlockState(searchPos);
         Block searchBlock = searchState.getBlock();
         if(searchBlock != null)
             if(searchBlock == ObjectManager.getBlock("propolis"))
@@ -304,30 +304,30 @@ public class EntityVespidQueen extends AgeableCreatureEntity implements IMob {
 					for(int z = hivePos.getZ() - hiveMax; z <= hivePos.getZ() + hiveMax; z++) {
                         BlockPos checkPos = new BlockPos(x, y, z);
 						if(this.isHiveBlock(checkPos)) {
-                            BlockState state = this.getEntityWorld().getBlockState(checkPos);
+                            BlockState state = this.getCommandSenderWorld().getBlockState(checkPos);
 							Block block = state.getBlock();
-							int orientationMeta = state.get(BlockVeswax.AGE) % 8;
-							Direction facing = Direction.byIndex(orientationMeta);
+							int orientationMeta = state.getValue(BlockVeswax.AGE) % 8;
+							Direction facing = Direction.from3DDataValue(orientationMeta);
 
-							if(facing.getXOffset() == 0) {
-								if(!this.isHiveBlock(checkPos.add(-1, 0, 0)) && this.canPlaceBlockAt(checkPos.add(-1, 0, 0)))
-									this.hiveExposedBlocks.add(new HiveExposedCoordinates(block, checkPos.add(-1, 0, 0), orientationMeta));
-								if(!this.isHiveBlock(checkPos.add(1, 0, 0)) && this.canPlaceBlockAt(checkPos.add(1, 0, 0)))
-									this.hiveExposedBlocks.add(new HiveExposedCoordinates(block, checkPos.add(1, 0, 0), orientationMeta));
+							if(facing.getStepX() == 0) {
+								if(!this.isHiveBlock(checkPos.offset(-1, 0, 0)) && this.canPlaceBlockAt(checkPos.offset(-1, 0, 0)))
+									this.hiveExposedBlocks.add(new HiveExposedCoordinates(block, checkPos.offset(-1, 0, 0), orientationMeta));
+								if(!this.isHiveBlock(checkPos.offset(1, 0, 0)) && this.canPlaceBlockAt(checkPos.offset(1, 0, 0)))
+									this.hiveExposedBlocks.add(new HiveExposedCoordinates(block, checkPos.offset(1, 0, 0), orientationMeta));
 							}
 
-							if(facing.getYOffset() == 0) {
-                                if(!this.isHiveBlock(checkPos.add(0, -1, 0)) && this.canPlaceBlockAt(checkPos.add(0, -1, 0)))
-									this.hiveExposedBlocks.add(new HiveExposedCoordinates(block, checkPos.add(0, -1, 0), orientationMeta));
-                                if(!this.isHiveBlock(checkPos.add(0, 1, 0)) && this.canPlaceBlockAt(checkPos.add(0, 1, 0)))
-									this.hiveExposedBlocks.add(new HiveExposedCoordinates(block, checkPos.add(0, 1, 0), orientationMeta));
+							if(facing.getStepY() == 0) {
+                                if(!this.isHiveBlock(checkPos.offset(0, -1, 0)) && this.canPlaceBlockAt(checkPos.offset(0, -1, 0)))
+									this.hiveExposedBlocks.add(new HiveExposedCoordinates(block, checkPos.offset(0, -1, 0), orientationMeta));
+                                if(!this.isHiveBlock(checkPos.offset(0, 1, 0)) && this.canPlaceBlockAt(checkPos.offset(0, 1, 0)))
+									this.hiveExposedBlocks.add(new HiveExposedCoordinates(block, checkPos.offset(0, 1, 0), orientationMeta));
 							}
 
-							if(facing.getZOffset() == 0) {
-                                if(!this.isHiveBlock(checkPos.add(0, 0, -1)) && this.canPlaceBlockAt(checkPos.add(0, 0, -1)))
-									this.hiveExposedBlocks.add(new HiveExposedCoordinates(block, checkPos.add(0, 0, -1), orientationMeta));
-                                if(!this.isHiveBlock(checkPos.add(0, 0, 1)) && this.canPlaceBlockAt(checkPos.add(0, 0, 1)))
-									this.hiveExposedBlocks.add(new HiveExposedCoordinates(block, checkPos.add(0, 0, 1), orientationMeta));
+							if(facing.getStepZ() == 0) {
+                                if(!this.isHiveBlock(checkPos.offset(0, 0, -1)) && this.canPlaceBlockAt(checkPos.offset(0, 0, -1)))
+									this.hiveExposedBlocks.add(new HiveExposedCoordinates(block, checkPos.offset(0, 0, -1), orientationMeta));
+                                if(!this.isHiveBlock(checkPos.offset(0, 0, 1)) && this.canPlaceBlockAt(checkPos.offset(0, 0, 1)))
+									this.hiveExposedBlocks.add(new HiveExposedCoordinates(block, checkPos.offset(0, 0, 1), orientationMeta));
 							}
 						}
 					}
@@ -338,7 +338,7 @@ public class EntityVespidQueen extends AgeableCreatureEntity implements IMob {
 	}
 	
 	public boolean canPlaceBlockAt(BlockPos pos) {
-        BlockState targetState = this.getEntityWorld().getBlockState(pos);
+        BlockState targetState = this.getCommandSenderWorld().getBlockState(pos);
 		Block targetBlock = targetState.getBlock();
         if(targetBlock == null)
 			return false;
@@ -393,7 +393,7 @@ public class EntityVespidQueen extends AgeableCreatureEntity implements IMob {
    	// ==================================================
     // ========== Damage Modifier ==========
     public float getDamageModifier(DamageSource damageSrc) {
-    	if(damageSrc.isFireDamage())
+    	if(damageSrc.isFire())
     		return 4.0F;
     	return 1.0F;
     }

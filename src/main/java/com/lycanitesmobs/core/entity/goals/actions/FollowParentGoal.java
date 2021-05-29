@@ -62,10 +62,10 @@ public class FollowParentGoal extends FollowGoal {
   	//                  Should Execute
   	// ==================================================
 	@Override
-    public boolean shouldExecute() {
+    public boolean canUse() {
     	if(!this.host.shouldFollowParent())
     		return false;
-    	return super.shouldExecute();
+    	return super.canUse();
     }
     
     
@@ -73,9 +73,9 @@ public class FollowParentGoal extends FollowGoal {
   	//                Continue Executing
   	// ==================================================
 	@Override
-    public boolean shouldContinueExecuting() {
+    public boolean canContinueToUse() {
     	if(!this.host.shouldFollowParent())
     		return false;
-    	return super.shouldContinueExecuting();
+    	return super.canContinueToUse();
     }
 }

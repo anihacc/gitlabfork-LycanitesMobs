@@ -239,7 +239,7 @@ public class ProjectileObjModel extends ProjectileModel {
 			}
 
 			// Begin Rendering Part:
-			matrixStack.push();
+			matrixStack.pushPose();
 
 			// Apply Initial Offsets: (To Match Blender OBJ Export)
 			this.doAngle(modelXRotOffset, 1F, 0F, 0F);
@@ -252,8 +252,8 @@ public class ProjectileObjModel extends ProjectileModel {
 			this.currentAnimationPart.applyAnimationFrames(this.animator);
 
 			// Render Part:
-			this.wavefrontObject.renderPart(vertexBuilder, matrixStack.getLast().getNormal(), matrixStack.getLast().getMatrix(), this.getBrightness(partName, layer, entity, brightness), 0, part, this.getPartColor(partName, entity, layer, loop), this.getPartTextureOffset(partName, entity, layer, loop));
-			matrixStack.pop();
+			this.wavefrontObject.renderPart(vertexBuilder, matrixStack.last().normal(), matrixStack.last().pose(), this.getBrightness(partName, layer, entity, brightness), 0, part, this.getPartColor(partName, entity, layer, loop), this.getPartTextureOffset(partName, entity, layer, loop));
+			matrixStack.popPose();
 		}
 	}
 

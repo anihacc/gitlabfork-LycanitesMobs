@@ -43,7 +43,7 @@ public class PortalEntity extends BaseProjectileEntity {
     public TileEntitySummoningPedestal summoningPedestal;
 
     // Datawatcher:
-    protected static final DataParameter<Optional<UUID>> OWNER_UUID = EntityDataManager.createKey(PortalEntity.class, DataSerializers.OPTIONAL_UNIQUE_ID);
+    protected static final DataParameter<Optional<UUID>> OWNER_UUID = EntityDataManager.defineId(PortalEntity.class, DataSerializers.OPTIONAL_UUID);
 	
     // ==================================================
  	//                   Constructors
@@ -74,10 +74,10 @@ public class PortalEntity extends BaseProjectileEntity {
         super(entityType, world);
         this.summoningPedestal = summoningPedestal;
         this.setStats();
-        this.setPosition(
-				summoningPedestal.getPos().getX() + 0.5D,
-				summoningPedestal.getPos().getY() + 3D,
-				summoningPedestal.getPos().getZ() + 0.5D
+        this.setPos(
+				summoningPedestal.getBlockPos().getX() + 0.5D,
+				summoningPedestal.getBlockPos().getY() + 3D,
+				summoningPedestal.getBlockPos().getZ() + 0.5D
 		);
     }
     
@@ -93,7 +93,7 @@ public class PortalEntity extends BaseProjectileEntity {
         this.waterProof = true;
         this.lavaProof = true;
 
-        this.dataManager.register(OWNER_UUID, Optional.empty());
+        this.entityData.define(OWNER_UUID, Optional.empty());
     }
     
     
@@ -109,7 +109,7 @@ public class PortalEntity extends BaseProjectileEntity {
         super.tick();
 
         // ==========Summoning Pedestal ==========
-        if(!this.getEntityWorld().isRemote) {
+        if(!this.getCommandSenderWorld().isClientSide) {
             if(this.summoningPedestal != null) {
                 this.shootingEntity = this.summoningPedestal.getPlayer();
                 this.summonType = this.summoningPedestal.getSummonType();
@@ -118,26 +118,26 @@ public class PortalEntity extends BaseProjectileEntity {
         }
 
         // ==========Sync Shooter Name ==========
-        if(!this.getEntityWorld().isRemote) {
+        if(!this.getCommandSenderWorld().isClientSide) {
             // Summoning Staff or Summoning Pedestal (with active player):
             if(this.shootingEntity != null) {
-				this.dataManager.set(OWNER_UUID, Optional.of(this.shootingEntity.getUniqueID()));
+				this.entityData.set(OWNER_UUID, Optional.of(this.shootingEntity.getUUID()));
 			}
             // Summoning Pedestal:
             else if(this.summoningPedestal != null && this.summoningPedestal.getOwnerUUID() != null) {
-				this.dataManager.set(OWNER_UUID, Optional.of(this.summoningPedestal.getOwnerUUID()));
+				this.entityData.set(OWNER_UUID, Optional.of(this.summoningPedestal.getOwnerUUID()));
 			}
             // Wild:
             else {
-				this.dataManager.set(OWNER_UUID, Optional.empty());
+				this.entityData.set(OWNER_UUID, Optional.empty());
 			}
         }
         else {
-            this.ownerUUID = this.dataManager.get(OWNER_UUID).orElse(null);
+            this.ownerUUID = this.entityData.get(OWNER_UUID).orElse(null);
         }
 
     	// ========== Check for Despawn ==========
-    	if(!this.getEntityWorld().isRemote && this.isAlive()) {
+    	if(!this.getCommandSenderWorld().isClientSide && this.isAlive()) {
             // Summoning Pedestal:
             if(this.summoningPedestal != null) {
                 if(this.summonType == null) {
@@ -170,7 +170,7 @@ public class PortalEntity extends BaseProjectileEntity {
             if(playerExt != null && this.portalItem != null) {
                 if(++this.summonTick >= this.portalItem.getRapidTime(null)) {
                     this.summonDuration = this.portalItem.getSummonDuration();
-                    if(this.shootingEntity.abilities.isCreativeMode) {
+                    if(this.shootingEntity.abilities.instabuild) {
 						this.summonAmount += this.portalItem.getSummonAmount();
 					}
                     else {
@@ -201,16 +201,16 @@ public class PortalEntity extends BaseProjectileEntity {
         }
 
         // ========== Client ==========
-        if(this.getEntityWorld().isRemote) {
+        if(this.getCommandSenderWorld().isClientSide) {
             for(int i = 0; i < 32; ++i) {
-                double angle = Math.toRadians(this.rand.nextFloat() * 360);
-                float distance = this.rand.nextFloat() * 2;
+                double angle = Math.toRadians(this.random.nextFloat() * 360);
+                float distance = this.random.nextFloat() * 2;
                 double x = distance * Math.cos(angle) + Math.sin(angle);
                 double z = distance * Math.sin(angle) - Math.cos(angle);
-                this.getEntityWorld().addParticle(ParticleTypes.PORTAL,
-                        this.getPositionVec().getX() + x,
-                        this.getPositionVec().getY() + (4.0F * this.rand.nextFloat()) - 2.0F,
-                        this.getPositionVec().getZ() + z,
+                this.getCommandSenderWorld().addParticle(ParticleTypes.PORTAL,
+                        this.position().x() + x,
+                        this.position().y() + (4.0F * this.random.nextFloat()) - 2.0F,
+                        this.position().z() + z,
                         0.0D, 0.0D, 0.0D);
             }
             return;
@@ -222,7 +222,7 @@ public class PortalEntity extends BaseProjectileEntity {
   	//                 Summon Creatures
   	// ==================================================
     public int summonCreatures() {
-    	if(this.getEntityWorld().isRemote) {
+    	if(this.getCommandSenderWorld().isClientSide) {
 			return 1;
 		}
         if(this.summonType == null) {
@@ -230,11 +230,11 @@ public class PortalEntity extends BaseProjectileEntity {
 		}
 
     	for(int i = 0; i < this.summonAmount; i++) {
-	    	Entity entity = this.summonType.create(this.getEntityWorld());
+	    	Entity entity = this.summonType.create(this.getCommandSenderWorld());
 	    	if(entity == null) {
 				return 0;
 			}
-	    	entity.setLocationAndAngles(this.getPositionVec().getX(), this.getPositionVec().getY(), this.getPositionVec().getZ(), this.rand.nextFloat() * 360.0F, 0.0F);
+	    	entity.moveTo(this.position().x(), this.position().y(), this.position().z(), this.random.nextFloat() * 360.0F, 0.0F);
 
 	    	if(entity instanceof BaseCreatureEntity) {
                 BaseCreatureEntity entityCreature = (BaseCreatureEntity) entity;
@@ -268,7 +268,7 @@ public class PortalEntity extends BaseProjectileEntity {
 					//this.shootingEntity.addStat(ObjectManager.getStat(entityCreature.creatureInfo.getName() + ".summon"), 1); TODO Player Stats
 				}
             }
-	    	this.getEntityWorld().addEntity(entity);
+	    	this.getCommandSenderWorld().addFreshEntity(entity);
     	}
         int amount = this.summonAmount;
     	this.summonAmount = 0;
@@ -281,7 +281,7 @@ public class PortalEntity extends BaseProjectileEntity {
  	// ==================================================
     // ========== Gravity ==========
     @Override
-    protected float getGravityVelocity() {
+    protected float getGravity() {
         return 0.0F;
     }
     
@@ -289,36 +289,36 @@ public class PortalEntity extends BaseProjectileEntity {
     public void moveToTarget() {
     	if(this.shootingEntity != null && this.summoningPedestal == null) {
     		// Get Look Target
-	        Vector3d lookDirection = this.shootingEntity.getLookVec();
-			this.targetX = this.shootingEntity.getPositionVec().getX() + (lookDirection.x * this.portalRange);
-			this.targetY = this.shootingEntity.getPositionVec().getY() + (lookDirection.y * this.portalRange);
-			this.targetZ = this.shootingEntity.getPositionVec().getZ() + (lookDirection.z * this.portalRange);
+	        Vector3d lookDirection = this.shootingEntity.getLookAngle();
+			this.targetX = this.shootingEntity.position().x() + (lookDirection.x * this.portalRange);
+			this.targetY = this.shootingEntity.position().y() + (lookDirection.y * this.portalRange);
+			this.targetZ = this.shootingEntity.position().z() + (lookDirection.z * this.portalRange);
 	        
 			// Apply Raytrace to Look Target:
-			RayTraceResult target = Utilities.raytrace(this.getEntityWorld(), this.shootingEntity.getPositionVec().getX(), this.shootingEntity.getPositionVec().getY(), this.shootingEntity.getPositionVec().getZ(), this.targetX, this.targetY, this.targetZ, 1.0F, this, null);
+			RayTraceResult target = Utilities.raytrace(this.getCommandSenderWorld(), this.shootingEntity.position().x(), this.shootingEntity.position().y(), this.shootingEntity.position().z(), this.targetX, this.targetY, this.targetZ, 1.0F, this, null);
 	        if(target != null) {
-				this.targetX = target.getHitVec().x;
-				this.targetY = target.getHitVec().y;
-				this.targetZ = target.getHitVec().z;
+				this.targetX = target.getLocation().x;
+				this.targetY = target.getLocation().y;
+				this.targetZ = target.getLocation().z;
 	        }
 	        
 	        this.targetY += 1.0D;
 			
 			// Update Position to Target:
-			this.setPosition(this.targetX, this.targetY, this.targetZ);
+			this.setPos(this.targetX, this.targetY, this.targetZ);
         }
     }
     
     // ========== Get Coord Behind ==========
     /** Returns the XYZ coordinate in front or behind this entity (using rotation angle) this entity with the given distance, use a negative distance for behind. **/
     public double[] getFacingPosition(Entity entity, double distance) {
-    	double angle = Math.toRadians(this.rotationYaw);
+    	double angle = Math.toRadians(this.yRot);
     	double xAmount = -Math.sin(angle);
     	double zAmount = Math.cos(angle);
     	double[] coords = new double[3];
-        coords[0] = entity.getPositionVec().getX() + (distance * xAmount);
-        coords[1] = entity.getPositionVec().getY();
-        coords[2] = entity.getPositionVec().getZ() + (distance * zAmount);
+        coords[0] = entity.position().x() + (distance * xAmount);
+        coords[1] = entity.position().y();
+        coords[2] = entity.position().z() + (distance * zAmount);
         return coords;
     }
     
@@ -327,7 +327,7 @@ public class PortalEntity extends BaseProjectileEntity {
  	//                     Impact
  	// ==================================================
     @Override
-    protected void onImpact(RayTraceResult movingObjectPos) {}
+    protected void onHit(RayTraceResult movingObjectPos) {}
     
     
     // ==================================================
@@ -346,7 +346,7 @@ public class PortalEntity extends BaseProjectileEntity {
 		}
 
         if(this.ownerUUID != null) {
-            if(this.ownerUUID.equals(ClientManager.getInstance().getClientPlayer().getUniqueID())) {
+            if(this.ownerUUID.equals(ClientManager.getInstance().getClientPlayer().getUUID())) {
 				return TextureManager.getTexture(this.entityName + "_client");
 			}
             else {
@@ -358,6 +358,6 @@ public class PortalEntity extends BaseProjectileEntity {
 
     @Override
     public float getTextureOffsetY() {
-        return this.getSize(Pose.STANDING).height + 0.5F;
+        return this.getDimensions(Pose.STANDING).height + 0.5F;
     }
 }

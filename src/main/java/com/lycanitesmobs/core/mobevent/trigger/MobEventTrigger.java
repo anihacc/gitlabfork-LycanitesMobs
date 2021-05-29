@@ -95,7 +95,7 @@ public abstract class MobEventTrigger {
 		for(SpawnCondition condition : this.conditions) {
 			BlockPos position = null;
 			if(player != null) {
-				position = player.getPosition();
+				position = player.blockPosition();
 			}
 			boolean met = condition.isMet(world, player, position);
 			if(met) {

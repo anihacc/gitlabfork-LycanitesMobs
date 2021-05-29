@@ -15,7 +15,7 @@ import java.util.List;
 public class StructureSpawnLocation extends RandomSpawnLocation {
 
 	/** The name of the Structure Type. Vanilla offers: Stronghold, Monument, Village, Mansion, EndCity, Fortress, Temple and Mineshaft, though Mineshaft is buggy, see the mineshaft.json spawner for a better way. Default: Stronghold. **/
-	public String structureName = Structure.STRONGHOLD.getStructureName();
+	public String structureName = Structure.STRONGHOLD.getFeatureName();
 
 	/** How close to the player (in blocks) Structures must be. Default: 100. **/
 	public int structureRange = 100;
@@ -43,7 +43,7 @@ public class StructureSpawnLocation extends RandomSpawnLocation {
 
 		BlockPos structurePos = null;
 		try {
-			structurePos = ((ServerWorld)world).func_241117_a_(Structure.STRONGHOLD, triggerPos, this.structureRange, false);
+			structurePos = ((ServerWorld)world).findNearestMapFeature(Structure.STRONGHOLD, triggerPos, this.structureRange, false);
 		}
 		catch (Exception e) {}
 
@@ -54,7 +54,7 @@ public class StructureSpawnLocation extends RandomSpawnLocation {
 		}
 
 		// Too Far:
-		double structureDistance = Math.sqrt(structurePos.distanceSq(triggerPos));
+		double structureDistance = Math.sqrt(structurePos.distSqr(triggerPos));
 		if(structureDistance > this.structureRange * this.structureRange) {
 			LycanitesMobs.logDebug("JSONSpawner", "No " + this.structureName + " Structures within range, nearest was: " + structureDistance + "/" + (this.structureRange * this.structureRange) + " at: " + structurePos);
 			return new ArrayList<>();

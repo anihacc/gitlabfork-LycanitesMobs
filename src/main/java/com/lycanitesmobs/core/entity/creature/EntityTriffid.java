@@ -48,15 +48,15 @@ public class EntityTriffid extends TameableCreatureEntity implements IMob {
     // ==================================================
 	// ========== Living Update ==========
 	@Override
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
 
         // Water Healing:
-        if(this.getAir() >= 0) {
+        if(this.getAirSupply() >= 0) {
             if (this.isInWater())
-                this.addPotionEffect(new EffectInstance(Effects.REGENERATION, 3 * 20, 2));
-            else if (this.isInWaterRainOrBubbleColumn())
-                this.addPotionEffect(new EffectInstance(Effects.REGENERATION, 3 * 20, 1));
+                this.addEffect(new EffectInstance(Effects.REGENERATION, 3 * 20, 2));
+            else if (this.isInWaterRainOrBubble())
+                this.addEffect(new EffectInstance(Effects.REGENERATION, 3 * 20, 1));
         }
     }
     
@@ -66,14 +66,14 @@ public class EntityTriffid extends TameableCreatureEntity implements IMob {
    	// ==================================================
     // ========== Damage Modifier ==========
     public float getDamageModifier(DamageSource damageSrc) {
-        if(damageSrc.isFireDamage())
+        if(damageSrc.isFire())
             return 2.0F;
-        if(damageSrc.getTrueSource() != null) {
+        if(damageSrc.getEntity() != null) {
             ItemStack heldItem = ItemStack.EMPTY;
-            if(damageSrc.getTrueSource() instanceof LivingEntity) {
-                LivingEntity entityLiving = (LivingEntity)damageSrc.getTrueSource();
-                if(!entityLiving.getHeldItem(Hand.MAIN_HAND).isEmpty()) {
-                    heldItem = entityLiving.getHeldItem(Hand.MAIN_HAND);
+            if(damageSrc.getEntity() instanceof LivingEntity) {
+                LivingEntity entityLiving = (LivingEntity)damageSrc.getEntity();
+                if(!entityLiving.getItemInHand(Hand.MAIN_HAND).isEmpty()) {
+                    heldItem = entityLiving.getItemInHand(Hand.MAIN_HAND);
                 }
             }
             if(ObjectLists.isAxe(heldItem)) {

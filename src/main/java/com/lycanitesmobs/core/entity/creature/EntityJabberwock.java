@@ -41,9 +41,9 @@ public class EntityJabberwock extends TameableCreatureEntity implements IMob {
         this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setTargetClass(PlayerEntity.class).setLongMemory(false));
         this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this));
 
-        if(this.getNavigator() instanceof GroundPathNavigator) {
-            GroundPathNavigator pathNavigateGround = (GroundPathNavigator)this.getNavigator();
-            pathNavigateGround.setBreakDoors(true);
+        if(this.getNavigation() instanceof GroundPathNavigator) {
+            GroundPathNavigator pathNavigateGround = (GroundPathNavigator)this.getNavigation();
+            pathNavigateGround.setCanOpenDoors(true);
         }
     }
 	
@@ -53,14 +53,14 @@ public class EntityJabberwock extends TameableCreatureEntity implements IMob {
     // ==================================================
 	// ========== Living Update ==========
 	@Override
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
         
         // Random Lunging:
-        if(this.onGround && !this.getEntityWorld().isRemote) {
+        if(this.onGround && !this.getCommandSenderWorld().isClientSide) {
         	if(this.hasAttackTarget()) {
-        		if(this.rand.nextInt(10) == 0)
-        			this.leap(6.0F, 0.1D, this.getAttackTarget());
+        		if(this.random.nextInt(10) == 0)
+        			this.leap(6.0F, 0.1D, this.getTarget());
         	}
         }
     }

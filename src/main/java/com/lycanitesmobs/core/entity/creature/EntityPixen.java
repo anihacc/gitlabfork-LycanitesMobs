@@ -50,7 +50,7 @@ public class EntityPixen extends TameableCreatureEntity implements IMob {
         this.spawnsInWater = true;
         this.hasAttackSound = false;
         this.flySoundSpeed = 5;
-        this.stepHeight = 1.0F;
+        this.maxUpStep = 1.0F;
         this.setupMob();
 
         // Random Aura Effects:
@@ -74,14 +74,14 @@ public class EntityPixen extends TameableCreatureEntity implements IMob {
     // ==================================================
 	// ========== Living Update ==========
 	@Override
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
 
         // Land/Fly:
-        if(!this.getEntityWorld().isRemote) {
+        if(!this.getCommandSenderWorld().isClientSide) {
             if(this.isLanded) {
                 this.wantsToLand = false;
-                if(!this.isSitting() && this.updateTick % (5 * 20) == 0 && this.getRNG().nextBoolean()) {
+                if(!this.isSitting() && this.updateTick % (5 * 20) == 0 && this.getRandom().nextBoolean()) {
                     this.leap(1.0D, 1.0D);
                     this.isLanded = false;
                 }
@@ -93,7 +93,7 @@ public class EntityPixen extends TameableCreatureEntity implements IMob {
                     }
                 }
                 else {
-                    if (this.updateTick % (5 * 20) == 0 && this.getRNG().nextBoolean()) {
+                    if (this.updateTick % (5 * 20) == 0 && this.getRandom().nextBoolean()) {
                         this.wantsToLand = true;
                     }
                 }
@@ -101,16 +101,16 @@ public class EntityPixen extends TameableCreatureEntity implements IMob {
         }
 
         // Mischief Aura:
-        if(!this.getEntityWorld().isRemote && this.auraRate > 0 && !this.isPetType("familiar")) {
+        if(!this.getCommandSenderWorld().isClientSide && this.auraRate > 0 && !this.isPetType("familiar")) {
             if (this.updateTick % this.auraRate == 0) {
                 List aoeTargets = this.getNearbyEntities(LivingEntity.class, null, 4);
                 for (Object entityObj : aoeTargets) {
                     LivingEntity target = (LivingEntity) entityObj;
-                    if (target != this && !(target instanceof EntityPixen) && target != this.getAttackTarget() && target != this.getAvoidTarget()) {
-                        int randomIndex = this.getRNG().nextInt(this.auraEffects.size());
+                    if (target != this && !(target instanceof EntityPixen) && target != this.getTarget() && target != this.getAvoidTarget()) {
+                        int randomIndex = this.getRandom().nextInt(this.auraEffects.size());
                         Effect effect = GameRegistry.findRegistry(Effect.class).getValue(new ResourceLocation(this.auraEffects.get(randomIndex)));
                         if(effect != null) {
-                            target.addPotionEffect(new EffectInstance(effect, this.auraDuration, this.auraAmplifier));
+                            target.addEffect(new EffectInstance(effect, this.auraDuration, this.auraAmplifier));
                         }
                     }
                 }
@@ -126,9 +126,9 @@ public class EntityPixen extends TameableCreatureEntity implements IMob {
     public BlockPos getWanderPosition(BlockPos wanderPosition) {
         if(this.wantsToLand || !this.isLanded) {
             BlockPos groundPos;
-            for(groundPos = wanderPosition.down(); groundPos.getY() > 0 && this.getEntityWorld().getBlockState(groundPos).getBlock() == Blocks.AIR; groundPos = groundPos.down()) {}
-            if(this.getEntityWorld().getBlockState(groundPos).getMaterial().isSolid()) {
-                return groundPos.up();
+            for(groundPos = wanderPosition.below(); groundPos.getY() > 0 && this.getCommandSenderWorld().getBlockState(groundPos).getBlock() == Blocks.AIR; groundPos = groundPos.below()) {}
+            if(this.getCommandSenderWorld().getBlockState(groundPos).getMaterial().isSolid()) {
+                return groundPos.above();
             }
         }
         return super.getWanderPosition(wanderPosition);
@@ -170,12 +170,12 @@ public class EntityPixen extends TameableCreatureEntity implements IMob {
 
     @Override
     public boolean canBeTempted() {
-        return !this.isInPack() && this.getRevengeTarget() == null;
+        return !this.isInPack() && this.getLastHurtByMob() == null;
     }
 
     @Override
     public boolean isAggressive() {
-        if(!this.isInPack() && this.getRevengeTarget() == null) {
+        if(!this.isInPack() && this.getLastHurtByMob() == null) {
             return false;
         }
         return super.isAggressive();

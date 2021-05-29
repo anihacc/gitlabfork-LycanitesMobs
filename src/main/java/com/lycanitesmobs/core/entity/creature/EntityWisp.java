@@ -31,7 +31,7 @@ public class EntityWisp extends TameableCreatureEntity {
 
         this.setupMob();
 
-        this.stepHeight = 1.0F;
+        this.maxUpStep = 1.0F;
 		this.setAttackCooldownMax(this.getRangedCooldown());
     }
 
@@ -50,16 +50,16 @@ public class EntityWisp extends TameableCreatureEntity {
 	public void tick() {
     	super.tick();
     	if(this.playPartner != null && !this.hasAttackTarget()) {
-			this.faceEntity(this.playPartner, 360, 360);
+			this.lookAt(this.playPartner, 360, 360);
 		}
 	}
 
     // ========== Living Update ==========
     @Override
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
 
-		if(!this.getEntityWorld().isRemote) {
+		if(!this.getCommandSenderWorld().isClientSide) {
 
 			// Light Aura:
 			if(!this.isPetType("familiar")) {
@@ -82,12 +82,12 @@ public class EntityWisp extends TameableCreatureEntity {
 						this.applyBuffs(target, 1, 1);
 						this.applyDebuffs(target, 1, 1);
 						if(target instanceof ZombieEntity || target instanceof SkeletonEntity) {
-							target.setFire(1);
+							target.setSecondsOnFire(1);
 						}
 						if(target instanceof BaseCreatureEntity) {
 							BaseCreatureEntity targetCreature = (BaseCreatureEntity)target;
 							if(targetCreature.daylightBurns()) {
-								targetCreature.setFire(1);
+								targetCreature.setSecondsOnFire(1);
 							}
 						}
 					}
@@ -101,7 +101,7 @@ public class EntityWisp extends TameableCreatureEntity {
 					List aoeTargets = this.getNearbyEntities(EntityWisp.class, null, 30);
 					for (Object entityObj : aoeTargets) {
 						EntityWisp target = (EntityWisp)entityObj;
-						if(target != this && this.getAttackTarget() != target) {
+						if(target != this && this.getTarget() != target) {
 							this.playPartner = target;
 							if(target.playPartner == null) {
 								target.playPartner = this;
@@ -112,13 +112,13 @@ public class EntityWisp extends TameableCreatureEntity {
 				}
 			}
 			else {
-				if(!this.playPartner.isAlive() || this.getAttackTarget() == this.playPartner || this.getDistance(this.playPartner) >= 100) {
+				if(!this.playPartner.isAlive() || this.getTarget() == this.playPartner || this.distanceTo(this.playPartner) >= 100) {
 					this.playPartner = null;
 				}
 				else if(this.hasAttackTarget()) {
 					this.setAttackCooldownMax(this.getRangedCooldown());
 					if(this.getPlayerOwner() == this.playPartner.getPlayerOwner()) {
-						this.playPartner.setAttackTarget(this.getAttackTarget());
+						this.playPartner.setTarget(this.getTarget());
 					}
 				}
 				else {
@@ -127,7 +127,7 @@ public class EntityWisp extends TameableCreatureEntity {
 							this.setAttackCooldownMax(160);
 							this.playPartner.setAttackCooldownMax(160);
 							this.playPartner.triggerAttackCooldown();
-							this.attackRanged(this.playPartner, this.getDistance(this.playPartner));
+							this.attackRanged(this.playPartner, this.distanceTo(this.playPartner));
 						}
 					}
 				}
@@ -143,7 +143,7 @@ public class EntityWisp extends TameableCreatureEntity {
 		if(this.isAttackOnCooldown()) {
 			return false;
 		}
-		return this.getRNG().nextDouble() <= 0.002D;
+		return this.getRandom().nextDouble() <= 0.002D;
 	}
 
 

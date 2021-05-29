@@ -80,8 +80,8 @@ import javax.annotation.Nullable;
 import java.util.*;
 
 public abstract class BaseCreatureEntity extends CreatureEntity {
-	public static final Attribute DEFENSE = (new RangedAttribute("generic.defense", 4.0D, 0.0D, 1024.0D)).setRegistryName(LycanitesMobs.MODID, "defense").setShouldWatch(true);
-	public static final Attribute RANGED_SPEED = (new RangedAttribute("generic.rangedSpeed", 4.0D, 0.0D, 1024.0D)).setRegistryName(LycanitesMobs.MODID, "ranged_speed").setShouldWatch(true);
+	public static final Attribute DEFENSE = (new RangedAttribute("generic.defense", 4.0D, 0.0D, 1024.0D)).setRegistryName(LycanitesMobs.MODID, "defense").setSyncable(true);
+	public static final Attribute RANGED_SPEED = (new RangedAttribute("generic.rangedSpeed", 4.0D, 0.0D, 1024.0D)).setRegistryName(LycanitesMobs.MODID, "ranged_speed").setSyncable(true);
 
 	// Core:
 	/** The Creature Info used by this creature. **/
@@ -125,7 +125,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
 	// Stats:
 	/** The level of this mob, higher levels increase the stat multipliers by a small amount. **/
-	protected int level = 1;
+	protected int mobLevel = 1;
 
 	/** The current amount of experience this creature has. **/
 	protected int experience = 0;
@@ -282,49 +282,49 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
 	// Data Manager:
 	/** Used to sync what targets this creature has. **/
-    protected static final DataParameter<Byte> TARGET = EntityDataManager.createKey(BaseCreatureEntity.class, DataSerializers.BYTE);
+    protected static final DataParameter<Byte> TARGET = EntityDataManager.defineId(BaseCreatureEntity.class, DataSerializers.BYTE);
     /** Used to sync which attack phase this creature is in. **/
-	protected static final DataParameter<Byte> ATTACK_PHASE = EntityDataManager.createKey(BaseCreatureEntity.class, DataSerializers.BYTE);
+	protected static final DataParameter<Byte> ATTACK_PHASE = EntityDataManager.defineId(BaseCreatureEntity.class, DataSerializers.BYTE);
 	/** Used to sync what animation states this creature is in. **/
-	protected static final DataParameter<Byte> ANIMATION_STATE = EntityDataManager.createKey(BaseCreatureEntity.class, DataSerializers.BYTE);
+	protected static final DataParameter<Byte> ANIMATION_STATE = EntityDataManager.defineId(BaseCreatureEntity.class, DataSerializers.BYTE);
 	/** Used to sync the current attack cooldown animation, useful for when creature attack cooldowns change dynamically. **/
-	protected static final DataParameter<Integer> ANIMATION_ATTACK_COOLDOWN_MAX = EntityDataManager.createKey(BaseCreatureEntity.class, DataSerializers.VARINT);
+	protected static final DataParameter<Integer> ANIMATION_ATTACK_COOLDOWN_MAX = EntityDataManager.defineId(BaseCreatureEntity.class, DataSerializers.INT);
 
 	/** Used to sync if this creature is climbing or not. TODO Perhaps move this into ANIMATION_STATE_BITS. **/
-	protected static final DataParameter<Byte> CLIMBING = EntityDataManager.createKey(BaseCreatureEntity.class, DataSerializers.BYTE);
+	protected static final DataParameter<Byte> CLIMBING = EntityDataManager.defineId(BaseCreatureEntity.class, DataSerializers.BYTE);
 	/** Used to sync the stealth percentage of this creature. Where 0.0 is unstealthed and 1.0 is fully stealthed, see burrowing Crusks for an example. **/
-	protected static final DataParameter<Float> STEALTH = EntityDataManager.createKey(BaseCreatureEntity.class, DataSerializers.FLOAT);
+	protected static final DataParameter<Float> STEALTH = EntityDataManager.defineId(BaseCreatureEntity.class, DataSerializers.FLOAT);
 
 	/** Used to sync the baby status of this creature. **/
-	protected static final DataParameter<Boolean> BABY = EntityDataManager.createKey(BaseCreatureEntity.class, DataSerializers.BOOLEAN);
+	protected static final DataParameter<Boolean> BABY = EntityDataManager.defineId(BaseCreatureEntity.class, DataSerializers.BOOLEAN);
 	/** Used to sync the dyed coloring of this creature. This will go towards colorable pet collars or saddles, etc in the future. **/
-	protected static final DataParameter<Byte> COLOR = EntityDataManager.createKey(BaseCreatureEntity.class, DataSerializers.BYTE);
+	protected static final DataParameter<Byte> COLOR = EntityDataManager.defineId(BaseCreatureEntity.class, DataSerializers.BYTE);
 	/** Used to sync the size scale of this creature. **/
-	protected static final DataParameter<Float> SIZE = EntityDataManager.createKey(BaseCreatureEntity.class, DataSerializers.FLOAT);
+	protected static final DataParameter<Float> SIZE = EntityDataManager.defineId(BaseCreatureEntity.class, DataSerializers.FLOAT);
 	/** Used to sync the stat level of this creature. **/
-	protected static final DataParameter<Integer> LEVEL = EntityDataManager.createKey(BaseCreatureEntity.class, DataSerializers.VARINT);
+	protected static final DataParameter<Integer> LEVEL = EntityDataManager.defineId(BaseCreatureEntity.class, DataSerializers.INT);
 	/** Used to sync the experience of this creature. **/
-	protected static final DataParameter<Integer> EXPERIENCE = EntityDataManager.createKey(BaseCreatureEntity.class, DataSerializers.VARINT);
+	protected static final DataParameter<Integer> EXPERIENCE = EntityDataManager.defineId(BaseCreatureEntity.class, DataSerializers.INT);
 	/** Used to sync the subspecies used by this creature. **/
-	protected static final DataParameter<Byte> SUBSPECIES = EntityDataManager.createKey(BaseCreatureEntity.class, DataSerializers.BYTE);
+	protected static final DataParameter<Byte> SUBSPECIES = EntityDataManager.defineId(BaseCreatureEntity.class, DataSerializers.BYTE);
 	/** Used to sync the variant used by this creature. **/
-	protected static final DataParameter<Byte> VARIANT = EntityDataManager.createKey(BaseCreatureEntity.class, DataSerializers.BYTE);
+	protected static final DataParameter<Byte> VARIANT = EntityDataManager.defineId(BaseCreatureEntity.class, DataSerializers.BYTE);
 
 	/** Used to sync the central arena position that this creature is using if any. See Asmodeus jumping for an example. **/
-	protected static final DataParameter<Optional<BlockPos>> ARENA = EntityDataManager.createKey(BaseCreatureEntity.class, DataSerializers.OPTIONAL_BLOCK_POS);
+	protected static final DataParameter<Optional<BlockPos>> ARENA = EntityDataManager.defineId(BaseCreatureEntity.class, DataSerializers.OPTIONAL_BLOCK_POS);
 
 	/** Used to sync the Head Equipment slot of this creature. Currently unused. **/
-	public static final DataParameter<ItemStack> EQUIPMENT_HEAD = EntityDataManager.createKey(BaseCreatureEntity.class, DataSerializers.ITEMSTACK);
+	public static final DataParameter<ItemStack> EQUIPMENT_HEAD = EntityDataManager.defineId(BaseCreatureEntity.class, DataSerializers.ITEM_STACK);
 	/** Used to sync the Chest Equipment slot of this creature. Used by Pet (Horse) Armor. **/
-	public static final DataParameter<ItemStack> EQUIPMENT_CHEST = EntityDataManager.createKey(BaseCreatureEntity.class, DataSerializers.ITEMSTACK);
+	public static final DataParameter<ItemStack> EQUIPMENT_CHEST = EntityDataManager.defineId(BaseCreatureEntity.class, DataSerializers.ITEM_STACK);
 	/** Used to sync the Legs Equipment slot of this creature. Currently unused. **/
-	public static final DataParameter<ItemStack> EQUIPMENT_LEGS = EntityDataManager.createKey(BaseCreatureEntity.class, DataSerializers.ITEMSTACK);
+	public static final DataParameter<ItemStack> EQUIPMENT_LEGS = EntityDataManager.defineId(BaseCreatureEntity.class, DataSerializers.ITEM_STACK);
 	/** Used to sync the Feet Equipment slot of this creature. Currently unused. **/
-	public static final DataParameter<ItemStack> EQUIPMENT_FEET = EntityDataManager.createKey(BaseCreatureEntity.class, DataSerializers.ITEMSTACK);
+	public static final DataParameter<ItemStack> EQUIPMENT_FEET = EntityDataManager.defineId(BaseCreatureEntity.class, DataSerializers.ITEM_STACK);
 	/** Used to sync the Bag Equipment slot of this creature. **/
-	public static final DataParameter<ItemStack> EQUIPMENT_BAG = EntityDataManager.createKey(BaseCreatureEntity.class, DataSerializers.ITEMSTACK);
+	public static final DataParameter<ItemStack> EQUIPMENT_BAG = EntityDataManager.defineId(BaseCreatureEntity.class, DataSerializers.ITEM_STACK);
 	/** Used to sync the Saddle Equipment slot of this creature. **/
-	public static final DataParameter<ItemStack> EQUIPMENT_SADDLE = EntityDataManager.createKey(BaseCreatureEntity.class, DataSerializers.ITEMSTACK);
+	public static final DataParameter<ItemStack> EQUIPMENT_SADDLE = EntityDataManager.defineId(BaseCreatureEntity.class, DataSerializers.ITEM_STACK);
 
 	protected void onKillEntity(LivingEntity entityLivingBase) {
 	}
@@ -406,32 +406,32 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		this.applyDynamicAttributes();
 
         // Movement:
-        this.moveController = this.createMoveController();
+        this.moveControl = this.createMoveController();
 
         // Path On Fire or In Lava:
         if(!this.canBurn()) {
-            this.setPathPriority(PathNodeType.DANGER_FIRE, 0.0F);
+            this.setPathfindingMalus(PathNodeType.DANGER_FIRE, 0.0F);
             if(this.canBreatheUnderlava()) {
-                this.setPathPriority(PathNodeType.LAVA, 1.0F);
+                this.setPathfindingMalus(PathNodeType.LAVA, 1.0F);
                 if(!this.canBreatheAir()) {
-                    this.setPathPriority(PathNodeType.LAVA, 8.0F);
+                    this.setPathfindingMalus(PathNodeType.LAVA, 8.0F);
                 }
             }
         }
 
         // Path In Water:
         if(this.waterDamage())
-            this.setPathPriority(PathNodeType.WATER, -1.0F);
+            this.setPathfindingMalus(PathNodeType.WATER, -1.0F);
         else if(this.canBreatheUnderwater()) {
-            this.setPathPriority(PathNodeType.WATER, 1.0F);
+            this.setPathfindingMalus(PathNodeType.WATER, 1.0F);
             if(!this.canBreatheAir())
-                this.setPathPriority(PathNodeType.WATER, 8.0F);
+                this.setPathfindingMalus(PathNodeType.WATER, 8.0F);
         }
 
         // Swimming:
-        if(this.canWade() && this.getNavigator() instanceof CreaturePathNavigator) {
-			CreaturePathNavigator pathNavigator = (CreaturePathNavigator)this.getNavigator();
-            pathNavigator.setCanSwim(true);
+        if(this.canWade() && this.getNavigation() instanceof CreaturePathNavigator) {
+			CreaturePathNavigator pathNavigator = (CreaturePathNavigator)this.getNavigation();
+            pathNavigator.setCanFloat(true);
         }
     }
 
@@ -447,26 +447,26 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	 * Registers all Data Manager Parameters.
 	 */
 	@Override
-	protected void registerData() {
+	protected void defineSynchedData() {
 		this.creatureInfo = CreatureManager.getInstance().getCreature(this.getClass());
-		super.registerData();
-		this.dataManager.register(TARGET, (byte) 0);
-		this.dataManager.register(ATTACK_PHASE, (byte) 0);
-		this.dataManager.register(ANIMATION_STATE, (byte) 0);
-		this.dataManager.register(ANIMATION_ATTACK_COOLDOWN_MAX, 0);
+		super.defineSynchedData();
+		this.entityData.define(TARGET, (byte) 0);
+		this.entityData.define(ATTACK_PHASE, (byte) 0);
+		this.entityData.define(ANIMATION_STATE, (byte) 0);
+		this.entityData.define(ANIMATION_ATTACK_COOLDOWN_MAX, 0);
 
-		this.dataManager.register(CLIMBING, (byte) 0);
-		this.dataManager.register(STEALTH, 0.0F);
+		this.entityData.define(CLIMBING, (byte) 0);
+		this.entityData.define(STEALTH, 0.0F);
 
-		this.dataManager.register(COLOR, (byte) 0);
-		this.dataManager.register(SIZE, (float) 1D);
-		this.dataManager.register(LEVEL, 1);
-		this.dataManager.register(EXPERIENCE, 0);
-		this.dataManager.register(SUBSPECIES, (byte) 0);
-		this.dataManager.register(VARIANT, (byte) 0);
+		this.entityData.define(COLOR, (byte) 0);
+		this.entityData.define(SIZE, (float) 1D);
+		this.entityData.define(LEVEL, 1);
+		this.entityData.define(EXPERIENCE, 0);
+		this.entityData.define(SUBSPECIES, (byte) 0);
+		this.entityData.define(VARIANT, (byte) 0);
 
-		this.dataManager.register(ARENA, Optional.empty());
-		InventoryCreature.registerData(this.dataManager);
+		this.entityData.define(ARENA, Optional.empty());
+		InventoryCreature.registerData(this.entityData);
 
 		this.loadCreatureFlags();
 		this.creatureSize = new EntitySize((float)this.creatureInfo.width, (float)this.creatureInfo.height, false);
@@ -492,12 +492,12 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	 * @return Returns a mutable AttributeModifierMap.
 	 */
 	public static AttributeModifierMap.MutableAttribute registerCustomAttributes() {
-		return CreatureEntity.registerAttributes()
-				.createMutableAttribute(DEFENSE)
-				.createMutableAttribute(Attributes.ATTACK_DAMAGE)
-				.createMutableAttribute(Attributes.ATTACK_SPEED)
-				.createMutableAttribute(RANGED_SPEED)
-				.createMutableAttribute(Attributes.FOLLOW_RANGE);
+		return CreatureEntity.createLivingAttributes()
+				.add(DEFENSE)
+				.add(Attributes.ATTACK_DAMAGE)
+				.add(Attributes.ATTACK_SPEED)
+				.add(RANGED_SPEED)
+				.add(Attributes.FOLLOW_RANGE);
 	}
 
 	/**
@@ -569,7 +569,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	 */
     public void setupMob() {
         // Stats:
-        this.stepHeight = 0.5F;
+        this.maxUpStep = 0.5F;
         this.inventory = new InventoryCreature(this.getName().getString(), this);
 
         // Drops:
@@ -601,7 +601,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	}
 
 	@Override
-	public int getExperiencePoints(PlayerEntity player) {
+	public int getExperienceReward(PlayerEntity player) {
 		float scaledExp = this.creatureInfo.experience;
 		if(this.getVariant() != null) {
 			if ("uncommon".equals(this.getVariant().rarity))
@@ -609,8 +609,8 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 			else if ("rare".equals(this.getVariant().rarity))
 				scaledExp = Math.round((float) (this.creatureInfo.experience * Variant.RARE_EXPERIENCE_SCALE));
 		}
-		this.experienceValue = Math.round(scaledExp);
-		return this.experienceValue;
+		this.xpReward = Math.round(scaledExp);
+		return this.xpReward;
 	}
     
     // ========== Name ==========
@@ -628,14 +628,14 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		TextComponent name = new StringTextComponent("");
 
     	if(!"".equals(this.getAgeName().getString())) {
-			name.append(this.getAgeName()).appendString(" ");
+			name.append(this.getAgeName()).append(" ");
 		}
 
     	if(!"".equals(this.getSubspeciesTitle().getString())) {
-			name.append(this.getSubspeciesTitle()).appendString(" ");
+			name.append(this.getSubspeciesTitle()).append(" ");
 		}
 
-    	return name.append(this.getSpeciesName()).appendString(" ").append(this.getLevelName());
+    	return name.append(this.getSpeciesName()).append(" ").append(this.getLevelName());
     }
     
     /** Returns the species name of this entity. **/
@@ -651,7 +651,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		}
 		if(this.getSubspecies() != null) {
 			if(this.getVariant() != null) {
-				subspeciesName.appendString(" ");
+				subspeciesName.append(" ");
 			}
 			subspeciesName.append(this.getSubspecies().getTitle());
 		}
@@ -663,7 +663,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		if(this.getLevel() < 2) {
 			return new StringTextComponent("");
 		}
-		return (TextComponent) new TranslationTextComponent("entity.level").appendString(" " + this.getLevel());
+		return (TextComponent) new TranslationTextComponent("entity.level").append(" " + this.getLevel());
 	}
 
     /** Gets the name of this entity relative to it's age, more useful for EntityCreatureAgeable. **/
@@ -676,14 +676,14 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     //                     Data Manager
     // ==================================================
 	@Override
-	public void notifyDataManagerChange(DataParameter<?> key) {
+	public void onSyncedDataUpdated(DataParameter<?> key) {
     	// TODO Move data manager sync to here and remove these getters.
-    	super.notifyDataManagerChange(key);
+    	super.onSyncedDataUpdated(key);
 	}
 
     public boolean getBoolFromDataManager(DataParameter<Boolean> key) {
         try {
-            return this.getDataManager().get(key);
+            return this.getEntityData().get(key);
         }
         catch (Exception e) {
             return false;
@@ -692,7 +692,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
     public byte getByteFromDataManager(DataParameter<Byte> key) {
         try {
-            return this.getDataManager().get(key);
+            return this.getEntityData().get(key);
         }
         catch (Exception e) {
             return 0;
@@ -701,7 +701,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
     public int getIntFromDataManager(DataParameter<Integer> key) {
         try {
-            return this.getDataManager().get(key);
+            return this.getEntityData().get(key);
         }
         catch (Exception e) {
             return 0;
@@ -710,7 +710,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
     public float getFloatFromDataManager(DataParameter<Float> key) {
         try {
-            return this.getDataManager().get(key);
+            return this.getEntityData().get(key);
         }
         catch (Exception e) {
             return 0;
@@ -719,7 +719,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
     public String getStringFromDataManager(DataParameter<String> key) {
         try {
-            return this.getDataManager().get(key);
+            return this.getEntityData().get(key);
         }
         catch (Exception e) {
             return null;
@@ -728,7 +728,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
 	public Optional<UUID> getUUIDFromDataManager(DataParameter<Optional<UUID>> key) {
 		try {
-			return this.getDataManager().get(key);
+			return this.getEntityData().get(key);
 		}
 		catch (Exception e) {
 			return null;
@@ -737,7 +737,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
     public ItemStack getItemStackFromDataManager(DataParameter<ItemStack> key) {
         try {
-            return this.getDataManager().get(key);
+            return this.getEntityData().get(key);
         }
         catch (Exception e) {
             return ItemStack.EMPTY;
@@ -746,7 +746,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
     public Optional<BlockPos> getBlockPosFromDataManager(DataParameter<Optional<BlockPos>> key) {
         try {
-            return this.getDataManager().get(key);
+            return this.getEntityData().get(key);
         }
         catch (Exception e) {
             return Optional.empty();
@@ -760,19 +760,19 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     // ========== Can Spawn Here ==========
     /** Checks if the creature is able to spawn at it's initial position. **/
     @Override
-    public boolean canSpawn(IWorld world, SpawnReason spawnReason) {
-	    return this.checkSpawnVanilla(this.getEntityWorld(), spawnReason, this.getPosition());
+    public boolean checkSpawnRules(IWorld world, SpawnReason spawnReason) {
+	    return this.checkSpawnVanilla(this.getCommandSenderWorld(), spawnReason, this.blockPosition());
     }
 
     @Override
-    public int getMaxSpawnedInChunk() {
+    public int getMaxSpawnClusterSize() {
         return this.creatureInfo.creatureSpawn.spawnGroupMax;
     }
 
 	// ========== Vanilla Spawn Check ==========
     /** Performs checks when spawned by a vanilla spawner or possibly another modded spawner if they use the vanilla checks. **/
     public boolean checkSpawnVanilla(World world, SpawnReason spawnReason, BlockPos pos) {
-        if(world.isRemote) {
+        if(world.isClientSide) {
 			return false;
 		}
         if(spawnReason != SpawnReason.NATURAL && spawnReason != SpawnReason.SPAWNER) {
@@ -791,13 +791,13 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     	
     	// Peaceful Check:
     	LycanitesMobs.logDebug("MobSpawns", "Checking for peaceful difficulty...");
-        if(!this.creatureInfo.peaceful && this.getEntityWorld().getDifficulty() == Difficulty.PEACEFUL) {
+        if(!this.creatureInfo.peaceful && this.getCommandSenderWorld().getDifficulty() == Difficulty.PEACEFUL) {
         	return false;
 		}
 
 		// Gamerule Check:
 		LycanitesMobs.logDebug("MobSpawns", "Checking gamerules...");
-		if(!this.getEntityWorld().getGameRules().getBoolean(GameRules.DO_MOB_SPAWNING)) {
+		if(!this.getCommandSenderWorld().getGameRules().getBoolean(GameRules.RULE_DOMOBSPAWNING)) {
 			return false;
 		}
         
@@ -860,12 +860,12 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
                 return false;
         }
     	LycanitesMobs.logDebug("MobSpawns", "Checking dimension.");
-    	if(!this.isNativeDimension(this.getEntityWorld()))
+    	if(!this.isNativeDimension(this.getCommandSenderWorld()))
     		return false;
     	LycanitesMobs.logDebug("MobSpawns", "Checking for liquid (water, lava, ooze, etc).");
-        if(!this.spawnsInWater && this.getEntityWorld().containsAnyLiquid(this.getBoundingBox()))
+        if(!this.spawnsInWater && this.getCommandSenderWorld().containsAnyLiquid(this.getBoundingBox()))
             return false;
-        else if(!this.spawnsOnLand && !this.getEntityWorld().containsAnyLiquid(this.getBoundingBox()))
+        else if(!this.spawnsOnLand && !this.getCommandSenderWorld().containsAnyLiquid(this.getBoundingBox()))
             return false;
     	LycanitesMobs.logDebug("MobSpawns", "Checking for underground.");
         if(!this.spawnsUnderground && this.isBlockUnderground(pos.getX(), pos.getY() + 1, pos.getZ()))
@@ -888,7 +888,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		double radius = this.creatureInfo.width;
 		double height = this.creatureInfo.height;
 		AxisAlignedBB spawnBoundries = new AxisAlignedBB(pos.getX() - radius, pos.getY(), pos.getZ() - radius, pos.getX() + radius, pos.getY() + height, pos.getZ() + radius);
-		if(!this.spawnsInBlock && !this.getEntityWorld().checkNoEntityCollision(this, VoxelShapes.create(spawnBoundries))) {
+		if(!this.spawnsInBlock && !this.getCommandSenderWorld().isUnobstructed(this, VoxelShapes.create(spawnBoundries))) {
 			return false;
 		}
 		return true;
@@ -968,18 +968,18 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     // ========== Egg Spawn ==========
     /** Called once this mob is initially spawned. **/
     @Override
-    public ILivingEntityData onInitialSpawn(IServerWorld world, DifficultyInstance difficultyInstance, SpawnReason spawnReason, @Nullable ILivingEntityData livingEntityData, @Nullable CompoundNBT compoundNBT) {
-		livingEntityData = super.onInitialSpawn(world, difficultyInstance, spawnReason, livingEntityData, compoundNBT);
+    public ILivingEntityData finalizeSpawn(IServerWorld world, DifficultyInstance difficultyInstance, SpawnReason spawnReason, @Nullable ILivingEntityData livingEntityData, @Nullable CompoundNBT compoundNBT) {
+		livingEntityData = super.finalizeSpawn(world, difficultyInstance, spawnReason, livingEntityData, compoundNBT);
         return livingEntityData;
     }
 
     // ========== Despawning ==========
 	@Override
-	public boolean isNoDespawnRequired() {
+	public boolean isPersistenceRequired() {
     	if(!this.canDespawnNaturally()) {
 			return true;
 		}
-		return super.isNoDespawnRequired();
+		return super.isPersistenceRequired();
 	}
 
     /** Returns whether this mob should despawn overtime or not. Config defined forced despawns override everything except tamed creatures and tagged creatures. **/
@@ -990,7 +990,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     		return false;
         if(this.creatureInfo.boss || (this.isRareVariant() && !Variant.RARE_DESPAWNING))
             return false;
-    	if(this.isPersistant() || this.getLeashed() || (this.hasCustomName() && "".equals(this.spawnEventType)))
+    	if(this.isPersistant() || this.isLeashed() || (this.hasCustomName() && "".equals(this.spawnEventType)))
     		return false;
     	return true;
     }
@@ -1008,14 +1008,14 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     }
 
     @Override
-	public void enablePersistence() {
-		super.enablePersistence();
+	public void setPersistenceRequired() {
+		super.setPersistenceRequired();
 		this.forceNoDespawn = true;
 	}
 
     /** A check that is constantly done, if this returns true, this entity will be removed, used normally for peaceful difficulty removal and temporary minions. **/
     public boolean despawnCheck() {
-        if(this.getEntityWorld().isRemote)
+        if(this.getCommandSenderWorld().isClientSide)
         	return false;
 
         // Disabled Mobs:
@@ -1027,15 +1027,15 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
         	return true;
 
 		// Peaceful:
-		if(!this.creatureInfo.peaceful && this.getEntityWorld().getDifficulty() == Difficulty.PEACEFUL && !this.hasCustomName()) {
+		if(!this.creatureInfo.peaceful && this.getCommandSenderWorld().getDifficulty() == Difficulty.PEACEFUL && !this.hasCustomName()) {
 			return true;
 		}
 
 		// Mob Event Despawning:
-		ExtendedWorld worldExt = ExtendedWorld.getForWorld(this.getEntityWorld());
+		ExtendedWorld worldExt = ExtendedWorld.getForWorld(this.getCommandSenderWorld());
 		if(worldExt != null) {
 			if(!"".equals(this.spawnEventType) && this.spawnEventCount >= 0 && this.spawnEventCount != worldExt.getWorldEventCount()) {
-				if(this.getLeashed() || this.isPersistant()) {
+				if(this.isLeashed() || this.isPersistant()) {
 					this.spawnEventType = "";
 					this.spawnEventCount = -1;
 					return false;
@@ -1050,14 +1050,14 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	// TODO Cave Air?
     /** Checks if the specified block is underground (unable to see the sky above it). This checks through leaves, plants, grass and vine materials. **/
     public boolean isBlockUnderground(int x, int y, int z) {
-    	if(this.getEntityWorld().canBlockSeeSky(new BlockPos(x, y, z)))
+    	if(this.getCommandSenderWorld().canSeeSkyFromBelowWater(new BlockPos(x, y, z)))
     		return false;
-    	for(int j = y; j < this.getEntityWorld().getHeight(); j++) {
-    		Material blockMaterial = this.getEntityWorld().getBlockState(new BlockPos(x, j, z)).getMaterial();
+    	for(int j = y; j < this.getCommandSenderWorld().getMaxBuildHeight(); j++) {
+    		Material blockMaterial = this.getCommandSenderWorld().getBlockState(new BlockPos(x, j, z)).getMaterial();
     		if(blockMaterial != Material.AIR
     				&& blockMaterial != Material.LEAVES
-    				&& blockMaterial != Material.PLANTS
-    				&& blockMaterial != Material.TALL_PLANTS)
+    				&& blockMaterial != Material.PLANT
+    				&& blockMaterial != Material.REPLACEABLE_PLANT)
     			return true;
     	}
     	return false;
@@ -1075,19 +1075,19 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	}
 
     @Override
-    public boolean isNonBoss() {
+    public boolean canChangeDimensions() {
         return !this.isBoss();
     }
 
     public void createBossInfo(BossInfo.Color color, boolean darkenSky) {
 		TextComponent name = (TextComponent)this.getName();
         if(this.isBossAlways())
-            name.appendString(" (Phase " + (this.getBattlePhase() + 1) + ")");
-        this.bossInfo = (ServerBossInfo)(new ServerBossInfo(name, color, BossInfo.Overlay.PROGRESS)).setDarkenSky(darkenSky);
+            name.append(" (Phase " + (this.getBattlePhase() + 1) + ")");
+        this.bossInfo = (ServerBossInfo)(new ServerBossInfo(name, color, BossInfo.Overlay.PROGRESS)).setDarkenScreen(darkenSky);
     }
 
     public BossInfo getBossInfo() {
-        if(this.bossInfo == null && this.showBossInfo() && !this.getEntityWorld().isRemote) {
+        if(this.bossInfo == null && this.showBossInfo() && !this.getCommandSenderWorld().isClientSide) {
             if(this.isBoss())
                 this.createBossInfo(BossInfo.Color.RED, false);
             else
@@ -1101,7 +1101,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
         if(this.bossInfo != null) {
 			TextComponent name = (TextComponent)this.getTitle();
 			if(this.isBossAlways())
-				name.appendString(" (Phase " + (this.getBattlePhase() + 1) + ")");
+				name.append(" (Phase " + (this.getBattlePhase() + 1) + ")");
             this.bossInfo.setName(name);
         }
     }
@@ -1118,14 +1118,14 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	 */
     public void summonMinion(LivingEntity minion, double angle, double distance) {
         double angleRadians = Math.toRadians(angle);
-        double x = this.getPositionVec().getX() + ((this.getSize(this.getPose()).width + distance) * Math.cos(angleRadians) - Math.sin(angleRadians));
-        double y = this.getPositionVec().getY() + 1;
+        double x = this.position().x() + ((this.getDimensions(this.getPose()).width + distance) * Math.cos(angleRadians) - Math.sin(angleRadians));
+        double y = this.position().y() + 1;
 		if(minion instanceof BaseCreatureEntity && ((BaseCreatureEntity)minion).isFlying()) {
-			y += this.getSize(this.getPose()).height / 2;
+			y += this.getDimensions(this.getPose()).height / 2;
 		}
-        double z = this.getPositionVec().getZ() + ((this.getSize(this.getPose()).width + distance) * Math.sin(angleRadians) + Math.cos(angleRadians));
-        minion.setLocationAndAngles(x, y, z, this.rand.nextFloat() * 360.0F, 0.0F);
-		this.getEntityWorld().addEntity(minion);
+        double z = this.position().z() + ((this.getDimensions(this.getPose()).width + distance) * Math.sin(angleRadians) + Math.cos(angleRadians));
+        minion.moveTo(x, y, z, this.random.nextFloat() * 360.0F, 0.0F);
+		this.getCommandSenderWorld().addFreshEntity(minion);
         if(minion instanceof BaseCreatureEntity) {
             ((BaseCreatureEntity)minion).setMinion(true);
 			if(!this.isRareVariant()) {
@@ -1139,8 +1139,8 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 			}
 			((BaseCreatureEntity)minion).onFirstSpawn();
         }
-        if(this.getAttackTarget() != null) {
-			minion.setRevengeTarget(this.getAttackTarget());
+        if(this.getTarget() != null) {
+			minion.setLastHurtByMob(this.getTarget());
 		}
 		this.addMinion(minion);
     }
@@ -1286,7 +1286,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     // ========== Get Random Size ==========
     public void getRandomSize() {
 		double range = CreatureManager.getInstance().config.randomSizeMax - CreatureManager.getInstance().config.randomSizeMin;
-    	double randomScale = range * this.getRNG().nextDouble();
+    	double randomScale = range * this.getRandom().nextDouble();
     	double scale = CreatureManager.getInstance().config.randomSizeMin + randomScale;
     	if(this.getVariant() != null)
 			scale *= this.getVariant().getScale();
@@ -1299,7 +1299,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
      * Entity is considered a child.
      */
     public int getAge() {
-        if (this.world.isRemote) {
+        if (this.level.isClientSide) {
             return this.getBoolFromDataManager(BABY) ? -1 : 1;
         }
         else {
@@ -1318,14 +1318,14 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	 */
 	@Override
 	@Nonnull
-	public EntitySize getSize(Pose pose) {
+	public EntitySize getDimensions(Pose pose) {
 		if(pose == Pose.SLEEPING) {
-			return SLEEPING_SIZE;
+			return SLEEPING_DIMENSIONS;
 		}
 		if(this.creatureSize == null) {
-			return super.getSize(pose);
+			return super.getDimensions(pose);
 		}
-    	return this.creatureSize.scale(this.getRenderScale() * (float)this.creatureInfo.sizeScale);
+    	return this.creatureSize.scale(this.getScale() * (float)this.creatureInfo.sizeScale);
 	}
 
 	/** Sets the size scale of this creature. **/
@@ -1335,31 +1335,31 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
 	/** Returns the model scale for rendering. **/
 	@Override
-	public float getRenderScale() {
+	public float getScale() {
 		return (float)this.sizeScale * (float)this.creatureInfo.sizeScale;
 	}
 
 	/** Returns the level of this mob, higher levels have higher stats. **/
 	public int getLevel() {
-		if(this.getEntityWorld().isRemote) {
+		if(this.getCommandSenderWorld().isClientSide) {
 			return this.getIntFromDataManager(LEVEL);
 		}
-		return this.level;
+		return this.mobLevel;
 	}
 
 	/** Returns the default starting level to use. **/
 	public int getStartingLevel() {
 		int startingLevelMin = Math.max(1, CreatureManager.getInstance().config.startingLevelMin);
 		if(CreatureManager.getInstance().config.startingLevelMax > startingLevelMin) {
-			return startingLevelMin + this.getRNG().nextInt(CreatureManager.getInstance().config.startingLevelMax - startingLevelMin);
+			return startingLevelMin + this.getRandom().nextInt(CreatureManager.getInstance().config.startingLevelMax - startingLevelMin);
 		}
 		if(CreatureManager.getInstance().config.levelPerDay > 0 && CreatureManager.getInstance().config.levelPerDayMax > 0) {
-			int day = (int)Math.floor(this.getEntityWorld().getGameTime() / 23999D);
+			int day = (int)Math.floor(this.getCommandSenderWorld().getGameTime() / 23999D);
 			double levelGain = Math.min(CreatureManager.getInstance().config.levelPerDay * day, CreatureManager.getInstance().config.levelPerDayMax);
 			startingLevelMin += (int)Math.floor(levelGain);
 		}
 		if(CreatureManager.getInstance().config.levelPerLocalDifficulty > 0) {
-			double levelGain = this.getEntityWorld().getDifficultyForLocation(this.getPosition()).getAdditionalDifficulty();
+			double levelGain = this.getCommandSenderWorld().getCurrentDifficultyAt(this.blockPosition()).getEffectiveDifficulty();
 			startingLevelMin += Math.max(0, (int)Math.floor(levelGain - 1.5D));
 		}
 		return startingLevelMin;
@@ -1374,21 +1374,21 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
 	/** Sets the level of this mob without refreshing stats, used when loading from NBT or from applyLevel(). If a level is changed use applyLevel() instead. **/
 	public void setLevel(int level) {
-		this.level = level;
-		this.dataManager.set(LEVEL, level);
+		this.mobLevel = level;
+		this.entityData.set(LEVEL, level);
 	}
 
 	/** Increases the level of this mob, higher levels have higher stats. **/
 	public void addLevel(int level) {
-		this.applyLevel(this.level + level);
+		this.applyLevel(this.mobLevel + level);
 	}
 
 	/**
 	 * Checks this creature's experience and performs a level up if it has enough to do so.
 	 */
 	public void updateLevelExperience() {
-		if(!this.getEntityWorld().isRemote) {
-			this.dataManager.set(EXPERIENCE, this.experience);
+		if(!this.getCommandSenderWorld().isClientSide) {
+			this.entityData.set(EXPERIENCE, this.experience);
 		}
 		if(this.getExperience() >= this.creatureStats.getExperienceForNextLevel()) {
 			this.setExperience(this.getExperience() - this.creatureStats.getExperienceForNextLevel());
@@ -1397,7 +1397,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 			// Particles:
 			//if(this.getEntityWorld().isRemote) {
 				for (int i = 0; i < 20; ++i) {
-					this.getEntityWorld().addParticle(ParticleTypes.HAPPY_VILLAGER, this.getPositionVec().getX() + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width, this.getPositionVec().getY() + this.rand.nextDouble() * (double) this.getSize(Pose.STANDING).height, this.getPositionVec().getZ() + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
+					this.getCommandSenderWorld().addParticle(ParticleTypes.HAPPY_VILLAGER, this.position().x() + (this.random.nextDouble() - 0.5D) * (double) this.getDimensions(Pose.STANDING).width, this.position().y() + this.random.nextDouble() * (double) this.getDimensions(Pose.STANDING).height, this.position().z() + (this.random.nextDouble() - 0.5D) * (double) this.getDimensions(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
 				}
 			//}
 		}
@@ -1408,7 +1408,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	 * @return How much experience this creature has.
 	 */
 	public int getExperience() {
-		if(this.getEntityWorld().isRemote) {
+		if(this.getCommandSenderWorld().isClientSide) {
 			return this.getIntFromDataManager(EXPERIENCE);
 		}
 		return this.experience;
@@ -1514,7 +1514,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 				scaledExp = Math.round((float) (this.creatureInfo.experience * Variant.UNCOMMON_EXPERIENCE_SCALE));
 			else if ("rare".equals(this.variant.rarity))
 				scaledExp = Math.round((float) (this.creatureInfo.experience * Variant.RARE_EXPERIENCE_SCALE));
-			this.experienceValue = Math.round(scaledExp);
+			this.xpReward = Math.round(scaledExp);
 			if ("rare".equals(this.variant.rarity)) {
 				this.damageLimit = BOSS_DAMAGE_LIMIT;
 				this.damageMax = BOSS_DAMAGE_LIMIT;
@@ -1591,8 +1591,8 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
         }
 
         // Fire Immunity Override:
-		if(this.isBurning() && !this.canBurn()) {
-			this.extinguish();
+		if(this.isOnFire() && !this.canBurn()) {
+			this.clearFire();
 		}
 
         // Not Walking On Land:
@@ -1601,12 +1601,12 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		}
 
         // Climbing/Flying:
-        if(!this.getEntityWorld().isRemote || this.canPassengerSteer()) {
-        	this.setBesideClimbableBlock(this.collidedHorizontally);
-        	if(!this.onGround && this.flySoundSpeed > 0 && this.ticksExisted % 20 == 0)
+        if(!this.getCommandSenderWorld().isClientSide || this.isControlledByLocalInstance()) {
+        	this.setBesideClimbableBlock(this.horizontalCollision);
+        	if(!this.onGround && this.flySoundSpeed > 0 && this.tickCount % 20 == 0)
         		this.playFlySound();
         }
-        if(!this.getEntityWorld().isRemote && this.isFlying() && this.hasAttackTarget() && this.updateTick % 40 == 0) {
+        if(!this.getCommandSenderWorld().isClientSide && this.isFlying() && this.hasAttackTarget() && this.updateTick % 40 == 0) {
             this.leap(0, 0.4D);
         }
 
@@ -1616,9 +1616,9 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 			ExtendedEntity perchEntityExt = ExtendedEntity.getForEntity(this.getPerchTarget());
 			if(perchEntityExt != null) {
 				Vector3d perchPosition = perchEntityExt.getPerchPosition();
-				this.setPosition(perchPosition.x, perchPosition.y, perchPosition.z);
-				this.setMotion(perchTarget.getMotion());
-				this.rotationYaw = perchTarget.rotationYaw;
+				this.setPos(perchPosition.x, perchPosition.y, perchPosition.z);
+				this.setDeltaMovement(perchTarget.getDeltaMovement());
+				this.yRot = perchTarget.yRot;
 			}
 			if(perchTarget instanceof PlayerEntity && !perchTarget.isPassenger()) {
 				ExtendedPlayer perchPlayerExt = ExtendedPlayer.getForPlayer((PlayerEntity) perchTarget);
@@ -1634,9 +1634,9 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		}
 
 		// Beastiary Discovery:
-		if(!this.getEntityWorld().isRemote && this.updateTick % 40 == 0) {
-			for(PlayerEntity player : this.getEntityWorld().getPlayers()) {
-				if(this.getDistance(player) <= 3) {
+		if(!this.getCommandSenderWorld().isClientSide && this.updateTick % 40 == 0) {
+			for(PlayerEntity player : this.getCommandSenderWorld().players()) {
+				if(this.distanceTo(player) <= 3) {
 					ExtendedPlayer extendedPlayer = ExtendedPlayer.getForPlayer(player);
 					if(extendedPlayer != null) {
 						extendedPlayer.getBeastiary().discoverCreature(this, 1, false);
@@ -1646,10 +1646,10 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		}
 
         // GUI Refresh Tick:
-        if(!this.getEntityWorld().isRemote && this.guiViewers.size() <= 0) {
+        if(!this.getCommandSenderWorld().isClientSide && this.guiViewers.size() <= 0) {
 			this.guiRefreshTick = 0;
 		}
-        if(!this.getEntityWorld().isRemote && this.guiRefreshTick > 0) {
+        if(!this.getCommandSenderWorld().isClientSide && this.guiRefreshTick > 0) {
         	if(--this.guiRefreshTick <= 0) {
         		this.refreshGUIViewers();
         		this.guiRefreshTick = 0;
@@ -1660,17 +1660,17 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     // ========== AI ==========
     /** Runs through all the AI tasks this mob has on the update, will update the flight navigator if this mob is using it too. **/
     @Override
-    protected void updateAITasks() {
+    protected void customServerAiStep() {
 		if(this.useDirectNavigator()) {
 			directNavigator.updateFlight();
 		}
-        super.updateAITasks();
+        super.customServerAiStep();
     }
 
     // ========== Living ==========
     /** The living tick, behaviour and custom update logic should go here. **/
     @Override
-    public void livingTick() {
+    public void aiStep() {
 		// Enforce Damage Limit:
 		if(this.damageLimit > 0) {
 			if (this.healthLastTick < 0)
@@ -1678,12 +1678,12 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 			if (this.healthLastTick - this.getHealth() > this.damageLimit)
 				this.setHealth(this.healthLastTick);
 			this.healthLastTick = this.getHealth();
-			if (!this.getEntityWorld().isRemote && this.updateTick % 20 == 0) {
+			if (!this.getCommandSenderWorld().isClientSide && this.updateTick % 20 == 0) {
 				this.damageTakenThisSec = 0;
 			}
 		}
 
-        super.livingTick();
+        super.aiStep();
 		if(this.creatureInfo.dummy) {
 			return;
 		}
@@ -1696,7 +1696,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 			}
 		}
         this.updateBattlePhase();
-        this.updateArmSwingProgress();
+        this.updateSwingTime();
 
 		// Blocking Updates:
 		if(this.currentBlockingTime > 0) {
@@ -1707,18 +1707,18 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		}
 
         // First Spawn:
-        if(!this.getEntityWorld().isRemote && this.firstSpawn) {
+        if(!this.getCommandSenderWorld().isClientSide && this.firstSpawn) {
             this.onFirstSpawn();
         }
 
         // Fixate Target:
-		if(!this.getEntityWorld().isRemote && !this.hasFixateTarget() && this.fixateUUID != null) {
+		if(!this.getCommandSenderWorld().isClientSide && !this.hasFixateTarget() && this.fixateUUID != null) {
 			double range = 64D;
-			List connections = this.getEntityWorld().getEntitiesWithinAABB(LivingEntity.class, this.getBoundingBox().grow(range, range, range));
+			List connections = this.getCommandSenderWorld().getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(range, range, range));
 			Iterator possibleFixateTargets = connections.iterator();
 			while(possibleFixateTargets.hasNext()) {
 				LivingEntity possibleFixateTarget = (LivingEntity)possibleFixateTargets.next();
-				if(possibleFixateTarget != this && possibleFixateTarget.getUniqueID().equals(this.fixateUUID)) {
+				if(possibleFixateTarget != this && possibleFixateTarget.getUUID().equals(this.fixateUUID)) {
 					this.setFixateTarget(possibleFixateTarget);
 					break;
 				}
@@ -1726,15 +1726,15 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 			this.fixateUUID = null;
 		}
 		if(this.hasFixateTarget()) {
-        	this.setAttackTarget(this.getFixateTarget());
+        	this.setTarget(this.getFixateTarget());
 		}
 
         // Remove Creative Attack Target:
         if(this.hasAttackTarget()) {
-            if(this.getAttackTarget() instanceof PlayerEntity) {
-                PlayerEntity targetPlayer = (PlayerEntity)this.getAttackTarget();
-                if(targetPlayer.abilities.disableDamage)
-                    this.setAttackTarget(null);
+            if(this.getTarget() instanceof PlayerEntity) {
+                PlayerEntity targetPlayer = (PlayerEntity)this.getTarget();
+                if(targetPlayer.abilities.invulnerable)
+                    this.setTarget(null);
             }
         }
 
@@ -1745,61 +1745,61 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
         }
 
         // Gliding:
-        if(!this.onGround && this.getMotion().y < 0.0D) {
-            this.setMotion(this.getMotion().mul(1, this.getFallingMod(), 1));
+        if(!this.onGround && this.getDeltaMovement().y < 0.0D) {
+            this.setDeltaMovement(this.getDeltaMovement().multiply(1, this.getFallingMod(), 1));
         }
 
         // Sunlight Damage:
-        if(!this.getEntityWorld().isRemote && this.daylightBurns() && this.getEntityWorld().isDaytime()) {
+        if(!this.getCommandSenderWorld().isClientSide && this.daylightBurns() && this.getCommandSenderWorld().isDay()) {
         	float brightness = this.getBrightness();
-            if(brightness > 0.5F && this.rand.nextFloat() * 30.0F < (brightness - 0.4F) * 2.0F && this.getEntityWorld().canBlockSeeSky(this.getPosition())) {
+            if(brightness > 0.5F && this.random.nextFloat() * 30.0F < (brightness - 0.4F) * 2.0F && this.getCommandSenderWorld().canSeeSkyFromBelowWater(this.blockPosition())) {
                 boolean shouldBurn = true;
                 ItemStack helmet = this.inventory.getEquipmentStack("head");
                 if(helmet != null) {
-                    if(helmet.isDamageable()) {
-                    	helmet.setDamage(helmet.getDamage() + this.rand.nextInt(2));
-                        if(helmet.getDamage() >= helmet.getMaxDamage()) {
+                    if(helmet.isDamageableItem()) {
+                    	helmet.setDamageValue(helmet.getDamageValue() + this.random.nextInt(2));
+                        if(helmet.getDamageValue() >= helmet.getMaxDamage()) {
                             this.setCurrentItemOrArmor(4, ItemStack.EMPTY);
                         }
                     }
                     shouldBurn = false;
                 }
                 if(shouldBurn) {
-					this.setFire(8);
+					this.setSecondsOnFire(8);
 				}
             }
         }
 
         // Water Damage:
-        if(!this.getEntityWorld().isRemote && this.waterDamage() && this.isWet() && !this.isInLava()) {
-            this.attackEntityFrom(DamageSource.DROWN, 1.0F);
+        if(!this.getCommandSenderWorld().isClientSide && this.waterDamage() && this.isInWaterOrRain() && !this.isInLava()) {
+            this.hurt(DamageSource.DROWN, 1.0F);
         }
 
         // Suffocation:
-        if(!this.getEntityWorld().isRemote && this.isAlive() && !this.canBreatheAir()) {
-        	this.setAir(this.determineNextAir(this.getAir()));
-			if(this.getAir() <= -200) {
-				this.setAir(-160);
-				this.attackEntityFrom(DamageSource.DROWN, 1.0F);
+        if(!this.getCommandSenderWorld().isClientSide && this.isAlive() && !this.canBreatheAir()) {
+        	this.setAirSupply(this.increaseAirSupply(this.getAirSupply()));
+			if(this.getAirSupply() <= -200) {
+				this.setAirSupply(-160);
+				this.hurt(DamageSource.DROWN, 1.0F);
 			}
         }
 
         // Natural Despawn Light Scaling:
-		if(!this.getEntityWorld().isRemote) {
+		if(!this.getCommandSenderWorld().isClientSide) {
 			float light = this.getBrightness();
 			if (!this.creatureInfo.creatureSpawn.spawnsInLight && light > 0.5F) {
-				this.idleTime += 2;
+				this.noActionTime += 2;
 			}
 			else if (!this.creatureInfo.creatureSpawn.spawnsInDark && light <= 0.5F) {
-				this.idleTime += 2;
+				this.noActionTime += 2;
 			}
 		}
 
 	    // Stealth Invisibility:
-    	if(!this.getEntityWorld().isRemote) {
+    	if(!this.getCommandSenderWorld().isClientSide) {
 	        if(this.isStealthed() && !this.isInvisible())
 	        	this.setInvisible(true);
-	        else if(!this.isStealthed() && this.isInvisible() && !this.isPotionActive(Effects.INVISIBILITY))
+	        else if(!this.isStealthed() && this.isInvisible() && !this.hasEffect(Effects.INVISIBILITY))
                 this.setInvisible(false);
     	}
         if(this.isStealthed()) {
@@ -1807,20 +1807,20 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
                 this.startStealth();
             this.onStealth();
         }
-        else if(this.isInvisible() && !this.isPotionActive(Effects.INVISIBILITY) && !this.getEntityWorld().isRemote) {
+        else if(this.isInvisible() && !this.hasEffect(Effects.INVISIBILITY) && !this.getCommandSenderWorld().isClientSide) {
             this.setInvisible(false);
         }
         this.stealthPrev = this.isStealthed();
 
         // Pickup Items:
-        if(this.ticksExisted % 20 == 0 && !this.getEntityWorld().isRemote && this.isAlive() && this.canPickupItems())
+        if(this.tickCount % 20 == 0 && !this.getCommandSenderWorld().isClientSide && this.isAlive() && this.canPickupItems())
         	this.pickupItems();
 
         // Entity Pickups:
-        if(!this.getEntityWorld().isRemote && this.pickupEntity != null) {
+        if(!this.getCommandSenderWorld().isClientSide && this.pickupEntity != null) {
 			if(!this.pickupEntity.isAlive())
 				this.dropPickupEntity();
-			else if(Math.sqrt(this.getDistance(this.pickupEntity)) > 32D) {
+			else if(Math.sqrt(this.distanceTo(this.pickupEntity)) > 32D) {
 				this.dropPickupEntity();
 			}
         }
@@ -1828,7 +1828,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		// Boss:
 		this.getBossInfo();
 		if(this.isBossAlways()) {
-			ExtendedWorld extendedWorld = ExtendedWorld.getForWorld(this.getEntityWorld());
+			ExtendedWorld extendedWorld = ExtendedWorld.getForWorld(this.getCommandSenderWorld());
 			extendedWorld.bossUpdate(this);
 		}
 
@@ -1852,9 +1852,9 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     /** An update that is called to sync things with the client and server such as various entity targets, attack phases, animations, etc. **/
     public void onSyncUpdate() {
     	// Sync Target Status:
-    	if(!this.getEntityWorld().isRemote) {
+    	if(!this.getCommandSenderWorld().isClientSide) {
     		byte targets = 0;
-    		if(this.getAttackTarget() != null)
+    		if(this.getTarget() != null)
     			targets += TARGET_BITS.ATTACK.id;
     		if(this.getMasterTarget() != null)
     			targets += TARGET_BITS.MASTER.id;
@@ -1868,15 +1868,15 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 				targets += TARGET_BITS.PICKUP.id;
 			if(this.getPerchTarget() != null)
 				targets += TARGET_BITS.PERCH.id;
-    		this.dataManager.set(TARGET, targets);
+    		this.entityData.set(TARGET, targets);
     	}
 
 		// Attack Phase:
-    	if(!this.getEntityWorld().isRemote)
-    		this.dataManager.set(ATTACK_PHASE, this.attackPhase);
+    	if(!this.getCommandSenderWorld().isClientSide)
+    		this.entityData.set(ATTACK_PHASE, this.attackPhase);
 
     	// Animations Server:
-        if(!this.getEntityWorld().isRemote) {
+        if(!this.getCommandSenderWorld().isClientSide) {
         	byte animations = 0;
 
         	// Attack Cooldown:
@@ -1889,7 +1889,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
         		animations += ANIMATION_STATE_BITS.GROUNDED.id;
 
             // Swimming Animation:
-            if(this.inWater)
+            if(this.wasTouchingWater)
                 animations += ANIMATION_STATE_BITS.IN_WATER.id;
 
         	// Blocking Animation:
@@ -1908,11 +1908,11 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 			if(this.spawnedAsBoss)
 				animations += ANIMATION_STATE_BITS.BOSS.id;
 
-        	this.dataManager.set(ANIMATION_STATE, animations);
+        	this.entityData.set(ANIMATION_STATE, animations);
         }
 
         // Animations Client:
-        else if(this.getEntityWorld().isRemote) {
+        else if(this.getCommandSenderWorld().isClientSide) {
         	byte animationState = this.getByteFromDataManager(ANIMATION_STATE);
         	if((animationState & ANIMATION_STATE_BITS.ATTACKED.id) > 0) {
         		if(!this.isAttackOnCooldown()) {
@@ -1923,19 +1923,19 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
         		this.resetAttackCooldown();
 			}
         	this.onGround = (animationState & ANIMATION_STATE_BITS.GROUNDED.id) > 0;
-            this.inWater = (animationState & ANIMATION_STATE_BITS.IN_WATER.id) > 0;
+            this.wasTouchingWater = (animationState & ANIMATION_STATE_BITS.IN_WATER.id) > 0;
         	this.extraAnimation01 = (animationState & ANIMATION_STATE_BITS.EXTRA01.id) > 0;
         	this.spawnedAsBoss = (animationState & ANIMATION_STATE_BITS.BOSS.id) > 0;
         }
 
         // Is Minion:
-        if(this.getEntityWorld().isRemote) {
+        if(this.getCommandSenderWorld().isClientSide) {
     		this.isMinion = (this.getByteFromDataManager(ANIMATION_STATE) & ANIMATION_STATE_BITS.MINION.id) > 0;
         }
 
         // Subspecies:
-        if(!this.getEntityWorld().isRemote) {
-    		this.dataManager.set(SUBSPECIES, (byte)this.getSubspeciesIndex());
+        if(!this.getCommandSenderWorld().isClientSide) {
+    		this.entityData.set(SUBSPECIES, (byte)this.getSubspeciesIndex());
         }
         else {
         	if(this.getSubspeciesIndex() != this.getByteFromDataManager(SUBSPECIES))
@@ -1943,8 +1943,8 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
         }
 
 		// Variant:
-		if(!this.getEntityWorld().isRemote) {
-			this.dataManager.set(VARIANT, (byte)this.getVariantIndex());
+		if(!this.getCommandSenderWorld().isClientSide) {
+			this.entityData.set(VARIANT, (byte)this.getVariantIndex());
 		}
 		else {
 			if(this.getVariantIndex() != this.getByteFromDataManager(VARIANT))
@@ -1952,8 +1952,8 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		}
 
         // Size:
-        if(!this.getEntityWorld().isRemote) {
-    		this.dataManager.set(SIZE, (float)this.sizeScale);
+        if(!this.getCommandSenderWorld().isClientSide) {
+    		this.entityData.set(SIZE, (float)this.sizeScale);
         }
         else {
         	if(this.sizeScale != this.getFloatFromDataManager(SIZE)) {
@@ -1962,8 +1962,8 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
         }
 
         // Arena:
-        if(!this.getEntityWorld().isRemote) {
-            this.dataManager.set(ARENA, this.getArenaCenter() != null ? Optional.of(this.getArenaCenter()) : Optional.empty());
+        if(!this.getCommandSenderWorld().isClientSide) {
+            this.entityData.set(ARENA, this.getArenaCenter() != null ? Optional.of(this.getArenaCenter()) : Optional.empty());
         }
     }
 
@@ -1981,8 +1981,8 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
   	//                     Movement
   	// ==================================================
 	@Override
-	public void setPosition(double x, double y, double z) {
-		super.setPosition(x, y, z);
+	public void setPos(double x, double y, double z) {
+		super.setPos(x, y, z);
 	}
 
 	/**
@@ -1994,9 +1994,9 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	 */
 	public float getBlockPathWeight(int x, int y, int z) {
 		if(this.creatureInfo.creatureSpawn.spawnsInDark && !this.creatureInfo.creatureSpawn.spawnsInLight)
-			return 0.5F - this.getEntityWorld().getBrightness(new BlockPos(x, y, z));
+			return 0.5F - this.getCommandSenderWorld().getBrightness(new BlockPos(x, y, z));
 		if(this.creatureInfo.creatureSpawn.spawnsInLight && !this.creatureInfo.creatureSpawn.spawnsInDark)
-			return this.getEntityWorld().getBrightness(new BlockPos(x, y, z)) - 0.5F;
+			return this.getCommandSenderWorld().getBrightness(new BlockPos(x, y, z)) - 0.5F;
 		return 0.0F;
 	}
 
@@ -2018,15 +2018,15 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
         if(this.canWade() && this.canBreatheUnderwater()) {
             // If the target is not in water and this entity is at the water surface, don't use water movement:
             boolean targetInWater = true;
-            if(this.getAttackTarget() != null)
-                targetInWater = this.getAttackTarget().isInWater();
+            if(this.getTarget() != null)
+                targetInWater = this.getTarget().isInWater();
             else if(this.getParentTarget() != null)
                 targetInWater = this.getParentTarget().isInWater();
             else if(this.getMasterTarget() != null)
                 targetInWater = this.getMasterTarget().isInWater();
             if(!targetInWater) {
-                BlockState blockState = this.getEntityWorld().getBlockState(this.getPosition().up());
-                if (blockState.getBlock().isAir(blockState, this.getEntityWorld(), this.getPosition().up())) {
+                BlockState blockState = this.getCommandSenderWorld().getBlockState(this.blockPosition().above());
+                if (blockState.getBlock().isAir(blockState, this.getCommandSenderWorld(), this.blockPosition().above())) {
                     return false;
                 }
             }
@@ -2037,9 +2037,9 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
 	@Override
 	public void move(MoverType type, Vector3d pos) {
-		double x = Math.max(Math.min(pos.getX(), 10), -10);
-		double y = Math.max(Math.min(pos.getY(), 10), -10);
-		double z = Math.max(Math.min(pos.getZ(), 10), -10);
+		double x = Math.max(Math.min(pos.x(), 10), -10);
+		double y = Math.max(Math.min(pos.y(), 10), -10);
+		double z = Math.max(Math.min(pos.z(), 10), -10);
 		super.move(type, new Vector3d(x, y, z));
 	}
 
@@ -2048,7 +2048,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     @Override
     public void travel(Vector3d direction) {
 		if(this.useDirectNavigator()) {
-			this.directNavigator.flightMovement(direction.getX(), direction.getZ());
+			this.directNavigator.flightMovement(direction.x(), direction.z());
 			this.updateLimbSwing();
 			return;
 		}
@@ -2067,21 +2067,21 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     public void travelFlying(Vector3d direction) {
     	double flightDampening = 0.91F;
 		if (this.onGround) {
-			BlockState groundState = this.getEntityWorld().getBlockState(this.getPosition().down());
-			flightDampening = groundState.getSlipperiness(this.getEntityWorld(), this.getPosition().down(), this) * 0.91F;
+			BlockState groundState = this.getCommandSenderWorld().getBlockState(this.blockPosition().below());
+			flightDampening = groundState.getSlipperiness(this.getCommandSenderWorld(), this.blockPosition().below(), this) * 0.91F;
 		}
-		this.move(MoverType.SELF, this.getMotion());
-		this.setMotion(this.getMotion().mul(flightDampening, flightDampening, flightDampening));
+		this.move(MoverType.SELF, this.getDeltaMovement());
+		this.setDeltaMovement(this.getDeltaMovement().multiply(flightDampening, flightDampening, flightDampening));
 
 		this.updateLimbSwing();
 	}
 
 	public void travelSwimming(Vector3d direction) {
 		super.moveRelative(0.1F, direction);
-		this.move(MoverType.SELF, this.getMotion());
-		this.setMotion(this.getMotion().scale(0.9D));
-		if (!this.isMoving() && this.getAttackTarget() == null && !this.isFlying()) {
-			this.setMotion(this.getMotion().add(0.0D, -0.005D, 0.0D));
+		this.move(MoverType.SELF, this.getDeltaMovement());
+		this.setDeltaMovement(this.getDeltaMovement().scale(0.9D));
+		if (!this.isMoving() && this.getTarget() == null && !this.isFlying()) {
+			this.setDeltaMovement(this.getDeltaMovement().add(0.0D, -0.005D, 0.0D));
 		}
 
 		this.updateLimbSwing();
@@ -2089,21 +2089,21 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
     /** Updates limb swing animation, used when flying or swimming as their movements don't update it like the standard walking movement. **/
     public void updateLimbSwing() {
-        this.prevLimbSwingAmount = this.limbSwingAmount;
-        double distanceX = this.getPositionVec().getX() - this.prevPosX;
-        double distanceZ = this.getPositionVec().getZ() - this.prevPosZ;
+        this.animationSpeedOld = this.animationSpeed;
+        double distanceX = this.position().x() - this.xo;
+        double distanceZ = this.position().z() - this.zo;
         float distance = MathHelper.sqrt(distanceX * distanceX + distanceZ * distanceZ) * 4.0F;
         if (distance > 1.0F) {
             distance = 1.0F;
         }
-        this.limbSwingAmount += (distance - this.limbSwingAmount) * 0.4F;
-        this.limbSwing += this.limbSwingAmount;
+        this.animationSpeed += (distance - this.animationSpeed) * 0.4F;
+        this.animationPosition += this.animationSpeed;
     }
 
     // ========== Get New Navigator ==========
     /** Called when this entity is constructed for initial navigator. **/
     @Override
-    protected PathNavigator createNavigator(World world) {
+    protected PathNavigator createNavigation(World world) {
         return new CreaturePathNavigator(this, world);
     }
 
@@ -2115,21 +2115,21 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
     // ========== Get Navigator ==========
     /** Returns the movement helper that this entity should use. **/
-    public PathNavigator getNavigator() {
-        return super.getNavigator();
+    public PathNavigator getNavigation() {
+        return super.getNavigation();
     }
 
     // ========== Get Move Helper ==========
     /** Returns the movement helper that this entity should use. **/
-    public MovementController getMoveHelper() {
-        return super.getMoveHelper();
+    public MovementController getMoveControl() {
+        return super.getMoveControl();
     }
     
     // ========== Clear Movement ==========
     /** Cuts off all movement for this update, will clear any pathfinder paths, works with the flight navigator too. **/
     public void clearMovement() {
-    	if(!this.useDirectNavigator() && this.getNavigator() != null)
-        	this.getNavigator().clearPath();
+    	if(!this.useDirectNavigator() && this.getNavigation() != null)
+        	this.getNavigation().stop();
         else
         	this.directNavigator.clearTargetPosition(1.0D);
     }
@@ -2138,46 +2138,46 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	public boolean rollWanderChance() {
 		/*if(this.canBreatheAir() && !this.isStrongSwimmer() && !this.isFlying() && this.isInWater())
 			return true;*/
-		return this.getRNG().nextDouble() <= 0.05D;
+		return this.getRandom().nextDouble() <= 0.05D;
 	}
     
     // ========== Leash ==========
     /** The leash update that manages all behaviour to do with the entity being leashed or unleashed. **/
     @Override
-    protected void updateLeashedState() {
-        super.updateLeashedState();
-        if(this.getLeashed() && this.getLeashHolder().getEntityWorld() == this.getEntityWorld()) {
+    protected void tickLeash() {
+        super.tickLeash();
+        if(this.isLeashed() && this.getLeashHolder().getCommandSenderWorld() == this.getCommandSenderWorld()) {
             Entity entity = this.getLeashHolder();
-            this.setHome((int)entity.getPositionVec().getX(), (int)entity.getPositionVec().getY(), (int)entity.getPositionVec().getZ(), 5);
-            float distance = this.getDistance(entity);
+            this.setHome((int)entity.position().x(), (int)entity.position().y(), (int)entity.position().z(), 5);
+            float distance = this.distanceTo(entity);
             this.testLeash(distance);
             
             if(!this.leashAIActive) {
                 this.goalSelector.addGoal(2, this.leashMoveTowardsRestrictionAI); // Main Goals
                 if (!this.isStrongSwimmer())
-                    this.setPathPriority(PathNodeType.WATER, 0.0F);
+                    this.setPathfindingMalus(PathNodeType.WATER, 0.0F);
                 this.leashAIActive = true;
             }
 
             if(distance > 4.0F)
-                this.getNavigator().tryMoveToEntityLiving(entity, 1.0D);
+                this.getNavigation().moveTo(entity, 1.0D);
 
             if(distance > 6.0F) {
-                double d0 = (entity.getPositionVec().getX() - this.getPositionVec().getX()) / (double)distance;
-                double d1 = (entity.getPositionVec().getY() - this.getPositionVec().getY()) / (double)distance;
-                double d2 = (entity.getPositionVec().getZ() - this.getPositionVec().getZ()) / (double)distance;
-                this.setMotion(this.getMotion().add(d0 * Math.abs(d0) * 0.4D, d1 * Math.abs(d1) * 0.4D, d2 * Math.abs(d2) * 0.4D));
+                double d0 = (entity.position().x() - this.position().x()) / (double)distance;
+                double d1 = (entity.position().y() - this.position().y()) / (double)distance;
+                double d2 = (entity.position().z() - this.position().z()) / (double)distance;
+                this.setDeltaMovement(this.getDeltaMovement().add(d0 * Math.abs(d0) * 0.4D, d1 * Math.abs(d1) * 0.4D, d2 * Math.abs(d2) * 0.4D));
             }
 
             if(distance > 10.0F)
-                this.clearLeashed(true, true);
+                this.dropLeash(true, true);
         }
-        else if(!this.getLeashed() && this.leashAIActive) {
+        else if(!this.isLeashed() && this.leashAIActive) {
             this.leashAIActive = false;
             this.goalSelector.removeGoal(this.leashMoveTowardsRestrictionAI); // Main Goals
             if (!this.isStrongSwimmer())
-                this.setPathPriority(PathNodeType.WATER, PathNodeType.WATER.getPriority());
-            this.detachHome();
+                this.setPathfindingMalus(PathNodeType.WATER, PathNodeType.WATER.getMalus());
+            this.hasRestriction();
         }
     }
     
@@ -2186,7 +2186,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
      * This will usually return false if the mob isStrongSwimmer()
      */
     @Override
-	public boolean isPushedByWater() {
+	public boolean isPushedByFluid() {
         return !this.isStrongSwimmer() && !this.isBoss();
     }
     
@@ -2194,21 +2194,21 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     /** Returns true if this entity is moving towards a destination (doesn't check if this entity is being pushed, etc though). **/
     public boolean isMoving() {
     	if(!this.useDirectNavigator())
-        	return this.getNavigator().getPath() != null;
+        	return this.getNavigation().getPath() != null;
         else
         	return !this.directNavigator.atTargetPosition();
     }
 
     // ========== Can Be Pushed ==========
     @Override
-    public boolean canBePushed() {
-        return super.canBePushed();
+    public boolean isPushable() {
+        return super.isPushable();
     }
     
     // ========== Can Be Leashed To ==========
     /** Returns whether or not this entity can be leashed to the specified player. Useful for tamed entites. **/
     @Override
-    public boolean canBeLeashedTo(PlayerEntity player) { return false; }
+    public boolean canBeLeashed(PlayerEntity player) { return false; }
     
     // ========== Test Leash ==========
     /** Called on the update to see if the leash should snap at the given distance. **/
@@ -2217,8 +2217,8 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     // ========== Set AI Speed ==========
     /** Used when setting the movement speed of this mob, called by AI classes before movement and is given a speed modifier, a local speed modifier is also applied here. **/
     @Override
-    public void setAIMoveSpeed(float speed) {
-        super.setAIMoveSpeed(speed * this.getAISpeedModifier());
+    public void setSpeed(float speed) {
+        super.setSpeed(speed * this.getAISpeedModifier());
     }
     
     // ========== Movement Speed Modifier ==========
@@ -2240,7 +2240,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     /** Modifies movement resistance in water. **/
     @Override
     protected float getWaterSlowDown() {
-        if(!this.isPushedByWater())
+        if(!this.isPushedByFluid())
             return 1F;
         return 0.8F;
     }
@@ -2256,19 +2256,19 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     	if(!this.isFlying()) {
     		this.playJumpSound();
 		}
-    	float yaw = this.rotationYaw;
-    	float pitch = this.rotationPitch;
+    	float yaw = this.yRot;
+    	float pitch = this.xRot;
     	double angle = Math.toRadians(yaw);
         double xAmount = -Math.sin(angle);
         double yAmount = leapHeight;
     	double zAmount = Math.cos(angle);
     	if(this.isFlying()) {
-    	    yAmount = Math.sin(Math.toRadians(pitch)) * distance + this.getMotion().getY() * 0.2D;
+    	    yAmount = Math.sin(Math.toRadians(pitch)) * distance + this.getDeltaMovement().y() * 0.2D;
         }
-        this.addVelocity(
-                xAmount * distance + this.getMotion().getX() * 0.2D,
+        this.push(
+                xAmount * distance + this.getDeltaMovement().x() * 0.2D,
                 yAmount,
-                zAmount * distance + this.getMotion().getZ() * 0.2D
+                zAmount * distance + this.getDeltaMovement().z() * 0.2D
         );
 		net.minecraftforge.common.ForgeHooks.onLivingJump(this);
     }
@@ -2284,7 +2284,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     public void leap(float range, double leapHeight, Entity target) {
         if(target == null)
             return;
-        this.leap(range, leapHeight, target.getPosition());
+        this.leap(range, leapHeight, target.blockPosition());
     }
 
 	/**
@@ -2300,10 +2300,10 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		if(!this.isFlying()) {
 			this.playJumpSound();
 		}
-		double distance = targetPos.distanceSq(this.getPosition());
+		double distance = targetPos.distSqr(this.blockPosition());
 		if(distance > 2.0F * 2.0F && distance <= range * range) {
-			double xDist = targetPos.getX() - this.getPosition().getX();
-			double zDist = targetPos.getZ() - this.getPosition().getZ();
+			double xDist = targetPos.getX() - this.blockPosition().getX();
+			double zDist = targetPos.getZ() - this.blockPosition().getZ();
 			if(xDist == 0) {
 				xDist = 0.05D;
 			}
@@ -2314,10 +2314,10 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
             /*this.motionX = xDist / xzDist * 0.5D * 0.8D + this.motionX * 0.2D;
             this.motionZ = zDist / xzDist * 0.5D * 0.8D + this.motionZ * 0.2D;
             this.motionY = leapHeight;*/
-			this.addVelocity(
-					xDist / xzDist * 0.5D * 0.8D + this.getMotion().getX() * 0.2D,
+			this.push(
+					xDist / xzDist * 0.5D * 0.8D + this.getDeltaMovement().x() * 0.2D,
 					leapHeight,
-					zDist / xzDist * 0.5D * 0.8D + this.getMotion().getZ() * 0.2D
+					zDist / xzDist * 0.5D * 0.8D + this.getDeltaMovement().z() * 0.2D
 			);
 			net.minecraftforge.common.ForgeHooks.onLivingJump(this);
 		}
@@ -2336,19 +2336,19 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 			distance = -distance;
 			opposite = true;
 		}
-		float yaw = this.rotationYaw + (opposite ? -90F : 90F);
-		float pitch = this.rotationPitch;
+		float yaw = this.yRot + (opposite ? -90F : 90F);
+		float pitch = this.xRot;
 		double angle = Math.toRadians(yaw);
 		double xAmount = -Math.sin(angle);
 		double yAmount = leapHeight;
 		double zAmount = Math.cos(angle);
 		if(this.isFlying()) {
-			yAmount = Math.sin(Math.toRadians(pitch)) * distance + this.getMotion().getY() * 0.2D;
+			yAmount = Math.sin(Math.toRadians(pitch)) * distance + this.getDeltaMovement().y() * 0.2D;
 		}
-		this.addVelocity(
-				xAmount * distance + this.getMotion().getX() * 0.2D,
+		this.push(
+				xAmount * distance + this.getDeltaMovement().x() * 0.2D,
 				yAmount,
-				zAmount * distance + this.getMotion().getZ() * 0.2D
+				zAmount * distance + this.getDeltaMovement().z() * 0.2D
 		);
 	}
     
@@ -2371,13 +2371,13 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     public void setHomeDistanceMax(float newDist) { this.homeDistanceMax = newDist; }
 
     /** Returns the home position in BlockPos. **/
-    public BlockPos getHomePosition() { return this.homePosition; }
+    public BlockPos getRestrictCenter() { return this.homePosition; }
 
     /** Gets the distance this mob is allowed to stray from it's home. -1 is used to unlimited distance. **/
     public float getHomeDistanceMax() { return this.homeDistanceMax; }
 
     /** Clears the current home position. Returns true if a home was detached. **/
-    public boolean detachHome() {
+    public boolean hasRestriction() {
     	if(this.hasHome())
     		return false;
     	this.setHomeDistanceMax(-1);
@@ -2386,7 +2386,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
     /** Returns whether or not this mob has a home set. **/
     public boolean hasHome() {
-    	return this.getHomePosition() != null && this.getHomeDistanceMax() >= 0;
+    	return this.getRestrictCenter() != null && this.getHomeDistanceMax() >= 0;
     }
 
     /** Returns whether or not the given XYZ position is near this entity's home position, returns true if no home is set. **/
@@ -2398,12 +2398,12 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     /** Returns the distance that the specified XYZ position is from the home position. **/
     public double getDistanceFromHome(int x, int y, int z) {
     	if(!hasHome()) return 0;
-    	return this.homePosition.distanceSq(new Vector3i(x, y, z));
+    	return this.homePosition.distSqr(new Vector3i(x, y, z));
     }
 
     /** Returns the distance that the entity's position is from the home position. **/
     public double getDistanceFromHome() {
-    	return this.homePosition.distanceSq(this.getPosition());
+    	return this.homePosition.distSqr(this.blockPosition());
     }
 
     // ========== Arena Center ==========
@@ -2436,7 +2436,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
         int airYMin = Math.min(airYMax, groundY + minY);
         if(airYMin >= airYMax)
             return airYMin;
-        return airYMin + this.getRNG().nextInt(airYMax - airYMin);
+        return airYMin + this.getRandom().nextInt(airYMax - airYMin);
     }
 
     // ========== Get Ground Y Position ==========
@@ -2446,11 +2446,11 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
         int y = pos.getY();
         if(y <= 0)
             return 0;
-        BlockState startBlock = this.getEntityWorld().getBlockState(pos);
-        if(startBlock.getBlock().isAir(startBlock, this.getEntityWorld(), pos)) {
+        BlockState startBlock = this.getCommandSenderWorld().getBlockState(pos);
+        if(startBlock.getBlock().isAir(startBlock, this.getCommandSenderWorld(), pos)) {
             for(int possibleGroundY = Math.max(0, y - 1); possibleGroundY >= 0; possibleGroundY--) {
-                BlockState possibleGroundBlock = this.getEntityWorld().getBlockState(new BlockPos(pos.getX(), possibleGroundY, pos.getZ()));
-                if(possibleGroundBlock.getBlock().isAir(possibleGroundBlock, this.getEntityWorld(), new BlockPos(pos.getX(), possibleGroundY, pos.getZ())))
+                BlockState possibleGroundBlock = this.getCommandSenderWorld().getBlockState(new BlockPos(pos.getX(), possibleGroundY, pos.getZ()));
+                if(possibleGroundBlock.getBlock().isAir(possibleGroundBlock, this.getCommandSenderWorld(), new BlockPos(pos.getX(), possibleGroundY, pos.getZ())))
                     y = possibleGroundY;
                 else
                     break;
@@ -2463,17 +2463,17 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     /** Returns the Y position of the highest air block from the starting x, y, z position until either a solid block is hit or the sky is accessible. **/
     public int getAirY(BlockPos pos) {
         int y = pos.getY();
-        int yMax = this.getEntityWorld().getHeight() - 1;
+        int yMax = this.getCommandSenderWorld().getMaxBuildHeight() - 1;
         if(y >= yMax)
             return yMax;
-        if(this.getEntityWorld().canBlockSeeSky(pos))
+        if(this.getCommandSenderWorld().canSeeSkyFromBelowWater(pos))
             return yMax;
 
-        BlockState startBlock = this.getEntityWorld().getBlockState(pos);
-        if(startBlock.getBlock().isAir(startBlock, this.getEntityWorld(), pos)) {
+        BlockState startBlock = this.getCommandSenderWorld().getBlockState(pos);
+        if(startBlock.getBlock().isAir(startBlock, this.getCommandSenderWorld(), pos)) {
             for(int possibleAirY = Math.min(yMax, y + 1); possibleAirY <= yMax; possibleAirY++) {
-                BlockState possibleGroundBlock = this.getEntityWorld().getBlockState(new BlockPos(pos.getX(), possibleAirY, pos.getZ()));
-                if(possibleGroundBlock.getBlock().isAir(possibleGroundBlock, this.getEntityWorld(), new BlockPos(pos.getX(), possibleAirY, pos.getZ())))
+                BlockState possibleGroundBlock = this.getCommandSenderWorld().getBlockState(new BlockPos(pos.getX(), possibleAirY, pos.getZ()));
+                if(possibleGroundBlock.getBlock().isAir(possibleGroundBlock, this.getCommandSenderWorld(), new BlockPos(pos.getX(), possibleAirY, pos.getZ())))
                     y = possibleAirY;
                 else
                     break;
@@ -2490,17 +2490,17 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
         int y = pos.getY();
         if(y <= 0)
             return 0;
-        int yMax = this.getEntityWorld().getHeight() - 1;
+        int yMax = this.getCommandSenderWorld().getMaxBuildHeight() - 1;
         if(y >= yMax)
             return yMax;
         int yLimit = 24;
         yMax = Math.min(yMax, y + yLimit);
-        BlockState startBlock = this.getEntityWorld().getBlockState(pos);
+        BlockState startBlock = this.getCommandSenderWorld().getBlockState(pos);
         if(startBlock.getMaterial() == Material.WATER) {
             int possibleSurfaceY = y;
             for(possibleSurfaceY += 1; possibleSurfaceY <= yMax; possibleSurfaceY++) {
-                BlockState possibleSurfaceBlock = this.getEntityWorld().getBlockState(new BlockPos(pos.getX(), possibleSurfaceY, pos.getZ()));
-                if(possibleSurfaceBlock.getBlock().isAir(possibleSurfaceBlock, this.getEntityWorld(), new BlockPos(pos.getX(), possibleSurfaceY, pos.getZ())))
+                BlockState possibleSurfaceBlock = this.getCommandSenderWorld().getBlockState(new BlockPos(pos.getX(), possibleSurfaceY, pos.getZ()));
+                if(possibleSurfaceBlock.getBlock().isAir(possibleSurfaceBlock, this.getCommandSenderWorld(), new BlockPos(pos.getX(), possibleSurfaceY, pos.getZ())))
                     return possibleSurfaceY;
                 else if(possibleSurfaceBlock.getMaterial() != Material.WATER)
                     return possibleSurfaceY - 1;
@@ -2517,7 +2517,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     // ========== Can Attack ==========
     /** Returns whether or not this mob is allowed to attack the given target class. **/
 	@Override
-	public boolean canAttack(EntityType<?> entityType) {
+	public boolean canAttackType(EntityType<?> entityType) {
 		if(entityType == this.getType())
 			return false;
 		return true;
@@ -2525,7 +2525,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
     /** Returns whether or not this mob is allowed to attack the given target entity. **/
 	public boolean canAttack(LivingEntity targetEntity) {
-		if(this.getEntityWorld().getDifficulty() == Difficulty.PEACEFUL && targetEntity instanceof PlayerEntity) {
+		if(this.getCommandSenderWorld().getDifficulty() == Difficulty.PEACEFUL && targetEntity instanceof PlayerEntity) {
 			return false;
 		}
 
@@ -2536,13 +2536,13 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		// Players:
         if(targetEntity instanceof PlayerEntity) {
             PlayerEntity targetPlayer = (PlayerEntity)targetEntity;
-            if(targetPlayer.abilities.disableDamage) {
+            if(targetPlayer.abilities.invulnerable) {
 				return false;
 			}
         }
 
         // Team:
-		if(this.isOnSameTeam(targetEntity)) {
+		if(this.isAlliedTo(targetEntity)) {
 			return false;
 		}
 
@@ -2583,7 +2583,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	 * @return The attack range.
 	 */
 	public double getPhysicalRange() {
-		double range = this.getSize(Pose.STANDING).width + 1.5D;
+		double range = this.getDimensions(Pose.STANDING).width + 1.5D;
 		if(this.isFlying()) {
 			range += this.getFlightOffset();
 		}
@@ -2600,7 +2600,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		double creatureRange = this.getPhysicalRange();
 		double targetSize = 1;
 		if(attackTarget != null) {
-			targetSize = (attackTarget.getSize(Pose.STANDING).width + 1) * (attackTarget.getSize(Pose.STANDING).width + 1);
+			targetSize = (attackTarget.getDimensions(Pose.STANDING).width + 1) * (attackTarget.getDimensions(Pose.STANDING).width + 1);
 		}
 		return creatureRange + targetSize + additionalReach;
 	}
@@ -2666,7 +2666,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     	if(this.masterTarget == null)
     		return null;
 		if(this.masterTarget instanceof MobEntity)
-			return ((MobEntity)this.masterTarget).getAttackTarget();
+			return ((MobEntity)this.masterTarget).getTarget();
     	return null;
     }
 
@@ -2675,7 +2675,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     	if(this.parentTarget == null)
     		return null;
 		if(this.parentTarget instanceof MobEntity)
-			return ((MobEntity)this.parentTarget).getAttackTarget();
+			return ((MobEntity)this.parentTarget).getTarget();
     	return null;
     }
     
@@ -2691,10 +2691,10 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     		// Apply Melee Damage Effects If Not Blocked:
 			if(target instanceof LivingEntity) {
 				LivingEntity livingTarget = (LivingEntity)target;
-				if(!(livingTarget.isActiveItemStackBlocking() && livingTarget.getActiveItemStack().isShield(livingTarget))) {
+				if(!(livingTarget.isBlocking() && livingTarget.getUseItem().isShield(livingTarget))) {
 					// Spread Fire:
-					if (this.spreadFire && this.isBurning() && this.rand.nextFloat() < this.creatureStats.getEffect())
-						target.setFire(this.getEffectDuration(4) / 20);
+					if (this.spreadFire && this.isOnFire() && this.random.nextFloat() < this.creatureStats.getEffect())
+						target.setSecondsOnFire(this.getEffectDuration(4) / 20);
 
 					// Element Effects:
 					if (this.creatureStats.getAmplifier() >= 0) {
@@ -2734,14 +2734,14 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		double pierceDamage = this.creatureStats.getPierce();
 		boolean success;
 		if(damage <= pierceDamage) {
-			success = target.attackEntityFrom(this.getDamageSource((EntityDamageSource) DamageSource.causeThrownDamage(projectile, this).setDamageBypassesArmor()).setDamageIsAbsolute(), damage);
+			success = target.hurt(this.getDamageSource((EntityDamageSource) DamageSource.thrown(projectile, this).bypassArmor()).bypassMagic(), damage);
 		}
 		else {
-			int hurtResistantTimeBefore = target.hurtResistantTime;
-			target.attackEntityFrom(this.getDamageSource((EntityDamageSource)DamageSource.causeThrownDamage(projectile, this).setDamageBypassesArmor()).setDamageIsAbsolute(), (float)pierceDamage);
-			target.hurtResistantTime = hurtResistantTimeBefore;
+			int hurtResistantTimeBefore = target.invulnerableTime;
+			target.hurt(this.getDamageSource((EntityDamageSource)DamageSource.thrown(projectile, this).bypassArmor()).bypassMagic(), (float)pierceDamage);
+			target.invulnerableTime = hurtResistantTimeBefore;
 			damage -= pierceDamage;
-			success = target.attackEntityFrom(this.getDamageSource((EntityDamageSource)DamageSource.causeThrownDamage(projectile, this)), damage);
+			success = target.hurt(this.getDamageSource((EntityDamageSource)DamageSource.thrown(projectile, this)), damage);
 		}
 
 		// Element Effects:
@@ -2769,7 +2769,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		if(projectileInfo == null) {
 			return null;
 		}
-		return this.fireProjectile(projectileInfo.createProjectile(this.getEntityWorld(), this), target, range, angle, offset, velocity, scale, inaccuracy);
+		return this.fireProjectile(projectileInfo.createProjectile(this.getCommandSenderWorld(), this), target, range, angle, offset, velocity, scale, inaccuracy);
 	}
 
 	/**
@@ -2785,7 +2785,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	 * @return The newly created projectile.
 	 */
 	public BaseProjectileEntity fireProjectile(Class<? extends BaseProjectileEntity> projectileClass, Entity target, float range, float angle, Vector3d offset, float velocity, float scale, float inaccuracy) {
-		BaseProjectileEntity projectile = ProjectileManager.getInstance().createOldProjectile(projectileClass, this.getEntityWorld(), this);
+		BaseProjectileEntity projectile = ProjectileManager.getInstance().createOldProjectile(projectileClass, this.getCommandSenderWorld(), this);
 		return this.fireProjectile(projectile, target, range, angle, offset, velocity, scale, inaccuracy);
 	}
 
@@ -2806,36 +2806,36 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 			return null;
 		}
 
-		projectile.setPosition(
-				projectile.getPositionVec().getX() + offset.x * this.sizeScale,
-				projectile.getPositionVec().getY() + (this.getSize(Pose.STANDING).height / 2) + (offset.y * this.sizeScale),
-				projectile.getPositionVec().getZ() + offset.z * this.sizeScale
+		projectile.setPos(
+				projectile.position().x() + offset.x * this.sizeScale,
+				projectile.position().y() + (this.getDimensions(Pose.STANDING).height / 2) + (offset.y * this.sizeScale),
+				projectile.position().z() + offset.z * this.sizeScale
 		);
 		projectile.setProjectileScale(scale);
 
-		Vector3d facing = this.getFacingPositionDouble(this.getPositionVec().getX(), this.getPositionVec().getY(), this.getPositionVec().getZ(), range, angle);
-		double distanceX = facing.x - this.getPositionVec().getX();
-		double distanceZ = facing.z - this.getPositionVec().getZ();
+		Vector3d facing = this.getFacingPositionDouble(this.position().x(), this.position().y(), this.position().z(), range, angle);
+		double distanceX = facing.x - this.position().x();
+		double distanceZ = facing.z - this.position().z();
 		double distanceXZ = MathHelper.sqrt(distanceX * distanceX + distanceZ * distanceZ) * 0.1D;
 		double distanceY = distanceXZ;
 		if(target != null) {
-			double targetX = target.getPositionVec().getX() - this.getPositionVec().getX();
-			double targetZ = target.getPositionVec().getZ() - this.getPositionVec().getZ();
+			double targetX = target.position().x() - this.position().x();
+			double targetZ = target.position().z() - this.position().z();
 			double newX = targetX * Math.cos(angle) - targetZ * Math.sin(angle);
 			double newY = targetX * Math.sin(angle) + targetZ * Math.cos(angle);
-			targetX = newX + this.getPositionVec().getX();
-			targetZ = newY + this.getPositionVec().getZ();
+			targetX = newX + this.position().x();
+			targetZ = newY + this.position().z();
 
-			distanceX = targetX - this.getPositionVec().getX();
-			distanceY = target.getBoundingBox().minY + (target.getSize(Pose.STANDING).height * 0.5D) - projectile.getPositionVec().getY();
-			distanceZ = targetZ - this.getPositionVec().getZ();
+			distanceX = targetX - this.position().x();
+			distanceY = target.getBoundingBox().minY + (target.getDimensions(Pose.STANDING).height * 0.5D) - projectile.position().y();
+			distanceZ = targetZ - this.position().z();
 		}
 
 		projectile.shoot(distanceX, distanceY, distanceZ, velocity, inaccuracy);
-		this.getEntityWorld().addEntity(projectile);
+		this.getCommandSenderWorld().addFreshEntity(projectile);
 
 		if(projectile.getLaunchSound() != null) {
-			this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
+			this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
 		}
 
 		return projectile;
@@ -2862,7 +2862,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
             return false;
         if(target == null)
             return false;
-        if(!this.canEntityBeSeen(target))
+        if(!this.canSee(target))
             return false;
 
         float damage = this.getAttackDamage(damageScale);
@@ -2878,7 +2878,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		boolean targetIsShielding = false;
 		if (target instanceof PlayerEntity) {
 			PlayerEntity targetPlayer = (PlayerEntity)target;
-			targetIsShielding = targetPlayer.isActiveItemStackBlocking() && targetPlayer.getActiveItemStack().isShield(targetPlayer);
+			targetIsShielding = targetPlayer.isBlocking() && targetPlayer.getUseItem().isShield(targetPlayer);
 		}
 
 		// Attempt The Attack:
@@ -2888,37 +2888,37 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
         	pierceDamage = 0;
 		}
         if(damage <= pierceDamage) {
-			attackSuccess = target.attackEntityFrom(this.getDamageSource(null).setDamageBypassesArmor().setDamageIsAbsolute(), damage);
+			attackSuccess = target.hurt(this.getDamageSource(null).bypassArmor().bypassMagic(), damage);
 		}
         else {
         	if(pierceDamage > 0) {
-				int hurtResistantTimeBefore = target.hurtResistantTime;
-				target.attackEntityFrom(this.getDamageSource(null).setDamageBypassesArmor().setDamageIsAbsolute(), (float) pierceDamage);
-				target.hurtResistantTime = hurtResistantTimeBefore;
+				int hurtResistantTimeBefore = target.invulnerableTime;
+				target.hurt(this.getDamageSource(null).bypassArmor().bypassMagic(), (float) pierceDamage);
+				target.invulnerableTime = hurtResistantTimeBefore;
 				damage -= pierceDamage;
 			}
-        	attackSuccess = target.attackEntityFrom(this.getDamageSource(null), damage);
+        	attackSuccess = target.hurt(this.getDamageSource(null), damage);
         }
 
         // After Successful Attack:
         if(attackSuccess) {
             if(i > 0) {
-            	target.addVelocity((double)(-MathHelper.sin(this.rotationYaw * (float)Math.PI / 180.0F) * (float)i * 0.5F), 0.1D, (double)(MathHelper.cos(this.rotationYaw * (float)Math.PI / 180.0F) * (float)i * 0.5F));
-                this.setMotion(this.getMotion().mul(0.6D, 1, 0.6D));
+            	target.push((double)(-MathHelper.sin(this.yRot * (float)Math.PI / 180.0F) * (float)i * 0.5F), 0.1D, (double)(MathHelper.cos(this.yRot * (float)Math.PI / 180.0F) * (float)i * 0.5F));
+                this.setDeltaMovement(this.getDeltaMovement().multiply(0.6D, 1, 0.6D));
             }
 
             // Fire Enchanted Held Weapons:
-            int fireEnchantDuration = EnchantmentHelper.getFireAspectModifier(this);
+            int fireEnchantDuration = EnchantmentHelper.getFireAspect(this);
             if(fireEnchantDuration > 0)
-            	target.setFire(fireEnchantDuration * 4);
+            	target.setSecondsOnFire(fireEnchantDuration * 4);
 
 			// Interrupt Shielding Players:
 			if (target instanceof PlayerEntity && this.canInteruptShields(true)) {
 				PlayerEntity targetPlayer = (PlayerEntity)target;
 				if (targetIsShielding && this.canInteruptShields(false)) {
-					ItemStack playerActiveItemStack = targetPlayer.isHandActive() ? targetPlayer.getActiveItemStack() : ItemStack.EMPTY;
-					targetPlayer.getCooldownTracker().setCooldown(playerActiveItemStack.getItem(), 100);
-					this.world.setEntityState(targetPlayer, (byte)30);
+					ItemStack playerActiveItemStack = targetPlayer.isUsingItem() ? targetPlayer.getUseItem() : ItemStack.EMPTY;
+					targetPlayer.getCooldowns().addCooldown(playerActiveItemStack.getItem(), 100);
+					this.level.broadcastEntityEvent(targetPlayer, (byte)30);
 				}
 			}
         }
@@ -2943,7 +2943,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
      public DamageSource getDamageSource(EntityDamageSource nestedDamageSource) {
          if(nestedDamageSource != null)
              return nestedDamageSource;
-        return DamageSource.causeMobDamage(this);
+        return DamageSource.mobAttack(this);
     }
 
 	/**
@@ -2960,7 +2960,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
    	//                    Taking Damage
    	// ==================================================
 	@Override
-	protected void damageEntity(DamageSource damageSrc, float damageAmount) {
+	protected void actuallyHurt(DamageSource damageSrc, float damageAmount) {
 		if(this.isInvulnerableTo(damageSrc)) {
 			return;
 		}
@@ -2970,11 +2970,11 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
 		// Modifiers:
 		damageAmount *= this.getDamageModifier(damageSrc);
-		damageAmount = this.applyArmorCalculations(damageSrc, damageAmount);
-		damageAmount = this.applyPotionDamageCalculations(damageSrc, damageAmount);
+		damageAmount = this.getDamageAfterArmorAbsorb(damageSrc, damageAmount);
+		damageAmount = this.getDamageAfterMagicAbsorb(damageSrc, damageAmount);
 		damageAmount = this.getDamageAfterDefense(damageAmount);
 		if(this.isBoss() || this.isRareVariant()) {
-			if (!(damageSrc.getTrueSource() instanceof PlayerEntity))
+			if (!(damageSrc.getEntity() instanceof PlayerEntity))
 				damageAmount *= 0.25F;
 		}
 
@@ -2983,14 +2983,14 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		damageAmount = Math.max(damageAmount - this.getAbsorptionAmount(), 0.0F);
 		this.setAbsorptionAmount(this.getAbsorptionAmount() - (damageBeforeAbsorption - damageAmount));
 		float absorbedDamage = damageBeforeAbsorption - damageAmount;
-		if (absorbedDamage > 0.0F && absorbedDamage < 3.4028235E37F && damageSrc.getTrueSource() instanceof ServerPlayerEntity) {
-			((ServerPlayerEntity)damageSrc.getTrueSource()).addStat(Stats.DAMAGE_DEALT_ABSORBED, Math.round(absorbedDamage * 10.0F));
+		if (absorbedDamage > 0.0F && absorbedDamage < 3.4028235E37F && damageSrc.getEntity() instanceof ServerPlayerEntity) {
+			((ServerPlayerEntity)damageSrc.getEntity()).awardStat(Stats.DAMAGE_DEALT_ABSORBED, Math.round(absorbedDamage * 10.0F));
 		}
 
 		damageAmount = net.minecraftforge.common.ForgeHooks.onLivingDamage(this, damageSrc, damageAmount);
 		if (damageAmount != 0.0F) {
 			float healthBeforeDamage = this.getHealth();
-			this.getCombatTracker().trackDamage(damageSrc, healthBeforeDamage, damageAmount);
+			this.getCombatTracker().recordDamage(damageSrc, healthBeforeDamage, damageAmount);
 			this.setHealth(healthBeforeDamage - damageAmount);
 			this.setAbsorptionAmount(this.getAbsorptionAmount() - damageAmount);
 		}
@@ -2999,25 +2999,25 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     // ========== Attacked From ==========
     /** Called when this entity has been attacked, uses a DamageSource and damage value. **/
     @Override
-    public boolean attackEntityFrom(DamageSource damageSrc, float damageAmount) {
-    	if(this.getEntityWorld().isRemote)
+    public boolean hurt(DamageSource damageSrc, float damageAmount) {
+    	if(this.getCommandSenderWorld().isClientSide)
     		return false;
         if(this.isInvulnerableTo(damageSrc))
         	return false;
-        if(!this.isVulnerableTo(damageSrc.getDamageType(), damageSrc, damageAmount))
+        if(!this.isVulnerableTo(damageSrc.getMsgId(), damageSrc, damageAmount))
         	return false;
-        if(!this.isVulnerableTo(damageSrc.getTrueSource()))
+        if(!this.isVulnerableTo(damageSrc.getEntity()))
         	return false;
         
-        if(super.attackEntityFrom(damageSrc, damageAmount)) {
+        if(super.hurt(damageSrc, damageAmount)) {
         	this.onDamage(damageSrc, damageAmount);
-            Entity entity = damageSrc.getImmediateSource();
+            Entity entity = damageSrc.getDirectEntity();
             if(entity instanceof ThrowableEntity)
-            	entity = ((ThrowableEntity)entity).func_234616_v_();
+            	entity = ((ThrowableEntity)entity).getOwner();
             
-            if(entity instanceof LivingEntity && this.getRider() != entity && this.getRidingEntity() != entity) {
+            if(entity instanceof LivingEntity && this.getRider() != entity && this.getVehicle() != entity) {
                 if(entity != this)
-                    this.setRevengeTarget((LivingEntity)entity);
+                    this.setLastHurtByMob((LivingEntity)entity);
                 return true;
             }
             else
@@ -3060,25 +3060,25 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
    	// ==================================================
     /** Called when this entity dies, drops items from the inventory. **/
     @Override
-    public void onDeath(DamageSource damageSource) {
-        super.onDeath(damageSource);
+    public void die(DamageSource damageSource) {
+        super.die(damageSource);
         if(!this.dead)
             return;
 
         if(this.isBossAlways()) {
-        	ExtendedWorld extendedWorld = ExtendedWorld.getForWorld(this.getEntityWorld());
+        	ExtendedWorld extendedWorld = ExtendedWorld.getForWorld(this.getCommandSenderWorld());
         	extendedWorld.bossRemoved(this);
 		}
 
-        if(!this.getEntityWorld().isRemote) {
+        if(!this.getCommandSenderWorld().isClientSide) {
             if(!this.isBoundPet())
                 this.inventory.dropInventory();
-            if(damageSource.getTrueSource() != null) {
-                if(damageSource.getTrueSource() instanceof PlayerEntity) {
+            if(damageSource.getEntity() != null) {
+                if(damageSource.getEntity() instanceof PlayerEntity) {
                     try {
-                        PlayerEntity player = (PlayerEntity) damageSource.getTrueSource();
+                        PlayerEntity player = (PlayerEntity) damageSource.getEntity();
                         //player.addStat(ObjectManager.getStat(this.creatureInfo.getName() + ".kill"), 1); TODO Player Stats
-                        if (this.isBoss() || this.getRNG().nextDouble() <= CreatureManager.getInstance().config.beastiaryAddOnDeathChance) {
+                        if (this.isBoss() || this.getRandom().nextDouble() <= CreatureManager.getInstance().config.beastiaryAddOnDeathChance) {
                             ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
                             playerExt.getBeastiary().discoverCreature(this, 2, false);
                         }
@@ -3147,8 +3147,8 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
     /** Returns true if this mob has an Attack Target. **/
     public boolean hasAttackTarget() {
-    	if(!this.getEntityWorld().isRemote)
-    		return this.getAttackTarget() != null;
+    	if(!this.getCommandSenderWorld().isClientSide)
+    		return this.getTarget() != null;
     	else
     		return (this.getByteFromDataManager(TARGET) & TARGET_BITS.ATTACK.id) > 0;
     }
@@ -3159,7 +3159,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     public void setMasterTarget(LivingEntity setTarget) { this.masterTarget = setTarget; }
     /** Returns true if this mob has a Master Target **/
     public boolean hasMaster() {
-    	if(!this.getEntityWorld().isRemote)
+    	if(!this.getCommandSenderWorld().isClientSide)
     		return this.getMasterTarget() != null;
     	else
     		return (this.getByteFromDataManager(TARGET) & TARGET_BITS.MASTER.id) > 0;
@@ -3171,7 +3171,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     public void setParentTarget(LivingEntity setTarget) { this.parentTarget = setTarget; }
     /** Returns true if this mob has a Parent Target **/
     public boolean hasParent() {
-    	if(!this.getEntityWorld().isRemote)
+    	if(!this.getCommandSenderWorld().isClientSide)
     		return this.getParentTarget() != null;
     	else
     		return (this.getByteFromDataManager(TARGET) & TARGET_BITS.PARENT.id) > 0;
@@ -3186,7 +3186,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     }
     /** Returns true if this mob has a Avoid Target **/
     public boolean hasAvoidTarget() {
-    	if(!this.getEntityWorld().isRemote)
+    	if(!this.getCommandSenderWorld().isClientSide)
     		return this.getAvoidTarget() != null;
     	else
     		return (this.getByteFromDataManager(TARGET) & TARGET_BITS.AVOID.id) > 0;
@@ -3213,7 +3213,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	}
 	/** Returns true if this mob has a Avoid Target **/
 	public boolean hasPerchTarget() {
-		if(!this.getEntityWorld().isRemote)
+		if(!this.getCommandSenderWorld().isClientSide)
 			return this.getPerchTarget() != null;
 		else
 			return (this.getByteFromDataManager(TARGET) & TARGET_BITS.PERCH.id) > 0;
@@ -3226,8 +3226,8 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
 	/** Returns true if this entity can see the provided entity. **/
 	@Override
-	public boolean canEntityBeSeen(Entity target) {
-		return super.canEntityBeSeen(target);
+	public boolean canSee(Entity target) {
+		return super.canSee(target);
 	}
 
     /** Returns this entity's Owner Target. **/
@@ -3255,7 +3255,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
     /** Returns true if this mob has a Rider Target **/
     public boolean hasRiderTarget() {
-    	if(!this.getEntityWorld().isRemote)
+    	if(!this.getCommandSenderWorld().isClientSide)
     		return this.getControllingPassenger() != null;
     	else
     		return (this.getByteFromDataManager(TARGET) & TARGET_BITS.RIDER.id) > 0;
@@ -3268,14 +3268,14 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
     /** Returns true if this creature can ride the provided entity. **/
     @Override
-    protected boolean canBeRidden(Entity entity) {
+    protected boolean canRide(Entity entity) {
         if (this.isBoss())
             return false;
-        return super.canBeRidden(entity);
+        return super.canRide(entity);
     }
 
     @Override
-	public boolean canBeSteered() {
+	public boolean canBeControlledByRider() {
 		return false;
 	}
 
@@ -3315,7 +3315,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
     /** Returns the BlockPos in front or behind the provided entity with the given distance and angle offset (in degrees), use a negative distance for behind. **/
     public BlockPos getFacingPosition(Entity entity, double distance, double angleOffset) {
-        return this.getFacingPosition(entity.getPositionVec().getX(), entity.getPositionVec().getY(), entity.getPositionVec().getZ(), distance, entity.rotationYaw + angleOffset);
+        return this.getFacingPosition(entity.position().x(), entity.position().y(), entity.position().z(), distance, entity.yRot + angleOffset);
     }
 
     /** Returns the BlockPos in front or behind the provided XYZ coords with the given distance and angle (in degrees), use a negative distance for behind. **/
@@ -3375,7 +3375,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		if(transformType == null) {
 			return null;
 		}
-		LivingEntity transformedEntity = transformType.create(this.getEntityWorld());
+		LivingEntity transformedEntity = transformType.create(this.getCommandSenderWorld());
 		if(transformedEntity == null) {
 			return null;
 		}
@@ -3497,8 +3497,8 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		}
 
 		// Transformed Entity:
-		transformedEntity.setLocationAndAngles(this.getPositionVec().getX(), this.getPositionVec().getY(), this.getPositionVec().getZ(), this.rotationYaw, this.rotationPitch);
-		this.getEntityWorld().addEntity(transformedEntity);
+		transformedEntity.moveTo(this.position().x(), this.position().y(), this.position().z(), this.yRot, this.xRot);
+		this.getCommandSenderWorld().addFreshEntity(transformedEntity);
 
 		// Remove Parts:
 		this.remove();
@@ -3543,11 +3543,11 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
 	/** Better name would be isSwimming(). Can this entity swim this tick checks if in fluids, checks for lava instead of water if isLavaCreature is true. **/
 	@Override
-	public boolean canSwim() {
+	public boolean isUnderWater() {
 		if(this.isLavaCreature) {
 			return this.isInLava();
 		}
-		return super.canSwim();
+		return super.isUnderWater();
 	}
 
     /** Returns true if this entity should swim to the liquid surface when pathing, by default entities that can't breather underwater will try to surface. **/
@@ -3592,9 +3592,9 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     public boolean isSafeToLand() {
         if(this.onGround)
             return true;
-        if(this.getEntityWorld().getBlockState(this.getPosition().down()).getMaterial().isSolid())
+        if(this.getCommandSenderWorld().getBlockState(this.blockPosition().below()).getMaterial().isSolid())
             return true;
-        if(this.getEntityWorld().getBlockState(this.getPosition().down(2)).getMaterial().isSolid())
+        if(this.getCommandSenderWorld().getBlockState(this.blockPosition().below(2)).getMaterial().isSolid())
             return true;
         return false;
     }
@@ -3644,8 +3644,8 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     public void setStealth(float setStealth) {
     	setStealth = Math.min(setStealth, 1);
     	setStealth = Math.max(setStealth, 0);
-    	if(!this.getEntityWorld().isRemote)
-    		this.dataManager.set(STEALTH, setStealth);
+    	if(!this.getCommandSenderWorld().isClientSide)
+    		this.entityData.set(STEALTH, setStealth);
     }
 
     /** Returns true if this mob is fully stealthed (1.0F or above). **/
@@ -3658,23 +3658,23 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
     /** Called while this mob is stealthed on the update, can be used to clear enemies targets that are targeting this mob, although a new event listener is in place now to handle this. The main EventListener also helps handling anti-targeting. **/
     public void onStealth() {
-    	if(!this.getEntityWorld().isRemote) {
-    		if(this.getAttackTarget() != null && this.getAttackTarget() instanceof MobEntity)
-    			if(((MobEntity) this.getAttackTarget()).getAttackTarget() != null)
-    				((MobEntity)this.getAttackTarget()).setAttackTarget(null);
+    	if(!this.getCommandSenderWorld().isClientSide) {
+    		if(this.getTarget() != null && this.getTarget() instanceof MobEntity)
+    			if(((MobEntity) this.getTarget()).getTarget() != null)
+    				((MobEntity)this.getTarget()).setTarget(null);
     	}
     }
     
     // ========== Climbing ==========
     /** Returns true if this entity is climbing a ladder or wall, can be used for animation. **/
     @Override
-    public boolean isOnLadder() {
+    public boolean onClimbable() {
     	if(this.isFlying() || (this.isStrongSwimmer() && this.isInWater())) return false;
     	if(this.canClimb()) {
             return (this.getByteFromDataManager(CLIMBING) & 1) != 0;
         }
     	else
-    		return super.isOnLadder();
+    		return super.onClimbable();
     }
     
     /** Used to set whether this mob is climbing up a block or not. **/
@@ -3684,7 +3684,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	        if(collided)
                 climbing = (byte)(climbing | 1);
 	        else climbing &= -2;
-	        this.dataManager.set(CLIMBING, climbing);
+	        this.entityData.set(CLIMBING, climbing);
     	}
     }
 
@@ -3699,20 +3699,20 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
      * getFallResistance() is used to reduce falling damage, if it is at or above 100 no falling damage is taken at all.
      * **/
     @Override
-    public boolean onLivingFall(float fallDistance, float damageMultiplier) {
+    public boolean causeFallDamage(float fallDistance, float damageMultiplier) {
         if(this.isFlying())
     		return false;
     	fallDistance -= this.getFallResistance();
     	if(this.getFallResistance() >= 100)
     		fallDistance = 0;
-    	return super.onLivingFall(fallDistance, damageMultiplier);
+    	return super.causeFallDamage(fallDistance, damageMultiplier);
     }
     
     /** Called when this mob is falling, y is how far the mob has fell so far and onGround is true when it has hit the ground. **/
     @Override
-    protected void updateFallState(double y, boolean onGround, BlockState state, BlockPos pos) {
+    protected void checkFallDamage(double y, boolean onGround, BlockState state, BlockPos pos) {
         if(!this.isFlying())
-            super.updateFallState(y, onGround, state, pos);
+            super.checkFallDamage(y, onGround, state, pos);
     }
     
     // ========== Blocking ==========
@@ -3723,7 +3723,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     
     /** Returns true if this mob is blocking. **/
     public boolean isBlocking() {
-    	if(this.getEntityWorld().isRemote)
+    	if(this.getCommandSenderWorld().isClientSide)
     		return (this.getByteFromDataManager(ANIMATION_STATE) & ANIMATION_STATE_BITS.BLOCKING.id) > 0;
     	return this.currentBlockingTime > 0;
     }
@@ -3746,19 +3746,19 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 			return false;
 		if(CreatureManager.getInstance().creatureGroups.containsKey("boss") && CreatureManager.getInstance().creatureGroups.get("boss").hasEntity(entity))
 			return false;
-		boolean heavyTarget =  entity instanceof IGroupHeavy || entity.getSize(Pose.STANDING).height >= 4 || entity.getSize(Pose.STANDING).width >= 4;
+		boolean heavyTarget =  entity instanceof IGroupHeavy || entity.getDimensions(Pose.STANDING).height >= 4 || entity.getDimensions(Pose.STANDING).width >= 4;
 		if(heavyTarget && !(this instanceof IGroupHeavy))
 			return false;
     	ExtendedEntity extendedEntity = ExtendedEntity.getForEntity(entity);
 		if(extendedEntity == null)
 			return false;
-		if((entity.getRidingEntity() != null && !(entity.getRidingEntity() instanceof BoatEntity) && !(entity.getRidingEntity() instanceof MinecartEntity)) || entity.getControllingPassenger() != null)
+		if((entity.getVehicle() != null && !(entity.getVehicle() instanceof BoatEntity) && !(entity.getVehicle() instanceof MinecartEntity)) || entity.getControllingPassenger() != null)
 			return false;
         if(ObjectManager.getEffect("weight") != null)
-            if((entity).isPotionActive(ObjectManager.getEffect("weight")))
+            if((entity).hasEffect(ObjectManager.getEffect("weight")))
                 return false;
         if(ObjectManager.getEffect("repulsion") != null)
-            if((entity).isPotionActive(ObjectManager.getEffect("repulsion")))
+            if((entity).hasEffect(ObjectManager.getEffect("repulsion")))
                 return false;
 		return extendedEntity.pickedUpByEntity == null || extendedEntity.pickedUpByEntity instanceof FearEntity;
     }
@@ -3776,7 +3776,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     }
     
     public boolean hasPickupEntity() {
-		if(!this.getEntityWorld().isRemote)
+		if(!this.getCommandSenderWorld().isClientSide)
 			return this.getPickupEntity() != null;
 		else
 			return (this.getByteFromDataManager(TARGET) & TARGET_BITS.PICKUP.id) > 0;
@@ -3806,18 +3806,18 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     }
 	public void destroyArea(int x, int y, int z, float strength, boolean drop, int range, PlayerEntity player, int chain) {
 		range = Math.max(range -1, 0);
-		for(int w = -((int)Math.ceil(this.getSize(Pose.STANDING).width) - range); w <= (Math.ceil(this.getSize(Pose.STANDING).width) + range); w++) {
-			for (int d = -((int) Math.ceil(this.getSize(Pose.STANDING).width) - range); d <= (Math.ceil(this.getSize(Pose.STANDING).width) + range); d++) {
-				for (int h = 0; h <= Math.ceil(this.getSize(Pose.STANDING).height); h++) {
+		for(int w = -((int)Math.ceil(this.getDimensions(Pose.STANDING).width) - range); w <= (Math.ceil(this.getDimensions(Pose.STANDING).width) + range); w++) {
+			for (int d = -((int) Math.ceil(this.getDimensions(Pose.STANDING).width) - range); d <= (Math.ceil(this.getDimensions(Pose.STANDING).width) + range); d++) {
+				for (int h = 0; h <= Math.ceil(this.getDimensions(Pose.STANDING).height); h++) {
 					BlockPos breakPos = new BlockPos(x + w, y + h, z + d);
-					BlockState blockState = this.getEntityWorld().getBlockState(breakPos);
-					float hardness = blockState.getBlockHardness(this.getEntityWorld(), breakPos);
+					BlockState blockState = this.getCommandSenderWorld().getBlockState(breakPos);
+					float hardness = blockState.getDestroySpeed(this.getCommandSenderWorld(), breakPos);
 					Material material = blockState.getMaterial();
 					if (hardness >= 0 && strength >= hardness && strength >= blockState.getBlock().getExplosionResistance() && material != Material.WATER && material != Material.LAVA) {
 						// If a player is set this is from a spawner in which case don't destroy the central block.
 						if(player == null || !(w == 0 && h == 0 && d == 0)) {
-							SpawnerEventListener.getInstance().onBlockBreak(this.getEntityWorld(), breakPos, blockState, player, chain);
-							this.getEntityWorld().destroyBlock(breakPos, drop);
+							SpawnerEventListener.getInstance().onBlockBreak(this.getCommandSenderWorld(), breakPos, blockState, player, chain);
+							this.getCommandSenderWorld().destroyBlock(breakPos, drop);
 						}
 					}
 				}
@@ -3825,12 +3825,12 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		}
 	}
 	public void destroyAreaBlock(int x, int y, int z, Class<WoodType> blockClass, boolean drop, int range) {
-		for(int w = -((int)Math.ceil(this.getSize(Pose.STANDING).width) + range); w <= (Math.ceil(this.getSize(Pose.STANDING).width) + range); w++)
-			for(int d = -((int)Math.ceil(this.getSize(Pose.STANDING).width) + range); d <= (Math.ceil(this.getSize(Pose.STANDING).width) + range); d++)
-				for(int h = 0; h <= Math.ceil(this.getSize(Pose.STANDING).height); h++) {
-					BlockState blockState = this.getEntityWorld().getBlockState(new BlockPos(x + w, y + h, z + d));
+		for(int w = -((int)Math.ceil(this.getDimensions(Pose.STANDING).width) + range); w <= (Math.ceil(this.getDimensions(Pose.STANDING).width) + range); w++)
+			for(int d = -((int)Math.ceil(this.getDimensions(Pose.STANDING).width) + range); d <= (Math.ceil(this.getDimensions(Pose.STANDING).width) + range); d++)
+				for(int h = 0; h <= Math.ceil(this.getDimensions(Pose.STANDING).height); h++) {
+					BlockState blockState = this.getCommandSenderWorld().getBlockState(new BlockPos(x + w, y + h, z + d));
 					if(blockClass.isInstance(blockState.getBlock())) {
-						this.getEntityWorld().destroyBlock(new BlockPos(x + w, y + h, z + d), drop);
+						this.getCommandSenderWorld().destroyBlock(new BlockPos(x + w, y + h, z + d), drop);
 					}
 				}
 	}
@@ -3873,8 +3873,8 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
    	// ==================================================
     /** Cycles through all of this entity's DropRates and drops random loot, usually called on death. If this mob is a minion, this method is cancelled. **/
     @Override
-    protected void spawnDrops(DamageSource damageSource) {
-    	if(this.getEntityWorld().isRemote || this.isMinion() || this.isBoundPet() || this.hasDropped)
+    protected void dropAllDeathLoot(DamageSource damageSource) {
+    	if(this.getCommandSenderWorld().isClientSide || this.isMinion() || this.isBoundPet() || this.hasDropped)
     		return;
 		this.hasDropped = true;
 
@@ -3895,7 +3895,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 			if(this.extraMobBehaviour != null && this.extraMobBehaviour.itemDropMultiplierOverride != 1) {
 				multiplier = Math.round((float) multiplier * (float) this.extraMobBehaviour.itemDropMultiplierOverride);
 			}
-    		int quantity = itemDrop.getQuantity(this.rand, 0, multiplier);
+    		int quantity = itemDrop.getQuantity(this.random, 0, multiplier);
     		if(quantity <= 0) {
 				continue;
 			}
@@ -3921,19 +3921,19 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     	/*if(itemStack.getItem() instanceof ItemEquipmentPart) {
 			((ItemEquipmentPart)itemStack.getItem()).randomizeLevel(this.world, itemStack);
 		}*/
-    	this.entityDropItem(itemStack, 0.0F);
+    	this.spawnAtLocation(itemStack, 0.0F);
     }
 
     // ========== Entity Drop Item ==========
     /** The vanilla item drop method, overridden to make use of the EntityItemCustom class. I recommend using dropItem() instead. **/
     @Override
-    public ItemEntity entityDropItem(ItemStack itemStack, float heightOffset) {
+    public ItemEntity spawnAtLocation(ItemStack itemStack, float heightOffset) {
         if(itemStack.getCount() != 0) {
-            CustomItemEntity entityItem = new CustomItemEntity(this.getEntityWorld(), this.getPositionVec().getX(), this.getPositionVec().getY() + (double)heightOffset, this.getPositionVec().getZ(), itemStack);
-            entityItem.setPickupDelay(10);
+            CustomItemEntity entityItem = new CustomItemEntity(this.getCommandSenderWorld(), this.position().x(), this.position().y() + (double)heightOffset, this.position().z(), itemStack);
+            entityItem.setPickUpDelay(10);
             this.applyDropEffects(entityItem);
 
-            this.getEntityWorld().addEntity(entityItem);
+            this.getCommandSenderWorld().addFreshEntity(entityItem);
             return entityItem;
         }
         else {
@@ -3978,7 +3978,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     // ========== GUI ==========
     /** This adds the provided PlayerEntity to the guiViewers array list, where on the next GUI refresh it will open the GUI. **/
     public void openGUI(PlayerEntity player) {
-    	if(this.getEntityWorld().isRemote)
+    	if(this.getCommandSenderWorld().isClientSide)
     		return;
     	this.addGUIViewer(player);
     	this.refreshGUIViewers();
@@ -3987,24 +3987,24 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     
     /** This adds the provided PlayerEntity to the guiViewers array list, where on the next GUI refresh it will open the GUI. **/
     public void addGUIViewer(PlayerEntity player) {
-    	if(!this.getEntityWorld().isRemote)
+    	if(!this.getCommandSenderWorld().isClientSide)
     		this.guiViewers.add(player);
     }
     
     /** This removes the provided PlayerEntity from the guiViewers array list. **/
     public void removeGUIViewer(PlayerEntity player) {
-    	if(!this.getEntityWorld().isRemote)
+    	if(!this.getCommandSenderWorld().isClientSide)
     		this.guiViewers.remove(player);
     }
     
     /** Called when all players viewing their entity's gui need to be refreshed. Usually after a GUI command on inventory change. Should be called using scheduleGUIRefresh(). **/
     public void refreshGUIViewers() {
-    	if(this.getEntityWorld().isRemote)
+    	if(this.getCommandSenderWorld().isClientSide)
     		return;
     	if(this.guiViewers.size() > 0) {
         	for(PlayerEntity player : this.guiViewers.toArray(new PlayerEntity[this.guiViewers.size()])) {
-        		if(player.openContainer instanceof CreatureContainer) {
-        			if(((CreatureContainer)player.openContainer).creature == this)
+        		if(player.containerMenu instanceof CreatureContainer) {
+        			if(((CreatureContainer)player.containerMenu).creature == this)
         				this.openGUIToPlayer(player);
         			else
         				this.removeGUIViewer(player);
@@ -4016,7 +4016,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     /** Actually opens the GUI to the player, should be used by openGUI() for an initial opening and then by refreshGUIViewers() for constant updates. **/
     public void openGUIToPlayer(PlayerEntity player) {
     	if(player instanceof ServerPlayerEntity)
-			NetworkHooks.openGui((ServerPlayerEntity)player, new CreatureContainerProvider(this), buf -> buf.writeInt(this.getEntityId()));
+			NetworkHooks.openGui((ServerPlayerEntity)player, new CreatureContainerProvider(this), buf -> buf.writeInt(this.getId()));
     }
     
     /** Schedules a GUI refresh, normally takes 2 ticks for everything to update for display. **/
@@ -4026,14 +4026,14 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
     /** The main interact method that is called when a player right clicks this entity. **/
     @Override
-    public ActionResultType func_230254_b_(PlayerEntity player, Hand hand) { // New process interact
+    public ActionResultType mobInteract(PlayerEntity player, Hand hand) { // New process interact
 		if(this.hasPerchTarget()) {
 			return ActionResultType.FAIL;
 		}
-	    if(this.assessInteractCommand(getInteractCommands(player, player.getHeldItem(hand)), player, player.getHeldItem(hand))) {
+	    if(this.assessInteractCommand(getInteractCommands(player, player.getItemInHand(hand)), player, player.getItemInHand(hand))) {
 			return ActionResultType.SUCCESS;
 		}
-	    return super.func_230254_b_(player, hand);
+	    return super.mobInteract(player, hand);
     }
 
     // ========== Assess Interact Command ==========
@@ -4058,7 +4058,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     	// Item Commands:
     	if(!itemStack.isEmpty()) {
     		// Leash:
-    		if(itemStack.getItem() == Items.LEAD && this.canBeLeashedTo(player))
+    		if(itemStack.getItem() == Items.LEAD && this.canBeLeashed(player))
     			commands.put(COMMAND_PIORITIES.ITEM_USE.id, "Leash");
     		
     		// Name Tag:
@@ -4094,7 +4094,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     public boolean performCommand(String command, PlayerEntity player, ItemStack itemStack) {
     	// Leash:
     	if("Leash".equals(command)) {
-    		this.setLeashHolder(player, true);
+    		this.setLeashedTo(player, true);
     		this.consumePlayersItem(player, itemStack);
     		return true;
     	}
@@ -4123,10 +4123,10 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	/** Gets whether this mob should always display its nametag client side. **/
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public boolean getAlwaysRenderNameTagForRender() {
+	public boolean shouldShowName() {
 		if(this.getVariant() != null && !this.hasCustomName())
 			return this.renderVariantNameTag();
-		return super.getAlwaysRenderNameTagForRender();
+		return super.shouldShowName();
 	}
 
     // ========== Render Subspecies Name Tag ==========
@@ -4142,10 +4142,10 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     }
     /** Consumes the specified amount from the item stack currently held by the specified player. **/
     public void consumePlayersItem(PlayerEntity player, ItemStack itemStack, int amount) {
-    	if(!player.abilities.disableDamage)
+    	if(!player.abilities.invulnerable)
             itemStack.setCount(Math.max(0, itemStack.getCount() - amount));
         if(itemStack.getCount() <= 0)
-        	player.inventory.setInventorySlotContents(player.inventory.currentItem, ItemStack.EMPTY);
+        	player.inventory.setItem(player.inventory.selected, ItemStack.EMPTY);
     }
 
     // ========== Replace Player's Item ==========
@@ -4155,14 +4155,14 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     }
     /** Replaces the specified itemstack and amount with a new itemstack. **/
     public void replacePlayersItem(PlayerEntity player, ItemStack itemStack, int amount, ItemStack newStack) {
-    	if(!player.abilities.disableDamage)
+    	if(!player.abilities.invulnerable)
             itemStack.setCount(Math.max(0, itemStack.getCount() - amount));
     	
         if(itemStack.getCount() <= 0)
-    		 player.inventory.setInventorySlotContents(player.inventory.currentItem, newStack);
+    		 player.inventory.setItem(player.inventory.selected, newStack);
          
-    	 else if(!player.inventory.addItemStackToInventory(newStack))
-        	 player.dropItem(newStack, false);
+    	 else if(!player.inventory.add(newStack))
+        	 player.drop(newStack, false);
     	
     }
     
@@ -4181,7 +4181,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     }
     /** Returns the current size of this mob's inventory. (Some mob inventories can vary in size such as mounts with and without bag items equipped.) **/
     public int getInventorySize() {
-    	return this.inventory.getSizeInventory();
+    	return this.inventory.getContainerSize();
     }
     /** Returns the maximum possible size of this mob's inventory. (The creature inventory is not actually resized, instead some slots are locked and made unavailable.) **/
     public int getInventorySizeMax() {
@@ -4252,14 +4252,14 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     // ========== Get Total Armor Value ==========
     /** Returns the total armor value of this mob. **/
     @Override
-    public int getTotalArmorValue() {
-		return super.getTotalArmorValue() + this.inventory.getArmorValue();
+    public int getArmorValue() {
+		return super.getArmorValue() + this.inventory.getArmorValue();
     }
     
     // ========== Pickup Items ==========
     /** Called on the update if this mob is able to pickup items. Searches for all nearby item entities and picks them up. **/
     public void pickupItems() {
-    	 List list = this.getEntityWorld().getEntitiesWithinAABB(ItemEntity.class, this.getBoundingBox().grow(1.0D, 0.0D, 1.0D));
+    	 List list = this.getCommandSenderWorld().getEntitiesOfClass(ItemEntity.class, this.getBoundingBox().inflate(1.0D, 0.0D, 1.0D));
          Iterator iterator = list.iterator();
 
          while (iterator.hasNext()) {
@@ -4307,7 +4307,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		}
 
     	// Fire Damage:
-		if(source.isFireDamage() && !this.canBurn()) {
+		if(source.isFire() && !this.canBurn()) {
 			return true;
 		}
 
@@ -4317,12 +4317,12 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		}
 
 		// Entity:
-		if(!this.isVulnerableTo(source.getTrueSource())) {
+		if(!this.isVulnerableTo(source.getEntity())) {
 			return true;
 		}
 
 		// Damage Sourcce:
-		if(!this.isVulnerableTo(source.damageType, source, 1)) {
+		if(!this.isVulnerableTo(source.msgId, source, 1)) {
 			return true;
 		}
 
@@ -4347,9 +4347,9 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
         if(this.isBoss() || this.isRareVariant()) {
             if(entity == null)
                 return false;
-            if(this.getDistance(entity) > this.bossRange) {
+            if(this.distanceTo(entity) > this.bossRange) {
             	if(entity instanceof PlayerEntity) {
-					((PlayerEntity)entity).sendStatusMessage(new TranslationTextComponent("boss.damage.protection.range"), true);
+					((PlayerEntity)entity).displayClientMessage(new TranslationTextComponent("boss.damage.protection.range"), true);
 				}
             	return false;
 			}
@@ -4358,22 +4358,22 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     }
 
 	@Override
-	protected void setOnFireFromLava() {
+	protected void lavaHurt() {
 		if(!this.canBurn())
 			return;
-		super.setOnFireFromLava();
+		super.lavaHurt();
 	}
 
 	@Override
-	public void setFire(int seconds) {
+	public void setSecondsOnFire(int seconds) {
 		if(!this.canBurn())
 			return;
-		super.setFire(seconds);
+		super.setSecondsOnFire(seconds);
 	}
 
     /** Returns whether or not the specified potion effect can be applied to this entity. **/
     @Override
-    public boolean isPotionApplicable(EffectInstance effectInstance) {
+    public boolean canBeAffected(EffectInstance effectInstance) {
 		for(ElementInfo element : getElements()) {
 			if(!element.isEffectApplicable(effectInstance)) {
 				return false;
@@ -4416,7 +4416,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     public boolean webProof() { return false; }
 
     @Override
-    public void setMotionMultiplier(BlockState blockState, Vector3d motionMultiplier) {
+    public void makeStuckInBlock(BlockState blockState, Vector3d motionMultiplier) {
     	if(blockState.getBlock() == Blocks.COBWEB && webProof()) {
     		return;
 		}
@@ -4426,21 +4426,21 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		if(blockState.getBlock() == ObjectManager.getBlock("frostweb") && webProof()) {
 			return;
 		}
-    	super.setMotionMultiplier(blockState, motionMultiplier);
+    	super.makeStuckInBlock(blockState, motionMultiplier);
     }
     
     // Breathing:
 	/** Returns the amount of air gained for the tick. Drowning in water is handled by LivingEntity and this isn't called in that case. **/
 	@Override
-	protected int determineNextAir(int currentAir) {
+	protected int increaseAirSupply(int currentAir) {
     	if(this.canBreatheUnderwater() && this.waterContact()) {
-    		return super.determineNextAir(currentAir);
+    		return super.increaseAirSupply(currentAir);
 		}
     	if(this.canBreatheUnderlava() && this.lavaContact()) {
-			return super.determineNextAir(currentAir);
+			return super.increaseAirSupply(currentAir);
 		}
     	if(this.canBreatheAir()) { // No drowning in lava and this method is called when eyes are not in water so no need to check twice.
-			return super.determineNextAir(currentAir);
+			return super.increaseAirSupply(currentAir);
 		}
 
 		return this.decreaseAirSupply(currentAir);
@@ -4472,8 +4472,8 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
     /** Sets the current amount of air this mob has. **/
 	@Override
-	public void setAir(int air) {
-		super.setAir(air);
+	public void setAirSupply(int air) {
+		super.setAirSupply(air);
     }
 	
 	/** Returns true if this mob is in water. **/
@@ -4484,9 +4484,9 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     
     /** Returns true if this mob is in contact with water in any way. **/
     public boolean waterContact() {
-    	if(this.isInWaterRainOrBubbleColumn())
+    	if(this.isInWaterRainOrBubble())
     		return true;
-    	if(this.getEntityWorld().isRaining() && !this.isBlockUnderground((int)this.getPositionVec().getX(), (int)this.getPositionVec().getY(), (int)this.getPositionVec().getZ()))
+    	if(this.getCommandSenderWorld().isRaining() && !this.isBlockUnderground((int)this.position().x(), (int)this.position().y(), (int)this.position().z()))
     		return true;
     	return false;
     }
@@ -4503,7 +4503,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	 * @return True if swimmable.
 	 */
 	public boolean isSwimmable(int x, int y, int z) {
-        BlockState blockState = this.getEntityWorld().getBlockState(new BlockPos(x, y, z));
+        BlockState blockState = this.getCommandSenderWorld().getBlockState(new BlockPos(x, y, z));
 		if(this.isLavaCreature && Material.LAVA.equals(blockState.getMaterial()))
 			return true;
 		else if(Material.WATER.equals(blockState.getMaterial()))
@@ -4518,8 +4518,8 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
     /** Gets the maximum fall height this creature is willing to do when pathing, varies depending on if it has an attack target, health, etc. **/
     @Override
-	public int getMaxFallHeight() {
-		return super.getMaxFallHeight() + (int)this.getFallResistance();
+	public int getMaxFallDistance() {
+		return super.getMaxFallDistance() + (int)this.getFallResistance();
 	}
     
     
@@ -4532,7 +4532,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
      * Light enough for spawnsInLight: 2 = Light, 3 = Bright
     **/
     public byte testLightLevel() {
-    	return testLightLevel(this.getPosition());
+    	return testLightLevel(this.blockPosition());
     }
 
     /** Returns a light rating for the light level the specified XYZ position.
@@ -4540,7 +4540,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
      * Light enough for spawnsInLight: 2 = Light, 3 = Bright
     **/
     public byte testLightLevel(BlockPos pos) {
-        BlockState spawnBlockState = this.getEntityWorld().getBlockState(pos);
+        BlockState spawnBlockState = this.getCommandSenderWorld().getBlockState(pos);
         if(pos.getY() < 0)
             return 0;
         if(spawnBlockState.getMaterial() == Material.WATER && CreatureManager.getInstance().spawnConfig.useSurfaceLightLevel)
@@ -4548,7 +4548,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
         else
             pos = new BlockPos(pos.getX(), this.getGroundY(pos), pos.getZ());
 
-		float brightness = this.getEntityWorld().getBrightness(pos);
+		float brightness = this.getCommandSenderWorld().getBrightness(pos);
         if(brightness == 0) return 0;
         if(brightness < 0.25F) return 1;
         if(brightness < 1) return 2;
@@ -4557,9 +4557,9 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     
     /** A client and server friendly solution to check if it is daytime or not. **/
     public boolean isDaytime() {
-    	if(!this.getEntityWorld().isRemote)
-    		return this.getEntityWorld().isDaytime();
-    	long time = this.getEntityWorld().getDayTime();
+    	if(!this.getCommandSenderWorld().isClientSide)
+    		return this.getCommandSenderWorld().isDay();
+    	long time = this.getCommandSenderWorld().getDayTime();
     	if(time < 12500)
     		return true;
     	if(time >= 12542 && time < 23460)
@@ -4570,37 +4570,37 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     // ========== Creature Attribute ==========
     /** Returns this creature's attribute. **/
    	@Override
-    public CreatureAttribute getCreatureAttribute() { return this.attribute; }
+    public CreatureAttribute getMobType() { return this.attribute; }
 
     // ========== Mounted Y Offset ==========
     /** An X Offset used to position the mob that is riding this mob. **/
     public double getMountedXOffset() {
     	if(this.getSubspecies() != null && this.getSubspecies().mountOffset != null) {
-			return (double)this.getSize(Pose.STANDING).width * this.getSubspecies().mountOffset.getX();
+			return (double)this.getDimensions(Pose.STANDING).width * this.getSubspecies().mountOffset.x();
 		}
-        return (double)this.getSize(Pose.STANDING).width * this.creatureInfo.mountOffset.getX();
+        return (double)this.getDimensions(Pose.STANDING).width * this.creatureInfo.mountOffset.x();
     }
 
 	/** A Y Offset used to position the mob that is riding this mob. **/
 	@Override
-	public double getMountedYOffset() {
+	public double getPassengersRidingOffset() {
 		if(this.getSubspecies() != null && this.getSubspecies().mountOffset != null) {
-			return (double)this.getSize(Pose.STANDING).height * this.getSubspecies().mountOffset.getY();
+			return (double)this.getDimensions(Pose.STANDING).height * this.getSubspecies().mountOffset.y();
 		}
-		return (double)this.getSize(Pose.STANDING).height * this.creatureInfo.mountOffset.getY();
+		return (double)this.getDimensions(Pose.STANDING).height * this.creatureInfo.mountOffset.y();
 	}
 
 	/** A Z Offset used to position the mob that is riding this mob. **/
 	public double getMountedZOffset() {
 		if(this.getSubspecies() != null && this.getSubspecies().mountOffset != null) {
-			return (double)this.getSize(Pose.STANDING).width * this.getSubspecies().mountOffset.getZ();
+			return (double)this.getDimensions(Pose.STANDING).width * this.getSubspecies().mountOffset.z();
 		}
-		return (double)this.getSize(Pose.STANDING).width * this.creatureInfo.mountOffset.getZ();
+		return (double)this.getDimensions(Pose.STANDING).width * this.creatureInfo.mountOffset.z();
 	}
 
     /** Get entities that are near this entity. **/
     public <T extends Entity> List<T> getNearbyEntities(Class <? extends T > clazz, Predicate<Entity> predicate, double range) {
-        return this.getEntityWorld().getEntitiesWithinAABB(clazz, this.getBoundingBox().grow(range, range, range), predicate);
+        return this.getCommandSenderWorld().getEntitiesOfClass(clazz, this.getBoundingBox().inflate(range, range, range), predicate);
     }
 
 	/** Returns how many entities of the specified Entity Type are within the specified range, used mostly for spawning, mobs that summon other mobs and group behaviours. **/
@@ -4634,7 +4634,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 				continue;
             if(targetEntity == this.getControllingPassenger())
                 continue;
-            double distance = this.getDistance(targetEntity);
+            double distance = this.distanceTo(targetEntity);
             if(distance < nearestDistance) {
                 nearestDistance = distance;
                 nearestEntity = targetEntity;
@@ -4649,9 +4649,9 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
    	// ========== Read ===========
     /** Used when loading this mob from a saved chunk. **/
     @Override
-    public void readAdditional(CompoundNBT nbtTagCompound) {
+    public void readAdditionalSaveData(CompoundNBT nbtTagCompound) {
 		if(this.creatureInfo.dummy) {
-			super.readAdditional(nbtTagCompound);
+			super.readAdditionalSaveData(nbtTagCompound);
 			return;
 		}
 
@@ -4694,7 +4694,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     	
     	if(nbtTagCompound.contains("ForceNoDespawn")) {
     		if(nbtTagCompound.getBoolean("ForceNoDespawn")) {
-				this.enablePersistence();
+				this.setPersistenceRequired();
 			}
     	}
     	
@@ -4740,7 +4740,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 			this.spawnedAsBoss = nbtTagCompound.getBoolean("SpawnedAsBoss");
 		}
     	
-        super.readAdditional(nbtTagCompound);
+        super.readAdditionalSaveData(nbtTagCompound);
         this.inventory.read(nbtTagCompound);
 
         if(nbtTagCompound.contains("Drops")) {
@@ -4773,7 +4773,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 			for(int i = 0; i < minionIds.size(); i++) {
 				CompoundNBT minionId = minionIds.getCompound(i);
 				if(minionId.contains("ID")) {
-					Entity entity = this.getEntityWorld().getEntityByID(minionId.getInt("ID"));
+					Entity entity = this.getCommandSenderWorld().getEntity(minionId.getInt("ID"));
 					if(entity instanceof LivingEntity)
 						this.addMinion((LivingEntity) entity);
 				}
@@ -4784,9 +4784,9 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     // ========== Write ==========
     /** Used when saving this mob to a chunk. **/
     @Override
-    public void writeAdditional(CompoundNBT nbtTagCompound) {
+    public void addAdditionalSaveData(CompoundNBT nbtTagCompound) {
 		if(this.creatureInfo.dummy) {
-			super.writeAdditional(nbtTagCompound);
+			super.addAdditionalSaveData(nbtTagCompound);
 			return;
 		}
 
@@ -4809,7 +4809,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		nbtTagCompound.putBoolean("SpawnedAsBoss", this.spawnedAsBoss);
     	
     	if(this.hasHome()) {
-    		BlockPos homePos = this.getHomePosition();
+    		BlockPos homePos = this.getRestrictCenter();
     		nbtTagCompound.putInt("HomeX", homePos.getX());
     		nbtTagCompound.putInt("HomeY", homePos.getY());
     		nbtTagCompound.putInt("HomeZ", homePos.getZ());
@@ -4824,18 +4824,18 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
         }
 
 		if(this.getFixateTarget() != null) {
-			nbtTagCompound.putLong("FixateUUIDMost", this.getFixateTarget().getUniqueID().getMostSignificantBits());
-			nbtTagCompound.putLong("FixateUUIDLeast", this.getFixateTarget().getUniqueID().getLeastSignificantBits());
+			nbtTagCompound.putLong("FixateUUIDMost", this.getFixateTarget().getUUID().getMostSignificantBits());
+			nbtTagCompound.putLong("FixateUUIDLeast", this.getFixateTarget().getUUID().getLeastSignificantBits());
 		}
 
 		try {
-			this.getAttributeManager().serialize();
+			this.getAttributes().save();
 		}
 		catch (Throwable t) {
 			LycanitesMobs.logError(t.getMessage());
 			t.printStackTrace();
 		}
-		super.writeAdditional(nbtTagCompound);
+		super.addAdditionalSaveData(nbtTagCompound);
         this.inventory.write(nbtTagCompound);
 		ListNBT nbtDropList = new ListNBT();
         for(ItemDrop drop : this.savedDrops) {
@@ -4853,7 +4853,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		ListNBT minionIds = new ListNBT();
 		for(LivingEntity minion : this.minions) {
 			CompoundNBT minionId = new CompoundNBT();
-			minionId.putInt("ID", minion.getEntityId());
+			minionId.putInt("ID", minion.getId());
 			minionIds.add(minionId);
 		}
 		nbtTagCompound.put("MinionIds", minionIds);
@@ -4887,7 +4887,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
     /** Returns the current maximum attack cooldown. **/
     public int getAttackCooldownMax() {
-    	if(!this.getEntityWorld().isRemote) {
+    	if(!this.getCommandSenderWorld().isClientSide) {
 			return this.attackCooldownMax;
 		}
 		else {
@@ -4898,8 +4898,8 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	/** Sets the current maximum attack cooldown. This will send a messag from server to client to keep the client in sync. **/
 	public void setAttackCooldownMax(int cooldownMax) {
     	this.attackCooldownMax = cooldownMax;
-    	if(!this.getEntityWorld().isRemote) {
-    		this.getDataManager().set(ANIMATION_ATTACK_COOLDOWN_MAX, this.attackCooldownMax);
+    	if(!this.getCommandSenderWorld().isClientSide) {
+    		this.getEntityData().set(ANIMATION_ATTACK_COOLDOWN_MAX, this.attackCooldownMax);
 		}
 	}
     
@@ -4979,8 +4979,8 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
      * @param color The color ID to use (see the static RenderCreature.colorTable array).
      */
     public void setColor(DyeColor color) {
-    	if(!this.getEntityWorld().isRemote) {
-			this.dataManager.set(COLOR, (byte) (color.getId() & 15));
+    	if(!this.getCommandSenderWorld().isClientSide) {
+			this.entityData.set(COLOR, (byte) (color.getId() & 15));
 		}
     }
 
@@ -4996,15 +4996,15 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     }
 
     @Override
-    public void addTrackingPlayer(ServerPlayerEntity player) {
-        super.addTrackingPlayer(player);
+    public void startSeenByPlayer(ServerPlayerEntity player) {
+        super.startSeenByPlayer(player);
         if(this.getBossInfo() != null)
             this.bossInfo.addPlayer(player);
     }
 
     @Override
-    public void removeTrackingPlayer(ServerPlayerEntity player) {
-        super.removeTrackingPlayer(player);
+    public void stopSeenByPlayer(ServerPlayerEntity player) {
+        super.stopSeenByPlayer(player);
         if(this.getBossInfo() != null)
             this.bossInfo.removePlayer(player);
     }
@@ -5035,7 +5035,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     // ========== Idle ==========
     /** Get number of ticks, at least during which the living entity will be silent. **/
     @Override
-    public int getTalkInterval() {
+    public int getAmbientSoundInterval() {
         return CreatureManager.getInstance().config.idleSoundTicks;
     }
 
@@ -5069,48 +5069,48 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
             super.playStepSound(pos, block);
             return;
         }
-        this.playSound(ObjectManager.getSound(this.getSoundName() + "_step"), this.getSoundVolume(), 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
+        this.playSound(ObjectManager.getSound(this.getSoundName() + "_step"), this.getSoundVolume(), 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
     }
 
     // ========== Fall ==========
     @Override
-    protected SoundEvent getFallSound(int height) {
-        return height > 4 ? SoundEvents.ENTITY_HOSTILE_BIG_FALL : SoundEvents.ENTITY_HOSTILE_SMALL_FALL;
+    protected SoundEvent getFallDamageSound(int height) {
+        return height > 4 ? SoundEvents.HOSTILE_BIG_FALL : SoundEvents.HOSTILE_SMALL_FALL;
     }
 
     // ========== Swim ==========
     @Override
     protected SoundEvent getSwimSound()
     {
-        return SoundEvents.ENTITY_HOSTILE_SWIM;
+        return SoundEvents.HOSTILE_SWIM;
     }
 
     // ========== Splash ==========
     @Override
-    protected SoundEvent getSplashSound()
+    protected SoundEvent getSwimSplashSound()
     {
-        return SoundEvents.ENTITY_HOSTILE_SPLASH;
+        return SoundEvents.HOSTILE_SPLASH;
     }
      
     // ========== Jump ==========
     /** Plays the jump sound when this creature jumps. **/
     public void playJumpSound() {
     	if(!this.hasJumpSound) return;
-    	this.playSound(ObjectManager.getSound(this.getSoundName() + "_jump"), this.getSoundVolume(), 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
+    	this.playSound(ObjectManager.getSound(this.getSoundName() + "_jump"), this.getSoundVolume(), 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
     }
      
     // ========== Fly ==========
     /** Plays a flying sound, usually a wing flap, called randomly when flying. **/
     public void playFlySound() {
     	if(!this.isFlying() || this.hasPerchTarget()) return;
-      	this.playSound(ObjectManager.getSound(this.getSoundName() + "_fly"), this.getSoundVolume(), 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
+      	this.playSound(ObjectManager.getSound(this.getSoundName() + "_fly"), this.getSoundVolume(), 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
     }
 
     // ========== Attack ==========
     /** Plays an attack sound, called once this creature has attacked. note that ranged attacks normally rely on the projectiles playing their launched sound instead. **/
     public void playAttackSound() {
      	if(!this.hasAttackSound) return;
-     	this.playSound(ObjectManager.getSound(this.getSoundName() + "_attack"), this.getSoundVolume(), 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
+     	this.playSound(ObjectManager.getSound(this.getSoundName() + "_attack"), this.getSoundVolume(), 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
     }
 
     // ========== Phase ==========
@@ -5118,7 +5118,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     public void playPhaseSound() {
         if(ObjectManager.getSound(this.creatureInfo.getName() + "_phase") == null)
             return;
-        this.playSound(ObjectManager.getSound(this.getSoundName() + "_phase"), this.getSoundVolume() * 2, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
+        this.playSound(ObjectManager.getSound(this.getSoundName() + "_phase"), this.getSoundVolume() * 2, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
     }
     
     // ========== Play Sound ==========

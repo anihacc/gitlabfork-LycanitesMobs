@@ -48,22 +48,22 @@ public class EntityAspid extends AgeableCreatureEntity {
     // ==================================================
 	// ========== Living Update ==========
 	@Override
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
 
-        if(!this.getEntityWorld().isRemote && this.hasCustomName()) {
+        if(!this.getCommandSenderWorld().isClientSide && this.hasCustomName()) {
 			//LycanitesMobs.logDebug("", "Distractions: " + this.nextDistractionGoalIndex);
 		}
         
         // Trail:
-        if(!this.getEntityWorld().isRemote && (this.ticksExisted % 10 == 0 || this.isMoving() && this.ticksExisted % 5 == 0)) {
+        if(!this.getCommandSenderWorld().isClientSide && (this.tickCount % 10 == 0 || this.isMoving() && this.tickCount % 5 == 0)) {
         	int trailHeight = 2;
-        	if(this.isChild())
+        	if(this.isBaby())
         		trailHeight = 1;
         	for(int y = 0; y < trailHeight; y++) {
-        		Block block = this.getEntityWorld().getBlockState(this.getPosition().add(0, y, 0)).getBlock();
+        		Block block = this.getCommandSenderWorld().getBlockState(this.blockPosition().offset(0, y, 0)).getBlock();
         		if(block == Blocks.AIR || block == Blocks.SNOW || block == ObjectManager.getBlock("poisoncloud"))
-        			this.getEntityWorld().setBlockState(this.getPosition().add(0, y, 0), ObjectManager.getBlock("poisoncloud").getDefaultState());
+        			this.getCommandSenderWorld().setBlockAndUpdate(this.blockPosition().offset(0, y, 0), ObjectManager.getBlock("poisoncloud").defaultBlockState());
         	}
 		}
     }
@@ -75,11 +75,11 @@ public class EntityAspid extends AgeableCreatureEntity {
 	// ========== Pathing Weight ==========
 	@Override
 	public float getBlockPathWeight(int x, int y, int z) {
-        if(this.getEntityWorld().getBlockState(new BlockPos(x, y - 1, z)).getBlock() != Blocks.AIR) {
-            BlockState blockState = this.getEntityWorld().getBlockState(new BlockPos(x, y - 1, z));
-            if(blockState.getMaterial() == Material.ORGANIC)
+        if(this.getCommandSenderWorld().getBlockState(new BlockPos(x, y - 1, z)).getBlock() != Blocks.AIR) {
+            BlockState blockState = this.getCommandSenderWorld().getBlockState(new BlockPos(x, y - 1, z));
+            if(blockState.getMaterial() == Material.GRASS)
                 return 10F;
-            if(blockState.getMaterial() == Material.EARTH)
+            if(blockState.getMaterial() == Material.DIRT)
                 return 7F;
         }
         return super.getBlockPathWeight(x, y, z);
@@ -93,9 +93,9 @@ public class EntityAspid extends AgeableCreatureEntity {
     public int getBagSize() { return this.creatureInfo.BagSize; }
 	// ========== Can leash ==========
     @Override
-    public boolean canBeLeashedTo(PlayerEntity player) {
+    public boolean canBeLeashed(PlayerEntity player) {
 	    if(!this.hasAttackTarget() && !this.hasMaster())
 	        return true;
-	    return super.canBeLeashedTo(player);
+	    return super.canBeLeashed(player);
     }
 }

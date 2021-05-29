@@ -134,7 +134,7 @@ public class CreaturesBeastiaryScreen extends BeastiaryScreen {
 			this.drawHelper.drawStringWrapped(matrixStack, text, nextX, nextY, width, 0xFFFFFF, true);
 
 			// Descovered:
-			nextY += 12 + this.drawHelper.getFontRenderer().getWordWrappedHeight(text, colRightWidth);
+			nextY += 12 + this.drawHelper.getFontRenderer().wordWrapHeight(text, colRightWidth);
 			text = new TranslationTextComponent("gui.beastiary.creatures.descovered").getString() + ": ";
 			text += this.playerExt.getBeastiary().getCreaturesDescovered(this.playerExt.selectedCreatureType);
 			text += "/" + this.playerExt.selectedCreatureType.creatures.size();

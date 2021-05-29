@@ -49,7 +49,7 @@ public class EntityChupacabra extends TameableCreatureEntity {
         	return false;
         
     	// Breed:
-        if((target instanceof AnimalEntity || (target instanceof BaseCreatureEntity && ((BaseCreatureEntity)target).creatureInfo.isFarmable())) && target.getSize(Pose.STANDING).height >= 1F)
+        if((target instanceof AnimalEntity || (target instanceof BaseCreatureEntity && ((BaseCreatureEntity)target).creatureInfo.isFarmable())) && target.getDimensions(Pose.STANDING).height >= 1F)
     		this.breed();
 
         // Leech:
@@ -64,7 +64,7 @@ public class EntityChupacabra extends TameableCreatureEntity {
    	//                     Abilities
    	// ==================================================
     public boolean canBeTempted() {
-    	return this.isChild();
+    	return this.isBaby();
     }
 
 

@@ -28,7 +28,7 @@ public class MaterialSpawnLocation extends BlockSpawnLocation {
 		BlockState blockState = world.getBlockState(blockPos);
 
 		if(!this.surface || !this.underground) {
-			if(world.canBlockSeeSky(blockPos)) {
+			if(world.canSeeSkyFromBelowWater(blockPos)) {
 				if(!this.surface) {
 					return false;
 				}

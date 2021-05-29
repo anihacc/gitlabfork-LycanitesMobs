@@ -23,11 +23,11 @@ public class DungeonFeature extends Feature<NoFeatureConfig> {
 	}
 
 	@Override
-	public boolean generate(ISeedReader reader, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config) {
+	public boolean place(ISeedReader reader, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config) {
 		boolean enabled = ConfigDungeons.INSTANCE.dungeonsEnabled.get();
 		int dungeonDistance = ConfigDungeons.INSTANCE.dungeonDistance.get();
 
-		World world = reader.getWorld();
+		World world = reader.getLevel();
 		ExtendedWorld extendedWorld = ExtendedWorld.getForWorld(world);
 		if(!enabled || extendedWorld == null) {
 			return false;
@@ -53,7 +53,7 @@ public class DungeonFeature extends Feature<NoFeatureConfig> {
 						if(yPos < 64) {
 							yPos = 64;
 						}
-						BlockPos dungeonPos = new ChunkPos(chunkPos.x + (dungeonSizeMax * x), chunkPos.z + (dungeonSizeMax * z)).asBlockPos().add(7, yPos, 7);
+						BlockPos dungeonPos = new ChunkPos(chunkPos.x + (dungeonSizeMax * x), chunkPos.z + (dungeonSizeMax * z)).getWorldPosition().offset(7, yPos, 7);
 						dungeonInstance.setOrigin(dungeonPos);
 						if(dungeonInstance.init(world)) {
 							extendedWorld.addDungeonInstance(dungeonInstance, new UUID(rand.nextLong(), rand.nextLong()));

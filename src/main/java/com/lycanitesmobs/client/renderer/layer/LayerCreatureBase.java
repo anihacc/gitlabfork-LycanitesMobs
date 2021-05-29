@@ -47,7 +47,7 @@ public class LayerCreatureBase extends LayerRenderer<BaseCreatureEntity, Creatur
     public boolean canRenderLayer(BaseCreatureEntity entity, float scale) {
         if(entity == null)
             return false;
-        if(entity.isInvisible() && entity.isInvisibleToPlayer(Minecraft.getInstance().player))
+        if(entity.isInvisible() && entity.isInvisibleTo(Minecraft.getInstance().player))
             return false;
         return true;
     }

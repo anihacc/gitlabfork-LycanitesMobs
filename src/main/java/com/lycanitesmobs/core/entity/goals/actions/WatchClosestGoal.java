@@ -9,11 +9,13 @@ import net.minecraft.entity.player.PlayerEntity;
 
 import java.util.EnumSet;
 
+import net.minecraft.entity.ai.goal.Goal.Flag;
+
 public class WatchClosestGoal extends Goal {
     // Targets:
     private MobEntity host;
     protected Entity closestEntity;
-    private final EntityPredicate searchPredicate = (new EntityPredicate()).setDistance(64.0D);
+    private final EntityPredicate searchPredicate = (new EntityPredicate()).range(64.0D);
 
     // Properties
     private Class watchedClass = LivingEntity.class;
@@ -28,7 +30,7 @@ public class WatchClosestGoal extends Goal {
    	// ==================================================
     public WatchClosestGoal(MobEntity setHost) {
     	this.host = setHost;
-        this.setMutexFlags(EnumSet.of(Flag.LOOK));
+        this.setFlags(EnumSet.of(Flag.LOOK));
     }
     
     
@@ -53,16 +55,16 @@ public class WatchClosestGoal extends Goal {
    	//                   Should Execute
    	// ==================================================
 	@Override
-    public boolean shouldExecute() {
-        if(this.host.getRNG().nextFloat() >= this.lookChance)
+    public boolean canUse() {
+        if(this.host.getRandom().nextFloat() >= this.lookChance)
             return false;
         else {
-            if(this.host.getAttackTarget() != null)
-                this.closestEntity = this.host.getAttackTarget();
+            if(this.host.getTarget() != null)
+                this.closestEntity = this.host.getTarget();
             if(this.watchedClass == PlayerEntity.class)
-                this.closestEntity = this.host.getEntityWorld().getClosestPlayer(this.host.getPositionVec().getX(), this.host.getPositionVec().getY(), this.host.getPositionVec().getZ(), this.maxDistance, entity -> true);
+                this.closestEntity = this.host.getCommandSenderWorld().getNearestPlayer(this.host.position().x(), this.host.position().y(), this.host.position().z(), this.maxDistance, entity -> true);
             else
-                this.host.world.getTargettableEntitiesWithinAABB(LivingEntity.class, this.searchPredicate, this.host, this.host.getBoundingBox().grow((double)this.maxDistance));
+                this.host.level.getNearbyEntities(LivingEntity.class, this.searchPredicate, this.host, this.host.getBoundingBox().inflate((double)this.maxDistance));
 
             return this.closestEntity != null;
         }
@@ -73,10 +75,10 @@ public class WatchClosestGoal extends Goal {
    	//                 Continue Executing
    	// ==================================================
 	@Override
-    public boolean shouldContinueExecuting() {
+    public boolean canContinueToUse() {
     	if(!this.closestEntity.isAlive())
     		return false;
-    	if(this.host.getDistance(this.closestEntity) > (double)(this.maxDistance * this.maxDistance))
+    	if(this.host.distanceTo(this.closestEntity) > (double)(this.maxDistance * this.maxDistance))
     		return false;
         return this.lookTime > 0;
     }
@@ -86,8 +88,8 @@ public class WatchClosestGoal extends Goal {
    	//                  Start Executing
    	// ==================================================
 	@Override
-    public void startExecuting() {
-        this.lookTime = lookTimeMin + this.host.getRNG().nextInt(lookTimeRange);
+    public void start() {
+        this.lookTime = lookTimeMin + this.host.getRandom().nextInt(lookTimeRange);
     }
     
     
@@ -95,7 +97,7 @@ public class WatchClosestGoal extends Goal {
    	//                      Reset
    	// ==================================================
 	@Override
-    public void resetTask() {
+    public void stop() {
         this.closestEntity = null;
     }
     
@@ -105,7 +107,7 @@ public class WatchClosestGoal extends Goal {
    	// ==================================================
 	@Override
     public void tick() {
-        this.host.getLookController().setLookPosition(this.closestEntity.getPositionVec().getX(), this.closestEntity.getPositionVec().getY() + (double)this.closestEntity.getEyeHeight(), this.closestEntity.getPositionVec().getZ(), 10.0F, (float)this.host.getVerticalFaceSpeed());
+        this.host.getLookControl().setLookAt(this.closestEntity.position().x(), this.closestEntity.position().y() + (double)this.closestEntity.getEyeHeight(), this.closestEntity.position().z(), 10.0F, (float)this.host.getMaxHeadXRot());
         this.lookTime--;
     }
 }

@@ -90,7 +90,7 @@ public class BlockFrostfire extends BlockFireBase {
     @Override
     public void burnBlockReplace(World world, BlockPos pos, int newFireAge) {
         if(world.getBlockState(pos).getBlock() == Blocks.ICE) {
-            world.setBlockState(pos, Blocks.PACKED_ICE.getDefaultState(), 3);
+            world.setBlock(pos, Blocks.PACKED_ICE.defaultBlockState(), 3);
             return;
         }
         super.burnBlockReplace(world, pos, newFireAge);
@@ -99,7 +99,7 @@ public class BlockFrostfire extends BlockFireBase {
     @Override
     public void burnBlockDestroy(World world, BlockPos pos) {
         if(world.getBlockState(pos).getBlock() == Blocks.ICE) {
-            world.setBlockState(pos, Blocks.PACKED_ICE.getDefaultState(), 3);
+            world.setBlock(pos, Blocks.PACKED_ICE.defaultBlockState(), 3);
             return;
         }
         super.burnBlockDestroy(world, pos);
@@ -110,14 +110,14 @@ public class BlockFrostfire extends BlockFireBase {
     //                Collision Effects
     // ==================================================
     @Override
-    public void onEntityCollision(BlockState blockState, World world, BlockPos pos, Entity entity) {
-        super.onEntityCollision(blockState, world, pos, entity);
+    public void entityInside(BlockState blockState, World world, BlockPos pos, Entity entity) {
+        super.entityInside(blockState, world, pos, entity);
 
         if(entity instanceof LivingEntity) {
-            EffectInstance effect = new EffectInstance(Effects.SLOWNESS, 3 * 20, 0);
+            EffectInstance effect = new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 3 * 20, 0);
             LivingEntity entityLiving = (LivingEntity)entity;
-            if(entityLiving.isPotionApplicable(effect))
-                entityLiving.addPotionEffect(effect);
+            if(entityLiving.canBeAffected(effect))
+                entityLiving.addEffect(effect);
             else
                 return; // Entities immune to slow are immune to frostfire damage.
         }
@@ -125,7 +125,7 @@ public class BlockFrostfire extends BlockFireBase {
         if(entity instanceof ItemEntity)
             return;
 
-        entity.attackEntityFrom(DamageSource.MAGIC, 2);
+        entity.hurt(DamageSource.MAGIC, 2);
     }
 
 
@@ -139,7 +139,7 @@ public class BlockFrostfire extends BlockFireBase {
         double y = pos.getY();
         double z = pos.getZ();
         if(random.nextInt(24) == 0)
-            world.playSound((double)((float)x + 0.5F), (double)((float)y + 0.5F), (double)((float)z + 0.5F), ObjectManager.getSound("frostfire"), SoundCategory.BLOCKS, 0.5F + random.nextFloat(), random.nextFloat() * 0.7F + 0.3F, false);
+            world.playLocalSound((double)((float)x + 0.5F), (double)((float)y + 0.5F), (double)((float)z + 0.5F), ObjectManager.getSound("frostfire"), SoundCategory.BLOCKS, 0.5F + random.nextFloat(), random.nextFloat() * 0.7F + 0.3F, false);
 
         if (random.nextInt(100) == 0) {
             x = pos.getX() + random.nextFloat();

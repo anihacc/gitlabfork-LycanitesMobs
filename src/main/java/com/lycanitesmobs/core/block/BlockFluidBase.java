@@ -30,13 +30,13 @@ public class BlockFluidBase extends FlowingFluidBlock {
     }
 
     @Override
-    public IFormattableTextComponent getTranslatedName() {
-        return new TranslationTextComponent(this.getTranslationKey());
+    public IFormattableTextComponent getName() {
+        return new TranslationTextComponent(this.getDescriptionId());
     }
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void addInformation(ItemStack stack, @Nullable IBlockReader world, List<ITextComponent> tooltip, ITooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, @Nullable IBlockReader world, List<ITextComponent> tooltip, ITooltipFlag flag) {
         tooltip.add(this.getDescription(stack, world));
     }
 

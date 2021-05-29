@@ -145,14 +145,14 @@ public class PlayerSpawnCondition extends SpawnCondition {
 		}
 
 		// Check UUID:
-		if(!"".equals(this.uuid) && !this.uuid.equalsIgnoreCase(player.getUniqueID().toString())) {
+		if(!"".equals(this.uuid) && !this.uuid.equalsIgnoreCase(player.getUUID().toString())) {
 			return false;
 		}
 
 		// Check Local Area Difficulty:
 		if(this.difficultyMin >= 0 || this.difficultyMax >= 0) {
-			DifficultyInstance difficultyInstance = world.getDifficultyForLocation(player.getPosition());
-			float difficulty = difficultyInstance.getAdditionalDifficulty();
+			DifficultyInstance difficultyInstance = world.getCurrentDifficultyAt(player.blockPosition());
+			float difficulty = difficultyInstance.getEffectiveDifficulty();
 			if (this.difficultyMin >= 0 && difficulty < this.difficultyMin) {
 				return false;
 			}
@@ -162,10 +162,10 @@ public class PlayerSpawnCondition extends SpawnCondition {
 		}
 
 		// Check Spawn Distance:
-		if(this.spawnDistanceMin >= 0 && player.getDistanceSq(new Vector3d(world.getWorldInfo().getSpawnX(), world.getWorldInfo().getSpawnY(), world.getWorldInfo().getSpawnZ())) < this.spawnDistanceMin) {
+		if(this.spawnDistanceMin >= 0 && player.distanceToSqr(new Vector3d(world.getLevelData().getXSpawn(), world.getLevelData().getYSpawn(), world.getLevelData().getZSpawn())) < this.spawnDistanceMin) {
 			return false;
 		}
-		if(this.spawnDistanceMax >= 0 && player.getDistanceSq(new Vector3d(world.getWorldInfo().getSpawnX(), world.getWorldInfo().getSpawnY(), world.getWorldInfo().getSpawnZ())) > this.spawnDistanceMax) {
+		if(this.spawnDistanceMax >= 0 && player.distanceToSqr(new Vector3d(world.getLevelData().getXSpawn(), world.getLevelData().getYSpawn(), world.getLevelData().getZSpawn())) > this.spawnDistanceMax) {
 			return false;
 		}
 
@@ -202,7 +202,7 @@ public class PlayerSpawnCondition extends SpawnCondition {
 		}
 
 		// Check Light Level:
-		int lightLevel = world.getLight(player.getPosition());
+		int lightLevel = world.getMaxLocalRawBrightness(player.blockPosition());
 		if(this.lightLevelMin >= 0 && lightLevel < this.lightLevelMin) {
 			return false;
 		}
@@ -215,8 +215,8 @@ public class PlayerSpawnCondition extends SpawnCondition {
 			boolean holdingItem = false;
 
 			// Main Hand:
-			if(!player.getHeldItemMainhand().isEmpty()) {
-				if (this.heldItems.contains(player.getHeldItemMainhand().getItem())) {
+			if(!player.getMainHandItem().isEmpty()) {
+				if (this.heldItems.contains(player.getMainHandItem().getItem())) {
 					holdingItem = true;
 					if("blacklist".equalsIgnoreCase(this.heldItemsListType)) {
 						return false;
@@ -225,8 +225,8 @@ public class PlayerSpawnCondition extends SpawnCondition {
 			}
 
 			// Off Hand:
-			if(!player.getHeldItemOffhand().isEmpty()) {
-				if (this.heldItems.contains(player.getHeldItemOffhand().getItem())) {
+			if(!player.getOffhandItem().isEmpty()) {
+				if (this.heldItems.contains(player.getOffhandItem().getItem())) {
 					holdingItem = true;
 					if("blacklist".equalsIgnoreCase(this.heldItemsListType)) {
 						return false;

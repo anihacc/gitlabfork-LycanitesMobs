@@ -34,7 +34,7 @@ public class BlockBase extends Block {
 	// Properties:
 	public ModInfo group;
 	public String blockName = "BlockBase";
-    public static final IntegerProperty AGE = BlockStateProperties.AGE_0_15;
+    public static final IntegerProperty AGE = BlockStateProperties.AGE_15;
 	
 	// Stats:
 	/** If set to a value above 0, the block will update on the specified number of ticks. **/
@@ -70,23 +70,23 @@ public class BlockBase extends Block {
 
 	@Override
 	@Nonnull
-	public String getTranslationKey() {
+	public String getDescriptionId() {
 		return "block." + LycanitesMobs.modInfo.modid + "." + this.blockName;
 	}
 
 	@Override
-	public IFormattableTextComponent getTranslatedName() {
-    	return new TranslationTextComponent(this.getTranslationKey());
+	public IFormattableTextComponent getName() {
+    	return new TranslationTextComponent(this.getDescriptionId());
 	}
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
-    public void addInformation(ItemStack stack, @Nullable IBlockReader world, List<ITextComponent> tooltip, ITooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, @Nullable IBlockReader world, List<ITextComponent> tooltip, ITooltipFlag flag) {
         tooltip.add(this.getDescription(stack, world));
     }
 
     public ITextComponent getDescription(ItemStack itemStack, @Nullable IBlockReader world) {
-        return new TranslationTextComponent(this.getTranslationKey() + ".description");
+        return new TranslationTextComponent(this.getDescriptionId() + ".description");
     }
 	
 	
@@ -94,10 +94,10 @@ public class BlockBase extends Block {
 	//                      Place
 	// ==================================================
 	@Override
-	public void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean isMoving) {
+	public void onPlace(BlockState state, World world, BlockPos pos, BlockState oldState, boolean isMoving) {
 		// Initial Block Ticking:
 		if(this.tickRate > 0) {
-			world.getPendingBlockTicks().scheduleTick(pos, this, this.tickRate(world));
+			world.getBlockTicks().scheduleTick(pos, this, this.tickRate(world));
 		}
 	}
     
@@ -113,7 +113,7 @@ public class BlockBase extends Block {
     // ========== Tick Update ==========
     @Override
     public void tick(BlockState state, ServerWorld world, BlockPos pos, Random random) { //tick()
-        if (world.isRemote)
+        if (world.isClientSide)
             return;
 
         // Remove On Tick:
@@ -122,7 +122,7 @@ public class BlockBase extends Block {
 
         // Looping Tick:
         else if (this.tickRate > 0 && this.loopTicks)
-            world.getPendingBlockTicks().scheduleTick(pos, this, this.tickRate(world), TickPriority.LOW);
+            world.getBlockTicks().scheduleTick(pos, this, this.tickRate(world), TickPriority.LOW);
     }
 
     // ========== Can Remove ==========
@@ -145,7 +145,7 @@ public class BlockBase extends Block {
 
 	@Override
 	public VoxelShape getCollisionShape(BlockState blockState, IBlockReader world, BlockPos blockPos, ISelectionContext selectionContext) {
-		return this.canCollide ? blockState.getShape(world, blockPos) : VoxelShapes.empty();
+		return this.hasCollision ? blockState.getShape(world, blockPos) : VoxelShapes.empty();
 	}
     
     
@@ -153,12 +153,12 @@ public class BlockBase extends Block {
 	//                Collision Effects
 	// ==================================================
 	@Override
-	public void onEntityWalk(World world, BlockPos pos, Entity entity) {
-		super.onEntityWalk(world, pos, entity);
+	public void stepOn(World world, BlockPos pos, Entity entity) {
+		super.stepOn(world, pos, entity);
 	}
 
     @Override
-    public void onEntityCollision(BlockState blockState, World world, BlockPos pos, Entity entity) {
-		super.onEntityCollision(blockState, world, pos, entity);
+    public void entityInside(BlockState blockState, World world, BlockPos pos, Entity entity) {
+		super.entityInside(blockState, world, pos, entity);
 	}
 }

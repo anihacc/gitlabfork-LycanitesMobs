@@ -283,7 +283,7 @@ public class MobSpawn {
 		}
 
 		// Chance:
-		if(this.getChance() < 1 && world.rand.nextDouble() > this.getChance()) {
+		if(this.getChance() < 1 && world.random.nextDouble() > this.getChance()) {
 			return false;
 		}
 
@@ -393,7 +393,7 @@ public class MobSpawn {
 			entityLiving.setCustomName(new StringTextComponent(this.mobNameTag));
 		}
 		if(!this.getNaturalDespawn() && entityLiving instanceof MobEntity) {
-			((MobEntity)entityLiving).enablePersistence();
+			((MobEntity)entityLiving).setPersistenceRequired();
 		}
 
 		if(entityLiving instanceof BaseCreatureEntity) {
@@ -415,7 +415,7 @@ public class MobSpawn {
 				entityCreature.setFixateTarget(player);
 			}
 			if(this.home >= 0) {
-				entityCreature.setHome((int)entityCreature.getPositionVec().getX(), (int)entityCreature.getPositionVec().getY(), (int)entityCreature.getPositionVec().getZ(), (float)this.home);
+				entityCreature.setHome((int)entityCreature.position().x(), (int)entityCreature.position().y(), (int)entityCreature.position().z(), (float)this.home);
 			}
 			if(this.mobLevel > 0) {
 				entityCreature.addLevel(this.mobLevel);

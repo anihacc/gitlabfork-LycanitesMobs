@@ -52,30 +52,30 @@ public class EntityAbaia extends TameableCreatureEntity implements IMob {
     // ==================================================
 	// ========== Living Update ==========
 	@Override
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
 
         // Static Aura Attack:
-        if(!this.getEntityWorld().isRemote && this.hasAttackTarget() && ++this.aoeAttackTick == (this.isPetType("familiar") ? 100 : 40)) {
+        if(!this.getCommandSenderWorld().isClientSide && this.hasAttackTarget() && ++this.aoeAttackTick == (this.isPetType("familiar") ? 100 : 40)) {
             this.aoeAttackTick = 0;
             List aoeTargets = this.getNearbyEntities(LivingEntity.class, null, 4);
             for(Object entityObj : aoeTargets) {
                 LivingEntity target = (LivingEntity)entityObj;
-                if(target != this && this.canAttack(target.getType()) && this.canAttack(target) && this.getEntitySenses().canSee(target) && (target.isInWater() || this.isRareVariant())) {
-                    target.attackEntityFrom(ElementDamageSource.causeElementDamage(this, ElementManager.getInstance().getElement("lightning")), this.getAttackDamage(1));
+                if(target != this && this.canAttackType(target.getType()) && this.canAttack(target) && this.getSensing().canSee(target) && (target.isInWater() || this.isRareVariant())) {
+                    target.hurt(ElementDamageSource.causeElementDamage(this, ElementManager.getInstance().getElement("lightning")), this.getAttackDamage(1));
                 }
             }
         }
 
         // Particles:
-        if(this.getEntityWorld().isRemote && this.hasAttackTarget()) {
-            this.getEntityWorld().addParticle(ParticleTypes.CRIT, this.getPositionVec().getX() + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width, this.getPositionVec().getY() + this.rand.nextDouble() * (double) this.getSize(Pose.STANDING).height, this.getPositionVec().getZ() + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
+        if(this.getCommandSenderWorld().isClientSide && this.hasAttackTarget()) {
+            this.getCommandSenderWorld().addParticle(ParticleTypes.CRIT, this.position().x() + (this.random.nextDouble() - 0.5D) * (double) this.getDimensions(Pose.STANDING).width, this.position().y() + this.random.nextDouble() * (double) this.getDimensions(Pose.STANDING).height, this.position().z() + (this.random.nextDouble() - 0.5D) * (double) this.getDimensions(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
 
             List aoeTargets = this.getNearbyEntities(LivingEntity.class, null, 4);
             for(Object entityObj : aoeTargets) {
                 LivingEntity target = (LivingEntity)entityObj;
-                if(this.canAttack(target.getType()) && this.canAttack(target) && this.getEntitySenses().canSee(target)) {
-                    this.getEntityWorld().addParticle(ParticleTypes.CRIT, target.getPositionVec().getX() + (this.rand.nextDouble() - 0.5D) * (double) target.getSize(Pose.STANDING).width, target.getPositionVec().getY() + this.rand.nextDouble() * (double) target.getSize(Pose.STANDING).height, target.getPositionVec().getZ() + (this.rand.nextDouble() - 0.5D) * (double) target.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
+                if(this.canAttackType(target.getType()) && this.canAttack(target) && this.getSensing().canSee(target)) {
+                    this.getCommandSenderWorld().addParticle(ParticleTypes.CRIT, target.position().x() + (this.random.nextDouble() - 0.5D) * (double) target.getDimensions(Pose.STANDING).width, target.position().y() + this.random.nextDouble() * (double) target.getDimensions(Pose.STANDING).height, target.position().z() + (this.random.nextDouble() - 0.5D) * (double) target.getDimensions(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
                 }
             }
         }
@@ -90,13 +90,13 @@ public class EntityAbaia extends TameableCreatureEntity implements IMob {
 	public float getBlockPathWeight(int x, int y, int z) {
         int waterWeight = 10;
 
-        Block block = this.getEntityWorld().getBlockState(new BlockPos(x, y, z)).getBlock();
+        Block block = this.getCommandSenderWorld().getBlockState(new BlockPos(x, y, z)).getBlock();
         if(block == Blocks.WATER)
             return (super.getBlockPathWeight(x, y, z) + 1) * (waterWeight + 1);
-        if(this.getEntityWorld().isRaining() && this.getEntityWorld().canBlockSeeSky(new BlockPos(x, y, z)))
+        if(this.getCommandSenderWorld().isRaining() && this.getCommandSenderWorld().canSeeSkyFromBelowWater(new BlockPos(x, y, z)))
             return (super.getBlockPathWeight(x, y, z) + 1) * (waterWeight + 1);
 
-        if(this.getAttackTarget() != null)
+        if(this.getTarget() != null)
             return super.getBlockPathWeight(x, y, z);
         if(this.waterContact())
             return -999999.0F;

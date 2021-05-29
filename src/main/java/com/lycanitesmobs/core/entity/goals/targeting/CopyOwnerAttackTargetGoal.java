@@ -25,7 +25,7 @@ public class CopyOwnerAttackTargetGoal extends TargetingGoal {
   	//                   Should Execute
   	// ==================================================
     @Override
-    public boolean shouldExecute() {
+    public boolean canUse() {
     	if(!this.host.isTamed())
     		return false;
     	if(this.host.isSitting())
@@ -38,8 +38,8 @@ public class CopyOwnerAttackTargetGoal extends TargetingGoal {
             return false;
 
         LivingEntity owner = (LivingEntity)this.host.getOwner();
-		int lastAttackedTime = owner.getLastAttackedEntityTime();
-    	this.target = owner.getLastAttackedEntity();
+		int lastAttackedTime = owner.getLastHurtMobTimestamp();
+    	this.target = owner.getLastHurtMob();
 		if(this.target == null) {
 			ExtendedEntity extendedOwner = ExtendedEntity.getForEntity(owner);
 			if(extendedOwner != null) {
@@ -60,10 +60,10 @@ public class CopyOwnerAttackTargetGoal extends TargetingGoal {
   	//                       Start
   	// ==================================================
     @Override
-    public void startExecuting() {
+    public void start() {
     	if(this.isEntityTargetable(this.target, false)) {
-			this.lastAttackTime = ((LivingEntity)this.host.getOwner()).getLastAttackedEntityTime();
-			super.startExecuting();
+			this.lastAttackTime = ((LivingEntity)this.host.getOwner()).getLastHurtMobTimestamp();
+			super.start();
 		}
     }
     
@@ -72,10 +72,10 @@ public class CopyOwnerAttackTargetGoal extends TargetingGoal {
  	//                  Continue Executing
  	// ==================================================
     @Override
-    public boolean shouldContinueExecuting() {
+    public boolean canContinueToUse() {
         if(this.host.isSitting() || !this.isValidTarget(this.getTarget()))
             return false;
-        return super.shouldContinueExecuting();
+        return super.canContinueToUse();
     }
     
     
@@ -90,7 +90,7 @@ public class CopyOwnerAttackTargetGoal extends TargetingGoal {
             return false;
 		if(target == this.host)
             return false;
-		if(!this.host.canAttack(target.getType()))
+		if(!this.host.canAttackType(target.getType()))
             return false;
 		if(!this.host.canAttack(target))
             return false;
@@ -102,7 +102,7 @@ public class CopyOwnerAttackTargetGoal extends TargetingGoal {
  	//                    Host Target
  	// ==================================================
     @Override
-    protected LivingEntity getTarget() { return this.host.getAttackTarget(); }
+    protected LivingEntity getTarget() { return this.host.getTarget(); }
     @Override
-    protected void setTarget(LivingEntity newTarget) { this.host.setAttackTarget(newTarget); }
+    protected void setTarget(LivingEntity newTarget) { this.host.setTarget(newTarget); }
 }

@@ -25,7 +25,7 @@ public class MobEventsCommand {
 
 	public static int reload(final CommandContext<CommandSource> context) {
 		MobEventManager.getInstance().reload();
-		context.getSource().sendFeedback(new TranslationTextComponent("lyc.command.mobevents.reload"), true);
+		context.getSource().sendSuccess(new TranslationTextComponent("lyc.command.mobevents.reload"), true);
 		return 0;
 	}
 
@@ -36,7 +36,7 @@ public class MobEventsCommand {
 		MobEventManager.getInstance().mobEventsRandom = true;
 		ConfigMobEvent.INSTANCE.mobEventsRandom.set(true);
 		ConfigMobEvent.INSTANCE.mobEventsRandom.save();
-		context.getSource().sendFeedback(new TranslationTextComponent("lyc.command.mobevents.enable"), true);
+		context.getSource().sendSuccess(new TranslationTextComponent("lyc.command.mobevents.enable"), true);
 		return 0;
 	}
 
@@ -44,27 +44,27 @@ public class MobEventsCommand {
 		MobEventManager.getInstance().mobEventsRandom = false;
 		ConfigMobEvent.INSTANCE.mobEventsRandom.set(false);
 		ConfigMobEvent.INSTANCE.mobEventsRandom.save();
-		context.getSource().sendFeedback(new TranslationTextComponent("lyc.command.mobevents.disable"), true);
+		context.getSource().sendSuccess(new TranslationTextComponent("lyc.command.mobevents.disable"), true);
 		return 0;
 	}
 
 	public static int creativeEnable(final CommandContext<CommandSource> context) {
 		MobEventPlayerServer.testOnCreative = true;
-		context.getSource().sendFeedback(new TranslationTextComponent("lyc.command.mobevents.creative.enable"), true);
+		context.getSource().sendSuccess(new TranslationTextComponent("lyc.command.mobevents.creative.enable"), true);
 		return 0;
 	}
 
 	public static int creativeDisable(final CommandContext<CommandSource> context) {
 		MobEventPlayerServer.testOnCreative = false;
-		context.getSource().sendFeedback(new TranslationTextComponent("lyc.command.mobevents.creative.disable"), true);
+		context.getSource().sendSuccess(new TranslationTextComponent("lyc.command.mobevents.creative.disable"), true);
 		return 0;
 	}
 
 	public static int list(final CommandContext<CommandSource> context) {
-		context.getSource().sendFeedback(new TranslationTextComponent("lyc.command.mobevents.list"), true);
+		context.getSource().sendSuccess(new TranslationTextComponent("lyc.command.mobevents.list"), true);
 		for(MobEvent mobEvent : MobEventManager.getInstance().mobEvents.values()) {
 			String eventName = mobEvent.name + " (" + mobEvent.getTitle().getString() + ")";
-			context.getSource().sendFeedback(new StringTextComponent(eventName), true);
+			context.getSource().sendSuccess(new StringTextComponent(eventName), true);
 		}
 		return 0;
 	}

@@ -97,24 +97,24 @@ public class Effects {
 		}
 
 		// Null Effect Fix:
-		for(Object potionEffectObj : entity.getActivePotionEffects()) {
+		for(Object potionEffectObj : entity.getActiveEffects()) {
 			if(potionEffectObj == null) {
-				entity.clearActivePotions();
+				entity.removeAllEffects();
 				LycanitesMobs.logWarning("EffectsSetup", "Found a null potion effect on entity: " + entity + " all effects have been removed from this entity.");
 			}
 		}
 		
 		// Night Vision Stops Blindness:
-		if(entity.isPotionActive(net.minecraft.potion.Effects.BLINDNESS) && entity.isPotionActive(net.minecraft.potion.Effects.NIGHT_VISION)) {
-			entity.removePotionEffect(net.minecraft.potion.Effects.BLINDNESS);
+		if(entity.hasEffect(net.minecraft.potion.Effects.BLINDNESS) && entity.hasEffect(net.minecraft.potion.Effects.NIGHT_VISION)) {
+			entity.removeEffect(net.minecraft.potion.Effects.BLINDNESS);
 		}
 
 
 		// Disable Nausea:
 		this.disableNausea = ConfigExtra.INSTANCE.disableNausea.get();
 		if(this.disableNausea && event.getEntityLiving() instanceof PlayerEntity) {
-			if(entity.isPotionActive(net.minecraft.potion.Effects.NAUSEA)) {
-				entity.removePotionEffect(net.minecraft.potion.Effects.NAUSEA);
+			if(entity.hasEffect(net.minecraft.potion.Effects.CONFUSION)) {
+				entity.removeEffect(net.minecraft.potion.Effects.CONFUSION);
 			}
 		}
 
@@ -130,8 +130,8 @@ public class Effects {
 		// Paralysis
 		EffectBase paralysis = ObjectManager.getEffect("paralysis");
 		if(paralysis != null) {
-			if(!invulnerable && entity.isPotionActive(paralysis)) {
-				entity.setMotion(0, entity.getMotion().getY() > 0 ? 0 : entity.getMotion().getY(), 0);
+			if(!invulnerable && entity.hasEffect(paralysis)) {
+				entity.setDeltaMovement(0, entity.getDeltaMovement().y() > 0 ? 0 : entity.getDeltaMovement().y(), 0);
 				entity.setOnGround(false);
 			}
 		}
@@ -139,21 +139,21 @@ public class Effects {
 		// Weight
 		EffectBase weight = ObjectManager.getEffect("weight");
 		if(weight != null) {
-			if(!invulnerable && entity.isPotionActive(weight) && !entity.isPotionActive(net.minecraft.potion.Effects.STRENGTH)) {
-				if(entity.getMotion().getY() > -0.2D)
-					entity.setMotion(entity.getMotion().add(0, -0.2D, 0));
+			if(!invulnerable && entity.hasEffect(weight) && !entity.hasEffect(net.minecraft.potion.Effects.DAMAGE_BOOST)) {
+				if(entity.getDeltaMovement().y() > -0.2D)
+					entity.setDeltaMovement(entity.getDeltaMovement().add(0, -0.2D, 0));
 			}
 		}
 		
 		// Fear
 		EffectBase fear = ObjectManager.getEffect("fear");
-		if(fear != null && !entity.getEntityWorld().isRemote) {
-			if(!invulnerable && entity.isPotionActive(fear)) {
+		if(fear != null && !entity.getCommandSenderWorld().isClientSide) {
+			if(!invulnerable && entity.hasEffect(fear)) {
 				ExtendedEntity extendedEntity = ExtendedEntity.getForEntity(entity);
 				if(extendedEntity != null) {
 					if(extendedEntity.fearEntity == null) {
-						FearEntity fearEntity = new FearEntity((EntityType<? extends FearEntity>) CreatureManager.getInstance().getEntityType("fear"), entity.getEntityWorld(), entity);
-						entity.getEntityWorld().addEntity(fearEntity);
+						FearEntity fearEntity = new FearEntity((EntityType<? extends FearEntity>) CreatureManager.getInstance().getEntityType("fear"), entity.getCommandSenderWorld(), entity);
+						entity.getCommandSenderWorld().addFreshEntity(fearEntity);
 						extendedEntity.fearEntity = fearEntity;
 					}
 				}
@@ -162,23 +162,23 @@ public class Effects {
 
 		// Instability
 		EffectBase instability = ObjectManager.getEffect("instability");
-		if(instability != null && !entity.getEntityWorld().isRemote && !(entity instanceof IGroupBoss)) {
-			if(!invulnerable && entity.isPotionActive(instability)) {
-				if(entity.getEntityWorld().rand.nextDouble() <= 0.1) {
-					double strength = 1 + entity.getActivePotionEffect(instability).getAmplifier();
-					double motionX = strength * (entity.getEntityWorld().rand.nextDouble() - 0.5D);
-					double motionY = strength * (entity.getEntityWorld().rand.nextDouble() - 0.5D);
-					double motionZ = strength * (entity.getEntityWorld().rand.nextDouble() - 0.5D);
-					entity.setMotion(entity.getMotion().add(motionX, motionY, motionZ));
+		if(instability != null && !entity.getCommandSenderWorld().isClientSide && !(entity instanceof IGroupBoss)) {
+			if(!invulnerable && entity.hasEffect(instability)) {
+				if(entity.getCommandSenderWorld().random.nextDouble() <= 0.1) {
+					double strength = 1 + entity.getEffect(instability).getAmplifier();
+					double motionX = strength * (entity.getCommandSenderWorld().random.nextDouble() - 0.5D);
+					double motionY = strength * (entity.getCommandSenderWorld().random.nextDouble() - 0.5D);
+					double motionZ = strength * (entity.getCommandSenderWorld().random.nextDouble() - 0.5D);
+					entity.setDeltaMovement(entity.getDeltaMovement().add(motionX, motionY, motionZ));
 					try {
 						if (entity instanceof ServerPlayerEntity) {
 							ServerPlayerEntity player = (ServerPlayerEntity) entity;
-							player.connection.sendPacket(new SEntityVelocityPacket(entity));
+							player.connection.send(new SEntityVelocityPacket(entity));
 							MessageEntityVelocity messageEntityVelocity = new MessageEntityVelocity(
 									player,
-									strength * (entity.getEntityWorld().rand.nextDouble() - 0.5D),
-									strength * (entity.getEntityWorld().rand.nextDouble() - 0.5D),
-									strength * (entity.getEntityWorld().rand.nextDouble() - 0.5D)
+									strength * (entity.getCommandSenderWorld().random.nextDouble() - 0.5D),
+									strength * (entity.getCommandSenderWorld().random.nextDouble() - 0.5D),
+									strength * (entity.getCommandSenderWorld().random.nextDouble() - 0.5D)
 							);
 							LycanitesMobs.packetHandler.sendToPlayer(messageEntityVelocity, player);
 						}
@@ -193,34 +193,34 @@ public class Effects {
 
 		// Plague
 		EffectBase plague = ObjectManager.getEffect("plague");
-		if(plague != null && !entity.getEntityWorld().isRemote) {
-			if(!invulnerable && entity.isPotionActive(plague)) {
+		if(plague != null && !entity.getCommandSenderWorld().isClientSide) {
+			if(!invulnerable && entity.hasEffect(plague)) {
 
 				// Poison:
-				int poisonAmplifier = entity.getActivePotionEffect(plague).getAmplifier();
-				int poisonDuration = entity.getActivePotionEffect(plague).getDuration();
-				if(entity.isPotionActive(net.minecraft.potion.Effects.POISON)) {
-					poisonAmplifier = Math.max(poisonAmplifier, entity.getActivePotionEffect(net.minecraft.potion.Effects.POISON).getAmplifier());
-					poisonDuration = Math.max(poisonDuration, entity.getActivePotionEffect(net.minecraft.potion.Effects.POISON).getDuration());
+				int poisonAmplifier = entity.getEffect(plague).getAmplifier();
+				int poisonDuration = entity.getEffect(plague).getDuration();
+				if(entity.hasEffect(net.minecraft.potion.Effects.POISON)) {
+					poisonAmplifier = Math.max(poisonAmplifier, entity.getEffect(net.minecraft.potion.Effects.POISON).getAmplifier());
+					poisonDuration = Math.max(poisonDuration, entity.getEffect(net.minecraft.potion.Effects.POISON).getDuration());
 				}
-				entity.addPotionEffect(new EffectInstance(net.minecraft.potion.Effects.POISON, poisonDuration, poisonAmplifier));
+				entity.addEffect(new EffectInstance(net.minecraft.potion.Effects.POISON, poisonDuration, poisonAmplifier));
 
 				// Spread:
-				if(entity.getEntityWorld().getGameTime() % 20 == 0) {
+				if(entity.getCommandSenderWorld().getGameTime() % 20 == 0) {
 					List aoeTargets = this.getNearbyEntities(entity, LivingEntity.class, null, 2);
 					for(Object entityObj : aoeTargets) {
 						LivingEntity target = (LivingEntity)entityObj;
-						if(target != entity && !entity.isOnSameTeam(target)) {
-							if(target instanceof PlayerEntity && !entity.canEntityBeSeen(target)) {
+						if(target != entity && !entity.isAlliedTo(target)) {
+							if(target instanceof PlayerEntity && !entity.canSee(target)) {
 								continue;
 							}
-							int amplifier = entity.getActivePotionEffect(plague).getAmplifier();
-							int duration = entity.getActivePotionEffect(plague).getDuration();
+							int amplifier = entity.getEffect(plague).getAmplifier();
+							int duration = entity.getEffect(plague).getDuration();
 							if(amplifier > 0) {
-								target.addPotionEffect(new EffectInstance(plague, duration, amplifier - 1));
+								target.addEffect(new EffectInstance(plague, duration, amplifier - 1));
 							}
 							else {
-								target.addPotionEffect(new EffectInstance(net.minecraft.potion.Effects.POISON, duration, amplifier));
+								target.addEffect(new EffectInstance(net.minecraft.potion.Effects.POISON, duration, amplifier));
 							}
 						}
 					}
@@ -230,30 +230,30 @@ public class Effects {
 
 		// Smited
 		EffectBase smited = ObjectManager.getEffect("smited");
-		if(smited != null && !entity.getEntityWorld().isRemote) {
-			if(!invulnerable && entity.isPotionActive(smited) && entity.getEntityWorld().getGameTime() % 20 == 0) {
+		if(smited != null && !entity.getCommandSenderWorld().isClientSide) {
+			if(!invulnerable && entity.hasEffect(smited) && entity.getCommandSenderWorld().getGameTime() % 20 == 0) {
 				float brightness = entity.getBrightness();
-				if(brightness > 0.5F && entity.getEntityWorld().canBlockSeeSky(entity.getPosition())) {
-					entity.setFire(4);
+				if(brightness > 0.5F && entity.getCommandSenderWorld().canSeeSkyFromBelowWater(entity.blockPosition())) {
+					entity.setSecondsOnFire(4);
 				}
 			}
 		}
 
 		// Bleed
 		EffectBase bleed = ObjectManager.getEffect("bleed");
-		if(bleed != null && !entity.getEntityWorld().isRemote) {
-			if(!invulnerable && entity.isPotionActive(bleed) && entity.getEntityWorld().getGameTime() % 20 == 0 && entity.getRidingEntity() == null) {
-				if(entity.prevDistanceWalkedModified != entity.distanceWalkedModified) {
-					entity.attackEntityFrom(DamageSource.MAGIC, entity.getActivePotionEffect(bleed).getAmplifier() + 1);
+		if(bleed != null && !entity.getCommandSenderWorld().isClientSide) {
+			if(!invulnerable && entity.hasEffect(bleed) && entity.getCommandSenderWorld().getGameTime() % 20 == 0 && entity.getVehicle() == null) {
+				if(entity.walkDistO != entity.walkDist) {
+					entity.hurt(DamageSource.MAGIC, entity.getEffect(bleed).getAmplifier() + 1);
 				}
 			}
 		}
 
 		// Smouldering
 		EffectBase smouldering = ObjectManager.getEffect("smouldering");
-		if(smouldering != null && !entity.getEntityWorld().isRemote) {
-			if(!invulnerable && entity.isPotionActive(smouldering) && entity.getEntityWorld().getGameTime() % 20 == 0) {
-				entity.setFire(4 + (4 * entity.getActivePotionEffect(smouldering).getAmplifier()));
+		if(smouldering != null && !entity.getCommandSenderWorld().isClientSide) {
+			if(!invulnerable && entity.hasEffect(smouldering) && entity.getCommandSenderWorld().getGameTime() % 20 == 0) {
+				entity.setSecondsOnFire(4 + (4 * entity.getEffect(smouldering).getAmplifier()));
 			}
 		}
 
@@ -265,29 +265,29 @@ public class Effects {
 			PlayerEntity player = (PlayerEntity)entity;
 			ModifiableAttributeInstance movement = entity.getAttribute(net.minecraftforge.common.ForgeMod.SWIM_SPEED.get());
 			int amplifier = -1;
-			if(entity.isPotionActive(swiftswimming)) {
-				amplifier = entity.getActivePotionEffect(swiftswimming).getAmplifier();
+			if(entity.hasEffect(swiftswimming)) {
+				amplifier = entity.getEffect(swiftswimming).getAmplifier();
 			}
 			if(amplifier == 0 && movement.getModifier(swiftswimmingMoveBoostUUID) == null) {
-				movement.applyPersistentModifier(swiftswimmingMoveBoost);
+				movement.addPermanentModifier(swiftswimmingMoveBoost);
 			}
 			else if(amplifier != 0 && movement.getModifier(swiftswimmingMoveBoostUUID) != null) {
 				movement.removeModifier(swiftswimmingMoveBoost);
 			}
 			if(amplifier == 1 && movement.getModifier(swiftswimmingMoveBoostUUID2) == null) {
-				movement.applyPersistentModifier(swiftswimmingMoveBoost2);
+				movement.addPermanentModifier(swiftswimmingMoveBoost2);
 			}
 			else if(amplifier != 1 && movement.getModifier(swiftswimmingMoveBoostUUID2) != null) {
 				movement.removeModifier(swiftswimmingMoveBoost2);
 			}
 			if(amplifier == 2 && movement.getModifier(swiftswimmingMoveBoostUUID3) == null) {
-				movement.applyPersistentModifier(swiftswimmingMoveBoost3);
+				movement.addPermanentModifier(swiftswimmingMoveBoost3);
 			}
 			else if(amplifier != 2 && movement.getModifier(swiftswimmingMoveBoostUUID3) != null) {
 				movement.removeModifier(swiftswimmingMoveBoost3);
 			}
 			if(amplifier >= 3 && movement.getModifier(swiftswimmingMoveBoostUUID4) == null) {
-				movement.applyPersistentModifier(swiftswimmingMoveBoost4);
+				movement.addPermanentModifier(swiftswimmingMoveBoost4);
 			}
 			else if(amplifier < 3 && movement.getModifier(swiftswimmingMoveBoostUUID4) != null) {
 				movement.removeModifier(swiftswimmingMoveBoost4);
@@ -296,23 +296,23 @@ public class Effects {
 
 		// Immunisation
 		EffectBase immunization = ObjectManager.getEffect("immunization");
-		if(immunization != null && !entity.getEntityWorld().isRemote) {
-			if(entity.isPotionActive(ObjectManager.getEffect("immunization"))) {
-				if(entity.isPotionActive(net.minecraft.potion.Effects.POISON)) {
-					entity.removePotionEffect(net.minecraft.potion.Effects.POISON);
+		if(immunization != null && !entity.getCommandSenderWorld().isClientSide) {
+			if(entity.hasEffect(ObjectManager.getEffect("immunization"))) {
+				if(entity.hasEffect(net.minecraft.potion.Effects.POISON)) {
+					entity.removeEffect(net.minecraft.potion.Effects.POISON);
 				}
-				if(entity.isPotionActive(net.minecraft.potion.Effects.HUNGER)) {
-					entity.removePotionEffect(net.minecraft.potion.Effects.HUNGER);
+				if(entity.hasEffect(net.minecraft.potion.Effects.HUNGER)) {
+					entity.removeEffect(net.minecraft.potion.Effects.HUNGER);
 				}
-				if(entity.isPotionActive(net.minecraft.potion.Effects.WEAKNESS)) {
-					entity.removePotionEffect(net.minecraft.potion.Effects.WEAKNESS);
+				if(entity.hasEffect(net.minecraft.potion.Effects.WEAKNESS)) {
+					entity.removeEffect(net.minecraft.potion.Effects.WEAKNESS);
 				}
-				if(entity.isPotionActive(net.minecraft.potion.Effects.NAUSEA)) {
-					entity.removePotionEffect(net.minecraft.potion.Effects.NAUSEA);
+				if(entity.hasEffect(net.minecraft.potion.Effects.CONFUSION)) {
+					entity.removeEffect(net.minecraft.potion.Effects.CONFUSION);
 				}
 				if(ObjectManager.getEffect("paralysis") != null) {
-					if(entity.isPotionActive(ObjectManager.getEffect("paralysis"))) {
-						entity.removePotionEffect(ObjectManager.getEffect("paralysis"));
+					if(entity.hasEffect(ObjectManager.getEffect("paralysis"))) {
+						entity.removeEffect(ObjectManager.getEffect("paralysis"));
 					}
 				}
 			}
@@ -320,22 +320,22 @@ public class Effects {
 
 		// Cleansed
 		EffectBase cleansed = ObjectManager.getEffect("cleansed");
-		if(ObjectManager.getEffect("cleansed") != null && !entity.getEntityWorld().isRemote) {
-			if(entity.isPotionActive(ObjectManager.getEffect("cleansed"))) {
-				if(entity.isPotionActive(net.minecraft.potion.Effects.WITHER)) {
-					entity.removePotionEffect(net.minecraft.potion.Effects.WITHER);
+		if(ObjectManager.getEffect("cleansed") != null && !entity.getCommandSenderWorld().isClientSide) {
+			if(entity.hasEffect(ObjectManager.getEffect("cleansed"))) {
+				if(entity.hasEffect(net.minecraft.potion.Effects.WITHER)) {
+					entity.removeEffect(net.minecraft.potion.Effects.WITHER);
 				}
-				if(entity.isPotionActive(net.minecraft.potion.Effects.UNLUCK)) {
-					entity.removePotionEffect(net.minecraft.potion.Effects.UNLUCK);
+				if(entity.hasEffect(net.minecraft.potion.Effects.UNLUCK)) {
+					entity.removeEffect(net.minecraft.potion.Effects.UNLUCK);
 				}
 				if(ObjectManager.getEffect("fear") != null) {
-					if(entity.isPotionActive(ObjectManager.getEffect("fear"))) {
-						entity.removePotionEffect(ObjectManager.getEffect("fear"));
+					if(entity.hasEffect(ObjectManager.getEffect("fear"))) {
+						entity.removeEffect(ObjectManager.getEffect("fear"));
 					}
 				}
 				if(ObjectManager.getEffect("insomnia") != null) {
-					if(entity.isPotionActive(ObjectManager.getEffect("insomnia"))) {
-						entity.removePotionEffect(ObjectManager.getEffect("insomnia"));
+					if(entity.hasEffect(ObjectManager.getEffect("insomnia"))) {
+						entity.removeEffect(ObjectManager.getEffect("insomnia"));
 					}
 				}
 			}
@@ -355,7 +355,7 @@ public class Effects {
 		boolean invulnerable = false;
 		if(entity instanceof PlayerEntity) {
 			PlayerEntity player = (PlayerEntity)entity;
-			invulnerable = player.abilities.disableDamage;
+			invulnerable = player.abilities.invulnerable;
 		}
 		if(invulnerable) {
 			return;
@@ -364,14 +364,14 @@ public class Effects {
 		// Anti-Jumping:
 		EffectBase paralysis = ObjectManager.getEffect("paralysis");
 		if(paralysis != null) {
-			if(entity.isPotionActive(paralysis)) {
+			if(entity.hasEffect(paralysis)) {
 				if(event.isCancelable()) event.setCanceled(true);
 			}
 		}
 
 		EffectBase weight = ObjectManager.getEffect("weight");
 		if(weight != null) {
-			if(entity.isPotionActive(weight)) {
+			if(entity.hasEffect(weight)) {
 				if(event.isCancelable()) event.setCanceled(true);
 			}
 		}
@@ -391,8 +391,8 @@ public class Effects {
 
 		LivingEntity target = event.getEntityLiving();
 		LivingEntity attacker = null;
-		if(event.getSource().getTrueSource() != null && event.getSource().getTrueSource() instanceof LivingEntity) {
-			attacker = (LivingEntity) event.getSource().getTrueSource();
+		if(event.getSource().getEntity() != null && event.getSource().getEntity() instanceof LivingEntity) {
+			attacker = (LivingEntity) event.getSource().getEntity();
 		}
 		if(attacker == null) {
 			return;
@@ -401,8 +401,8 @@ public class Effects {
 		// ========== Debuffs ==========
 		// Lifeleak
 		EffectBase lifeleak = ObjectManager.getEffect("lifeleak");
-		if(lifeleak != null && !event.getEntityLiving().getEntityWorld().isRemote) {
-			if(attacker.isPotionActive(lifeleak)) {
+		if(lifeleak != null && !event.getEntityLiving().getCommandSenderWorld().isClientSide) {
+			if(attacker.hasEffect(lifeleak)) {
 				if (event.isCancelable()) {
 					event.setCanceled(true);
 				}
@@ -423,15 +423,15 @@ public class Effects {
         if(event.getEntityLiving() == null)
             return;
 		LivingEntity target = event.getEntityLiving();
-		Entity attacker = event.getSource().getTrueSource();
+		Entity attacker = event.getSource().getEntity();
 
 
 		// ========== Debuffs ==========
         // Fall Resistance
 		EffectBase fallresist = ObjectManager.getEffect("fallresist");
 		if(fallresist != null) {
-            if(event.getEntityLiving().isPotionActive(fallresist)) {
-                if("fall".equals(event.getSource().damageType)) {
+            if(event.getEntityLiving().hasEffect(fallresist)) {
+                if("fall".equals(event.getSource().msgId)) {
                     event.setAmount(0);
                     event.setCanceled(true);
                 }
@@ -441,9 +441,9 @@ public class Effects {
 		// Penetration
 		EffectBase penetration = ObjectManager.getEffect("penetration");
 		if(penetration != null) {
-			if(event.getEntityLiving().isPotionActive(penetration)) {
+			if(event.getEntityLiving().hasEffect(penetration)) {
 				float damage = event.getAmount();
-				float multiplier = 0.25F * (event.getEntityLiving().getActivePotionEffect(penetration).getAmplifier() + 1);
+				float multiplier = 0.25F * (event.getEntityLiving().getEffect(penetration).getAmplifier() + 1);
 				event.setAmount(damage + (damage * multiplier));
 			}
 		}
@@ -451,8 +451,8 @@ public class Effects {
 		// Fear
 		EffectBase fear = ObjectManager.getEffect("fear");
 		if(fear != null) {
-			if(event.getEntityLiving().isPotionActive(fear)) {
-				if("inWall".equals(event.getSource().damageType)) {
+			if(event.getEntityLiving().hasEffect(fear)) {
+				if("inWall".equals(event.getSource().msgId)) {
 					event.setAmount(0);
 					event.setCanceled(true);
 				}
@@ -463,17 +463,17 @@ public class Effects {
         // ========== Buffs ==========
         // Leeching
 		EffectBase leech = ObjectManager.getEffect("leech");
-		if(leech != null && event.getSource().getTrueSource() != null) {
+		if(leech != null && event.getSource().getEntity() != null) {
 			LivingEntity leechingEntity = null;
-			if(event.getSource().getImmediateSource() instanceof LivingEntity) {
-				leechingEntity = (LivingEntity)event.getSource().getImmediateSource();
+			if(event.getSource().getDirectEntity() instanceof LivingEntity) {
+				leechingEntity = (LivingEntity)event.getSource().getDirectEntity();
 			}
-			else if(event.getSource().getTrueSource() instanceof LivingEntity) {
-				leechingEntity = (LivingEntity)event.getSource().getTrueSource();
+			else if(event.getSource().getEntity() instanceof LivingEntity) {
+				leechingEntity = (LivingEntity)event.getSource().getEntity();
 			}
 			if(leechingEntity != null) {
-				if(leechingEntity.isPotionActive(leech)) {
-					int leeching = leechingEntity.getActivePotionEffect(leech).getAmplifier() + 1;
+				if(leechingEntity.hasEffect(leech)) {
+					int leeching = leechingEntity.getEffect(leech).getAmplifier() + 1;
 					leechingEntity.heal(Math.max(leeching, 1));
 				}
 			}
@@ -486,16 +486,16 @@ public class Effects {
 			if(!attackerIsBoss && CreatureManager.getInstance().getCreatureGroup("boss") != null) {
 				attackerIsBoss = CreatureManager.getInstance().getCreatureGroup("boss").hasEntity(attacker);
 			}
-			if(attacker != null && !attackerIsBoss && target.isPotionActive(repulsion)) {
-				double knockback = target.getActivePotionEffect(repulsion).getAmplifier() + 2;
-				double xDist = attacker.getPositionVec().getX() - target.getPositionVec().getX();
-				double zDist = attacker.getPositionVec().getZ() - target.getPositionVec().getZ();
+			if(attacker != null && !attackerIsBoss && target.hasEffect(repulsion)) {
+				double knockback = target.getEffect(repulsion).getAmplifier() + 2;
+				double xDist = attacker.position().x() - target.position().x();
+				double zDist = attacker.position().z() - target.position().z();
 				double xzDist = Math.max(MathHelper.sqrt(xDist * xDist + zDist * zDist), 0.01D);
 				double motionCap = 10;
 				double xVel = xDist / xzDist * knockback;
 				double zVel = zDist / xzDist * knockback;
-				if (attacker.getMotion().getX() < motionCap && attacker.getMotion().getX() > -motionCap && attacker.getMotion().getZ() < motionCap && attacker.getMotion().getZ() > -motionCap) {
-					attacker.addVelocity(xVel, 0, zVel);
+				if (attacker.getDeltaMovement().x() < motionCap && attacker.getDeltaMovement().x() > -motionCap && attacker.getDeltaMovement().z() < motionCap && attacker.getDeltaMovement().z() > -motionCap) {
+					attacker.push(xVel, 0, zVel);
 				}
 			}
 		}
@@ -514,16 +514,16 @@ public class Effects {
 		// Rejuvenation:
 		EffectBase rejuvenation = ObjectManager.getEffect("rejuvenation");
 		if(rejuvenation != null) {
-			if(entity.isPotionActive(rejuvenation)) {
-				event.setAmount((float)Math.ceil(event.getAmount() * (2 * (1 + entity.getActivePotionEffect(rejuvenation).getAmplifier()))));
+			if(entity.hasEffect(rejuvenation)) {
+				event.setAmount((float)Math.ceil(event.getAmount() * (2 * (1 + entity.getEffect(rejuvenation).getAmplifier()))));
 			}
 		}
 
 		// Decay:
 		EffectBase decay = ObjectManager.getEffect("decay");
 		if(decay != null) {
-			if(entity.isPotionActive(decay)) {
-				event.setAmount((float)Math.floor(event.getAmount() / (2 * (1 + entity.getActivePotionEffect(decay).getAmplifier()))));
+			if(entity.hasEffect(decay)) {
+				event.setAmount((float)Math.floor(event.getAmount() / (2 * (1 + entity.getEffect(decay).getAmplifier()))));
 			}
 		}
 	}
@@ -536,12 +536,12 @@ public class Effects {
 	@SubscribeEvent
 	public void onSleep(PlayerSleepInBedEvent event) {
 		PlayerEntity player = event.getPlayer();
-		if(player == null || player.getEntityWorld().isRemote || event.isCanceled())
+		if(player == null || player.getCommandSenderWorld().isClientSide || event.isCanceled())
 			return;
 
 		// Insomnia:
 		EffectBase insomnia = ObjectManager.getEffect("insomnia");
-		if(insomnia != null && player.isPotionActive(insomnia)) {
+		if(insomnia != null && player.hasEffect(insomnia)) {
 			event.setResult(PlayerEntity.SleepResult.NOT_SAFE);
 		}
 	}
@@ -561,8 +561,8 @@ public class Effects {
 		// ========== Debuffs ==========
 		// Aphagia
 		EffectBase aphagia = ObjectManager.getEffect("aphagia");
-		if(aphagia != null && !event.getEntityLiving().getEntityWorld().isRemote) {
-			if(event.getEntityLiving().isPotionActive(aphagia)) {
+		if(aphagia != null && !event.getEntityLiving().getCommandSenderWorld().isClientSide) {
+			if(event.getEntityLiving().hasEffect(aphagia)) {
 				if(event.isCancelable()) {
 					event.setCanceled(true);
 				}
@@ -576,7 +576,7 @@ public class Effects {
 	// ==================================================
 	/** Get entities that are near the provided entity. **/
 	public <T extends Entity> List<T> getNearbyEntities(Entity searchEntity, Class <? extends T > clazz, final Class filterClass, double range) {
-		return searchEntity.getEntityWorld().getEntitiesWithinAABB(clazz, searchEntity.getBoundingBox().grow(range, range, range), (Predicate<Entity>) entity -> {
+		return searchEntity.getCommandSenderWorld().getEntitiesOfClass(clazz, searchEntity.getBoundingBox().inflate(range, range, range), (Predicate<Entity>) entity -> {
 			if(filterClass == null)
 				return true;
 			return filterClass.isAssignableFrom(entity.getClass());

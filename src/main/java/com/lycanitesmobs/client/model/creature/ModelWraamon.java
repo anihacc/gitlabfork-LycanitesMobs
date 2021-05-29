@@ -69,7 +69,7 @@ public class ModelWraamon extends ModelTemplateBiped {
 			}
 			if (this.currentModelState.getFloat("standingChangeTime") <= 0) {
 				this.currentModelState.setBoolean("standing", !this.currentModelState.getBoolean("standing"));
-				this.currentModelState.setFloat("standingChangeTime", (2 * 20) + (8 * 20 * entity.getRNG().nextFloat()));
+				this.currentModelState.setFloat("standingChangeTime", (2 * 20) + (8 * 20 * entity.getRandom().nextFloat()));
 			}
 			if (partName.equals("body")) {
 				this.currentModelState.setFloat("standingChangeTime", this.currentModelState.getFloat("standingChangeTime") - 1);

@@ -53,7 +53,7 @@ public class ItemStaffSummoning extends BaseItem {
 	@Override
 	public boolean onEntitySwing(ItemStack itemStack, LivingEntity entity) {
 		if(entity instanceof PlayerEntity) {
-			entity.setActiveHand(Hand.MAIN_HAND);
+			entity.startUsingItem(Hand.MAIN_HAND);
 			return true;
 		}
 		return super.onEntitySwing(itemStack, entity);
@@ -66,42 +66,42 @@ public class ItemStaffSummoning extends BaseItem {
 
 	// ========== Start ==========
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
+	public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
 		ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
 		if(playerExt != null) {
 			// Summon Selected Mob:
 			SummonSet summonSet = playerExt.getSelectedSummonSet();
 			if(summonSet.isUseable()) {
-				if(!player.getEntityWorld().isRemote) {
+				if(!player.getCommandSenderWorld().isClientSide) {
 					playerExt.staffPortal = new PortalEntity((EntityType<? extends PortalEntity>)ProjectileManager.getInstance().oldProjectileTypes.get(PortalEntity.class), world, player, summonSet.getCreatureType(), this);
-					playerExt.staffPortal.setLocationAndAngles(player.getPositionVec().getX(), player.getPositionVec().getY(), player.getPositionVec().getZ(), world.rand.nextFloat() * 360.0F, 0.0F);
-					world.addEntity(playerExt.staffPortal);
+					playerExt.staffPortal.moveTo(player.position().x(), player.position().y(), player.position().z(), world.random.nextFloat() * 360.0F, 0.0F);
+					world.addFreshEntity(playerExt.staffPortal);
 				}
 			}
 			// Open Minion GUI If None Selected:
 			else {
 				playerExt.staffPortal = null;
-				if(!player.getEntityWorld().isRemote())
+				if(!player.getCommandSenderWorld().isClientSide())
 					playerExt.sendAllSummonSetsToPlayer();
 				else
 					ClientManager.getInstance().displayGuiScreen("beastiary", player);
 			}
 		}
-		player.setActiveHand(hand);
-		return new ActionResult(ActionResultType.SUCCESS, player.getHeldItem(hand));
+		player.startUsingItem(hand);
+		return new ActionResult(ActionResultType.SUCCESS, player.getItemInHand(hand));
 	}
 
 	// ========== Using ==========
 	@Override
 	public void onUsingTick(ItemStack itemStack, LivingEntity user, int useRemaining) {
-		if(!user.isHandActive()) {
+		if(!user.isUsingItem()) {
 			return;
 		}
 		int useTime = this.getUseDuration(itemStack) - useRemaining;
 		if(useTime >= this.getRapidTime(itemStack)) {
 			int rapidRemainder = useTime % this.getRapidTime(itemStack);
 			if(rapidRemainder == 0) {
-				if(this.rapidAttack(itemStack, user.getEntityWorld(), user)) {
+				if(this.rapidAttack(itemStack, user.getCommandSenderWorld(), user)) {
 					this.weaponFlash = Math.max(20, this.getRapidTime(itemStack));
 				}
 			}
@@ -114,7 +114,7 @@ public class ItemStaffSummoning extends BaseItem {
 
 	// ========== Stop ==========
 	@Override
-	public void onPlayerStoppedUsing(ItemStack stack, World worldIn, LivingEntity entityLiving, int timeLeft) {
+	public void releaseUsing(ItemStack stack, World worldIn, LivingEntity entityLiving, int timeLeft) {
 		int useTime = this.getUseDuration(stack) - timeLeft;
 		float power = (float)useTime / (float)this.getChargeTime(stack);
 
@@ -141,7 +141,7 @@ public class ItemStaffSummoning extends BaseItem {
 
 	// ========== Animation ==========
 	@Override
-	public UseAction getUseAction(ItemStack itemStack) {
+	public UseAction getUseAnimation(ItemStack itemStack) {
 		return UseAction.BOW;
 	}
 
@@ -205,12 +205,12 @@ public class ItemStaffSummoning extends BaseItem {
     }
 
     protected void damage_item(ItemStack itemStack, int amountToDamage, ServerPlayerEntity entity) {
-        itemStack.attemptDamageItem(amountToDamage, entity.getRNG(), entity);
+        itemStack.hurt(amountToDamage, entity.getRandom(), entity);
         if (itemStack.getCount() == 0) {
-            if (entity.getHeldItem(Hand.MAIN_HAND).equals(itemStack)) {
-                entity.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
-            } else if (entity.getHeldItem(Hand.OFF_HAND).equals(itemStack)) {
-                entity.setHeldItem(Hand.OFF_HAND, ItemStack.EMPTY);
+            if (entity.getItemInHand(Hand.MAIN_HAND).equals(itemStack)) {
+                entity.setItemInHand(Hand.MAIN_HAND, ItemStack.EMPTY);
+            } else if (entity.getItemInHand(Hand.OFF_HAND).equals(itemStack)) {
+                entity.setItemInHand(Hand.OFF_HAND, ItemStack.EMPTY);
             }
         }
     }
@@ -234,8 +234,8 @@ public class ItemStaffSummoning extends BaseItem {
 	//                     Repairs
 	// ==================================================
     @Override
-    public boolean getIsRepairable(ItemStack itemStack, ItemStack repairStack) {
+    public boolean isValidRepairItem(ItemStack itemStack, ItemStack repairStack) {
     	if(repairStack.getItem() == Items.GOLD_INGOT) return true;
-        return super.getIsRepairable(itemStack, repairStack);
+        return super.isValidRepairItem(itemStack, repairStack);
     }
 }

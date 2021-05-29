@@ -30,7 +30,7 @@ public class EntityZoataur extends RideableCreatureEntity implements IMob {
         this.setupMob();
         
         // Stats:
-        this.stepHeight = 1.0F;
+        this.maxUpStep = 1.0F;
     }
 
 
@@ -48,13 +48,13 @@ public class EntityZoataur extends RideableCreatureEntity implements IMob {
     // ==================================================
     // ========== Living Update ==========
     @Override
-    public void livingTick() {
+    public void aiStep() {
         // Force Blocking:
-        if(!this.getEntityWorld().isRemote && this.isBlocking() && this.hasAttackTarget()) {
-            this.setAttackTarget(null);
+        if(!this.getCommandSenderWorld().isClientSide && this.isBlocking() && this.hasAttackTarget()) {
+            this.setTarget(null);
         }
 
-        super.livingTick();
+        super.aiStep();
     }
 	
 	
@@ -65,14 +65,14 @@ public class EntityZoataur extends RideableCreatureEntity implements IMob {
     /** Called when this mob has received damage. Here a random blocking chance is applied. **/
     @Override
     public void onDamage(DamageSource damageSrc, float damage) {
-    	if(!this.hasRiderTarget() && this.getRNG().nextDouble() > 0.75D && this.getHealth() / this.getMaxHealth() > 0.25F)
+    	if(!this.hasRiderTarget() && this.getRandom().nextDouble() > 0.75D && this.getHealth() / this.getMaxHealth() > 0.25F)
     		this.setBlocking();
         super.onDamage(damageSrc, damage);
     }
     
     // ========== Blocking ==========
     public void setBlocking() {
-    	this.currentBlockingTime = this.blockingTime + this.getRNG().nextInt(this.blockingTime / 2);
+    	this.currentBlockingTime = this.blockingTime + this.getRandom().nextInt(this.blockingTime / 2);
     }
 
 
@@ -109,7 +109,7 @@ public class EntityZoataur extends RideableCreatureEntity implements IMob {
     // ==================================================
     @Override
     public void mountAbility(Entity rider) {
-        if(this.getEntityWorld().isRemote)
+        if(this.getCommandSenderWorld().isClientSide)
             return;
 
         if(this.getStamina() < this.getStaminaCost())

@@ -20,7 +20,7 @@ public class SleepSpawnTrigger extends BlockSpawnTrigger {
 		ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
 
 		// Chance:
-		if(this.chance < 1 && player.getRNG().nextDouble() > this.chance) {
+		if(this.chance < 1 && player.getRandom().nextDouble() > this.chance) {
 			return false;
 		}
 

@@ -15,7 +15,7 @@ public class EquipmentCommand {
 
 	public static int reload(final CommandContext<CommandSource> context) {
 		EquipmentPartManager.getInstance().reload();
-		context.getSource().sendFeedback(new TranslationTextComponent("lyc.command.equipment.reload"), true);
+		context.getSource().sendSuccess(new TranslationTextComponent("lyc.command.equipment.reload"), true);
 		return 0;
 	}
 }

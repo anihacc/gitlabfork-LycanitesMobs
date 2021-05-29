@@ -49,14 +49,14 @@ public class ChargeItem extends BaseItem {
     }
 
     @Override
-    public ITextComponent getDisplayName(ItemStack itemStack) {
-        return this.getProjectileName().appendString(" ").append(new TranslationTextComponent("item.lycanitesmobs.charge"));
+    public ITextComponent getName(ItemStack itemStack) {
+        return this.getProjectileName().append(" ").append(new TranslationTextComponent("item.lycanitesmobs.charge"));
     }
 
     @Override
-    public void addInformation(ItemStack itemStack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag tooltipFlag) {
-        super.addInformation(itemStack, world, tooltip, tooltipFlag);
-        FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
+    public void appendHoverText(ItemStack itemStack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag tooltipFlag) {
+        super.appendHoverText(itemStack, world, tooltip, tooltipFlag);
+        FontRenderer fontRenderer = Minecraft.getInstance().font;
         for(ITextComponent description : this.getAdditionalDescriptions(itemStack, world, tooltipFlag)) {
             tooltip.add(description);
         }
@@ -72,43 +72,43 @@ public class ChargeItem extends BaseItem {
 
         if(!this.getElements().isEmpty()) {
             ITextComponent elements = new TranslationTextComponent("item.lycanitesmobs.charge.elements")
-                    .appendString(" ").append(this.getElementNames());
+                    .append(" ").append(this.getElementNames());
             descriptions.add(elements);
         }
 
         ITextComponent projectile = new TranslationTextComponent("item.lycanitesmobs.charge.projectile")
-                .appendString(" ").append(this.getProjectileName());
+                .append(" ").append(this.getProjectileName());
         descriptions.add(projectile);
 
         return descriptions;
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
-        ItemStack itemStack = player.getHeldItem(hand);
+    public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
+        ItemStack itemStack = player.getItemInHand(hand);
 
-        if(!world.isRemote && player.isSneaking()) { // isSneaking()
+        if(!world.isClientSide && player.isShiftKeyDown()) { // isSneaking()
             BaseProjectileEntity projectile = this.createProjectile(itemStack, world, player);
             if(projectile == null) {
                 LycanitesMobs.logWarning("", "Failed to create projectile from Charge Item: " + this.itemName);
                 return new ActionResult<>(ActionResultType.FAIL, itemStack);
             }
-            world.addEntity(projectile);
-            if(!player.abilities.isCreativeMode) {
+            world.addFreshEntity(projectile);
+            if(!player.abilities.instabuild) {
                 itemStack.setCount(Math.max(0, itemStack.getCount() - 1));
             }
-            this.playSound(world, player.getPosition(), projectile.getLaunchSound(), SoundCategory.NEUTRAL, 0.5F, 0.4F / (player.getRNG().nextFloat() * 0.4F + 0.8F));
+            this.playSound(world, player.blockPosition(), projectile.getLaunchSound(), SoundCategory.NEUTRAL, 0.5F, 0.4F / (player.getRandom().nextFloat() * 0.4F + 0.8F));
         }
 
         return new ActionResult<>(ActionResultType.SUCCESS, itemStack);
     }
 
     @Override
-    public ActionResultType itemInteractionForEntity(ItemStack stack, PlayerEntity player, LivingEntity entity, Hand hand) {
+    public ActionResultType interactLivingEntity(ItemStack stack, PlayerEntity player, LivingEntity entity, Hand hand) {
         if(entity instanceof TameableCreatureEntity && ((TameableCreatureEntity)entity).getPlayerOwner() == player) {
             return ActionResultType.SUCCESS;
         }
-        return super.itemInteractionForEntity(stack, player, entity, hand);
+        return super.interactLivingEntity(stack, player, entity, hand);
     }
 
     /**
@@ -145,7 +145,7 @@ public class ChargeItem extends BaseItem {
         boolean firstElement = true;
         for(ElementInfo element : this.getElements()) {
             if(!firstElement) {
-                elementNames.appendString(", ");
+                elementNames.append(", ");
             }
             firstElement = false;
             elementNames.append(element.getTitle());

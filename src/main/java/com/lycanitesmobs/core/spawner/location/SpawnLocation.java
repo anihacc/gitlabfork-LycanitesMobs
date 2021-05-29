@@ -79,14 +79,14 @@ public class SpawnLocation {
     /** Returns a list of positions to spawn at. **/
     public List<BlockPos> getSpawnPositions(World world, PlayerEntity player, BlockPos triggerPos) {
         List<BlockPos> spawnPositions = new ArrayList<>();
-        int yPos = this.getOffset(world.rand, this.rangeMin.getY(), this.rangeMax.getY());
+        int yPos = this.getOffset(world.random, this.rangeMin.getY(), this.rangeMax.getY());
 		if((this.yMax < 0 || yPos <= this.yMax) && (this.yMin < 0 || yPos >= this.yMin)) {
 			Vector3i offset = new Vector3i(
-					this.getOffset(world.rand, this.rangeMin.getX(), this.rangeMax.getX()),
+					this.getOffset(world.random, this.rangeMin.getX(), this.rangeMax.getX()),
 					yPos,
-					this.getOffset(world.rand, this.rangeMin.getZ(), this.rangeMax.getZ())
+					this.getOffset(world.random, this.rangeMin.getZ(), this.rangeMax.getZ())
 			);
-			spawnPositions.add(triggerPos.add(offset));
+			spawnPositions.add(triggerPos.offset(offset));
 		}
 
         return this.sortSpawnPositions(spawnPositions, world, triggerPos);

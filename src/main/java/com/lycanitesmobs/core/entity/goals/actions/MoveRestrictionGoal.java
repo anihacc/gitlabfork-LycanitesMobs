@@ -7,6 +7,8 @@ import net.minecraft.util.math.vector.Vector3d;
 
 import java.util.EnumSet;
 
+import net.minecraft.entity.ai.goal.Goal.Flag;
+
 public class MoveRestrictionGoal extends Goal {
 	// Targets:
     private BaseCreatureEntity host;
@@ -22,7 +24,7 @@ public class MoveRestrictionGoal extends Goal {
  	// ==================================================
     public MoveRestrictionGoal(BaseCreatureEntity setHost) {
         this.host = setHost;
-        this.setMutexFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
+        this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
     }
     
     
@@ -39,10 +41,10 @@ public class MoveRestrictionGoal extends Goal {
   	//                  Should Execute
   	// ==================================================
 	@Override
-    public boolean shouldExecute() {
+    public boolean canUse() {
         if(this.host.hasHome())
             return false;
-        BlockPos chunkcoordinates = this.host.getHomePosition();
+        BlockPos chunkcoordinates = this.host.getRestrictCenter();
         Vector3d vec3 = RandomPositionGenerator.findRandomTargetTowards(this.host, 16, 7, new Vector3d((double)chunkcoordinates.getX(), (double)chunkcoordinates.getY(), (double)chunkcoordinates.getZ()));
         if(vec3 == null)
             return false;
@@ -58,8 +60,8 @@ public class MoveRestrictionGoal extends Goal {
   	//                Continue Executing
   	// ==================================================
 	@Override
-    public boolean shouldContinueExecuting() {
-        return !this.host.getNavigator().noPath();
+    public boolean canContinueToUse() {
+        return !this.host.getNavigation().isDone();
     }
     
     
@@ -67,7 +69,7 @@ public class MoveRestrictionGoal extends Goal {
   	//                     Start
   	// ==================================================
 	@Override
-    public void startExecuting() {
-        this.host.getNavigator().tryMoveToXYZ(this.movePosX, this.movePosY, this.movePosZ, this.speed);
+    public void start() {
+        this.host.getNavigation().moveTo(this.movePosX, this.movePosY, this.movePosZ, this.speed);
     }
 }

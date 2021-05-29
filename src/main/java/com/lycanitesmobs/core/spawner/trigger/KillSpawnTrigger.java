@@ -29,10 +29,10 @@ public class KillSpawnTrigger extends EntitySpawnTrigger {
 		}
 
 		// Chance:
-		if(this.chance < 1 && player.getRNG().nextDouble() > this.chance) {
+		if(this.chance < 1 && player.getRandom().nextDouble() > this.chance) {
 			return;
 		}
 
-		this.trigger(player.getEntityWorld(), player, killedEntity.getPosition(), 0, 0);
+		this.trigger(player.getCommandSenderWorld(), player, killedEntity.blockPosition(), 0, 0);
 	}
 }

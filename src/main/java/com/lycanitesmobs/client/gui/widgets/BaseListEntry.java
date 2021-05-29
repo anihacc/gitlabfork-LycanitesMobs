@@ -27,7 +27,7 @@ public abstract class BaseListEntry extends AbstractOptionList.Entry<BaseListEnt
 	 * Returns a list of child GUI elements such as buttons that should receive input events, etc.
 	 * @return A list of child GUI elements.
 	 */
-	//@Override // this has been commented out and may cause issues later
+	@Override
 	public List<? extends IGuiEventListener> children() {
 		return new ArrayList<>();
 	}

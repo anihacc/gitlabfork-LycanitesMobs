@@ -6,6 +6,8 @@ import net.minecraft.entity.ai.goal.Goal;
 
 import java.util.EnumSet;
 
+import net.minecraft.entity.ai.goal.Goal.Flag;
+
 public class CopyMasterAttackTargetGoal extends Goal {
 	// Targets:
 	private BaseCreatureEntity host;
@@ -18,7 +20,7 @@ public class CopyMasterAttackTargetGoal extends Goal {
   	// ==================================================
     public CopyMasterAttackTargetGoal(BaseCreatureEntity setHost) {
         host = setHost;
-		this.setMutexFlags(EnumSet.of(Flag.TARGET));
+		this.setFlags(EnumSet.of(Flag.TARGET));
     }
     
     
@@ -35,9 +37,9 @@ public class CopyMasterAttackTargetGoal extends Goal {
   	//                   Should Execute
   	// ==================================================
     @Override
-    public boolean shouldExecute() {
-    	if(this.host.getAttackTarget() != null) {
-    		if(!this.host.getAttackTarget().isAlive())
+    public boolean canUse() {
+    	if(this.host.getTarget() != null) {
+    		if(!this.host.getTarget().isAlive())
     			return false;
     	}
     	if(this.host.getMasterAttackTarget() == null)
@@ -51,10 +53,10 @@ public class CopyMasterAttackTargetGoal extends Goal {
   	// ==================================================
     @Override
     public void tick() {
-    	if(this.host.getAttackTarget() == null) {
+    	if(this.host.getTarget() == null) {
     		LivingEntity target = this.host.getMasterAttackTarget();
     		if(isTargetValid(target))
-    			this.host.setAttackTarget(target);
+    			this.host.setTarget(target);
     	}
     }
 
@@ -66,7 +68,7 @@ public class CopyMasterAttackTargetGoal extends Goal {
     	if(target == null) return false;
     	if(!target.isAlive()) return false;
 		if(target == this.host) return false;
-		if(!this.host.canAttack(target.getType()))
+		if(!this.host.canAttackType(target.getType()))
             return false;
 		if(!this.host.canAttack(target))
 			return false;
@@ -78,7 +80,7 @@ public class CopyMasterAttackTargetGoal extends Goal {
  	//                       Reset
  	// ==================================================
     @Override
-    public void resetTask() {
-        this.host.setAttackTarget(null);
+    public void stop() {
+        this.host.setTarget(null);
     }
 }

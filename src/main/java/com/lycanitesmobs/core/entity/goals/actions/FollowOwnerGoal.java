@@ -58,7 +58,7 @@ public class FollowOwnerGoal extends FollowGoal {
 	//                  Should Execute
 	// ==================================================
 	@Override
-	public boolean shouldExecute() {
+	public boolean canUse() {
 		Entity target = this.getTarget();
 		if(target == null)
 			return false;
@@ -68,7 +68,7 @@ public class FollowOwnerGoal extends FollowGoal {
 			return false;
 
 		// Start straying when within the stray radius and the target.
-		double distance = this.host.getDistance(target);
+		double distance = this.host.distanceTo(target);
 		if(distance <= this.strayDistance && this.strayDistance != 0) {
 			this.host.clearMovement();
 			return false;
@@ -82,8 +82,8 @@ public class FollowOwnerGoal extends FollowGoal {
 	//                Continue Executing
 	// ==================================================
 	@Override
-	public boolean shouldContinueExecuting() {
-    	return this.shouldExecute();
+	public boolean canContinueToUse() {
+    	return this.canUse();
 	}
     
 	
@@ -92,7 +92,7 @@ public class FollowOwnerGoal extends FollowGoal {
  	// ==================================================
 	@Override
     public void tick() {
-		if(this.host.getDistance(this.getTarget()) >= this.lostDistance) {
+		if(this.host.distanceTo(this.getTarget()) >= this.lostDistance) {
 			this.teleportToOwner();
 		}
     	super.tick();
@@ -108,20 +108,20 @@ public class FollowOwnerGoal extends FollowGoal {
 				return;
 			}
 
-	    	int i = MathHelper.floor(this.getTarget().getPositionVec().getX()) - 2;
+	    	int i = MathHelper.floor(this.getTarget().position().x()) - 2;
 	        int j = MathHelper.floor(this.getTarget().getBoundingBox().minY);
-	        int k = MathHelper.floor(this.getTarget().getPositionVec().getZ()) - 2;
+	        int k = MathHelper.floor(this.getTarget().position().z()) - 2;
 
             if(this.host.isFlying() || this.getTarget().isInWater()) {
-                this.host.setLocationAndAngles(i, j + 1, k, this.host.rotationYaw, this.host.rotationPitch);
+                this.host.moveTo(i, j + 1, k, this.host.yRot, this.host.xRot);
                 this.host.clearMovement();
                 return;
             }
 	
 	        for(int x = -2; x <= 2; ++x) {
 	            for(int z = -2; z <= 2; ++z) {
-	                if(this.canTeleportTo(this.getTarget().getPosition().add(x, 0, z))) {
-                        this.host.setLocationAndAngles((double)((float)(i + x) + 0.5F), (double)j, (double)((float)(k + z) + 0.5F), this.host.rotationYaw, this.host.rotationPitch);
+	                if(this.canTeleportTo(this.getTarget().blockPosition().offset(x, 0, z))) {
+                        this.host.moveTo((double)((float)(i + x) + 0.5F), (double)j, (double)((float)(k + z) + 0.5F), this.host.yRot, this.host.xRot);
 	                    this.host.clearMovement();
 	                    return;
 	                }
@@ -131,8 +131,8 @@ public class FollowOwnerGoal extends FollowGoal {
     }
 
 	protected boolean canTeleportTo(BlockPos blockPos) {
-		BlockState blockState = this.host.getEntityWorld().getBlockState(blockPos.down());
-		return blockState.canEntitySpawn(this.host.getEntityWorld(), blockPos.down(), this.host.getType()) && this.host.getEntityWorld().isAirBlock(blockPos) && this.host.getEntityWorld().isAirBlock(blockPos.up());
+		BlockState blockState = this.host.getCommandSenderWorld().getBlockState(blockPos.below());
+		return blockState.isValidSpawn(this.host.getCommandSenderWorld(), blockPos.below(), this.host.getType()) && this.host.getCommandSenderWorld().isEmptyBlock(blockPos) && this.host.getCommandSenderWorld().isEmptyBlock(blockPos.above());
 	}
     
     //TODO Wait on the ChunkUnload Chunk event, if this mob is not sitting and the unloading chunk is what it's in, then teleport this mob to it's owner away from the unloaded chunk, unless it's player has disconnected.

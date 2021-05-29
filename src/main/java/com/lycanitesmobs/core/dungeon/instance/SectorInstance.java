@@ -288,8 +288,8 @@ public class SectorInstance {
 	 * @return A list of ChunkPos.
 	 */
 	public List<ChunkPos> getChunkPositions() {
-		ChunkPos minChunkPos = new ChunkPos(this.getOccupiedBoundsMin().add(-1, 0, -1));
-		ChunkPos maxChunkPos = new ChunkPos(this.getOccupiedBoundsMax().add(1, 0, 1));
+		ChunkPos minChunkPos = new ChunkPos(this.getOccupiedBoundsMin().offset(-1, 0, -1));
+		ChunkPos maxChunkPos = new ChunkPos(this.getOccupiedBoundsMax().offset(1, 0, 1));
 		List<ChunkPos> chunkPosList = new ArrayList<>();
 		for(int x = minChunkPos.x; x <= maxChunkPos.x; x++) {
 			for(int z = minChunkPos.z; z <= maxChunkPos.z; z++) {
@@ -401,35 +401,35 @@ public class SectorInstance {
 	public BlockPos getBoundsMin(Vector3i boundsSize) {
 		BlockPos bounds = new BlockPos(this.parentConnector.position);
 		if(this.parentConnector.facing == Direction.UP) {
-			bounds = bounds.add(
+			bounds = bounds.offset(
 					-(int)Math.ceil((double)boundsSize.getX() / 2),
 					0,
 					-(int)Math.ceil((double)boundsSize.getZ() / 2)
 			);
 		}
 		else if(this.parentConnector.facing == Direction.SOUTH) {
-			bounds = bounds.add(
+			bounds = bounds.offset(
 					-(int)Math.ceil((double)boundsSize.getX() / 2),
 					0,
 					0
 			);
 		}
 		else if(this.parentConnector.facing == Direction.EAST) {
-			bounds = bounds.add(
+			bounds = bounds.offset(
 					0,
 					0,
 					-(int)Math.ceil((double)boundsSize.getZ() / 2)
 			);
 		}
 		else if(this.parentConnector.facing == Direction.NORTH) {
-			bounds = bounds.add(
+			bounds = bounds.offset(
 					-(int)Math.ceil((double)boundsSize.getX() / 2),
 					0,
 					-boundsSize.getZ()
 			);
 		}
 		else if(this.parentConnector.facing == Direction.WEST) {
-			bounds = bounds.add(
+			bounds = bounds.offset(
 					-boundsSize.getX(),
 					0,
 					-(int)Math.ceil((double)boundsSize.getZ() / 2)
@@ -448,35 +448,35 @@ public class SectorInstance {
 	public BlockPos getBoundsMax(Vector3i boundsSize) {
 		BlockPos bounds = new BlockPos(this.parentConnector.position);
 		if(this.parentConnector.facing == Direction.UP) {
-			bounds = bounds.add(
+			bounds = bounds.offset(
 					(int)Math.ceil((double)boundsSize.getX() / 2),
 					boundsSize.getY(),
 					(int)Math.ceil((double)boundsSize.getZ() / 2)
 			);
 		}
 		else if(this.parentConnector.facing == Direction.SOUTH) {
-			bounds = bounds.add(
+			bounds = bounds.offset(
 					(int)Math.floor((double)boundsSize.getX() / 2),
 					boundsSize.getY(),
 					boundsSize.getZ()
 			);
 		}
 		else if(this.parentConnector.facing == Direction.EAST) {
-			bounds = bounds.add(
+			bounds = bounds.offset(
 					boundsSize.getX(),
 					boundsSize.getY(),
 					(int)Math.floor((double)boundsSize.getZ() / 2)
 			);
 		}
 		else if(this.parentConnector.facing == Direction.NORTH) {
-			bounds = bounds.add(
+			bounds = bounds.offset(
 					(int)Math.floor((double)boundsSize.getX() / 2),
 					boundsSize.getY(),
 					0
 			);
 		}
 		else if(this.parentConnector.facing == Direction.WEST) {
-			bounds = bounds.add(
+			bounds = bounds.offset(
 					0,
 					boundsSize.getY(),
 					(int)Math.floor((double)boundsSize.getZ() / 2)
@@ -553,13 +553,13 @@ public class SectorInstance {
 	public void placeBlock(IWorld worldWriter, ChunkPos chunkPos, BlockPos blockPos, BlockState blockState, Direction facing, Random random) {
 		// Restrict To Chunk Position:
 		int chunkOffset = 0;
-		if(blockPos.getX() < chunkPos.getXStart() + chunkOffset || blockPos.getX() > chunkPos.getXEnd() + chunkOffset) {
+		if(blockPos.getX() < chunkPos.getMinBlockX() + chunkOffset || blockPos.getX() > chunkPos.getMaxBlockX() + chunkOffset) {
 			return;
 		}
-		if(blockPos.getY() <= 0 || blockPos.getY() >= worldWriter.getHeight()) {
+		if(blockPos.getY() <= 0 || blockPos.getY() >= worldWriter.getMaxBuildHeight()) {
 			return;
 		}
-		if(blockPos.getZ() < chunkPos.getZStart() + chunkOffset || blockPos.getZ() > chunkPos.getZEnd() + chunkOffset) {
+		if(blockPos.getZ() < chunkPos.getMinBlockZ() + chunkOffset || blockPos.getZ() > chunkPos.getMaxBlockZ() + chunkOffset) {
 			return;
 		}
 
@@ -574,13 +574,13 @@ public class SectorInstance {
 
 		// Torch:
 		if(blockState.getBlock() == Blocks.TORCH) {
-			blockState = blockState.with(WallTorchBlock.HORIZONTAL_FACING, facing);
+			blockState = blockState.setValue(WallTorchBlock.FACING, facing);
 			flags = 0;
 		}
 
 		// Chest:
 		if(blockState.getBlock() == Blocks.CHEST) {
-			blockState = blockState.with(ChestBlock.FACING, facing);
+			blockState = blockState.setValue(ChestBlock.FACING, facing);
 		}
 
 		// Don't Update:
@@ -592,19 +592,19 @@ public class SectorInstance {
 
 
 		// Set The Block:
-		worldWriter.setBlockState(blockPos, blockState, flags);
+		worldWriter.setBlock(blockPos, blockState, flags);
 
 
 		// Tile Entities:
 
 		// Spawner:
 		if(blockState.getBlock() == Blocks.SPAWNER) {
-			TileEntity tileEntity = worldWriter.getTileEntity(blockPos);
+			TileEntity tileEntity = worldWriter.getBlockEntity(blockPos);
 			if(tileEntity instanceof MobSpawnerTileEntity) {
 				MobSpawnerTileEntity spawner = (MobSpawnerTileEntity)tileEntity;
 				MobSpawn mobSpawn = this.layout.dungeonInstance.schematic.getRandomMobSpawn(this.parentConnector.level, false, random);
 				if(mobSpawn != null && mobSpawn.entityType != null) {
-					spawner.getSpawnerBaseLogic().setEntityType(mobSpawn.entityType);
+					spawner.getSpawner().setEntityId(mobSpawn.entityType);
 				}
 			}
 			return;
@@ -612,7 +612,7 @@ public class SectorInstance {
 
 		// Chest:
 		if(blockState.getBlock() == Blocks.CHEST) {
-			TileEntity tileEntity = worldWriter.getTileEntity(blockPos);
+			TileEntity tileEntity = worldWriter.getBlockEntity(blockPos);
 			if(tileEntity instanceof ChestTileEntity) {
 
 				// Apply Loot Table:
@@ -652,7 +652,7 @@ public class SectorInstance {
 		if("bossRoom".equalsIgnoreCase(this.dungeonSector.type)) {
 			MobSpawn mobSpawn = this.layout.dungeonInstance.schematic.getRandomMobSpawn(this.parentConnector.level, true, random);
 			if(mobSpawn != null) {
-				this.spawnMob(worldWriter, world, chunkPos, this.getCenter().add(0, 1, 0), mobSpawn, random);
+				this.spawnMob(worldWriter, world, chunkPos, this.getCenter().offset(0, 1, 0), mobSpawn, random);
 			}
 		}
 	}
@@ -683,7 +683,7 @@ public class SectorInstance {
 		for(int x = startX; x <= stopX; x++) {
 			for(int y = startY; y <= stopY; y++) {
 				for(int z = startZ; z <= stopZ; z++) {
-					this.placeBlock(worldWriter, chunkPos, new BlockPos(x, y, z), Blocks.CAVE_AIR.getDefaultState(), Direction.SOUTH, random);
+					this.placeBlock(worldWriter, chunkPos, new BlockPos(x, y, z), Blocks.CAVE_AIR.defaultBlockState(), Direction.SOUTH, random);
 				}
 			}
 		}
@@ -700,8 +700,8 @@ public class SectorInstance {
 	 */
 	public void buildFloor(IWorld worldWriter, World world, ChunkPos chunkPos, Random random, int offsetY) {
 		// Get Start and Stop Positions:
-		BlockPos startPos = this.getRoomBoundsMin().add(0, offsetY, 0);
-		BlockPos stopPos = this.getRoomBoundsMax().add(0, offsetY, 0);
+		BlockPos startPos = this.getRoomBoundsMin().offset(0, offsetY, 0);
+		BlockPos stopPos = this.getRoomBoundsMax().offset(0, offsetY, 0);
 		int startX = Math.min(startPos.getX(), stopPos.getX());
 		int stopX = Math.max(startPos.getX(), stopPos.getX());
 		int startY = Math.min(startPos.getY(), stopPos.getY());
@@ -711,7 +711,7 @@ public class SectorInstance {
 
 		for(int layerIndex : this.dungeonSector.floor.layers.keySet()) {
 			int y = startY + layerIndex;
-			if(y <= 0 || y >= world.getHeight()) {
+			if(y <= 0 || y >= world.getMaxBuildHeight()) {
 				continue;
 			}
 			SectorLayer layer = this.dungeonSector.floor.layers.get(layerIndex);
@@ -757,7 +757,7 @@ public class SectorInstance {
 			SectorLayer layer = this.dungeonSector.wall.layers.get(layerIndex);
 			for(int y = startY; y <= stopY; y++) {
 				// Y Limit:
-				if(y <= 0 || y >= world.getHeight()) {
+				if(y <= 0 || y >= world.getMaxBuildHeight()) {
 					continue;
 				}
 
@@ -810,7 +810,7 @@ public class SectorInstance {
 
 		for(int layerIndex : this.dungeonSector.ceiling.layers.keySet()) {
 			int y = stopY + layerIndex;
-			if(y <= 0 || y >= world.getHeight()) {
+			if(y <= 0 || y >= world.getMaxBuildHeight()) {
 				continue;
 			}
 			SectorLayer layer = this.dungeonSector.ceiling.layers.get(layerIndex);
@@ -874,7 +874,7 @@ public class SectorInstance {
 		for(int y = startY; y >= stopY; y--) {
 			for(int x = startX; x <= stopX; x++) {
 				for(int z = startZ; z <= stopZ; z++) {
-					BlockState blockState = Blocks.CAVE_AIR.getDefaultState();
+					BlockState blockState = Blocks.CAVE_AIR.defaultBlockState();
 
 					// Center:
 					if(x == centerX && z == centerZ) {
@@ -898,7 +898,7 @@ public class SectorInstance {
 							blockState = floorBlockState;
 						}
 						else if (offsetX == 1 && offsetZ == 2) {
-							blockState = stairsBlockState.with(StairsBlock.FACING, Direction.WEST);
+							blockState = stairsBlockState.setValue(StairsBlock.FACING, Direction.WEST);
 						}
 					}
 					if(step % 4 == 1) {
@@ -906,7 +906,7 @@ public class SectorInstance {
 							blockState = floorBlockState;
 						}
 						else if (offsetX == 2 && offsetZ == 1) {
-							blockState = stairsBlockState.with(StairsBlock.FACING, Direction.SOUTH);
+							blockState = stairsBlockState.setValue(StairsBlock.FACING, Direction.SOUTH);
 						}
 					}
 					if(step % 4 == 0) {
@@ -914,7 +914,7 @@ public class SectorInstance {
 							blockState = floorBlockState;
 						}
 						else if (offsetX == 1 && offsetZ == 0) {
-							blockState = stairsBlockState.with(StairsBlock.FACING, Direction.EAST);
+							blockState = stairsBlockState.setValue(StairsBlock.FACING, Direction.EAST);
 						}
 					}
 
@@ -938,20 +938,20 @@ public class SectorInstance {
 	public void spawnMob(IWorld worldWriter, World world, ChunkPos chunkPos, BlockPos blockPos, MobSpawn mobSpawn, Random random) {
 		// Restrict To Chunk Position:
 		int chunkOffset = 8;
-		if(blockPos.getX() < chunkPos.getXStart() + chunkOffset || blockPos.getX() > chunkPos.getXEnd() + chunkOffset) {
+		if(blockPos.getX() < chunkPos.getMinBlockX() + chunkOffset || blockPos.getX() > chunkPos.getMaxBlockX() + chunkOffset) {
 			return;
 		}
-		if(blockPos.getY() <= 0 || blockPos.getY() >= world.getHeight()) {
+		if(blockPos.getY() <= 0 || blockPos.getY() >= world.getMaxBuildHeight()) {
 			return;
 		}
-		if(blockPos.getZ() < chunkPos.getZStart() + chunkOffset || blockPos.getZ() > chunkPos.getZEnd() + chunkOffset) {
+		if(blockPos.getZ() < chunkPos.getMinBlockZ() + chunkOffset || blockPos.getZ() > chunkPos.getMaxBlockZ() + chunkOffset) {
 			return;
 		}
 
 		// Spawn Mob:
 		LycanitesMobs.logDebug("Dungeon", "Spawning mob " + mobSpawn + " at: " + blockPos + " level: " + this.parentConnector.level);
 		LivingEntity entityLiving = mobSpawn.createEntity(world);
-		entityLiving.setPosition(blockPos.getX(), blockPos.getY(), blockPos.getZ());
+		entityLiving.setPos(blockPos.getX(), blockPos.getY(), blockPos.getZ());
 
 		if(entityLiving instanceof BaseCreatureEntity) {
 			BaseCreatureEntity entityCreature = (BaseCreatureEntity)entityLiving;
@@ -959,7 +959,7 @@ public class SectorInstance {
 		}
 
 		mobSpawn.onSpawned(entityLiving, null);
-		worldWriter.addEntity(entityLiving);
+		worldWriter.addFreshEntity(entityLiving);
 	}
 
 

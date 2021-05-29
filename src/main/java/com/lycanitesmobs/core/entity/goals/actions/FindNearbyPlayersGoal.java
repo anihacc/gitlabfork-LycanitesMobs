@@ -35,7 +35,7 @@ public class FindNearbyPlayersGoal extends Goal {
     }
 
 	@Override
-    public boolean shouldExecute() {
+    public boolean canUse() {
 		return this.host.isAlive();
     }
 
@@ -48,8 +48,8 @@ public class FindNearbyPlayersGoal extends Goal {
 		LivingEntity newTarget = null;
 		try {
 			this.host.playerTargets.clear();
-			for(PlayerEntity player : this.host.getEntityWorld().getPlayers()) {
-				if(this.host.getDistance(player) <= this.searchRange) {
+			for(PlayerEntity player : this.host.getCommandSenderWorld().players()) {
+				if(this.host.distanceTo(player) <= this.searchRange) {
 					this.host.playerTargets.add(player);
 				}
 			}

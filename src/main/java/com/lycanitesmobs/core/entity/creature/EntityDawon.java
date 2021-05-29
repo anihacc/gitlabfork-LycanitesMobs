@@ -37,17 +37,17 @@ public class EntityDawon extends TameableCreatureEntity {
     // ==================================================
     // ========== Living Update ==========
     @Override
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
 
         // Random Leaping:
-        if(this.onGround && !this.getEntityWorld().isRemote) {
+        if(this.onGround && !this.getCommandSenderWorld().isClientSide) {
             if(this.hasAttackTarget()) {
-                if(this.rand.nextInt(10) == 0)
-                    this.leap(16.0F, 0.2D, this.getAttackTarget());
+                if(this.random.nextInt(10) == 0)
+                    this.leap(16.0F, 0.2D, this.getTarget());
             }
             else {
-                if(this.isMoving() && this.rand.nextInt(50) == 0)
+                if(this.isMoving() && this.random.nextInt(50) == 0)
                     this.leap(2.0D, 0.5D);
             }
         }

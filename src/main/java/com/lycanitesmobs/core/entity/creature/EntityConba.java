@@ -64,7 +64,7 @@ public class EntityConba extends TameableCreatureEntity implements IMob {
 			String entityName = this.creatureInfo.getName();
 	    	if(entityName != null) {
 				infection = new TranslationTextComponent("entity." + this.creatureInfo.modInfo.modid + "." + entityName + ".infected");
-				infection.appendString(" ");
+				infection.append(" ");
 			}
 		}
     	return infection.append(super.getSpeciesName());
@@ -82,29 +82,29 @@ public class EntityConba extends TameableCreatureEntity implements IMob {
     // ==================================================
 	// ========== Living Update ==========
 	@Override
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
         
         // Random Leaping:
-        if(this.onGround && !this.getEntityWorld().isRemote) {
+        if(this.onGround && !this.getCommandSenderWorld().isClientSide) {
         	if(this.hasAvoidTarget()) {
-        		if(this.rand.nextInt(10) == 0)
-        			this.leap(1.0F, 0.6D, this.getAttackTarget());
+        		if(this.random.nextInt(10) == 0)
+        			this.leap(1.0F, 0.6D, this.getTarget());
         	}
         	else {
-        		if(this.rand.nextInt(50) == 0 && this.isMoving())
+        		if(this.random.nextInt(50) == 0 && this.isMoving())
         			this.leap(1.0D, 0.6D);
         	}
         }
         
         // Infected AI:
-        if(!this.getEntityWorld().isRemote) {
+        if(!this.getCommandSenderWorld().isClientSide) {
 			// The Swarm:
 			if(!this.vespidInfection && "theswarm".equals(this.spawnEventType)) {
 				this.vespidInfection = true;
 			}
 
-            if (this.vespidInfection && !this.getEntityWorld().isRemote) {
+            if (this.vespidInfection && !this.getCommandSenderWorld().isClientSide) {
                 this.aiAttackMelee.setEnabled(true);
                 if (this.vespidInfectionTime++ >= 60 * 20) {
                     this.spawnVespidSwarm();
@@ -116,11 +116,11 @@ public class EntityConba extends TameableCreatureEntity implements IMob {
         }
         
         // Infected Visuals
-        if(this.getEntityWorld().isRemote) {
+        if(this.getCommandSenderWorld().isClientSide) {
         	this.vespidInfection = this.extraAnimation01();
         	if(this.vespidInfection) {
     	        for(int i = 0; i < 2; ++i) {
-    	            this.getEntityWorld().addParticle(ParticleTypes.WITCH, this.getPositionVec().getX() + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, this.getPositionVec().getY() + this.rand.nextDouble() * (double)this.getSize(Pose.STANDING).height, this.getPositionVec().getZ() + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
+    	            this.getCommandSenderWorld().addParticle(ParticleTypes.WITCH, this.position().x() + (this.random.nextDouble() - 0.5D) * (double)this.getDimensions(Pose.STANDING).width, this.position().y() + this.random.nextDouble() * (double)this.getDimensions(Pose.STANDING).height, this.position().z() + (this.random.nextDouble() - 0.5D) * (double)this.getDimensions(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
     	        }
         	}
         }
@@ -157,25 +157,25 @@ public class EntityConba extends TameableCreatureEntity implements IMob {
    	//                      Death
    	// ==================================================
     @Override
-    public void onDeath(DamageSource damageSource) {
-		if(!this.getEntityWorld().isRemote && this.vespidInfection)
+    public void die(DamageSource damageSource) {
+		if(!this.getCommandSenderWorld().isClientSide && this.vespidInfection)
 			this.spawnVespidSwarm();
-        super.onDeath(damageSource);
+        super.die(damageSource);
     }
     
     public void spawnVespidSwarm() {
-    	int j = 2 + this.rand.nextInt(5) + getEntityWorld().getDifficulty().getId() - 1;
+    	int j = 2 + this.random.nextInt(5) + getCommandSenderWorld().getDifficulty().getId() - 1;
         for(int k = 0; k < j; ++k) {
-            float f = ((float)(k % 2) - 0.5F) * this.getSize(Pose.STANDING).width / 4.0F;
-            float f1 = ((float)(k / 2) - 0.5F) * this.getSize(Pose.STANDING).width / 4.0F;
-            EntityVespid vespid = (EntityVespid)CreatureManager.getInstance().getCreature("vespid").createEntity(this.getEntityWorld());
-            vespid.setLocationAndAngles(this.getPositionVec().getX() + (double)f, this.getPositionVec().getY() + 0.5D, this.getPositionVec().getZ() + (double)f1, this.rand.nextFloat() * 360.0F, 0.0F);
+            float f = ((float)(k % 2) - 0.5F) * this.getDimensions(Pose.STANDING).width / 4.0F;
+            float f1 = ((float)(k / 2) - 0.5F) * this.getDimensions(Pose.STANDING).width / 4.0F;
+            EntityVespid vespid = (EntityVespid)CreatureManager.getInstance().getCreature("vespid").createEntity(this.getCommandSenderWorld());
+            vespid.moveTo(this.position().x() + (double)f, this.position().y() + 0.5D, this.position().z() + (double)f1, this.random.nextFloat() * 360.0F, 0.0F);
             vespid.applyVariant(this.getVariantIndex());
             vespid.setGrowingAge(vespid.growthTime);
             vespid.spawnEventType = this.spawnEventType;
-            this.getEntityWorld().addEntity(vespid);
-            if(this.getAttackTarget() != null)
-            	vespid.setRevengeTarget(this.getAttackTarget());
+            this.getCommandSenderWorld().addFreshEntity(vespid);
+            if(this.getTarget() != null)
+            	vespid.setLastHurtByMob(this.getTarget());
         }
     }
     
@@ -198,7 +198,7 @@ public class EntityConba extends TameableCreatureEntity implements IMob {
     // ========== Extra Animations ==========
     /** An additional animation boolean that is passed to all clients through the animation mask. **/
     public boolean extraAnimation01() {
-    	if(!this.getEntityWorld().isRemote)
+    	if(!this.getCommandSenderWorld().isClientSide)
     		return this.vespidInfection;
 	    else
 	    	return this.extraAnimation01;
@@ -220,8 +220,8 @@ public class EntityConba extends TameableCreatureEntity implements IMob {
    	// ========== Read ===========
     /** Used when loading this mob from a saved chunk. **/
     @Override
-    public void readAdditional(CompoundNBT nbtTagCompound) {
-    	super.readAdditional(nbtTagCompound);
+    public void readAdditionalSaveData(CompoundNBT nbtTagCompound) {
+    	super.readAdditionalSaveData(nbtTagCompound);
         
         if(nbtTagCompound.contains("VespidInfection")) {
         	this.vespidInfection = nbtTagCompound.getBoolean("VespidInfection");
@@ -234,8 +234,8 @@ public class EntityConba extends TameableCreatureEntity implements IMob {
     // ========== Write ==========
     /** Used when saving this mob to a chunk. **/
     @Override
-    public void writeAdditional(CompoundNBT nbtTagCompound) {
-        super.writeAdditional(nbtTagCompound);
+    public void addAdditionalSaveData(CompoundNBT nbtTagCompound) {
+        super.addAdditionalSaveData(nbtTagCompound);
     	nbtTagCompound.putBoolean("VespidInfection", this.vespidInfection);
     	if(this.vespidInfection)
         	nbtTagCompound.putInt("VespidInfectionTime", this.vespidInfectionTime);

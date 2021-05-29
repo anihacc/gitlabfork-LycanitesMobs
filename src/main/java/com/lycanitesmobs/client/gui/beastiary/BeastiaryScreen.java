@@ -77,7 +77,7 @@ public abstract class BeastiaryScreen extends BaseScreen {
         this.mc = Minecraft.getInstance();
 		/*if(this.mc.gameSettings.guiScale != 2 || GUI_ACTIVE) {
 			OPENED_GUI_SCALE = this.mc.gameSettings.guiScale;
-			this.mc.mainWindow.func_216521_a(this.mc.gameSettings.guiScale, this.mc.getForceUnicodeFont());
+			this.mc.mainWindow.calculateScale(this.mc.gameSettings.guiScale, this.mc.getForceUnicodeFont());
 		}
 		else {
 			GUI_ACTIVE = true;
@@ -85,13 +85,13 @@ public abstract class BeastiaryScreen extends BaseScreen {
     }
 
     @Override
-    public void onClose() {
+    public void removed() {
 		/*if(this.mc.gameSettings.guiScale == 2 && !GUI_ACTIVE) {
 			this.mc.gameSettings.guiScale = OPENED_GUI_SCALE;
-			this.mc.mainWindow.func_216521_a(this.mc.gameSettings.guiScale, this.mc.getForceUnicodeFont());
+			this.mc.mainWindow.calculateScale(this.mc.gameSettings.guiScale, this.mc.getForceUnicodeFont());
 		}
 		GUI_ACTIVE = false;*/
-        super.onClose();
+        super.removed();
     }
 
     @Override
@@ -103,7 +103,7 @@ public abstract class BeastiaryScreen extends BaseScreen {
     public void init() {
         super.init();
         if(this.scaledResolution == null) {
-            this.scaledResolution = this.mc.getMainWindow();
+            this.scaledResolution = this.mc.getWindow();
         }
 
         this.zLevel = -1000F;
@@ -182,19 +182,19 @@ public abstract class BeastiaryScreen extends BaseScreen {
     @Override
     public void actionPerformed(int buttonId) {
         if(buttonId == Page.INDEX.id) {
-            this.mc.displayGuiScreen(new IndexBeastiaryScreen(Minecraft.getInstance().player));
+            this.mc.setScreen(new IndexBeastiaryScreen(Minecraft.getInstance().player));
         }
         if(buttonId == Page.CREATURES.id) {
-            this.mc.displayGuiScreen(new CreaturesBeastiaryScreen(Minecraft.getInstance().player));
+            this.mc.setScreen(new CreaturesBeastiaryScreen(Minecraft.getInstance().player));
         }
         if(buttonId == Page.PETS.id) {
-            this.mc.displayGuiScreen(new PetsBeastiaryScreen(Minecraft.getInstance().player));
+            this.mc.setScreen(new PetsBeastiaryScreen(Minecraft.getInstance().player));
         }
         if(buttonId == Page.SUMMONING.id) {
-            this.mc.displayGuiScreen(new SummoningBeastiaryScreen(Minecraft.getInstance().player));
+            this.mc.setScreen(new SummoningBeastiaryScreen(Minecraft.getInstance().player));
         }
         if(buttonId == Page.ELEMENTS.id) {
-            this.mc.displayGuiScreen(new ElementsBeastiaryScreen(Minecraft.getInstance().player));
+            this.mc.setScreen(new ElementsBeastiaryScreen(Minecraft.getInstance().player));
         }
     }
 
@@ -203,8 +203,8 @@ public abstract class BeastiaryScreen extends BaseScreen {
      */
     @Override
     public boolean keyReleased(int keyCode, int keyCodeB, int keyCodeC) {
-        if(keyCode == 1 || keyCode == this.mc.gameSettings.keyBindInventory.getKey().getKeyCode()) {
-            this.mc.player.closeScreen();
+        if(keyCode == 1 || keyCode == this.mc.options.keyInventory.getKey().getValue()) {
+            this.mc.player.closeContainer();
         }
         return super.keyReleased(keyCode, keyCodeB, keyCodeC);
     }
@@ -251,7 +251,7 @@ public abstract class BeastiaryScreen extends BaseScreen {
 
             // Create New:
             if(this.creaturePreviewEntity == null || this.creaturePreviewEntity.getClass() != creatureInfo.entityClass || !subspeciesMatch) {
-                this.creaturePreviewEntity = creatureInfo.createEntity(this.player.getEntityWorld());
+                this.creaturePreviewEntity = creatureInfo.createEntity(this.player.getCommandSenderWorld());
                 this.creaturePreviewEntity.isOnGround();
                 if (this.creaturePreviewEntity instanceof BaseCreatureEntity) {
                     ((BaseCreatureEntity) this.creaturePreviewEntity).setSubspecies(this.getDisplaySubspecies(creatureInfo));
@@ -280,10 +280,10 @@ public abstract class BeastiaryScreen extends BaseScreen {
                     previewCreatureBase.onlyRenderTicks = this.creaturePreviewTicks;
                 }
 
-                matrixStack.push();
+                matrixStack.pushPose();
                 matrixStack.translate(0, 0, -1000);
                 BaseGui.renderLivingEntity(matrixStack, posX, posY, scale, lookX, lookY, this.creaturePreviewEntity);
-                matrixStack.pop();
+                matrixStack.popPose();
             }
         }
         catch (Exception e) {
@@ -319,7 +319,7 @@ public abstract class BeastiaryScreen extends BaseScreen {
             soundSuffix += "." + creatureInfo.getSubspecies(this.playerExt.selectedSubspecies).name;
         }
         SoundEvent soundEvent = ObjectManager.getSound(creatureInfo.getName() + soundSuffix + "_say");
-        this.player.getEntityWorld().playSound(this.player, this.player.getPositionVec().getX(), this.player.getPositionVec().getY(), this.player.getPositionVec().getZ(), soundEvent, SoundCategory.NEUTRAL, 1, 1);
+        this.player.getCommandSenderWorld().playSound(this.player, this.player.position().x(), this.player.position().y(), this.player.position().z(), soundEvent, SoundCategory.NEUTRAL, 1, 1);
     }
 
     /**

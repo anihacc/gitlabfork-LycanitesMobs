@@ -26,7 +26,7 @@ public class ItemSoulgazer extends BaseItem {
 	// ==================================================
 	// ========== Entity Interaction ==========
 	@Override
-	public ActionResultType itemInteractionForEntity(ItemStack stack, PlayerEntity player, LivingEntity entity, Hand hand) {
+	public ActionResultType interactLivingEntity(ItemStack stack, PlayerEntity player, LivingEntity entity, Hand hand) {
     	ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
     	if(playerExt == null)
 			return ActionResultType.FAIL;

@@ -47,7 +47,7 @@ public class ItemCustomSpawnEgg extends BaseItem {
         this.creatureType = creatureType;
         this.setRegistryName(this.modInfo.modid, this.itemName);
 
-        DispenserBlock.registerDispenseBehavior(this, new SpawnEggDispenseBehaviour());
+        DispenserBlock.registerBehavior(this, new SpawnEggDispenseBehaviour());
 
 		LycanitesMobs.logDebug("Creature Type", "Created Creature Type Spawn Egg: " + this.itemName);
     }
@@ -56,16 +56,16 @@ public class ItemCustomSpawnEgg extends BaseItem {
 	//                  Get Display Name
 	// ==================================================
     @Override
-    public ITextComponent getDisplayName(ItemStack itemStack) {
+    public ITextComponent getName(ItemStack itemStack) {
 		TextComponent displayName = (TextComponent)new TranslationTextComponent("creaturetype.spawn")
-				.appendString(" ")
+				.append(" ")
 				.append(this.creatureType.getTitle())
-				.appendString(": ");
+				.append(": ");
 		CreatureInfo creatureInfo = this.getCreatureInfo(itemStack);
 		if(creatureInfo != null)
 			displayName.append(creatureInfo.getTitle());
 		else
-			displayName.appendString("Missing Creature NBT");
+			displayName.append("Missing Creature NBT");
         return displayName;
     }
     
@@ -74,9 +74,9 @@ public class ItemCustomSpawnEgg extends BaseItem {
 	//                      Info
 	// ==================================================
     @Override
-	public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flag) {
+	public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flag) {
 		ITextComponent description = this.getDescription(stack, worldIn, tooltip, flag);
-        if(!"".equalsIgnoreCase(description.getString()) && !("item." + this.itemName + ".description").equals(description.getUnformattedComponentText())) {
+        if(!"".equalsIgnoreCase(description.getString()) && !("item." + this.itemName + ".description").equals(description.getContents())) {
 			tooltip.add(description);
         }
     }
@@ -97,8 +97,8 @@ public class ItemCustomSpawnEgg extends BaseItem {
 	//                    Item Group
 	// ==================================================
 	@Override
-	public void fillItemGroup(ItemGroup tab, NonNullList<ItemStack> items) {
-		if(!this.isInGroup(tab)) {
+	public void fillItemCategory(ItemGroup tab, NonNullList<ItemStack> items) {
+		if(!this.allowdedIn(tab)) {
 			return;
 		}
 
@@ -127,30 +127,30 @@ public class ItemCustomSpawnEgg extends BaseItem {
 	//                     Item Use
 	// ==================================================
     @Override
-	public ActionResultType onItemUse(ItemUseContext context) {
-		World world = context.getWorld();
-		BlockPos pos = context.getPos();
+	public ActionResultType useOn(ItemUseContext context) {
+		World world = context.getLevel();
+		BlockPos pos = context.getClickedPos();
 		PlayerEntity player = context.getPlayer();
-		ItemStack itemStack = context.getItem();
+		ItemStack itemStack = context.getItemInHand();
 
         BlockState blockState = world.getBlockState(pos);
         Block block = blockState.getBlock();
 
-        if (world.isRemote) {
+        if (world.isClientSide) {
             return ActionResultType.SUCCESS;
         }
-        if (!player.canPlayerEdit(pos.offset(context.getFace()), context.getFace(), itemStack)) {
+        if (!player.mayUseItemAt(pos.relative(context.getClickedFace()), context.getClickedFace(), itemStack)) {
             return ActionResultType.FAIL;
         }
         
         // Edit Spawner:
         if(block == Blocks.SPAWNER) {
-            TileEntity tileEntity = world.getTileEntity(pos);
-			AbstractSpawner mobspawnerbaselogic = ((MobSpawnerTileEntity)tileEntity).getSpawnerBaseLogic();
-            mobspawnerbaselogic.setEntityType(this.getCreatureInfo(itemStack).getEntityType());
-            tileEntity.markDirty();
-            world.notifyBlockUpdate(pos, blockState, blockState, 3);
-            if (!player.abilities.isCreativeMode) {
+            TileEntity tileEntity = world.getBlockEntity(pos);
+			AbstractSpawner mobspawnerbaselogic = ((MobSpawnerTileEntity)tileEntity).getSpawner();
+            mobspawnerbaselogic.setEntityId(this.getCreatureInfo(itemStack).getEntityType());
+            tileEntity.setChanged();
+            world.sendBlockUpdated(pos, blockState, blockState, 3);
+            if (!player.abilities.instabuild) {
                 itemStack.setCount(Math.max(0, itemStack.getCount() - 1));
             }
 
@@ -158,18 +158,18 @@ public class ItemCustomSpawnEgg extends BaseItem {
         }
         
         // Spawn Mob:
-		pos = pos.offset(context.getFace());
+		pos = pos.relative(context.getClickedFace());
 		double d0 = 0.0D;
-		if (context.getFace() == Direction.UP && blockState.getBlock() instanceof FenceBlock) {
+		if (context.getClickedFace() == Direction.UP && blockState.getBlock() instanceof FenceBlock) {
 			d0 = 0.5D;
 		}
 
 		LivingEntity entity = this.spawnCreature(world, itemStack, (double)pos.getX() + 0.5D, (double)pos.getY() + d0, (double)pos.getZ() + 0.5D);
 		if(entity != null) {
-			if(itemStack.hasDisplayName()) {
-				entity.setCustomName(itemStack.getDisplayName());
+			if(itemStack.hasCustomHoverName()) {
+				entity.setCustomName(itemStack.getHoverName());
 			}
-			if(!player.abilities.isCreativeMode) {
+			if(!player.abilities.instabuild) {
 				itemStack.setCount(Math.max(0, itemStack.getCount() - 1));
 			}
 		}
@@ -182,34 +182,34 @@ public class ItemCustomSpawnEgg extends BaseItem {
 	//                   On Right Click
 	// ==================================================
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
-        ItemStack itemStack = player.getHeldItem(hand);
-        if(world.isRemote)
+    public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
+        ItemStack itemStack = player.getItemInHand(hand);
+        if(world.isClientSide)
             return new ActionResult(ActionResultType.PASS, itemStack);
         else {
-            RayTraceResult rayTraceResult = this.rayTrace(world, player, RayTraceContext.FluidMode.ANY);
+            RayTraceResult rayTraceResult = this.getPlayerPOVHitResult(world, player, RayTraceContext.FluidMode.ANY);
 
             if(rayTraceResult.getType() != RayTraceResult.Type.BLOCK)
                 return new ActionResult(ActionResultType.PASS, itemStack);
 
             BlockRayTraceResult blockRayTraceResult = (BlockRayTraceResult)rayTraceResult;
-			BlockPos pos = blockRayTraceResult.getPos();
+			BlockPos pos = blockRayTraceResult.getBlockPos();
 
-			if (!world.isBlockModifiable(player, pos)) {
+			if (!world.mayInteract(player, pos)) {
 				return new ActionResult(ActionResultType.FAIL, itemStack);
 			}
 
-			if (!player.canPlayerEdit(pos, blockRayTraceResult.getFace(), itemStack)) {
+			if (!player.mayUseItemAt(pos, blockRayTraceResult.getDirection(), itemStack)) {
 				return new ActionResult(ActionResultType.PASS, itemStack);
 			}
 
 			if (world.getBlockState(pos).getMaterial() == Material.WATER) {
 				LivingEntity entity = spawnCreature(world, itemStack, (double) pos.getX(), (double) pos.getY(), (double) pos.getZ());
 				if (entity != null)
-					if (itemStack.hasDisplayName()) {
-						entity.setCustomName(itemStack.getDisplayName());
+					if (itemStack.hasCustomHoverName()) {
+						entity.setCustomName(itemStack.getHoverName());
 					}
-				if (!player.abilities.isCreativeMode) {
+				if (!player.abilities.instabuild) {
 					itemStack.setCount(Math.max(0, itemStack.getCount() - 1));
 				}
 			}
@@ -258,21 +258,21 @@ public class ItemCustomSpawnEgg extends BaseItem {
 	public LivingEntity spawnCreature(World world, ItemStack itemStack, double x, double y, double z) {
 		LivingEntity entity = this.getCreatureInfo(itemStack).createEntity(world);
 		if(entity != null && world instanceof IServerWorld) {
-			entity.setLocationAndAngles(x, y, z, MathHelper.wrapDegrees(world.rand.nextFloat() * 360.0F), 0.0F);
-			entity.rotationYawHead = entity.rotationYaw;
-			entity.renderYawOffset = entity.rotationYaw;
+			entity.moveTo(x, y, z, MathHelper.wrapDegrees(world.random.nextFloat() * 360.0F), 0.0F);
+			entity.yHeadRot = entity.yRot;
+			entity.yBodyRot = entity.yRot;
 
-			if(itemStack.hasDisplayName()) {
-				entity.setCustomName(itemStack.getDisplayName());
+			if(itemStack.hasCustomHoverName()) {
+				entity.setCustomName(itemStack.getHoverName());
 			}
 
 			if(entity instanceof MobEntity) {
 				MobEntity mobEntity = (MobEntity)entity;
-				mobEntity.onInitialSpawn((IServerWorld)world, world.getDifficultyForLocation(mobEntity.getPosition()), SpawnReason.SPAWN_EGG, null, null);
+				mobEntity.finalizeSpawn((IServerWorld)world, world.getCurrentDifficultyAt(mobEntity.blockPosition()), SpawnReason.SPAWN_EGG, null, null);
 				mobEntity.playAmbientSound();
 			}
 
-			world.addEntity(entity);
+			world.addFreshEntity(entity);
 		}
 		return entity;
 	}

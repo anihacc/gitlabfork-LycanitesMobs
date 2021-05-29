@@ -11,7 +11,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public class DefendVillageGoal extends FindAttackTargetGoal {
-	private final EntityPredicate villageSearchPredicate = (new EntityPredicate()).setDistance(64.0D);
+	private final EntityPredicate villageSearchPredicate = (new EntityPredicate()).range(64.0D);
 
 	public DefendVillageGoal(BaseCreatureEntity setHost) {
 		super(setHost);
@@ -21,14 +21,14 @@ public class DefendVillageGoal extends FindAttackTargetGoal {
 	 * Returns whether the Goal should begin execution.
 	 */
 	@Override
-	public boolean shouldExecute() {
+	public boolean canUse() {
 		if(this.host.getOwner() != null) {
 			return false;
 		}
 
-		AxisAlignedBB villageSearchArea = this.host.getBoundingBox().grow(10.0D, 8.0D, 10.0D);
-		List<LivingEntity> villagers = this.host.world.getTargettableEntitiesWithinAABB(VillagerEntity.class, this.villageSearchPredicate, this.host, villageSearchArea);
-		List<PlayerEntity> players = this.host.world.getTargettablePlayersWithinAABB(this.villageSearchPredicate, this.host, villageSearchArea);
+		AxisAlignedBB villageSearchArea = this.host.getBoundingBox().inflate(10.0D, 8.0D, 10.0D);
+		List<LivingEntity> villagers = this.host.level.getNearbyEntities(VillagerEntity.class, this.villageSearchPredicate, this.host, villageSearchArea);
+		List<PlayerEntity> players = this.host.level.getNearbyPlayers(this.villageSearchPredicate, this.host, villageSearchArea);
 		Iterator villagerIter = villagers.iterator();
 
 		while(villagerIter.hasNext()) {
@@ -52,8 +52,8 @@ public class DefendVillageGoal extends FindAttackTargetGoal {
 	 * Execute a one shot task or start executing a continuous task
 	 */
 	@Override
-	public void startExecuting() {
-		super.startExecuting();
+	public void start() {
+		super.start();
 	}
 
 }

@@ -175,7 +175,7 @@ public class Variant {
 	 */
 	public boolean canSpawn(LivingEntity entityLiving) {
 		if(entityLiving != null) {
-			World world = entityLiving.getEntityWorld();
+			World world = entityLiving.getCommandSenderWorld();
 
 			// Spawn Day Limit:
 			int day = (int)Math.floor(world.getGameTime() / 23999D);

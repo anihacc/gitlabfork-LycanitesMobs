@@ -5,6 +5,8 @@ import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TranslationTextComponent;
 
+import net.minecraft.client.gui.widget.button.Button.IPressable;
+
 public class MountTab extends Tab {
 	
 	public MountTab(int id, IPressable pressable) {
@@ -13,7 +15,7 @@ public class MountTab extends Tab {
 
     @Override
     public void onTabClicked () {
-        KeyBinding.setKeyBindState(KeyHandler.instance.mountInventory.getKey(), true); //TODO Add a better way that works!
+        KeyBinding.set(KeyHandler.instance.mountInventory.getKey(), true); //TODO Add a better way that works!
     }
 
     @Override

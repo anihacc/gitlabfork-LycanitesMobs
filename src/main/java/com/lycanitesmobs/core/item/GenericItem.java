@@ -1,5 +1,7 @@
 package com.lycanitesmobs.core.item;
 
+import net.minecraft.item.Item.Properties;
+
 public class GenericItem extends BaseItem {
 	public String modelName;
 

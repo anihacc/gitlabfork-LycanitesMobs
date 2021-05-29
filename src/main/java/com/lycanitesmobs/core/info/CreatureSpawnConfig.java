@@ -63,7 +63,7 @@ public class CreatureSpawnConfig {
 		if(this.dimensionList.length > 0) {
 			boolean inDimensionList = false;
 			for (String dimensionId : this.dimensionList) {
-				if (dimensionId.equals(world.getDimensionKey().getLocation().toString())) {
+				if (dimensionId.equals(world.dimension().location().toString())) {
 					inDimensionList = true;
 					break;
 				}

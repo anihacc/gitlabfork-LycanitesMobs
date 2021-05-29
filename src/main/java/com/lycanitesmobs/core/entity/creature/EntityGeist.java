@@ -54,9 +54,9 @@ public class EntityGeist extends AgeableCreatureEntity implements IMob {
         this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setTargetClass(PlayerEntity.class).setLongMemory(false));
         this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this));
 
-        if(this.getNavigator() instanceof GroundPathNavigator) {
-            GroundPathNavigator pathNavigateGround = (GroundPathNavigator)this.getNavigator();
-            pathNavigateGround.setBreakDoors(true);
+        if(this.getNavigation() instanceof GroundPathNavigator) {
+            GroundPathNavigator pathNavigateGround = (GroundPathNavigator)this.getNavigation();
+            pathNavigateGround.setCanOpenDoors(true);
             pathNavigateGround.setAvoidSun(true);
         }
     }
@@ -75,27 +75,27 @@ public class EntityGeist extends AgeableCreatureEntity implements IMob {
     public void onKillEntity(LivingEntity entityLivingBase) {
         super.onKillEntity(entityLivingBase);
 
-        if(this.getEntityWorld().getDifficulty().getId() >= 2 && entityLivingBase instanceof VillagerEntity) {
-            if (this.getEntityWorld().getDifficulty().getId() == 2 && this.rand.nextBoolean()) return;
+        if(this.getCommandSenderWorld().getDifficulty().getId() >= 2 && entityLivingBase instanceof VillagerEntity) {
+            if (this.getCommandSenderWorld().getDifficulty().getId() == 2 && this.random.nextBoolean()) return;
 
             VillagerEntity villagerentity = (VillagerEntity)entityLivingBase;
-            ZombieVillagerEntity zombievillagerentity = EntityType.ZOMBIE_VILLAGER.create(this.world);
-            zombievillagerentity.copyLocationAndAnglesFrom(villagerentity);
+            ZombieVillagerEntity zombievillagerentity = EntityType.ZOMBIE_VILLAGER.create(this.level);
+            zombievillagerentity.copyPosition(villagerentity);
             villagerentity.remove();
-            zombievillagerentity.onInitialSpawn((IServerWorld) this.getEntityWorld(), this.getEntityWorld().getDifficultyForLocation(zombievillagerentity.getPosition()),SpawnReason.CONVERSION, null, null);
+            zombievillagerentity.finalizeSpawn((IServerWorld) this.getCommandSenderWorld(), this.getCommandSenderWorld().getCurrentDifficultyAt(zombievillagerentity.blockPosition()),SpawnReason.CONVERSION, null, null);
             zombievillagerentity.setVillagerData(villagerentity.getVillagerData());
-            zombievillagerentity.setOffers(villagerentity.getOffers().write());
-            zombievillagerentity.setEXP(villagerentity.getXp());
-            zombievillagerentity.setChild(villagerentity.isChild());
-            zombievillagerentity.setNoAI(villagerentity.isAIDisabled());
+            zombievillagerentity.setTradeOffers(villagerentity.getOffers().createTag());
+            zombievillagerentity.setVillagerXp(villagerentity.getVillagerXp());
+            zombievillagerentity.setBaby(villagerentity.isBaby());
+            zombievillagerentity.setNoAi(villagerentity.isNoAi());
 
             if (villagerentity.hasCustomName()) {
                 zombievillagerentity.setCustomName(villagerentity.getCustomName());
                 zombievillagerentity.setCustomNameVisible(villagerentity.isCustomNameVisible());
             }
 
-            this.getEntityWorld().addEntity(zombievillagerentity);
-            this.getEntityWorld().playEvent(null, 1016, zombievillagerentity.getPosition(), 0);
+            this.getCommandSenderWorld().addFreshEntity(zombievillagerentity);
+            this.getCommandSenderWorld().levelEvent(null, 1016, zombievillagerentity.blockPosition(), 0);
         }
     }
 
@@ -104,26 +104,26 @@ public class EntityGeist extends AgeableCreatureEntity implements IMob {
     //                      Death
     // ==================================================
     @Override
-    public void onDeath(DamageSource damageSource) {
+    public void die(DamageSource damageSource) {
         try {
-            int shadowfireWidth = (int)Math.floor(this.getSize(this.getPose()).width) + 1;
-            int shadowfireHeight = (int)Math.floor(this.getSize(this.getPose()).height) + 1;
+            int shadowfireWidth = (int)Math.floor(this.getDimensions(this.getPose()).width) + 1;
+            int shadowfireHeight = (int)Math.floor(this.getDimensions(this.getPose()).height) + 1;
             boolean permanent = false;
-            if(damageSource.getTrueSource() == this) {
+            if(damageSource.getEntity() == this) {
                 permanent = true;
                 shadowfireWidth *= 5;
             }
 
-            if(!this.getEntityWorld().isRemote && (permanent || (this.getEntityWorld().getGameRules().getBoolean(GameRules.MOB_GRIEFING) && this.shadowfireDeath))) {
-                for(int x = (int)this.getPositionVec().getX() - shadowfireWidth; x <= (int)this.getPositionVec().getX() + shadowfireWidth; x++) {
-                    for(int y = (int)this.getPositionVec().getY() - shadowfireHeight; y <= (int)this.getPositionVec().getY() + shadowfireHeight; y++) {
-                        for(int z = (int)this.getPositionVec().getZ() - shadowfireWidth; z <= (int)this.getPositionVec().getZ() + shadowfireWidth; z++) {
-                            Block block = this.getEntityWorld().getBlockState(new BlockPos(x, y, z)).getBlock();
+            if(!this.getCommandSenderWorld().isClientSide && (permanent || (this.getCommandSenderWorld().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING) && this.shadowfireDeath))) {
+                for(int x = (int)this.position().x() - shadowfireWidth; x <= (int)this.position().x() + shadowfireWidth; x++) {
+                    for(int y = (int)this.position().y() - shadowfireHeight; y <= (int)this.position().y() + shadowfireHeight; y++) {
+                        for(int z = (int)this.position().z() - shadowfireWidth; z <= (int)this.position().z() + shadowfireWidth; z++) {
+                            Block block = this.getCommandSenderWorld().getBlockState(new BlockPos(x, y, z)).getBlock();
                             if(block != Blocks.AIR && block != ObjectManager.getBlock("shadowfire")) {
                                 BlockPos placePos = new BlockPos(x, y + 1, z);
-                                Block upperBlock = this.getEntityWorld().getBlockState(placePos).getBlock();
+                                Block upperBlock = this.getCommandSenderWorld().getBlockState(placePos).getBlock();
                                 if(upperBlock == Blocks.AIR) {
-                                    this.getEntityWorld().setBlockState(placePos, ObjectManager.getBlock("shadowfire").getDefaultState().with(BlockFireBase.PERMANENT, permanent));
+                                    this.getCommandSenderWorld().setBlockAndUpdate(placePos, ObjectManager.getBlock("shadowfire").defaultBlockState().setValue(BlockFireBase.PERMANENT, permanent));
                                 }
                             }
                         }
@@ -132,7 +132,7 @@ public class EntityGeist extends AgeableCreatureEntity implements IMob {
             }
         }
         catch(Exception e) {}
-        super.onDeath(damageSource);
+        super.die(damageSource);
     }
 
     // ==================================================
@@ -147,6 +147,6 @@ public class EntityGeist extends AgeableCreatureEntity implements IMob {
    	// ==================================================
     @Override
     public boolean daylightBurns() {
-        return !this.isChild() && !this.isMinion();
+        return !this.isBaby() && !this.isMinion();
     }
 }

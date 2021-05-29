@@ -33,23 +33,23 @@ public class BlockSlabCustom extends SlabBlock {
 	}
 
     @Override
-    public boolean isTransparent(BlockState blockState) {
+    public boolean useShapeForLightOcclusion(BlockState blockState) {
         return true;
     }
 
     @Override
-    public IFormattableTextComponent getTranslatedName() {
-        return new TranslationTextComponent(this.getTranslationKey());
+    public IFormattableTextComponent getName() {
+        return new TranslationTextComponent(this.getDescriptionId());
     }
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void addInformation(ItemStack stack, @Nullable IBlockReader world, List<ITextComponent> tooltip, ITooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, @Nullable IBlockReader world, List<ITextComponent> tooltip, ITooltipFlag flag) {
         tooltip.add(this.getDescription(stack, world));
     }
 
     public ITextComponent getDescription(ItemStack itemStack, @Nullable IBlockReader world) {
-        return new TranslationTextComponent(this.getTranslationKey() + ".description");
+        return new TranslationTextComponent(this.getDescriptionId() + ".description");
     }
 
 
@@ -58,7 +58,7 @@ public class BlockSlabCustom extends SlabBlock {
     // ==================================================
     @Nullable
     public Item getItemDropped(BlockState state, Random rand, int fortune) {
-        return Item.getItemFromBlock(this);
+        return Item.byBlock(this);
     }
 
     public ItemStack getItem(World worldIn, BlockPos pos, BlockState state) {

@@ -79,7 +79,7 @@ public class FindGroupAttackTargetGoal extends FindAttackTargetGoal {
 		}
     	
     	// Type Check:
-    	if(!this.host.canAttack(target.getType()))
+    	if(!this.host.canAttackType(target.getType()))
             return false;
 
         // Entity Check:

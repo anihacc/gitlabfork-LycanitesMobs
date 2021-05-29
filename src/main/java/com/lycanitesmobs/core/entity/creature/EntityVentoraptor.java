@@ -30,7 +30,7 @@ public class EntityVentoraptor extends RideableCreatureEntity {
         this.setupMob();
         
         // Stats:
-        this.stepHeight = 1.0F;
+        this.maxUpStep = 1.0F;
     }
 
     // ========== Init AI ==========
@@ -47,17 +47,17 @@ public class EntityVentoraptor extends RideableCreatureEntity {
     // ==================================================
 	// ========== Living Update ==========
 	@Override
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
 
 		// Random Leaping:
-        if(!this.isTamed() && this.onGround && !this.getEntityWorld().isRemote) {
+        if(!this.isTamed() && this.onGround && !this.getCommandSenderWorld().isClientSide) {
         	if(this.hasAttackTarget()) {
-        		if(this.rand.nextInt(10) == 0)
-        			this.leap(6.0F, 0.5D, this.getAttackTarget());
+        		if(this.random.nextInt(10) == 0)
+        			this.leap(6.0F, 0.5D, this.getTarget());
         	}
         	else {
-        		if(this.rand.nextInt(50) == 0 && this.isMoving())
+        		if(this.random.nextInt(50) == 0 && this.isMoving())
         			this.leap(2.0D, 0.5D);
         	}
         }
@@ -65,10 +65,10 @@ public class EntityVentoraptor extends RideableCreatureEntity {
 
     @Override
     public void riderEffects(LivingEntity rider) {
-        if(rider.isPotionActive(Effects.WEAKNESS))
-            rider.removePotionEffect(Effects.WEAKNESS);
-        if(rider.isPotionActive(Effects.SLOWNESS))
-            rider.removePotionEffect(Effects.SLOWNESS);
+        if(rider.hasEffect(Effects.WEAKNESS))
+            rider.removeEffect(Effects.WEAKNESS);
+        if(rider.hasEffect(Effects.MOVEMENT_SLOWDOWN))
+            rider.removeEffect(Effects.MOVEMENT_SLOWDOWN);
     }
 
 	
@@ -95,7 +95,7 @@ public class EntityVentoraptor extends RideableCreatureEntity {
     // ==================================================
     @Override
     public void mountAbility(Entity rider) {
-    	if(this.getEntityWorld().isRemote)
+    	if(this.getCommandSenderWorld().isClientSide)
     		return;
 
     	if(this.abilityToggled)

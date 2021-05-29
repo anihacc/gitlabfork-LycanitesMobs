@@ -24,7 +24,7 @@ public class CopyRiderAttackTargetGoal extends TargetingGoal {
   	//                   Should Execute
   	// ==================================================
     @Override
-    public boolean shouldExecute() {
+    public boolean canUse() {
     	if(!this.host.hasRiderTarget())
     		return false;
     	if(this.host.isSitting())
@@ -32,11 +32,11 @@ public class CopyRiderAttackTargetGoal extends TargetingGoal {
     	if(this.host.getRider() == null)
     		return false;
     	
-    	this.target = this.host.getRider().getLastAttackedEntity();
+    	this.target = this.host.getRider().getLastHurtMob();
     	if(this.target == null) {
     		return false;
     	}
-    	if(lastAttackTime == this.host.getRider().getLastAttackedEntityTime())
+    	if(lastAttackTime == this.host.getRider().getLastHurtMobTimestamp())
     		return false;
     	return true;
     }
@@ -46,10 +46,10 @@ public class CopyRiderAttackTargetGoal extends TargetingGoal {
   	//                       Start
   	// ==================================================
     @Override
-    public void startExecuting() {
+    public void start() {
     	if(isTargetValid(target)) {
-			lastAttackTime = this.host.getRider().getLastAttackedEntityTime();
-			super.startExecuting();
+			lastAttackTime = this.host.getRider().getLastHurtMobTimestamp();
+			super.start();
 		}
     }
     
@@ -58,12 +58,12 @@ public class CopyRiderAttackTargetGoal extends TargetingGoal {
  	//                  Continue Executing
  	// ==================================================
     @Override
-    public boolean shouldContinueExecuting() {
+    public boolean canContinueToUse() {
     	if(!this.host.hasRiderTarget())
     		return false;
         if(this.host.isSitting())
             return false;
-        return super.shouldContinueExecuting();
+        return super.canContinueToUse();
     }
     
     
@@ -77,7 +77,7 @@ public class CopyRiderAttackTargetGoal extends TargetingGoal {
     		return false;
 		if(target == this.host)
 			return false;
-		if(!this.host.canAttack(target.getType()))
+		if(!this.host.canAttackType(target.getType()))
 			return false;
     	return true;
     }
@@ -87,7 +87,7 @@ public class CopyRiderAttackTargetGoal extends TargetingGoal {
  	//                    Host Target
  	// ==================================================
     @Override
-    protected LivingEntity getTarget() { return this.host.getAttackTarget(); }
+    protected LivingEntity getTarget() { return this.host.getTarget(); }
     @Override
-    protected void setTarget(LivingEntity newTarget) { this.host.setAttackTarget(newTarget); }
+    protected void setTarget(LivingEntity newTarget) { this.host.setTarget(newTarget); }
 }

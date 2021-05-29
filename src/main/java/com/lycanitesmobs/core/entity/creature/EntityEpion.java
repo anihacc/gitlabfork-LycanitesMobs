@@ -36,7 +36,7 @@ public class EntityEpion extends RideableCreatureEntity implements IMob {
         
         this.setupMob();
 
-        this.stepHeight = 1.0F;
+        this.maxUpStep = 1.0F;
     }
 
     @Override
@@ -60,37 +60,37 @@ public class EntityEpion extends RideableCreatureEntity implements IMob {
     // ==================================================
 	// ========== Living Update ==========
 	@Override
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
         
         // Sunlight Explosions:
-        if(!this.getEntityWorld().isRemote && !this.isTamed() && !this.isMinion() && !this.isRareVariant()) {
+        if(!this.getCommandSenderWorld().isClientSide && !this.isTamed() && !this.isMinion() && !this.isRareVariant()) {
         	if(!this.isFlying() && (this.onGround || this.isInWater()) && this.isAlive()) {
         		int explosionRadius = 2;
 				if(this.subspecies != null)
 					explosionRadius = 3;
 				explosionRadius = Math.max(2, Math.round((float)explosionRadius * (float)this.sizeScale));
-                if(this.getEntityWorld().getGameRules().getBoolean(GameRules.MOB_GRIEFING) && this.griefing)
-	        	    this.getEntityWorld().createExplosion(this, this.getPositionVec().getX(), this.getPositionVec().getY(), this.getPositionVec().getZ(), explosionRadius, Explosion.Mode.NONE);
+                if(this.getCommandSenderWorld().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING) && this.griefing)
+	        	    this.getCommandSenderWorld().explode(this, this.position().x(), this.position().y(), this.position().z(), explosionRadius, Explosion.Mode.NONE);
 				else
-					this.getEntityWorld().createExplosion(this, this.getPositionVec().getX(), this.getPositionVec().getY(), this.getPositionVec().getZ(), explosionRadius, Explosion.Mode.BREAK);
+					this.getCommandSenderWorld().explode(this, this.position().x(), this.position().y(), this.position().z(), explosionRadius, Explosion.Mode.BREAK);
 	        	this.remove();
         	}
         }
         
         // Particles:
-        if(this.getEntityWorld().isRemote)
+        if(this.getCommandSenderWorld().isClientSide)
 	        for(int i = 0; i < 2; ++i) {
-	            this.getEntityWorld().addParticle(ParticleTypes.WITCH, this.getPositionVec().getX() + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, this.getPositionVec().getY() + this.rand.nextDouble() * (double)this.getSize(Pose.STANDING).height, this.getPositionVec().getZ() + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
+	            this.getCommandSenderWorld().addParticle(ParticleTypes.WITCH, this.position().x() + (this.random.nextDouble() - 0.5D) * (double)this.getDimensions(Pose.STANDING).width, this.position().y() + this.random.nextDouble() * (double)this.getDimensions(Pose.STANDING).height, this.position().z() + (this.random.nextDouble() - 0.5D) * (double)this.getDimensions(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
 	        }
     }
 
 	@Override
-	public boolean canEntityBeSeen(Entity target) {
+	public boolean canSee(Entity target) {
 		if(this.isRareVariant()) {
 			return true;
 		}
-		return super.canEntityBeSeen(target);
+		return super.canSee(target);
 	}
     
     
@@ -110,10 +110,10 @@ public class EntityEpion extends RideableCreatureEntity implements IMob {
   	// ==================================================
     @Override
     public boolean isFlying() {
-    	if(this.getEntityWorld().isRemote) return true;
-    	if(this.daylightBurns() && this.getEntityWorld().isDaytime() && this.getEntityWorld().getGameRules().getBoolean(GameRules.MOB_GRIEFING) && this.griefing) {
+    	if(this.getCommandSenderWorld().isClientSide) return true;
+    	if(this.daylightBurns() && this.getCommandSenderWorld().isDay() && this.getCommandSenderWorld().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING) && this.griefing) {
     		float brightness = this.getBrightness();
-        	if(brightness > 0.5F && this.getEntityWorld().canBlockSeeSky(this.getPosition()))
+        	if(brightness > 0.5F && this.getCommandSenderWorld().canSeeSkyFromBelowWater(this.blockPosition()))
         		return false;
     	}
         return true;
@@ -149,7 +149,7 @@ public class EntityEpion extends RideableCreatureEntity implements IMob {
 	//                   Mount Ability
 	// ==================================================
 	public void mountAbility(Entity rider) {
-		if(this.getEntityWorld().isRemote)
+		if(this.getCommandSenderWorld().isClientSide)
 			return;
 
 		if(this.getStamina() < this.getStaminaCost())
@@ -159,9 +159,9 @@ public class EntityEpion extends RideableCreatureEntity implements IMob {
 			PlayerEntity player = (PlayerEntity)rider;
 			ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile("bloodleech");
 			if(projectileInfo != null) {
-				BaseProjectileEntity projectile = projectileInfo.createProjectile(this.getEntityWorld(), player);
-				this.getEntityWorld().addEntity(projectile);
-				this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
+				BaseProjectileEntity projectile = projectileInfo.createProjectile(this.getCommandSenderWorld(), player);
+				this.getCommandSenderWorld().addFreshEntity(projectile);
+				this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
 				this.triggerAttackCooldown();
 			}
 		}

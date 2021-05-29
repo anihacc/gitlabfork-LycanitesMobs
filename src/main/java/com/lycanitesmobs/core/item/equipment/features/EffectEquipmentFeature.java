@@ -47,16 +47,16 @@ public class EffectEquipmentFeature extends EquipmentFeature {
 			return null;
 		}
 
-		TextComponent description = (TextComponent) new TranslationTextComponent("equipment.feature." + this.featureType).appendString(" ").append(
+		TextComponent description = (TextComponent) new TranslationTextComponent("equipment.feature." + this.featureType).append(" ").append(
 				this.getEffectTypeName());
 		if(this.effectStrength > 0) {
-			description.appendString(" ").append(new TranslationTextComponent("entity.level")).appendString(" " + this.effectStrength);
+			description.append(" ").append(new TranslationTextComponent("entity.level")).append(" " + this.effectStrength);
 		}
 		if(!"self".equals(this.effectTarget) && this.effectDuration > 0) {
-			description.appendString(" " + ((float)this.effectDuration / 20) + "s");
+			description.append(" " + ((float)this.effectDuration / 20) + "s");
 		}
 
-		description.appendString(" (" + this.effectTarget + ")");
+		description.append(" (" + this.effectTarget + ")");
 
 		return description;
 	}
@@ -69,13 +69,13 @@ public class EffectEquipmentFeature extends EquipmentFeature {
 
 		TextComponent summary = this.getEffectTypeName();
 		if(this.effectStrength > 0) {
-			summary.appendString(" ").append(new TranslationTextComponent("entity.level")).appendString(" " + this.effectStrength);
+			summary.append(" ").append(new TranslationTextComponent("entity.level")).append(" " + this.effectStrength);
 		}
 		if(!"self".equals(this.effectTarget) && this.effectDuration > 0) {
-			summary.appendString(" " + ((float)this.effectDuration / 20) + "s");
+			summary.append(" " + ((float)this.effectDuration / 20) + "s");
 		}
 
-		summary.appendString(" (" + this.effectTarget + ")");
+		summary.append(" (" + this.effectTarget + ")");
 
 		return summary;
 	}
@@ -109,14 +109,14 @@ public class EffectEquipmentFeature extends EquipmentFeature {
 
 		// Burning:
 		if("burning".equalsIgnoreCase(this.effectType)) {
-			effectTarget.setFire(Math.round(((float)this.effectDuration) / 20));
+			effectTarget.setSecondsOnFire(Math.round(((float)this.effectDuration) / 20));
 			return;
 		}
 
 		// Potion Effects:
 		Effect effect = GameRegistry.findRegistry(Effect.class).getValue(new ResourceLocation(this.effectType));
 		if(effect != null && this.effectStrength > 0) {
-			effectTarget.addPotionEffect(new EffectInstance(effect, this.effectDuration, this.effectStrength - 1));
+			effectTarget.addEffect(new EffectInstance(effect, this.effectDuration, this.effectStrength - 1));
 		}
 	}
 }

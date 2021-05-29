@@ -18,7 +18,7 @@ public class LMItemsGroup extends ItemGroup {
 	// ========== Tab Icon ==========
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public ItemStack createIcon() {
+	public ItemStack makeIcon() {
 		if(ObjectManager.getItem("soulgazer") != null)
 			return new ItemStack(ObjectManager.getItem("soulgazer"));
 		else if(ObjectManager.getItem("poisongland") != null)

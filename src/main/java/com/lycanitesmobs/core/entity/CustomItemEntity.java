@@ -28,13 +28,13 @@ public class CustomItemEntity extends ItemEntity {
 	// ==================================================
    	//                   Taking Damage
    	// ==================================================
-    public boolean attackEntityFrom(DamageSource damageSource, float damageAmount) {
+    public boolean hurt(DamageSource damageSource, float damageAmount) {
     	if(this.isInvulnerableTo(DamageSource.ON_FIRE) || !this.canBurn) {
-    		if(damageSource.isFireDamage() || "inFire".equalsIgnoreCase(damageSource.damageType)) {
+    		if(damageSource.isFire() || "inFire".equalsIgnoreCase(damageSource.msgId)) {
     			return false;
     		}
     	}
-        return super.attackEntityFrom(damageSource, damageAmount);
+        return super.hurt(damageSource, damageAmount);
     }
 
     public void setCanBurn(boolean canBurn) {
@@ -51,9 +51,9 @@ public class CustomItemEntity extends ItemEntity {
     // ==================================================
    	//                  Network Flags
    	// ==================================================
-    protected void setFlag(int flagID, boolean value) {
+    protected void setSharedFlag(int flagID, boolean value) {
     	if(flagID == 0 && this.isInvulnerableTo(DamageSource.ON_FIRE))
     		value = false;
-        super.setFlag(flagID, value);
+        super.setSharedFlag(flagID, value);
     }
 }

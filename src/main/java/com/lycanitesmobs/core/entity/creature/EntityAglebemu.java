@@ -30,7 +30,7 @@ public class EntityAglebemu extends TameableCreatureEntity implements IMob {
         this.babySpawnChance = 0.01D;
         this.setupMob();
 
-        this.setPathPriority(PathNodeType.WATER, 0F);
+        this.setPathfindingMalus(PathNodeType.WATER, 0F);
     }
 
     // ========== Init AI ==========
@@ -46,17 +46,17 @@ public class EntityAglebemu extends TameableCreatureEntity implements IMob {
     // ==================================================
 	// ========== Living Update ==========
 	@Override
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
 
         // Random Leaping:
-        if(this.onGround && !this.getEntityWorld().isRemote && this.isMoving()) {
+        if(this.onGround && !this.getCommandSenderWorld().isClientSide && this.isMoving()) {
             if(this.hasAttackTarget()) {
-                if(this.rand.nextInt(5) == 0)
-                    this.leap(6.0F, 0.6D, this.getAttackTarget());
+                if(this.random.nextInt(5) == 0)
+                    this.leap(6.0F, 0.6D, this.getTarget());
             }
             else {
-                if(this.rand.nextInt(25) == 0)
+                if(this.random.nextInt(25) == 0)
                     this.leap(1.0D, 1.0D);
             }
         }
@@ -81,13 +81,13 @@ public class EntityAglebemu extends TameableCreatureEntity implements IMob {
     public float getBlockPathWeight(int x, int y, int z) {
         int waterWeight = 10;
         BlockPos pos = new BlockPos(x, y, z);
-        BlockState blockState = this.getEntityWorld().getBlockState(pos);
+        BlockState blockState = this.getCommandSenderWorld().getBlockState(pos);
         if(blockState.getBlock() == Blocks.WATER)
             return (super.getBlockPathWeight(x, y, z) + 1) * (waterWeight + 1);
-        if(this.getEntityWorld().isRaining() && this.getEntityWorld().canBlockSeeSky(pos))
+        if(this.getCommandSenderWorld().isRaining() && this.getCommandSenderWorld().canSeeSkyFromBelowWater(pos))
             return (super.getBlockPathWeight(x, y, z) + 1) * (waterWeight + 1);
 
-        if(this.getAttackTarget() != null)
+        if(this.getTarget() != null)
             return super.getBlockPathWeight(x, y, z);
         if(this.waterContact())
             return -999999.0F;
@@ -97,7 +97,7 @@ public class EntityAglebemu extends TameableCreatureEntity implements IMob {
 
     // Pushed By Water:
     @Override
-    public boolean isPushedByWater() {
+    public boolean isPushedByFluid() {
         return false;
     }
     

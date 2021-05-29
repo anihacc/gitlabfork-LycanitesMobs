@@ -36,7 +36,7 @@ public class EntityGrue extends TameableCreatureEntity implements IMob {
         this.spawnsInWater = true;
         this.setupMob();
 
-        this.stepHeight = 1.0F;
+        this.maxUpStep = 1.0F;
     }
 
     // ========== Init AI ==========
@@ -53,25 +53,25 @@ public class EntityGrue extends TameableCreatureEntity implements IMob {
     // ==================================================
 	// ========== Living Update ==========
 	@Override
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
         
         // Random Target Teleporting:
-        if(!this.getEntityWorld().isRemote && this.hasAttackTarget()) {
+        if(!this.getCommandSenderWorld().isClientSide && this.hasAttackTarget()) {
 	        if(this.teleportTime-- <= 0) {
-	        	this.teleportTime = 60 + this.getRNG().nextInt(40);
-        		BlockPos teleportPosition = this.getFacingPosition(this.getAttackTarget(), -this.getAttackTarget().getSize(Pose.STANDING).width - 1D, 0);
+	        	this.teleportTime = 60 + this.getRandom().nextInt(40);
+        		BlockPos teleportPosition = this.getFacingPosition(this.getTarget(), -this.getTarget().getDimensions(Pose.STANDING).width - 1D, 0);
         		if(this.canTeleportTo(teleportPosition)) {
 					this.playJumpSound();
-					this.setPosition(teleportPosition.getX(), teleportPosition.getY(), teleportPosition.getZ());
+					this.setPos(teleportPosition.getX(), teleportPosition.getY(), teleportPosition.getZ());
 				}
 	        }
         }
         
         // Particles:
-        if(this.getEntityWorld().isRemote)
+        if(this.getCommandSenderWorld().isClientSide)
 	        for(int i = 0; i < 2; ++i) {
-	            this.getEntityWorld().addParticle(ParticleTypes.WITCH, this.getPositionVec().getX() + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, this.getPositionVec().getY() + this.rand.nextDouble() * (double)this.getSize(Pose.STANDING).height, this.getPositionVec().getZ() + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
+	            this.getCommandSenderWorld().addParticle(ParticleTypes.WITCH, this.position().x() + (this.random.nextDouble() - 0.5D) * (double)this.getDimensions(Pose.STANDING).width, this.position().y() + this.random.nextDouble() * (double)this.getDimensions(Pose.STANDING).height, this.position().z() + (this.random.nextDouble() - 0.5D) * (double)this.getDimensions(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
 	        }
     }
 
@@ -82,8 +82,8 @@ public class EntityGrue extends TameableCreatureEntity implements IMob {
 	 */
 	public boolean canTeleportTo(BlockPos pos) {
 		for (int y = 0; y <= 1; y++) {
-			BlockState blockState = this.getEntityWorld().getBlockState(pos.add(0, y, 0));
-			if (blockState.isSolid())
+			BlockState blockState = this.getCommandSenderWorld().getBlockState(pos.offset(0, y, 0));
+			if (blockState.canOcclude())
 				return false;
 		}
         return true;
@@ -95,20 +95,20 @@ public class EntityGrue extends TameableCreatureEntity implements IMob {
    	// ==================================================
     @Override
     public boolean canStealth() {
-    	if(this.getEntityWorld().isRemote) return false;
+    	if(this.getCommandSenderWorld().isClientSide) return false;
 		if(this.isMoving()) return false;
     	return this.testLightLevel() <= 0;
     }
     
     @Override
     public void startStealth() {
-    	if(this.getEntityWorld().isRemote) {
+    	if(this.getCommandSenderWorld().isClientSide) {
             IParticleData particle = ParticleTypes.WITCH;
-            double d0 = this.rand.nextGaussian() * 0.02D;
-            double d1 = this.rand.nextGaussian() * 0.02D;
-            double d2 = this.rand.nextGaussian() * 0.02D;
+            double d0 = this.random.nextGaussian() * 0.02D;
+            double d1 = this.random.nextGaussian() * 0.02D;
+            double d2 = this.random.nextGaussian() * 0.02D;
             for(int i = 0; i < 100; i++)
-            	this.getEntityWorld().addParticle(particle, this.getPositionVec().getX() + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).width * 2.0F) - (double)this.getSize(Pose.STANDING).width, this.getPositionVec().getY() + 0.5D + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).height), this.getPositionVec().getZ() + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).width * 2.0F) - (double)this.getSize(Pose.STANDING).width, d0, d1, d2);
+            	this.getCommandSenderWorld().addParticle(particle, this.position().x() + (double)(this.random.nextFloat() * this.getDimensions(Pose.STANDING).width * 2.0F) - (double)this.getDimensions(Pose.STANDING).width, this.position().y() + 0.5D + (double)(this.random.nextFloat() * this.getDimensions(Pose.STANDING).height), this.position().z() + (double)(this.random.nextFloat() * this.getDimensions(Pose.STANDING).width * 2.0F) - (double)this.getDimensions(Pose.STANDING).width, d0, d1, d2);
         }
     	super.startStealth();
     }
@@ -127,15 +127,15 @@ public class EntityGrue extends TameableCreatureEntity implements IMob {
     	if(this.isRareVariant() && target instanceof LivingEntity) {
     		LivingEntity targetLiving = (LivingEntity)target;
     		List<Effect> goodEffects = new ArrayList<>();
-    		for(EffectInstance effectInstance : targetLiving.getActivePotionEffects()) {
-				if(ObjectLists.inEffectList("buffs", effectInstance.getPotion()))
-					goodEffects.add(effectInstance.getPotion());
+    		for(EffectInstance effectInstance : targetLiving.getActiveEffects()) {
+				if(ObjectLists.inEffectList("buffs", effectInstance.getEffect()))
+					goodEffects.add(effectInstance.getEffect());
     		}
     		if(goodEffects.size() > 0) {
     			if(goodEffects.size() > 1)
-    				targetLiving.removePotionEffect(goodEffects.get(this.getRNG().nextInt(goodEffects.size())));
+    				targetLiving.removeEffect(goodEffects.get(this.getRandom().nextInt(goodEffects.size())));
     			else
-    				targetLiving.removePotionEffect(goodEffects.get(0));
+    				targetLiving.removeEffect(goodEffects.get(0));
 				float leeching = Math.max(1, this.getAttackDamage(damageScale) / 2);
 		    	this.heal(leeching);
     		}

@@ -5,6 +5,8 @@ import net.minecraft.entity.ai.goal.Goal;
 
 import java.util.EnumSet;
 
+import net.minecraft.entity.ai.goal.Goal.Flag;
+
 public class LookIdleGoal extends Goal {
     // Targets:
     private BaseCreatureEntity host;
@@ -21,7 +23,7 @@ public class LookIdleGoal extends Goal {
    	// ==================================================
     public LookIdleGoal(BaseCreatureEntity setHost) {
         this.host = setHost;
-        this.setMutexFlags(EnumSet.of(Flag.LOOK));
+        this.setFlags(EnumSet.of(Flag.LOOK));
     }
     
     
@@ -42,8 +44,8 @@ public class LookIdleGoal extends Goal {
    	//                  Should Execute
    	// ==================================================
 	@Override
-    public boolean shouldExecute() {
-        return this.host.getRNG().nextFloat() < 0.02F;
+    public boolean canUse() {
+        return this.host.getRandom().nextFloat() < 0.02F;
     }
     
     
@@ -51,7 +53,7 @@ public class LookIdleGoal extends Goal {
    	//                Continue Executing
    	// ==================================================
 	@Override
-    public boolean shouldContinueExecuting() {
+    public boolean canContinueToUse() {
         return this.idleTime >= 0;
     }
     
@@ -60,11 +62,11 @@ public class LookIdleGoal extends Goal {
    	//                     Start
    	// ==================================================
 	@Override
-    public void startExecuting() {
-        double d0 = (Math.PI * 2D) * this.host.getRNG().nextDouble();
+    public void start() {
+        double d0 = (Math.PI * 2D) * this.host.getRandom().nextDouble();
         this.lookX = Math.cos(d0);
         this.lookZ = Math.sin(d0);
-        this.idleTime = idleTimeMin + this.host.getRNG().nextInt(idleTimeRange);
+        this.idleTime = idleTimeMin + this.host.getRandom().nextInt(idleTimeRange);
     }
     
     
@@ -74,11 +76,11 @@ public class LookIdleGoal extends Goal {
 	@Override
     public void tick() {
         this.idleTime--;
-        this.host.getLookController().setLookPosition(
-        		this.host.getPositionVec().getX() + this.lookX,
-        		this.host.getPositionVec().getY() + (double)this.host.getEyeHeight(),
-        		this.host.getPositionVec().getZ() + this.lookZ, 10.0F,
-        		(float)this.host.getVerticalFaceSpeed()
+        this.host.getLookControl().setLookAt(
+        		this.host.position().x() + this.lookX,
+        		this.host.position().y() + (double)this.host.getEyeHeight(),
+        		this.host.position().z() + this.lookZ, 10.0F,
+        		(float)this.host.getMaxHeadXRot()
         		);
     }
 }

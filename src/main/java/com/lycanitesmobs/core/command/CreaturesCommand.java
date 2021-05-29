@@ -15,7 +15,7 @@ public class CreaturesCommand {
 
 	public static int reload(final CommandContext<CommandSource> context) {
 		CreatureManager.getInstance().reload();
-		context.getSource().sendFeedback(new TranslationTextComponent("lyc.command.creatures.reload"), true);
+		context.getSource().sendSuccess(new TranslationTextComponent("lyc.command.creatures.reload"), true);
 		return 0;
 	}
 }

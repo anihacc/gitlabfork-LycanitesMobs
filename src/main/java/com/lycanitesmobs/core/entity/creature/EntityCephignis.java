@@ -40,7 +40,7 @@ public class EntityCephignis extends AgeableCreatureEntity {
         this.isAggressiveByDefault = false;
         this.setupMob();
 
-        this.setPathPriority(PathNodeType.LAVA, 0F);
+        this.setPathfindingMalus(PathNodeType.LAVA, 0F);
     }
 
     // ========== Init AI ==========
@@ -60,12 +60,12 @@ public class EntityCephignis extends AgeableCreatureEntity {
     public float getBlockPathWeight(int x, int y, int z) {
         int waterWeight = 10;
         BlockPos pos = new BlockPos(x, y, z);
-        if(this.getEntityWorld().getBlockState(pos).getBlock() == ObjectManager.getBlock("purelava"))
+        if(this.getCommandSenderWorld().getBlockState(pos).getBlock() == ObjectManager.getBlock("purelava"))
             return (super.getBlockPathWeight(x, y, z) + 1) * (waterWeight + 2);
-        if(this.getEntityWorld().getBlockState(pos).getBlock() == Blocks.LAVA)
+        if(this.getCommandSenderWorld().getBlockState(pos).getBlock() == Blocks.LAVA)
             return (super.getBlockPathWeight(x, y, z) + 1) * (waterWeight + 1);
 
-        if(this.getAttackTarget() != null)
+        if(this.getTarget() != null)
             return super.getBlockPathWeight(x, y, z);
         if(this.lavaContact())
             return -999999.0F;
@@ -87,12 +87,12 @@ public class EntityCephignis extends AgeableCreatureEntity {
 
     // ========== Can leash ==========
     @Override
-    public boolean canBeLeashedTo(PlayerEntity player) { return true; }
+    public boolean canBeLeashed(PlayerEntity player) { return true; }
 
     // ========== Can Be Tempted ==========
     @Override
     public boolean canBeTempted() {
-        if(this.getAir() <= -100)
+        if(this.getAirSupply() <= -100)
             return false;
         else return super.canBeTempted();
     }
@@ -135,7 +135,7 @@ public class EntityCephignis extends AgeableCreatureEntity {
    	// ==================================================
     // ========== Damage Modifier ==========
     public float getDamageModifier(DamageSource damageSrc) {
-    	if(damageSrc.isFireDamage())
+    	if(damageSrc.isFire())
     		return 0F;
     	else return super.getDamageModifier(damageSrc);
     }

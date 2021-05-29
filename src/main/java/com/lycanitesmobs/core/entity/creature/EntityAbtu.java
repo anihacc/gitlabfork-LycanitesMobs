@@ -49,46 +49,46 @@ public class EntityAbtu extends TameableCreatureEntity implements IMob {
     // ==================================================
 	// ========== Living Update ==========
 	@Override
-    public void livingTick() {
+    public void aiStep() {
 		// Summon Allies:
         if(this.hasAttackTarget() && this.updateTick % 20 == 0) {
 			this.allyUpdate();
 		}
 
         // Random Leaping:
-        if(!this.getEntityWorld().isRemote) {
-            if(this.hasAttackTarget() && this.isChild() && (this.isInWater() || this.onGround)) {
-                if(this.getRNG().nextInt(10) == 0)
-                    this.leap(4.0F, 0.6D, this.getAttackTarget());
+        if(!this.getCommandSenderWorld().isClientSide) {
+            if(this.hasAttackTarget() && this.isBaby() && (this.isInWater() || this.onGround)) {
+                if(this.getRandom().nextInt(10) == 0)
+                    this.leap(4.0F, 0.6D, this.getTarget());
             }
         }
 		
-        super.livingTick();
+        super.aiStep();
     }
     
     // ========== Spawn Minions ==========
 	public void allyUpdate() {
-		if(this.getEntityWorld().isRemote || this.isChild())
+		if(this.getCommandSenderWorld().isClientSide || this.isBaby())
 			return;
 		
 		// Spawn Minions:
 		if(this.swarmLimit > 0 && this.nearbyCreatureCount(this.getType(), 64D) < this.swarmLimit) {
-			float random = this.rand.nextFloat();
+			float random = this.random.nextFloat();
 			float spawnChance = 0.25F;
 			if(random <= spawnChance)
-				this.spawnAlly(this.getPositionVec().getX() - 2 + (random * 4), this.getPositionVec().getY(), this.getPositionVec().getZ() - 2 + (random * 4));
+				this.spawnAlly(this.position().x() - 2 + (random * 4), this.position().y(), this.position().z() - 2 + (random * 4));
 		}
 	}
 	
     public void spawnAlly(double x, double y, double z) {
-    	AgeableCreatureEntity minion = (AgeableCreatureEntity)this.creatureInfo.createEntity(this.getEntityWorld());
+    	AgeableCreatureEntity minion = (AgeableCreatureEntity)this.creatureInfo.createEntity(this.getCommandSenderWorld());
     	minion.setGrowingAge(minion.growthTime);
-    	minion.setLocationAndAngles(x, y, z, this.rand.nextFloat() * 360.0F, 0.0F);
+    	minion.moveTo(x, y, z, this.random.nextFloat() * 360.0F, 0.0F);
 		minion.setMinion(true);
 		minion.applyVariant(this.getVariantIndex());
-    	this.getEntityWorld().addEntity(minion);
-        if(this.getAttackTarget() != null)
-        	minion.setRevengeTarget(this.getAttackTarget());
+    	this.getCommandSenderWorld().addFreshEntity(minion);
+        if(this.getTarget() != null)
+        	minion.setLastHurtByMob(this.getTarget());
     }
 
 	
@@ -100,13 +100,13 @@ public class EntityAbtu extends TameableCreatureEntity implements IMob {
 	public float getBlockPathWeight(int x, int y, int z) {
         int waterWeight = 10;
 
-        Block block = this.getEntityWorld().getBlockState(new BlockPos(x, y, z)).getBlock();
+        Block block = this.getCommandSenderWorld().getBlockState(new BlockPos(x, y, z)).getBlock();
         if(block == Blocks.WATER)
             return (super.getBlockPathWeight(x, y, z) + 1) * (waterWeight + 1);
-        if(this.getEntityWorld().isRaining() && this.getEntityWorld().canBlockSeeSky(new BlockPos(x, y, z)))
+        if(this.getCommandSenderWorld().isRaining() && this.getCommandSenderWorld().canSeeSkyFromBelowWater(new BlockPos(x, y, z)))
             return (super.getBlockPathWeight(x, y, z) + 1) * (waterWeight + 1);
 
-        if(this.getAttackTarget() != null)
+        if(this.getTarget() != null)
             return super.getBlockPathWeight(x, y, z);
         if(this.waterContact())
             return -999999.0F;
@@ -137,9 +137,9 @@ public class EntityAbtu extends TameableCreatureEntity implements IMob {
     //                       Death
     // ==================================================
     @Override
-    public void onDeath(DamageSource par1DamageSource) {
+    public void die(DamageSource par1DamageSource) {
     	allyUpdate();
-        super.onDeath(par1DamageSource);
+        super.die(par1DamageSource);
     }
     
     

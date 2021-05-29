@@ -35,11 +35,11 @@ public class InventorySnooperScreen extends InventoryScreen {
 	}
 	
 	public int getGUIXSize() {
-		return this.xSize;
+		return this.imageWidth;
 	}
 	
 	public int getGUIYSize() {
-		return this.ySize;
+		return this.imageHeight;
 	}
 
 }

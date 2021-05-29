@@ -48,24 +48,24 @@ public class EntityWendigo extends BaseCreatureEntity implements IMob {
     // ==================================================
 	// ========== Living Update ==========
 	@Override
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
 
         // Trail:
-        if(!this.getEntityWorld().isRemote && this.isMoving() && this.ticksExisted % 5 == 0) {
+        if(!this.getCommandSenderWorld().isClientSide && this.isMoving() && this.tickCount % 5 == 0) {
             int trailHeight = 1;
             int trailWidth = 1;
             if(this.isRareVariant())
                 trailWidth = 3;
             for(int y = 0; y < trailHeight; y++) {
-                Block block = this.getEntityWorld().getBlockState(this.getPosition().add(0, y, 0)).getBlock();
+                Block block = this.getCommandSenderWorld().getBlockState(this.blockPosition().offset(0, y, 0)).getBlock();
                 if(block != null && (block == Blocks.AIR || block == Blocks.FIRE || block == Blocks.SNOW || block == Blocks.TALL_GRASS || block == ObjectManager.getBlock("scorchfire") || block == ObjectManager.getBlock("doomfire"))) {
                     if(trailWidth == 1)
-                        this.getEntityWorld().setBlockState(this.getPosition().add(0, y, 0), ObjectManager.getBlock("frostfire").getDefaultState());
+                        this.getCommandSenderWorld().setBlockAndUpdate(this.blockPosition().offset(0, y, 0), ObjectManager.getBlock("frostfire").defaultBlockState());
                     else
                         for(int x = -(trailWidth / 2); x < (trailWidth / 2) + 1; x++) {
                             for(int z = -(trailWidth / 2); z < (trailWidth / 2) + 1; z++) {
-                                this.getEntityWorld().setBlockState(this.getPosition().add(x, y, z), ObjectManager.getBlock("frostfire").getDefaultState());
+                                this.getCommandSenderWorld().setBlockAndUpdate(this.blockPosition().offset(x, y, z), ObjectManager.getBlock("frostfire").defaultBlockState());
                             }
                         }
                 }
@@ -73,21 +73,21 @@ public class EntityWendigo extends BaseCreatureEntity implements IMob {
         }
 
         // Freeze Water:
-        if(!this.getEntityWorld().isRemote && this.isMoving() && this.ticksExisted % 5 == 0) {
-            Block block = this.getEntityWorld().getBlockState(this.getPosition().add(0, -1, 0)).getBlock();
+        if(!this.getCommandSenderWorld().isClientSide && this.isMoving() && this.tickCount % 5 == 0) {
+            Block block = this.getCommandSenderWorld().getBlockState(this.blockPosition().offset(0, -1, 0)).getBlock();
             if(block == Blocks.WATER)
-                this.getEntityWorld().setBlockState(this.getPosition().add(0, -1, 0), Blocks.ICE.getDefaultState());
+                this.getCommandSenderWorld().setBlockAndUpdate(this.blockPosition().offset(0, -1, 0), Blocks.ICE.defaultBlockState());
         }
         
         // Particles:
-        if(this.getEntityWorld().isRemote) {
+        if(this.getCommandSenderWorld().isClientSide) {
 	        for(int i = 0; i < 2; ++i) {
-	            this.getEntityWorld().addParticle(ParticleTypes.ITEM_SNOWBALL, this.getPositionVec().getX() + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, this.getPositionVec().getY() + this.rand.nextDouble() * (double)this.getSize(Pose.STANDING).height, this.getPositionVec().getZ() + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
-	            this.getEntityWorld().addParticle(ParticleTypes.ITEM_SNOWBALL, this.getPositionVec().getX() + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, this.getPositionVec().getY() + this.rand.nextDouble() * (double)this.getSize(Pose.STANDING).height, this.getPositionVec().getZ() + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
+	            this.getCommandSenderWorld().addParticle(ParticleTypes.ITEM_SNOWBALL, this.position().x() + (this.random.nextDouble() - 0.5D) * (double)this.getDimensions(Pose.STANDING).width, this.position().y() + this.random.nextDouble() * (double)this.getDimensions(Pose.STANDING).height, this.position().z() + (this.random.nextDouble() - 0.5D) * (double)this.getDimensions(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
+	            this.getCommandSenderWorld().addParticle(ParticleTypes.ITEM_SNOWBALL, this.position().x() + (this.random.nextDouble() - 0.5D) * (double)this.getDimensions(Pose.STANDING).width, this.position().y() + this.random.nextDouble() * (double)this.getDimensions(Pose.STANDING).height, this.position().z() + (this.random.nextDouble() - 0.5D) * (double)this.getDimensions(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
 	        }
-	        if(this.ticksExisted % 10 == 0)
+	        if(this.tickCount % 10 == 0)
 		        for(int i = 0; i < 2; ++i) {
-		            this.getEntityWorld().addParticle(ParticleTypes.ITEM_SNOWBALL, this.getPositionVec().getX() + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, this.getPositionVec().getY() + this.rand.nextDouble() * (double)this.getSize(Pose.STANDING).height, this.getPositionVec().getZ() + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
+		            this.getCommandSenderWorld().addParticle(ParticleTypes.ITEM_SNOWBALL, this.position().x() + (this.random.nextDouble() - 0.5D) * (double)this.getDimensions(Pose.STANDING).width, this.position().y() + this.random.nextDouble() * (double)this.getDimensions(Pose.STANDING).height, this.position().z() + (this.random.nextDouble() - 0.5D) * (double)this.getDimensions(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
 		        }
         }
     }
@@ -110,11 +110,11 @@ public class EntityWendigo extends BaseCreatureEntity implements IMob {
         int waterWeight = 10;
         BlockPos pos = new BlockPos(x, y, z);
         if(ObjectManager.getBlock("ooze") != null) {
-            if (this.getEntityWorld().getBlockState(pos).getBlock() == ObjectManager.getBlock("ooze"))
+            if (this.getCommandSenderWorld().getBlockState(pos).getBlock() == ObjectManager.getBlock("ooze"))
                 return (super.getBlockPathWeight(x, y, z) + 1) * (waterWeight + 1);
         }
 
-        if(this.getAttackTarget() != null)
+        if(this.getTarget() != null)
             return super.getBlockPathWeight(x, y, z);
         if(this.isInWater())
             return -999999.0F;
@@ -124,7 +124,7 @@ public class EntityWendigo extends BaseCreatureEntity implements IMob {
 
     // Pushed By Water:
     @Override
-    public boolean isPushedByWater() {
+    public boolean isPushedByFluid() {
         return false;
     }
     

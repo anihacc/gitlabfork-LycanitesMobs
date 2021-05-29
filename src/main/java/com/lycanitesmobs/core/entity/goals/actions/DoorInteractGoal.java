@@ -13,6 +13,8 @@ import net.minecraft.util.math.MathHelper;
 
 import java.util.EnumSet;
 
+import net.minecraft.entity.ai.goal.Goal.Flag;
+
 public abstract class DoorInteractGoal extends Goal {
 	// Targets:
     protected MobEntity host;
@@ -34,7 +36,7 @@ public abstract class DoorInteractGoal extends Goal {
     public DoorInteractGoal(MobEntity setHost) {
         this.doorPosition = BlockPos.ZERO;
         this.host = setHost;
-        this.setMutexFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
+        this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
     }
 
 	
@@ -42,20 +44,20 @@ public abstract class DoorInteractGoal extends Goal {
  	//                  Should Execute
  	// ==================================================
 	@Override
-    public boolean shouldExecute() {
-        if(!this.host.collidedHorizontally)
+    public boolean canUse() {
+        if(!this.host.horizontalCollision)
             return false;
 
-        Path pathEntity = this.host.getNavigator().getPath();
+        Path pathEntity = this.host.getNavigation().getPath();
 
-        if(pathEntity != null && !pathEntity.isFinished()) {
-            for(int i = 0; i < Math.min(pathEntity.getCurrentPathIndex() + 2, pathEntity.getCurrentPathLength()); ++i) {
-                PathPoint pathpoint = pathEntity.getPathPointFromIndex(i);
+        if(pathEntity != null && !pathEntity.isDone()) {
+            for(int i = 0; i < Math.min(pathEntity.getNextNodeIndex() + 2, pathEntity.getNodeCount()); ++i) {
+                PathPoint pathpoint = pathEntity.getNode(i);
                 this.entityPosX = pathpoint.x;
                 this.entityPosY = pathpoint.y + 1;
                 this.entityPosZ = pathpoint.z;
 
-                if(this.host.getDistanceSq((double)this.entityPosX, this.host.getPositionVec().getY(), (double)this.entityPosZ) <= 2.25D) {
+                if(this.host.distanceToSqr((double)this.entityPosX, this.host.position().y(), (double)this.entityPosZ) <= 2.25D) {
                     BlockPos possibleDoorPos = new BlockPos(this.entityPosX, this.entityPosY, this.entityPosZ);
                     if(this.isDoor(possibleDoorPos)) {
                         this.doorPosition = possibleDoorPos;
@@ -65,9 +67,9 @@ public abstract class DoorInteractGoal extends Goal {
                 }
             }
 
-            this.entityPosX = MathHelper.floor(this.host.getPositionVec().getX());
-            this.entityPosY = MathHelper.floor(this.host.getPositionVec().getY() + 1.0D);
-            this.entityPosZ = MathHelper.floor(this.host.getPositionVec().getZ());
+            this.entityPosX = MathHelper.floor(this.host.position().x());
+            this.entityPosY = MathHelper.floor(this.host.position().y() + 1.0D);
+            this.entityPosZ = MathHelper.floor(this.host.position().z());
             BlockPos possibleDoorPos = new BlockPos(this.entityPosX, this.entityPosY, this.entityPosZ);
             if(this.isDoor(possibleDoorPos)) {
                 this.doorPosition = possibleDoorPos;
@@ -85,10 +87,10 @@ public abstract class DoorInteractGoal extends Goal {
  	//                      Start
  	// ==================================================
 	@Override
-    public void startExecuting() {
+    public void start() {
         this.hasStoppedDoorInteraction = false;
-        this.entityPositionX = (float)((double)((float)this.entityPosX + 0.5F) - this.host.getPositionVec().getX());
-        this.entityPositionZ = (float)((double)((float)this.entityPosZ + 0.5F) - this.host.getPositionVec().getZ());
+        this.entityPositionX = (float)((double)((float)this.entityPosX + 0.5F) - this.host.position().x());
+        this.entityPositionZ = (float)((double)((float)this.entityPosZ + 0.5F) - this.host.position().z());
     }
 
 	
@@ -96,7 +98,7 @@ public abstract class DoorInteractGoal extends Goal {
  	//                Continue Executing
  	// ==================================================
 	@Override
-    public boolean shouldContinueExecuting() {
+    public boolean canContinueToUse() {
         return !this.hasStoppedDoorInteraction;
     }
 
@@ -106,8 +108,8 @@ public abstract class DoorInteractGoal extends Goal {
  	// ==================================================
 	@Override
     public void tick() {
-        float f = (float)((double)((float)this.entityPosX + 0.5F) - this.host.getPositionVec().getX());
-        float f1 = (float)((double)((float)this.entityPosZ + 0.5F) - this.host.getPositionVec().getZ());
+        float f = (float)((double)((float)this.entityPosX + 0.5F) - this.host.position().x());
+        float f1 = (float)((double)((float)this.entityPosZ + 0.5F) - this.host.position().z());
         float f2 = this.entityPositionX * f + this.entityPositionZ * f1;
 
         if(f2 < 0.0F)
@@ -119,7 +121,7 @@ public abstract class DoorInteractGoal extends Goal {
  	//                   Is Door
  	// ==================================================
     private boolean isDoor(BlockPos pos) {
-        BlockState iblockstate = this.host.getEntityWorld().getBlockState(pos);
+        BlockState iblockstate = this.host.getCommandSenderWorld().getBlockState(pos);
         Block block = iblockstate.getBlock();
         return block instanceof DoorBlock && iblockstate.getMaterial() == Material.WOOD;
     }

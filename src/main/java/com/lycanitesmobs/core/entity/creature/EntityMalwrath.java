@@ -29,7 +29,7 @@ public class EntityMalwrath extends RideableCreatureEntity {
 
         this.setupMob();
 
-        this.stepHeight = 1.0F;
+        this.maxUpStep = 1.0F;
         this.hitAreaWidthScale = 1.5F;
     }
 
@@ -51,46 +51,46 @@ public class EntityMalwrath extends RideableCreatureEntity {
     // ==================================================
     // ========== Living Update ==========
     @Override
-    public void livingTick() {
-        if(!this.getEntityWorld().isRemote && this.isRareVariant() && this.hasAttackTarget() && this.ticksExisted % 20 == 0) {
+    public void aiStep() {
+        if(!this.getCommandSenderWorld().isClientSide && this.isRareVariant() && this.hasAttackTarget() && this.tickCount % 20 == 0) {
             this.allyUpdate();
         }
 
-        super.livingTick();
+        super.aiStep();
     }
 
     @Override
     public void riderEffects(LivingEntity rider) {
-        if(rider.isPotionActive(Effects.WITHER))
-            rider.removePotionEffect(Effects.WITHER);
-        if(rider.isBurning())
-            rider.extinguish();
+        if(rider.hasEffect(Effects.WITHER))
+            rider.removeEffect(Effects.WITHER);
+        if(rider.isOnFire())
+            rider.clearFire();
     }
 
     // ========== Spawn Minions ==========
     public void allyUpdate() {
-        if(this.getEntityWorld().isRemote)
+        if(this.getCommandSenderWorld().isClientSide)
             return;
 
         // Spawn Minions:
         if(CreatureManager.getInstance().getCreature("wraith").enabled) {
             if (this.nearbyCreatureCount(CreatureManager.getInstance().getCreature("wraith").getEntityType(), 64D) < 10) {
-                float random = this.rand.nextFloat();
+                float random = this.random.nextFloat();
                 if (random <= 0.1F) {
-                    this.spawnAlly(this.getPositionVec().getX() - 2 + (random * 4), this.getPositionVec().getY(), this.getPositionVec().getZ() - 2 + (random * 4));
+                    this.spawnAlly(this.position().x() - 2 + (random * 4), this.position().y(), this.position().z() - 2 + (random * 4));
                 }
             }
         }
     }
 
     public void spawnAlly(double x, double y, double z) {
-        EntityWraith minion = (EntityWraith)CreatureManager.getInstance().getCreature("wraith").createEntity(this.getEntityWorld());
-        minion.setLocationAndAngles(x, y, z, this.rotationYaw, this.rotationPitch);
+        EntityWraith minion = (EntityWraith)CreatureManager.getInstance().getCreature("wraith").createEntity(this.getCommandSenderWorld());
+        minion.moveTo(x, y, z, this.yRot, this.xRot);
 		minion.setMinion(true);
 		minion.setMasterTarget(this);
-        this.getEntityWorld().addEntity(minion);
-        if(this.getAttackTarget() != null) {
-            minion.setRevengeTarget(this.getAttackTarget());
+        this.getCommandSenderWorld().addFreshEntity(minion);
+        if(this.getTarget() != null) {
+            minion.setLastHurtByMob(this.getTarget());
         }
         minion.setSizeScale(this.sizeScale);
     }
@@ -162,8 +162,8 @@ public class EntityMalwrath extends RideableCreatureEntity {
     //                      Movement
     // ==================================================
     @Override
-    public double getMountedYOffset() {
-        return (double)this.getSize(Pose.STANDING).height * 0.9D;
+    public double getPassengersRidingOffset() {
+        return (double)this.getDimensions(Pose.STANDING).height * 0.9D;
     }
 
 
@@ -172,7 +172,7 @@ public class EntityMalwrath extends RideableCreatureEntity {
     // ==================================================
     @Override
     public void mountAbility(Entity rider) {
-        if(this.getEntityWorld().isRemote)
+        if(this.getCommandSenderWorld().isClientSide)
             return;
 
         if(this.abilityToggled)
@@ -190,9 +190,9 @@ public class EntityMalwrath extends RideableCreatureEntity {
             PlayerEntity player = (PlayerEntity)rider;
             ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile("demonicblast");
             if(projectileInfo != null) {
-                BaseProjectileEntity projectile = projectileInfo.createProjectile(this.getEntityWorld(), player);
-                this.getEntityWorld().addEntity(projectile);
-                this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
+                BaseProjectileEntity projectile = projectileInfo.createProjectile(this.getCommandSenderWorld(), player);
+                this.getCommandSenderWorld().addFreshEntity(projectile);
+                this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
                 this.triggerAttackCooldown();
             }
         }

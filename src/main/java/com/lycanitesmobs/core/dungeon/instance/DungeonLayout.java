@@ -118,7 +118,7 @@ public class DungeonLayout {
 	 * @return The generated entrance sector.
 	 */
 	public SectorInstance start(Random random) {
-		this.originConnector = new SectorConnector(this.dungeonInstance.originPos, null, 0, Direction.byHorizontalIndex(random.nextInt(100)));
+		this.originConnector = new SectorConnector(this.dungeonInstance.originPos, null, 0, Direction.from2DDataValue(random.nextInt(100)));
 		DungeonSector entranceDungeonSector = this.dungeonInstance.schematic.getRandomSector("entrance", random);
 		SectorInstance entranceSector = new SectorInstance(this, entranceDungeonSector, random);
 		entranceSector.connect(this.originConnector);

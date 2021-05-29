@@ -21,7 +21,7 @@ public class TileEntityEquipmentForge extends TileEntityBase implements IInvento
 	protected NonNullList<ItemStack> itemStacks = NonNullList.withSize(ItemEquipment.PART_LIMIT + 1, ItemStack.EMPTY);
 
 	/** The level of the forge. **/
-	protected int level = 1;
+	protected int forgeLevel = 1;
 
 	@Override
 	public TileEntityType<?> getType() {
@@ -29,9 +29,9 @@ public class TileEntityEquipmentForge extends TileEntityBase implements IInvento
 	}
 
 	@Override
-	public void remove() {
+	public void setRemoved() {
 		// TODO Drop parts or piece.
-		super.remove();
+		super.setRemoved();
 	}
 
 	@Override
@@ -57,7 +57,7 @@ public class TileEntityEquipmentForge extends TileEntityBase implements IInvento
 	 * Returns the stack in the given slot.
 	 */
 	@Override
-	public ItemStack getStackInSlot(int index) {
+	public ItemStack getItem(int index) {
 		return this.itemStacks.get(index);
 	}
 
@@ -65,32 +65,32 @@ public class TileEntityEquipmentForge extends TileEntityBase implements IInvento
 	 * Removes up to a specified number of items from an inventory slot and returns them in a new stack.
 	 */
 	@Override
-	public ItemStack decrStackSize(int index, int count) {
-		return ItemStackHelper.getAndSplit(this.itemStacks, index, count);
+	public ItemStack removeItem(int index, int count) {
+		return ItemStackHelper.removeItem(this.itemStacks, index, count);
 	}
 
 	/**
 	 * Removes a stack from the given slot and returns it.
 	 */
 	@Override
-	public ItemStack removeStackFromSlot(int index) {
-		return ItemStackHelper.getAndRemove(this.itemStacks, index);
+	public ItemStack removeItemNoUpdate(int index) {
+		return ItemStackHelper.takeItem(this.itemStacks, index);
 	}
 
 	/**
 	 * Sets the given item stack to the specified slot in the inventory (can be crafting or armor sections).
 	 */
 	@Override
-	public void setInventorySlotContents(int index, ItemStack stack) {
+	public void setItem(int index, ItemStack stack) {
 		this.itemStacks.set(index, stack);
-		if (stack.getCount() > this.getInventoryStackLimit()) {
-			stack.setCount(this.getInventoryStackLimit());
+		if (stack.getCount() > this.getMaxStackSize()) {
+			stack.setCount(this.getMaxStackSize());
 		}
 	}
 
 
 	@Override
-	public int getSizeInventory() {
+	public int getContainerSize() {
 		return this.itemStacks.size();
 	}
 
@@ -98,22 +98,22 @@ public class TileEntityEquipmentForge extends TileEntityBase implements IInvento
 	 * Returns the maximum stack size for a inventory slot. Seems to always be 64, possibly will be extended.
 	 */
 	@Override
-	public int getInventoryStackLimit() {
+	public int getMaxStackSize() {
 		return 64;
 	}
 
 	@Override
-	public boolean isUsableByPlayer(PlayerEntity player) {
+	public boolean stillValid(PlayerEntity player) {
 		return false;
 	}
 
 	@Override
-	public void openInventory(PlayerEntity player) {
+	public void startOpen(PlayerEntity player) {
 
 	}
 
 	@Override
-	public void closeInventory(PlayerEntity player) {
+	public void stopOpen(PlayerEntity player) {
 
 	}
 
@@ -122,17 +122,17 @@ public class TileEntityEquipmentForge extends TileEntityBase implements IInvento
 	 * guis use Slot.isItemValid
 	 */
 	@Override
-	public boolean isItemValidForSlot(int index, ItemStack itemStack) {
+	public boolean canPlaceItem(int index, ItemStack itemStack) {
 		if(!(itemStack.getItem() instanceof ItemEquipment) && !(itemStack.getItem() instanceof ItemEquipmentPart)) {
 			return false;
 		}
 
-		ItemStack existingStack = this.getStackInSlot(index);
+		ItemStack existingStack = this.getItem(index);
 		return existingStack.isEmpty();
 	}
 
 	@Override
-	public void clear() {
+	public void clearContent() {
 
 	}
 
@@ -141,7 +141,7 @@ public class TileEntityEquipmentForge extends TileEntityBase implements IInvento
 	//              Client Events
 	// ========================================
 	@Override
-	public boolean receiveClientEvent(int eventID, int eventArg) {
+	public boolean triggerEvent(int eventID, int eventArg) {
 		return false;
 	}
 
@@ -154,21 +154,21 @@ public class TileEntityEquipmentForge extends TileEntityBase implements IInvento
 		CompoundNBT syncData = new CompoundNBT();
 
 		// Server to Client:
-		if(!this.getWorld().isRemote) {
-			syncData.putInt("ForgeLevel", this.level);
+		if(!this.getLevel().isClientSide) {
+			syncData.putInt("ForgeLevel", this.forgeLevel);
 		}
 
-		return new SUpdateTileEntityPacket(this.getPos(), 1, syncData);
+		return new SUpdateTileEntityPacket(this.getBlockPos(), 1, syncData);
 	}
 
 	@Override
 	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket packet) {
-		if(!this.getWorld().isRemote)
+		if(!this.getLevel().isClientSide)
 			return;
 
-		CompoundNBT syncData = packet.getNbtCompound();
+		CompoundNBT syncData = packet.getTag();
 		if(syncData.contains("ForgeLevel"))
-			this.level = syncData.getInt("ForgeLevel");
+			this.forgeLevel = syncData.getInt("ForgeLevel");
 	}
 
 	@Override
@@ -183,7 +183,7 @@ public class TileEntityEquipmentForge extends TileEntityBase implements IInvento
 	@Override
 	public void read(CompoundNBT nbtTagCompound) {
 		if(nbtTagCompound.contains("ForgeLevel")) {
-			this.level = nbtTagCompound.getInt("ForgeLevel");
+			this.forgeLevel = nbtTagCompound.getInt("ForgeLevel");
 		}
 		if(nbtTagCompound.contains("Items")) {
 			ItemStackHelper.loadAllItems(nbtTagCompound, this.itemStacks);
@@ -192,10 +192,10 @@ public class TileEntityEquipmentForge extends TileEntityBase implements IInvento
 	}
 
 	@Override
-	public CompoundNBT write(CompoundNBT nbtTagCompound) {
-		nbtTagCompound.putInt("ForgeLevel", this.level);
+	public CompoundNBT save(CompoundNBT nbtTagCompound) {
+		nbtTagCompound.putInt("ForgeLevel", this.forgeLevel);
 		ItemStackHelper.saveAllItems(nbtTagCompound, this.itemStacks);
-		return super.write(nbtTagCompound);
+		return super.save(nbtTagCompound);
 	}
 
 
@@ -205,8 +205,8 @@ public class TileEntityEquipmentForge extends TileEntityBase implements IInvento
 	/**
 	 * Returns the level of this Equipment Forge.
 	 */
-	public int getLevel() {
-		return this.level;
+	public int getForgeLevel() {
+		return this.forgeLevel;
 	}
 
 	/**
@@ -214,7 +214,7 @@ public class TileEntityEquipmentForge extends TileEntityBase implements IInvento
 	 * @param level The level to set the forge to. Higher levels allow for working with higher level Equipment Parts.
 	 */
 	public void setLevel(int level) {
-		this.level = level;
+		this.forgeLevel = level;
 	}
 
 	/**
@@ -222,10 +222,10 @@ public class TileEntityEquipmentForge extends TileEntityBase implements IInvento
 	 */
 	public ITextComponent getName() {
 		String levelName = "lesser";
-		if(this.level == 2) {
+		if(this.forgeLevel == 2) {
 			levelName = "greater";
 		}
-		else if(this.level >= 3) {
+		else if(this.forgeLevel >= 3) {
 			levelName = "master";
 		}
 		return new TranslationTextComponent("block.lycanitesmobs.equipmentforge_" + levelName);

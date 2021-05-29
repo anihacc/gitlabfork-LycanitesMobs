@@ -44,15 +44,15 @@ public class DebugCommand {
 		ConfigDebug.INSTANCE.enabled.set(enabledLogs);
 		ConfigDebug.INSTANCE.enabled.save();
 
-		context.getSource().sendFeedback(new TranslationTextComponent("lyc.command.debug.log").appendString(" " + category), true);
+		context.getSource().sendSuccess(new TranslationTextComponent("lyc.command.debug.log").append(" " + category), true);
 		return 0;
 	}
 
 	public static int list(final CommandContext<CommandSource> context) {
-		context.getSource().sendFeedback(new TranslationTextComponent("lyc.command.debug.list"), true);
+		context.getSource().sendSuccess(new TranslationTextComponent("lyc.command.debug.list"), true);
 		String[] debugCategories = new String[] {"jsonspawner", "mobspawns", "entity", "subspecies", "creature", "mobevents", "dungeon", "items", "equipment"};
 		for(String debugCategory : debugCategories) {
-			context.getSource().sendFeedback(new StringTextComponent(debugCategory), true);
+			context.getSource().sendSuccess(new StringTextComponent(debugCategory), true);
 		}
 		return 0;
 	}
@@ -69,14 +69,14 @@ public class DebugCommand {
 			return 0;
 		}
 		for(RegistryKey<Biome> biomeKey : BiomeDictionary.getBiomes(biomeType)) {
-			context.getSource().sendFeedback(new StringTextComponent(biomeKey.getLocation().toString()), true); // TODO Figure out how the hell to get a biome display name now...
+			context.getSource().sendSuccess(new StringTextComponent(biomeKey.location().toString()), true); // TODO Figure out how the hell to get a biome display name now...
 		}
 		return 0;
 	}
 
 	public static int listbiometags(final CommandContext<CommandSource> context) {
 		for(BiomeDictionary.Type biomeType : BiomeDictionary.Type.getAll()) {
-			context.getSource().sendFeedback(new StringTextComponent(biomeType.getName()), true);
+			context.getSource().sendSuccess(new StringTextComponent(biomeType.getName()), true);
 		}
 		return 0;
 	}
@@ -84,7 +84,7 @@ public class DebugCommand {
 	public static int overlay(final CommandContext<CommandSource> context) {
 		ConfigDebug.INSTANCE.creatureOverlay.set(!ConfigDebug.INSTANCE.creatureOverlay.get());
 		ConfigDebug.INSTANCE.creatureOverlay.save();
-		context.getSource().sendFeedback(new TranslationTextComponent("lyc.command.debug.overlay"), true);
+		context.getSource().sendSuccess(new TranslationTextComponent("lyc.command.debug.overlay"), true);
 		return 0;
 	}
 }

@@ -47,43 +47,43 @@ public class EntityCalpod extends BaseCreatureEntity implements IMob {
     // ==================================================
 	// ========== Living Update ==========
 	@Override
-    public void livingTick() {
-		if(!this.getEntityWorld().isRemote && this.hasAttackTarget() && this.getAttackTarget() instanceof PlayerEntity && this.updateTick % 60 == 0) {
+    public void aiStep() {
+		if(!this.getCommandSenderWorld().isClientSide && this.hasAttackTarget() && this.getTarget() instanceof PlayerEntity && this.updateTick % 60 == 0) {
 			this.allyUpdate();
 		}
 
 		// Destroy Blocks:
-		if(!this.getEntityWorld().isRemote)
-			if(this.getAttackTarget() != null && this.getEntityWorld().getGameRules().getBoolean(GameRules.MOB_GRIEFING) && this.griefing) {
-				float distance = this.getAttackTarget().getDistance(this);
-				if(distance <= this.getSize(Pose.STANDING).width + 1.0F)
-					this.destroyAreaBlock((int)this.getPositionVec().getX(), (int)this.getPositionVec().getY(), (int)this.getPositionVec().getZ(), WoodType.class, true, 0);
+		if(!this.getCommandSenderWorld().isClientSide)
+			if(this.getTarget() != null && this.getCommandSenderWorld().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING) && this.griefing) {
+				float distance = this.getTarget().distanceTo(this);
+				if(distance <= this.getDimensions(Pose.STANDING).width + 1.0F)
+					this.destroyAreaBlock((int)this.position().x(), (int)this.position().y(), (int)this.position().z(), WoodType.class, true, 0);
 			}
         
-        super.livingTick();
+        super.aiStep();
     }
     
     // ========== Spawn Minions ==========
 	public void allyUpdate() {
-		if(this.getEntityWorld().isRemote)
+		if(this.getCommandSenderWorld().isClientSide)
 			return;
 		
 		// Spawn Minions:
 		if(this.swarmLimit > 0 && this.countAllies(64D) < this.swarmLimit) {
-			float random = this.rand.nextFloat();
+			float random = this.random.nextFloat();
 			if(random <= 0.125F)
-				this.spawnAlly(this.getPositionVec().getX() - 2 + (random * 4), this.getPositionVec().getY(), this.getPositionVec().getZ() - 2 + (random * 4));
+				this.spawnAlly(this.position().x() - 2 + (random * 4), this.position().y(), this.position().z() - 2 + (random * 4));
 		}
 	}
 	
     public void spawnAlly(double x, double y, double z) {
-		BaseCreatureEntity minion = (BaseCreatureEntity) this.creatureInfo.createEntity(this.getEntityWorld());
-    	minion.setLocationAndAngles(x, y, z, this.rand.nextFloat() * 360.0F, 0.0F);
+		BaseCreatureEntity minion = (BaseCreatureEntity) this.creatureInfo.createEntity(this.getCommandSenderWorld());
+    	minion.moveTo(x, y, z, this.random.nextFloat() * 360.0F, 0.0F);
 		minion.setMinion(true);
 		minion.applyVariant(this.getVariantIndex());
-		this.getEntityWorld().addEntity(minion);
-        if(this.getAttackTarget() != null)
-        	minion.setRevengeTarget(this.getAttackTarget());
+		this.getCommandSenderWorld().addFreshEntity(minion);
+        if(this.getTarget() != null)
+        	minion.setLastHurtByMob(this.getTarget());
     }
     
     
@@ -91,9 +91,9 @@ public class EntityCalpod extends BaseCreatureEntity implements IMob {
     //                       Death
     // ==================================================
     @Override
-    public void onDeath(DamageSource par1DamageSource) {
+    public void die(DamageSource par1DamageSource) {
     	allyUpdate();
-        super.onDeath(par1DamageSource);
+        super.die(par1DamageSource);
     }
 
 	// ==================================================

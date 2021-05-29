@@ -25,7 +25,7 @@ public class EquipmentForgeContainer extends BaseContainer {
 	 * @param extraData A packet sent from the server to create the Container from.
 	 */
 	public EquipmentForgeContainer(int windowId, PlayerInventory playerInventory, PacketBuffer extraData) {
-		this(windowId, playerInventory, (TileEntityEquipmentForge)playerInventory.player.getEntityWorld().getTileEntity(BlockPos.fromLong(extraData.readLong())));
+		this(windowId, playerInventory, (TileEntityEquipmentForge)playerInventory.player.getCommandSenderWorld().getBlockEntity(BlockPos.of(extraData.readLong())));
 	}
 
 	/**
@@ -41,9 +41,9 @@ public class EquipmentForgeContainer extends BaseContainer {
 		this.addPlayerSlots(playerInventory, 0, 0);
 
 		// Forge Inventory
-		this.inventoryStart = this.inventorySlots.size();
+		this.inventoryStart = this.slots.size();
 		int slots = 0;
-		if(equipmentForge.getSizeInventory() > 0) {
+		if(equipmentForge.getContainerSize() > 0) {
 			int slotSize = 18;
 			int x = 8 + slotSize;
 			int y = 38;
@@ -85,7 +85,7 @@ public class EquipmentForgeContainer extends BaseContainer {
 
 
 	@Override
-	public boolean canInteractWith(PlayerEntity player) {
+	public boolean stillValid(PlayerEntity player) {
 		if(this.equipmentForge == null) {
 			return false;
 		}
@@ -105,16 +105,16 @@ public class EquipmentForgeContainer extends BaseContainer {
 
 		// Edit Equipment Piece:
 		EquipmentForgeSlot slotBase = (EquipmentForgeSlot)this.getSlot(this.inventoryStart + 1);
-		if(equipmentSlot.getHasStack() && !slotBase.getHasStack() && equipmentSlot.getStack().getItem() instanceof ItemEquipment) { // Only edit if not already creating a new piece.
+		if(equipmentSlot.hasItem() && !slotBase.hasItem() && equipmentSlot.getItem().getItem() instanceof ItemEquipment) { // Only edit if not already creating a new piece.
 			EquipmentForgeSlot slotHead = (EquipmentForgeSlot)this.getSlot(this.inventoryStart + 2);
 			EquipmentForgeSlot slotTipA = (EquipmentForgeSlot)this.getSlot(this.inventoryStart + 3);
 			EquipmentForgeSlot slotTipB = (EquipmentForgeSlot)this.getSlot(this.inventoryStart + 4);
 			EquipmentForgeSlot slotTipC = (EquipmentForgeSlot)this.getSlot(this.inventoryStart + 5);
 			EquipmentForgeSlot slotPommel = (EquipmentForgeSlot)this.getSlot(this.inventoryStart + 6);
 
-			ItemEquipment itemEquipment = (ItemEquipment) equipmentSlot.getStack().getItem();
+			ItemEquipment itemEquipment = (ItemEquipment) equipmentSlot.getItem().getItem();
 			int axeIndex = 0;
-			for(ItemStack partStack : itemEquipment.getEquipmentPartStacks(equipmentSlot.getStack())) {
+			for(ItemStack partStack : itemEquipment.getEquipmentPartStacks(equipmentSlot.getItem())) {
 				ItemEquipmentPart itemEquipmentPart = itemEquipment.getEquipmentPart(partStack);
 				if(itemEquipmentPart == null) {
 					continue;
@@ -167,27 +167,27 @@ public class EquipmentForgeContainer extends BaseContainer {
 		ItemStack pieceStack = new ItemStack(itemEquipment);
 
 		// Add Parts:
-		if(slotBase.getHasStack()) {
-			itemEquipment.addEquipmentPart(pieceStack, slotBase.getStack(), 0);
+		if(slotBase.hasItem()) {
+			itemEquipment.addEquipmentPart(pieceStack, slotBase.getItem(), 0);
 		}
-		if(slotHead.getHasStack()) {
-			itemEquipment.addEquipmentPart(pieceStack, slotHead.getStack(), 1);
+		if(slotHead.hasItem()) {
+			itemEquipment.addEquipmentPart(pieceStack, slotHead.getItem(), 1);
 		}
-		if(slotTipA.getHasStack()) {
-			itemEquipment.addEquipmentPart(pieceStack, slotTipA.getStack(), 2);
+		if(slotTipA.hasItem()) {
+			itemEquipment.addEquipmentPart(pieceStack, slotTipA.getItem(), 2);
 		}
-		if(slotTipB.getHasStack()) {
-			itemEquipment.addEquipmentPart(pieceStack, slotTipB.getStack(), 3);
+		if(slotTipB.hasItem()) {
+			itemEquipment.addEquipmentPart(pieceStack, slotTipB.getItem(), 3);
 		}
-		if(slotTipC.getHasStack()) {
-			itemEquipment.addEquipmentPart(pieceStack, slotTipC.getStack(), 4);
+		if(slotTipC.hasItem()) {
+			itemEquipment.addEquipmentPart(pieceStack, slotTipC.getItem(), 4);
 		}
-		if(slotPommel.getHasStack()) {
-			itemEquipment.addEquipmentPart(pieceStack, slotPommel.getStack(), 5);
+		if(slotPommel.hasItem()) {
+			itemEquipment.addEquipmentPart(pieceStack, slotPommel.getItem(), 5);
 		}
 
 		// Put Piece Stack:
-		slotPiece.putStack(pieceStack);
+		slotPiece.set(pieceStack);
 	}
 
 
@@ -216,11 +216,11 @@ public class EquipmentForgeContainer extends BaseContainer {
 		Slot slotTipB = this.getSlot(this.inventoryStart + 4);
 		Slot slotTipC = this.getSlot(this.inventoryStart + 5);
 
-		if(!slotBase.getHasStack() || !slotHead.getHasStack()) {
+		if(!slotBase.hasItem() || !slotHead.hasItem()) {
 			return false;
 		}
 
-		return slotTipA.getHasStack() || slotTipB.getHasStack() || slotTipC.getHasStack();
+		return slotTipA.hasItem() || slotTipB.hasItem() || slotTipC.hasItem();
 	}
 
 
@@ -228,7 +228,7 @@ public class EquipmentForgeContainer extends BaseContainer {
 	 * Disabled until fixed later.
 	 */
 	@Override
-	public ItemStack transferStackInSlot(PlayerEntity player, int slotID) {
+	public ItemStack quickMoveStack(PlayerEntity player, int slotID) {
 		return ItemStack.EMPTY;
 	}
 }

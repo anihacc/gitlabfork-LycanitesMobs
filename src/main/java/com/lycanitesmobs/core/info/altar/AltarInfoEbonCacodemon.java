@@ -39,15 +39,15 @@ public class AltarInfoEbonCacodemon extends AltarInfo {
         Block bodyBlock = Blocks.OBSIDIAN;
 
         // Upper:
-        if(world.getBlockState(pos.add(0, 1, 0)).getBlock() != bodyBlock)
+        if(world.getBlockState(pos.offset(0, 1, 0)).getBlock() != bodyBlock)
             return false;
-        if(world.getBlockState(pos.add(0, 2, 0)).getBlock() != bodyBlock)
+        if(world.getBlockState(pos.offset(0, 2, 0)).getBlock() != bodyBlock)
             return false;
 
         // Lower:
-        if(world.getBlockState(pos.add(0, -1, 0)).getBlock() != bodyBlock)
+        if(world.getBlockState(pos.offset(0, -1, 0)).getBlock() != bodyBlock)
             return false;
-        if(world.getBlockState(pos.add(0, -2, 0)).getBlock() != bodyBlock)
+        if(world.getBlockState(pos.offset(0, -2, 0)).getBlock() != bodyBlock)
             return false;
 
         // X Rotation:
@@ -61,43 +61,43 @@ public class AltarInfoEbonCacodemon extends AltarInfo {
 
     private boolean checkRotationX(Block bodyBlock, Entity entity, World world, BlockPos pos) {
         // Left Arm:
-        if(world.getBlockState(pos.add(-1, 2, 0)).getBlock() != bodyBlock)
+        if(world.getBlockState(pos.offset(-1, 2, 0)).getBlock() != bodyBlock)
             return false;
-        if(world.getBlockState(pos.add(-1, 1, 0)).getBlock() != bodyBlock)
+        if(world.getBlockState(pos.offset(-1, 1, 0)).getBlock() != bodyBlock)
             return false;
-        if(world.getBlockState(pos.add(-2, 1, 0)).getBlock() != bodyBlock)
+        if(world.getBlockState(pos.offset(-2, 1, 0)).getBlock() != bodyBlock)
             return false;
-        if(world.getBlockState(pos.add(-1, 0, 0)).getBlock() != bodyBlock)
+        if(world.getBlockState(pos.offset(-1, 0, 0)).getBlock() != bodyBlock)
             return false;
-        if(world.getBlockState(pos.add(-2, 0, 0)).getBlock() != bodyBlock)
+        if(world.getBlockState(pos.offset(-2, 0, 0)).getBlock() != bodyBlock)
             return false;
 
         // Right Arm:
-        if(world.getBlockState(pos.add(1, 2, 0)).getBlock() != bodyBlock)
+        if(world.getBlockState(pos.offset(1, 2, 0)).getBlock() != bodyBlock)
             return false;
-        if(world.getBlockState(pos.add(1, 1, 0)).getBlock() != bodyBlock)
+        if(world.getBlockState(pos.offset(1, 1, 0)).getBlock() != bodyBlock)
             return false;
-        if(world.getBlockState(pos.add(2, 1, 0)).getBlock() != bodyBlock)
+        if(world.getBlockState(pos.offset(2, 1, 0)).getBlock() != bodyBlock)
             return false;
-        if(world.getBlockState(pos.add(1, 0, 0)).getBlock() != bodyBlock)
+        if(world.getBlockState(pos.offset(1, 0, 0)).getBlock() != bodyBlock)
             return false;
-        if(world.getBlockState(pos.add(2, 0, 0)).getBlock() != bodyBlock)
+        if(world.getBlockState(pos.offset(2, 0, 0)).getBlock() != bodyBlock)
             return false;
 
         // Left Leg:
-        if(world.getBlockState(pos.add(-1, -1, 0)).getBlock() != bodyBlock)
+        if(world.getBlockState(pos.offset(-1, -1, 0)).getBlock() != bodyBlock)
             return false;
-        if(world.getBlockState(pos.add(-1, -2, 0)).getBlock() != bodyBlock)
+        if(world.getBlockState(pos.offset(-1, -2, 0)).getBlock() != bodyBlock)
             return false;
-        if(world.getBlockState(pos.add(-2, -1, 0)).getBlock() != bodyBlock)
+        if(world.getBlockState(pos.offset(-2, -1, 0)).getBlock() != bodyBlock)
             return false;
 
         // Right Leg:
-        if(world.getBlockState(pos.add(1, -1, 0)).getBlock() != bodyBlock)
+        if(world.getBlockState(pos.offset(1, -1, 0)).getBlock() != bodyBlock)
             return false;
-        if(world.getBlockState(pos.add(1, -2, 0)).getBlock() != bodyBlock)
+        if(world.getBlockState(pos.offset(1, -2, 0)).getBlock() != bodyBlock)
             return false;
-        if(world.getBlockState(pos.add(2, -1, 0)).getBlock() != bodyBlock)
+        if(world.getBlockState(pos.offset(2, -1, 0)).getBlock() != bodyBlock)
             return false;
 
         return true;
@@ -106,43 +106,43 @@ public class AltarInfoEbonCacodemon extends AltarInfo {
 
     private boolean checkRotationZ(Block bodyBlock, Entity entity, World world, BlockPos pos) {
         // Left Arm:
-        if(world.getBlockState(pos.add(0, 2, -1)).getBlock() != bodyBlock)
+        if(world.getBlockState(pos.offset(0, 2, -1)).getBlock() != bodyBlock)
             return false;
-        if(world.getBlockState(pos.add(0, 1, -1)).getBlock() != bodyBlock)
+        if(world.getBlockState(pos.offset(0, 1, -1)).getBlock() != bodyBlock)
             return false;
-        if(world.getBlockState(pos.add(0, 1, -2)).getBlock() != bodyBlock)
+        if(world.getBlockState(pos.offset(0, 1, -2)).getBlock() != bodyBlock)
             return false;
-        if(world.getBlockState(pos.add(0, 0, -1)).getBlock() != bodyBlock)
+        if(world.getBlockState(pos.offset(0, 0, -1)).getBlock() != bodyBlock)
             return false;
-        if(world.getBlockState(pos.add(0, 0, -2)).getBlock() != bodyBlock)
+        if(world.getBlockState(pos.offset(0, 0, -2)).getBlock() != bodyBlock)
             return false;
 
         // Right Arm:
-        if(world.getBlockState(pos.add(0, 2, 1)).getBlock() != bodyBlock)
+        if(world.getBlockState(pos.offset(0, 2, 1)).getBlock() != bodyBlock)
             return false;
-        if(world.getBlockState(pos.add(0, 1, 1)).getBlock() != bodyBlock)
+        if(world.getBlockState(pos.offset(0, 1, 1)).getBlock() != bodyBlock)
             return false;
-        if(world.getBlockState(pos.add(0, 1, 2)).getBlock() != bodyBlock)
+        if(world.getBlockState(pos.offset(0, 1, 2)).getBlock() != bodyBlock)
             return false;
-        if(world.getBlockState(pos.add(0, 0, 1)).getBlock() != bodyBlock)
+        if(world.getBlockState(pos.offset(0, 0, 1)).getBlock() != bodyBlock)
             return false;
-        if(world.getBlockState(pos.add(0, 0, 2)).getBlock() != bodyBlock)
+        if(world.getBlockState(pos.offset(0, 0, 2)).getBlock() != bodyBlock)
             return false;
 
         // Left Leg:
-        if(world.getBlockState(pos.add(0, -1, -1)).getBlock() != bodyBlock)
+        if(world.getBlockState(pos.offset(0, -1, -1)).getBlock() != bodyBlock)
             return false;
-        if(world.getBlockState(pos.add(0, -2, -1)).getBlock() != bodyBlock)
+        if(world.getBlockState(pos.offset(0, -2, -1)).getBlock() != bodyBlock)
             return false;
-        if(world.getBlockState(pos.add(0, -1, -2)).getBlock() != bodyBlock)
+        if(world.getBlockState(pos.offset(0, -1, -2)).getBlock() != bodyBlock)
             return false;
 
         // Right Leg:
-        if(world.getBlockState(pos.add(0, -1, 1)).getBlock() != bodyBlock)
+        if(world.getBlockState(pos.offset(0, -1, 1)).getBlock() != bodyBlock)
             return false;
-        if(world.getBlockState(pos.add(0, -2, 1)).getBlock() != bodyBlock)
+        if(world.getBlockState(pos.offset(0, -2, 1)).getBlock() != bodyBlock)
             return false;
-        if(world.getBlockState(pos.add(0, -1, 2)).getBlock() != bodyBlock)
+        if(world.getBlockState(pos.offset(0, -1, 2)).getBlock() != bodyBlock)
             return false;
 
         return true;
@@ -155,7 +155,7 @@ public class AltarInfoEbonCacodemon extends AltarInfo {
     /** Called when this Altar should activate. This will typically destroy the Altar and summon a rare mob or activate an event such as a boss event. If false is returned then the activation did not work, this is the place to check for things like dimensions. **/
     @Override
     public boolean activate(Entity entity, World world, BlockPos pos, int variant) {
-        if(world.isRemote)
+        if(world.isClientSide)
             return true;
 
         int x = pos.getX();
@@ -180,7 +180,7 @@ public class AltarInfoEbonCacodemon extends AltarInfo {
 
         // Offset:
         if(entity != null)
-            pos = this.getFacingPosition(pos, 10, entity.rotationYaw);
+            pos = this.getFacingPosition(pos, 10, entity.yRot);
 
         // Clear Spawn Area:
         for (int xTarget = x - size; xTarget <= x + size; xTarget++) {
@@ -196,8 +196,8 @@ public class AltarInfoEbonCacodemon extends AltarInfo {
         entityCreature.altarSummoned = true;
         entityCreature.forceBossHealthBar = true;
         entityCreature.applyVariant(3);
-        entityCreature.setLocationAndAngles(x, y - 2, z, 0, 0);
-        world.addEntity(entityCreature);
+        entityCreature.moveTo(x, y - 2, z, 0, 0);
+        world.addFreshEntity(entityCreature);
         entityCreature.destroyArea(x, y, z, 10000, false, 2);
 
         return true;

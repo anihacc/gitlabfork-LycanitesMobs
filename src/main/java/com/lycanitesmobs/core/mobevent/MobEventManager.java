@@ -208,7 +208,7 @@ public class MobEventManager extends JSONLoader {
 	@SubscribeEvent
 	public void onWorldUpdate(TickEvent.WorldTickEvent event) {
 		World world = event.world;
-		if(world.isRemote)
+		if(world.isClientSide)
 			return;
 		ExtendedWorld worldExt = ExtendedWorld.getForWorld(world);
 		if(worldExt == null) {
@@ -246,8 +246,8 @@ public class MobEventManager extends JSONLoader {
 		if(ClientManager.getInstance().getClientPlayer() == null)
 			return;
 
-        World world = ClientManager.getInstance().getClientPlayer().getEntityWorld();
-		if(!world.isRemote)
+        World world = ClientManager.getInstance().getClientPlayer().getCommandSenderWorld();
+		if(!world.isClientSide)
 			return;
         ExtendedWorld worldExt = ExtendedWorld.getForWorld(world);
         if(worldExt == null)

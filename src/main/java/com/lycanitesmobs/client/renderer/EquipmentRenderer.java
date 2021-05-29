@@ -20,7 +20,7 @@ import java.util.List;
 public class EquipmentRenderer extends ItemStackTileEntityRenderer implements IItemModelRenderer {
 
 	@Override
-	public void func_239207_a_(ItemStack itemStack, ItemCameraTransforms.TransformType transformType, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, int brightness, int unknown) {
+	public void renderByItem(ItemStack itemStack, ItemCameraTransforms.TransformType transformType, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, int brightness, int unknown) {
 		if(!(itemStack.getItem() instanceof ItemEquipment)) {
 			return;
 		}
@@ -28,20 +28,20 @@ public class EquipmentRenderer extends ItemStackTileEntityRenderer implements II
 		Hand hand = null;
 
 		// Position:
-		matrixStack.push();
+		matrixStack.pushPose();
 		matrixStack.translate(0.5F, 0.35F, 0.6F); // translate
-		matrixStack.rotate(new Vector3f(1.0F, 0.0F, 0.0F).rotationDegrees(90)); // rotate
-		matrixStack.rotate(new Vector3f(0.0F, 0.0F, 1.0F).rotationDegrees(-100)); // rotate
+		matrixStack.mulPose(new Vector3f(1.0F, 0.0F, 0.0F).rotationDegrees(90)); // rotate
+		matrixStack.mulPose(new Vector3f(0.0F, 0.0F, 1.0F).rotationDegrees(-100)); // rotate
 		matrixStack.translate(0F, -1.5F, 0F);
 		EquipmentModel equipmentModel = ModelManager.getInstance().getEquipmentModel();
 
 		float loop = 0;
 		if(Minecraft.getInstance().player != null) {
-			loop = Minecraft.getInstance().player.ticksExisted;
+			loop = Minecraft.getInstance().player.tickCount;
 		}
 		equipmentModel.render(itemStack, hand, matrixStack, renderTypeBuffer, this, loop, brightness);
 
-		matrixStack.pop();
+		matrixStack.popPose();
 	}
 
 	@Override
@@ -49,7 +49,7 @@ public class EquipmentRenderer extends ItemStackTileEntityRenderer implements II
 		if(location == null) {
 			return;
 		}
-		Minecraft.getInstance().getTextureManager().bindTexture(location);
+		Minecraft.getInstance().getTextureManager().bind(location);
 	}
 
 	@Override

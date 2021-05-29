@@ -215,7 +215,7 @@ public class DungeonTheme {
 	public BlockState getBlockState(SectorInstance sectorInstance, char patternChar, Random random, List<ThemeBlock> blockList) {
 		// Nothing:
 		if(patternChar == '0') {
-			return Blocks.CAVE_AIR.getDefaultState();
+			return Blocks.CAVE_AIR.defaultBlockState();
 		}
 
 		// Sector Instantiated:
@@ -243,17 +243,17 @@ public class DungeonTheme {
 
 		// Chest:
 		if(patternChar == 'C') {
-			return Blocks.CHEST.getDefaultState();
+			return Blocks.CHEST.defaultBlockState();
 		}
 
 		// Spawner:
 		else if(patternChar == 'S') {
-			return Blocks.SPAWNER.getDefaultState();
+			return Blocks.SPAWNER.defaultBlockState();
 		}
 
 		// List Check:
 		if(blockList.isEmpty()) {
-			return Blocks.CAVE_AIR.getDefaultState();
+			return Blocks.CAVE_AIR.defaultBlockState();
 		}
 		if(blockList.size() == 1) {
 			return blockList.get(0).getBlockState();

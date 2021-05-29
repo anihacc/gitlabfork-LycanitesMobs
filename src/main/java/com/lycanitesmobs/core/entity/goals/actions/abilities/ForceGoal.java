@@ -116,7 +116,7 @@ public class ForceGoal extends Goal {
 	}
 
 	@Override
-    public boolean shouldExecute() {
+    public boolean canUse() {
 		if(!this.host.isAlive()) {
 			return false;
 		}
@@ -129,7 +129,7 @@ public class ForceGoal extends Goal {
     }
 
 	@Override
-	public void startExecuting() {
+	public void start() {
 		this.cooldownTime = this.cooldownDuration;
 	}
 
@@ -161,26 +161,26 @@ public class ForceGoal extends Goal {
 			if(!(entity instanceof LivingEntity)) {
 				continue;
 			}
-			double xDist = this.host.getPositionVec().getX() - entity.getPositionVec().getX();
-			double yDist = this.host.getPositionVec().getY() - entity.getPositionVec().getY();
-			double zDist = this.host.getPositionVec().getZ() - entity.getPositionVec().getZ();
+			double xDist = this.host.position().x() - entity.position().x();
+			double yDist = this.host.position().y() - entity.position().y();
+			double zDist = this.host.position().z() - entity.position().z();
 			double xzDist = Math.max(MathHelper.sqrt(xDist * xDist + zDist * zDist), 0.01D);
 			ServerPlayerEntity player = null;
 			if (entity instanceof ServerPlayerEntity) {
 				player = (ServerPlayerEntity) entity;
 			}
-			if (entity.getMotion().getX() < motionCap && entity.getMotion().getX() > -motionCap && entity.getMotion().getZ() < motionCap && entity.getMotion().getZ() > -motionCap) {
-				entity.addVelocity(
-						((xDist / xzDist) * factor) + (entity.getMotion().getX() * factor),
-						(yDist * factor * 0.25D) + (entity.getMotion().getY() * factor * 0.25D),
-						((zDist / xzDist) * factor) + (entity.getMotion().getZ() * factor)
+			if (entity.getDeltaMovement().x() < motionCap && entity.getDeltaMovement().x() > -motionCap && entity.getDeltaMovement().z() < motionCap && entity.getDeltaMovement().z() > -motionCap) {
+				entity.push(
+						((xDist / xzDist) * factor) + (entity.getDeltaMovement().x() * factor),
+						(yDist * factor * 0.25D) + (entity.getDeltaMovement().y() * factor * 0.25D),
+						((zDist / xzDist) * factor) + (entity.getDeltaMovement().z() * factor)
 				);
 			}
-			if(this.dismountTargets && entity.getRidingEntity() != null) {
+			if(this.dismountTargets && entity.getVehicle() != null) {
 				entity.stopRiding();
 			}
 			if (player != null) {
-				player.connection.sendPacket(new SEntityVelocityPacket(entity));
+				player.connection.send(new SEntityVelocityPacket(entity));
 			}
 		}
     }

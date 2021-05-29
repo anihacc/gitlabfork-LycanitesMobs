@@ -54,11 +54,11 @@ public class EntityHellfireBarrier extends BaseProjectileEntity {
         this.pierceBlocks = true;
         this.projectileLife = 5 * 20;
         this.animationFrameMax = 59;
-        this.noClip = true;
+        this.noPhysics = true;
     }
 
     @Override
-    public boolean isBurning() { return false; }
+    public boolean isOnFire() { return false; }
 
 
     // ==================================================
@@ -66,7 +66,7 @@ public class EntityHellfireBarrier extends BaseProjectileEntity {
     // ==================================================
     @Override
     public void tick() {
-        if(this.getEntityWorld().isRemote)
+        if(this.getCommandSenderWorld().isClientSide)
             return;
 
         // Time Update:
@@ -78,34 +78,34 @@ public class EntityHellfireBarrier extends BaseProjectileEntity {
             hellfireWalls = new EntityHellfireWall[this.hellfireHeight][this.hellfireWidth];
             for(int row = 0; row < this.hellfireHeight; row++) {
                 for(int col = 0; col < this.hellfireWidth; col++) {
-                    if(this.func_234616_v_() != null) {
+                    if(this.getOwner() != null) {
                         if(this.wall) {
-                            hellfireWalls[row][col] = new EntityHellfireWall(ProjectileManager.getInstance().oldProjectileTypes.get(EntityHellfireWall.class), this.getEntityWorld(), (LivingEntity) this.getShooter());
+                            hellfireWalls[row][col] = new EntityHellfireWall(ProjectileManager.getInstance().oldProjectileTypes.get(EntityHellfireWall.class), this.getCommandSenderWorld(), (LivingEntity) this.getShooter());
                         }
                         else {
-                            hellfireWalls[row][col] = new EntityHellfireBarrierPart(ProjectileManager.getInstance().oldProjectileTypes.get(EntityHellfireBarrierPart.class), this.getEntityWorld(), (LivingEntity) this.getShooter());
+                            hellfireWalls[row][col] = new EntityHellfireBarrierPart(ProjectileManager.getInstance().oldProjectileTypes.get(EntityHellfireBarrierPart.class), this.getCommandSenderWorld(), (LivingEntity) this.getShooter());
                         }
                     }
                     else {
                         if(this.wall) {
-                            hellfireWalls[row][col] = new EntityHellfireWall(ProjectileManager.getInstance().oldProjectileTypes.get(EntityHellfireWall.class), this.getEntityWorld(), this.getPositionVec().getX(), this.getPositionVec().getY() + (this.hellfireSize * row), this.getPositionVec().getZ());
+                            hellfireWalls[row][col] = new EntityHellfireWall(ProjectileManager.getInstance().oldProjectileTypes.get(EntityHellfireWall.class), this.getCommandSenderWorld(), this.position().x(), this.position().y() + (this.hellfireSize * row), this.position().z());
                         }
                         else {
-                            hellfireWalls[row][col] = new EntityHellfireBarrierPart(ProjectileManager.getInstance().oldProjectileTypes.get(EntityHellfireBarrierPart.class), this.getEntityWorld(), this.getPositionVec().getX(), this.getPositionVec().getY() + (this.hellfireSize * row), this.getPositionVec().getZ());
+                            hellfireWalls[row][col] = new EntityHellfireBarrierPart(ProjectileManager.getInstance().oldProjectileTypes.get(EntityHellfireBarrierPart.class), this.getCommandSenderWorld(), this.position().x(), this.position().y() + (this.hellfireSize * row), this.position().z());
                         }
                     }
 
                     double rotationRadians = Math.toRadians(this.rotation);
                     double x = (((float)col / this.hellfireWidth) * (this.hellfireSize * (this.hellfireWidth - 1))) * Math.cos(rotationRadians) + Math.sin(rotationRadians);
                     double z = (((float)col / this.hellfireWidth) * (this.hellfireSize * (this.hellfireWidth - 1))) * Math.sin(rotationRadians) - Math.cos(rotationRadians);
-                    this.hellfireWalls[row][col].setPosition(
-                            this.getPositionVec().getX() + x,
-                            this.getPositionVec().getY() + (this.hellfireSize * row),
-                            this.getPositionVec().getZ() + z
+                    this.hellfireWalls[row][col].setPos(
+                            this.position().x() + x,
+                            this.position().y() + (this.hellfireSize * row),
+                            this.position().z() + z
                     );
                     this.hellfireWalls[row][col].projectileLife = 2 * 20;
 
-                    this.getEntityWorld().addEntity(hellfireWalls[row][col]);
+                    this.getCommandSenderWorld().addFreshEntity(hellfireWalls[row][col]);
                     this.hellfireWalls[row][col].setProjectileScale(this.hellfireSize * 2.5F);
                 }
             }
@@ -118,10 +118,10 @@ public class EntityHellfireBarrier extends BaseProjectileEntity {
                 double rotationRadians = Math.toRadians(this.rotation);
                 double x = (((float)col / this.hellfireWidth) * (this.hellfireSize * (this.hellfireWidth - 1))) * Math.cos(rotationRadians) + Math.sin(rotationRadians);
                 double z = (((float)col / this.hellfireWidth) * (this.hellfireSize * (this.hellfireWidth - 1))) * Math.sin(rotationRadians) - Math.cos(rotationRadians);
-                this.hellfireWalls[row][col].setPosition(
-                        this.getPositionVec().getX() + x,
-                        this.getPositionVec().getY() + (this.hellfireSize * row),
-                        this.getPositionVec().getZ() + z
+                this.hellfireWalls[row][col].setPos(
+                        this.position().x() + x,
+                        this.position().y() + (this.hellfireSize * row),
+                        this.position().z() + z
                 );
                 this.hellfireWalls[row][col].projectileLife = 2 * 20;
 
@@ -139,7 +139,7 @@ public class EntityHellfireBarrier extends BaseProjectileEntity {
     @Override
     public boolean onEntityLivingDamage(LivingEntity entityLiving) {
     	if(!entityLiving.isInvulnerableTo(DamageSource.ON_FIRE))
-    		entityLiving.setFire(this.getEffectDuration(10) / 20);
+    		entityLiving.setSecondsOnFire(this.getEffectDuration(10) / 20);
     	return true;
     }
 

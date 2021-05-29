@@ -66,7 +66,7 @@ public class ProjectileBehaviourSummon extends ProjectileBehaviour {
 
 	@Override
 	public void onProjectileImpact(BaseProjectileEntity projectile, World world, BlockPos pos) {
-		if(projectile == null || projectile.getEntityWorld().isRemote) {
+		if(projectile == null || projectile.getCommandSenderWorld().isClientSide) {
 			return;
 		}
 		EntityType entityType = null;
@@ -74,10 +74,10 @@ public class ProjectileBehaviourSummon extends ProjectileBehaviour {
 		// Summon Minion:
 		SummonSet summonSet = null;
 		if(this.summonMinion) {
-			if(!(projectile.func_234616_v_() instanceof PlayerEntity)) {
+			if(!(projectile.getOwner() instanceof PlayerEntity)) {
 				return;
 			}
-			PlayerEntity player = (PlayerEntity)projectile.func_234616_v_();
+			PlayerEntity player = (PlayerEntity)projectile.getOwner();
 			ExtendedPlayer extendedPlayer = ExtendedPlayer.getForPlayer(player);
 			if(extendedPlayer == null) {
 				return;
@@ -109,23 +109,23 @@ public class ProjectileBehaviourSummon extends ProjectileBehaviour {
 
 		int summonCount = this.summonCountMin;
 		if(this.summonCountMax > this.summonCountMin) {
-			summonCount = this.summonCountMin + projectile.getEntityWorld().rand.nextInt(this.summonCountMax - this.summonCountMin);
+			summonCount = this.summonCountMin + projectile.getCommandSenderWorld().random.nextInt(this.summonCountMax - this.summonCountMin);
 		}
 
 		for(int i = 0; i < summonCount; i++) {
-			if (projectile.getEntityWorld().rand.nextDouble() <= this.summonChance) {
+			if (projectile.getCommandSenderWorld().random.nextDouble() <= this.summonChance) {
 				try {
-					Entity entity = entityType.create(projectile.getEntityWorld());
-					entity.setLocationAndAngles(projectile.getPosition().getX(), projectile.getPosition().getY(), projectile.getPosition().getZ(), projectile.rotationYaw, 0.0F);
+					Entity entity = entityType.create(projectile.getCommandSenderWorld());
+					entity.moveTo(projectile.blockPosition().getX(), projectile.blockPosition().getY(), projectile.blockPosition().getZ(), projectile.yRot, 0.0F);
 					if (entity instanceof BaseCreatureEntity) {
 						BaseCreatureEntity entityCreature = (BaseCreatureEntity) entity;
 						entityCreature.setMinion(true);
 						entityCreature.setTemporary(this.summonDuration);
 						entityCreature.setSizeScale(this.sizeScale);
 
-						if (projectile.func_234616_v_() instanceof PlayerEntity && entityCreature instanceof TameableCreatureEntity) {
+						if (projectile.getOwner() instanceof PlayerEntity && entityCreature instanceof TameableCreatureEntity) {
 							TameableCreatureEntity entityTameable = (TameableCreatureEntity) entityCreature;
-							entityTameable.setPlayerOwner((PlayerEntity) projectile.func_234616_v_());
+							entityTameable.setPlayerOwner((PlayerEntity) projectile.getOwner());
 							entityTameable.setSitting(false);
 							entityTameable.setFollowing(true);
 							entityTameable.setPassive(false);
@@ -138,13 +138,13 @@ public class ProjectileBehaviourSummon extends ProjectileBehaviour {
 							}
 						}
 
-						float randomAngle = 45F + (45F * projectile.getEntityWorld().rand.nextFloat());
-						if (projectile.getEntityWorld().rand.nextBoolean()) {
+						float randomAngle = 45F + (45F * projectile.getCommandSenderWorld().random.nextFloat());
+						if (projectile.getCommandSenderWorld().random.nextBoolean()) {
 							randomAngle = -randomAngle;
 						}
 						BlockPos spawnPos = entityCreature.getFacingPosition(projectile, -1, randomAngle);
-						entity.setLocationAndAngles(spawnPos.getX(), spawnPos.getY(), spawnPos.getZ(), projectile.rotationYaw, 0.0F);
-						entity.getEntityWorld().addEntity(entity);
+						entity.moveTo(spawnPos.getX(), spawnPos.getY(), spawnPos.getZ(), projectile.yRot, 0.0F);
+						entity.getCommandSenderWorld().addFreshEntity(entity);
 					}
 				}
 				catch (Exception e) {

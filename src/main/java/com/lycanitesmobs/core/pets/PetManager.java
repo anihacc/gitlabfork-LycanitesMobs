@@ -91,12 +91,12 @@ public class PetManager {
             // Create New Entries For Non-Loaded Entries From The NBT Map:
             for (CompoundNBT nbtEntry : this.entryNBTs.values()) {
                 if (this.host instanceof PlayerEntity && nbtEntry.getString("Type").equalsIgnoreCase("familiar")) { // Only load active familiars.
-                    if (!DonationFamiliars.instance.playerFamiliars.containsKey(this.host.getUniqueID()) ||
-                            !DonationFamiliars.instance.playerFamiliars.get(this.host.getUniqueID()).containsKey(nbtEntry.getUniqueId("UUID"))) {
+                    if (!DonationFamiliars.instance.playerFamiliars.containsKey(this.host.getUUID()) ||
+                            !DonationFamiliars.instance.playerFamiliars.get(this.host.getUUID()).containsKey(nbtEntry.getUUID("UUID"))) {
                         continue;
                     }
                 }
-                PetEntry petEntry = new PetEntry(nbtEntry.getUniqueId("UUID"), nbtEntry.getString("Type"), this.host, nbtEntry.getString("SummonType"));
+                PetEntry petEntry = new PetEntry(nbtEntry.getUUID("UUID"), nbtEntry.getString("Type"), this.host, nbtEntry.getString("SummonType"));
                 petEntry.readFromNBT(nbtEntry);
                 if (petEntry.active)
                     this.addEntry(petEntry);
@@ -107,7 +107,7 @@ public class PetManager {
 
         // New Entries:
         if(this.newEntries.size() > 0) {
-            if (!world.isRemote && this.host instanceof PlayerEntity) {
+            if (!world.isClientSide && this.host instanceof PlayerEntity) {
                 for (PetEntry petEntry : this.newEntries) {
                     ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer((PlayerEntity) this.host);
                     if (playerExt != null)
@@ -176,12 +176,12 @@ public class PetManager {
         ListNBT entryList = nbtTagCompound.getList("PetManager", 10);
         for(int i = 0; i < entryList.size(); ++i) {
             CompoundNBT nbtEntry = (CompoundNBT)entryList.get(i);
-            if(!nbtEntry.hasUniqueId("UUID") && nbtEntry.contains("EntryName")) { // Convert Pet Entries from older mod versions.
+            if(!nbtEntry.hasUUID("UUID") && nbtEntry.contains("EntryName")) { // Convert Pet Entries from older mod versions.
                 LycanitesMobs.logInfo("", "[Pets] Converting Pet Entry from older mod version: " + nbtEntry.getString("EntryName") + "...");
-                nbtEntry.putUniqueId("UUID", UUID.randomUUID());
+                nbtEntry.putUUID("UUID", UUID.randomUUID());
             }
-            if(nbtEntry.hasUniqueId("UUID")) {
-                this.entryNBTs.put(nbtEntry.getUniqueId("UUID"), nbtEntry);
+            if(nbtEntry.hasUUID("UUID")) {
+                this.entryNBTs.put(nbtEntry.getUUID("UUID"), nbtEntry);
             }
             else {
                 LycanitesMobs.logWarning("", "[Pets] A Pet Entry was missing a UUID and EntryName, this is either a bug or NBT data has been tampered with, please report this!");

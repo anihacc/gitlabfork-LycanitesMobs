@@ -59,7 +59,7 @@ public class MessageSummonSet {
 	public static MessageSummonSet decode(PacketBuffer packet) {
 		MessageSummonSet message = new MessageSummonSet();
         message.summonSetID = packet.readByte();
-        message.summonType = packet.readString(256);
+        message.summonType = packet.readUtf(256);
 		message.subpsecies = packet.readInt();
 		message.variant = packet.readInt();
         message.behaviour = packet.readByte();
@@ -71,7 +71,7 @@ public class MessageSummonSet {
 	 */
 	public static void encode(MessageSummonSet message, PacketBuffer packet) {
         packet.writeByte(message.summonSetID);
-        packet.writeString(message.summonType);
+        packet.writeUtf(message.summonType);
 		packet.writeInt(message.subpsecies);
 		packet.writeInt(message.variant);
         packet.writeByte(message.behaviour);

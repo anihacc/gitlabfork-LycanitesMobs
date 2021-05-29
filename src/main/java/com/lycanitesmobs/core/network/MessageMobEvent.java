@@ -35,7 +35,7 @@ public class MessageMobEvent {
 
 		ctx.get().enqueueWork(() -> {
 			PlayerEntity player = ClientManager.getInstance().getClientPlayer();
-			World world = player.getEntityWorld();
+			World world = player.getCommandSenderWorld();
 			ExtendedWorld worldExt = ExtendedWorld.getForWorld(world);
 
 			if ("".equals(message.mobEventName))
@@ -51,7 +51,7 @@ public class MessageMobEvent {
 	 */
 	public static MessageMobEvent decode(PacketBuffer packet) {
 		MessageMobEvent message = new MessageMobEvent();
-        message.mobEventName = packet.readString(256);
+        message.mobEventName = packet.readUtf(256);
         message.pos = packet.readBlockPos();
         message.level = packet.readInt();
         message.subspecies = packet.readInt();
@@ -62,7 +62,7 @@ public class MessageMobEvent {
 	 * Writes the message into bytes.
 	 */
 	public static void encode(MessageMobEvent message, PacketBuffer packet) {
-        packet.writeString(message.mobEventName);
+        packet.writeUtf(message.mobEventName);
         packet.writeBlockPos(message.pos);
         packet.writeInt(message.level);
 		packet.writeInt(message.subspecies);

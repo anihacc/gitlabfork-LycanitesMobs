@@ -36,7 +36,7 @@ public class EntityNaxiris extends RideableCreatureEntity {
 		this.solidCollision = true;
         this.setupMob();
 
-        this.stepHeight = 1.0F;
+        this.maxUpStep = 1.0F;
     }
 
     @Override
@@ -56,10 +56,10 @@ public class EntityNaxiris extends RideableCreatureEntity {
     // ==================================================
     @Override
     public void riderEffects(LivingEntity rider) {
-        if(rider.isPotionActive(Effects.MINING_FATIGUE))
-            rider.removePotionEffect(Effects.MINING_FATIGUE);
-        if(rider.isPotionActive(ObjectManager.getEffect("weight")))
-            rider.removePotionEffect(ObjectManager.getEffect("weight"));
+        if(rider.hasEffect(Effects.DIG_SLOWDOWN))
+            rider.removeEffect(Effects.DIG_SLOWDOWN);
+        if(rider.hasEffect(ObjectManager.getEffect("weight")))
+            rider.removeEffect(ObjectManager.getEffect("weight"));
     }
 
     
@@ -71,22 +71,22 @@ public class EntityNaxiris extends RideableCreatureEntity {
     public void onDamage(DamageSource damageSrc, float damage) {
     	super.onDamage(damageSrc, damage);
     	
-    	Entity damageEntity = damageSrc.getTrueSource();
-    	if(damageEntity != null && ("mob".equals(damageSrc.damageType) || "player".equals(damageSrc.damageType))) {
+    	Entity damageEntity = damageSrc.getEntity();
+    	if(damageEntity != null && ("mob".equals(damageSrc.msgId) || "player".equals(damageSrc.msgId))) {
     		
     		// Eat Buffs:
         	if(damageEntity instanceof LivingEntity) {
         		LivingEntity targetLiving = (LivingEntity)damageEntity;
         		List<Effect> goodEffects = new ArrayList<>();
-        		for(EffectInstance effect : targetLiving.getActivePotionEffects()) {
-					if(ObjectLists.inEffectList("buffs", effect.getPotion()))
-						goodEffects.add(effect.getPotion());
+        		for(EffectInstance effect : targetLiving.getActiveEffects()) {
+					if(ObjectLists.inEffectList("buffs", effect.getEffect()))
+						goodEffects.add(effect.getEffect());
         		}
-        		if(goodEffects.size() > 0 && this.getRNG().nextBoolean()) {
+        		if(goodEffects.size() > 0 && this.getRandom().nextBoolean()) {
         			if(goodEffects.size() > 1)
-        				targetLiving.removePotionEffect(goodEffects.get(this.getRNG().nextInt(goodEffects.size())));
+        				targetLiving.removeEffect(goodEffects.get(this.getRandom().nextInt(goodEffects.size())));
         			else
-        				targetLiving.removePotionEffect(goodEffects.get(0));
+        				targetLiving.removeEffect(goodEffects.get(0));
     		    	float leeching = damage * 1.1F;
     		    	this.heal(leeching);
         		}
@@ -146,13 +146,13 @@ public class EntityNaxiris extends RideableCreatureEntity {
     //                      Movement
     // ==================================================
     @Override
-    public double getMountedYOffset() {
-        return (double)this.getSize(Pose.STANDING).height * 0.9D;
+    public double getPassengersRidingOffset() {
+        return (double)this.getDimensions(Pose.STANDING).height * 0.9D;
     }
 
 	@Override
 	public double getMountedZOffset() {
-		return (double)this.getSize(Pose.STANDING).width * -0.2D;
+		return (double)this.getDimensions(Pose.STANDING).width * -0.2D;
 	}
 
 
@@ -161,7 +161,7 @@ public class EntityNaxiris extends RideableCreatureEntity {
     // ==================================================
     @Override
     public void mountAbility(Entity rider) {
-        if(this.getEntityWorld().isRemote)
+        if(this.getCommandSenderWorld().isClientSide)
             return;
 
         if(this.abilityToggled)
@@ -179,9 +179,9 @@ public class EntityNaxiris extends RideableCreatureEntity {
             PlayerEntity player = (PlayerEntity)rider;
 			ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile("arcanelaserstorm");
 			if(projectileInfo != null) {
-				BaseProjectileEntity projectile = projectileInfo.createProjectile(this.getEntityWorld(), player);
-				this.getEntityWorld().addEntity(projectile);
-				this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
+				BaseProjectileEntity projectile = projectileInfo.createProjectile(this.getCommandSenderWorld(), player);
+				this.getCommandSenderWorld().addFreshEntity(projectile);
+				this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
 				this.triggerAttackCooldown();
 			}
         }

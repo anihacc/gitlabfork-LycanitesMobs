@@ -40,7 +40,7 @@ public class ModelHerma extends ModelTemplateArachnid {
         if(partName.equals("head") && this.currentModelState != null) {
             if(entity != null && distance >= 0.25f) {
                 if (this.currentModelState.getFloat("walkingAngleChangeTime") <= 0) {
-                    float random = entity.getRNG().nextFloat();
+                    float random = entity.getRandom().nextFloat();
                     if (random <= 0.3f)
                         this.currentModelState.setFloat("walkingAngleTarget", 90);
                     else if (random <= 0.6f)

@@ -63,7 +63,7 @@ public class EntitySerpix extends TameableCreatureEntity implements IGroupHeavy 
 
     // Pushed By Water:
     @Override
-    public boolean isPushedByWater() {
+    public boolean isPushedByFluid() {
         return false;
     }
 
@@ -81,30 +81,30 @@ public class EntitySerpix extends TameableCreatureEntity implements IGroupHeavy 
         }
         List<RapidFireProjectileEntity> projectiles = new ArrayList<>();
 
-        RapidFireProjectileEntity projectileEntry = new RapidFireProjectileEntity(ProjectileManager.getInstance().oldProjectileTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getEntityWorld(), this, 15, 3);
+        RapidFireProjectileEntity projectileEntry = new RapidFireProjectileEntity(ProjectileManager.getInstance().oldProjectileTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getCommandSenderWorld(), this, 15, 3);
         projectiles.add(projectileEntry);
 
-        RapidFireProjectileEntity projectileEntry2 = new RapidFireProjectileEntity(ProjectileManager.getInstance().oldProjectileTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getEntityWorld(), this, 15, 3);
+        RapidFireProjectileEntity projectileEntry2 = new RapidFireProjectileEntity(ProjectileManager.getInstance().oldProjectileTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getCommandSenderWorld(), this, 15, 3);
         projectileEntry2.offsetX += 1.0D;
         projectiles.add(projectileEntry2);
 
-        RapidFireProjectileEntity projectileEntry3 = new RapidFireProjectileEntity(ProjectileManager.getInstance().oldProjectileTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getEntityWorld(), this, 15, 3);
+        RapidFireProjectileEntity projectileEntry3 = new RapidFireProjectileEntity(ProjectileManager.getInstance().oldProjectileTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getCommandSenderWorld(), this, 15, 3);
         projectileEntry3.offsetX -= 1.0D;
         projectiles.add(projectileEntry3);
 
-        RapidFireProjectileEntity projectileEntry4 = new RapidFireProjectileEntity(ProjectileManager.getInstance().oldProjectileTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getEntityWorld(), this, 15, 3);
+        RapidFireProjectileEntity projectileEntry4 = new RapidFireProjectileEntity(ProjectileManager.getInstance().oldProjectileTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getCommandSenderWorld(), this, 15, 3);
         projectileEntry4.offsetZ += 1.0D;
         projectiles.add(projectileEntry4);
 
-        RapidFireProjectileEntity projectileEntry5 = new RapidFireProjectileEntity(ProjectileManager.getInstance().oldProjectileTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getEntityWorld(), this, 15, 3);
+        RapidFireProjectileEntity projectileEntry5 = new RapidFireProjectileEntity(ProjectileManager.getInstance().oldProjectileTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getCommandSenderWorld(), this, 15, 3);
         projectileEntry5.offsetZ -= 1.0D;
         projectiles.add(projectileEntry5);
 
-        RapidFireProjectileEntity projectileEntry6 = new RapidFireProjectileEntity(ProjectileManager.getInstance().oldProjectileTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getEntityWorld(), this, 15, 3);
+        RapidFireProjectileEntity projectileEntry6 = new RapidFireProjectileEntity(ProjectileManager.getInstance().oldProjectileTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getCommandSenderWorld(), this, 15, 3);
         projectileEntry6.offsetY += 1.0D;
         projectiles.add(projectileEntry6);
 
-        RapidFireProjectileEntity projectileEntry7 = new RapidFireProjectileEntity(ProjectileManager.getInstance().oldProjectileTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getEntityWorld(), this, 15, 3);
+        RapidFireProjectileEntity projectileEntry7 = new RapidFireProjectileEntity(ProjectileManager.getInstance().oldProjectileTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getCommandSenderWorld(), this, 15, 3);
         projectileEntry7.offsetY -= 10D;
         projectiles.add(projectileEntry7);
 
@@ -113,27 +113,27 @@ public class EntitySerpix extends TameableCreatureEntity implements IGroupHeavy 
             projectile.setProjectileScale(1f);
 
             // Y Offset:
-            projectile.setPosition(
-                    projectile.getPositionVec().getX(),
-                    projectile.getPositionVec().getY() - this.getSize(Pose.STANDING).height / 4,
-                    projectile.getPositionVec().getZ()
+            projectile.setPos(
+                    projectile.position().x(),
+                    projectile.position().y() - this.getDimensions(Pose.STANDING).height / 4,
+                    projectile.position().z()
             );
 
             // Accuracy:
-            float accuracy = 1.0F * (this.getRNG().nextFloat() - 0.5F);
+            float accuracy = 1.0F * (this.getRandom().nextFloat() - 0.5F);
 
             // Set Velocities:
-            double d0 = target.getPositionVec().getX() - launchPos.getX() + accuracy;
-            double d1 = target.getPositionVec().getY() + (double)target.getEyeHeight() - 1.100000023841858D - projectile.getPositionVec().getY() + accuracy;
-            double d2 = target.getPositionVec().getZ() - launchPos.getZ() + accuracy;
+            double d0 = target.position().x() - launchPos.getX() + accuracy;
+            double d1 = target.position().y() + (double)target.getEyeHeight() - 1.100000023841858D - projectile.position().y() + accuracy;
+            double d2 = target.position().z() - launchPos.getZ() + accuracy;
             float f1 = MathHelper.sqrt(d0 * d0 + d2 * d2) * 0.2F;
             float velocity = 1.2F;
             projectile.shoot(d0, d1 + (double)f1, d2, velocity, 6.0F);
 
             // Launch:
-            this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
-            projectile.setPosition(launchPos.getX(), launchPos.getY(), launchPos.getZ());
-            this.getEntityWorld().addEntity(projectile);
+            this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
+            projectile.setPos(launchPos.getX(), launchPos.getY(), launchPos.getZ());
+            this.getCommandSenderWorld().addFreshEntity(projectile);
         }
 
         super.attackRanged(target, range);
@@ -147,15 +147,15 @@ public class EntitySerpix extends TameableCreatureEntity implements IGroupHeavy 
     public boolean canStealth() {
         if(this.isTamed() && this.isSitting())
             return false;
-        BlockState blockState = this.getEntityWorld().getBlockState(this.getPosition().add(0, -1, 0));
+        BlockState blockState = this.getCommandSenderWorld().getBlockState(this.blockPosition().offset(0, -1, 0));
         if(blockState.getBlock() != Blocks.AIR) {
-            if(blockState.getMaterial() == Material.EARTH) return true;
-            if(blockState.getMaterial() == Material.ORGANIC) return true;
+            if(blockState.getMaterial() == Material.DIRT) return true;
+            if(blockState.getMaterial() == Material.GRASS) return true;
             if(blockState.getMaterial() == Material.LEAVES) return true;
             if(blockState.getMaterial() == Material.SAND) return true;
             if(blockState.getMaterial() == Material.CLAY) return true;
+            if(blockState.getMaterial() == Material.TOP_SNOW) return true;
             if(blockState.getMaterial() == Material.SNOW) return true;
-            if(blockState.getMaterial() == Material.SNOW_BLOCK) return true;
         }
         if(blockState.getBlock() == Blocks.NETHERRACK)
             return true;
@@ -167,7 +167,7 @@ public class EntitySerpix extends TameableCreatureEntity implements IGroupHeavy 
    	//                     Abilities
    	// ==================================================
     public boolean canBeTempted() {
-    	return this.isChild();
+    	return this.isBaby();
     }
 
     @Override

@@ -8,6 +8,8 @@ import net.minecraft.util.math.BlockPos;
 
 import java.util.EnumSet;
 
+import net.minecraft.entity.ai.goal.Goal.Flag;
+
 public abstract class FollowGoal extends Goal {
 	// Targets:
 	BaseCreatureEntity host;
@@ -27,7 +29,7 @@ public abstract class FollowGoal extends Goal {
     public FollowGoal(BaseCreatureEntity setHost) {
         this.host = setHost;
         this.targetClass = this.host.getClass();
-		this.setMutexFlags(EnumSet.of(Flag.MOVE));
+		this.setFlags(EnumSet.of(Flag.MOVE));
     }
     
 	
@@ -67,14 +69,14 @@ public abstract class FollowGoal extends Goal {
   	//                  Should Execute
   	// ==================================================
 	@Override
-    public boolean shouldExecute() {
+    public boolean canUse() {
     	Entity target = this.getTarget();
 	    if(target == null || target == this.host)
 	        return false;
         if(!target.isAlive())
         	return false;
 
-		double distance = this.host.getDistance(target);
+		double distance = this.host.distanceTo(target);
 	    if(distance > this.lostDistance && this.lostDistance != 0) {
 			return false;
 		}
@@ -90,14 +92,14 @@ public abstract class FollowGoal extends Goal {
   	//                Continue Executing
   	// ==================================================
 	@Override
-    public boolean shouldContinueExecuting() {
+    public boolean canContinueToUse() {
     	Entity target = this.getTarget();
     	if(target == null)
     		return false;
         if(!target.isAlive())
         	return false;
         
-        double distance = this.host.getDistance(target);
+        double distance = this.host.distanceTo(target);
         if(distance > this.lostDistance && this.lostDistance != 0) {
 			this.setTarget(null);
 			return false;
@@ -116,7 +118,7 @@ public abstract class FollowGoal extends Goal {
   	//                       Start
   	// ==================================================
 	@Override
-    public void startExecuting() {
+    public void start() {
         this.updateRate = 0;
     }
     
@@ -136,16 +138,16 @@ public abstract class FollowGoal extends Goal {
 			}
         	if(!this.host.useDirectNavigator()) {
         		if(this.behindDistance == 0 || !(target instanceof BaseCreatureEntity)) {
-                    this.host.getNavigator().tryMoveToEntityLiving(target, this.speed);
+                    this.host.getNavigation().moveTo(target, this.speed);
                 }
         		else {
         			BlockPos pos = ((BaseCreatureEntity)target).getFacingPosition(-this.behindDistance);
-        			this.host.getNavigator().tryMoveToXYZ(pos.getX(), pos.getY(), pos.getZ(), this.speed);
+        			this.host.getNavigation().moveTo(pos.getX(), pos.getY(), pos.getZ(), this.speed);
         		}
         	}
         	else {
         		if(this.behindDistance == 0 || !(target instanceof BaseCreatureEntity))
-        			this.host.directNavigator.setTargetPosition(new BlockPos((int)target.getPositionVec().getX(), (int)target.getPositionVec().getY(), (int)target.getPositionVec().getZ()), this.speed);
+        			this.host.directNavigator.setTargetPosition(new BlockPos((int)target.position().x(), (int)target.position().y(), (int)target.position().z()), this.speed);
         		else {
                     BlockPos pos = ((BaseCreatureEntity)target).getFacingPosition(-this.behindDistance);
         			this.host.directNavigator.setTargetPosition(pos, this.speed);
@@ -159,7 +161,7 @@ public abstract class FollowGoal extends Goal {
  	//                       Reset
  	// ==================================================
 	@Override
-    public void resetTask() {
+    public void stop() {
         this.host.clearMovement();
     }
 

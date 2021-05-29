@@ -149,11 +149,11 @@ public class Subspecies {
 	 */
 	public boolean canSpawn(LivingEntity entityLiving) {
 		if(entityLiving != null) {
-			World world = entityLiving.getEntityWorld();
+			World world = entityLiving.getCommandSenderWorld();
 
 			// Check Conditions:
 			for(SpawnCondition condition : this.spawnConditions) {
-				if(!condition.isMet(world, null, new BlockPos(entityLiving.getPositionVec()))) {
+				if(!condition.isMet(world, null, new BlockPos(entityLiving.position()))) {
 					return false;
 				}
 			}
@@ -192,7 +192,7 @@ public class Subspecies {
 		LycanitesMobs.logDebug("Subspecies", "Total Weight: " + totalWeight);
 
 		// Roll and Check Default:
-		int roll = entity.getRNG().nextInt(totalWeight) + 1;
+		int roll = entity.getRandom().nextInt(totalWeight) + 1;
 		LycanitesMobs.logDebug("Subspecies", "Rolled: " + roll);
 		if(roll <= baseSpeciesWeightScaled) {
 			LycanitesMobs.logDebug("Subspecies", "Base variant selected: " + baseSpeciesWeightScaled);
@@ -241,7 +241,7 @@ public class Subspecies {
 
 		int hostWeight = (hostVariant != null ? hostVariant.weight : Variant.BASE_WEIGHT);
 		int partnerWeight = (partnerVariant != null ? partnerVariant.weight : Variant.BASE_WEIGHT);
-		int roll = entity.getRNG().nextInt(hostWeight + partnerWeight);
+		int roll = entity.getRandom().nextInt(hostWeight + partnerWeight);
 		if(roll > hostWeight)
 			return partnerVariant;
 		return hostVariant;

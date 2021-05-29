@@ -17,7 +17,7 @@ public class LMEquipmentPartsGroup extends ItemGroup {
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public ItemStack createIcon() {
+	public ItemStack makeIcon() {
 		this.fallbackIcon = false;
 		if(ObjectManager.getItem("equipmentpart_eechetikarm") != null)
 			return new ItemStack(ObjectManager.getItem("equipmentpart_eechetikarm"));
@@ -37,9 +37,9 @@ public class LMEquipmentPartsGroup extends ItemGroup {
 	}
 
 	@OnlyIn(Dist.CLIENT)
-	public ItemStack getIcon() {
+	public ItemStack getIconItem() {
 		if (this.iconStack.isEmpty() || this.fallbackIcon) {
-			this.iconStack = this.createIcon();
+			this.iconStack = this.makeIcon();
 		}
 		return this.iconStack;
 	}

@@ -25,20 +25,20 @@ public class SpawnerCommand {
 		String spawnerName = StringArgumentType.getString(context, "spawner");
 		int level = Math.max(1, IntegerArgumentType.getInteger(context, "level"));
 		if(!SpawnerManager.getInstance().spawners.containsKey(spawnerName)) {
-			context.getSource().sendFeedback(new TranslationTextComponent("lyc.command.spawner.test.unknown"), true);
+			context.getSource().sendSuccess(new TranslationTextComponent("lyc.command.spawner.test.unknown"), true);
 			return 0;
 		}
 
-		World world = context.getSource().getWorld();
+		World world = context.getSource().getLevel();
 		PlayerEntity player = null;
 		BlockPos pos = BlockPos.ZERO;
 		if(context.getSource().getEntity() instanceof PlayerEntity) {
 			player = (PlayerEntity)context.getSource().getEntity();
-			pos = new BlockPos(player.getPositionVec());
+			pos = new BlockPos(player.position());
 		}
 
 		SpawnerManager.getInstance().spawners.get(spawnerName).trigger(world, player, null, pos, level, 1, 0);
-		context.getSource().sendFeedback(new TranslationTextComponent("lyc.command.spawner.test"), true);
+		context.getSource().sendSuccess(new TranslationTextComponent("lyc.command.spawner.test"), true);
 		return 0;
 	}
 
@@ -53,10 +53,10 @@ public class SpawnerCommand {
 		else if(brightness < 1) level = 2;
 		String results = " Level: " + level + " Brightness: " + brightness;
 		if(level <= 1) {
-			context.getSource().sendFeedback(new TranslationTextComponent("lyc.command.spawner.lighttest.dark").appendString(results), true);
+			context.getSource().sendSuccess(new TranslationTextComponent("lyc.command.spawner.lighttest.dark").append(results), true);
 		}
 		else {
-			context.getSource().sendFeedback(new TranslationTextComponent("lyc.command.spawner.lighttest.light").appendString(results), true);
+			context.getSource().sendSuccess(new TranslationTextComponent("lyc.command.spawner.lighttest.light").append(results), true);
 		}
 		return 0;
 	}

@@ -31,7 +31,7 @@ public class EntityErepede extends RideableCreatureEntity {
         this.setupMob();
         
         // Stats:
-        this.stepHeight = 1.0F;
+        this.maxUpStep = 1.0F;
     }
 
     // ========== Init AI ==========
@@ -47,8 +47,8 @@ public class EntityErepede extends RideableCreatureEntity {
     // ==================================================
 	// ========== Living Update ==========
 	@Override
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
     }
 
 	
@@ -59,16 +59,16 @@ public class EntityErepede extends RideableCreatureEntity {
     @Override
     public float getAISpeedModifier() {
     	if(this.hasRiderTarget()) {
-            BlockState blockState = this.getEntityWorld().getBlockState(this.getPosition().add(0, -1, 0));
-            if (blockState.getMaterial() == Material.SAND || (blockState.getMaterial() == Material.AIR && this.getEntityWorld().getBlockState(this.getPosition().add(0, -2, 0)).getMaterial() == Material.SAND))
+            BlockState blockState = this.getCommandSenderWorld().getBlockState(this.blockPosition().offset(0, -1, 0));
+            if (blockState.getMaterial() == Material.SAND || (blockState.getMaterial() == Material.AIR && this.getCommandSenderWorld().getBlockState(this.blockPosition().offset(0, -2, 0)).getMaterial() == Material.SAND))
                 return 1.8F;
         }
     	return 1.0F;
     }
     
     @Override
-    public double getMountedYOffset() {
-        return (double)this.getSize(Pose.STANDING).height * 0.9D;
+    public double getPassengersRidingOffset() {
+        return (double)this.getDimensions(Pose.STANDING).height * 0.9D;
     }
 
     
@@ -76,7 +76,7 @@ public class EntityErepede extends RideableCreatureEntity {
     //                   Mount Ability
     // ==================================================
     public void mountAbility(Entity rider) {
-    	if(this.getEntityWorld().isRemote)
+    	if(this.getCommandSenderWorld().isClientSide)
     		return;
     	
     	if(this.abilityToggled)
@@ -88,9 +88,9 @@ public class EntityErepede extends RideableCreatureEntity {
     		PlayerEntity player = (PlayerEntity)rider;
 			ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile("mudshot");
 			if(projectileInfo != null) {
-				BaseProjectileEntity projectile = projectileInfo.createProjectile(this.getEntityWorld(), player);
-				this.getEntityWorld().addEntity(projectile);
-				this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
+				BaseProjectileEntity projectile = projectileInfo.createProjectile(this.getCommandSenderWorld(), player);
+				this.getCommandSenderWorld().addFreshEntity(projectile);
+				this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
 				this.triggerAttackCooldown();
 			}
     	}

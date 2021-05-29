@@ -93,15 +93,15 @@ public class EntityConcapedeSegment extends AgeableCreatureEntity {
     // ==================================================
 	// ========== Living Update ==========
 	@Override
-    public void livingTick() {
+    public void aiStep() {
         // Try to Load Parent from UUID:
-        if(!this.getEntityWorld().isRemote && !this.hasParent() && this.parentUUID != null && this.updateTick > 0 && this.updateTick % 40 == 0) {
+        if(!this.getCommandSenderWorld().isClientSide && !this.hasParent() && this.parentUUID != null && this.updateTick > 0 && this.updateTick % 40 == 0) {
 	        double range = 64D;
-	        List connections = this.getEntityWorld().getEntitiesWithinAABB(AgeableCreatureEntity.class, this.getBoundingBox().grow(range, range, range));
+	        List connections = this.getCommandSenderWorld().getEntitiesOfClass(AgeableCreatureEntity.class, this.getBoundingBox().inflate(range, range, range));
 	        Iterator possibleConnections = connections.iterator();
 	        while(possibleConnections.hasNext()) {
 	        	AgeableCreatureEntity possibleConnection = (AgeableCreatureEntity)possibleConnections.next();
-	            if(possibleConnection != this && possibleConnection.getUniqueID().equals(this.parentUUID)) {
+	            if(possibleConnection != this && possibleConnection.getUUID().equals(this.parentUUID)) {
 	            	this.setParentTarget(possibleConnection);
 	            	break;
 	            }
@@ -109,10 +109,10 @@ public class EntityConcapedeSegment extends AgeableCreatureEntity {
 	        this.parentUUID = null;
         }
         
-        super.livingTick();
+        super.aiStep();
         
         // Concapede Connections:
-        if(!this.getEntityWorld().isRemote) {
+        if(!this.getCommandSenderWorld().isClientSide) {
         	// Check if back segment is alive:
 			if(this.backSegment != null) {
 				if(!this.backSegment.isAlive())
@@ -127,44 +127,44 @@ public class EntityConcapedeSegment extends AgeableCreatureEntity {
 
         	// Force position to front with offset:
         	if(this.hasParent()) {
-        		this.faceEntity(this.getParentTarget(), 360, 360);
+        		this.lookAt(this.getParentTarget(), 360, 360);
         		
         		double segmentDistance = 0.65D;
         		Vector3d pos;
         		if(this.getParentTarget() instanceof BaseCreatureEntity)
-        			pos = ((BaseCreatureEntity)this.getParentTarget()).getFacingPositionDouble(this.getParentTarget().getPositionVec().getX(), this.getParentTarget().getPositionVec().getY(), this.getParentTarget().getPositionVec().getZ(), -0.25D, 0);
+        			pos = ((BaseCreatureEntity)this.getParentTarget()).getFacingPositionDouble(this.getParentTarget().position().x(), this.getParentTarget().position().y(), this.getParentTarget().position().z(), -0.25D, 0);
         		else
-					pos = new Vector3d(this.getParentTarget().getPositionVec().getX(), this.getParentTarget().getPositionVec().getY(), this.getParentTarget().getPositionVec().getZ());
+					pos = new Vector3d(this.getParentTarget().position().x(), this.getParentTarget().position().y(), this.getParentTarget().position().z());
 
-        		double followX = this.getPositionVec().getX();
-        		double followY = this.getPositionVec().getY();
-        		double followZ = this.getPositionVec().getZ();
+        		double followX = this.position().x();
+        		double followY = this.position().y();
+        		double followZ = this.position().z();
 
-        		if(this.getPositionVec().getX() - pos.x > segmentDistance)
+        		if(this.position().x() - pos.x > segmentDistance)
 					followX = pos.x + segmentDistance;
-        		else if(this.getPositionVec().getX() - pos.x < -segmentDistance)
+        		else if(this.position().x() - pos.x < -segmentDistance)
 					followX = pos.x - segmentDistance;
         		
-        		if(this.getPositionVec().getY() - pos.y > segmentDistance)
+        		if(this.position().y() - pos.y > segmentDistance)
 					followY = pos.y;
-        		else if(this.getPositionVec().getY() - pos.y < -(segmentDistance / 2))
+        		else if(this.position().y() - pos.y < -(segmentDistance / 2))
 					followY = pos.y;
         		
-        		if(this.getPositionVec().getZ() - pos.z > segmentDistance)
+        		if(this.position().z() - pos.z > segmentDistance)
 					followZ = pos.z + segmentDistance;
-        		else if(this.getPositionVec().getZ() - pos.z < -segmentDistance)
+        		else if(this.position().z() - pos.z < -segmentDistance)
 					followZ = pos.z - segmentDistance;
 
-        		this.setPosition(followX, followY, followZ);
+        		this.setPos(followX, followY, followZ);
         	}
 
 			// Look at parent:
 			if(this.hasParent()) {
-				this.getLookController().setLookPositionWithEntity(this.getParentTarget(), 30.0F, 30.0F);
+				this.getLookControl().setLookAt(this.getParentTarget(), 30.0F, 30.0F);
 			}
 
 			// Growth Into Head:
-			if(!this.getEntityWorld().isRemote && this.getGrowingAge() <= 0)
+			if(!this.getCommandSenderWorld().isClientSide && this.getGrowingAge() <= 0)
 				this.setGrowingAge(-this.growthTime);
         }
     }
@@ -185,14 +185,14 @@ public class EntityConcapedeSegment extends AgeableCreatureEntity {
 		if(this.hasParent())
 			age = -this.growthTime;
         super.setGrowingAge(age);
-		if(age == 0 && !this.getEntityWorld().isRemote) {
-			EntityConcapedeHead concapedeHead = (EntityConcapedeHead)CreatureManager.getInstance().getCreature("concapede").createEntity(this.getEntityWorld());
-			concapedeHead.copyLocationAndAnglesFrom(this);
+		if(age == 0 && !this.getCommandSenderWorld().isClientSide) {
+			EntityConcapedeHead concapedeHead = (EntityConcapedeHead)CreatureManager.getInstance().getCreature("concapede").createEntity(this.getCommandSenderWorld());
+			concapedeHead.copyPosition(this);
 			concapedeHead.firstSpawn = false;
 			concapedeHead.setGrowingAge(-this.growthTime / 4);
 			concapedeHead.setSizeScale(this.sizeScale);
 			concapedeHead.applyVariant(this.getVariantIndex());
-			this.getEntityWorld().addEntity(concapedeHead);
+			this.getCommandSenderWorld().addFreshEntity(concapedeHead);
 			if(this.backSegment != null)
 				this.backSegment.setParentTarget(concapedeHead);
 			this.remove();
@@ -211,12 +211,12 @@ public class EntityConcapedeSegment extends AgeableCreatureEntity {
 	// ========== Pathing Weight ==========
     @Override
     public float getBlockPathWeight(int x, int y, int z) {
-        BlockState blockState = this.getEntityWorld().getBlockState(new BlockPos(x, y - 1, z));
+        BlockState blockState = this.getCommandSenderWorld().getBlockState(new BlockPos(x, y - 1, z));
         Block block = blockState.getBlock();
         if(block != Blocks.AIR) {
-            if(blockState.getMaterial() == Material.ORGANIC)
+            if(blockState.getMaterial() == Material.GRASS)
                 return 10F;
-            if(blockState.getMaterial() == Material.EARTH)
+            if(blockState.getMaterial() == Material.DIRT)
                 return 7F;
         }
         return super.getBlockPathWeight(x, y, z);
@@ -224,16 +224,16 @@ public class EntityConcapedeSegment extends AgeableCreatureEntity {
     
 	// ========== Can leash ==========
     @Override
-    public boolean canBeLeashedTo(PlayerEntity player) {
+    public boolean canBeLeashed(PlayerEntity player) {
 	    return !this.hasParent();
     }
     
     // ========== Falling Speed Modifier ==========
     @Override
     public double getFallingMod() {
-    	if(this.getEntityWorld().isRemote)
+    	if(this.getCommandSenderWorld().isClientSide)
     		return 0.0D;
-    	if(this.hasParent() && this.getParentTarget().getPositionVec().getY() > this.getPositionVec().getY())
+    	if(this.hasParent() && this.getParentTarget().position().y() > this.position().y())
     		return 0.0D;
     	return super.getFallingMod();
     }
@@ -332,20 +332,20 @@ public class EntityConcapedeSegment extends AgeableCreatureEntity {
    	// ========== Read ===========
     /** Used when loading this mob from a saved chunk. **/
     @Override
-    public void readAdditional(CompoundNBT nbtTagCompound) {
-    	if(nbtTagCompound.hasUniqueId("ParentUUID")) {
-            this.parentUUID = nbtTagCompound.getUniqueId("ParentUUID");
+    public void readAdditionalSaveData(CompoundNBT nbtTagCompound) {
+    	if(nbtTagCompound.hasUUID("ParentUUID")) {
+            this.parentUUID = nbtTagCompound.getUUID("ParentUUID");
         }
-        super.readAdditional(nbtTagCompound);
+        super.readAdditionalSaveData(nbtTagCompound);
     }
     
     // ========== Write ==========
     /** Used when saving this mob to a chunk. **/
     @Override
-    public void writeAdditional(CompoundNBT nbtTagCompound) {
-		super.writeAdditional(nbtTagCompound);
+    public void addAdditionalSaveData(CompoundNBT nbtTagCompound) {
+		super.addAdditionalSaveData(nbtTagCompound);
     	if(this.hasParent()) {
-			nbtTagCompound.putUniqueId("ParentUUID", this.getParentTarget().getUniqueID());
+			nbtTagCompound.putUUID("ParentUUID", this.getParentTarget().getUUID());
     	}
     }
 }

@@ -24,25 +24,25 @@ public class ItemBlockPlacer extends BaseItem {
 	}
 
 	@Override
-	public ActionResultType onItemUse(ItemUseContext context) {
-		World world = context.getWorld();
-		BlockPos pos = context.getPos();
+	public ActionResultType useOn(ItemUseContext context) {
+		World world = context.getLevel();
+		BlockPos pos = context.getClickedPos();
 		PlayerEntity player = context.getPlayer();
-		ItemStack itemStack = context.getItem();
+		ItemStack itemStack = context.getItemInHand();
 
-		if (world.isRemote) {
+		if (world.isClientSide) {
 			return ActionResultType.SUCCESS;
 		}
 		else {
-			pos = pos.offset(context.getFace());
-			if(player.canPlayerEdit(pos, context.getFace(), itemStack)) {
+			pos = pos.relative(context.getClickedFace());
+			if(player.mayUseItemAt(pos, context.getClickedFace(), itemStack)) {
 				try {
 					BlockState blockState = world.getBlockState(pos);
 					if(blockState.isAir(world, pos)) {
-						world.playSound((double)pos.getX() + 0.5D, (double)pos.getY() + 0.5D, (double)pos.getZ() + 0.5D, ObjectManager.getSound(this.placedBlockName), SoundCategory.PLAYERS, 1.0F, player.getRNG().nextFloat() * 0.4F + 0.8F, false);
-						world.setBlockState(pos, ObjectManager.getBlock(this.placedBlockName).getDefaultState());
+						world.playLocalSound((double)pos.getX() + 0.5D, (double)pos.getY() + 0.5D, (double)pos.getZ() + 0.5D, ObjectManager.getSound(this.placedBlockName), SoundCategory.PLAYERS, 1.0F, player.getRandom().nextFloat() * 0.4F + 0.8F, false);
+						world.setBlockAndUpdate(pos, ObjectManager.getBlock(this.placedBlockName).defaultBlockState());
 					}
-					if(!player.abilities.isCreativeMode)
+					if(!player.abilities.instabuild)
 						itemStack.setCount(Math.max(0, itemStack.getCount() - 1));
 					return ActionResultType.SUCCESS;
 				}

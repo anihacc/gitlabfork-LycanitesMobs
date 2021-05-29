@@ -42,8 +42,8 @@ public class EntityKrake extends AgeableCreatureEntity implements IMob {
     }
 
     @Override
-    public boolean canEntityBeSeen(Entity target) {
-        if(target == this.getRevengeTarget() && this.getRevengeTimer() + (3 * 20) > this.ticksExisted) {
+    public boolean canSee(Entity target) {
+        if(target == this.getLastHurtByMob() && this.getLastHurtByMobTimestamp() + (3 * 20) > this.tickCount) {
             return true;
         }
         if(target instanceof PlayerEntity || target instanceof VillagerEntity) {
@@ -71,13 +71,13 @@ public class EntityKrake extends AgeableCreatureEntity implements IMob {
     public float getBlockPathWeight(int x, int y, int z) {
         int waterWeight = 10;
         BlockPos pos = new BlockPos(x, y, z);
-        BlockState blockState = this.getEntityWorld().getBlockState(pos);
+        BlockState blockState = this.getCommandSenderWorld().getBlockState(pos);
         if(blockState.getBlock() == Blocks.WATER)
             return (super.getBlockPathWeight(x, y, z) + 1) * (waterWeight + 1);
-        if(this.getEntityWorld().isRaining() && this.getEntityWorld().canBlockSeeSky(pos))
+        if(this.getCommandSenderWorld().isRaining() && this.getCommandSenderWorld().canSeeSkyFromBelowWater(pos))
             return (super.getBlockPathWeight(x, y, z) + 1) * (waterWeight + 1);
 
-        if(this.getAttackTarget() != null)
+        if(this.getTarget() != null)
             return super.getBlockPathWeight(x, y, z);
 
         return super.getBlockPathWeight(x, y, z);
@@ -85,16 +85,16 @@ public class EntityKrake extends AgeableCreatureEntity implements IMob {
 	
 	// Pushed By Water:
 	@Override
-	public boolean isPushedByWater() {
+	public boolean isPushedByFluid() {
         return false;
     }
 
     // ========== Can leash ==========
     @Override
-    public boolean canBeLeashedTo(PlayerEntity player) {
+    public boolean canBeLeashed(PlayerEntity player) {
         if(!this.hasAttackTarget())
             return true;
-        return super.canBeLeashedTo(player);
+        return super.canBeLeashed(player);
     }
 
     // ==================================================
@@ -107,8 +107,8 @@ public class EntityKrake extends AgeableCreatureEntity implements IMob {
     // ========== Get Wander Position ==========
     public BlockPos getWanderPosition(BlockPos wanderPosition) {
         BlockPos groundPos;
-        for(groundPos = wanderPosition.down(); groundPos.getY() > 0 && !this.getEntityWorld().getBlockState(groundPos).getMaterial().isSolid(); groundPos = groundPos.down()) {}
-        return groundPos.up();
+        for(groundPos = wanderPosition.below(); groundPos.getY() > 0 && !this.getCommandSenderWorld().getBlockState(groundPos).getMaterial().isSolid(); groundPos = groundPos.below()) {}
+        return groundPos.above();
     }
     
     

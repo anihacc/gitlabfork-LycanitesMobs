@@ -27,6 +27,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import com.lycanitesmobs.core.entity.BaseCreatureEntity.TARGET_TYPES;
+
 public class EntityAmalgalich extends BaseCreatureEntity implements IMob, IGroupHeavy, IGroupBoss {
     private ForceGoal consumptionGoalP0;
     private ForceGoal consumptionGoalP2;
@@ -42,7 +44,7 @@ public class EntityAmalgalich extends BaseCreatureEntity implements IMob, IGroup
         this.hasAttackSound = true;
         this.setAttackCooldownMax(30);
         this.hasJumpSound = false;
-        this.entityCollisionReduction = 1.0F;
+        this.pushthrough = 1.0F;
         this.setupMob();
         this.hitAreaWidthScale = 2F;
 
@@ -96,15 +98,15 @@ public class EntityAmalgalich extends BaseCreatureEntity implements IMob, IGroup
 
     /** Returns a larger bounding box for rendering this large entity. **/
     @OnlyIn(Dist.CLIENT)
-    public AxisAlignedBB getRenderBoundingBox() {
-        return this.getBoundingBox().grow(200, 50, 200).offset(0, -25, 0);
+    public AxisAlignedBB getBoundingBoxForCulling() {
+        return this.getBoundingBox().inflate(200, 50, 200).move(0, -25, 0);
     }
 
     @Override
     public void onFirstSpawn() {
         super.onFirstSpawn();
         if(this.getArenaCenter() == null) {
-            this.setArenaCenter(this.getPosition());
+            this.setArenaCenter(this.blockPosition());
         }
     }
 
@@ -113,24 +115,24 @@ public class EntityAmalgalich extends BaseCreatureEntity implements IMob, IGroup
     //                      Updates
     // ==================================================
     @Override
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
 
         // Arena Snapping:
         if(this.hasArenaCenter()) {
             BlockPos arenaPos = this.getArenaCenter();
-            double arenaY = this.getPositionVec().getY();
-            if (this.getEntityWorld().isAirBlock(arenaPos))
+            double arenaY = this.position().y();
+            if (this.getCommandSenderWorld().isEmptyBlock(arenaPos))
                 arenaY = arenaPos.getY();
-            else if (this.getEntityWorld().isAirBlock(arenaPos.add(0, 1, 0)))
-                arenaY = arenaPos.add(0, 1, 0).getY();
+            else if (this.getCommandSenderWorld().isEmptyBlock(arenaPos.offset(0, 1, 0)))
+                arenaY = arenaPos.offset(0, 1, 0).getY();
 
-            if (this.getPositionVec().getX() != arenaPos.getX() || this.getPositionVec().getY() != arenaY || this.getPositionVec().getZ() != arenaPos.getZ())
-                this.setPosition(arenaPos.getX(), arenaY, arenaPos.getZ());
+            if (this.position().x() != arenaPos.getX() || this.position().y() != arenaY || this.position().z() != arenaPos.getZ())
+                this.setPos(arenaPos.getX(), arenaY, arenaPos.getZ());
         }
 
         // Consumption Animation:
-        if(this.getEntityWorld().isRemote) {
+        if(this.getCommandSenderWorld().isClientSide) {
             if(!this.extraAnimation01()) {
                 this.consumptionAnimationTime = this.consumptionDuration;
             }
@@ -160,7 +162,7 @@ public class EntityAmalgalich extends BaseCreatureEntity implements IMob, IGroup
     }
 
     @Override
-    public boolean canBePushed() {
+    public boolean isPushable() {
         return false;
     }
     
@@ -198,7 +200,7 @@ public class EntityAmalgalich extends BaseCreatureEntity implements IMob, IGroup
     }
 
     public boolean extraAnimation01() {
-        if(this.getEntityWorld().isRemote) {
+        if(this.getCommandSenderWorld().isClientSide) {
             return super.extraAnimation01();
         }
 
@@ -238,14 +240,14 @@ public class EntityAmalgalich extends BaseCreatureEntity implements IMob, IGroup
         if(minion instanceof EntityEpion) {
             int extinguishWidth = 10;
             int extinguishHeight = 30;
-            if(!this.getEntityWorld().isRemote) {
-                for(int x = (int)minion.getPositionVec().getX() - extinguishWidth; x <= (int)minion.getPositionVec().getX() + extinguishWidth; x++) {
-                    for(int y = (int)minion.getPositionVec().getY() - extinguishHeight; y <= (int)minion.getPositionVec().getY() + 2; y++) {
-                        for(int z = (int)minion.getPositionVec().getZ() - extinguishWidth; z <= (int)minion.getPositionVec().getZ() + extinguishWidth; z++) {
-                            Block block = this.getEntityWorld().getBlockState(new BlockPos(x, y, z)).getBlock();
+            if(!this.getCommandSenderWorld().isClientSide) {
+                for(int x = (int)minion.position().x() - extinguishWidth; x <= (int)minion.position().x() + extinguishWidth; x++) {
+                    for(int y = (int)minion.position().y() - extinguishHeight; y <= (int)minion.position().y() + 2; y++) {
+                        for(int z = (int)minion.position().z() - extinguishWidth; z <= (int)minion.position().z() + extinguishWidth; z++) {
+                            Block block = this.getCommandSenderWorld().getBlockState(new BlockPos(x, y, z)).getBlock();
                             if(block == ObjectManager.getBlock("shadowfire")) {
                                 BlockPos placePos = new BlockPos(x, y, z);
-                                this.getEntityWorld().removeBlock(placePos, true);
+                                this.getCommandSenderWorld().removeBlock(placePos, true);
                             }
                         }
                     }
@@ -300,7 +302,7 @@ public class EntityAmalgalich extends BaseCreatureEntity implements IMob, IGroup
         }
         if(entity instanceof PlayerEntity) {
             PlayerEntity player = (PlayerEntity)entity;
-            if (!player.abilities.disableDamage && player.getPositionVec().getY() > this.getPositionVec().getY() + CreatureManager.getInstance().config.bossAntiFlight) {
+            if (!player.abilities.invulnerable && player.position().y() > this.position().y() + CreatureManager.getInstance().config.bossAntiFlight) {
                 return false;
             }
         }
@@ -320,12 +322,12 @@ public class EntityAmalgalich extends BaseCreatureEntity implements IMob, IGroup
     // ========== Attacked From ==========
     /** Called when this entity has been attacked, uses a DamageSource and damage value. **/
     @Override
-    public boolean attackEntityFrom(DamageSource damageSrc, float damageAmount) {
-        if(this.playerTargets != null && damageSrc.getTrueSource() != null && damageSrc.getTrueSource() instanceof PlayerEntity) {
-            if (!this.playerTargets.contains(damageSrc.getTrueSource()))
-                this.playerTargets.add((PlayerEntity)damageSrc.getTrueSource());
+    public boolean hurt(DamageSource damageSrc, float damageAmount) {
+        if(this.playerTargets != null && damageSrc.getEntity() != null && damageSrc.getEntity() instanceof PlayerEntity) {
+            if (!this.playerTargets.contains(damageSrc.getEntity()))
+                this.playerTargets.add((PlayerEntity)damageSrc.getEntity());
         }
-        return super.attackEntityFrom(damageSrc, damageAmount);
+        return super.hurt(damageSrc, damageAmount);
     }
 
 
@@ -334,15 +336,15 @@ public class EntityAmalgalich extends BaseCreatureEntity implements IMob, IGroup
     // ==================================================
     // ========== Read ===========
     @Override
-    public void readAdditional(CompoundNBT nbtTagCompound) {
-        super.readAdditional(nbtTagCompound);
+    public void readAdditionalSaveData(CompoundNBT nbtTagCompound) {
+        super.readAdditionalSaveData(nbtTagCompound);
     }
 
     // ========== Write ==========
     /** Used when saving this mob to a chunk. **/
     @Override
-    public void writeAdditional(CompoundNBT nbtTagCompound) {
-        super.writeAdditional(nbtTagCompound);
+    public void addAdditionalSaveData(CompoundNBT nbtTagCompound) {
+        super.addAdditionalSaveData(nbtTagCompound);
     }
 
 

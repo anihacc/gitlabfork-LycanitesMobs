@@ -469,12 +469,12 @@ public class CreatureInfo {
 	@Nonnull
 	public EntityType<? extends LivingEntity> getEntityType() {
 		if(this.entityType == null) {
-			EntityType.Builder entityTypeBuilder = EntityType.Builder.create(EntityFactory.getInstance(), this.peaceful ? EntityClassification.CREATURE : EntityClassification.MONSTER);
+			EntityType.Builder entityTypeBuilder = EntityType.Builder.of(EntityFactory.getInstance(), this.peaceful ? EntityClassification.CREATURE : EntityClassification.MONSTER);
 //			entityTypeBuilder.setCustomClientFactory(EntityFactory.getInstance().createOnClientFunction); // Was created when experimenting with custom spawn packets, not in use currently but may be needed in the future.
 			entityTypeBuilder.setTrackingRange(this.isBoss() ? 32 : 10);
 			entityTypeBuilder.setUpdateInterval(3);
 			entityTypeBuilder.setShouldReceiveVelocityUpdates(false);
-			entityTypeBuilder.size((float)this.width, (float)this.height);
+			entityTypeBuilder.sized((float)this.width, (float)this.height);
 			this.entityType = entityTypeBuilder.build(this.getName());
 			this.entityType.setRegistryName(LycanitesMobs.MODID, this.getName());
 			EntityFactory.getInstance().addEntityType(this.entityType, this.entityConstructor, this.getName());
@@ -553,7 +553,7 @@ public class CreatureInfo {
 		boolean firstElement = true;
 		for(ElementInfo element : elements) {
 			if(!firstElement) {
-				elementNames.appendString(", ");
+				elementNames.append(", ");
 			}
 			firstElement = false;
 			elementNames.append(element.getTitle());
@@ -574,7 +574,7 @@ public class CreatureInfo {
 		boolean firstDiet = true;
 		for(String diet : this.diets) {
 			if(!firstDiet) {
-				dietNames.appendString(", ");
+				dietNames.append(", ");
 			}
 			firstDiet = false;
 			dietNames.append(new TranslationTextComponent("diet." + diet));
@@ -600,7 +600,7 @@ public class CreatureInfo {
 		boolean firstBiome = true;
 		for(String biomeId : biomeIds) {
 			if(!firstBiome) {
-				biomeNames.appendString(", ");
+				biomeNames.append(", ");
 			}
 			firstBiome = false;
 			biomeNames.append(new StringTextComponent(biomeId)); // TODO Figure out how to get biome display names now.
@@ -621,30 +621,30 @@ public class CreatureInfo {
 		boolean firstDrop = true;
 		for(ItemDrop drop : this.drops) {
 			if(!firstDrop) {
-				dropNames.appendString("\n");
+				dropNames.append("\n");
 			}
 			firstDrop = false;
-			dropNames.append(drop.getItemStack().getDisplayName());
-			dropNames.appendString(" (");
+			dropNames.append(drop.getItemStack().getHoverName());
+			dropNames.append(" (");
 
 			if(drop.maxAmount > drop.minAmount)
-				dropNames.appendString(drop.minAmount + "-" + drop.maxAmount + "X");
+				dropNames.append(drop.minAmount + "-" + drop.maxAmount + "X");
 			else
-				dropNames.appendString(drop.minAmount + "X");
+				dropNames.append(drop.minAmount + "X");
 
-			dropNames.appendString(" " + (drop.chance * 100) + "%");
+			dropNames.append(" " + (drop.chance * 100) + "%");
 
 			Subspecies subspecies = this.getSubspecies(0);
 			if(drop.subspeciesIndex > 0) {
 				subspecies = this.getSubspecies(drop.subspeciesIndex);
 				if(subspecies.name != null) {
-					dropNames.appendString(" ");
+					dropNames.append(" ");
 					dropNames.append(subspecies.getTitle());
 				}
 			}
 
 			if(drop.variantIndex >= 0) {
-				dropNames.appendString(" ");
+				dropNames.append(" ");
 				Variant variant = subspecies.getVariant(drop.variantIndex);
 				if(variant == null) {
 					dropNames.append(new TranslationTextComponent("subspecies.normal"));
@@ -654,7 +654,7 @@ public class CreatureInfo {
 				}
 			}
 
-			dropNames.appendString(")");
+			dropNames.append(")");
 		}
 		return dropNames;
 	}
@@ -783,7 +783,7 @@ public class CreatureInfo {
 		}
 
 		// Get Random Subspecies:
-		int randomIndex =  entity.getRNG().nextInt(possibleSubspecies.size());
+		int randomIndex =  entity.getRandom().nextInt(possibleSubspecies.size());
 		return possibleSubspecies.get(randomIndex);
 	}
 
@@ -798,12 +798,12 @@ public class CreatureInfo {
 		}
 		for(String diet : this.diets) {
 			ResourceLocation dietTagId = new ResourceLocation(LycanitesMobs.MODID, "diet_" + diet);
-			ITag<Item> dietTag = ItemTags.getCollection().get(dietTagId);
+			ITag<Item> dietTag = ItemTags.getAllTags().getTag(dietTagId);
 			if(dietTag == null) {
 				LycanitesMobs.logWarning("", "[Creature] Cannot find diet: " + dietTagId);
 				return false;
 			}
-			if(itemStack.getItem().isIn(dietTag)) {
+			if(itemStack.getItem().is(dietTag)) {
 				return true;
 			}
 		}

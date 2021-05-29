@@ -68,7 +68,7 @@ public class MessagePetEntryRemove {
 	public static MessagePetEntryRemove decode(PacketBuffer packet) {
 		MessagePetEntryRemove message = new MessagePetEntryRemove();
 		try {
-            message.petEntryID = packet.readUniqueId();
+            message.petEntryID = packet.readUUID();
 		} catch (Exception e) {
 			LycanitesMobs.logWarning("", "There was a problem decoding the packet: " + packet + ".");
 			e.printStackTrace();
@@ -81,7 +81,7 @@ public class MessagePetEntryRemove {
 	 */
 	public static void encode(MessagePetEntryRemove message, PacketBuffer packet) {
 		try {
-			packet.writeUniqueId(message.petEntryID);
+			packet.writeUUID(message.petEntryID);
 		} catch (Exception e) {
 			LycanitesMobs.logWarning("", "There was a problem encoding the packet: " + packet + ".");
 			e.printStackTrace();

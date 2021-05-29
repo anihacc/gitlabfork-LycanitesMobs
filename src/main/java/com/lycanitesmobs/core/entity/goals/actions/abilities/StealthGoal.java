@@ -24,7 +24,7 @@ public class StealthGoal extends Goal {
  	// ==================================================
 	public StealthGoal(BaseCreatureEntity setHost) {
 		this.host = setHost;
-		this.setMutexFlags(EnumSet.noneOf(Goal.Flag.class));
+		this.setFlags(EnumSet.noneOf(Goal.Flag.class));
 	}
 	
 	
@@ -53,18 +53,18 @@ public class StealthGoal extends Goal {
  	//                   Should Execute
  	// ==================================================
 	@Override
-	public boolean shouldExecute() {
+	public boolean canUse() {
 		this.unstealth = false;
-		if(this.host.getLeashed()) this.unstealth = true;
+		if(this.host.isLeashed()) this.unstealth = true;
 		
 		if(!this.stealthMove) {
-			if(!this.host.useDirectNavigator() && !this.host.getNavigator().noPath())
+			if(!this.host.useDirectNavigator() && !this.host.getNavigation().isDone())
 				this.unstealth = true;
 			if(this.host.useDirectNavigator() && !this.host.directNavigator.atTargetPosition())
 				this.unstealth = true;
 		}
 		
-		if(!this.stealthAttack && this.host.getAttackTarget() != null)
+		if(!this.stealthAttack && this.host.getTarget() != null)
 			this.unstealth = true;
 		if(!this.host.canStealth())
 			this.unstealth = true;
@@ -77,17 +77,17 @@ public class StealthGoal extends Goal {
  	//                 Continue Executing
  	// ==================================================
 	@Override
-	public boolean shouldContinueExecuting() {
-		if(this.host.getLeashed()) this.unstealth = true;
+	public boolean canContinueToUse() {
+		if(this.host.isLeashed()) this.unstealth = true;
 		
 		if(!this.stealthMove) {
-			if(!this.host.useDirectNavigator() && !this.host.getNavigator().noPath())
+			if(!this.host.useDirectNavigator() && !this.host.getNavigation().isDone())
 				this.unstealth = true;
 			if(this.host.useDirectNavigator() && !this.host.directNavigator.atTargetPosition())
 				this.unstealth = true;
 		}
 		
-		if(!this.stealthAttack && this.host.getAttackTarget() != null)
+		if(!this.stealthAttack && this.host.getTarget() != null)
 			this.unstealth = true;
 		if(!this.host.canStealth())
 			this.unstealth = true;
@@ -106,7 +106,7 @@ public class StealthGoal extends Goal {
  	//                 Start Executing
  	// ==================================================
 	@Override
-	public void startExecuting() {
+	public void start() {
 		this.host.setStealth(0F);
 		this.stealthTime = 0;
 		this.stealthTimeMaxPrev = this.stealthTimeMax;
@@ -117,7 +117,7 @@ public class StealthGoal extends Goal {
  	//                  Reset Task
  	// ==================================================
 	@Override
-	public void resetTask() {
+	public void stop() {
 		this.host.setStealth(0F);
 		this.stealthTime = 0;
 		this.stealthTimeMaxPrev = this.stealthTimeMax;

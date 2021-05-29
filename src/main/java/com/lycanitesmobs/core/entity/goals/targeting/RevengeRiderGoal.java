@@ -53,7 +53,7 @@ public class RevengeRiderGoal extends FindAttackTargetGoal {
 	// ==================================================
  	//                  Should Execute
  	// ==================================================
-    public boolean shouldExecute() {
+    public boolean canUse() {
     	if(!this.host.hasRiderTarget())
     		return false;
     	if(this.host.getRider() == null)
@@ -70,20 +70,20 @@ public class RevengeRiderGoal extends FindAttackTargetGoal {
 	// ==================================================
  	//                 Start Executing
  	// ==================================================
-    public void startExecuting() {
+    public void start() {
         this.target = this.getRiderRevengeTarget();
         this.revengeTime = this.getRiderRevengeTime();
 
         try {
             if (this.callForHelp) {
                 double d0 = this.getTargetDistance();
-                List allies = this.host.getEntityWorld().getEntitiesWithinAABB(this.host.getClass(), this.host.getBoundingBox().grow(d0, 4.0D, d0), (Predicate<Entity>) input -> input instanceof LivingEntity);
+                List allies = this.host.getCommandSenderWorld().getEntitiesOfClass(this.host.getClass(), this.host.getBoundingBox().inflate(d0, 4.0D, d0), (Predicate<Entity>) input -> input instanceof LivingEntity);
                 Iterator possibleAllies = allies.iterator();
 
                 while (possibleAllies.hasNext()) {
                     BaseCreatureEntity possibleAlly = (BaseCreatureEntity) possibleAllies.next();
-                    if (possibleAlly != this.host && possibleAlly.getAttackTarget() == null && !possibleAlly.isOnSameTeam(this.target))
-                        possibleAlly.setAttackTarget(this.target);
+                    if (possibleAlly != this.host && possibleAlly.getTarget() == null && !possibleAlly.isAlliedTo(this.target))
+                        possibleAlly.setTarget(this.target);
                 }
             }
         }
@@ -92,7 +92,7 @@ public class RevengeRiderGoal extends FindAttackTargetGoal {
             e.printStackTrace();
         }
 
-        super.startExecuting();
+        super.start();
     }
 
 

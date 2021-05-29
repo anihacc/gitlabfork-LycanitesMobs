@@ -27,9 +27,9 @@ public class EquipmentInfuserTileEntity extends TileEntityBase implements IInven
 	}
 
 	@Override
-	public void remove() {
+	public void setRemoved() {
 		// TODO Drop parts or piece.
-		super.remove();
+		super.setRemoved();
 	}
 
 	@Override
@@ -51,7 +51,7 @@ public class EquipmentInfuserTileEntity extends TileEntityBase implements IInven
 	 * Returns the stack in the given slot.
 	 */
 	@Override
-	public ItemStack getStackInSlot(int index) {
+	public ItemStack getItem(int index) {
 		return this.itemStacks.get(index);
 	}
 
@@ -59,31 +59,31 @@ public class EquipmentInfuserTileEntity extends TileEntityBase implements IInven
 	 * Removes up to a specified number of items from an inventory slot and returns them in a new stack.
 	 */
 	@Override
-	public ItemStack decrStackSize(int index, int count) {
-		return ItemStackHelper.getAndSplit(this.itemStacks, index, count);
+	public ItemStack removeItem(int index, int count) {
+		return ItemStackHelper.removeItem(this.itemStacks, index, count);
 	}
 
 	/**
 	 * Removes a stack from the given slot and returns it.
 	 */
 	@Override
-	public ItemStack removeStackFromSlot(int index) {
-		return ItemStackHelper.getAndRemove(this.itemStacks, index);
+	public ItemStack removeItemNoUpdate(int index) {
+		return ItemStackHelper.takeItem(this.itemStacks, index);
 	}
 
 	/**
 	 * Sets the given item stack to the specified slot in the inventory (can be crafting or armor sections).
 	 */
 	@Override
-	public void setInventorySlotContents(int index, ItemStack stack) {
+	public void setItem(int index, ItemStack stack) {
 		this.itemStacks.set(index, stack);
-		if (stack.getCount() > this.getInventoryStackLimit()) {
-			stack.setCount(this.getInventoryStackLimit());
+		if (stack.getCount() > this.getMaxStackSize()) {
+			stack.setCount(this.getMaxStackSize());
 		}
 	}
 
 	@Override
-	public int getSizeInventory() {
+	public int getContainerSize() {
 		return this.itemStacks.size();
 	}
 
@@ -91,22 +91,22 @@ public class EquipmentInfuserTileEntity extends TileEntityBase implements IInven
 	 * Returns the maximum stack size for a inventory slot. Seems to always be 64, possibly will be extended.
 	 */
 	@Override
-	public int getInventoryStackLimit() {
+	public int getMaxStackSize() {
 		return 64;
 	}
 
 	@Override
-	public boolean isUsableByPlayer(PlayerEntity player) {
+	public boolean stillValid(PlayerEntity player) {
 		return false;
 	}
 
 	@Override
-	public void openInventory(PlayerEntity player) {
+	public void startOpen(PlayerEntity player) {
 
 	}
 
 	@Override
-	public void closeInventory(PlayerEntity player) {
+	public void stopOpen(PlayerEntity player) {
 
 	}
 
@@ -115,25 +115,25 @@ public class EquipmentInfuserTileEntity extends TileEntityBase implements IInven
 	 * guis use Slot.isItemValid
 	 */
 	@Override
-	public boolean isItemValidForSlot(int index, ItemStack itemStack) {
-		ItemStack existingStack = this.getStackInSlot(index);
+	public boolean canPlaceItem(int index, ItemStack itemStack) {
+		ItemStack existingStack = this.getItem(index);
 		return existingStack.isEmpty();
 	}
 
 	@Override
-	public void clear() {
+	public void clearContent() {
 
 	}
 
 	@Override
-	public boolean receiveClientEvent(int eventID, int eventArg) {
+	public boolean triggerEvent(int eventID, int eventArg) {
 		return false;
 	}
 
 	@Override
 	public SUpdateTileEntityPacket getUpdatePacket() {
 		CompoundNBT syncData = new CompoundNBT();
-		return new SUpdateTileEntityPacket(this.getPos(), 1, syncData);
+		return new SUpdateTileEntityPacket(this.getBlockPos(), 1, syncData);
 	}
 
 	@Override
@@ -155,8 +155,8 @@ public class EquipmentInfuserTileEntity extends TileEntityBase implements IInven
 	}
 
 	@Override
-	public CompoundNBT write(CompoundNBT nbtTagCompound) {
+	public CompoundNBT save(CompoundNBT nbtTagCompound) {
 		ItemStackHelper.saveAllItems(nbtTagCompound, this.itemStacks);
-		return super.write(nbtTagCompound);
+		return super.save(nbtTagCompound);
 	}
 }

@@ -25,10 +25,10 @@ public class ChunkSpawnTrigger extends SpawnTrigger {
 	/** Called every time a new chunk is generated. **/
 	public boolean onChunkPopulate(World world, ChunkPos chunkPos) {
 		// Chance:
-		if(this.chance < 1 && world.rand.nextDouble() > this.chance) {
+		if(this.chance < 1 && world.random.nextDouble() > this.chance) {
 			return false;
 		}
 
-		return this.trigger(world, null, new BlockPos(chunkPos.getXStart() + 8, world.getSeaLevel(), chunkPos.getZStart() + 8), 0, 0);
+		return this.trigger(world, null, new BlockPos(chunkPos.getMinBlockX() + 8, world.getSeaLevel(), chunkPos.getMinBlockZ() + 8), 0, 0);
 	}
 }

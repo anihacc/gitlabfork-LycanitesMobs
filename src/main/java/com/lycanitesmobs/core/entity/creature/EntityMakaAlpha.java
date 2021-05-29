@@ -51,13 +51,13 @@ public class EntityMakaAlpha extends AgeableCreatureEntity {
   	//                      Update
   	// ==================================================
 	@Override
-	public void livingTick() {
-		super.livingTick();
+	public void aiStep() {
+		super.aiStep();
 		
 		// Alpha Sparring Cooldown:
-		if(this.hasAttackTarget() && this.getAttackTarget() instanceof EntityMakaAlpha) {
-			if(this.getHealth() / this.getMaxHealth() <= 0.25F || this.getAttackTarget().getHealth() / this.getAttackTarget().getMaxHealth() <= 0.25F) {
-				this.setAttackTarget(null);
+		if(this.hasAttackTarget() && this.getTarget() instanceof EntityMakaAlpha) {
+			if(this.getHealth() / this.getMaxHealth() <= 0.25F || this.getTarget().getHealth() / this.getTarget().getMaxHealth() <= 0.25F) {
+				this.setTarget(null);
 			}
 		}
 	}
@@ -77,12 +77,12 @@ public class EntityMakaAlpha extends AgeableCreatureEntity {
     // ========== Pathing Weight ==========
     @Override
     public float getBlockPathWeight(int x, int y, int z) {
-        BlockState blockState = this.getEntityWorld().getBlockState(new BlockPos(x, y - 1, z));
+        BlockState blockState = this.getCommandSenderWorld().getBlockState(new BlockPos(x, y - 1, z));
         Block block = blockState.getBlock();
         if(block != Blocks.AIR) {
-            if(blockState.getMaterial() == Material.ORGANIC)
+            if(blockState.getMaterial() == Material.GRASS)
                 return 10F;
-            if(blockState.getMaterial() == Material.EARTH)
+            if(blockState.getMaterial() == Material.DIRT)
                 return 7F;
         }
         return super.getBlockPathWeight(x, y, z);
@@ -90,7 +90,7 @@ public class EntityMakaAlpha extends AgeableCreatureEntity {
 
     // ========== Can leash ==========
     @Override
-    public boolean canBeLeashedTo(PlayerEntity player) {
+    public boolean canBeLeashed(PlayerEntity player) {
         return true;
     }
 
@@ -105,10 +105,10 @@ public class EntityMakaAlpha extends AgeableCreatureEntity {
    	//                      Attacks
    	// ==================================================
 	@Override
-	public boolean canAttack(EntityType targetType) {
+	public boolean canAttackType(EntityType targetType) {
 		if(targetType == this.getType())
 			return true;
-		return super.canAttack(targetType);
+		return super.canAttackType(targetType);
 	}
 
 	@Override
@@ -121,20 +121,20 @@ public class EntityMakaAlpha extends AgeableCreatureEntity {
     }
 
     @Override
-    public void setAttackTarget(LivingEntity entity) {
-    	if(entity == null && this.getAttackTarget() instanceof EntityMakaAlpha) {
+    public void setTarget(LivingEntity entity) {
+    	if(entity == null && this.getTarget() instanceof EntityMakaAlpha) {
     		this.heal((this.getMaxHealth() - this.getHealth()) / 2);
-    		this.addPotionEffect(new EffectInstance(Effects.REGENERATION, 20 * 20, 2, false, false));
-			this.getAttackTarget().heal((this.getMaxHealth() - this.getHealth()) / 2);
-			this.getAttackTarget().addPotionEffect(new EffectInstance(Effects.REGENERATION, 20 * 20, 2, false, false));
+    		this.addEffect(new EffectInstance(Effects.REGENERATION, 20 * 20, 2, false, false));
+			this.getTarget().heal((this.getMaxHealth() - this.getHealth()) / 2);
+			this.getTarget().addEffect(new EffectInstance(Effects.REGENERATION, 20 * 20, 2, false, false));
     	}
-    	super.setAttackTarget(entity);
+    	super.setTarget(entity);
     }
 
 	@Override
 	public boolean rollAttackTargetChance(LivingEntity target) {
     	if(target instanceof PlayerEntity || target.getType() == this.getType())
-    		return this.getRNG().nextDouble() <= 0.01D;
+    		return this.getRandom().nextDouble() <= 0.01D;
 		return true;
 	}
     
@@ -145,7 +145,7 @@ public class EntityMakaAlpha extends AgeableCreatureEntity {
     // ========== Damage Modifier ==========
     public float getDamageModifier(DamageSource damageSrc) {
         float damageMod = super.getDamageModifier(damageSrc);
-        if(damageSrc.getTrueSource() instanceof EntityMakaAlpha)
+        if(damageSrc.getEntity() instanceof EntityMakaAlpha)
             damageMod *= 2;
         return damageMod;
     }
@@ -157,6 +157,6 @@ public class EntityMakaAlpha extends AgeableCreatureEntity {
     // ========== Create Child ==========
 	@Override
 	public AgeableCreatureEntity createChild(AgeableCreatureEntity partner) {
-		return (AgeableCreatureEntity) CreatureManager.getInstance().getCreature("maka").createEntity(this.getEntityWorld());
+		return (AgeableCreatureEntity) CreatureManager.getInstance().getCreature("maka").createEntity(this.getCommandSenderWorld());
 	}
 }

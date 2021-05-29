@@ -32,7 +32,7 @@ public class EntityWarg extends RideableCreatureEntity {
         this.setupMob();
         
         // Stats:
-        this.stepHeight = 1.0F;
+        this.maxUpStep = 1.0F;
     }
 
     // ========== Init AI ==========
@@ -49,31 +49,31 @@ public class EntityWarg extends RideableCreatureEntity {
     // ==================================================
 	// ========== Living Update ==========
 	@Override
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
         
         // Random Leaping:
-        if(!this.isTamed() && this.onGround && !this.getEntityWorld().isRemote) {
+        if(!this.isTamed() && this.onGround && !this.getCommandSenderWorld().isClientSide) {
         	if(this.hasAttackTarget()) {
-        		if(this.rand.nextInt(10) == 0)
-        			this.leap(4.0F, 0.5D, this.getAttackTarget());
+        		if(this.random.nextInt(10) == 0)
+        			this.leap(4.0F, 0.5D, this.getTarget());
         	}
         }
 
         // Leap Landing Effect:
-        if(this.leapedAbilityQueued && !this.onGround && !this.getEntityWorld().isRemote) {
+        if(this.leapedAbilityQueued && !this.onGround && !this.getCommandSenderWorld().isClientSide) {
             this.leapedAbilityQueued = false;
             this.leapedAbilityReady = true;
         }
-        if(this.leapedAbilityReady && this.onGround && !this.getEntityWorld().isRemote) {
+        if(this.leapedAbilityReady && this.onGround && !this.getCommandSenderWorld().isClientSide) {
             this.leapedAbilityReady = false;
             double distance = 4.0D;
-            List<LivingEntity> possibleTargets = this.getEntityWorld().getEntitiesWithinAABB(LivingEntity.class, this.getBoundingBox().grow(distance, distance, distance), possibleTarget -> {
+            List<LivingEntity> possibleTargets = this.getCommandSenderWorld().getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(distance, distance, distance), possibleTarget -> {
 				if (!possibleTarget.isAlive()
 						|| possibleTarget == EntityWarg.this
-						|| EntityWarg.this.isRidingOrBeingRiddenBy(possibleTarget)
-						|| EntityWarg.this.isOnSameTeam(possibleTarget)
-						|| !EntityWarg.this.canAttack(possibleTarget.getType())
+						|| EntityWarg.this.hasIndirectPassenger(possibleTarget)
+						|| EntityWarg.this.isAlliedTo(possibleTarget)
+						|| !EntityWarg.this.canAttackType(possibleTarget.getType())
 						|| !EntityWarg.this.canAttack(possibleTarget))
 					return false;
 
@@ -112,15 +112,15 @@ public class EntityWarg extends RideableCreatureEntity {
 
     // ========== Mounted Offset ==========
     @Override
-    public double getMountedYOffset() {
-        return (double)this.getSize(Pose.STANDING).height * 0.85D;
+    public double getPassengersRidingOffset() {
+        return (double)this.getDimensions(Pose.STANDING).height * 0.85D;
     }
 
     // ========== Leap ==========
     @Override
     public void leap(double distance, double leapHeight) {
         super.leap(distance, leapHeight);
-        if(!this.getEntityWorld().isRemote)
+        if(!this.getCommandSenderWorld().isClientSide)
             this.leapedAbilityQueued = true;
     }
 
@@ -128,7 +128,7 @@ public class EntityWarg extends RideableCreatureEntity {
     @Override
     public void leap(float range, double leapHeight, Entity target) {
         super.leap(range, leapHeight, target);
-        if(!this.getEntityWorld().isRemote)
+        if(!this.getCommandSenderWorld().isClientSide)
             this.leapedAbilityQueued = true;
     }
 
@@ -138,7 +138,7 @@ public class EntityWarg extends RideableCreatureEntity {
     // ==================================================
     @Override
     public void mountAbility(Entity rider) {
-        if(this.getEntityWorld().isRemote)
+        if(this.getCommandSenderWorld().isClientSide)
             return;
 
         if(!this.onGround)

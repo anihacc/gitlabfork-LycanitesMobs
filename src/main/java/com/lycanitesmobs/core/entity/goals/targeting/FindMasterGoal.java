@@ -79,7 +79,7 @@ public class FindMasterGoal extends TargetingGoal {
         if(this.targetClass != null && !this.targetClass.isAssignableFrom(target.getClass()))
             return false;
 
-        if(target instanceof AnimalEntity && ((AnimalEntity)target).getGrowingAge() < 0)
+        if(target instanceof AnimalEntity && ((AnimalEntity)target).getAge() < 0)
             return false;
     	if(target instanceof AgeableCreatureEntity && ((AgeableCreatureEntity)target).getGrowingAge() < 0)
             return false;
@@ -107,11 +107,11 @@ public class FindMasterGoal extends TargetingGoal {
   	//                   Should Execute
   	// ==================================================
     @Override
-    public boolean shouldExecute() {
+    public boolean canUse() {
 		if (this.host.updateTick % 20 != 0) {
 			return false;
 		}
-		if(this.targetChance > 0 && this.host.getRNG().nextInt(this.targetChance) != 0) {
+		if(this.targetChance > 0 && this.host.getRandom().nextInt(this.targetChance) != 0) {
 			return false;
 		}
 

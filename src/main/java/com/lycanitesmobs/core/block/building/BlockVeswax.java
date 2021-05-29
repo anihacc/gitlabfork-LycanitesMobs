@@ -31,11 +31,11 @@ public class BlockVeswax extends BlockBase {
 		this.removeOnTick = true;
 
 		this.setRegistryName(this.group.modid, this.blockName.toLowerCase());
-		this.setDefaultState(this.getStateContainer().getBaseState().with(AGE, 0));
+		this.registerDefaultState(this.getStateDefinition().any().setValue(AGE, 0));
 	}
 
 	@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
 		builder.add(AGE);
 	}
 
@@ -44,10 +44,10 @@ public class BlockVeswax extends BlockBase {
     //                   Placement
     // ==================================================
     @Override
-	public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack itemStack) {
-        int orientationMeta = placer.getHorizontalFacing().getOpposite().getIndex();
+	public void setPlacedBy(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack itemStack) {
+        int orientationMeta = placer.getDirection().getOpposite().get3DDataValue();
         orientationMeta += 8;
-        world.setBlockState(pos, state.with(AGE, orientationMeta), 1);
+        world.setBlock(pos, state.setValue(AGE, orientationMeta), 1);
     }
 
 
@@ -61,17 +61,17 @@ public class BlockVeswax extends BlockBase {
     }
 
     @Override
-	public boolean ticksRandomly(BlockState state) {
-		return state.get(AGE) < 8;
+	public boolean isRandomlyTicking(BlockState state) {
+		return state.getValue(AGE) < 8;
 	}
 
     // ========== Tick Update ==========
 	@Override
 	public void tick(BlockState state, ServerWorld world, BlockPos pos, Random random) { //tick()
-        if(world.isRemote)
+        if(world.isClientSide)
             return;
         double range = 32D;
-        if(!world.getEntitiesWithinAABB(EntityVespidQueen.class, new AxisAlignedBB(pos.getX() - range, pos.getY() - range, pos.getZ() - range, pos.getX() + range, pos.getY() + range, pos.getZ() + range)).isEmpty())
+        if(!world.getEntitiesOfClass(EntityVespidQueen.class, new AxisAlignedBB(pos.getX() - range, pos.getY() - range, pos.getZ() - range, pos.getX() + range, pos.getY() + range, pos.getZ() + range)).isEmpty())
             return;
         super.tick(state, world, pos, random);
     }

@@ -7,6 +7,8 @@ import net.minecraft.util.math.BlockPos;
 
 import java.util.EnumSet;
 
+import net.minecraft.entity.ai.goal.Goal.Flag;
+
 public class ChaseGoal extends Goal {
 	// Targets:
     private BaseCreatureEntity host;
@@ -24,7 +26,7 @@ public class ChaseGoal extends Goal {
  	// ==================================================
     public ChaseGoal(BaseCreatureEntity setHost) {
         this.host = setHost;
-		this.setMutexFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
+		this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
     }
     
     
@@ -49,12 +51,12 @@ public class ChaseGoal extends Goal {
  	//                   Should Execute
  	// ==================================================
 	@Override
-    public boolean shouldExecute() {
-		this.target = this.host.getAttackTarget();
+    public boolean canUse() {
+		this.target = this.host.getTarget();
 		if(this.target == null || !this.target.isAlive()) {
 			return false;
 		}
-		float distance = this.host.getDistance(this.target);
+		float distance = this.host.distanceTo(this.target);
 		if(distance > this.maxTargetDistance) {
 			return false;
 		}
@@ -62,7 +64,7 @@ public class ChaseGoal extends Goal {
 			return false;
 		}
 
-		this.movePos = this.target.getPosition();
+		this.movePos = this.target.blockPosition();
 
         return true;
     }
@@ -72,11 +74,11 @@ public class ChaseGoal extends Goal {
  	//                 Continue Executing
  	// ==================================================
 	@Override
-    public boolean shouldContinueExecuting() {
-		if (!this.shouldExecute()) {
+    public boolean canContinueToUse() {
+		if (!this.canUse()) {
 			return false;
 		}
-		if (!this.host.useDirectNavigator() && this.host.getNavigator().noPath()) {
+		if (!this.host.useDirectNavigator() && this.host.getNavigation().isDone()) {
 			return false;
 		}
     	return true;
@@ -87,9 +89,9 @@ public class ChaseGoal extends Goal {
 	//                      Start
 	// ==================================================
 	@Override
-	public void startExecuting() {
+	public void start() {
 		if(!this.host.useDirectNavigator())
-			this.host.getNavigator().tryMoveToXYZ(this.movePos.getX(), this.movePos.getY(), this.movePos.getZ(), this.speed);
+			this.host.getNavigation().moveTo(this.movePos.getX(), this.movePos.getY(), this.movePos.getZ(), this.speed);
 		else
 			this.host.directNavigator.setTargetPosition(this.movePos, this.speed);
 	}
@@ -99,10 +101,10 @@ public class ChaseGoal extends Goal {
 	//                       Reset
 	// ==================================================
 	@Override
-	public void resetTask() {
+	public void stop() {
 		this.target = null;
 		if(!this.host.useDirectNavigator())
-			this.host.getNavigator().clearPath();
+			this.host.getNavigation().stop();
 		else
 			this.host.directNavigator.clearTargetPosition(this.speed);
 	}

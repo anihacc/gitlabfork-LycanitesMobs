@@ -12,6 +12,8 @@ import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 
+import net.minecraft.entity.ai.goal.Goal.Flag;
+
 public class GetItemGoal extends Goal {
 	// Targets:
 	private BaseCreatureEntity host;
@@ -34,7 +36,7 @@ public class GetItemGoal extends Goal {
   	// ==================================================
     public GetItemGoal(BaseCreatureEntity setHost) {
         super();
-		this.setMutexFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
+		this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
         this.host = setHost;
         this.targetSelector = input -> true;
         this.targetSorter = new TargetSorterNearest(setHost);
@@ -69,7 +71,7 @@ public class GetItemGoal extends Goal {
   	//                  Should Execute
   	// ==================================================
 	@Override
-    public boolean shouldExecute() {
+    public boolean canUse() {
     	if(!this.host.canPickupItems())
     		return false;
 
@@ -87,14 +89,14 @@ public class GetItemGoal extends Goal {
         double heightDistance = 4.0D;
         if(this.host.useDirectNavigator())
         	heightDistance = this.distanceMax;
-        List<ItemEntity> possibleTargets = this.host.getEntityWorld().getEntitiesWithinAABB(ItemEntity.class, this.host.getBoundingBox().grow(this.distanceMax, heightDistance, this.distanceMax), this.targetSelector);
+        List<ItemEntity> possibleTargets = this.host.getCommandSenderWorld().getEntitiesOfClass(ItemEntity.class, this.host.getBoundingBox().inflate(this.distanceMax, heightDistance, this.distanceMax), this.targetSelector);
         
         if(possibleTargets.isEmpty())
             return false;
         Collections.sort(possibleTargets, this.targetSorter);
         this.target = possibleTargets.get(0);
         
-        return this.shouldContinueExecuting();
+        return this.canContinueToUse();
     }
     
     
@@ -102,18 +104,18 @@ public class GetItemGoal extends Goal {
  	//                  Continue Executing
  	// ==================================================
 	@Override
-    public boolean shouldContinueExecuting() {
+    public boolean canContinueToUse() {
     	if(this.target == null)
             return false;
         if(!this.target.isAlive())
             return false;
         
-        double distance = this.host.getDistance(target);
+        double distance = this.host.distanceTo(target);
         if(distance > this.distanceMax)
         	return false;
         
         if(this.checkSight)
-            if(this.host.getEntitySenses().canSee(this.target))
+            if(this.host.getSensing().canSee(this.target))
                 this.cantSeeTime = 0;
             else if(++this.cantSeeTime > this.cantSeeTimeMax)
                 return false;
@@ -126,7 +128,7 @@ public class GetItemGoal extends Goal {
  	//                      Reset
  	// ==================================================
 	@Override
-    public void resetTask() {
+    public void stop() {
         this.target = null;
         this.host.clearMovement();
     }
@@ -136,7 +138,7 @@ public class GetItemGoal extends Goal {
   	//                       Start
   	// ==================================================
 	@Override
-    public void startExecuting() {
+    public void start() {
         this.updateRate = 0;
     }
     
@@ -149,9 +151,9 @@ public class GetItemGoal extends Goal {
         if(this.updateRate-- <= 0) {
             this.updateRate = 20;
         	if(!this.host.useDirectNavigator())
-        		this.host.getNavigator().tryMoveToEntityLiving(this.target, this.speed);
+        		this.host.getNavigation().moveTo(this.target, this.speed);
         	else
-        		this.host.directNavigator.setTargetPosition(new BlockPos((int)this.target.getPositionVec().getX(), (int)this.target.getPositionVec().getY(), (int)this.target.getPositionVec().getZ()), this.speed);
+        		this.host.directNavigator.setTargetPosition(new BlockPos((int)this.target.position().x(), (int)this.target.position().y(), (int)this.target.position().z()), this.speed);
         }
     }
 }

@@ -53,13 +53,13 @@ public class EntityHellfireWave extends BaseProjectileEntity {
         this.pierceBlocks = true;
         this.projectileLife = 5 * 20;
         this.animationFrameMax = 59;
-        this.noClip = true;
+        this.noPhysics = true;
         this.waterProof = true;
         this.lavaProof = true;
     }
 
     @Override
-    public boolean isBurning() { return false; }
+    public boolean isOnFire() { return false; }
 
 
     // ==================================================
@@ -67,7 +67,7 @@ public class EntityHellfireWave extends BaseProjectileEntity {
     // ==================================================
     @Override
     public void tick() {
-        if(this.getEntityWorld().isRemote)
+        if(this.getCommandSenderWorld().isClientSide)
             return;
 
         // Time Update:
@@ -79,16 +79,16 @@ public class EntityHellfireWave extends BaseProjectileEntity {
             this.hellfireWalls = new EntityHellfireWall[this.hellfireHeight][this.hellfireWidth];
             for(int row = 0; row < this.hellfireHeight; row++) {
                 for(int col = 0; col < this.hellfireWidth; col++) {
-                    if(this.func_234616_v_() != null)
-                        this.hellfireWalls[row][col] = new EntityHellfireWavePart(ProjectileManager.getInstance().oldProjectileTypes.get(EntityHellfireWavePart.class), this.getEntityWorld(), (LivingEntity) this.getShooter());
+                    if(this.getOwner() != null)
+                        this.hellfireWalls[row][col] = new EntityHellfireWavePart(ProjectileManager.getInstance().oldProjectileTypes.get(EntityHellfireWavePart.class), this.getCommandSenderWorld(), (LivingEntity) this.getShooter());
                     else
-                        this.hellfireWalls[row][col] = new EntityHellfireWavePart(ProjectileManager.getInstance().oldProjectileTypes.get(EntityHellfireWavePart.class), this.getEntityWorld(), this.getPositionVec().getX(), this.getPositionVec().getY() + 5 + (this.hellfireSize * row), this.getPositionVec().getZ());
-                    this.hellfireWalls[row][col].setPosition(
-                            this.hellfireWalls[row][col].getPositionVec().getX(),
-                            this.getPositionVec().getY() + (this.hellfireSize * row),
-                            this.hellfireWalls[row][col].getPositionVec().getZ()
+                        this.hellfireWalls[row][col] = new EntityHellfireWavePart(ProjectileManager.getInstance().oldProjectileTypes.get(EntityHellfireWavePart.class), this.getCommandSenderWorld(), this.position().x(), this.position().y() + 5 + (this.hellfireSize * row), this.position().z());
+                    this.hellfireWalls[row][col].setPos(
+                            this.hellfireWalls[row][col].position().x(),
+                            this.position().y() + (this.hellfireSize * row),
+                            this.hellfireWalls[row][col].position().z()
                     );
-                    this.getEntityWorld().addEntity(hellfireWalls[row][col]);
+                    this.getCommandSenderWorld().addFreshEntity(hellfireWalls[row][col]);
                     this.hellfireWalls[row][col].setProjectileScale(this.hellfireSize * 2);
                 }
             }
@@ -100,10 +100,10 @@ public class EntityHellfireWave extends BaseProjectileEntity {
                 double rotationRadians = Math.toRadians(((((float)col / this.hellfireWidth) * this.angle) - (this.angle / 2) + this.rotation) % 360);
                 double x = (((float)this.time / this.timeMax) * 200) * Math.cos(rotationRadians) - Math.sin(rotationRadians);
                 double z = (((float)this.time / this.timeMax) * 200) * Math.sin(rotationRadians) + Math.cos(rotationRadians);
-                this.hellfireWalls[row][col].setPosition(
-                        this.getPositionVec().getX() + x,
-                        this.getPositionVec().getY() + (this.hellfireSize * row),
-                        this.getPositionVec().getZ() + z
+                this.hellfireWalls[row][col].setPos(
+                        this.position().x() + x,
+                        this.position().y() + (this.hellfireSize * row),
+                        this.position().z() + z
                 );
                 this.hellfireWalls[row][col].projectileLife = 2 * 20;
                 if(!this.isAlive())
@@ -120,7 +120,7 @@ public class EntityHellfireWave extends BaseProjectileEntity {
     @Override
     public boolean onEntityLivingDamage(LivingEntity entityLiving) {
     	if(!entityLiving.isInvulnerableTo(DamageSource.ON_FIRE))
-    		entityLiving.setFire(this.getEffectDuration(10) / 20);
+    		entityLiving.setSecondsOnFire(this.getEffectDuration(10) / 20);
     	return true;
     }
 

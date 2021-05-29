@@ -51,7 +51,7 @@ public class BeastiaryIndexList extends BaseList {
 		protected void onClicked() {}
 
 		@Override
-		public List<? extends IGuiEventListener> getEventListeners() {
+		public List<? extends IGuiEventListener> children() {
 			return null;
 		}
 	}

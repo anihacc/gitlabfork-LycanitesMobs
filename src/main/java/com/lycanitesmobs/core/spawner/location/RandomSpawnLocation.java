@@ -101,8 +101,8 @@ public class RandomSpawnLocation extends BlockSpawnLocation {
 		int rangeMaxX = Math.round((float)this.rangeMax.getX() * (float)difficultyScale);
 		int rangeMinX = Math.round((float)this.rangeMin.getX() * (float)difficultyScale);
 		if(rangeMaxX * difficultyScale > 0) {
-			xPos = world.rand.nextInt(rangeMaxX);
-			if(world.rand.nextBoolean()) {
+			xPos = world.random.nextInt(rangeMaxX);
+			if(world.random.nextBoolean()) {
 				xPos += rangeMinX;
 			}
 			else {
@@ -114,8 +114,8 @@ public class RandomSpawnLocation extends BlockSpawnLocation {
 		int rangeMaxZ = Math.round((float)this.rangeMax.getZ() * (float)difficultyScale);
 		int rangeMinZ = Math.round((float)this.rangeMin.getZ() * (float)difficultyScale);
 		if(rangeMaxZ * difficultyScale > 0) {
-			zPos = world.rand.nextInt(rangeMaxZ);
-			if(world.rand.nextBoolean()) {
+			zPos = world.random.nextInt(rangeMaxZ);
+			if(world.random.nextBoolean()) {
 				zPos += rangeMinZ;
 			}
 			else {
@@ -151,7 +151,7 @@ public class RandomSpawnLocation extends BlockSpawnLocation {
 		if(this.yMin >= 0) {
 			minY = Math.max(minY, this.yMin);
 		}
-		int maxY = Math.min(originY + rangeMaxY, world.getHeight() - 1); // Search up to this y pos
+		int maxY = Math.min(originY + rangeMaxY, world.getMaxBuildHeight() - 1); // Search up to this y pos
 		if(this.yMax >= 0) {
 			maxY = Math.min(maxY, this.yMax);
 		}
@@ -172,7 +172,7 @@ public class RandomSpawnLocation extends BlockSpawnLocation {
 				boolean lastYPos = false;
 
 				// If can see sky:
-				if(world.canBlockSeeSky(spawnPos)) {
+				if(world.canSeeSkyFromBelowWater(spawnPos)) {
 					// Get random floating position if not searching for solid ground:
 					if(!this.solidGround) {
 						int floatRange = maxY - nextY;
@@ -180,13 +180,13 @@ public class RandomSpawnLocation extends BlockSpawnLocation {
 							if(world.getBlockState(spawnPos).getBlock() != Blocks.AIR) {
 								floatRange = this.getValidBlockHeight(world, spawnPos, maxY);
 							}
-							nextY += world.rand.nextInt(floatRange + 1) - 1;
+							nextY += world.random.nextInt(floatRange + 1) - 1;
 						}
 					}
 					lastYPos = true;
 				}
 
-				if(super.isValidBlock(world, spawnPos.up())) {
+				if(super.isValidBlock(world, spawnPos.above())) {
 					if(nextY <= 64) {
 						yCoordsLow.add(nextY);
 					}
@@ -203,17 +203,17 @@ public class RandomSpawnLocation extends BlockSpawnLocation {
 
 		// Pick Random Y Pos:
 		int y = -1;
-		if(yCoordsHigh.size() > 0 && (yCoordsLow.size() <= 0 || world.rand.nextFloat() > 0.25F)) {
+		if(yCoordsHigh.size() > 0 && (yCoordsLow.size() <= 0 || world.random.nextFloat() > 0.25F)) {
 			if(yCoordsHigh.size() == 1)
 				y = yCoordsHigh.get(0);
 			else
-				y = yCoordsHigh.get(world.rand.nextInt(yCoordsHigh.size() - 1));
+				y = yCoordsHigh.get(world.random.nextInt(yCoordsHigh.size() - 1));
 		}
 		else if(yCoordsLow.size() > 0) {
 			if(yCoordsLow.size() == 1)
 				y = yCoordsLow.get(0);
 			else
-				y = yCoordsLow.get(world.rand.nextInt(yCoordsLow.size() - 1));
+				y = yCoordsLow.get(world.random.nextInt(yCoordsLow.size() - 1));
 		}
 
 		return y;
@@ -235,9 +235,9 @@ public class RandomSpawnLocation extends BlockSpawnLocation {
 	public boolean posHasGround(World world, BlockPos pos) {
 		if(pos == null || pos.getY() == 0)
 			return false;
-		BlockState possibleGroundBlock = world.getBlockState(pos.down());
+		BlockState possibleGroundBlock = world.getBlockState(pos.below());
 		try {
-			if(possibleGroundBlock.isSolid())
+			if(possibleGroundBlock.canOcclude())
 				return true;
 		} catch(Exception e) {}
 		try {

@@ -55,7 +55,7 @@ public class ItemEquipment extends BaseItem {
 		this.itemName = "equipment";
 		this.modInfo = LycanitesMobs.modInfo;
 		this.setRegistryName(this.modInfo.modid, this.itemName);
-		properties.maxStackSize(1);
+		properties.stacksTo(1);
 	}
 
 
@@ -63,9 +63,9 @@ public class ItemEquipment extends BaseItem {
 	//                      Info
 	// ==================================================
 	@Override
-	public void addInformation(ItemStack itemStack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag tooltipFlag) {
-		super.addInformation(itemStack, world, tooltip, tooltipFlag);
-		FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
+	public void appendHoverText(ItemStack itemStack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag tooltipFlag) {
+		super.appendHoverText(itemStack, world, tooltip, tooltipFlag);
+		FontRenderer fontRenderer = Minecraft.getInstance().font;
 		for(ITextComponent description : this.getAdditionalDescriptions(itemStack, world, tooltipFlag)) {
 			tooltip.add(description);
 		}
@@ -84,26 +84,26 @@ public class ItemEquipment extends BaseItem {
 			ItemEquipmentPart equipmentPart = this.getEquipmentPart(equipmentPartStack);
 			if(equipmentPart == null)
 				continue;
-			int partLevel = equipmentPart.getLevel(equipmentPartStack);
-			descriptions.add(equipmentPart.getDisplayName(itemStack));
+			int partLevel = equipmentPart.getPartLevel(equipmentPartStack);
+			descriptions.add(equipmentPart.getName(itemStack));
 		}
 		descriptions.add(new StringTextComponent("-------------------\n"));
 
 		// Damage:
 		TextComponent damageDescription = (TextComponent) new TranslationTextComponent("equipment.feature.damage")
-				.appendString(" " + String.format("%.0f", this.getDamageAmount(itemStack) + 1));
-		damageDescription.appendString("\n")
+				.append(" " + String.format("%.0f", this.getDamageAmount(itemStack) + 1));
+		damageDescription.append("\n")
 				.append(new TranslationTextComponent("equipment.feature.damage.cooldown"))
-				.appendString(" " + String.format("%.1f", this.getDamageCooldown(itemStack)));
-		damageDescription.appendString("\n")
+				.append(" " + String.format("%.1f", this.getDamageCooldown(itemStack)));
+		damageDescription.append("\n")
 				.append(new TranslationTextComponent("equipment.feature.damage.knockback"))
-				.appendString(" " + String.format("%.0f", this.getDamageKnockback(itemStack)));
-		damageDescription.appendString("\n")
+				.append(" " + String.format("%.0f", this.getDamageKnockback(itemStack)));
+		damageDescription.append("\n")
 				.append(new TranslationTextComponent("equipment.feature.damage.range"))
-				.appendString(" " + String.format("%.1f", this.getDamageRange(itemStack)));
-		damageDescription.appendString("\n")
+				.append(" " + String.format("%.1f", this.getDamageRange(itemStack)));
+		damageDescription.append("\n")
 				.append(new TranslationTextComponent("equipment.feature.damage.sweep"))
-				.appendString(" " + String.format("%.0f", Math.min(this.getDamageSweep(itemStack), 360)));
+				.append(" " + String.format("%.0f", Math.min(this.getDamageSweep(itemStack), 360)));
 		descriptions.add(damageDescription);
 
 		// Summaries:
@@ -117,25 +117,25 @@ public class ItemEquipment extends BaseItem {
 			// Harvest:
 			if (!"".equals(harvestSummaries.getString())) {
 				descriptions.add(new TranslationTextComponent("equipment.feature.harvest")
-						.appendString(" ").append(harvestSummaries));
+						.append(" ").append(harvestSummaries));
 			}
 
 			// Effect:
 			if (!"".equals(effectSummaries.getString())) {
 				descriptions.add(new TranslationTextComponent("equipment.feature.effect")
-						.appendString(" ").append(effectSummaries));
+						.append(" ").append(effectSummaries));
 			}
 
 			// Projectile:
 			if (!"".equals(projectileSummaries.getString())) {
 				descriptions.add(new TranslationTextComponent("equipment.feature.projectile")
-						.appendString(" ").append(projectileSummaries));
+						.append(" ").append(projectileSummaries));
 			}
 
 			// Summon:
 			if (!"".equals(summonSummaries.getString())) {
 				descriptions.add(new TranslationTextComponent("equipment.feature.summon")
-						.appendString(" ").append(summonSummaries));
+						.append(" ").append(summonSummaries));
 			}
 		}
 
@@ -155,7 +155,7 @@ public class ItemEquipment extends BaseItem {
 		boolean first = true;
 		for (EquipmentFeature equipmentFeature : effectFeatures.keySet()) {
 			if(!first) {
-				featureSummaries.appendString(", ");
+				featureSummaries.append(", ");
 			}
 			first = false;
 			ITextComponent featureSummary = equipmentFeature.getSummary(effectFeatures.get(equipmentFeature), this.getPartLevel(effectFeatures.get(equipmentFeature)));
@@ -265,7 +265,7 @@ public class ItemEquipment extends BaseItem {
 				continue;
 			}
 			for (EquipmentFeature feature : equipmentPart.features) {
-				if(feature.isActive(equipmentPartStack, equipmentPart.getLevel(equipmentPartStack)) && feature.featureType.equalsIgnoreCase(featureType)) {
+				if(feature.isActive(equipmentPartStack, equipmentPart.getPartLevel(equipmentPartStack)) && feature.featureType.equalsIgnoreCase(featureType)) {
 					features.add(feature);
 				}
 			}
@@ -288,7 +288,7 @@ public class ItemEquipment extends BaseItem {
 				continue;
 			}
 			for (EquipmentFeature feature : equipmentPart.features) {
-				if(feature.isActive(equipmentPartStack, equipmentPart.getLevel(equipmentPartStack)) && feature.featureType.equalsIgnoreCase(featureType)) {
+				if(feature.isActive(equipmentPartStack, equipmentPart.getPartLevel(equipmentPartStack)) && feature.featureType.equalsIgnoreCase(featureType)) {
 					features.put(feature, equipmentPartStack);
 				}
 			}
@@ -308,7 +308,7 @@ public class ItemEquipment extends BaseItem {
 			if(equipmentPart == null) {
 				continue;
 			}
-			equipmentPart.setLevel(equipmentPartStack, Math.min(levelCap, equipmentPart.getLevel(equipmentPartStack)));
+			equipmentPart.setLevel(equipmentPartStack, Math.min(levelCap, equipmentPart.getPartLevel(equipmentPartStack)));
 		}
 	}
 
@@ -325,7 +325,7 @@ public class ItemEquipment extends BaseItem {
 			if(equipmentPart == null) {
 				continue;
 			}
-			int partLevel = equipmentPart.getLevel(equipmentPartStack);
+			int partLevel = equipmentPart.getPartLevel(equipmentPartStack);
 			if(partLevel > highestLevel) {
 				highestLevel = partLevel;
 			}
@@ -345,7 +345,7 @@ public class ItemEquipment extends BaseItem {
 			return 1;
 		}
 		ItemEquipmentPart featurePart = (ItemEquipmentPart)featureItem;
-		return featurePart.getLevel(partStack);
+		return featurePart.getPartLevel(partStack);
 	}
 
 
@@ -353,7 +353,7 @@ public class ItemEquipment extends BaseItem {
 	//                       Using
 	// ==================================================
 	@Override
-	public UseAction getUseAction(ItemStack itemStack) {
+	public UseAction getUseAnimation(ItemStack itemStack) {
 		return UseAction.BOW;
 	}
 
@@ -363,8 +363,8 @@ public class ItemEquipment extends BaseItem {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
-		ItemStack itemStack = player.getHeldItem(hand);
+	public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
+		ItemStack itemStack = player.getItemInHand(hand);
 		boolean active = false;
 
 		// Projectiles:
@@ -376,7 +376,7 @@ public class ItemEquipment extends BaseItem {
 		}
 
 		if(active) {
-			player.setActiveHand(hand);
+			player.startUsingItem(hand);
 			return new ActionResult<>(ActionResultType.SUCCESS, itemStack);
 		}
 		return new ActionResult<>(ActionResultType.FAIL, itemStack);
@@ -384,7 +384,7 @@ public class ItemEquipment extends BaseItem {
 
 	@Override
 	public void onUsingTick(ItemStack itemStack, LivingEntity user, int count) {
-		if(!user.isHandActive()) {
+		if(!user.isUsingItem()) {
 			return;
 		}
 
@@ -402,7 +402,7 @@ public class ItemEquipment extends BaseItem {
 	 * @param hand The active hand.
 	 */
 	public void onItemLeftClick(World world, PlayerEntity player, Hand hand) {
-		ItemStack itemStack = player.getHeldItem(hand);
+		ItemStack itemStack = player.getItemInHand(hand);
 
 		// Projectiles:
 		for(EquipmentFeature equipmentFeature : this.getFeaturesByType(itemStack, "projectile")) {
@@ -412,11 +412,11 @@ public class ItemEquipment extends BaseItem {
 	}
 
 	@Override
-	public ActionResultType onItemUse(ItemUseContext context) {
+	public ActionResultType useOn(ItemUseContext context) {
 		boolean active = false;
 
 		// Harvesting:
-		for(EquipmentFeature equipmentFeature : this.getFeaturesByType(context.getItem(), "harvest")) {
+		for(EquipmentFeature equipmentFeature : this.getFeaturesByType(context.getItemInHand(), "harvest")) {
 			HarvestEquipmentFeature harvestFeature = (HarvestEquipmentFeature)equipmentFeature;
 			if(harvestFeature.onBlockUsed(context)) {
 				active = true;
@@ -424,14 +424,14 @@ public class ItemEquipment extends BaseItem {
 		}
 
 		if(active) {
-			context.getPlayer().setActiveHand(context.getHand());
+			context.getPlayer().startUsingItem(context.getHand());
 			return ActionResultType.SUCCESS;
 		}
-		return super.onItemUse(context);
+		return super.useOn(context);
 	}
 
 	@Override
-	public ActionResultType itemInteractionForEntity(ItemStack itemStack, PlayerEntity player, LivingEntity target, Hand hand) {
+	public ActionResultType interactLivingEntity(ItemStack itemStack, PlayerEntity player, LivingEntity target, Hand hand) {
 		boolean entityInteraction = false;
 
 		// Harvesting:
@@ -499,14 +499,14 @@ public class ItemEquipment extends BaseItem {
 	}
 
 	@Override
-	public boolean onBlockDestroyed(ItemStack itemStack, World world, BlockState blockState, BlockPos pos, LivingEntity entityLiving) {
-		if(!world.isRemote) {
+	public boolean mineBlock(ItemStack itemStack, World world, BlockState blockState, BlockPos pos, LivingEntity entityLiving) {
+		if(!world.isClientSide) {
 			for (EquipmentFeature equipmentFeature : this.getFeaturesByType(itemStack, "harvest")) {
 				HarvestEquipmentFeature harvestFeature = (HarvestEquipmentFeature) equipmentFeature;
 				harvestFeature.onBlockDestroyed(world, blockState, pos, entityLiving);
 			}
 		}
-		return super.onBlockDestroyed(itemStack, world, blockState, pos, entityLiving);
+		return super.mineBlock(itemStack, world, blockState, pos, entityLiving);
 	}
 
 
@@ -521,7 +521,7 @@ public class ItemEquipment extends BaseItem {
 	 * @return True on successful hit.
 	 */
 	@Override
-	public boolean hitEntity(ItemStack itemStack, LivingEntity primaryTarget, LivingEntity attacker) {
+	public boolean hurtEnemy(ItemStack itemStack, LivingEntity primaryTarget, LivingEntity attacker) {
 		ExtendedEntity extendedEntity = ExtendedEntity.getForEntity(attacker);
 		boolean attackOnCooldown = false;
 		if(extendedEntity != null) {
@@ -536,12 +536,12 @@ public class ItemEquipment extends BaseItem {
 		// Sweeping:
 		List<LivingEntity> targets = new ArrayList<>();
 		targets.add(primaryTarget);
-		if(attacker != null && !attacker.getEntityWorld().isRemote && !attacker.isSneaking() && !attackOnCooldown) {
+		if(attacker != null && !attacker.getCommandSenderWorld().isClientSide && !attacker.isShiftKeyDown() && !attackOnCooldown) {
 			double sweepAngle = this.getDamageSweep(itemStack);
 			if(sweepAngle > 0) {
 				float sweepDamage = (float) this.getDamageAmount(itemStack);
 				double sweepRange = 1 + this.getDamageRange(itemStack);
-				List<LivingEntity> possibleTargets = attacker.getEntityWorld().getEntitiesWithinAABB(LivingEntity.class, attacker.getBoundingBox().grow(sweepRange, sweepRange, sweepRange));
+				List<LivingEntity> possibleTargets = attacker.getCommandSenderWorld().getEntitiesOfClass(LivingEntity.class, attacker.getBoundingBox().inflate(sweepRange, sweepRange, sweepRange));
 				for (LivingEntity possibleTarget : possibleTargets) {
 					// Valid Sweep Target:
 					if (possibleTarget == attacker || possibleTarget == primaryTarget) {
@@ -555,7 +555,7 @@ public class ItemEquipment extends BaseItem {
 					}
 					if (possibleTarget instanceof TameableEntity) {
 						TameableEntity possibleTameableTarget = (TameableEntity) possibleTarget;
-						if (possibleTameableTarget.getOwner() != null && !attacker.getEntityWorld().getServer().isPVPEnabled()) {
+						if (possibleTameableTarget.getOwner() != null && !attacker.getCommandSenderWorld().getServer().isPvpAllowed()) {
 							continue;
 						}
 						if (possibleTameableTarget.getOwner() == attacker) {
@@ -564,7 +564,7 @@ public class ItemEquipment extends BaseItem {
 					}
 					if (possibleTarget instanceof TameableCreatureEntity) {
 						TameableCreatureEntity possibleTameableTarget = (TameableCreatureEntity) possibleTarget;
-						if (possibleTameableTarget.getPlayerOwner() != null && !attacker.getEntityWorld().getServer().isPVPEnabled()) {
+						if (possibleTameableTarget.getPlayerOwner() != null && !attacker.getCommandSenderWorld().getServer().isPvpAllowed()) {
 							continue;
 						}
 						if (possibleTameableTarget.getPlayerOwner() == attacker) {
@@ -573,10 +573,10 @@ public class ItemEquipment extends BaseItem {
 					}
 
 					// Check Angle:
-					double targetXDist = possibleTarget.getPositionVec().getX() - attacker.getPositionVec().getX();
-					double targetZDist = attacker.getPositionVec().getZ() - possibleTarget.getPositionVec().getZ();
+					double targetXDist = possibleTarget.position().x() - attacker.position().x();
+					double targetZDist = attacker.position().z() - possibleTarget.position().z();
 					double targetAngleAbsolute = 180 + Math.toDegrees(Math.atan2(targetXDist, targetZDist));
-					double targetAngle = Math.abs(targetAngleAbsolute - attacker.rotationYaw);
+					double targetAngle = Math.abs(targetAngleAbsolute - attacker.yRot);
 					if(targetAngle > 180) {
 						targetAngle = 180 - (targetAngle - 180);
 					}
@@ -587,9 +587,9 @@ public class ItemEquipment extends BaseItem {
 					targets.add(possibleTarget);
 					DamageSource sweepSource = DamageSource.GENERIC;
 					if (attacker instanceof PlayerEntity) {
-						sweepSource = DamageSource.causePlayerDamage((PlayerEntity) attacker);
+						sweepSource = DamageSource.playerAttack((PlayerEntity) attacker);
 					}
-					possibleTarget.attackEntityFrom(sweepSource, sweepDamage);
+					possibleTarget.hurt(sweepSource, sweepDamage);
 				}
 			}
 		}
@@ -597,23 +597,23 @@ public class ItemEquipment extends BaseItem {
 		// Sweep Particles:
 		if(attacker instanceof PlayerEntity && targets.size() > 1) {
 			PlayerEntity playerAttacker = (PlayerEntity)attacker;
-			playerAttacker.spawnSweepParticles();
-			attacker.getEntityWorld().playSound(null, attacker.getPositionVec().getX(), attacker.getPositionVec().getY(), attacker.getPositionVec().getZ(), SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, attacker.getSoundCategory(), 1.0F, 1.0F);
+			playerAttacker.sweepAttack();
+			attacker.getCommandSenderWorld().playSound(null, attacker.position().x(), attacker.position().y(), attacker.position().z(), SoundEvents.PLAYER_ATTACK_SWEEP, attacker.getSoundSource(), 1.0F, 1.0F);
 		}
 
 		for(LivingEntity target : targets) {
 			// Knockback:
 			double knockback = this.getDamageKnockback(itemStack);
 			if (knockback != 0 && attacker != null && target != null) {
-				double xDist = attacker.getPositionVec().getX() - target.getPositionVec().getX();
-				double zDist = attacker.getPositionVec().getZ() - target.getPositionVec().getZ();
+				double xDist = attacker.position().x() - target.position().x();
+				double zDist = attacker.position().z() - target.position().z();
 				double xzDist = Math.max(MathHelper.sqrt(xDist * xDist + zDist * zDist), 0.01D);
 				double motionCap = 10;
-				if (target.getMotion().getX() < motionCap && target.getMotion().getX() > -motionCap && target.getMotion().getZ() < motionCap && target.getMotion().getZ() > -motionCap) {
-					target.addVelocity(
-							-(xDist / xzDist * knockback + target.getMotion().getX() * knockback),
+				if (target.getDeltaMovement().x() < motionCap && target.getDeltaMovement().x() > -motionCap && target.getDeltaMovement().z() < motionCap && target.getDeltaMovement().z() > -motionCap) {
+					target.push(
+							-(xDist / xzDist * knockback + target.getDeltaMovement().x() * knockback),
 							0,
-							-(zDist / xzDist * knockback + target.getMotion().getZ() * knockback)
+							-(zDist / xzDist * knockback + target.getDeltaMovement().z() * knockback)
 					);
 				}
 			}
@@ -649,8 +649,8 @@ public class ItemEquipment extends BaseItem {
 	public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack itemStack) {
 		Multimap<Attribute, AttributeModifier> multimap = MultimapBuilder.hashKeys().arrayListValues().build(super.getAttributeModifiers(slot, itemStack));
 		if (slot == EquipmentSlotType.MAINHAND) {
-			multimap.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", this.getDamageAmount(itemStack), AttributeModifier.Operation.ADDITION));
-			multimap.put(Attributes.ATTACK_SPEED, new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", -this.getDamageCooldown(itemStack), AttributeModifier.Operation.ADDITION));
+			multimap.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Weapon modifier", this.getDamageAmount(itemStack), AttributeModifier.Operation.ADDITION));
+			multimap.put(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Weapon modifier", -this.getDamageCooldown(itemStack), AttributeModifier.Operation.ADDITION));
 		}
 
 		return multimap;

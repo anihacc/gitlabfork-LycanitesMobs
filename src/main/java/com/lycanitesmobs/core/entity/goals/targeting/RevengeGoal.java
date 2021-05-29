@@ -66,13 +66,13 @@ public class RevengeGoal extends FindAttackTargetGoal {
  	//                  Should Execute
  	// ==================================================
 	@Override
-    public boolean shouldExecute() {
-    	if(this.host.getRevengeTarget() == null || !this.isEntityTargetable(this.host.getRevengeTarget(), false))
+    public boolean canUse() {
+    	if(this.host.getLastHurtByMob() == null || !this.isEntityTargetable(this.host.getLastHurtByMob(), false))
     		return false;
 
-		this.target = this.host.getRevengeTarget();
-		if(this.host.getRevengeTimer() != this.revengeTime) {
-			this.revengeTime = this.host.getRevengeTimer();
+		this.target = this.host.getLastHurtByMob();
+		if(this.host.getLastHurtByMobTimestamp() != this.revengeTime) {
+			this.revengeTime = this.host.getLastHurtByMobTimestamp();
 			this.callNearbyForHelp();
 		}
 
@@ -99,7 +99,7 @@ public class RevengeGoal extends FindAttackTargetGoal {
  	//                 Start Executing
  	// ==================================================
 	@Override
-    public void startExecuting() {
-        super.startExecuting();
+    public void start() {
+        super.start();
     }
 }

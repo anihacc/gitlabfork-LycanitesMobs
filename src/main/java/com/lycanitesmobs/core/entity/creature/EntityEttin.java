@@ -41,9 +41,9 @@ public class EntityEttin extends AgeableCreatureEntity implements IMob {
 		this.goalSelector.addGoal(this.nextDistractionGoalIndex++, new BreakDoorGoal(this));
         this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(false));
 
-		if(this.getNavigator() instanceof GroundPathNavigator) {
-			GroundPathNavigator pathNavigateGround = (GroundPathNavigator)this.getNavigator();
-			pathNavigateGround.setBreakDoors(true);
+		if(this.getNavigation() instanceof GroundPathNavigator) {
+			GroundPathNavigator pathNavigateGround = (GroundPathNavigator)this.getNavigation();
+			pathNavigateGround.setCanOpenDoors(true);
 		}
     }
 
@@ -64,16 +64,16 @@ public class EntityEttin extends AgeableCreatureEntity implements IMob {
     // ==================================================
 	// ========== Living Update ==========
 	@Override
-    public void livingTick() {
+    public void aiStep() {
     	// Destroy Blocks:
-		if(!this.getEntityWorld().isRemote)
-	        if(this.getAttackTarget() != null && this.getEntityWorld().getGameRules().getBoolean(GameRules.MOB_GRIEFING) && this.griefing) {
-		    	float distance = this.getAttackTarget().getDistance(this);
-		    		if(distance <= this.getSize(Pose.STANDING).width + 4.0F)
-		    			this.destroyArea((int)this.getPositionVec().getX(), (int)this.getPositionVec().getY(), (int)this.getPositionVec().getZ(), 0.5F, true);
+		if(!this.getCommandSenderWorld().isClientSide)
+	        if(this.getTarget() != null && this.getCommandSenderWorld().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING) && this.griefing) {
+		    	float distance = this.getTarget().distanceTo(this);
+		    		if(distance <= this.getDimensions(Pose.STANDING).width + 4.0F)
+		    			this.destroyArea((int)this.position().x(), (int)this.position().y(), (int)this.position().z(), 0.5F, true);
 	        }
         
-        super.livingTick();
+        super.aiStep();
     }
     
     

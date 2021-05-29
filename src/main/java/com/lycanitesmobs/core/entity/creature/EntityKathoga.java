@@ -36,7 +36,7 @@ public class EntityKathoga extends RideableCreatureEntity {
         this.spreadFire = true;
         this.setupMob();
 
-        this.stepHeight = 1.0F;
+        this.maxUpStep = 1.0F;
     }
 
     // ========== Init AI ==========
@@ -62,19 +62,19 @@ public class EntityKathoga extends RideableCreatureEntity {
     // ==================================================
 	// ========== Living Update ==========
 	@Override
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
         
         // Become a farmed animal if removed from the Nether to another dimension, prevents natural despawning.
-        if(this.getEntityWorld().getDimensionKey() != World.THE_NETHER)
+        if(this.getCommandSenderWorld().dimension() != World.NETHER)
         	this.setFarmed();
     }
     
     public void riderEffects(LivingEntity rider) {
-    	if(rider.isPotionActive(Effects.WITHER))
-    		rider.removePotionEffect(Effects.WITHER);
-        if(rider.isBurning())
-            rider.setFire(0);
+    	if(rider.hasEffect(Effects.WITHER))
+    		rider.removeEffect(Effects.WITHER);
+        if(rider.isOnFire())
+            rider.setSecondsOnFire(0);
     }
 
     
@@ -83,7 +83,7 @@ public class EntityKathoga extends RideableCreatureEntity {
     // ==================================================
     @Override
     public void mountAbility(Entity rider) {
-    	if(this.getEntityWorld().isRemote)
+    	if(this.getCommandSenderWorld().isClientSide)
     		return;
 
     	if(this.abilityToggled)
@@ -117,7 +117,7 @@ public class EntityKathoga extends RideableCreatureEntity {
         	return false;
         
     	// Breed:
-        if((target instanceof AnimalEntity || (target instanceof BaseCreatureEntity && ((BaseCreatureEntity)target).creatureInfo.isFarmable())) && target.getSize(Pose.STANDING).height >= 1F)
+        if((target instanceof AnimalEntity || (target instanceof BaseCreatureEntity && ((BaseCreatureEntity)target).creatureInfo.isFarmable())) && target.getDimensions(Pose.STANDING).height >= 1F)
     		this.breed();
     	
         return true;
@@ -127,12 +127,12 @@ public class EntityKathoga extends RideableCreatureEntity {
     public void specialAttack() {
         // Withering Roar:
         double distance = 5.0D;
-        List<LivingEntity> possibleTargets = this.getEntityWorld().getEntitiesWithinAABB(LivingEntity.class, this.getBoundingBox().grow(distance, distance, distance), (Predicate<LivingEntity>) possibleTarget -> {
+        List<LivingEntity> possibleTargets = this.getCommandSenderWorld().getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(distance, distance, distance), (Predicate<LivingEntity>) possibleTarget -> {
             if(!possibleTarget.isAlive()
                     || possibleTarget == EntityKathoga.this
-                    || EntityKathoga.this.isRidingOrBeingRiddenBy(possibleTarget)
-                    || EntityKathoga.this.isOnSameTeam(possibleTarget)
-                    || !EntityKathoga.this.canAttack(possibleTarget.getType())
+                    || EntityKathoga.this.hasIndirectPassenger(possibleTarget)
+                    || EntityKathoga.this.isAlliedTo(possibleTarget)
+                    || !EntityKathoga.this.canAttackType(possibleTarget.getType())
                     || !EntityKathoga.this.canAttack(possibleTarget))
                 return false;
             return true;
@@ -146,7 +146,7 @@ public class EntityKathoga extends RideableCreatureEntity {
                     }
                 }
                 if(doDamage) {
-                    possibleTarget.addPotionEffect(new EffectInstance(Effects.WITHER, 10 * 20, 0));
+                    possibleTarget.addEffect(new EffectInstance(Effects.WITHER, 10 * 20, 0));
                 }
             }
         }
@@ -159,7 +159,7 @@ public class EntityKathoga extends RideableCreatureEntity {
    	//                     Abilities
    	// ==================================================
     public boolean canBeTempted() {
-    	return this.isChild();
+    	return this.isBaby();
     }
 
 

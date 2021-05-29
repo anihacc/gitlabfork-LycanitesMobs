@@ -16,7 +16,7 @@ public class MessageEntityGUICommand {
 	
 	public MessageEntityGUICommand() {}
 	public MessageEntityGUICommand(int guiCommandID, Entity entity) {
-		this.entityID = entity.getEntityId();
+		this.entityID = entity.getId();
 		this.guiCommandID = guiCommandID;
 	}
 
@@ -30,8 +30,8 @@ public class MessageEntityGUICommand {
 
         ctx.get().enqueueWork(() -> {
 			PlayerEntity player = ctx.get().getSender();
-			World world = player.getEntityWorld();
-			Entity entity = world.getEntityByID(message.entityID);
+			World world = player.getCommandSenderWorld();
+			Entity entity = world.getEntity(message.entityID);
 			if (entity instanceof TameableCreatureEntity) {
 				TameableCreatureEntity pet = (TameableCreatureEntity) entity;
 				pet.performGUICommand(player, message.guiCommandID);

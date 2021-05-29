@@ -33,21 +33,21 @@ public class EquipmentForgeSlot extends BaseSlot {
 
 
 	@Override
-	public boolean isItemValid(ItemStack itemStack) {
+	public boolean mayPlace(ItemStack itemStack) {
 		Item item = itemStack.getItem();
 		if(item instanceof ItemEquipmentPart) {
 			ItemEquipmentPart equipmentPart = (ItemEquipmentPart)item;
-			return this.type.equals(equipmentPart.slotType) && equipmentPart.getLevel(itemStack) <= this.containerForge.equipmentForge.getLevel();
+			return this.type.equals(equipmentPart.slotType) && equipmentPart.getPartLevel(itemStack) <= this.containerForge.equipmentForge.getForgeLevel();
 		}
 		else if(item instanceof ItemEquipment) {
-			if(this.containerForge.equipmentForge.getLevel() < 3) {
+			if(this.containerForge.equipmentForge.getForgeLevel() < 3) {
 				ItemEquipment equipment = (ItemEquipment)item;
 				int equipmentLevel = equipment.getHighestLevel(itemStack);
-				if(equipmentLevel > this.containerForge.equipmentForge.getLevel()) {
+				if(equipmentLevel > this.containerForge.equipmentForge.getForgeLevel()) {
 					return false;
 				}
 			}
-			return this.type.equals("piece") && !this.getHasStack();
+			return this.type.equals("piece") && !this.hasItem();
 		}
         return false;
     }
@@ -58,13 +58,13 @@ public class EquipmentForgeSlot extends BaseSlot {
 	 * @return True if this slot has a valid item stack.
 	 */
 	@Override
-	public boolean getHasStack() {
-		if(!super.getHasStack()) {
+	public boolean hasItem() {
+		if(!super.hasItem()) {
 			return false;
 		}
-		if(this.getStack().getItem() instanceof ItemEquipment) {
-			ItemEquipment itemEquipment = (ItemEquipment) this.getStack().getItem();
-			if(itemEquipment.getEquipmentPartCount(this.getStack()) == 0) {
+		if(this.getItem().getItem() instanceof ItemEquipment) {
+			ItemEquipment itemEquipment = (ItemEquipment) this.getItem().getItem();
+			if(itemEquipment.getEquipmentPartCount(this.getItem()) == 0) {
 				return false;
 			}
 		}
@@ -72,11 +72,11 @@ public class EquipmentForgeSlot extends BaseSlot {
 	}
 
 	@Override
-	public int getSlotStackLimit() {
-		if(this.inventory instanceof InventoryCreature)
-			if(((InventoryCreature)this.inventory).getTypeFromSlot(this.getSlotIndex()) != null)
+	public int getMaxStackSize() {
+		if(this.container instanceof InventoryCreature)
+			if(((InventoryCreature)this.container).getTypeFromSlot(this.getSlotIndex()) != null)
 				return 1;
-        return this.inventory.getInventoryStackLimit();
+        return this.container.getMaxStackSize();
     }
 
 
@@ -122,7 +122,7 @@ public class EquipmentForgeSlot extends BaseSlot {
 	 * @param itemStack The ItemStack being inserted.
 	 */
 	@Override
-	public void putStack(ItemStack itemStack) {
+	public void set(ItemStack itemStack) {
 		this.putStackWithoutUpdate(itemStack);
 
 		// Update Container:
@@ -140,7 +140,7 @@ public class EquipmentForgeSlot extends BaseSlot {
 	 * @param itemStack The ItemStack being inserted.
 	 */
 	public void putStackWithoutUpdate(ItemStack itemStack) {
-		super.putStack(itemStack);
+		super.set(itemStack);
 
 		// Update Child Slots:
 		if(!this.childSlots.isEmpty()) {
@@ -160,9 +160,9 @@ public class EquipmentForgeSlot extends BaseSlot {
 
 		// Equipment Piece:
 		if(item instanceof ItemEquipment) {
-			int forgeLevel = this.containerForge.equipmentForge.getLevel();
+			int forgeLevel = this.containerForge.equipmentForge.getForgeLevel();
 			if(forgeLevel < 3) {
-				((ItemEquipment)item).applyLevelCap(itemStack, this.containerForge.equipmentForge.getLevel());
+				((ItemEquipment)item).applyLevelCap(itemStack, this.containerForge.equipmentForge.getForgeLevel());
 			}
 		}
 
@@ -178,16 +178,16 @@ public class EquipmentForgeSlot extends BaseSlot {
 
 
 	@Override
-	public boolean canTakeStack(PlayerEntity player) {
+	public boolean mayPickup(PlayerEntity player) {
 		if(!this.childSlots.isEmpty()) {
 			for(EquipmentForgeSlot childSlot : this.childSlots) {
-				if(!childSlot.getStack().isEmpty()) {
+				if(!childSlot.getItem().isEmpty()) {
 					return false;
 				}
 			}
 		}
 		else if("piece".equals(this.type)) {
-			if(this.getHasStack() && !this.containerForge.isEquipmentValid()) {
+			if(this.hasItem() && !this.containerForge.isEquipmentValid()) {
 				return false;
 			}
 		}
@@ -199,7 +199,7 @@ public class EquipmentForgeSlot extends BaseSlot {
 	 * Updates the type of each child slot that is connected to this slot.
 	 */
 	public void updateChildSlots() {
-		Item item = this.getStack().getItem();
+		Item item = this.getItem().getItem();
 
 		// Update Child Slots:
 		List<Integer> updatedChildSlots = new ArrayList<>();
@@ -210,8 +210,8 @@ public class EquipmentForgeSlot extends BaseSlot {
 			for (EquipmentFeature feature : itemEquipmentPart.features) {
 				if (feature instanceof SlotEquipmentFeature) {
 					SlotEquipmentFeature slotFeature = (SlotEquipmentFeature) feature;
-					int level = itemEquipmentPart.getLevel(this.getStack());
-					if (slotFeature.isActive(this.getStack(), level)) {
+					int level = itemEquipmentPart.getPartLevel(this.getItem());
+					if (slotFeature.isActive(this.getItem(), level)) {
 						int index = 0;
 						if (slotFeature.slotType.equals("axe")) {
 							index = ++axeSlots;

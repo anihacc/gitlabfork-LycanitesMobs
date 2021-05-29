@@ -21,7 +21,7 @@ public class SummoningPedestalContainer extends BaseContainer {
      * @param extraData A packet sent from the server to create the Container from.
      */
     public SummoningPedestalContainer(int windowId, PlayerInventory playerInventory, PacketBuffer extraData) {
-        this(windowId, playerInventory, (TileEntitySummoningPedestal)playerInventory.player.getEntityWorld().getTileEntity(BlockPos.fromLong(extraData.readLong())));
+        this(windowId, playerInventory, (TileEntitySummoningPedestal)playerInventory.player.getCommandSenderWorld().getBlockEntity(BlockPos.of(extraData.readLong())));
     }
 
     /**
@@ -33,29 +33,29 @@ public class SummoningPedestalContainer extends BaseContainer {
     public SummoningPedestalContainer(int windowId, PlayerInventory playerInventory, TileEntitySummoningPedestal summoningPedestal) {
         super(TYPE, windowId);
         this.summoningPedestal = summoningPedestal;
-        this.inventoryStart = this.inventorySlots.size();
+        this.inventoryStart = this.slots.size();
 
         // Player Inventory
-        this.playerInventoryStart = this.inventorySlots.size();
+        this.playerInventoryStart = this.slots.size();
         this.addSlotGrid(playerInventory, 8, 171, 1, 0, 8);
 
         // Pedestal Inventory
         int slots = 0;
-        if(summoningPedestal.getSizeInventory() > 0) {
+        if(summoningPedestal.getContainerSize() > 0) {
             this.addSlot(new BaseSlot(summoningPedestal, slots++, 93, 43));
         }
         this.inventoryFinish = this.inventoryStart + slots;
     }
 
     @Override
-    public boolean canInteractWith(PlayerEntity player) {
+    public boolean stillValid(PlayerEntity player) {
         if(this.summoningPedestal == null)
             return false;
         return player == this.summoningPedestal.getPlayer();
     }
 
     @Override
-    public ItemStack transferStackInSlot(PlayerEntity player, int slotID) {
+    public ItemStack quickMoveStack(PlayerEntity player, int slotID) {
         return ItemStack.EMPTY;
     }
 }

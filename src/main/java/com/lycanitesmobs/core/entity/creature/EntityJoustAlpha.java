@@ -50,13 +50,13 @@ public class EntityJoustAlpha extends AgeableCreatureEntity {
 	// Pathing Weight:
 	@Override
 	public float getBlockPathWeight(int x, int y, int z) {
-        BlockState blockState = this.getEntityWorld().getBlockState(new BlockPos(x, y - 1, z));
+        BlockState blockState = this.getCommandSenderWorld().getBlockState(new BlockPos(x, y - 1, z));
         if(blockState.getBlock() != Blocks.AIR) {
             if(blockState.getMaterial() == Material.SAND)
                 return 10F;
             if(blockState.getMaterial() == Material.CLAY)
                 return 7F;
-            if(blockState.getMaterial() == Material.ROCK)
+            if(blockState.getMaterial() == Material.STONE)
                 return 5F;
         }
         return super.getBlockPathWeight(x, y, z);
@@ -67,20 +67,20 @@ public class EntityJoustAlpha extends AgeableCreatureEntity {
    	//                      Attacks
    	// ==================================================
 	@Override
-	public boolean canAttack(EntityType targetType) {
+	public boolean canAttackType(EntityType targetType) {
 		if(targetType == this.getType())
 			return true;
-		return super.canAttack(targetType);
+		return super.canAttackType(targetType);
 	}
 
 	// ========== Set Attack Target ==========
     @Override
-    public void setAttackTarget(LivingEntity entity) {
-    	if(entity == null && this.getAttackTarget() instanceof EntityJoustAlpha && this.getHealth() < this.getMaxHealth()) {
+    public void setTarget(LivingEntity entity) {
+    	if(entity == null && this.getTarget() instanceof EntityJoustAlpha && this.getHealth() < this.getMaxHealth()) {
     		this.heal((this.getMaxHealth() - this.getHealth()) / 2);
-    		this.addPotionEffect(new EffectInstance(Effects.REGENERATION, 10 * 20, 2, false, true));
+    		this.addEffect(new EffectInstance(Effects.REGENERATION, 10 * 20, 2, false, true));
     	}
-    	super.setAttackTarget(entity);
+    	super.setTarget(entity);
     }
 
     // ==================================================
@@ -107,6 +107,6 @@ public class EntityJoustAlpha extends AgeableCreatureEntity {
     // ========== Create Child ==========
 	@Override
 	public AgeableCreatureEntity createChild(AgeableCreatureEntity partner) {
-		return (AgeableCreatureEntity) CreatureManager.getInstance().getCreature("joust").createEntity(this.getEntityWorld());
+		return (AgeableCreatureEntity) CreatureManager.getInstance().getCreature("joust").createEntity(this.getCommandSenderWorld());
 	}
 }

@@ -60,12 +60,12 @@ public class LaserProjectileEntity extends BaseProjectileEntity {
 	public int offsetIDStart = 14;
 
     // Data Parameters:
-    protected static final DataParameter<Integer> SHOOTING_ENTITY_ID = EntityDataManager.createKey(LaserProjectileEntity.class, DataSerializers.VARINT);
-    protected static final DataParameter<Integer> LASER_END_ID = EntityDataManager.createKey(LaserProjectileEntity.class, DataSerializers.VARINT);
-    protected static final DataParameter<Integer> LASER_TIME = EntityDataManager.createKey(LaserProjectileEntity.class, DataSerializers.VARINT);
-    protected static final DataParameter<Float> OFFSET_X = EntityDataManager.createKey(LaserProjectileEntity.class, DataSerializers.FLOAT);
-    protected static final DataParameter<Float> OFFSET_Y = EntityDataManager.createKey(LaserProjectileEntity.class, DataSerializers.FLOAT);
-    protected static final DataParameter<Float> OFFSET_Z = EntityDataManager.createKey(LaserProjectileEntity.class, DataSerializers.FLOAT);
+    protected static final DataParameter<Integer> SHOOTING_ENTITY_ID = EntityDataManager.defineId(LaserProjectileEntity.class, DataSerializers.INT);
+    protected static final DataParameter<Integer> LASER_END_ID = EntityDataManager.defineId(LaserProjectileEntity.class, DataSerializers.INT);
+    protected static final DataParameter<Integer> LASER_TIME = EntityDataManager.defineId(LaserProjectileEntity.class, DataSerializers.INT);
+    protected static final DataParameter<Float> OFFSET_X = EntityDataManager.defineId(LaserProjectileEntity.class, DataSerializers.FLOAT);
+    protected static final DataParameter<Float> OFFSET_Y = EntityDataManager.defineId(LaserProjectileEntity.class, DataSerializers.FLOAT);
+    protected static final DataParameter<Float> OFFSET_Z = EntityDataManager.defineId(LaserProjectileEntity.class, DataSerializers.FLOAT);
 	
     // ==================================================
  	//                   Constructors
@@ -107,24 +107,24 @@ public class LaserProjectileEntity extends BaseProjectileEntity {
         this.setRange(16.0F);
         this.setLaserWidth(1.0F);
         this.knockbackChance = 0D;
-        this.targetX = this.getPositionVec().getX();
-        this.targetY = this.getPositionVec().getY();
-        this.targetZ = this.getPositionVec().getZ();
-        this.dataManager.register(SHOOTING_ENTITY_ID, this.shootingEntityRef);
-        this.dataManager.register(LASER_END_ID, this.laserEndRef);
-        this.dataManager.register(LASER_TIME, this.laserTime);
-        this.dataManager.register(OFFSET_X, (float) this.offsetX);
-        this.dataManager.register(OFFSET_Y, (float) this.offsetY);
-        this.dataManager.register(OFFSET_Z, (float) this.offsetZ);
-        this.noClip = true;
+        this.targetX = this.position().x();
+        this.targetY = this.position().y();
+        this.targetZ = this.position().z();
+        this.entityData.define(SHOOTING_ENTITY_ID, this.shootingEntityRef);
+        this.entityData.define(LASER_END_ID, this.laserEndRef);
+        this.entityData.define(LASER_TIME, this.laserTime);
+        this.entityData.define(OFFSET_X, (float) this.offsetX);
+        this.entityData.define(OFFSET_Y, (float) this.offsetY);
+        this.entityData.define(OFFSET_Z, (float) this.offsetZ);
+        this.noPhysics = true;
     }
 
     @Override
-    public AxisAlignedBB getRenderBoundingBox() {
+    public AxisAlignedBB getBoundingBoxForCulling() {
         if(this.laserEnd == null)
-            return super.getRenderBoundingBox();
-        double distance = this.getDistance(this.laserEnd);
-        return super.getRenderBoundingBox().expand(distance, distance, distance);
+            return super.getBoundingBoxForCulling();
+        double distance = this.distanceTo(this.laserEnd);
+        return super.getBoundingBoxForCulling().expandTowards(distance, distance, distance);
     }
 	
     
@@ -144,28 +144,28 @@ public class LaserProjectileEntity extends BaseProjectileEntity {
  	// ==================================================
     @Override
     public void tick() {
-    	if(!this.getEntityWorld().isRemote) {
-    		this.dataManager.set(LASER_TIME, this.laserTime);
+    	if(!this.getCommandSenderWorld().isClientSide) {
+    		this.entityData.set(LASER_TIME, this.laserTime);
     	}
     	else {
-    		this.laserTime = this.dataManager.get(LASER_TIME);
+    		this.laserTime = this.entityData.get(LASER_TIME);
     	}
     	this.syncShootingEntity();
     	
     	//this.syncOffset(); Broken? :(
-    	if(!this.getEntityWorld().isRemote && this.shootingEntity != null) {
+    	if(!this.getCommandSenderWorld().isClientSide && this.shootingEntity != null) {
     		Entity entityToFollow = this.shootingEntity;
     		if(this.followEntity != null)
     			entityToFollow = this.followEntity;
-    		double xPos = entityToFollow.getPositionVec().getX() + this.offsetX;
-			double yPos = entityToFollow.getPositionVec().getY() + (this.getSize(Pose.STANDING).height / 2) + this.offsetY;
-			double zPos = entityToFollow.getPositionVec().getZ() + this.offsetZ;
+    		double xPos = entityToFollow.position().x() + this.offsetX;
+			double yPos = entityToFollow.position().y() + (this.getDimensions(Pose.STANDING).height / 2) + this.offsetY;
+			double zPos = entityToFollow.position().z() + this.offsetZ;
     		if(entityToFollow instanceof BaseCreatureEntity) {
 				BaseCreatureEntity creatureToFollow = (BaseCreatureEntity)entityToFollow;
-				xPos = creatureToFollow.getFacingPosition(creatureToFollow, this.offsetX, creatureToFollow.rotationYaw + 90F).getX();
-				zPos = creatureToFollow.getFacingPosition(creatureToFollow, this.offsetZ, creatureToFollow.rotationYaw).getZ();
+				xPos = creatureToFollow.getFacingPosition(creatureToFollow, this.offsetX, creatureToFollow.yRot + 90F).getX();
+				zPos = creatureToFollow.getFacingPosition(creatureToFollow, this.offsetZ, creatureToFollow.yRot).getZ();
 			}
-    		this.setPosition(xPos, yPos, zPos);
+    		this.setPos(xPos, yPos, zPos);
     	}
     	
     	if(this.laserTime > 0) {
@@ -179,48 +179,48 @@ public class LaserProjectileEntity extends BaseProjectileEntity {
             double maxZ;
 
 	    	if(this.laserEnd != null) {
-	    		if(this.getPositionVec().getX() - this.getSize(Pose.STANDING).width < this.laserEnd.getPositionVec().getX() - this.laserEnd.getSize(Pose.STANDING).width)
-                    minX = this.getPositionVec().getX() - this.getSize(Pose.STANDING).width;
+	    		if(this.position().x() - this.getDimensions(Pose.STANDING).width < this.laserEnd.position().x() - this.laserEnd.getDimensions(Pose.STANDING).width)
+                    minX = this.position().x() - this.getDimensions(Pose.STANDING).width;
 	    		else
-                    minX = this.laserEnd.getPositionVec().getX() - this.laserEnd.getSize(Pose.STANDING).width;
+                    minX = this.laserEnd.position().x() - this.laserEnd.getDimensions(Pose.STANDING).width;
 	    		
-	    		if(this.getPositionVec().getX() + this.getSize(Pose.STANDING).width > this.laserEnd.getPositionVec().getX() + this.laserEnd.getSize(Pose.STANDING).width)
-	    			maxX = this.getPositionVec().getX() + this.getSize(Pose.STANDING).width;
+	    		if(this.position().x() + this.getDimensions(Pose.STANDING).width > this.laserEnd.position().x() + this.laserEnd.getDimensions(Pose.STANDING).width)
+	    			maxX = this.position().x() + this.getDimensions(Pose.STANDING).width;
 	    		else
-	    			maxX = this.laserEnd.getPositionVec().getX() + this.laserEnd.getSize(Pose.STANDING).width;
+	    			maxX = this.laserEnd.position().x() + this.laserEnd.getDimensions(Pose.STANDING).width;
 	    		
 	    		
-	    		if(this.getPositionVec().getY() - this.getSize(Pose.STANDING).height < this.laserEnd.getPositionVec().getY() - this.laserEnd.getSize(Pose.STANDING).height)
-	    			minY = this.getPositionVec().getY() - this.getSize(Pose.STANDING).height;
+	    		if(this.position().y() - this.getDimensions(Pose.STANDING).height < this.laserEnd.position().y() - this.laserEnd.getDimensions(Pose.STANDING).height)
+	    			minY = this.position().y() - this.getDimensions(Pose.STANDING).height;
 	    		else
-	    			minY = this.laserEnd.getPositionVec().getY() - this.laserEnd.getSize(Pose.STANDING).height;
+	    			minY = this.laserEnd.position().y() - this.laserEnd.getDimensions(Pose.STANDING).height;
 	    		
-	    		if(this.getPositionVec().getY() + this.getSize(Pose.STANDING).width > this.laserEnd.getPositionVec().getY() + this.laserEnd.getSize(Pose.STANDING).height)
-	    			maxY = this.getPositionVec().getY() + this.getSize(Pose.STANDING).height;
+	    		if(this.position().y() + this.getDimensions(Pose.STANDING).width > this.laserEnd.position().y() + this.laserEnd.getDimensions(Pose.STANDING).height)
+	    			maxY = this.position().y() + this.getDimensions(Pose.STANDING).height;
 	    		else
-	    			maxY = this.laserEnd.getPositionVec().getY() + this.laserEnd.getSize(Pose.STANDING).height;
+	    			maxY = this.laserEnd.position().y() + this.laserEnd.getDimensions(Pose.STANDING).height;
 	    		
 	    		
-	    		if(this.getPositionVec().getZ() - this.getSize(Pose.STANDING).width < this.laserEnd.getPositionVec().getZ() - this.laserEnd.getSize(Pose.STANDING).width)
-	    			minZ = this.getPositionVec().getZ() - this.getSize(Pose.STANDING).width;
+	    		if(this.position().z() - this.getDimensions(Pose.STANDING).width < this.laserEnd.position().z() - this.laserEnd.getDimensions(Pose.STANDING).width)
+	    			minZ = this.position().z() - this.getDimensions(Pose.STANDING).width;
 	    		else
-	    			minZ = this.laserEnd.getPositionVec().getZ() - this.laserEnd.getSize(Pose.STANDING).width;
+	    			minZ = this.laserEnd.position().z() - this.laserEnd.getDimensions(Pose.STANDING).width;
 	    		
-	    		if(this.getPositionVec().getZ() + this.getSize(Pose.STANDING).width > this.laserEnd.getPositionVec().getZ() + this.laserEnd.getSize(Pose.STANDING).width)
-	    			maxZ = this.getPositionVec().getZ() + this.getSize(Pose.STANDING).width;
+	    		if(this.position().z() + this.getDimensions(Pose.STANDING).width > this.laserEnd.position().z() + this.laserEnd.getDimensions(Pose.STANDING).width)
+	    			maxZ = this.position().z() + this.getDimensions(Pose.STANDING).width;
 	    		else
-	    			maxZ = this.laserEnd.getPositionVec().getZ() + this.laserEnd.getSize(Pose.STANDING).width;
+	    			maxZ = this.laserEnd.position().z() + this.laserEnd.getDimensions(Pose.STANDING).width;
 	    	}
 	    	else {
-	    		minX = this.getPositionVec().getX() - this.getSize(Pose.STANDING).width;
-	    		maxX = this.getPositionVec().getX() + this.getSize(Pose.STANDING).width;
-	    		minY = this.getPositionVec().getY() - this.getSize(Pose.STANDING).height;
-	    		maxY = this.getPositionVec().getY() + this.getSize(Pose.STANDING).height;
-	    		minZ = this.getPositionVec().getZ() - this.getSize(Pose.STANDING).width;
-	    		maxZ = this.getPositionVec().getZ() + this.getSize(Pose.STANDING).width;
+	    		minX = this.position().x() - this.getDimensions(Pose.STANDING).width;
+	    		maxX = this.position().x() + this.getDimensions(Pose.STANDING).width;
+	    		minY = this.position().y() - this.getDimensions(Pose.STANDING).height;
+	    		maxY = this.position().y() + this.getDimensions(Pose.STANDING).height;
+	    		minZ = this.position().z() - this.getDimensions(Pose.STANDING).width;
+	    		maxZ = this.position().z() + this.getDimensions(Pose.STANDING).width;
 	    	}
 
-            this.getBoundingBox().expand(
+            this.getBoundingBox().expandTowards(
                     (maxX - minX) - (this.getBoundingBox().maxX - this.getBoundingBox().minX),
                     (maxY - minY) - (this.getBoundingBox().maxY - this.getBoundingBox().minY),
                     (maxZ - minZ) - (this.getBoundingBox().maxZ - this.getBoundingBox().minZ)
@@ -236,11 +236,11 @@ public class LaserProjectileEntity extends BaseProjectileEntity {
  	//                   Update End
  	// ==================================================
 	public void updateEnd() {
-		if(this.getEntityWorld().isRemote) {
-			this.laserEndRef = this.dataManager.get(LASER_END_ID);
+		if(this.getCommandSenderWorld().isClientSide) {
+			this.laserEndRef = this.entityData.get(LASER_END_ID);
 			Entity possibleLaserEnd = null;
 			if(this.laserEndRef != -1)
-				possibleLaserEnd = this.getEntityWorld().getEntityByID(this.laserEndRef);
+				possibleLaserEnd = this.getCommandSenderWorld().getEntity(this.laserEndRef);
 			if(possibleLaserEnd != null && possibleLaserEnd instanceof LaserEndProjectileEntity)
 				this.laserEnd = (LaserEndProjectileEntity)possibleLaserEnd;
 			else {
@@ -255,24 +255,24 @@ public class LaserProjectileEntity extends BaseProjectileEntity {
 		if(this.laserEnd == null)
 			this.laserEndRef = -1;
 		else {
-			if(!this.getEntityWorld().isRemote)
-				this.laserEndRef = this.laserEnd.getEntityId();
+			if(!this.getCommandSenderWorld().isClientSide)
+				this.laserEndRef = this.laserEnd.getId();
 			
 			// Entity Aiming:
 			boolean lockedLaser = false;
 			if(this.shootingEntity != null && this.useEntityAttackTarget) {
-				if(this.shootingEntity instanceof BaseCreatureEntity && ((BaseCreatureEntity)this.shootingEntity).getAttackTarget() != null) {
-					LivingEntity attackTarget = ((BaseCreatureEntity)this.shootingEntity).getAttackTarget();
-					this.targetX = attackTarget.getPositionVec().getX();
-					this.targetY = attackTarget.getPositionVec().getY() + (attackTarget.getSize(Pose.STANDING).height / 2);
-					this.targetZ = attackTarget.getPositionVec().getZ();
+				if(this.shootingEntity instanceof BaseCreatureEntity && ((BaseCreatureEntity)this.shootingEntity).getTarget() != null) {
+					LivingEntity attackTarget = ((BaseCreatureEntity)this.shootingEntity).getTarget();
+					this.targetX = attackTarget.position().x();
+					this.targetY = attackTarget.position().y() + (attackTarget.getDimensions(Pose.STANDING).height / 2);
+					this.targetZ = attackTarget.position().z();
 					lockedLaser = true;
 				}
 				else {
-					Vector3d lookDirection = this.shootingEntity.getLookVec();
-					this.targetX = this.shootingEntity.getPositionVec().getX() + (lookDirection.x * this.laserRange);
-					this.targetY = this.shootingEntity.getPositionVec().getY() + this.shootingEntity.getEyeHeight() + (lookDirection.y * this.laserRange);
-					this.targetZ = this.shootingEntity.getPositionVec().getZ() + (lookDirection.z * this.laserRange);
+					Vector3d lookDirection = this.shootingEntity.getLookAngle();
+					this.targetX = this.shootingEntity.position().x() + (lookDirection.x * this.laserRange);
+					this.targetY = this.shootingEntity.position().y() + this.shootingEntity.getEyeHeight() + (lookDirection.y * this.laserRange);
+					this.targetZ = this.shootingEntity.position().z() + (lookDirection.z * this.laserRange);
 				}
 			}
 			
@@ -283,23 +283,23 @@ public class LaserProjectileEntity extends BaseProjectileEntity {
 				excludedEntities.add(this.shootingEntity);
 			if(this.followEntity != null)
 				excludedEntities.add(this.followEntity);
-			RayTraceResult rayTraceResult = Utilities.raytrace(this.getEntityWorld(), this.getPositionVec().getX(), this.getPositionVec().getY(), this.getPositionVec().getZ(), this.targetX, this.targetY, this.targetZ, this.laserWidth, this, excludedEntities);
+			RayTraceResult rayTraceResult = Utilities.raytrace(this.getCommandSenderWorld(), this.position().x(), this.position().y(), this.position().z(), this.targetX, this.targetY, this.targetZ, this.laserWidth, this, excludedEntities);
 			
 			// Update Laser End Position:
 			double newTargetX = this.targetX;
 			double newTargetY = this.targetY;
 			double newTargetZ = this.targetZ;
 			if(rayTraceResult != null && !lockedLaser) {
-				newTargetX = rayTraceResult.getHitVec().x;
-				newTargetY = rayTraceResult.getHitVec().y;
-				newTargetZ = rayTraceResult.getHitVec().z;
+				newTargetX = rayTraceResult.getLocation().x;
+				newTargetY = rayTraceResult.getLocation().y;
+				newTargetZ = rayTraceResult.getLocation().z;
 			}
 			this.laserEnd.onUpdateEnd(newTargetX, newTargetY, newTargetZ);
 			
 			// Damage:
 			if(this.laserTime % this.laserDelay == 0 && this.isAlive() && rayTraceResult instanceof EntityRayTraceResult) {
 				EntityRayTraceResult entityRayTraceResult = (EntityRayTraceResult)rayTraceResult;
-				if(this.laserEnd.getDistance(entityRayTraceResult.getEntity()) <= (this.laserWidth * 10)) {
+				if(this.laserEnd.distanceTo(entityRayTraceResult.getEntity()) <= (this.laserWidth * 10)) {
 					boolean doDamage = true;
 					if (entityRayTraceResult.getEntity() instanceof LivingEntity) {
 						doDamage = this.canDamage((LivingEntity) entityRayTraceResult.getEntity());
@@ -310,9 +310,9 @@ public class LaserProjectileEntity extends BaseProjectileEntity {
             }
 		}
 		
-		this.dataManager.set(LASER_END_ID, this.laserEndRef);
+		this.entityData.set(LASER_END_ID, this.laserEndRef);
 		if(this.getBeamSound() != null)
-			this.playSound(this.getBeamSound(), 1.0F, 1.0F / (this.rand.nextFloat() * 0.4F + 0.8F));
+			this.playSound(this.getBeamSound(), 1.0F, 1.0F / (this.random.nextFloat() * 0.4F + 0.8F));
 	}
 	
     
@@ -332,14 +332,14 @@ public class LaserProjectileEntity extends BaseProjectileEntity {
  	//                 Fire Projectile
  	// ==================================================
     public void fireProjectile() {
-    	World world = this.getEntityWorld();
-    	if(world.isRemote)
+    	World world = this.getCommandSenderWorld();
+    	if(world.isClientSide)
     		return;
     	
 		try {
 			if(this.shootingEntity == null) {
 				Constructor laserEndConstructor = this.getLaserEndClass().getConstructor(EntityType.class, World.class, Double.class, Double.class, Double.class, LaserProjectileEntity.class);
-				this.laserEnd = (LaserEndProjectileEntity)laserEndConstructor.newInstance(ProjectileManager.getInstance().oldProjectileTypes.get(this.getLaserEndClass()), world, this.getPositionVec().getX(), this.getPositionVec().getY(), this.getPositionVec().getZ(), this);
+				this.laserEnd = (LaserEndProjectileEntity)laserEndConstructor.newInstance(ProjectileManager.getInstance().oldProjectileTypes.get(this.getLaserEndClass()), world, this.position().x(), this.position().y(), this.position().z(), this);
 			}
 	        else {
 				Constructor laserEndConstructor = this.getLaserEndClass().getConstructor(EntityType.class, World.class, LivingEntity.class, LaserProjectileEntity.class);
@@ -347,9 +347,9 @@ public class LaserProjectileEntity extends BaseProjectileEntity {
 	        }
 	        
 			if(this.getLaunchSound() != null)
-				this.playSound(this.getLaunchSound(), 1.0F, 1.0F / (this.rand.nextFloat() * 0.4F + 0.8F));
+				this.playSound(this.getLaunchSound(), 1.0F, 1.0F / (this.random.nextFloat() * 0.4F + 0.8F));
 	        
-	        world.addEntity(laserEnd);
+	        world.addFreshEntity(laserEnd);
 		}
 		catch (Exception e) {
 			System.out.println("[WARNING] [LycanitesMobs] EntityLaser was unable to instantiate the EntityLaserEnd.");
@@ -362,16 +362,16 @@ public class LaserProjectileEntity extends BaseProjectileEntity {
  	//               Sync Shooting Entity
  	// ==================================================
     public void syncShootingEntity() {
-    	if(!this.getEntityWorld().isRemote) {
+    	if(!this.getCommandSenderWorld().isClientSide) {
     		if(this.shootingEntity == null) this.shootingEntityRef = -1;
-    		else this.shootingEntityRef = this.shootingEntity.getEntityId();
-    		this.dataManager.set(SHOOTING_ENTITY_ID, this.shootingEntityRef);
+    		else this.shootingEntityRef = this.shootingEntity.getId();
+    		this.entityData.set(SHOOTING_ENTITY_ID, this.shootingEntityRef);
     	}
     	else {
-    		this.shootingEntityRef = this.dataManager.get(SHOOTING_ENTITY_ID);
+    		this.shootingEntityRef = this.entityData.get(SHOOTING_ENTITY_ID);
             if(this.shootingEntityRef == -1) this.shootingEntity = null;
     		else {
-    			Entity possibleShootingEntity = this.getEntityWorld().getEntityByID(this.shootingEntityRef);
+    			Entity possibleShootingEntity = this.getCommandSenderWorld().getEntity(this.shootingEntityRef);
     			if(possibleShootingEntity != null && possibleShootingEntity instanceof LivingEntity)
     				this.shootingEntity = (LivingEntity)possibleShootingEntity;
     			else
@@ -381,15 +381,15 @@ public class LaserProjectileEntity extends BaseProjectileEntity {
     }
     
     public void syncOffset() {
-    	if(!this.getEntityWorld().isRemote) {
-    		this.dataManager.set(OFFSET_X, (float) this.offsetX);
-    		this.dataManager.set(OFFSET_Y, (float) this.offsetY);
-    		this.dataManager.set(OFFSET_Z, (float) this.offsetZ);
+    	if(!this.getCommandSenderWorld().isClientSide) {
+    		this.entityData.set(OFFSET_X, (float) this.offsetX);
+    		this.entityData.set(OFFSET_Y, (float) this.offsetY);
+    		this.entityData.set(OFFSET_Z, (float) this.offsetZ);
     	}
     	else {
-    		this.offsetX = this.dataManager.get(OFFSET_X);
-    		this.offsetY = this.dataManager.get(OFFSET_Y);
-    		this.offsetZ = this.dataManager.get(OFFSET_Z);
+    		this.offsetX = this.entityData.get(OFFSET_X);
+    		this.offsetY = this.entityData.get(OFFSET_Y);
+    		this.offsetZ = this.entityData.get(OFFSET_Z);
         }
     }
 	
@@ -421,7 +421,7 @@ public class LaserProjectileEntity extends BaseProjectileEntity {
  	// ==================================================
     // ========== Gravity ==========
     @Override
-    protected float getGravityVelocity() {
+    protected float getGravity() {
         return 0.0F;
     }
     
@@ -430,7 +430,7 @@ public class LaserProjectileEntity extends BaseProjectileEntity {
  	//                     Impact
  	// ==================================================
     @Override
-    protected void onImpact(RayTraceResult rayTraceResult) {
+    protected void onHit(RayTraceResult rayTraceResult) {
     	return;
     }
     
@@ -446,7 +446,7 @@ public class LaserProjectileEntity extends BaseProjectileEntity {
 		// Prevent Knockback:
 		double targetKnockbackResistance = 0;
 		if(this.knockbackChance < 1) {
-			if(this.knockbackChance <= 0 || this.rand.nextDouble() <= this.knockbackChance) {
+			if(this.knockbackChance <= 0 || this.random.nextDouble() <= this.knockbackChance) {
 				if(target instanceof LivingEntity) {
 					targetKnockbackResistance = ((LivingEntity)target).getAttribute(Attributes.KNOCKBACK_RESISTANCE).getValue();
 					((LivingEntity)target).getAttribute(Attributes.KNOCKBACK_RESISTANCE).setBaseValue(1);
@@ -455,20 +455,20 @@ public class LaserProjectileEntity extends BaseProjectileEntity {
 		}
 
 		// Deal Damage:
-		if(this.func_234616_v_() instanceof BaseCreatureEntity) {
-			BaseCreatureEntity creatureThrower = (BaseCreatureEntity)this.func_234616_v_();
+		if(this.getOwner() instanceof BaseCreatureEntity) {
+			BaseCreatureEntity creatureThrower = (BaseCreatureEntity)this.getOwner();
 			attackSuccess = creatureThrower.doRangedDamage(target, this, damage);
 		}
         else {
 			double pierceDamage = 1;
 			if(damage <= pierceDamage)
-                attackSuccess = target.attackEntityFrom(DamageSource.causeThrownDamage(this, this.func_234616_v_()).setDamageBypassesArmor().setDamageIsAbsolute(), damage);
+                attackSuccess = target.hurt(DamageSource.thrown(this, this.getOwner()).bypassArmor().bypassMagic(), damage);
             else {
-                int hurtResistantTimeBefore = target.hurtResistantTime;
-                target.attackEntityFrom(DamageSource.causeThrownDamage(this, this.func_234616_v_()).setDamageBypassesArmor().setDamageIsAbsolute(), (float)pierceDamage);
-                target.hurtResistantTime = hurtResistantTimeBefore;
+                int hurtResistantTimeBefore = target.invulnerableTime;
+                target.hurt(DamageSource.thrown(this, this.getOwner()).bypassArmor().bypassMagic(), (float)pierceDamage);
+                target.invulnerableTime = hurtResistantTimeBefore;
                 damage -= pierceDamage;
-                attackSuccess = target.attackEntityFrom(DamageSource.causeThrownDamage(this, this.func_234616_v_()), damage);
+                attackSuccess = target.hurt(DamageSource.thrown(this, this.getOwner()), damage);
             }
         }
         
@@ -477,7 +477,7 @@ public class LaserProjectileEntity extends BaseProjectileEntity {
     	
         // Restore Knockback:
         if(this.knockbackChance < 1) {
-            if(this.knockbackChance <= 0 || this.rand.nextDouble() <= this.knockbackChance) {
+            if(this.knockbackChance <= 0 || this.random.nextDouble() <= this.knockbackChance) {
                 if(target instanceof LivingEntity)
                     ((LivingEntity)target).getAttribute(Attributes.KNOCKBACK_RESISTANCE).setBaseValue(targetKnockbackResistance);
             }
@@ -503,7 +503,7 @@ public class LaserProjectileEntity extends BaseProjectileEntity {
     }
 
     public float getLaserAlpha() {
-        return 0.25F + (float)(0.1F * Math.sin(this.ticksExisted));
+        return 0.25F + (float)(0.1F * Math.sin(this.tickCount));
     }
     
     
@@ -519,24 +519,24 @@ public class LaserProjectileEntity extends BaseProjectileEntity {
     		return new double[] {0.0D, 0.0D, 0.0D};
     	else
     		return new double[] {
-    			this.laserEnd.getPositionVec().getX() - this.getPositionVec().getX(),
-    			this.laserEnd.getPositionVec().getY() - this.getPositionVec().getY(),
-    			this.laserEnd.getPositionVec().getZ() - this.getPositionVec().getZ()
+    			this.laserEnd.position().x() - this.position().x(),
+    			this.laserEnd.position().y() - this.position().y(),
+    			this.laserEnd.position().z() - this.position().z()
     		};
     }
     
     public float getLength() {
     	if(this.laserEnd == null)
     		return 0;
-    	return this.getDistance(this.laserEnd);
+    	return this.distanceTo(this.laserEnd);
     }
     
     public float[] getBeamAngles() {
     	float[] angles = new float[] {0, 0, 0, 0};
     	if(this.laserEnd != null) {
-    		float dx = (float)(this.laserEnd.getPositionVec().getX() - this.getPositionVec().getX());
-    		float dy = (float)(this.laserEnd.getPositionVec().getY() - this.getPositionVec().getY());
-    		float dz = (float)(this.laserEnd.getPositionVec().getZ() - this.getPositionVec().getZ());
+    		float dx = (float)(this.laserEnd.position().x() - this.position().x());
+    		float dy = (float)(this.laserEnd.position().y() - this.position().y());
+    		float dz = (float)(this.laserEnd.position().z() - this.position().z());
 			angles[0] = (float)Math.toDegrees(Math.atan2(dz, dy)) - 90;
 			angles[1] = (float)Math.toDegrees(Math.atan2(dx, dz));
 			angles[2] = (float)Math.toDegrees(Math.atan2(dx, dy)) - 90;
@@ -568,7 +568,7 @@ public class LaserProjectileEntity extends BaseProjectileEntity {
     // ==================================================
    	// ========== Read ===========
     @Override
-    public void readAdditional(CompoundNBT nbtTagCompound) {
+    public void readAdditionalSaveData(CompoundNBT nbtTagCompound) {
     	if(nbtTagCompound.contains("LaserTime"))
     		this.setTime(nbtTagCompound.getInt("LaserTime"));
     	if(nbtTagCompound.contains("OffsetX"))
@@ -577,16 +577,16 @@ public class LaserProjectileEntity extends BaseProjectileEntity {
     		this.offsetY = nbtTagCompound.getDouble("OffsetY");
     	if(nbtTagCompound.contains("OffsetZ"))
     		this.offsetZ = nbtTagCompound.getDouble("OffsetZ");
-        super.readAdditional(nbtTagCompound);
+        super.readAdditionalSaveData(nbtTagCompound);
     }
     
     // ========== Write ==========
     @Override
-    public void writeAdditional(CompoundNBT nbtTagCompound) {
+    public void addAdditionalSaveData(CompoundNBT nbtTagCompound) {
     	nbtTagCompound.putInt("LaserTime", this.laserTime);
     	nbtTagCompound.putDouble("OffsetX", this.offsetX);
     	nbtTagCompound.putDouble("OffsetY", this.offsetY);
     	nbtTagCompound.putDouble("OffsetZ", this.offsetZ);
-        super.writeAdditional(nbtTagCompound);
+        super.addAdditionalSaveData(nbtTagCompound);
     }
 }

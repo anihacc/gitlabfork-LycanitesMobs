@@ -42,7 +42,7 @@ public class EntityIgnibus extends RideableCreatureEntity implements IGroupHeavy
         this.setAttackCooldownMax(20);
         this.setupMob();
 
-        this.stepHeight = 1.0F;
+        this.maxUpStep = 1.0F;
         this.hitAreaWidthScale = 1.5F;
     }
 
@@ -59,14 +59,14 @@ public class EntityIgnibus extends RideableCreatureEntity implements IGroupHeavy
     // ==================================================
     // ========== Living Update ==========
     @Override
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
 
         // Land/Fly:
-        if(!this.getEntityWorld().isRemote) {
+        if(!this.getCommandSenderWorld().isClientSide) {
             if(this.isLanded) {
                 this.wantsToLand = false;
-                if(this.hasPickupEntity() || this.getControllingPassenger() != null || this.getLeashed() || this.isInWater() || (!this.isTamed() && this.updateTick % (5 * 20) == 0 && this.getRNG().nextBoolean())) {
+                if(this.hasPickupEntity() || this.getControllingPassenger() != null || this.isLeashed() || this.isInWater() || (!this.isTamed() && this.updateTick % (5 * 20) == 0 && this.getRandom().nextBoolean())) {
                     this.leap(1.0D, 1.0D);
                     this.isLanded = false;
                 }
@@ -81,7 +81,7 @@ public class EntityIgnibus extends RideableCreatureEntity implements IGroupHeavy
                     }
                 }
                 else {
-                    if (!this.hasPickupEntity() && !this.hasAttackTarget() && this.updateTick % (5 * 20) == 0 && this.getRNG().nextBoolean()) {
+                    if (!this.hasPickupEntity() && !this.hasAttackTarget() && this.updateTick % (5 * 20) == 0 && this.getRandom().nextBoolean()) {
                         this.wantsToLand = true;
                     }
                 }
@@ -89,22 +89,22 @@ public class EntityIgnibus extends RideableCreatureEntity implements IGroupHeavy
             if(this.hasPickupEntity() || this.getControllingPassenger() != null || this.hasAttackTarget() || this.isInWater()) {
                 this.wantsToLand = false;
             }
-            else if(this.isTamed() && this.isSitting() && !this.getLeashed()) {
+            else if(this.isTamed() && this.isSitting() && !this.isLeashed()) {
                 this.wantsToLand = true;
             }
         }
 
         // Particles:
-        if(this.getEntityWorld().isRemote)
+        if(this.getCommandSenderWorld().isClientSide)
             for(int i = 0; i < 2; ++i) {
-                this.getEntityWorld().addParticle(ParticleTypes.SMOKE, this.getPositionVec().getX() + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, this.getPositionVec().getY() + this.rand.nextDouble() * (double)this.getSize(Pose.STANDING).height, this.getPositionVec().getZ() + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
-                this.getEntityWorld().addParticle(ParticleTypes.FLAME, this.getPositionVec().getX() + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, this.getPositionVec().getY() + this.rand.nextDouble() * (double)this.getSize(Pose.STANDING).height, this.getPositionVec().getZ() + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
+                this.getCommandSenderWorld().addParticle(ParticleTypes.SMOKE, this.position().x() + (this.random.nextDouble() - 0.5D) * (double)this.getDimensions(Pose.STANDING).width, this.position().y() + this.random.nextDouble() * (double)this.getDimensions(Pose.STANDING).height, this.position().z() + (this.random.nextDouble() - 0.5D) * (double)this.getDimensions(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
+                this.getCommandSenderWorld().addParticle(ParticleTypes.FLAME, this.position().x() + (this.random.nextDouble() - 0.5D) * (double)this.getDimensions(Pose.STANDING).width, this.position().y() + this.random.nextDouble() * (double)this.getDimensions(Pose.STANDING).height, this.position().z() + (this.random.nextDouble() - 0.5D) * (double)this.getDimensions(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
             }
     }
 
     @Override
     public void riderEffects(LivingEntity rider) {
-        rider.addPotionEffect(new EffectInstance(Effects.FIRE_RESISTANCE, (5 * 20) + 5, 1));
+        rider.addEffect(new EffectInstance(Effects.FIRE_RESISTANCE, (5 * 20) + 5, 1));
         super.riderEffects(rider);
     }
 
@@ -117,9 +117,9 @@ public class EntityIgnibus extends RideableCreatureEntity implements IGroupHeavy
     public BlockPos getWanderPosition(BlockPos wanderPosition) {
         if(this.wantsToLand || !this.isLanded) {
             BlockPos groundPos;
-            for(groundPos = wanderPosition.down(); groundPos.getY() > 0 && this.getEntityWorld().getBlockState(groundPos).getBlock() == Blocks.AIR; groundPos = groundPos.down()) {}
-            if(this.getEntityWorld().getBlockState(groundPos).getMaterial().isSolid()) {
-                return groundPos.up();
+            for(groundPos = wanderPosition.below(); groundPos.getY() > 0 && this.getCommandSenderWorld().getBlockState(groundPos).getBlock() == Blocks.AIR; groundPos = groundPos.below()) {}
+            if(this.getCommandSenderWorld().getBlockState(groundPos).getMaterial().isSolid()) {
+                return groundPos.above();
             }
         }
         return super.getWanderPosition(wanderPosition);
@@ -174,35 +174,35 @@ public class EntityIgnibus extends RideableCreatureEntity implements IGroupHeavy
         }
         List<RapidFireProjectileEntity> projectiles = new ArrayList<>();
 
-        RapidFireProjectileEntity projectileEntry = new RapidFireProjectileEntity(ProjectileManager.getInstance().oldProjectileTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getEntityWorld(), this, 15, 3);
+        RapidFireProjectileEntity projectileEntry = new RapidFireProjectileEntity(ProjectileManager.getInstance().oldProjectileTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getCommandSenderWorld(), this, 15, 3);
         projectiles.add(projectileEntry);
 
-        RapidFireProjectileEntity projectileEntry2 = new RapidFireProjectileEntity(ProjectileManager.getInstance().oldProjectileTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getEntityWorld(), this, 15, 3);
+        RapidFireProjectileEntity projectileEntry2 = new RapidFireProjectileEntity(ProjectileManager.getInstance().oldProjectileTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getCommandSenderWorld(), this, 15, 3);
         projectileEntry2.offsetX += 1.0D;
         projectileEntry2.setProjectileScale(0.25f);
         projectiles.add(projectileEntry2);
 
-        RapidFireProjectileEntity projectileEntry3 = new RapidFireProjectileEntity(ProjectileManager.getInstance().oldProjectileTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getEntityWorld(), this, 15, 3);
+        RapidFireProjectileEntity projectileEntry3 = new RapidFireProjectileEntity(ProjectileManager.getInstance().oldProjectileTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getCommandSenderWorld(), this, 15, 3);
         projectileEntry3.offsetX -= 1.0D;
         projectileEntry3.setProjectileScale(0.25f);
         projectiles.add(projectileEntry3);
 
-        RapidFireProjectileEntity projectileEntry4 = new RapidFireProjectileEntity(ProjectileManager.getInstance().oldProjectileTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getEntityWorld(), this, 15, 3);
+        RapidFireProjectileEntity projectileEntry4 = new RapidFireProjectileEntity(ProjectileManager.getInstance().oldProjectileTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getCommandSenderWorld(), this, 15, 3);
         projectileEntry4.offsetZ += 1.0D;
         projectileEntry4.setProjectileScale(0.25f);
         projectiles.add(projectileEntry4);
 
-        RapidFireProjectileEntity projectileEntry5 = new RapidFireProjectileEntity(ProjectileManager.getInstance().oldProjectileTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getEntityWorld(), this, 15, 3);
+        RapidFireProjectileEntity projectileEntry5 = new RapidFireProjectileEntity(ProjectileManager.getInstance().oldProjectileTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getCommandSenderWorld(), this, 15, 3);
         projectileEntry5.offsetZ -= 1.0D;
         projectileEntry5.setProjectileScale(0.25f);
         projectiles.add(projectileEntry5);
 
-        RapidFireProjectileEntity projectileEntry6 = new RapidFireProjectileEntity(ProjectileManager.getInstance().oldProjectileTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getEntityWorld(), this, 15, 3);
+        RapidFireProjectileEntity projectileEntry6 = new RapidFireProjectileEntity(ProjectileManager.getInstance().oldProjectileTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getCommandSenderWorld(), this, 15, 3);
         projectileEntry6.offsetY += 1.0D;
         projectileEntry6.setProjectileScale(0.25f);
         projectiles.add(projectileEntry6);
 
-        RapidFireProjectileEntity projectileEntry7 = new RapidFireProjectileEntity(ProjectileManager.getInstance().oldProjectileTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getEntityWorld(), this, 15, 3);
+        RapidFireProjectileEntity projectileEntry7 = new RapidFireProjectileEntity(ProjectileManager.getInstance().oldProjectileTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getCommandSenderWorld(), this, 15, 3);
         projectileEntry7.offsetY -= 1.0D;
         projectileEntry7.setProjectileScale(0.25f);
         projectiles.add(projectileEntry7);
@@ -211,27 +211,27 @@ public class EntityIgnibus extends RideableCreatureEntity implements IGroupHeavy
             projectile.setProjectileScale(1f);
 
             // Y Offset:
-            projectile.setPosition(
-                    projectile.getPositionVec().getX(),
-                    projectile.getPositionVec().getY() - this.getSize(Pose.STANDING).height / 4,
-                    projectile.getPositionVec().getZ()
+            projectile.setPos(
+                    projectile.position().x(),
+                    projectile.position().y() - this.getDimensions(Pose.STANDING).height / 4,
+                    projectile.position().z()
             );
 
             // Accuracy:
-            float accuracy = 4.0F * (this.getRNG().nextFloat() - 0.5F);
+            float accuracy = 4.0F * (this.getRandom().nextFloat() - 0.5F);
 
             // Set Velocities:
-            double d0 = target.getPositionVec().getX() - this.getPositionVec().getX() + accuracy;
-            double d1 = target.getPositionVec().getY() + (double)target.getEyeHeight() - 1.100000023841858D - projectile.getPositionVec().getY() + accuracy;
-            double d2 = target.getPositionVec().getZ() - this.getPositionVec().getZ() + accuracy;
+            double d0 = target.position().x() - this.position().x() + accuracy;
+            double d1 = target.position().y() + (double)target.getEyeHeight() - 1.100000023841858D - projectile.position().y() + accuracy;
+            double d2 = target.position().z() - this.position().z() + accuracy;
             float f1 = MathHelper.sqrt(d0 * d0 + d2 * d2) * 0.2F;
             float velocity = 1.2F;
             projectile.shoot(d0, d1 + (double)f1, d2, velocity, 6.0F);
             projectile.setProjectileScale(4);
 
             // Launch:
-            this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
-            this.getEntityWorld().addEntity(projectile);
+            this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
+            this.getCommandSenderWorld().addFreshEntity(projectile);
         }
 
         super.attackRanged(target, range);
@@ -261,7 +261,7 @@ public class EntityIgnibus extends RideableCreatureEntity implements IGroupHeavy
     // ========== Damage Modifier ==========
     @Override
     public float getDamageModifier(DamageSource damageSrc) {
-        if(damageSrc.isFireDamage())
+        if(damageSrc.isFire())
             return 0F;
         else return super.getDamageModifier(damageSrc);
     }
@@ -271,11 +271,11 @@ public class EntityIgnibus extends RideableCreatureEntity implements IGroupHeavy
     //                      Movement
     // ==================================================
     @Override
-    public double getMountedYOffset() {
+    public double getPassengersRidingOffset() {
         if(this.onGround) {
-            return (double)this.getSize(Pose.STANDING).height * 0.52D;
+            return (double)this.getDimensions(Pose.STANDING).height * 0.52D;
         }
-        return (double)this.getSize(Pose.STANDING).height * 0.54D;
+        return (double)this.getDimensions(Pose.STANDING).height * 0.54D;
     }
 
 
@@ -284,7 +284,7 @@ public class EntityIgnibus extends RideableCreatureEntity implements IGroupHeavy
     // ==================================================
     @Override
     public void mountAbility(Entity rider) {
-        if(this.getEntityWorld().isRemote)
+        if(this.getCommandSenderWorld().isClientSide)
             return;
 
         if(this.abilityToggled)
@@ -308,35 +308,35 @@ public class EntityIgnibus extends RideableCreatureEntity implements IGroupHeavy
             // Type:
             List<RapidFireProjectileEntity> projectiles = new ArrayList<>();
 
-            RapidFireProjectileEntity projectileEntry = new RapidFireProjectileEntity(ProjectileManager.getInstance().oldProjectileTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getEntityWorld(), player, 15, 3);
+            RapidFireProjectileEntity projectileEntry = new RapidFireProjectileEntity(ProjectileManager.getInstance().oldProjectileTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getCommandSenderWorld(), player, 15, 3);
             projectiles.add(projectileEntry);
 
-			RapidFireProjectileEntity projectileEntry2 = new RapidFireProjectileEntity(ProjectileManager.getInstance().oldProjectileTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getEntityWorld(), this, 15, 3);
+			RapidFireProjectileEntity projectileEntry2 = new RapidFireProjectileEntity(ProjectileManager.getInstance().oldProjectileTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getCommandSenderWorld(), this, 15, 3);
 			projectileEntry2.offsetX += 1.0D;
 			projectileEntry2.setProjectileScale(0.25f);
 			projectiles.add(projectileEntry2);
 
-			RapidFireProjectileEntity projectileEntry3 = new RapidFireProjectileEntity(ProjectileManager.getInstance().oldProjectileTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getEntityWorld(), this, 15, 3);
+			RapidFireProjectileEntity projectileEntry3 = new RapidFireProjectileEntity(ProjectileManager.getInstance().oldProjectileTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getCommandSenderWorld(), this, 15, 3);
 			projectileEntry3.offsetX -= 1.0D;
 			projectileEntry3.setProjectileScale(0.25f);
 			projectiles.add(projectileEntry3);
 
-			RapidFireProjectileEntity projectileEntry4 = new RapidFireProjectileEntity(ProjectileManager.getInstance().oldProjectileTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getEntityWorld(), this, 15, 3);
+			RapidFireProjectileEntity projectileEntry4 = new RapidFireProjectileEntity(ProjectileManager.getInstance().oldProjectileTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getCommandSenderWorld(), this, 15, 3);
 			projectileEntry4.offsetZ += 1.0D;
 			projectileEntry4.setProjectileScale(0.25f);
 			projectiles.add(projectileEntry4);
 
-			RapidFireProjectileEntity projectileEntry5 = new RapidFireProjectileEntity(ProjectileManager.getInstance().oldProjectileTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getEntityWorld(), this, 15, 3);
+			RapidFireProjectileEntity projectileEntry5 = new RapidFireProjectileEntity(ProjectileManager.getInstance().oldProjectileTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getCommandSenderWorld(), this, 15, 3);
 			projectileEntry5.offsetZ -= 1.0D;
 			projectileEntry5.setProjectileScale(0.25f);
 			projectiles.add(projectileEntry5);
 
-			RapidFireProjectileEntity projectileEntry6 = new RapidFireProjectileEntity(ProjectileManager.getInstance().oldProjectileTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getEntityWorld(), this, 15, 3);
+			RapidFireProjectileEntity projectileEntry6 = new RapidFireProjectileEntity(ProjectileManager.getInstance().oldProjectileTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getCommandSenderWorld(), this, 15, 3);
 			projectileEntry6.offsetY += 1.0D;
 			projectileEntry6.setProjectileScale(0.25f);
 			projectiles.add(projectileEntry6);
 
-			RapidFireProjectileEntity projectileEntry7 = new RapidFireProjectileEntity(ProjectileManager.getInstance().oldProjectileTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getEntityWorld(), this, 15, 3);
+			RapidFireProjectileEntity projectileEntry7 = new RapidFireProjectileEntity(ProjectileManager.getInstance().oldProjectileTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getCommandSenderWorld(), this, 15, 3);
 			projectileEntry7.offsetY -= 10D;
 			projectileEntry7.setProjectileScale(0.25f);
 			projectiles.add(projectileEntry7);
@@ -345,15 +345,15 @@ public class EntityIgnibus extends RideableCreatureEntity implements IGroupHeavy
                 projectile.setProjectileScale(1f);
 
                 // Y Offset:
-                projectile.setPosition(
-                        projectile.getPositionVec().getX(),
-                        projectile.getPositionVec().getY() - this.getSize(Pose.STANDING).height / 4,
-                        projectile.getPositionVec().getZ()
+                projectile.setPos(
+                        projectile.position().x(),
+                        projectile.position().y() - this.getDimensions(Pose.STANDING).height / 4,
+                        projectile.position().z()
                 );
 
                 // Launch:
-                this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
-                this.getEntityWorld().addEntity(projectile);
+                this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
+                this.getCommandSenderWorld().addFreshEntity(projectile);
             }
             this.triggerAttackCooldown();
         }

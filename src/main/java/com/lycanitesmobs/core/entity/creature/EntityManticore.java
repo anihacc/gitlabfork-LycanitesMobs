@@ -23,7 +23,7 @@ public class EntityManticore extends TameableCreatureEntity implements IMob {
         this.flySoundSpeed = 20;
         this.setupMob();
 
-        this.stepHeight = 1.0F;
+        this.maxUpStep = 1.0F;
     }
 
     // ========== Init AI ==========
@@ -40,8 +40,8 @@ public class EntityManticore extends TameableCreatureEntity implements IMob {
     // ==================================================
 	// ========== Living Update ==========
 	@Override
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
     }
     
     

@@ -42,7 +42,7 @@ public class MessagePetEntry {
         this.subspecies = petEntry.subspeciesIndex;
         this.variant = petEntry.variantIndex;
 		this.behaviour = summonSet.getBehaviourByte();
-		this.petEntryEntityID = petEntry.entity != null ? petEntry.entity.getEntityId() : -1;
+		this.petEntryEntityID = petEntry.entity != null ? petEntry.entity.getId() : -1;
 		this.petEntryEntityName = petEntry.entityName;
 		this.respawnTime = petEntry.respawnTime;
 		this.respawnTimeMax = petEntry.respawnTimeMax;
@@ -93,7 +93,7 @@ public class MessagePetEntry {
 		summonSet.readFromPacket(message.summonType, message.subspecies, message.variant, message.behaviour);
         Entity entity = null;
         if(message.petEntryEntityID != -1) {
-            entity = player.getEntityWorld().getEntityByID(message.petEntryEntityID);
+            entity = player.getCommandSenderWorld().getEntity(message.petEntryEntityID);
         }
         petEntry.entity = entity;
         petEntry.entityName = message.petEntryEntityName;
@@ -109,16 +109,16 @@ public class MessagePetEntry {
 	 */
 	public static MessagePetEntry decode(PacketBuffer packet) {
 		MessagePetEntry message = new MessagePetEntry();
-        message.petEntryID = packet.readUniqueId();
-        message.petEntryType = packet.readString(512);
+        message.petEntryID = packet.readUUID();
+        message.petEntryType = packet.readUtf(512);
         message.spawningActive = packet.readBoolean();
         message.teleportEntity = packet.readBoolean();
-        message.summonType = packet.readString(512);
+        message.summonType = packet.readUtf(512);
 		message.subspecies = packet.readInt();
 		message.variant = packet.readInt();
         message.behaviour = packet.readByte();
         message.petEntryEntityID = packet.readInt();
-		message.petEntryEntityName = packet.readString(1024);
+		message.petEntryEntityName = packet.readUtf(1024);
         message.respawnTime = packet.readInt();
         message.respawnTimeMax = packet.readInt();
         message.entityLevel = packet.readInt();
@@ -131,16 +131,16 @@ public class MessagePetEntry {
 	 * Writes the message into bytes.
 	 */
 	public static void encode(MessagePetEntry message, PacketBuffer packet) {
-        packet.writeUniqueId(message.petEntryID);
-        packet.writeString(message.petEntryType);
+        packet.writeUUID(message.petEntryID);
+        packet.writeUtf(message.petEntryType);
         packet.writeBoolean(message.spawningActive);
         packet.writeBoolean(message.teleportEntity);
-        packet.writeString(message.summonType);
+        packet.writeUtf(message.summonType);
 		packet.writeInt(message.subspecies);
 		packet.writeInt(message.variant);
         packet.writeByte(message.behaviour);
         packet.writeInt(message.petEntryEntityID);
-		packet.writeString(message.petEntryEntityName);
+		packet.writeUtf(message.petEntryEntityName);
         packet.writeInt(message.respawnTime);
         packet.writeInt(message.respawnTimeMax);
         packet.writeInt(message.entityLevel);

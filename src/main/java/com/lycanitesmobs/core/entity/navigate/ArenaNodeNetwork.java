@@ -53,7 +53,7 @@ public class ArenaNodeNetwork {
         double smallestDistance = 0;
         ArenaNode closestNode = null;
         for(ArenaNode node : this.nodes) {
-            double distance = targetPos.distanceSq(node.pos);
+            double distance = targetPos.distSqr(node.pos);
             if(closestNode == null || distance < smallestDistance) {
                 smallestDistance = distance;
                 closestNode = node;

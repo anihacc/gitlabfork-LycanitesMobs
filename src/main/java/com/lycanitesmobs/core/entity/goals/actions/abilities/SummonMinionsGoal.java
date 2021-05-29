@@ -9,6 +9,8 @@ import net.minecraft.entity.player.PlayerEntity;
 
 import java.util.EnumSet;
 
+import net.minecraft.entity.ai.goal.Goal.Flag;
+
 public class SummonMinionsGoal extends BaseGoal {
     // Properties:
 	protected int summonTime = 0;
@@ -26,7 +28,7 @@ public class SummonMinionsGoal extends BaseGoal {
 	 */
 	public SummonMinionsGoal(BaseCreatureEntity setHost) {
 		super(setHost);
-		this.setMutexFlags(EnumSet.noneOf(Flag.class));
+		this.setFlags(EnumSet.noneOf(Flag.class));
     }
 
 	/**
@@ -90,15 +92,15 @@ public class SummonMinionsGoal extends BaseGoal {
 	}
 
 	@Override
-    public boolean shouldExecute() {
+    public boolean canUse() {
 		if(this.host.isPetType("familiar")) {
 			return false;
 		}
-		return super.shouldExecute() && this.minionInfo != null;
+		return super.canUse() && this.minionInfo != null;
 	}
 
 	@Override
-    public void startExecuting() {
+    public void start() {
 		this.summonTime = 1;
 	}
 
@@ -117,22 +119,22 @@ public class SummonMinionsGoal extends BaseGoal {
 			for (PlayerEntity target : this.host.playerTargets) {
 				if(target.isCreative() || target.isSpectator())
 					continue;
-				if (CreatureManager.getInstance().config.bossAntiFlight > 0 && target.getPositionVec().getY() > this.host.getPositionVec().getY() + CreatureManager.getInstance().config.bossAntiFlight + 1) {
+				if (CreatureManager.getInstance().config.bossAntiFlight > 0 && target.position().y() > this.host.position().y() + CreatureManager.getInstance().config.bossAntiFlight + 1) {
 					this.summonMinion(target);
 				}
 			}
 			return;
 		}
 
-		this.summonMinion(this.host.getAttackTarget());
+		this.summonMinion(this.host.getTarget());
     }
 
 	protected void summonMinion(LivingEntity target) {
-		LivingEntity minion = this.minionInfo.createEntity(this.host.getEntityWorld());
-		this.host.summonMinion(minion, this.host.getRNG().nextDouble() * 360, this.host.getSize(this.host.getPose()).width + 1);
+		LivingEntity minion = this.minionInfo.createEntity(this.host.getCommandSenderWorld());
+		this.host.summonMinion(minion, this.host.getRandom().nextDouble() * 360, this.host.getDimensions(this.host.getPose()).width + 1);
 		if(minion instanceof BaseCreatureEntity) {
 			BaseCreatureEntity minionCreature = (BaseCreatureEntity)minion;
-			minionCreature.setAttackTarget(target);
+			minionCreature.setTarget(target);
 			minionCreature.setSizeScale(minionCreature.sizeScale * this.sizeScale);
 		}
 	}

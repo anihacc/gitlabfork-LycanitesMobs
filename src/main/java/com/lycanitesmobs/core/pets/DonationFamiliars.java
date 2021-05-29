@@ -142,8 +142,8 @@ public class DonationFamiliars {
 		}
 
 		Map<UUID, PetEntry> playerFamiliarEntries = new HashMap<>();
-		if(this.playerFamiliars.containsKey(player.getUniqueID())) {
-			playerFamiliarEntries = this.playerFamiliars.get(player.getUniqueID());
+		if(this.playerFamiliars.containsKey(player.getUUID())) {
+			playerFamiliarEntries = this.playerFamiliars.get(player.getUUID());
 			for(PetEntry familiarEntry : playerFamiliarEntries.values()) {
 				if(familiarEntry.host == null) {
 					familiarEntry.host = player;

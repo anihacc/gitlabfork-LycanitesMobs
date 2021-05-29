@@ -33,10 +33,10 @@ public class MixBlockSpawnTrigger extends BlockSpawnTrigger {
 		}
 
 		// Chance:
-		if(this.chance < 1 && world.rand.nextDouble() > this.chance) {
+		if(this.chance < 1 && world.random.nextDouble() > this.chance) {
 			return;
 		}
 
-		this.trigger(world, null, mixPos.up(), this.getBlockLevel(blockState, world, mixPos), 0);
+		this.trigger(world, null, mixPos.above(), this.getBlockLevel(blockState, world, mixPos), 0);
 	}
 }

@@ -12,6 +12,8 @@ import net.minecraft.util.math.vector.Vector3d;
 
 import java.util.EnumSet;
 
+import net.minecraft.entity.ai.goal.Goal.Flag;
+
 public class StayByWaterGoal extends Goal {
 	// Targets:
     private BaseCreatureEntity host;
@@ -31,7 +33,7 @@ public class StayByWaterGoal extends Goal {
    	// ==================================================
     public StayByWaterGoal(BaseCreatureEntity setHost) {
     	this.host = setHost;
-		this.setMutexFlags(EnumSet.of(Flag.MOVE));
+		this.setFlags(EnumSet.of(Flag.MOVE));
     }
     
     
@@ -53,16 +55,16 @@ public class StayByWaterGoal extends Goal {
    	//                  Should Execute
    	// ==================================================
 	@Override
-    public boolean shouldExecute() {
+    public boolean canUse() {
     	if(this.host.canBreatheAir())
     		return false;
 
     	// Set home when in water or lava (for lava creatures).
     	if(this.host.isInWater()) {
-    		FluidState fluidState = this.host.getEntityWorld().getFluidState(this.host.getPosition());
-    		if((!this.host.isLavaCreature && fluidState.isTagged(FluidTags.WATER)) ||
-    			(this.host.isLavaCreature && fluidState.isTagged(FluidTags.LAVA))) {
-	    		this.waterPos = this.host.getPosition();
+    		FluidState fluidState = this.host.getCommandSenderWorld().getFluidState(this.host.blockPosition());
+    		if((!this.host.isLavaCreature && fluidState.is(FluidTags.WATER)) ||
+    			(this.host.isLavaCreature && fluidState.is(FluidTags.LAVA))) {
+	    		this.waterPos = this.host.blockPosition();
 	    		this.hasWaterPos = true;
 	    		return false;
     		}
@@ -89,27 +91,27 @@ public class StayByWaterGoal extends Goal {
 	    		int searchRangeX = 32;
 	    		int searchRangeY = 8;
 	    		int searchRangeZ = 32;
-                BlockPos hostPos = this.host.getPosition();
+                BlockPos hostPos = this.host.blockPosition();
 	    		for(int searchX = hostPos.getX() - searchRangeX; searchX <= hostPos.getX() + searchRangeX; ++searchX) {
 	    			for(int searchY = hostPos.getY() - searchRangeY; searchY <= hostPos.getY() + searchRangeY; ++searchY) {
 	    				for(int searchZ = hostPos.getZ() - searchRangeZ; searchZ <= hostPos.getZ() + searchRangeZ; ++searchZ) {
 	    					BlockPos searchPos = new BlockPos(searchX, searchY, searchZ);
 
 	    					// If the block is closer than the last valid location...
-	    					double searchDistance = this.host.getDistanceSq(Vector3d.copy(searchPos));
+	    					double searchDistance = this.host.distanceToSqr(Vector3d.atLowerCornerOf(searchPos));
     		    			if(!this.hasWaterPos || searchDistance < closestDistance) {
 		    					
     		    				// And it is a valid water position...
     		    				if(this.isValidWaterPosition(searchPos)) {
 		    						
     		    					// If the host has a rounded width larger than 1 then check if it can fit in the target block...
-    		    					boolean enoughSpace = Math.round(this.host.getSize(Pose.STANDING).width) <= 1;
+    		    					boolean enoughSpace = Math.round(this.host.getDimensions(Pose.STANDING).width) <= 1;
 		    						if(!enoughSpace) {
 		    							enoughSpace = true;
-			    						int neededSpace = Math.round(this.host.getSize(Pose.STANDING).width + 0.5F);
+			    						int neededSpace = Math.round(this.host.getDimensions(Pose.STANDING).width + 0.5F);
 			    						for(int adjX = searchX - neededSpace; adjX <= searchX + neededSpace; ++adjX) {
 			    							for(int adjZ = searchZ - neededSpace; adjZ <= searchZ + neededSpace; ++adjZ) {
-			    								if(this.host.getEntityWorld().getBlockState(new BlockPos(adjX, searchY, adjZ)).getMaterial().isSolid()) {
+			    								if(this.host.getCommandSenderWorld().getBlockState(new BlockPos(adjX, searchY, adjZ)).getMaterial().isSolid()) {
 			    									enoughSpace = false;
 			    									break;
 			    								}
@@ -136,7 +138,7 @@ public class StayByWaterGoal extends Goal {
     		return false;
     	
     	// If the host has an attack target and plenty of air, then it is allowed to stray from the water position within the limit.
-        if(this.host.hasAttackTarget() && this.host.getAir() > -100 && this.getDistanceFromWater() <= this.strayDistance)
+        if(this.host.hasAttackTarget() && this.host.getAirSupply() > -100 && this.getDistanceFromWater() <= this.strayDistance)
         	return false;
     	
         // At this point the host should return to the water position, if there is one.
@@ -147,11 +149,11 @@ public class StayByWaterGoal extends Goal {
         if(!this.host.canBreatheUnderwater())
             return false;
         if(!this.host.waterDamage()) {
-            if(this.host.getEntityWorld().getBlockState(pos).getMaterial() == Material.WATER)
+            if(this.host.getCommandSenderWorld().getBlockState(pos).getMaterial() == Material.WATER)
                 return true;
         }
         if(this.host.isInvulnerableTo(DamageSource.ON_FIRE) || this.host.isLavaCreature) {
-            if(this.host.getEntityWorld().getBlockState(pos).getMaterial() == Material.LAVA)
+            if(this.host.getCommandSenderWorld().getBlockState(pos).getMaterial() == Material.LAVA)
                 return true;
         }
         return false;
@@ -162,7 +164,7 @@ public class StayByWaterGoal extends Goal {
    	//                     Start
    	// ==================================================
 	@Override
-    public void startExecuting() {
+    public void start() {
         this.updateRate = 0;
     }
     
@@ -175,7 +177,7 @@ public class StayByWaterGoal extends Goal {
         if(this.updateRate-- <= 0) {
             this.updateRate = 20;
 	    	if(!host.useDirectNavigator()) {
-	    		this.host.getNavigator().tryMoveToXYZ(this.waterPos.getX() + 0.5D, this.waterPos.getY(), this.waterPos.getZ() + 0.5D, this.speed);
+	    		this.host.getNavigation().moveTo(this.waterPos.getX() + 0.5D, this.waterPos.getY(), this.waterPos.getZ() + 0.5D, this.speed);
 	    	}
 	    	else
 	    		host.directNavigator.setTargetPosition(this.waterPos, this.speed);
@@ -187,7 +189,7 @@ public class StayByWaterGoal extends Goal {
  	//                       Reset
  	// ==================================================
 	@Override
-    public void resetTask() {
+    public void stop() {
         this.host.clearMovement();
     }
 
@@ -198,6 +200,6 @@ public class StayByWaterGoal extends Goal {
     public double getDistanceFromWater() {
         if(!this.hasWaterPos)
             return 0;
-    	return this.host.getDistanceSq(Vector3d.copy(this.waterPos));
+    	return this.host.distanceToSqr(Vector3d.atLowerCornerOf(this.waterPos));
     }
 }

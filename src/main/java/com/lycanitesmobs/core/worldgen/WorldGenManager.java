@@ -28,8 +28,8 @@ public class WorldGenManager {
 	public AlwaysPlacement alwaysPlacement = new AlwaysPlacement(NoPlacementConfig.CODEC);
 	
 	// Features:
-	public ChunkSpawnFeature chunkSpawnFeature = new ChunkSpawnFeature(NoFeatureConfig.field_236558_a_);
-	public DungeonFeature dungeonFeature = new DungeonFeature(NoFeatureConfig.field_236558_a_);
+	public ChunkSpawnFeature chunkSpawnFeature = new ChunkSpawnFeature(NoFeatureConfig.CODEC);
+	public DungeonFeature dungeonFeature = new DungeonFeature(NoFeatureConfig.CODEC);
 
 	@SubscribeEvent
 	public void registerPlacements(RegistryEvent.Register<Placement<?>> event) {

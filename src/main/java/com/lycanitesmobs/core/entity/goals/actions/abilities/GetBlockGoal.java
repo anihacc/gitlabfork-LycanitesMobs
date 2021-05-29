@@ -15,6 +15,8 @@ import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 
+import net.minecraft.entity.ai.goal.Goal.Flag;
+
 public class GetBlockGoal extends Goal {
 	// Targets:
 	private BaseCreatureEntity host;
@@ -38,7 +40,7 @@ public class GetBlockGoal extends Goal {
   	// ==================================================
     public GetBlockGoal(BaseCreatureEntity setHost) {
         super();
-		this.setMutexFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
+		this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
         this.host = setHost;
         this.targetSorter = new TargetSorterNearest(setHost);
     }
@@ -82,11 +84,11 @@ public class GetBlockGoal extends Goal {
   	//                  Should Execute
   	// ==================================================
 	@Override
-    public boolean shouldExecute() {
-    	if(!this.host.canPickupItems() || !this.host.getEntityWorld().getGameRules().getBoolean(GameRules.MOB_GRIEFING))
+    public boolean canUse() {
+    	if(!this.host.canPickupItems() || !this.host.getCommandSenderWorld().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING))
     		return false;
     	
-    	if(!this.host.getEntityWorld().getGameRules().getBoolean(GameRules.MOB_GRIEFING))
+    	if(!this.host.getCommandSenderWorld().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING))
     		return false;
 
     	if(!this.tamedLooting) {
@@ -105,10 +107,10 @@ public class GetBlockGoal extends Goal {
     	
         int heightDistance = 2;
         List<BlockPos> possibleTargets = new ArrayList<BlockPos>();
-        for(int x = (int)this.host.getPositionVec().getX() - this.distanceMax; x < (int)this.host.getPositionVec().getX() + this.distanceMax; x++) {
-        	for(int y = (int)this.host.getPositionVec().getY() - heightDistance; y < (int)this.host.getPositionVec().getY() + heightDistance; y++) {
-        		for(int z = (int)this.host.getPositionVec().getZ() - this.distanceMax; z < (int)this.host.getPositionVec().getZ() + this.distanceMax; z++) {
-        			Block searchBlock = this.host.getEntityWorld().getBlockState(new BlockPos(x, y, z)).getBlock();
+        for(int x = (int)this.host.position().x() - this.distanceMax; x < (int)this.host.position().x() + this.distanceMax; x++) {
+        	for(int y = (int)this.host.position().y() - heightDistance; y < (int)this.host.position().y() + heightDistance; y++) {
+        		for(int z = (int)this.host.position().z() - this.distanceMax; z < (int)this.host.position().z() + this.distanceMax; z++) {
+        			Block searchBlock = this.host.getCommandSenderWorld().getBlockState(new BlockPos(x, y, z)).getBlock();
                 	if(searchBlock != null && searchBlock != Blocks.AIR && searchBlock != Blocks.REDSTONE_TORCH) {
                         BlockPos possibleTarget = null;
                 		if(!"".equalsIgnoreCase(this.targetBlockName)) {
@@ -133,7 +135,7 @@ public class GetBlockGoal extends Goal {
         Collections.sort(possibleTargets, this.targetSorter);
         this.target = possibleTargets.get(0);
         
-        return this.shouldContinueExecuting();
+        return this.canContinueToUse();
     }
     
     
@@ -141,14 +143,14 @@ public class GetBlockGoal extends Goal {
  	//                  Continue Executing
  	// ==================================================
 	@Override
-    public boolean shouldContinueExecuting() {
+    public boolean canContinueToUse() {
     	if(this.target == null)
             return false;
     	
-    	if(!this.host.getEntityWorld().getGameRules().getBoolean(GameRules.MOB_GRIEFING))
+    	if(!this.host.getCommandSenderWorld().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING))
     		return false;
         
-        double distance = this.host.getDistanceSq(this.target.getX(), this.target.getY(), this.target.getZ());
+        double distance = this.host.distanceToSqr(this.target.getX(), this.target.getY(), this.target.getZ());
         if(distance > this.distanceMax)
         	return false;
         
@@ -166,7 +168,7 @@ public class GetBlockGoal extends Goal {
  	//                      Reset
  	// ==================================================
 	@Override
-    public void resetTask() {
+    public void stop() {
         this.target = null;
         this.host.clearMovement();
     }
@@ -176,7 +178,7 @@ public class GetBlockGoal extends Goal {
   	//                       Start
   	// ==================================================
 	@Override
-    public void startExecuting() {
+    public void start() {
         this.updateRate = 0;
     }
     
@@ -189,7 +191,7 @@ public class GetBlockGoal extends Goal {
         if(this.updateRate-- <= 0) {
             this.updateRate = 10;
         	if(!this.host.useDirectNavigator())
-        		this.host.getNavigator().tryMoveToXYZ(this.target.getX(), this.target.getY(), this.target.getZ(), this.speed);
+        		this.host.getNavigation().moveTo(this.target.getX(), this.target.getY(), this.target.getZ(), this.speed);
         	else
         		this.host.directNavigator.setTargetPosition(this.target, this.speed);
         }

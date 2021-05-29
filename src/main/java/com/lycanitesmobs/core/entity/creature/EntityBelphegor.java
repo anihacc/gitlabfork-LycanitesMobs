@@ -22,7 +22,7 @@ import java.util.List;
 public class EntityBelphegor extends TameableCreatureEntity implements IMob {
 
     // Data Manager:
-    protected static final DataParameter<Integer> HELLFIRE_ENERGY = EntityDataManager.createKey(EntityBelphegor.class, DataSerializers.VARINT);
+    protected static final DataParameter<Integer> HELLFIRE_ENERGY = EntityDataManager.defineId(EntityBelphegor.class, DataSerializers.INT);
 
     public int hellfireEnergy = 0;
     public List<EntityHellfireOrb> hellfireOrbs = new ArrayList<>();
@@ -49,18 +49,18 @@ public class EntityBelphegor extends TameableCreatureEntity implements IMob {
         this.goalSelector.addGoal(this.nextDistractionGoalIndex++, new BreakDoorGoal(this));
         this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackRangedGoal(this).setSpeed(1.0D).setRange(16.0F).setMinChaseDistance(8.0F).setChaseTime(-1));
 
-        if(this.getNavigator() instanceof GroundPathNavigator) {
-            GroundPathNavigator pathNavigateGround = (GroundPathNavigator)this.getNavigator();
-            pathNavigateGround.setBreakDoors(true);
+        if(this.getNavigation() instanceof GroundPathNavigator) {
+            GroundPathNavigator pathNavigateGround = (GroundPathNavigator)this.getNavigation();
+            pathNavigateGround.setCanOpenDoors(true);
         }
     }
 
     // ========== Init ==========
     /** Initiates the entity setting all the values to be watched by the datawatcher. **/
     @Override
-    protected void registerData() {
-        super.registerData();
-        this.dataManager.register(HELLFIRE_ENERGY, this.hellfireEnergy);
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(HELLFIRE_ENERGY, this.hellfireEnergy);
     }
 
 
@@ -69,22 +69,22 @@ public class EntityBelphegor extends TameableCreatureEntity implements IMob {
     // ==================================================
     // ========== Living Update ==========
     @Override
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
 
         // Sync Hellfire Energy:
-        if (!this.getEntityWorld().isRemote) {
-            this.dataManager.set(HELLFIRE_ENERGY, this.hellfireEnergy);
+        if (!this.getCommandSenderWorld().isClientSide) {
+            this.entityData.set(HELLFIRE_ENERGY, this.hellfireEnergy);
         }
         else {
             try {
-                this.hellfireEnergy = this.dataManager.get(HELLFIRE_ENERGY);
+                this.hellfireEnergy = this.entityData.get(HELLFIRE_ENERGY);
             }
             catch(Exception e) {}
         }
 
         // Hellfire Update:
-        if(this.getEntityWorld().isRemote && this.hellfireEnergy > 0)
+        if(this.getCommandSenderWorld().isClientSide && this.hellfireEnergy > 0)
             EntityRahovart.updateHellfireOrbs(this, this.updateTick, 3, this.hellfireEnergy, 0.5F, this.hellfireOrbs);
     }
     

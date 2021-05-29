@@ -48,11 +48,11 @@ public class EntityArisaur extends AgeableCreatureEntity implements IGroupHeavy 
 	// ========== Pathing Weight ==========
 	@Override
 	public float getBlockPathWeight(int x, int y, int z) {
-		if(this.getEntityWorld().getBlockState(new BlockPos(x, y - 1, z)).getBlock() != Blocks.AIR) {
-			BlockState blocState = this.getEntityWorld().getBlockState(new BlockPos(x, y - 1, z));
-			if(blocState.getMaterial() == Material.ORGANIC)
+		if(this.getCommandSenderWorld().getBlockState(new BlockPos(x, y - 1, z)).getBlock() != Blocks.AIR) {
+			BlockState blocState = this.getCommandSenderWorld().getBlockState(new BlockPos(x, y - 1, z));
+			if(blocState.getMaterial() == Material.GRASS)
 				return 10F;
-			if(blocState.getMaterial() == Material.EARTH)
+			if(blocState.getMaterial() == Material.DIRT)
 				return 7F;
 		}
         return super.getBlockPathWeight(x, y, z);
@@ -66,7 +66,7 @@ public class EntityArisaur extends AgeableCreatureEntity implements IGroupHeavy 
     public int getBagSize() { return this.creatureInfo.BagSize; }
 	// ========== Can leash ==========
     @Override
-    public boolean canBeLeashedTo(PlayerEntity player) {
+    public boolean canBeLeashed(PlayerEntity player) {
 	    return true;
     }
 }

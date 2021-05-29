@@ -57,10 +57,10 @@ public class EntityMaka extends AgeableCreatureEntity {
         CreatureInfo alphaInfo = CreatureManager.getInstance().getCreature("makaalpha");
         if(alphaInfo != null) {
             float alphaChance = (float)alphaInfo.creatureSpawn.spawnWeight / Math.max(this.creatureInfo.creatureSpawn.spawnWeight, 1);
-            if (this.getRNG().nextFloat() <= alphaChance) {
-				EntityMakaAlpha alpha = (EntityMakaAlpha)CreatureManager.getInstance().getCreature("makaalpha").createEntity(this.getEntityWorld());
-                alpha.copyLocationAndAnglesFrom(this);
-                this.getEntityWorld().addEntity(alpha);
+            if (this.getRandom().nextFloat() <= alphaChance) {
+				EntityMakaAlpha alpha = (EntityMakaAlpha)CreatureManager.getInstance().getCreature("makaalpha").createEntity(this.getCommandSenderWorld());
+                alpha.copyPosition(this);
+                this.getCommandSenderWorld().addFreshEntity(alpha);
                 this.remove();
             }
         }
@@ -74,12 +74,12 @@ public class EntityMaka extends AgeableCreatureEntity {
 	// ========== Pathing Weight ==========
 	@Override
 	public float getBlockPathWeight(int x, int y, int z) {
-        BlockState blockState = this.getEntityWorld().getBlockState(new BlockPos(x, y - 1, z));
+        BlockState blockState = this.getCommandSenderWorld().getBlockState(new BlockPos(x, y - 1, z));
         Block block = blockState.getBlock();
 		if(block != Blocks.AIR) {
-			if(blockState.getMaterial() == Material.ORGANIC)
+			if(blockState.getMaterial() == Material.GRASS)
 				return 10F;
-			if(blockState.getMaterial() == Material.EARTH)
+			if(blockState.getMaterial() == Material.DIRT)
 				return 7F;
 		}
         return super.getBlockPathWeight(x, y, z);
@@ -87,7 +87,7 @@ public class EntityMaka extends AgeableCreatureEntity {
     
 	// ========== Can leash ==========
     @Override
-    public boolean canBeLeashedTo(PlayerEntity player) {
+    public boolean canBeLeashed(PlayerEntity player) {
 	    return true;
     }
 
@@ -116,10 +116,10 @@ public class EntityMaka extends AgeableCreatureEntity {
 	@Override
 	public void setGrowingAge(int age) {
 		if(age == 0 && this.getAge() < 0) {
-            if (this.getRNG().nextFloat() >= 0.9F) {
-				EntityMakaAlpha alpha = (EntityMakaAlpha)CreatureManager.getInstance().getCreature("makaalpha").createEntity(this.getEntityWorld());
-                alpha.copyLocationAndAnglesFrom(this);
-                this.getEntityWorld().addEntity(alpha);
+            if (this.getRandom().nextFloat() >= 0.9F) {
+				EntityMakaAlpha alpha = (EntityMakaAlpha)CreatureManager.getInstance().getCreature("makaalpha").createEntity(this.getCommandSenderWorld());
+                alpha.copyPosition(this);
+                this.getCommandSenderWorld().addFreshEntity(alpha);
                 this.remove();
             }
         }

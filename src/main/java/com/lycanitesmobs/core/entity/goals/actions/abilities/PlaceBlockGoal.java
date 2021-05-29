@@ -9,6 +9,8 @@ import net.minecraft.util.math.vector.Vector3d;
 
 import java.util.EnumSet;
 
+import net.minecraft.entity.ai.goal.Goal.Flag;
+
 public class PlaceBlockGoal extends Goal {
 	// Targets:
     private BaseCreatureEntity host;
@@ -31,7 +33,7 @@ public class PlaceBlockGoal extends Goal {
    	// ==================================================
     public PlaceBlockGoal(BaseCreatureEntity setHost) {
     	this.host = setHost;
-		this.setMutexFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
+		this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
     }
     
     
@@ -73,7 +75,7 @@ public class PlaceBlockGoal extends Goal {
    	//                  Should Execute
    	// ==================================================
 	@Override
-    public boolean shouldExecute() {
+    public boolean canUse() {
         if(this.blockState == null)
             return false;
         
@@ -90,9 +92,9 @@ public class PlaceBlockGoal extends Goal {
    	//                     Start
    	// ==================================================
 	@Override
-    public void startExecuting() {
+    public void start() {
     	if(!host.useDirectNavigator())
-    		this.host.getNavigator().tryMoveToXYZ(this.pos.getX(), this.pos.getY(), this.pos.getZ(), this.speed);
+    		this.host.getNavigation().moveTo(this.pos.getX(), this.pos.getY(), this.pos.getZ(), this.speed);
     	else
     		host.directNavigator.setTargetPosition(this.pos, this.speed);
     }
@@ -102,8 +104,8 @@ public class PlaceBlockGoal extends Goal {
  	//                       Reset
  	// ==================================================
 	@Override
-    public void resetTask() {
-        this.host.getNavigator().clearPath();
+    public void stop() {
+        this.host.getNavigation().stop();
         this.host.directNavigator.clearTargetPosition(1.0D);
         this.blockState = null;
     }
@@ -117,22 +119,22 @@ public class PlaceBlockGoal extends Goal {
     	if(this.repathTime-- <= 0) {
     		this.repathTime = 20;
     		if(!host.useDirectNavigator())
-        		this.host.getNavigator().tryMoveToXYZ(this.pos.getX(), this.pos.getY(), this.pos.getZ(), this.speed);
+        		this.host.getNavigation().moveTo(this.pos.getX(), this.pos.getY(), this.pos.getZ(), this.speed);
         	else
         		host.directNavigator.setTargetPosition(this.pos, this.speed);
     	}
     	
-        this.host.getLookController().setLookPosition(this.pos.getX(), this.pos.getY(), this.pos.getZ(), 30.0F, 30.0F);
+        this.host.getLookControl().setLookAt(this.pos.getX(), this.pos.getY(), this.pos.getZ(), 30.0F, 30.0F);
         
         // Place Block:
-        if(this.host.getDistanceSq(new Vector3d(this.pos.getX(), this.pos.getY(), this.pos.getZ())) <= this.range * this.range) {
-        	this.host.getEntityWorld().setBlockState(this.pos, this.blockState, 3);
+        if(this.host.distanceToSqr(new Vector3d(this.pos.getX(), this.pos.getY(), this.pos.getZ())) <= this.range * this.range) {
+        	this.host.getCommandSenderWorld().setBlock(this.pos, this.blockState, 3);
             this.blockState = null;
             this.host.clearMovement();
         }
         
         // Cancel If Too Far:
-        if(this.host.getDistanceSq(new Vector3d(this.pos.getX(), this.pos.getY(), this.pos.getZ())) >= this.maxDistance * this.maxDistance) {
+        if(this.host.distanceToSqr(new Vector3d(this.pos.getX(), this.pos.getY(), this.pos.getZ())) >= this.maxDistance * this.maxDistance) {
             this.blockState = null;
             this.host.clearMovement();
         }
@@ -143,15 +145,15 @@ public class PlaceBlockGoal extends Goal {
    	//                  Can Place Block
    	// ==================================================
     public boolean canPlaceBlock(BlockPos pos) {
-    	BlockState targetState = this.host.getEntityWorld().getBlockState(pos);
+    	BlockState targetState = this.host.getCommandSenderWorld().getBlockState(pos);
 		if(targetState.getMaterial() == Material.WATER || targetState.getMaterial() == Material.LAVA) {
 			if(!this.replaceLiquid)
 				return false;
 		}
 		else if(targetState.getMaterial() != Material.AIR && !this.replaceSolid)
 			return false;
-		if(!this.host.useDirectNavigator() && this.host.getNavigator() != null) {
-			if(this.host.getNavigator().getPathToPos(pos, 0) == null)
+		if(!this.host.useDirectNavigator() && this.host.getNavigation() != null) {
+			if(this.host.getNavigation().createPath(pos, 0) == null)
 				return false;
 		}
 		return true;

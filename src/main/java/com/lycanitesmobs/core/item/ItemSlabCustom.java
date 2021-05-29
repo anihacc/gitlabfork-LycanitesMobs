@@ -25,7 +25,7 @@ public class ItemSlabCustom extends BlockItem
         super(block, properties);
         this.singleSlab = singleSlab;
         this.doubleSlab = doubleSlab;
-        properties.maxDamage(0);
+        properties.durability(0);
         this.setRegistryName(block.getRegistryName());
     }
 
@@ -33,13 +33,13 @@ public class ItemSlabCustom extends BlockItem
      * Returns the unlocalized name of this item. This version accepts an ItemStack so different stacks can have
      * different names based on their damage or NBT.
      */
-    public String getTranslationKey(ItemStack stack) {
-        return this.singleSlab.getTranslationKey();
+    public String getDescriptionId(ItemStack stack) {
+        return this.singleSlab.getDescriptionId();
     }
 
     @Override
-    public ITextComponent getDisplayName(ItemStack stack) {
-        return this.singleSlab.getTranslatedName();
+    public ITextComponent getName(ItemStack stack) {
+        return this.singleSlab.getName();
     }
 
     /**
@@ -129,6 +129,6 @@ public class ItemSlabCustom extends BlockItem
     }*/
 
     protected <T extends Comparable<T>> BlockState makeState(Property<T> p_185055_1_, Comparable<?> p_185055_2_) {
-        return this.doubleSlab.getDefaultState();//.withProperty(p_185055_1_, (T)p_185055_2_);
+        return this.doubleSlab.defaultBlockState();//.withProperty(p_185055_1_, (T)p_185055_2_);
     }
 }

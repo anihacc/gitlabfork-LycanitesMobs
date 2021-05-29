@@ -52,13 +52,13 @@ public class EntityHellfireWall extends BaseProjectileEntity {
         this.projectileLife = 2 * 20;
         this.animationFrameMax = 59;
         this.textureTiling = 2;
-        this.noClip = true;
+        this.noPhysics = true;
         this.waterProof = true;
         this.lavaProof = true;
     }
 
     @Override
-    public boolean isBurning() { return false; }
+    public boolean isOnFire() { return false; }
 
 
     // ==================================================
@@ -68,12 +68,12 @@ public class EntityHellfireWall extends BaseProjectileEntity {
     public void tick() {
     	super.tick();
 
-    	if (!this.getEntityWorld().isRemote) {
-            List list = this.getEntityWorld().getEntitiesWithinAABBExcludingEntity(this, this.getBoundingBox().grow(this.getMotion().getX(), this.getMotion().getY(), this.getMotion().getZ()).expand(1.0D, 1.0D, 1.0D));
+    	if (!this.getCommandSenderWorld().isClientSide) {
+            List list = this.getCommandSenderWorld().getEntities(this, this.getBoundingBox().inflate(this.getDeltaMovement().x(), this.getDeltaMovement().y(), this.getDeltaMovement().z()).expandTowards(1.0D, 1.0D, 1.0D));
 
             for (int j = 0; j < list.size(); ++j) {
                 Entity entity = (Entity)list.get(j);
-                this.onImpact(new EntityRayTraceResult(entity));
+                this.onHit(new EntityRayTraceResult(entity));
             }
         }
     }
@@ -82,7 +82,7 @@ public class EntityHellfireWall extends BaseProjectileEntity {
     @Override
     public boolean onEntityLivingDamage(LivingEntity entityLiving) {
     	if(!entityLiving.isInvulnerableTo(DamageSource.ON_FIRE))
-    		entityLiving.setFire(this.getEffectDuration(10) / 20);
+    		entityLiving.setSecondsOnFire(this.getEffectDuration(10) / 20);
     	return true;
     }
 
@@ -102,9 +102,9 @@ public class EntityHellfireWall extends BaseProjectileEntity {
     public void onDamage(LivingEntity target, float damage, boolean attackSuccess) {
 
         // Remove Good Potion Effects:
-        for(EffectInstance potionEffect : target.getActivePotionEffects().toArray(new EffectInstance[target.getActivePotionEffects().size()])) {
-            if(ObjectLists.inEffectList("buffs", potionEffect.getPotion()))
-                target.removePotionEffect(potionEffect.getPotion());
+        for(EffectInstance potionEffect : target.getActiveEffects().toArray(new EffectInstance[target.getActiveEffects().size()])) {
+            if(ObjectLists.inEffectList("buffs", potionEffect.getEffect()))
+                target.removeEffect(potionEffect.getEffect());
         }
 
         boolean obliterate = true;

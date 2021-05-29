@@ -98,13 +98,13 @@ public class DungeonInstance {
 				this.schematic = schematics.get(0);
 			}
 			else {
-				this.schematic = schematics.get(this.world.rand.nextInt(schematics.size()));
+				this.schematic = schematics.get(this.world.random.nextInt(schematics.size()));
 			}
 		}
 
 		// Get Seed:
 		if(this.seed == 0) {
-			this.seed = world.rand.nextLong();
+			this.seed = world.random.nextLong();
 		}
 		this.random = new Random(this.seed);
 
@@ -119,7 +119,7 @@ public class DungeonInstance {
 		// Mark For Save:
 		ExtendedWorld extendedWorld = ExtendedWorld.getForWorld(world);
 		if(extendedWorld != null) {
-			extendedWorld.markDirty();
+			extendedWorld.setDirty();
 		}
 
 		return true;
@@ -173,7 +173,7 @@ public class DungeonInstance {
 	 * @param nbtTagCompound The NBT Data to read from.
 	 */
 	public void readFromNBT(CompoundNBT nbtTagCompound) {
-		this.uuid = nbtTagCompound.getUniqueId("Id");
+		this.uuid = nbtTagCompound.getUUID("Id");
 		this.schematic = DungeonManager.getInstance().getSchematic(nbtTagCompound.getString("Schematic"));
 		this.seed = nbtTagCompound.getLong("Seed");
 		this.complete = nbtTagCompound.getBoolean("Complete");
@@ -200,7 +200,7 @@ public class DungeonInstance {
 		if(this.uuid == null || this.schematic == null)
 			return null;
 
-		nbtTagCompound.putUniqueId("Id", this.uuid);
+		nbtTagCompound.putUUID("Id", this.uuid);
 		nbtTagCompound.putString("Schematic", this.schematic.name);
 		nbtTagCompound.putLong("Seed", this.seed);
 		nbtTagCompound.putBoolean("Complete", this.complete);

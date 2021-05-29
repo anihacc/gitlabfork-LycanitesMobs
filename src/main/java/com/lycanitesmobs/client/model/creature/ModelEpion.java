@@ -53,7 +53,7 @@ public class ModelEpion extends CreatureObjModel {
 			rotZ += Math.toDegrees(MathHelper.cos(loop * 0.18F) * 0.05F + 0.05F);
 			rotX += Math.toDegrees(MathHelper.sin(loop * 0.067F) * 0.05F);
 		}
-		if(entity.isBeingRidden()) {
+		if(entity.isVehicle()) {
 			if(partName.equals("earleft") || partName.equals("earright")) {
 				rotX -= 30;
 			}
@@ -81,7 +81,7 @@ public class ModelEpion extends CreatureObjModel {
 		// Flying:
 		else {
 			if (partName.equals("body")) {
-				float bob = -MathHelper.sin(loop * 0.2F) * (entity.isBeingRidden() ? 0.1F : 0.6F);
+				float bob = -MathHelper.sin(loop * 0.2F) * (entity.isVehicle() ? 0.1F : 0.6F);
 				if (bob < 0) bob = -bob;
 				posY += bob;
 			}

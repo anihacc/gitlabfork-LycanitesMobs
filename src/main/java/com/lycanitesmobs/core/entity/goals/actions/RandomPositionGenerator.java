@@ -24,11 +24,11 @@ public class RandomPositionGenerator {
 
     // ========== Find Random Waypoint to Target ==========
     public static Vector3d findRandomTargetTowards(BaseCreatureEntity entity, int range, int height, Vector3d par3Vector3d) {
-        staticVector = new Vector3d(par3Vector3d.x - entity.getPositionVec().getX(), par3Vector3d.y - entity.getPositionVec().getY(), par3Vector3d.z - entity.getPositionVec().getZ());
+        staticVector = new Vector3d(par3Vector3d.x - entity.position().x(), par3Vector3d.y - entity.position().y(), par3Vector3d.z - entity.position().z());
         return findRandomTargetTowards(entity, range, height, staticVector, 0);
     }
     public static Vector3d findRandomTargetTowards(BaseCreatureEntity entity, int range, int height, Vector3d par3Vector3d, int heightLevel) {
-        staticVector = new Vector3d(par3Vector3d.x - entity.getPositionVec().getX(), par3Vector3d.y - entity.getPositionVec().getY(), par3Vector3d.z - entity.getPositionVec().getZ());
+        staticVector = new Vector3d(par3Vector3d.x - entity.position().x(), par3Vector3d.y - entity.position().y(), par3Vector3d.z - entity.position().z());
         return getTargetBlock(entity, range, height, staticVector, heightLevel);
     }
 
@@ -37,14 +37,14 @@ public class RandomPositionGenerator {
         return findRandomTargetAwayFrom(entity, range, height, avoidTarget, 0);
     }
     public static Vector3d findRandomTargetAwayFrom(BaseCreatureEntity entity, int range, int height, Vector3d avoidTarget, int heightLevel) {
-        staticVector = new Vector3d(entity.getPositionVec().getX(), entity.getPositionVec().getY(), entity.getPositionVec().getZ()).subtract(avoidTarget);
+        staticVector = new Vector3d(entity.position().x(), entity.position().y(), entity.position().z()).subtract(avoidTarget);
         return getTargetBlock(entity, range, height, staticVector, heightLevel);
     }
 
     // ========== Get Target Block ==========
     private static Vector3d getTargetBlock(BaseCreatureEntity entity, int range, int height, Vector3d target, int heightLevel) {
-        PathNavigator pathNavigate = entity.getNavigator();
-        Random random = entity.getRNG();
+        PathNavigator pathNavigate = entity.getNavigation();
+        Random random = entity.getRandom();
         boolean validTarget = false;
         int targetX = 0;
         int targetY = 0;
@@ -53,7 +53,7 @@ public class RandomPositionGenerator {
         boolean pastHome;
 
         if(entity.hasHome()) {
-            double homeDist = (entity.getHomePosition().distanceSq(entity.getPosition()) + 4.0F);
+            double homeDist = (entity.getRestrictCenter().distSqr(entity.blockPosition()) + 4.0F);
             double homeDistMax = (double)(entity.getHomeDistanceMax() + (float)range);
             pastHome = homeDist < homeDistMax * homeDistMax;
         }
@@ -67,19 +67,19 @@ public class RandomPositionGenerator {
 
             // Random Height:
             if(entity.isFlying() || (entity.isStrongSwimmer() && entity.isInWater())) {
-	            if(entity.getPositionVec().getY() > entity.getEntityWorld().getHeight(Heightmap.Type.OCEAN_FLOOR, entity.getPosition()).getY() + (heightLevel * 1.25))
+	            if(entity.position().y() > entity.getCommandSenderWorld().getHeightmapPos(Heightmap.Type.OCEAN_FLOOR, entity.blockPosition()).getY() + (heightLevel * 1.25))
 	        		possibleY = random.nextInt(2 * height) - height * 3 / 2;
-	            else if(entity.getPositionVec().getY() < entity.getEntityWorld().getHeight(Heightmap.Type.OCEAN_FLOOR, entity.getPosition()).getY() + heightLevel)
+	            else if(entity.position().y() < entity.getCommandSenderWorld().getHeightmapPos(Heightmap.Type.OCEAN_FLOOR, entity.blockPosition()).getY() + heightLevel)
 	            	possibleY = random.nextInt(2 * height) - height / 2;
             }
 
             if(target == null || (double)possibleX * target.x + (double)possibleZ * target.z >= 0.0D) {
-            	possibleX += MathHelper.floor(entity.getPositionVec().getX());
-            	possibleY += MathHelper.floor(entity.getPositionVec().getY());
-            	possibleZ += MathHelper.floor(entity.getPositionVec().getZ());
+            	possibleX += MathHelper.floor(entity.position().x());
+            	possibleY += MathHelper.floor(entity.position().y());
+            	possibleZ += MathHelper.floor(entity.position().z());
                 BlockPos possiblePos = new BlockPos(possibleX, possibleY, possibleZ);
 
-                if((!pastHome || entity.positionNearHome(possibleX, possibleY, possibleZ)) && (entity.useDirectNavigator() || pathNavigate.canEntityStandOnPos(possiblePos))) {
+                if((!pastHome || entity.positionNearHome(possibleX, possibleY, possibleZ)) && (entity.useDirectNavigator() || pathNavigate.isStableDestination(possiblePos))) {
                     float pathWeight = entity.getBlockPathWeight(possibleX, possibleY, possibleZ);
                     if(pathWeight > pathMin) {
                     	pathMin = pathWeight;

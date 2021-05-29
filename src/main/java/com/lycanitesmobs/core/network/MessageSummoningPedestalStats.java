@@ -40,7 +40,7 @@ public class MessageSummoningPedestalStats {
 			return;
 
 		PlayerEntity player = ClientManager.getInstance().getClientPlayer();
-        TileEntity tileEntity = player.getEntityWorld().getTileEntity(new BlockPos(message.x, message.y, message.z));
+        TileEntity tileEntity = player.getCommandSenderWorld().getBlockEntity(new BlockPos(message.x, message.y, message.z));
         TileEntitySummoningPedestal summoningPedestal = null;
         if(tileEntity instanceof TileEntitySummoningPedestal)
             summoningPedestal = (TileEntitySummoningPedestal)tileEntity;

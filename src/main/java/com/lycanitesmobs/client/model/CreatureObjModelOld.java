@@ -97,7 +97,7 @@ public class CreatureObjModelOld extends CreatureModel {
 
     	boolean isChild = false;
 		if(entity != null) {
-			isChild = entity.isChild();
+			isChild = entity.isBaby();
 		}
 
         // Assess Scale and Check if Trophy:
@@ -108,7 +108,7 @@ public class CreatureObjModelOld extends CreatureModel {
 		}
 		else {
 			if(entity != null) {
-                scale *= entity.getRenderScale();
+                scale *= entity.getScale();
             }
 		}
 
@@ -136,7 +136,7 @@ public class CreatureObjModelOld extends CreatureModel {
                 continue;
 
             // Begin Rendering Part:
-			matrixStack.push();
+			matrixStack.pushPose();
 
             // Apply Initial Offsets: (To Match Blender OBJ Export)
             this.doAngle(modelXRotOffset, 1F, 0F, 0F);
@@ -185,8 +185,8 @@ public class CreatureObjModelOld extends CreatureModel {
 
             // Render:
             this.uncenterPart(partName);
-			this.objModel.renderPart(vertexBuilder, matrixStack.getLast().getNormal(), matrixStack.getLast().getMatrix(), this.getBrightness(partName, layer, entity, brightness), fade, part, this.getPartColor(partName, entity, layer, trophyModel, loop), this.getPartTextureOffset(partName, entity, layer, trophyModel, loop));
-			matrixStack.pop();
+			this.objModel.renderPart(vertexBuilder, matrixStack.last().normal(), matrixStack.last().pose(), this.getBrightness(partName, layer, entity, brightness), fade, part, this.getPartColor(partName, entity, layer, trophyModel, loop), this.getPartTextureOffset(partName, entity, layer, trophyModel, loop));
+			matrixStack.popPose();
 		}
 	}
 

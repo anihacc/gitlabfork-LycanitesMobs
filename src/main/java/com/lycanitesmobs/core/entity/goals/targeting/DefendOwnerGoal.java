@@ -9,6 +9,8 @@ import net.minecraft.entity.passive.TameableEntity;
 
 import java.util.EnumSet;
 
+import net.minecraft.entity.ai.goal.Goal.Flag;
+
 public class DefendOwnerGoal extends TargetingGoal {
 	// Properties:
 	private TameableCreatureEntity tamedHost;
@@ -19,7 +21,7 @@ public class DefendOwnerGoal extends TargetingGoal {
     public DefendOwnerGoal(TameableCreatureEntity setHost) {
         super(setHost);
     	this.tamedHost = setHost;
-		this.setMutexFlags(EnumSet.of(Flag.TARGET));
+		this.setFlags(EnumSet.of(Flag.TARGET));
     }
     
     
@@ -46,9 +48,9 @@ public class DefendOwnerGoal extends TargetingGoal {
  	//                    Host Target
  	// ==================================================
     @Override
-    protected LivingEntity getTarget() { return this.host.getAttackTarget(); }
+    protected LivingEntity getTarget() { return this.host.getTarget(); }
     @Override
-    protected void setTarget(LivingEntity newTarget) { this.host.setAttackTarget(newTarget); }
+    protected void setTarget(LivingEntity newTarget) { this.host.setTarget(newTarget); }
     protected Entity getOwner() { return this.tamedHost.getPlayerOwner(); }
     
     
@@ -74,14 +76,14 @@ public class DefendOwnerGoal extends TargetingGoal {
             return false;
     	
     	// Team Checks:
-        if(this.host.isOnSameTeam(target)) {
+        if(this.host.isAlliedTo(target)) {
             return false;
         }
 
         // LivingEntity Check:
 		if(target instanceof MobEntity) {
 			MobEntity mobEntity = (MobEntity)target;
-			if(!mobEntity.canAttack(EntityType.PLAYER)) {
+			if(!mobEntity.canAttackType(EntityType.PLAYER)) {
 				return false;
 			}
 		}
@@ -98,10 +100,10 @@ public class DefendOwnerGoal extends TargetingGoal {
         else if(target instanceof BaseCreatureEntity && ((BaseCreatureEntity)target).isHostileTo(this.getOwner())) {
             return true;
         }
-        else if(target instanceof MobEntity && ((MobEntity)target).getAttackTarget() == this.getOwner()) {
+        else if(target instanceof MobEntity && ((MobEntity)target).getTarget() == this.getOwner()) {
             return true;
         }
-		else if(target.getRevengeTarget() == this.getOwner()) {
+		else if(target.getLastHurtByMob() == this.getOwner()) {
 			return true;
 		}
         
@@ -113,7 +115,7 @@ public class DefendOwnerGoal extends TargetingGoal {
   	//                   Should Execute
   	// ==================================================
     @Override
-    public boolean shouldExecute() {
+    public boolean canUse() {
     	this.target = null;
     	
     	// Owner Check:
@@ -128,8 +130,8 @@ public class DefendOwnerGoal extends TargetingGoal {
     	if(!this.host.isAggressive())
             return false;
         
-        double distance = this.getTargetDistance() - this.host.getSize(Pose.STANDING).width;
-        double heightDistance = 4.0D - this.host.getSize(Pose.STANDING).height;
+        double distance = this.getTargetDistance() - this.host.getDimensions(Pose.STANDING).width;
+        double heightDistance = 4.0D - this.host.getDimensions(Pose.STANDING).height;
         if(this.host.useDirectNavigator())
             heightDistance = distance;
         this.target = this.getNewTarget(distance, heightDistance, distance);
@@ -143,9 +145,9 @@ public class DefendOwnerGoal extends TargetingGoal {
 	//                  Continue Executing
 	// ==================================================
 	@Override
-	public boolean shouldContinueExecuting() {
+	public boolean canContinueToUse() {
 		if(!this.isValidTarget(this.getTarget()))
 			return false;
-		return super.shouldContinueExecuting();
+		return super.canContinueToUse();
 	}
 }

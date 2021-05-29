@@ -37,7 +37,7 @@ public class ArenaNode {
             return null;
         if(adjacentNodesSize == 1)
             return this.adjacentNodes.get(0);
-        return this.adjacentNodes.get(this.world.rand.nextInt(adjacentNodesSize));
+        return this.adjacentNodes.get(this.world.random.nextInt(adjacentNodesSize));
     }
 
     public ArenaNode getClosestAdjacentNode(BlockPos targetPos) {
@@ -46,10 +46,10 @@ public class ArenaNode {
             return null;
         if(adjacentNodesSize == 1)
             return this.adjacentNodes.get(0);
-        double smallestDistance = this.pos.distanceSq(targetPos);
+        double smallestDistance = this.pos.distSqr(targetPos);
         ArenaNode closestNode = this;
         for(ArenaNode adjacentNode : this.adjacentNodes) {
-            double distance = adjacentNode.pos.distanceSq(targetPos);
+            double distance = adjacentNode.pos.distSqr(targetPos);
             if(distance < smallestDistance) {
                 smallestDistance = distance;
                 closestNode = adjacentNode;

@@ -67,13 +67,13 @@ public class EntityIka extends AgeableCreatureEntity {
     public float getBlockPathWeight(int x, int y, int z) {
         int waterWeight = 10;
         BlockPos pos = new BlockPos(x, y, z);
-        BlockState blockState = this.getEntityWorld().getBlockState(pos);
+        BlockState blockState = this.getCommandSenderWorld().getBlockState(pos);
         if(blockState.getBlock() == Blocks.WATER)
             return (super.getBlockPathWeight(x, y, z) + 1) * (waterWeight + 1);
-        if(this.getEntityWorld().isRaining() && this.getEntityWorld().canBlockSeeSky(pos))
+        if(this.getCommandSenderWorld().isRaining() && this.getCommandSenderWorld().canSeeSkyFromBelowWater(pos))
             return (super.getBlockPathWeight(x, y, z) + 1) * (waterWeight + 1);
 
-        if(this.getAttackTarget() != null)
+        if(this.getTarget() != null)
             return super.getBlockPathWeight(x, y, z);
         if(this.waterContact())
             return -999999.0F;
@@ -83,18 +83,18 @@ public class EntityIka extends AgeableCreatureEntity {
 
     // Pushed By Water:
     @Override
-    public boolean isPushedByWater() {
+    public boolean isPushedByFluid() {
         return false;
     }
 
     // ========== Can leash ==========
     @Override
-    public boolean canBeLeashedTo(PlayerEntity player) { return true; }
+    public boolean canBeLeashed(PlayerEntity player) { return true; }
 
     // ========== Can Be Tempted ==========
     @Override
     public boolean canBeTempted() {
-        if(this.getAir() <= -100)
+        if(this.getAirSupply() <= -100)
             return false;
         else return super.canBeTempted();
     }

@@ -52,7 +52,7 @@ public class EntityIoray extends RideableCreatureEntity implements IMob {
 	// ========== Living Update ==========
 	@Override
     public void riderEffects(LivingEntity rider) {
-        rider.addPotionEffect(new EffectInstance(Effects.WATER_BREATHING, (5 * 20) + 5, 1));
+        rider.addEffect(new EffectInstance(Effects.WATER_BREATHING, (5 * 20) + 5, 1));
         super.riderEffects(rider);
     }
 
@@ -65,13 +65,13 @@ public class EntityIoray extends RideableCreatureEntity implements IMob {
 	public float getBlockPathWeight(int x, int y, int z) {
         int waterWeight = 10;
 
-        Block block = this.getEntityWorld().getBlockState(new BlockPos(x, y, z)).getBlock();
+        Block block = this.getCommandSenderWorld().getBlockState(new BlockPos(x, y, z)).getBlock();
         if(block == Blocks.WATER)
             return (super.getBlockPathWeight(x, y, z) + 1) * (waterWeight + 1);
-        if(this.getEntityWorld().isRaining() && this.getEntityWorld().canBlockSeeSky(new BlockPos(x, y, z)))
+        if(this.getCommandSenderWorld().isRaining() && this.getCommandSenderWorld().canSeeSkyFromBelowWater(new BlockPos(x, y, z)))
             return (super.getBlockPathWeight(x, y, z) + 1) * (waterWeight + 1);
 
-        if(this.getAttackTarget() != null)
+        if(this.getTarget() != null)
             return super.getBlockPathWeight(x, y, z);
         if(this.waterContact())
             return -999999.0F;
@@ -93,8 +93,8 @@ public class EntityIoray extends RideableCreatureEntity implements IMob {
 
     // ========== Mounted Offset ==========
     @Override
-    public double getMountedYOffset() {
-        return (double)this.getSize(Pose.STANDING).height * 0.6D;
+    public double getPassengersRidingOffset() {
+        return (double)this.getDimensions(Pose.STANDING).height * 0.6D;
     }
     
     
@@ -138,11 +138,11 @@ public class EntityIoray extends RideableCreatureEntity implements IMob {
         // Create New Laser:
         if(this.projectile == null) {
             // Type:
-            this.projectile = projectileInfo.createProjectile(this.getEntityWorld(), this);
+            this.projectile = projectileInfo.createProjectile(this.getCommandSenderWorld(), this);
 
             // Launch:
-            this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
-            this.getEntityWorld().addEntity(projectile);
+            this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
+            this.getCommandSenderWorld().addFreshEntity(projectile);
         }
 
         super.attackRanged(target, range);
@@ -154,14 +154,14 @@ public class EntityIoray extends RideableCreatureEntity implements IMob {
     // ==================================================
     BaseProjectileEntity abilityProjectile = null;
     public void mountAbility(Entity rider) {
-        if(this.getEntityWorld().isRemote)
+        if(this.getCommandSenderWorld().isClientSide)
             return;
 
         if(this.getStamina() < this.getStaminaRecoveryMax() * 2)
             return;
 
         if(this.hasAttackTarget())
-            this.setAttackTarget(null);
+            this.setTarget(null);
 
         // Update Laser:
         if(this.abilityProjectile != null && this.abilityProjectile.isAlive()) {
@@ -181,11 +181,11 @@ public class EntityIoray extends RideableCreatureEntity implements IMob {
             if(this.getControllingPassenger() == null || !(this.getControllingPassenger() instanceof LivingEntity))
                 return;
 
-            this.abilityProjectile = projectileInfo.createProjectile(this.getEntityWorld(), this);
+            this.abilityProjectile = projectileInfo.createProjectile(this.getCommandSenderWorld(), this);
 
             // Launch:
-            this.playSound(abilityProjectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
-            this.getEntityWorld().addEntity(abilityProjectile);
+            this.playSound(abilityProjectile.getLaunchSound(), 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
+            this.getCommandSenderWorld().addFreshEntity(abilityProjectile);
         }
 
         this.applyStaminaCost();
@@ -196,7 +196,7 @@ public class EntityIoray extends RideableCreatureEntity implements IMob {
     public void onDismounted(Entity entity) {
         super.onDismounted(entity);
         if(entity != null && entity instanceof LivingEntity) {
-            ((LivingEntity)entity).addPotionEffect(new EffectInstance(Effects.WATER_BREATHING, 5 * 20, 1));
+            ((LivingEntity)entity).addEffect(new EffectInstance(Effects.WATER_BREATHING, 5 * 20, 1));
         }
     }
 

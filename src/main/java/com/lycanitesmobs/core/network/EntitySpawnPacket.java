@@ -31,38 +31,38 @@ public class EntitySpawnPacket implements IPacket<ClientPlayNetHandler> {
 			if(serverEntity instanceof BaseProjectileEntity) {
 				this.entityTypeName = ((BaseProjectileEntity)serverEntity).entityName;
 			}
-			this.entityId = serverEntity.getEntityId();
-			this.uuid = serverEntity.getUniqueID();
-			this.pitch = serverEntity.rotationPitch;
-			this.yaw = serverEntity.rotationYaw;
-			this.pos = serverEntity.getPositionVec();
+			this.entityId = serverEntity.getId();
+			this.uuid = serverEntity.getUUID();
+			this.pitch = serverEntity.xRot;
+			this.yaw = serverEntity.yRot;
+			this.pos = serverEntity.position();
 		}
 	}
 
 	@Override
-	public void readPacketData(PacketBuffer packet) throws IOException {
-		this.entityTypeName = packet.readString();
+	public void read(PacketBuffer packet) throws IOException {
+		this.entityTypeName = packet.readUtf();
 		this.entityId = packet.readInt();
-		this.uuid = packet.readUniqueId();
+		this.uuid = packet.readUUID();
 		this.pitch = packet.readFloat();
 		this.yaw = packet.readFloat();
 		this.pos = new Vector3d(packet.readDouble(), packet.readDouble(), packet.readDouble());
 	}
 
 	@Override
-	public void writePacketData(PacketBuffer packet) throws IOException {
-		packet.writeString(this.entityTypeName);
+	public void write(PacketBuffer packet) throws IOException {
+		packet.writeUtf(this.entityTypeName);
 		packet.writeInt(this.entityId);
-		packet.writeUniqueId(this.uuid);
+		packet.writeUUID(this.uuid);
 		packet.writeFloat(this.pitch);
 		packet.writeFloat(this.yaw);
-		packet.writeDouble(this.pos.getX());
-		packet.writeDouble(this.pos.getY());
-		packet.writeDouble(this.pos.getZ());
+		packet.writeDouble(this.pos.x());
+		packet.writeDouble(this.pos.y());
+		packet.writeDouble(this.pos.z());
 	}
 
 	@Override
-	public void processPacket(ClientPlayNetHandler handler) {
+	public void handle(ClientPlayNetHandler handler) {
 		if(!EntityFactory.getInstance().entityTypeNetworkMap.containsKey(this.entityTypeName)) {
 			LycanitesMobs.logWarning("", "Unable to find entity type from packet: " + this.entityTypeName);
 			return;
@@ -73,11 +73,11 @@ public class EntitySpawnPacket implements IPacket<ClientPlayNetHandler> {
 			LycanitesMobs.logWarning("", "Unable to create client entity from packet: " + this.entityTypeName);
 			return;
 		}
-		entity.setPosition(this.pos.getX(), this.pos.getY(), this.pos.getZ());
-		entity.rotationPitch = this.pitch;
-		entity.rotationYaw = this.yaw;
-		entity.setEntityId(this.entityId);
-		entity.setUniqueId(this.uuid);
+		entity.setPos(this.pos.x(), this.pos.y(), this.pos.z());
+		entity.xRot = this.pitch;
+		entity.yRot = this.yaw;
+		entity.setId(this.entityId);
+		entity.setUUID(this.uuid);
 
 		// Projectiles:
 		if(entity instanceof BaseProjectileEntity) {
@@ -90,6 +90,6 @@ public class EntitySpawnPacket implements IPacket<ClientPlayNetHandler> {
 			}
 		}
 
-		handler.getWorld().addEntity(this.entityId, entity);
+		handler.getLevel().putNonPlayerEntity(this.entityId, entity);
 	}
 }

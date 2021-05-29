@@ -7,6 +7,8 @@ import net.minecraft.item.ItemStack;
 
 import java.util.EnumSet;
 
+import net.minecraft.entity.ai.goal.Goal.Flag;
+
 public class BegGoal extends Goal {
 	// Targets:
     private TameableCreatureEntity host;
@@ -21,7 +23,7 @@ public class BegGoal extends Goal {
  	// ==================================================
     public BegGoal(TameableCreatureEntity setHost) {
         this.host = setHost;
-		this.setMutexFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
+		this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
     }
     
     
@@ -38,8 +40,8 @@ public class BegGoal extends Goal {
  	//                   Should Execute
  	// ==================================================
 	@Override
-    public boolean shouldExecute() {
-        this.player = this.host.getEntityWorld().getClosestPlayer(this.host.getPositionVec().getX(), this.host.getPositionVec().getY(), this.host.getPositionVec().getZ(), (double) this.range, entity -> true);
+    public boolean canUse() {
+        this.player = this.host.getCommandSenderWorld().getNearestPlayer(this.host.position().x(), this.host.position().y(), this.host.position().z(), (double) this.range, entity -> true);
         return this.player != null && this.gotBegItem(this.player);
     }
 	
@@ -48,8 +50,8 @@ public class BegGoal extends Goal {
  	//                 Continue Executing
  	// ==================================================
 	@Override
-    public boolean shouldContinueExecuting() {
-        return this.player.isAlive() && (!(this.host.getDistance(this.player) > (double) (this.range * this.range)) && (this.begTime > 0 && this.gotBegItem(this.player)));
+    public boolean canContinueToUse() {
+        return this.player.isAlive() && (!(this.host.distanceTo(this.player) > (double) (this.range * this.range)) && (this.begTime > 0 && this.gotBegItem(this.player)));
     }
 	
     
@@ -57,9 +59,9 @@ public class BegGoal extends Goal {
  	//                      Start
  	// ==================================================
 	@Override
-    public void startExecuting() {
+    public void start() {
         this.host.setSitting(true);
-        this.begTime = 40 + this.host.getRNG().nextInt(40);
+        this.begTime = 40 + this.host.getRandom().nextInt(40);
     }
 	
     
@@ -67,7 +69,7 @@ public class BegGoal extends Goal {
  	//                       Reset
  	// ==================================================
 	@Override
-    public void resetTask() {
+    public void stop() {
         this.host.setSitting(false);
         this.player = null;
     }
@@ -78,7 +80,7 @@ public class BegGoal extends Goal {
  	// ==================================================
 	@Override
     public void tick() {
-        this.host.getLookController().setLookPosition(this.player.getPositionVec().getX(), this.player.getPositionVec().getY() + (double)this.player.getEyeHeight(), this.player.getPositionVec().getZ(), 10.0F, (float)this.host.getVerticalFaceSpeed());
+        this.host.getLookControl().setLookAt(this.player.position().x(), this.player.position().y() + (double)this.player.getEyeHeight(), this.player.position().z(), 10.0F, (float)this.host.getMaxHeadXRot());
         --this.begTime;
     }
 	
@@ -87,7 +89,7 @@ public class BegGoal extends Goal {
  	//                    Got Beg Item
  	// ==================================================
     private boolean gotBegItem(PlayerEntity player) {
-        ItemStack itemstack = player.inventory.getCurrentItem();
+        ItemStack itemstack = player.inventory.getSelected();
         if(itemstack.isEmpty())
         	return false;
         

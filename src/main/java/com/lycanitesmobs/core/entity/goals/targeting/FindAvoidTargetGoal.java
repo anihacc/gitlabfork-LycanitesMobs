@@ -96,14 +96,14 @@ public class FindAvoidTargetGoal extends TargetingGoal {
   	//                   Should Execute
   	// ==================================================
     @Override
-    public boolean shouldExecute() {
+    public boolean canUse() {
         if (!this.tameTargeting && this.host.isTamed()) {
             return false;
         }
 		if (this.host.updateTick % 20 != 0) {
 			return false;
 		}
-		if(this.targetChance > 0 && this.host.getRNG().nextInt(this.targetChance) != 0) {
+		if(this.targetChance > 0 && this.host.getRandom().nextInt(this.targetChance) != 0) {
 			return false;
 		}
 

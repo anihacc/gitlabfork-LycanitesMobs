@@ -29,14 +29,14 @@ public class ItemCleansingCrystal extends BaseItem {
  	//                    Item Use
  	// ==================================================
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
-		ItemStack itemStack = player.getHeldItem(hand);
-			if(!player.abilities.isCreativeMode) {
+    public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
+		ItemStack itemStack = player.getItemInHand(hand);
+			if(!player.abilities.instabuild) {
 				itemStack.setCount(Math.max(0, itemStack.getCount() - 1));
 			}
 
-			if(!world.isRemote && ObjectManager.getEffect("cleansed") != null) {
-				player.addPotionEffect(new EffectInstance(ObjectManager.getEffect("cleansed"), 10 * 20));
+			if(!world.isClientSide && ObjectManager.getEffect("cleansed") != null) {
+				player.addEffect(new EffectInstance(ObjectManager.getEffect("cleansed"), 10 * 20));
 			}
 
 			return new ActionResult(ActionResultType.SUCCESS, itemStack);

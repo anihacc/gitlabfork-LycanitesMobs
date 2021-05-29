@@ -22,30 +22,30 @@ public class SpawnersCommand {
 
 	public static int reload(final CommandContext<CommandSource> context) {
 		SpawnerManager.getInstance().reload();
-		context.getSource().sendFeedback(new TranslationTextComponent("lyc.command.spawners.reload"), true);
+		context.getSource().sendSuccess(new TranslationTextComponent("lyc.command.spawners.reload"), true);
 		return 0;
 	}
 
 	public static int creativeEnable(final CommandContext<CommandSource> context) {
 		SpawnerEventListener.testOnCreative = true;
-		context.getSource().sendFeedback(new TranslationTextComponent("lyc.command.spawners.creative.enable"), true);
+		context.getSource().sendSuccess(new TranslationTextComponent("lyc.command.spawners.creative.enable"), true);
 		return 0;
 	}
 
 	public static int creativeDisable(final CommandContext<CommandSource> context) {
 		SpawnerEventListener.testOnCreative = false;
-		context.getSource().sendFeedback(new TranslationTextComponent("lyc.command.spawners.creative.disable"), true);
+		context.getSource().sendSuccess(new TranslationTextComponent("lyc.command.spawners.creative.disable"), true);
 		return 0;
 	}
 
 	public static int list(final CommandContext<CommandSource> context) {
-		context.getSource().sendFeedback(new TranslationTextComponent("lyc.command.spawners.list"), true);
+		context.getSource().sendSuccess(new TranslationTextComponent("lyc.command.spawners.list"), true);
 		for(Spawner spawner : SpawnerManager.getInstance().spawners.values()) {
 			if(!"".equals(spawner.eventName)) {
 				continue;
 			}
 			String spawnerName = spawner.name;
-			context.getSource().sendFeedback(new StringTextComponent(spawnerName), true);
+			context.getSource().sendSuccess(new StringTextComponent(spawnerName), true);
 		}
 		return 0;
 	}

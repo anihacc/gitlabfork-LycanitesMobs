@@ -66,7 +66,7 @@ public class PlayerSpawnTrigger extends SpawnTrigger {
 		}
 
 		// World Time:
-		if(this.useWorldTime && player.getEntityWorld().getDayTime() % 24000 != this.tickRate) {
+		if(this.useWorldTime && player.getCommandSenderWorld().getDayTime() % 24000 != this.tickRate) {
 			return;
 		}
 
@@ -76,20 +76,20 @@ public class PlayerSpawnTrigger extends SpawnTrigger {
 		}
 
 		// Chance:
-		if(this.chance < 1 && player.getRNG().nextDouble() > this.chance) {
+		if(this.chance < 1 && player.getRandom().nextDouble() > this.chance) {
 			return;
 		}
 
 		// Last Tick Distance:
 		if(this.lastTickDistanceMin > -1 || this.lastTickDistanceMax > -1) {
-			BlockPos playerPos = player.getPosition();
+			BlockPos playerPos = player.blockPosition();
 			if (!this.lastTickPositions.containsKey(player)) {
 				this.lastTickPositions.put(player, playerPos);
 			}
 			else {
 				playerPos = this.lastTickPositions.get(player);
 			}
-			double lastTickDistance = player.getPosition().distanceSq(playerPos);
+			double lastTickDistance = player.blockPosition().distSqr(playerPos);
 			if(this.lastTickDistanceMin > -1 && lastTickDistance < this.lastTickDistanceMin) {
 				return;
 			}
@@ -98,6 +98,6 @@ public class PlayerSpawnTrigger extends SpawnTrigger {
 			}
 		}
 
-		this.trigger(player.getEntityWorld(), player, player.getPosition(), 0, 0);
+		this.trigger(player.getCommandSenderWorld(), player, player.blockPosition(), 0, 0);
 	}
 }

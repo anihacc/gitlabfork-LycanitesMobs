@@ -43,7 +43,7 @@ public class ProjectileBehaviourFireProjectiles extends ProjectileBehaviour {
 
 	@Override
 	public void onProjectileUpdate(BaseProjectileEntity projectile) {
-		if(this.tickRate < 0 || projectile.updateTick % this.tickRate != 0 || projectile.getEntityWorld().isRemote) {
+		if(this.tickRate < 0 || projectile.updateTick % this.tickRate != 0 || projectile.getCommandSenderWorld().isClientSide) {
 			return;
 		}
 
@@ -54,7 +54,7 @@ public class ProjectileBehaviourFireProjectiles extends ProjectileBehaviour {
 
 	@Override
 	public void onProjectileImpact(BaseProjectileEntity projectile, World world, BlockPos pos) {
-		if(projectile.getEntityWorld().isRemote) {
+		if(projectile.getCommandSenderWorld().isClientSide) {
 			return;
 		}
 
@@ -84,21 +84,21 @@ public class ProjectileBehaviourFireProjectiles extends ProjectileBehaviour {
 		}
 		BaseProjectileEntity childProjectile;
 
-		if(projectile.func_234616_v_() != null) {
+		if(projectile.getOwner() != null) {
 			LivingEntity shooter = projectile.getShooter() instanceof  LivingEntity ? (LivingEntity)projectile.getShooter() : null;
-			childProjectile = projectileInfo.createProjectile(projectile.getEntityWorld(), shooter);
-			childProjectile.setPosition(
-					projectile.getPositionVec().getX(),
-					projectile.getPositionVec().getY(),
-					projectile.getPositionVec().getZ()
+			childProjectile = projectileInfo.createProjectile(projectile.getCommandSenderWorld(), shooter);
+			childProjectile.setPos(
+					projectile.position().x(),
+					projectile.position().y(),
+					projectile.position().z()
 			);
 		}
 		else {
 			childProjectile = projectileInfo.createProjectile(
-					projectile.getEntityWorld(),
-					projectile.getPositionVec().getX(),
-					projectile.getPositionVec().getY(),
-					projectile.getPositionVec().getZ()
+					projectile.getCommandSenderWorld(),
+					projectile.position().x(),
+					projectile.position().y(),
+					projectile.position().z()
 			);
 		}
 
@@ -111,23 +111,23 @@ public class ProjectileBehaviourFireProjectiles extends ProjectileBehaviour {
 		}
 
 		float velocity = 1.2F;
-		double motionT = projectile.getMotion().getX() + projectile.getMotion().getY() + projectile.getMotion().getZ();
-		if(projectile.getMotion().getX() < 0)
-			motionT -= projectile.getMotion().getX() * 2;
-		if(projectile.getMotion().getY() < 0)
-			motionT -= projectile.getMotion().getY() * 2;
-		if(projectile.getMotion().getZ() < 0)
-			motionT -= projectile.getMotion().getZ() * 2;
+		double motionT = projectile.getDeltaMovement().x() + projectile.getDeltaMovement().y() + projectile.getDeltaMovement().z();
+		if(projectile.getDeltaMovement().x() < 0)
+			motionT -= projectile.getDeltaMovement().x() * 2;
+		if(projectile.getDeltaMovement().y() < 0)
+			motionT -= projectile.getDeltaMovement().y() * 2;
+		if(projectile.getDeltaMovement().z() < 0)
+			motionT -= projectile.getDeltaMovement().z() * 2;
 		childProjectile.shoot(
-				projectile.getMotion().getX() / motionT + (projectile.getEntityWorld().getRandom().nextGaussian() - 0.5D),
-				projectile.getMotion().getY() / motionT + (projectile.getEntityWorld().getRandom().nextGaussian() - 0.5D),
-				projectile.getMotion().getZ() / motionT + (projectile.getEntityWorld().getRandom().nextGaussian() - 0.5D),
+				projectile.getDeltaMovement().x() / motionT + (projectile.getCommandSenderWorld().getRandom().nextGaussian() - 0.5D),
+				projectile.getDeltaMovement().y() / motionT + (projectile.getCommandSenderWorld().getRandom().nextGaussian() - 0.5D),
+				projectile.getDeltaMovement().z() / motionT + (projectile.getCommandSenderWorld().getRandom().nextGaussian() - 0.5D),
 				velocity,
 				0
 		);
 
-		projectile.playSound(childProjectile.getLaunchSound(), 1.0F, 1.0F / (projectile.getEntityWorld().getRandom().nextFloat() * 0.4F + 0.8F));
-		projectile.getEntityWorld().addEntity(childProjectile);
+		projectile.playSound(childProjectile.getLaunchSound(), 1.0F, 1.0F / (projectile.getCommandSenderWorld().getRandom().nextFloat() * 0.4F + 0.8F));
+		projectile.getCommandSenderWorld().addFreshEntity(childProjectile);
 
 		return childProjectile;
 	}

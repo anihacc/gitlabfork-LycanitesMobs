@@ -160,8 +160,8 @@ public class CreatureType {
 			return;
 		}
 		Item.Properties treatProperties = new Item.Properties();
-		treatProperties.group(ItemManager.getInstance().itemsGroup);
-		treatProperties.maxStackSize(16);
+		treatProperties.tab(ItemManager.getInstance().itemsGroup);
+		treatProperties.stacksTo(16);
 		this.treat = new ItemTreat(treatProperties, this);
 		ObjectManager.addItem(this.getTreatName(), this.treat);
 
@@ -174,7 +174,7 @@ public class CreatureType {
 		}
 		String spawnEggName = this.getSpawnEggName();
 		Item.Properties spawnEggProperties = new Item.Properties();
-		spawnEggProperties.group(ItemManager.getInstance().creaturesGroups);
+		spawnEggProperties.tab(ItemManager.getInstance().creaturesGroups);
 		this.spawnEgg = new ItemCustomSpawnEgg(spawnEggProperties, spawnEggName, this);
 		ObjectManager.addItem(spawnEggName, this.spawnEgg);
 
@@ -184,8 +184,8 @@ public class CreatureType {
 			return;
 		}
 		Item.Properties soulstoneProperties = new Item.Properties();
-		soulstoneProperties.group(ItemManager.getInstance().itemsGroup);
-		soulstoneProperties.maxStackSize(64);
+		soulstoneProperties.tab(ItemManager.getInstance().itemsGroup);
+		soulstoneProperties.stacksTo(64);
 		this.soulstone = new ItemSoulstoneFilled(soulstoneProperties, this);
 		ObjectManager.addItem(this.getSoulstoneName(), this.soulstone);
 	}

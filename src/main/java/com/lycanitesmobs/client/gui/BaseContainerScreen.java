@@ -28,7 +28,7 @@ public abstract class BaseContainerScreen<T extends Container> extends Container
 
     @Override
     public void init(Minecraft minecraft, int width, int height) {
-        this.drawHelper = new DrawHelper(minecraft, minecraft.fontRenderer);
+        this.drawHelper = new DrawHelper(minecraft, minecraft.font);
         this.minecraft = minecraft;
         super.init(minecraft, width, height);
         this.initWidgets();
@@ -58,7 +58,7 @@ public abstract class BaseContainerScreen<T extends Container> extends Container
         this.renderWidgets(matrixStack, mouseX, mouseY, partialTicks); // Renders buttons.
         super.render(matrixStack, mouseX, mouseY, partialTicks); // Renders slots.
         this.renderForeground(matrixStack, mouseX, mouseY, partialTicks);
-        this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
+        this.renderTooltip(matrixStack, mouseX, mouseY);
     }
 
     /**
@@ -68,7 +68,7 @@ public abstract class BaseContainerScreen<T extends Container> extends Container
      * @param partialTicks Ticks for animation.
      */
     protected abstract void renderBackground(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks);
-    protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY) {} // Overridden as required but ignored.
+    protected void renderBg(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY) {} // Overridden as required but ignored.
 
     /**
      * Updates widgets like buttons and other controls for this screen. Super renders the button list, called after this.

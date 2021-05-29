@@ -12,6 +12,8 @@ import net.minecraft.world.server.ServerWorld;
 import java.util.EnumSet;
 import java.util.Random;
 
+import net.minecraft.entity.ai.goal.Goal.Flag;
+
 public class MoveVillageGoal extends Goal {
 	// Targets:
     private BaseCreatureEntity host;
@@ -26,7 +28,7 @@ public class MoveVillageGoal extends Goal {
  	// ==================================================
     public MoveVillageGoal(BaseCreatureEntity setHost) {
         this.host = setHost;
-        this.setMutexFlags(EnumSet.of(Flag.MOVE));
+        this.setFlags(EnumSet.of(Flag.MOVE));
     }
     
     
@@ -47,21 +49,21 @@ public class MoveVillageGoal extends Goal {
  	//                  Should Execute
  	// ==================================================
 	@Override
-    public boolean shouldExecute() {
-        if (this.host.isBeingRidden()) {
+    public boolean canUse() {
+        if (this.host.isVehicle()) {
             return false;
-        } else if (this.isNocturnal && this.host.world.isDaytime()) {
+        } else if (this.isNocturnal && this.host.level.isDay()) {
             return false;
-        } else if (this.host.getRNG().nextInt(this.frequency) != 0) {
+        } else if (this.host.getRandom().nextInt(this.frequency) != 0) {
             return false;
         } else {
-            ServerWorld serverWorld = (ServerWorld)this.host.world;
-            BlockPos blockPos = new BlockPos(this.host.getPosition());
-            if (!serverWorld.func_241119_a_(blockPos, 6)) {
+            ServerWorld serverWorld = (ServerWorld)this.host.level;
+            BlockPos blockPos = new BlockPos(this.host.blockPosition());
+            if (!serverWorld.isCloseToVillage(blockPos, 6)) {
                 return false;
             } else {
-                Vector3d lvt_3_1_ = RandomPositionGenerator.func_221024_a(this.host, 15, 7, (p_220755_1_) -> {
-                    return (double)(-serverWorld.func_242403_h(p_220755_1_));
+                Vector3d lvt_3_1_ = RandomPositionGenerator.getLandPos(this.host, 15, 7, (p_220755_1_) -> {
+                    return (double)(-serverWorld.getBlockFloorHeight(p_220755_1_));
                 });
                 this.blockPos = lvt_3_1_ == null ? null : new BlockPos(lvt_3_1_);
                 return this.blockPos != null;
@@ -74,8 +76,8 @@ public class MoveVillageGoal extends Goal {
  	//                Continue Executing
  	// ==================================================
 	@Override
-    public boolean shouldContinueExecuting() {
-        return this.blockPos != null && !this.host.getNavigator().noPath() && this.host.getNavigator().getTargetPos().equals(this.blockPos);
+    public boolean canContinueToUse() {
+        return this.blockPos != null && !this.host.getNavigation().isDone() && this.host.getNavigation().getTargetPos().equals(this.blockPos);
     }
 
     
@@ -85,26 +87,26 @@ public class MoveVillageGoal extends Goal {
     @Override
     public void tick() {
         if (this.blockPos != null) {
-            PathNavigator lvt_1_1_ = this.host.getNavigator();
-            if (lvt_1_1_.noPath() && !this.blockPos.withinDistance(this.host.getPositionVec(), 10.0D)) {
+            PathNavigator lvt_1_1_ = this.host.getNavigation();
+            if (lvt_1_1_.isDone() && !this.blockPos.closerThan(this.host.position(), 10.0D)) {
                 Vector3d lvt_2_1_ = new Vector3d(this.blockPos.getX(), this.blockPos.getY(), this.blockPos.getZ());
-                Vector3d lvt_3_1_ = new Vector3d(this.host.getPositionVec().getX(), this.host.getPositionVec().getY(), this.host.getPositionVec().getZ());
+                Vector3d lvt_3_1_ = new Vector3d(this.host.position().x(), this.host.position().y(), this.host.position().z());
                 Vector3d lvt_4_1_ = lvt_3_1_.subtract(lvt_2_1_);
                 lvt_2_1_ = lvt_4_1_.scale(0.4D).add(lvt_2_1_);
                 Vector3d lvt_5_1_ = lvt_2_1_.subtract(lvt_3_1_).normalize().scale(10.0D).add(lvt_3_1_);
                 BlockPos lvt_6_1_ = new BlockPos(lvt_5_1_);
-                lvt_6_1_ = this.host.world.getHeight(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, lvt_6_1_);
-                if (!lvt_1_1_.tryMoveToXYZ((double) lvt_6_1_.getX(), (double) lvt_6_1_.getY(), (double) lvt_6_1_.getZ(), 1.0D)) {
-                    this.func_220754_g();
+                lvt_6_1_ = this.host.level.getHeightmapPos(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, lvt_6_1_);
+                if (!lvt_1_1_.moveTo((double) lvt_6_1_.getX(), (double) lvt_6_1_.getY(), (double) lvt_6_1_.getZ(), 1.0D)) {
+                    this.moveRandomly();
                 }
             }
 
         }
     }
 
-    private void func_220754_g() {
-        Random lvt_1_1_ = this.host.getRNG();
-        BlockPos lvt_2_1_ = this.host.world.getHeight(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, this.host.getPosition().add(-8 + lvt_1_1_.nextInt(16), 0, -8 + lvt_1_1_.nextInt(16)));
-        this.host.getNavigator().tryMoveToXYZ((double)lvt_2_1_.getX(), (double)lvt_2_1_.getY(), (double)lvt_2_1_.getZ(), 1.0D);
+    private void moveRandomly() {
+        Random lvt_1_1_ = this.host.getRandom();
+        BlockPos lvt_2_1_ = this.host.level.getHeightmapPos(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, this.host.blockPosition().offset(-8 + lvt_1_1_.nextInt(16), 0, -8 + lvt_1_1_.nextInt(16)));
+        this.host.getNavigation().moveTo((double)lvt_2_1_.getX(), (double)lvt_2_1_.getY(), (double)lvt_2_1_.getZ(), 1.0D);
     }
 }

@@ -29,7 +29,7 @@ public class EntityTremor extends TameableCreatureEntity implements IMob {
 
 		this.setupMob();
 
-        this.stepHeight = 1.0F;
+        this.maxUpStep = 1.0F;
     }
 
     @Override
@@ -49,25 +49,25 @@ public class EntityTremor extends TameableCreatureEntity implements IMob {
     // ==================================================
 	// ========== Living Update ==========
 	@Override
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
         
-        if(!this.getEntityWorld().isRemote && this.isRareVariant() && !this.isPetType("familiar")) {
+        if(!this.getCommandSenderWorld().isClientSide && this.isRareVariant() && !this.isPetType("familiar")) {
 	    	// Random Charging:
-	    	if(this.hasAttackTarget() && this.getDistance(this.getAttackTarget()) > 1 && this.getRNG().nextInt(20) == 0) {
-	    		if(this.getPositionVec().getY() - 1 > this.getAttackTarget().getPositionVec().getY())
-	    			this.leap(6.0F, -1.0D, this.getAttackTarget());
-	    		else if(this.getPositionVec().getY() + 1 < this.getAttackTarget().getPositionVec().getY())
-	    			this.leap(6.0F, 1.0D, this.getAttackTarget());
+	    	if(this.hasAttackTarget() && this.distanceTo(this.getTarget()) > 1 && this.getRandom().nextInt(20) == 0) {
+	    		if(this.position().y() - 1 > this.getTarget().position().y())
+	    			this.leap(6.0F, -1.0D, this.getTarget());
+	    		else if(this.position().y() + 1 < this.getTarget().position().y())
+	    			this.leap(6.0F, 1.0D, this.getTarget());
 	    		else
-	    			this.leap(6.0F, 0D, this.getAttackTarget());
+	    			this.leap(6.0F, 0D, this.getTarget());
 	    	}
         }
 
         // Particles:
-        if(this.getEntityWorld().isRemote)
+        if(this.getCommandSenderWorld().isClientSide)
 			for(int i = 0; i < 2; ++i) {
-				this.getEntityWorld().addParticle(ParticleTypes.SMOKE, this.getPositionVec().getX() + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, this.getPositionVec().getY() + this.rand.nextDouble() * (double)this.getSize(Pose.STANDING).height, this.getPositionVec().getZ() + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
+				this.getCommandSenderWorld().addParticle(ParticleTypes.SMOKE, this.position().x() + (this.random.nextDouble() - 0.5D) * (double)this.getDimensions(Pose.STANDING).width, this.position().y() + this.random.nextDouble() * (double)this.getDimensions(Pose.STANDING).height, this.position().z() + (this.random.nextDouble() - 0.5D) * (double)this.getDimensions(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
 			}
     }
 
@@ -83,12 +83,12 @@ public class EntityTremor extends TameableCreatureEntity implements IMob {
     	
     	// Explosion:
 		int explosionStrength = Math.max(1, this.explosionStrength);
-		Explosion.Mode damageTerrain = this.explosionStrength > 0 && this.getEntityWorld().getGameRules().getBoolean(GameRules.MOB_GRIEFING) ? Explosion.Mode.BREAK : Explosion.Mode.NONE;
+		Explosion.Mode damageTerrain = this.explosionStrength > 0 && this.getCommandSenderWorld().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING) ? Explosion.Mode.BREAK : Explosion.Mode.NONE;
 		if(this.isPetType("familiar")) {
 			explosionStrength = 1;
 			damageTerrain = Explosion.Mode.NONE;
 		}
-		this.getEntityWorld().createExplosion(this, this.getPositionVec().getX(), this.getPositionVec().getY(), this.getPositionVec().getZ(), explosionStrength, damageTerrain);
+		this.getCommandSenderWorld().explode(this, this.position().x(), this.position().y(), this.position().z(), explosionStrength, damageTerrain);
 
         return true;
     }
@@ -136,11 +136,11 @@ public class EntityTremor extends TameableCreatureEntity implements IMob {
 	}
 
 	@Override
-	public boolean isPotionApplicable(EffectInstance effectInstance) {
-    	if(effectInstance.getPotion() == Effects.WITHER) {
+	public boolean canBeAffected(EffectInstance effectInstance) {
+    	if(effectInstance.getEffect() == Effects.WITHER) {
     		return false;
 		}
-		return super.isPotionApplicable(effectInstance);
+		return super.canBeAffected(effectInstance);
 	}
     
     @Override

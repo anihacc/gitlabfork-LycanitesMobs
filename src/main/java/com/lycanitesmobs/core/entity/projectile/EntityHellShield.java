@@ -38,7 +38,7 @@ public class EntityHellShield extends BaseProjectileEntity {
     	this.setDamage(0);
     	this.setProjectileScale(1F);
         this.knockbackChance = 0D;
-        this.noClip = true;
+        this.noPhysics = true;
     }
 	
     
@@ -48,7 +48,7 @@ public class EntityHellShield extends BaseProjectileEntity {
     @Override
     public void tick() {
     	super.tick();
-    	if(this.getPositionVec().getY() > this.getEntityWorld().getHeight() + 20)
+    	if(this.position().y() > this.getCommandSenderWorld().getMaxBuildHeight() + 20)
     		this.remove();
     }
 	
@@ -58,7 +58,7 @@ public class EntityHellShield extends BaseProjectileEntity {
  	// ==================================================
     // ========== Gravity ==========
     @Override
-    protected float getGravityVelocity() {
+    protected float getGravity() {
         return 0F;
     }
     
@@ -70,7 +70,7 @@ public class EntityHellShield extends BaseProjectileEntity {
     @Override
     public void onImpactVisuals() {
     	for(int i = 0; i < 8; ++i)
-    		this.getEntityWorld().addParticle(RedstoneParticleData.REDSTONE_DUST, this.getPositionVec().getX(), this.getPositionVec().getY(), this.getPositionVec().getZ(), 0.0D, 0.0D, 0.0D);
+    		this.getCommandSenderWorld().addParticle(RedstoneParticleData.REDSTONE, this.position().x(), this.position().y(), this.position().z(), 0.0D, 0.0D, 0.0D);
     }
 
     @Override

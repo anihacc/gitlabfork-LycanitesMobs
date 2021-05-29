@@ -24,7 +24,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, CreatureModel> {
     public CreatureRenderer(String entityID, EntityRendererManager renderManager, float shadowSize) {
     	super(renderManager, ModelManager.getInstance().getCreatureModel(CreatureManager.getInstance().getCreature(entityID), null), shadowSize);
-		if(this.entityModel == null)
+		if(this.model == null)
 			return;
     }
 
@@ -41,31 +41,31 @@ public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, CreatureMo
 	public void render(BaseCreatureEntity entity, float partialTicks, float yaw, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, int brightness) {
 		// Get Model and Layers:
 		try {
-			this.layerRenderers.clear();
-			this.entityModel = ModelManager.getInstance().getCreatureModel(entity.creatureInfo, entity.subspecies);
-			this.entityModel.addCustomLayers(this);
+			this.layers.clear();
+			this.model = ModelManager.getInstance().getCreatureModel(entity.creatureInfo, entity.subspecies);
+			this.model.addCustomLayers(this);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		if(this.entityModel == null) {
+		if(this.model == null) {
 			return;
 		}
 
 		// Get Entity States:
 		float scale = 1;
-		boolean shouldSit = entity.isPassenger() && (entity.getRidingEntity() != null && entity.getRidingEntity().shouldRiderSit());
-		this.entityModel.isSitting = shouldSit;
-		this.entityModel.isChild = entity.isChild();
-		float renderYaw = MathHelper.clamp(yaw, entity.prevRenderYawOffset, entity.renderYawOffset);
-		float renderYawHead = MathHelper.clamp(yaw, entity.prevRotationYawHead, entity.rotationYawHead);
+		boolean shouldSit = entity.isPassenger() && (entity.getVehicle() != null && entity.getVehicle().shouldRiderSit());
+		this.model.riding = shouldSit;
+		this.model.young = entity.isBaby();
+		float renderYaw = MathHelper.clamp(yaw, entity.yBodyRotO, entity.yBodyRot);
+		float renderYawHead = MathHelper.clamp(yaw, entity.yHeadRotO, entity.yHeadRot);
 
 		// Looking Yaw:
 		float lookYaw = renderYawHead - renderYaw;
-		if(shouldSit && entity.getRidingEntity() instanceof LivingEntity) {
-			LivingEntity livingentity = (LivingEntity)entity.getRidingEntity();
-			renderYaw = MathHelper.clamp(yaw, livingentity.prevRenderYawOffset, livingentity.renderYawOffset);
+		if(shouldSit && entity.getVehicle() instanceof LivingEntity) {
+			LivingEntity livingentity = (LivingEntity)entity.getVehicle();
+			renderYaw = MathHelper.clamp(yaw, livingentity.yBodyRotO, livingentity.yBodyRot);
 			lookYaw = renderYawHead - renderYaw;
 			float renderYawMountOffset = MathHelper.wrapDegrees(lookYaw);
 			if (renderYawMountOffset < -85.0F) {
@@ -85,28 +85,28 @@ public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, CreatureMo
 		}
 
 		// Looking Pitch:
-		matrixStack.push();
-		float lookPitch = MathHelper.lerp(yaw, entity.prevRotationPitch, entity.rotationPitch);
+		matrixStack.pushPose();
+		float lookPitch = MathHelper.lerp(yaw, entity.xRotO, entity.xRot);
 		if(entity.getPose() == Pose.SLEEPING) {
-			Direction direction = entity.getBedDirection();
+			Direction direction = entity.getBedOrientation();
 			if (direction != null) {
 				float f4 = entity.getEyeHeight(Pose.STANDING) - 0.1F;
-				matrixStack.translate((double)((float)(-direction.getXOffset()) * f4), 0.0D, (double)((float)(-direction.getZOffset()) * f4));
+				matrixStack.translate((double)((float)(-direction.getStepX()) * f4), 0.0D, (double)((float)(-direction.getStepZ()) * f4));
 			}
 		}
 
 		// Animation Ticks:
-		float loop = this.handleRotationFloat(entity, partialTicks % 1.0F); // partialTicks is increased when turning for some reason
-		this.applyRotations(entity, matrixStack, loop, renderYaw, yaw);
+		float loop = this.getBob(entity, partialTicks % 1.0F); // partialTicks is increased when turning for some reason
+		this.setupRotations(entity, matrixStack, loop, renderYaw, yaw);
 		matrixStack.scale(-1.0F, -1.0F, 1.0F);
-		this.preRenderCallback(entity, matrixStack, yaw);
+		this.scale(entity, matrixStack, yaw);
 		matrixStack.translate(0.0D, (double)-1.501F, 0.0D);
 		float distance = 0.0F;
 		float time = 0.0F;
 		if (!shouldSit && entity.isAlive()) {
-			distance = MathHelper.lerp(yaw, entity.prevLimbSwingAmount, entity.limbSwingAmount);
-			time = entity.limbSwing - entity.limbSwingAmount * (1.0F - yaw);
-			if (entity.isChild()) {
+			distance = MathHelper.lerp(yaw, entity.animationSpeedOld, entity.animationSpeed);
+			time = entity.animationPosition - entity.animationSpeed * (1.0F - yaw);
+			if (entity.isBaby()) {
 				time *= 3.0F;
 			}
 
@@ -122,13 +122,13 @@ public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, CreatureMo
 		}
 
 		// Entity Visibility:
-		boolean invisible = !this.isVisible(entity);
-		boolean allyInvisible = invisible && !entity.isInvisibleToPlayer(Minecraft.getInstance().player);
+		boolean invisible = !this.isBodyVisible(entity);
+		boolean allyInvisible = invisible && !entity.isInvisibleTo(Minecraft.getInstance().player);
 
 		// Render Model Layers:
 		this.getMainModel().generateAnimationFrames(entity, time, distance, loop, lookYaw, lookPitch, 1, brightness);
 		this.renderModel(entity, matrixStack, renderTypeBuffer, null, time, distance, loop, lookYaw, lookPitch, 1, brightness, fade, invisible, allyInvisible);
-		for(LayerRenderer<BaseCreatureEntity, CreatureModel> layer : this.layerRenderers) {
+		for(LayerRenderer<BaseCreatureEntity, CreatureModel> layer : this.layers) {
 			if(!(layer instanceof LayerCreatureBase)) {
 				continue;
 			}
@@ -139,7 +139,7 @@ public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, CreatureMo
 			this.renderModel(entity, matrixStack, renderTypeBuffer, layerCreatureBase, time, distance, loop, lookYaw, lookPitch, scale, brightness, fade, invisible, allyInvisible);
 		}
 		this.getMainModel().clearAnimationFrames();
-		matrixStack.pop();
+		matrixStack.popPose();
     }
 
 	/**
@@ -177,7 +177,7 @@ public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, CreatureMo
 	 * @return The main model to render.
 	 */
 	public CreatureModel getMainModel() {
-		return this.entityModel;
+		return this.model;
 	}
 
 	/**
@@ -188,32 +188,32 @@ public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, CreatureMo
 	 */
 	public ResourceLocation getEntityTexture(BaseCreatureEntity entity, LayerCreatureBase layer) {
     	if(layer == null) {
-			return this.getEntityTexture(entity);
+			return this.getTextureLocation(entity);
 		}
     	ResourceLocation layerTexture = layer.getLayerTexture(entity);
-		return layerTexture != null ? layerTexture : this.getEntityTexture(entity);
+		return layerTexture != null ? layerTexture : this.getTextureLocation(entity);
 	}
 
 	@Override
-	public ResourceLocation getEntityTexture(BaseCreatureEntity entity) {
+	public ResourceLocation getTextureLocation(BaseCreatureEntity entity) {
 		return entity.getTexture();
 	}
 
     /** If true, display the name of the entity above it. **/
     @Override
-    protected boolean canRenderName(BaseCreatureEntity entity) {
-        if(!Minecraft.isGuiEnabled()) return false;
+    protected boolean shouldShowName(BaseCreatureEntity entity) {
+        if(!Minecraft.renderNames()) return false;
     	//if(entity == this.renderManager.pointedEntity) return false; // This was renderViewEntity not pointedEntity, perhaps for hiding name in inventory/beastiary view?
-    	if(entity.isInvisibleToPlayer(Minecraft.getInstance().player)) return false;
+    	if(entity.isInvisibleTo(Minecraft.getInstance().player)) return false;
     	if(entity.getControllingPassenger() != null) return false;
     	
-    	if(entity.getAlwaysRenderNameTagForRender()) {
+    	if(entity.shouldShowName()) {
 			if(entity.isTamed())
-				return entity == this.renderManager.pointedEntity;
+				return entity == this.entityRenderDispatcher.crosshairPickEntity;
     		return true;
     	}
     	
-    	return entity.hasCustomName() && entity == this.renderManager.pointedEntity;
+    	return entity.hasCustomName() && entity == this.entityRenderDispatcher.crosshairPickEntity;
     }
 
     /**

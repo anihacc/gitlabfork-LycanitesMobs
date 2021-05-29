@@ -35,9 +35,9 @@ public class EntityWildkin extends TameableCreatureEntity implements IMob {
         this.goalSelector.addGoal(this.nextDistractionGoalIndex++, new BreakDoorGoal(this));
         this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(false));
 
-        if(this.getNavigator() instanceof GroundPathNavigator) {
-            GroundPathNavigator pathNavigateGround = (GroundPathNavigator)this.getNavigator();
-            pathNavigateGround.setBreakDoors(true);
+        if(this.getNavigation() instanceof GroundPathNavigator) {
+            GroundPathNavigator pathNavigateGround = (GroundPathNavigator)this.getNavigation();
+            pathNavigateGround.setCanOpenDoors(true);
         }
     }
 

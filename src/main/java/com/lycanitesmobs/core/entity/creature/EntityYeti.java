@@ -23,6 +23,8 @@ import net.minecraft.world.World;
 
 import java.util.HashMap;
 
+import com.lycanitesmobs.core.entity.BaseCreatureEntity.COMMAND_PIORITIES;
+
 public class EntityYeti extends AgeableCreatureEntity {
 	
 	// ==================================================
@@ -53,25 +55,25 @@ public class EntityYeti extends AgeableCreatureEntity {
     // ==================================================
 	// ========== Living Update ==========
 	@Override
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
         
         // Trail:
-        if(!this.getEntityWorld().isRemote && (this.ticksExisted % 10 == 0 || this.isMoving() && this.ticksExisted % 5 == 0)) {
+        if(!this.getCommandSenderWorld().isClientSide && (this.tickCount % 10 == 0 || this.isMoving() && this.tickCount % 5 == 0)) {
             int trailHeight = 2;
-            if(this.isChild())
+            if(this.isBaby())
                 trailHeight = 1;
             for(int y = 0; y < trailHeight; y++) {
-                Block block = this.getEntityWorld().getBlockState(this.getPosition().add(0, y, 0)).getBlock();
+                Block block = this.getCommandSenderWorld().getBlockState(this.blockPosition().offset(0, y, 0)).getBlock();
                 if(block == Blocks.AIR || block == Blocks.SNOW || block == ObjectManager.getBlock("frostcloud"))
-                    this.getEntityWorld().setBlockState(this.getPosition().add(0, y, 0), ObjectManager.getBlock("frostcloud").getDefaultState());
+                    this.getCommandSenderWorld().setBlockAndUpdate(this.blockPosition().offset(0, y, 0), ObjectManager.getBlock("frostcloud").defaultBlockState());
             }
         }
         
         // Particles:
-        if(this.getEntityWorld().isRemote)
+        if(this.getCommandSenderWorld().isClientSide)
 	        for(int i = 0; i < 2; ++i) {
-	            this.getEntityWorld().addParticle(ParticleTypes.ITEM_SNOWBALL, this.getPositionVec().getX() + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, this.getPositionVec().getY() + this.rand.nextDouble() * (double)this.getSize(Pose.STANDING).height, this.getPositionVec().getZ() + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
+	            this.getCommandSenderWorld().addParticle(ParticleTypes.ITEM_SNOWBALL, this.position().x() + (this.random.nextDouble() - 0.5D) * (double)this.getDimensions(Pose.STANDING).width, this.position().y() + this.random.nextDouble() * (double)this.getDimensions(Pose.STANDING).height, this.position().z() + (this.random.nextDouble() - 0.5D) * (double)this.getDimensions(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
 	        }
     }
 	
@@ -82,12 +84,12 @@ public class EntityYeti extends AgeableCreatureEntity {
 	// ========== Pathing Weight ==========
 	@Override
 	public float getBlockPathWeight(int x, int y, int z) {
-        BlockState blockState = this.getEntityWorld().getBlockState(new BlockPos(x, y - 1, z));
+        BlockState blockState = this.getCommandSenderWorld().getBlockState(new BlockPos(x, y - 1, z));
         Block block = blockState.getBlock();
         if(block != Blocks.AIR) {
-            if(blockState.getMaterial() == Material.ORGANIC || blockState.getMaterial() == Material.SNOW)
+            if(blockState.getMaterial() == Material.GRASS || blockState.getMaterial() == Material.TOP_SNOW)
                 return 10F;
-            if(blockState.getMaterial() == Material.EARTH || blockState.getMaterial() == Material.ICE)
+            if(blockState.getMaterial() == Material.DIRT || blockState.getMaterial() == Material.ICE)
                 return 7F;
         }
         return super.getBlockPathWeight(x, y, z);
@@ -95,7 +97,7 @@ public class EntityYeti extends AgeableCreatureEntity {
     
 	// ========== Can leash ==========
     @Override
-    public boolean canBeLeashedTo(PlayerEntity player) {
+    public boolean canBeLeashed(PlayerEntity player) {
 	    return true;
     }
 
@@ -116,10 +118,10 @@ public class EntityYeti extends AgeableCreatureEntity {
     }
 
     @Override
-    public boolean isPotionApplicable(EffectInstance potionEffect) {
-        if(potionEffect.getPotion() == Effects.SLOWNESS) return false;
-        if(potionEffect.getPotion() == Effects.HUNGER) return false;
-        return super.isPotionApplicable(potionEffect);
+    public boolean canBeAffected(EffectInstance potionEffect) {
+        if(potionEffect.getEffect() == Effects.MOVEMENT_SLOWDOWN) return false;
+        if(potionEffect.getEffect() == Effects.HUNGER) return false;
+        return super.canBeAffected(potionEffect);
     }
 	
     

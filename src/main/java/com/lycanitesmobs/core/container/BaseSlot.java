@@ -18,17 +18,17 @@ public class BaseSlot extends Slot {
     // ==================================================
   	//                    Validation
   	// ==================================================
-	public boolean isItemValid(ItemStack itemStack) {
-		if(this.inventory == null) {
+	public boolean mayPlace(ItemStack itemStack) {
+		if(this.container == null) {
 			return true;
 		}
-		return this.inventory.isItemValidForSlot(this.getSlotIndex(), itemStack);
+		return this.container.canPlaceItem(this.getSlotIndex(), itemStack);
     }
 	
-	public int getSlotStackLimit() {
-		if(this.inventory instanceof InventoryCreature)
-			if(((InventoryCreature)this.inventory).getTypeFromSlot(this.getSlotIndex()) != null)
+	public int getMaxStackSize() {
+		if(this.container instanceof InventoryCreature)
+			if(((InventoryCreature)this.container).getTypeFromSlot(this.getSlotIndex()) != null)
 				return 1;
-        return this.inventory.getInventoryStackLimit();
+        return this.container.getMaxStackSize();
     }
 }

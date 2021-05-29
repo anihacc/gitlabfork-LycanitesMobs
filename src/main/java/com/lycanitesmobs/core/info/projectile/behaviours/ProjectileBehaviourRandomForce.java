@@ -20,15 +20,15 @@ public class ProjectileBehaviourRandomForce extends ProjectileBehaviour {
 
 	@Override
 	public void onProjectileUpdate(BaseProjectileEntity projectile) {
-		if(projectile.getEntityWorld().isRemote) {
+		if(projectile.getCommandSenderWorld().isClientSide) {
 			return;
 		}
 
 		if(projectile.updateTick % 5 == 0) {
-			projectile.addVelocity(
-					(0.5D - projectile.getEntityWorld().getRandom().nextDouble()) * this.force,
-					(0.5D - projectile.getEntityWorld().getRandom().nextDouble()) * this.force,
-					(0.5D - projectile.getEntityWorld().getRandom().nextDouble()) * this.force
+			projectile.push(
+					(0.5D - projectile.getCommandSenderWorld().getRandom().nextDouble()) * this.force,
+					(0.5D - projectile.getCommandSenderWorld().getRandom().nextDouble()) * this.force,
+					(0.5D - projectile.getCommandSenderWorld().getRandom().nextDouble()) * this.force
 			);
 		}
 	}

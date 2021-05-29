@@ -39,7 +39,7 @@ public class EntitySpriggan extends TameableCreatureEntity implements IMob {
 
         this.setupMob();
 
-        this.stepHeight = 1.0F;
+        this.maxUpStep = 1.0F;
     }
 
     @Override
@@ -60,15 +60,15 @@ public class EntitySpriggan extends TameableCreatureEntity implements IMob {
 	private int farmingTick = 0;
     // ========== Living Update ==========
     @Override
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
 
 		// Water Healing:
-		if(this.getAir() >= 0) {
+		if(this.getAirSupply() >= 0) {
 			if (this.isInWater())
-				this.addPotionEffect(new EffectInstance(Effects.REGENERATION, 3 * 20, 2));
-			else if (this.isInWaterRainOrBubbleColumn())
-				this.addPotionEffect(new EffectInstance(Effects.REGENERATION, 3 * 20, 1));
+				this.addEffect(new EffectInstance(Effects.REGENERATION, 3 * 20, 2));
+			else if (this.isInWaterRainOrBubble())
+				this.addEffect(new EffectInstance(Effects.REGENERATION, 3 * 20, 1));
 		}
 
         // Farming:
@@ -81,33 +81,33 @@ public class EntitySpriggan extends TameableCreatureEntity implements IMob {
         	this.farmingTick++;
 	        int farmingRange = 16;
 	        int farmingHeight = 4;
-	        for(int x = (int)this.getPositionVec().getX() - farmingRange; x <= (int)this.getPositionVec().getX() + farmingRange; x++) {
-	        	for(int y = (int)this.getPositionVec().getY() - farmingHeight; y <= (int)this.getPositionVec().getY() + farmingHeight; y++) {
-	        		for(int z = (int)this.getPositionVec().getZ() - farmingRange; z <= (int)this.getPositionVec().getZ() + farmingRange; z++) {
+	        for(int x = (int)this.position().x() - farmingRange; x <= (int)this.position().x() + farmingRange; x++) {
+	        	for(int y = (int)this.position().y() - farmingHeight; y <= (int)this.position().y() + farmingHeight; y++) {
+	        		for(int z = (int)this.position().z() - farmingRange; z <= (int)this.position().z() + farmingRange; z++) {
                         BlockPos pos = new BlockPos(x, y, z);
-	        			Block farmingBlock = this.getEntityWorld().getBlockState(pos).getBlock();
+	        			Block farmingBlock = this.getCommandSenderWorld().getBlockState(pos).getBlock();
 	        			if(farmingBlock instanceof IPlantable && farmingBlock instanceof IGrowable && farmingBlock != Blocks.TALL_GRASS) {
 	        				
 		        			// Boost Crops Every X Seconds:
-		        			if(!this.getEntityWorld().isRemote && this.getEntityWorld() instanceof ServerWorld && this.farmingTick % (currentFarmingRate) == 0) {
+		        			if(!this.getCommandSenderWorld().isClientSide && this.getCommandSenderWorld() instanceof ServerWorld && this.farmingTick % (currentFarmingRate) == 0) {
                                 /*if(farmingBlock.getTickRandomly()) {
                                     this.getEntityWorld().scheduleBlockUpdate(pos, farmingBlock, currentFarmingRate, 1);
                                 }*/
 
 		    	        		IGrowable growableBlock = (IGrowable)farmingBlock;
-		    	        		if(growableBlock.canGrow(this.getEntityWorld(), pos, this.getEntityWorld().getBlockState(pos), this.getEntityWorld().isRemote())) {
-	    	                        if(growableBlock.canUseBonemeal(this.getEntityWorld(), this.getRNG(), pos, this.getEntityWorld().getBlockState(pos))) {
-	    	                        	growableBlock.grow((ServerWorld)this.getEntityWorld(), this.getRNG(), pos, this.getEntityWorld().getBlockState(pos));
+		    	        		if(growableBlock.isValidBonemealTarget(this.getCommandSenderWorld(), pos, this.getCommandSenderWorld().getBlockState(pos), this.getCommandSenderWorld().isClientSide())) {
+	    	                        if(growableBlock.isBonemealSuccess(this.getCommandSenderWorld(), this.getRandom(), pos, this.getCommandSenderWorld().getBlockState(pos))) {
+	    	                        	growableBlock.performBonemeal((ServerWorld)this.getCommandSenderWorld(), this.getRandom(), pos, this.getCommandSenderWorld().getBlockState(pos));
 	    	                        }
 		    	                }
 		        			}
 		        			
 		        			// Crop Growth Effect:
-		        			if(this.getEntityWorld().isRemote && this.farmingTick % 40 == 0) {
-		        				double d0 = this.getRNG().nextGaussian() * 0.02D;
-		                        double d1 = this.getRNG().nextGaussian() * 0.02D;
-		                        double d2 = this.getRNG().nextGaussian() * 0.02D;
-		        				this.getEntityWorld().addParticle(ParticleTypes.HAPPY_VILLAGER, (double)((float)x + this.getRNG().nextFloat()), (double)y + (double)this.getRNG().nextFloat(), (double)((float)z + this.getRNG().nextFloat()), d0, d1, d2);
+		        			if(this.getCommandSenderWorld().isClientSide && this.farmingTick % 40 == 0) {
+		        				double d0 = this.getRandom().nextGaussian() * 0.02D;
+		                        double d1 = this.getRandom().nextGaussian() * 0.02D;
+		                        double d2 = this.getRandom().nextGaussian() * 0.02D;
+		        				this.getCommandSenderWorld().addParticle(ParticleTypes.HAPPY_VILLAGER, (double)((float)x + this.getRandom().nextFloat()), (double)y + (double)this.getRandom().nextFloat(), (double)((float)z + this.getRandom().nextFloat()), d0, d1, d2);
 		        			}
 	        			}
 	    	        }
@@ -116,12 +116,12 @@ public class EntitySpriggan extends TameableCreatureEntity implements IMob {
         }
 
         // Particles:
-        if(this.getEntityWorld().isRemote && !CreatureManager.getInstance().config.disableBlockParticles)
+        if(this.getCommandSenderWorld().isClientSide && !CreatureManager.getInstance().config.disableBlockParticles)
             for(int i = 0; i < 2; ++i) {
-                this.getEntityWorld().addParticle(new BlockParticleData(ParticleTypes.BLOCK, Blocks.TALL_GRASS.getDefaultState()),
-                        this.getPositionVec().getX() + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width,
-                        this.getPositionVec().getY() + this.rand.nextDouble() * (double) this.getSize(Pose.STANDING).height,
-                        this.getPositionVec().getZ() + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width,
+                this.getCommandSenderWorld().addParticle(new BlockParticleData(ParticleTypes.BLOCK, Blocks.TALL_GRASS.defaultBlockState()),
+                        this.position().x() + (this.random.nextDouble() - 0.5D) * (double) this.getDimensions(Pose.STANDING).width,
+                        this.position().y() + this.random.nextDouble() * (double) this.getDimensions(Pose.STANDING).height,
+                        this.position().z() + (this.random.nextDouble() - 0.5D) * (double) this.getDimensions(Pose.STANDING).width,
                         0.0D, 0.0D, 0.0D);
             }
     }
@@ -150,11 +150,11 @@ public class EntitySpriggan extends TameableCreatureEntity implements IMob {
     	// Create New Laser:
     	if(this.projectile == null) {
 	    	// Type:
-	    	this.projectile = projectileInfo.createProjectile(this.getEntityWorld(), this);
+	    	this.projectile = projectileInfo.createProjectile(this.getCommandSenderWorld(), this);
 	    	
 	    	// Launch:
-	        this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
-	        this.getEntityWorld().addEntity(projectile);
+	        this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
+	        this.getCommandSenderWorld().addFreshEntity(projectile);
     	}
 
     	super.attackRanged(target, range);
@@ -166,14 +166,14 @@ public class EntitySpriggan extends TameableCreatureEntity implements IMob {
    	// ==================================================
     // ========== Damage Modifier ==========
     public float getDamageModifier(DamageSource damageSrc) {
-        if(damageSrc.isFireDamage())
+        if(damageSrc.isFire())
             return 2.0F;
-		if(damageSrc.getTrueSource() != null) {
+		if(damageSrc.getEntity() != null) {
 			ItemStack heldItem = ItemStack.EMPTY;
-			if(damageSrc.getTrueSource() instanceof LivingEntity) {
-				LivingEntity entityLiving = (LivingEntity)damageSrc.getTrueSource();
-				if(!entityLiving.getHeldItem(Hand.MAIN_HAND).isEmpty()) {
-					heldItem = entityLiving.getHeldItem(Hand.MAIN_HAND);
+			if(damageSrc.getEntity() instanceof LivingEntity) {
+				LivingEntity entityLiving = (LivingEntity)damageSrc.getEntity();
+				if(!entityLiving.getItemInHand(Hand.MAIN_HAND).isEmpty()) {
+					heldItem = entityLiving.getItemInHand(Hand.MAIN_HAND);
 				}
 			}
 			if(ObjectLists.isAxe(heldItem)) {

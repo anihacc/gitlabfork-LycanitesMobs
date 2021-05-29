@@ -32,6 +32,6 @@ public class LanguageLoader implements ISelectiveResourceReloadListener {
 	 */
 	@Override
 	public void onResourceManagerReload(IResourceManager resourceManager, Predicate<IResourceType> resourcePredicate) {
-		LanguageManager.getInstance().loadLanguage(Minecraft.getInstance().gameSettings.language);
+		LanguageManager.getInstance().loadLanguage(Minecraft.getInstance().options.languageCode);
 	}
 }

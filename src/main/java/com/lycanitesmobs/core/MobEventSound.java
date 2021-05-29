@@ -14,12 +14,12 @@ public class MobEventSound extends SimpleSound implements ITickableSound {
     protected boolean donePlaying;
 
     public MobEventSound(SoundEvent soundEvent, SoundCategory categoryIn, Entity entity, float volume, float pitch) {
-        super(soundEvent, categoryIn, volume, pitch, (float)entity.getPositionVec().getX(), (float)entity.getPositionVec().getY(), (float)entity.getPositionVec().getZ());
+        super(soundEvent, categoryIn, volume, pitch, (float)entity.position().x(), (float)entity.position().y(), (float)entity.position().z());
         this.entity = entity;
-        this.repeat = true;
+        this.looping = true;
         this.volume = volume;
         this.pitch = 1.0F;
-        this.repeat = false;
+        this.looping = false;
     }
 
     @Override
@@ -28,14 +28,14 @@ public class MobEventSound extends SimpleSound implements ITickableSound {
             this.donePlaying = true;
         }
         else {
-            this.x = (float)this.entity.getPositionVec().getX();
-            this.y = (float)this.entity.getPositionVec().getY();
-            this.z = (float)this.entity.getPositionVec().getZ();
+            this.x = (float)this.entity.position().x();
+            this.y = (float)this.entity.position().y();
+            this.z = (float)this.entity.position().z();
         }
     }
 
     @Override
-    public boolean isDonePlaying() {
+    public boolean isStopped() {
         return this.donePlaying;
     }
 }

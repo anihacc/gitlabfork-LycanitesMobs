@@ -271,7 +271,7 @@ public class PetsBeastiaryScreen extends BeastiaryScreen {
 			float experienceNormal = (float)this.playerExt.selectedPet.getExperience() / this.playerExt.selectedPet.getMaxExperience();
 			this.drawHelper.drawTexture(matrixStack, TextureManager.getTexture("GUIBarExperience"), barX, barY, 0, experienceNormal, 1, barWidth * experienceNormal, barHeight);
 			String experienceText = this.playerExt.selectedPet.getExperience() + "/" + this.playerExt.selectedPet.getMaxExperience();
-			this.drawHelper.getFontRenderer().drawString(matrixStack, experienceText, barCenter - (this.drawHelper.getStringWidth(experienceText) / 2), barY + 2, 0xFFFFFF);
+			this.drawHelper.getFontRenderer().draw(matrixStack, experienceText, barCenter - (this.drawHelper.getStringWidth(experienceText) / 2), barY + 2, 0xFFFFFF);
 		}
 
 		// Base Display:
@@ -363,7 +363,7 @@ public class PetsBeastiaryScreen extends BeastiaryScreen {
 
 				this.playerExt.sendPetEntryToServer(petEntry);
 				if (this.playerExt.selectedPet == null) {
-					this.mc.displayGuiScreen(new PetsBeastiaryScreen(this.mc.player));
+					this.mc.setScreen(new PetsBeastiaryScreen(this.mc.player));
 				}
 				return;
 			}
@@ -387,11 +387,11 @@ public class PetsBeastiaryScreen extends BeastiaryScreen {
 	public ITextComponent getTitle() {
 		if(this.playerExt.selectedPet != null) {
 			ITextComponent title = this.playerExt.selectedPet.getDisplayName()
-					.copyRaw().appendString(" ")
-					.copyRaw().append(new TranslationTextComponent("creature.stat.level"))
-					.copyRaw().appendString(" " + this.playerExt.selectedPet.getLevel());
+					.plainCopy().append(" ")
+					.plainCopy().append(new TranslationTextComponent("creature.stat.level"))
+					.plainCopy().append(" " + this.playerExt.selectedPet.getLevel());
 			if(this.playerExt.selectedPet.releaseEntity) {
-				title = new TranslationTextComponent("gui.pet.release").appendString(" ").append(title);
+				title = new TranslationTextComponent("gui.pet.release").append(" ").append(title);
 			}
 			return title;
 		}
@@ -419,6 +419,6 @@ public class PetsBeastiaryScreen extends BeastiaryScreen {
 			soundSuffix += "." + creatureInfo.getSubspecies(this.playerExt.selectedPet.subspeciesIndex).name;
 		}
 		SoundEvent soundEvent = ObjectManager.getSound(creatureInfo.getName() + soundSuffix + "_tame");
-		this.player.getEntityWorld().playSound(this.player, this.player.getPositionVec().getX(), this.player.getPositionVec().getY(), this.player.getPositionVec().getZ(), soundEvent, SoundCategory.NEUTRAL, 1, 1);
+		this.player.getCommandSenderWorld().playSound(this.player, this.player.position().x(), this.player.position().y(), this.player.position().z(), soundEvent, SoundCategory.NEUTRAL, 1, 1);
 	}
 }

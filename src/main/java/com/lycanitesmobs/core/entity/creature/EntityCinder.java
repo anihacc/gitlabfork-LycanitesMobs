@@ -36,7 +36,7 @@ public class EntityCinder extends TameableCreatureEntity implements IMob, IFusab
         this.hasAttackSound = false;
         this.setupMob();
 
-        this.stepHeight = 1.0F;
+        this.maxUpStep = 1.0F;
     }
 
     // ========== Init AI ==========
@@ -52,21 +52,21 @@ public class EntityCinder extends TameableCreatureEntity implements IMob, IFusab
     // ==================================================
 	// ========== Living Update ==========
 	@Override
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
 
         // Suffocation Transform:
-		if(!this.getEntityWorld().isRemote) {
+		if(!this.getCommandSenderWorld().isClientSide) {
 			if(this.inWallDamageAbsorbed >= 10) {
 				this.transform(CreatureManager.getInstance().getEntityType("volcan"), null, false);
 			}
 		}
         
         // Particles:
-        if(this.getEntityWorld().isRemote) {
+        if(this.getCommandSenderWorld().isClientSide) {
 			for (int i = 0; i < 2; ++i) {
-				this.getEntityWorld().addParticle(ParticleTypes.LARGE_SMOKE, this.getPositionVec().getX() + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width, this.getPositionVec().getY() + this.rand.nextDouble() * (double) this.getSize(Pose.STANDING).height, this.getPositionVec().getZ() + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
-				this.getEntityWorld().addParticle(ParticleTypes.FLAME, this.getPositionVec().getX() + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width, this.getPositionVec().getY() + this.rand.nextDouble() * (double) this.getSize(Pose.STANDING).height, this.getPositionVec().getZ() + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
+				this.getCommandSenderWorld().addParticle(ParticleTypes.LARGE_SMOKE, this.position().x() + (this.random.nextDouble() - 0.5D) * (double) this.getDimensions(Pose.STANDING).width, this.position().y() + this.random.nextDouble() * (double) this.getDimensions(Pose.STANDING).height, this.position().z() + (this.random.nextDouble() - 0.5D) * (double) this.getDimensions(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
+				this.getCommandSenderWorld().addParticle(ParticleTypes.FLAME, this.position().x() + (this.random.nextDouble() - 0.5D) * (double) this.getDimensions(Pose.STANDING).width, this.position().y() + this.random.nextDouble() * (double) this.getDimensions(Pose.STANDING).height, this.position().z() + (this.random.nextDouble() - 0.5D) * (double) this.getDimensions(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
 			}
 		}
     }
@@ -82,30 +82,30 @@ public class EntityCinder extends TameableCreatureEntity implements IMob, IFusab
     	List<RapidFireProjectileEntity> projectiles = new ArrayList<>();
 		ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile("ember");
     	
-    	RapidFireProjectileEntity projectileEntry = new RapidFireProjectileEntity(ProjectileManager.getInstance().oldProjectileTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getEntityWorld(), this, 15, 3);
+    	RapidFireProjectileEntity projectileEntry = new RapidFireProjectileEntity(ProjectileManager.getInstance().oldProjectileTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getCommandSenderWorld(), this, 15, 3);
     	projectiles.add(projectileEntry);
     	
-    	RapidFireProjectileEntity projectileEntry2 = new RapidFireProjectileEntity(ProjectileManager.getInstance().oldProjectileTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getEntityWorld(), this, 15, 3);
+    	RapidFireProjectileEntity projectileEntry2 = new RapidFireProjectileEntity(ProjectileManager.getInstance().oldProjectileTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getCommandSenderWorld(), this, 15, 3);
     	projectileEntry2.offsetX += 1.0D;
     	projectiles.add(projectileEntry2);
     	
-    	RapidFireProjectileEntity projectileEntry3 = new RapidFireProjectileEntity(ProjectileManager.getInstance().oldProjectileTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getEntityWorld(), this, 15, 3);
+    	RapidFireProjectileEntity projectileEntry3 = new RapidFireProjectileEntity(ProjectileManager.getInstance().oldProjectileTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getCommandSenderWorld(), this, 15, 3);
     	projectileEntry3.offsetX -= 1.0D;
     	projectiles.add(projectileEntry3);
     	
-    	RapidFireProjectileEntity projectileEntry4 = new RapidFireProjectileEntity(ProjectileManager.getInstance().oldProjectileTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getEntityWorld(), this, 15, 3);
+    	RapidFireProjectileEntity projectileEntry4 = new RapidFireProjectileEntity(ProjectileManager.getInstance().oldProjectileTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getCommandSenderWorld(), this, 15, 3);
     	projectileEntry4.offsetZ += 1.0D;
     	projectiles.add(projectileEntry4);
     	
-    	RapidFireProjectileEntity projectileEntry5 = new RapidFireProjectileEntity(ProjectileManager.getInstance().oldProjectileTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getEntityWorld(), this, 15, 3);
+    	RapidFireProjectileEntity projectileEntry5 = new RapidFireProjectileEntity(ProjectileManager.getInstance().oldProjectileTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getCommandSenderWorld(), this, 15, 3);
     	projectileEntry5.offsetZ -= 1.0D;
     	projectiles.add(projectileEntry5);
     	
-    	RapidFireProjectileEntity projectileEntry6 = new RapidFireProjectileEntity(ProjectileManager.getInstance().oldProjectileTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getEntityWorld(), this, 15, 3);
+    	RapidFireProjectileEntity projectileEntry6 = new RapidFireProjectileEntity(ProjectileManager.getInstance().oldProjectileTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getCommandSenderWorld(), this, 15, 3);
     	projectileEntry6.offsetY += 1.0D;
     	projectiles.add(projectileEntry6);
     	
-    	RapidFireProjectileEntity projectileEntry7 = new RapidFireProjectileEntity(ProjectileManager.getInstance().oldProjectileTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getEntityWorld(), this, 15, 3);
+    	RapidFireProjectileEntity projectileEntry7 = new RapidFireProjectileEntity(ProjectileManager.getInstance().oldProjectileTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getCommandSenderWorld(), this, 15, 3);
     	projectileEntry7.offsetY -= 1.0D;
     	projectiles.add(projectileEntry7);
     	
@@ -113,26 +113,26 @@ public class EntityCinder extends TameableCreatureEntity implements IMob, IFusab
 	        projectile.setProjectileScale(1f);
 	    	
 	    	// Y Offset:
-			projectile.setPosition(
-					projectile.getPositionVec().getX(),
-					projectile.getPositionVec().getY() - this.getSize(Pose.STANDING).height / 4,
-					projectile.getPositionVec().getZ()
+			projectile.setPos(
+					projectile.position().x(),
+					projectile.position().y() - this.getDimensions(Pose.STANDING).height / 4,
+					projectile.position().z()
 			);
 	    	
 	    	// Accuracy:
-	    	float accuracy = 1.0F * (this.getRNG().nextFloat() - 0.5F);
+	    	float accuracy = 1.0F * (this.getRandom().nextFloat() - 0.5F);
 	    	
 	    	// Set Velocities:
-	        double d0 = target.getPositionVec().getX() - this.getPositionVec().getX() + accuracy;
-	        double d1 = target.getPositionVec().getY() + (double)target.getEyeHeight() - 1.100000023841858D - projectile.getPositionVec().getY() + accuracy;
-	        double d2 = target.getPositionVec().getZ() - this.getPositionVec().getZ() + accuracy;
+	        double d0 = target.position().x() - this.position().x() + accuracy;
+	        double d1 = target.position().y() + (double)target.getEyeHeight() - 1.100000023841858D - projectile.position().y() + accuracy;
+	        double d2 = target.position().z() - this.position().z() + accuracy;
 	        float f1 = MathHelper.sqrt(d0 * d0 + d2 * d2) * 0.2F;
 	        float velocity = 0.6F;
 	        projectile.shoot(d0, d1 + (double)f1, d2, velocity, 6.0F);
 	        
 	        // Launch:
-	        this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
-	        this.getEntityWorld().addEntity(projectile);
+	        this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
+	        this.getCommandSenderWorld().addFreshEntity(projectile);
     	}
     	
         super.attackRanged(target, range);
@@ -184,7 +184,7 @@ public class EntityCinder extends TameableCreatureEntity implements IMob, IFusab
    	// ==================================================
     // ========== Damage Modifier ==========
     public float getDamageModifier(DamageSource damageSrc) {
-    	if(damageSrc.isFireDamage())
+    	if(damageSrc.isFire())
     		return 0F;
     	else return super.getDamageModifier(damageSrc);
     }

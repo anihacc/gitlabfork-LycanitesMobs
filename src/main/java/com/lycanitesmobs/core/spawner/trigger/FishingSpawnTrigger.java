@@ -29,14 +29,14 @@ public class FishingSpawnTrigger extends SpawnTrigger {
 	/** Called every time a player fishes up an item. **/
 	public void onFished(World world, PlayerEntity player, Entity hookEntity) {
 		// Chance:
-		if(this.chance < 1 && player.getRNG().nextDouble() > this.chance) {
+		if(this.chance < 1 && player.getRandom().nextDouble() > this.chance) {
 			return;
 		}
 
-		BlockPos spawnPos = player.getPosition().add(0, 0, 1);
+		BlockPos spawnPos = player.blockPosition().offset(0, 0, 1);
 		this.hookEntity = hookEntity;
 		if(this.hookEntity != null) {
-			spawnPos = hookEntity.getPosition();
+			spawnPos = hookEntity.blockPosition();
 		}
 		this.trigger(world, player, spawnPos, 0, 0);
 	}
@@ -45,7 +45,7 @@ public class FishingSpawnTrigger extends SpawnTrigger {
 	public void applyToEntity(LivingEntity entityLiving) {
 		super.applyToEntity(entityLiving);
 		if(this.hookEntity != null) {
-			entityLiving.setMotion(this.hookEntity.getMotion());
+			entityLiving.setDeltaMovement(this.hookEntity.getDeltaMovement());
 		}
 	}
 }

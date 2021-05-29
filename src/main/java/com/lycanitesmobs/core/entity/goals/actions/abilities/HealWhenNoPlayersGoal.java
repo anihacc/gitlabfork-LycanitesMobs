@@ -24,7 +24,7 @@ public class HealWhenNoPlayersGoal extends Goal {
 	 */
 	public HealWhenNoPlayersGoal(BaseCreatureEntity setHost) {
         this.host = setHost;
-		this.setMutexFlags(EnumSet.noneOf(Goal.Flag.class));
+		this.setFlags(EnumSet.noneOf(Goal.Flag.class));
     }
 
 	/**
@@ -38,20 +38,20 @@ public class HealWhenNoPlayersGoal extends Goal {
     }
 
 	@Override
-    public boolean shouldExecute() {
+    public boolean canUse() {
 		return this.host.isAlive();
     }
 
 	@Override
-    public boolean shouldContinueExecuting() {
+    public boolean canContinueToUse() {
         return this.host.isAlive();
     }
 
 	@Override
-    public void startExecuting() {}
+    public void start() {}
 
 	@Override
-    public void resetTask() {
+    public void stop() {
 		this.firstPlayerTargetCheck = false;
 	}
 

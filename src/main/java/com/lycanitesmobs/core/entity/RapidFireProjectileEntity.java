@@ -35,7 +35,7 @@ public class RapidFireProjectileEntity extends BaseProjectileEntity {
  	// ==================================================
 	public RapidFireProjectileEntity(EntityType<? extends BaseProjectileEntity> entityType, World world) {
 		super(entityType, world);
-		this.noClip = true;
+		this.noPhysics = true;
 	}
 
 	public RapidFireProjectileEntity(EntityType<? extends BaseProjectileEntity> entityType, Class entityClass, World world, int setTime, int setDelay) {
@@ -43,7 +43,7 @@ public class RapidFireProjectileEntity extends BaseProjectileEntity {
 		this.projectileClass = entityClass;
 		this.rapidTime = setTime;
 		this.rapidDelay = setDelay;
-		this.noClip = true;
+		this.noPhysics = true;
 	}
 
 	public RapidFireProjectileEntity(EntityType<? extends BaseProjectileEntity> entityType, Class entityClass, World world, double x, double y, double z, int setTime, int setDelay) {
@@ -51,7 +51,7 @@ public class RapidFireProjectileEntity extends BaseProjectileEntity {
 		this.projectileClass = entityClass;
         this.rapidTime = setTime;
         this.rapidDelay = setDelay;
-        this.noClip = true;
+        this.noPhysics = true;
     }
 
     public RapidFireProjectileEntity(EntityType<? extends BaseProjectileEntity> entityType, Class entityClass, World world, LivingEntity entityLivingBase, int setTime, int setDelay) {
@@ -59,12 +59,12 @@ public class RapidFireProjectileEntity extends BaseProjectileEntity {
         //this.setSize(projectileWidth, projectileHeight);
         this.projectileClass = entityClass;
         this.shootingEntity = entityLivingBase;
-        this.offsetX = this.getPositionVec().getX() - entityLivingBase.getPositionVec().getX();
-        this.offsetY = this.getPositionVec().getY() - entityLivingBase.getPositionVec().getY();
-        this.offsetZ = this.getPositionVec().getZ() - entityLivingBase.getPositionVec().getZ();
+        this.offsetX = this.position().x() - entityLivingBase.position().x();
+        this.offsetY = this.position().y() - entityLivingBase.position().y();
+        this.offsetZ = this.position().z() - entityLivingBase.position().z();
         this.rapidTime = setTime;
         this.rapidDelay = setDelay;
-        this.noClip = true;
+        this.noPhysics = true;
     }
 
 	public RapidFireProjectileEntity(EntityType<? extends BaseProjectileEntity> entityType, ProjectileInfo projectileInfo, World world, double par2, double par4, double par6, int setTime, int setDelay) {
@@ -73,7 +73,7 @@ public class RapidFireProjectileEntity extends BaseProjectileEntity {
 		this.projectileInfo = projectileInfo;
 		this.rapidTime = setTime;
 		this.rapidDelay = setDelay;
-		this.noClip = true;
+		this.noPhysics = true;
 	}
 
 	public RapidFireProjectileEntity(EntityType<? extends BaseProjectileEntity> entityType, ProjectileInfo projectileInfo, World world, LivingEntity entityLivingBase, int setTime, int setDelay) {
@@ -81,16 +81,16 @@ public class RapidFireProjectileEntity extends BaseProjectileEntity {
 		//this.setSize(projectileWidth, projectileHeight);
 		this.projectileInfo = projectileInfo;
 		this.shootingEntity = entityLivingBase;
-		this.offsetX = this.getPositionVec().getX() - entityLivingBase.getPositionVec().getX();
-		this.offsetY = this.getPositionVec().getY() - entityLivingBase.getPositionVec().getY();
-		this.offsetZ = this.getPositionVec().getZ() - entityLivingBase.getPositionVec().getZ();
+		this.offsetX = this.position().x() - entityLivingBase.position().x();
+		this.offsetY = this.position().y() - entityLivingBase.position().y();
+		this.offsetZ = this.position().z() - entityLivingBase.position().z();
 		this.rapidTime = setTime;
 		this.rapidDelay = setDelay;
-		this.noClip = true;
+		this.noPhysics = true;
 	}
 
 	@Override
-	public IPacket<?> createSpawnPacket() {
+	public IPacket<?> getAddEntityPacket() {
 		return new SSpawnObjectPacket(this);
 	}
 	
@@ -101,10 +101,10 @@ public class RapidFireProjectileEntity extends BaseProjectileEntity {
     @Override
     public void tick() {
     	if(this.shootingEntity != null) {
-    		this.setPosition(
-					shootingEntity.getPositionVec().getX() + this.offsetX,
-					shootingEntity.getPositionVec().getY() + this.offsetY,
-					shootingEntity.getPositionVec().getZ() + this.offsetZ
+    		this.setPos(
+					shootingEntity.position().x() + this.offsetX,
+					shootingEntity.position().y() + this.offsetY,
+					shootingEntity.position().z() + this.offsetZ
 			);
     	}
     	if(rapidTime > 0) {
@@ -136,8 +136,8 @@ public class RapidFireProjectileEntity extends BaseProjectileEntity {
  	//                 Fire Projectile
  	// ==================================================
     public void fireProjectile() {
-    	World world = this.getEntityWorld();
-    	if(world.isRemote)
+    	World world = this.getCommandSenderWorld();
+    	if(world.isClientSide)
     		return;
     	
 		try {
@@ -145,26 +145,26 @@ public class RapidFireProjectileEntity extends BaseProjectileEntity {
 
 	        if(this.shootingEntity == null) {
 				if(this.projectileInfo != null) {
-					projectile = this.projectileInfo.createProjectile(this.getEntityWorld(), this.getPositionVec().getX(), this.getPositionVec().getY(), this.getPositionVec().getZ());
-					projectile.shoot(this.getMotion().x, this.getMotion().y, this.getMotion().z, (float)this.projectileInfo.velocity, 0);
+					projectile = this.projectileInfo.createProjectile(this.getCommandSenderWorld(), this.position().x(), this.position().y(), this.position().z());
+					projectile.shoot(this.getDeltaMovement().x, this.getDeltaMovement().y, this.getDeltaMovement().z, (float)this.projectileInfo.velocity, 0);
 				}
 				else {
-					projectile = ProjectileManager.getInstance().createOldProjectile(this.projectileClass, world, this.getPositionVec().getX(), this.getPositionVec().getY(), this.getPositionVec().getZ());
-					projectile.shoot(this.getMotion().x, this.getMotion().y, this.getMotion().z, 1, 1);
+					projectile = ProjectileManager.getInstance().createOldProjectile(this.projectileClass, world, this.position().x(), this.position().y(), this.position().z());
+					projectile.shoot(this.getDeltaMovement().x, this.getDeltaMovement().y, this.getDeltaMovement().z, 1, 1);
 				}
 	        }
 	        else {
 	        	if(this.projectileInfo != null) {
-					projectile = this.projectileInfo.createProjectile(this.getEntityWorld(), this.shootingEntity);
-					projectile.shoot(this.getMotion().x, this.getMotion().y, this.getMotion().z, (float)this.projectileInfo.velocity, 0);
+					projectile = this.projectileInfo.createProjectile(this.getCommandSenderWorld(), this.shootingEntity);
+					projectile.shoot(this.getDeltaMovement().x, this.getDeltaMovement().y, this.getDeltaMovement().z, (float)this.projectileInfo.velocity, 0);
 				}
 	        	else {
 					projectile = ProjectileManager.getInstance().createOldProjectile(this.projectileClass, world, this.shootingEntity);
-					projectile.shoot(this.getMotion().x, this.getMotion().y, this.getMotion().z, 1, 1);
+					projectile.shoot(this.getDeltaMovement().x, this.getDeltaMovement().y, this.getDeltaMovement().z, 1, 1);
 				}
                 if(projectile instanceof ThrowableEntity) {
                     ThrowableEntity entityThrowable = (ThrowableEntity)projectile;
-                    entityThrowable.setPosition(this.shootingEntity.getPositionVec().getX() + this.offsetX, this.shootingEntity.getPositionVec().getY() + this.offsetY, this.shootingEntity.getPositionVec().getZ() + this.offsetZ);
+                    entityThrowable.setPos(this.shootingEntity.position().x() + this.offsetX, this.shootingEntity.position().y() + this.offsetY, this.shootingEntity.position().z() + this.offsetZ);
                 }
 	        }
 	        
@@ -172,7 +172,7 @@ public class RapidFireProjectileEntity extends BaseProjectileEntity {
                 ((BaseProjectileEntity) projectile).setProjectileScale(this.projectileScale);
             }
 	        
-	        world.addEntity((Entity)projectile);
+	        world.addFreshEntity((Entity)projectile);
 		}
 		catch (Exception e) {
 			System.out.println("[WARNING] [LycanitesMobs] EntityRapidFire was unable to instantiate the given projectile class.");
@@ -186,17 +186,17 @@ public class RapidFireProjectileEntity extends BaseProjectileEntity {
  	// ==================================================
     // ========== Gravity ==========
     @Override
-    protected float getGravityVelocity() {
+    protected float getGravity() {
         return 0.0F;
     }
 
     // ========== Set Position ==========
-    public void setPosition(double x, double y, double z) {
-        super.setPosition(x, y, z);
+    public void setPos(double x, double y, double z) {
+        super.setPos(x, y, z);
         if(this.shootingEntity != null) {
-            this.offsetX = x - this.shootingEntity.getPositionVec().getX();
-            this.offsetY = y - this.shootingEntity.getPositionVec().getY();
-            this.offsetZ = z - this.shootingEntity.getPositionVec().getZ();
+            this.offsetX = x - this.shootingEntity.position().x();
+            this.offsetY = y - this.shootingEntity.position().y();
+            this.offsetZ = z - this.shootingEntity.position().z();
         }
     }
     
@@ -205,7 +205,7 @@ public class RapidFireProjectileEntity extends BaseProjectileEntity {
  	//                     Impact
  	// ==================================================
     @Override
-    protected void onImpact(RayTraceResult rayTraceResult) {
+    protected void onHit(RayTraceResult rayTraceResult) {
     	return;
     }
     

@@ -23,7 +23,7 @@ public class EquipmentPartRenderer extends ItemStackTileEntityRenderer implement
 	protected List<LayerItem> renderLayers = new ArrayList<>();
 
 	@Override
-	public void func_239207_a_(ItemStack itemStack, ItemCameraTransforms.TransformType transformType, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, int brightness, int unknown) {
+	public void renderByItem(ItemStack itemStack, ItemCameraTransforms.TransformType transformType, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, int brightness, int unknown) {
 		if(!(itemStack.getItem() instanceof ItemEquipmentPart)) {
 			return;
 		}
@@ -40,16 +40,16 @@ public class EquipmentPartRenderer extends ItemStackTileEntityRenderer implement
 
 		float loop = 0;
 		if(Minecraft.getInstance().player != null) {
-			loop = Minecraft.getInstance().player.ticksExisted;
+			loop = Minecraft.getInstance().player.tickCount;
 		}
 
 		matrixStack.translate(0.6F, 0.35F, 0.5F); // translate
-		matrixStack.rotate(new Vector3f(1.0F, 0.0F, 0.0F).rotationDegrees(190));
-		matrixStack.rotate(new Vector3f(0.0F, 1.0F, 0.0F).rotationDegrees(-45));
-		matrixStack.rotate(new Vector3f(0.0F, 0.0F, 1.0F).rotationDegrees(10));
+		matrixStack.mulPose(new Vector3f(1.0F, 0.0F, 0.0F).rotationDegrees(190));
+		matrixStack.mulPose(new Vector3f(0.0F, 1.0F, 0.0F).rotationDegrees(-45));
+		matrixStack.mulPose(new Vector3f(0.0F, 0.0F, 1.0F).rotationDegrees(10));
 		matrixStack.translate(0F, -1.7F, 0F);
 
-		matrixStack.push();
+		matrixStack.pushPose();
 		if("head".equalsIgnoreCase(itemEquipmentPart.slotType)) {
 			matrixStack.translate(0F, 0F, 0.5F);
 		}
@@ -64,7 +64,7 @@ public class EquipmentPartRenderer extends ItemStackTileEntityRenderer implement
 		}
 		//this.renderModel(itemObjModel, itemStack, hand, matrixStack, renderTypeBuffer, new LayerItemDye(this, "dye"),null, loop, brightness);
 		itemObjModel.clearAnimationFrames();
-		matrixStack.pop();
+		matrixStack.popPose();
 	}
 
 	/**
@@ -92,7 +92,7 @@ public class EquipmentPartRenderer extends ItemStackTileEntityRenderer implement
 		if(location == null) {
 			return;
 		}
-		Minecraft.getInstance().getTextureManager().bindTexture(location);
+		Minecraft.getInstance().getTextureManager().bind(location);
 	}
 
 	@Override

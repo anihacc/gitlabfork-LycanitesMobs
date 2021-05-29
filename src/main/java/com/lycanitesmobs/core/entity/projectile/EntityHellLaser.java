@@ -78,9 +78,9 @@ public class EntityHellLaser extends LaserProjectileEntity {
     @Override
     public boolean updateDamage(Entity target) {
     	boolean damageDealt = super.updateDamage(target);
-        if(this.func_234616_v_() != null && damageDealt) {
+        if(this.getOwner() != null && damageDealt) {
         	if(target instanceof LivingEntity)
-    			((LivingEntity)target).addPotionEffect(new EffectInstance(Effects.WITHER, this.getEffectDuration(5), 0));
+    			((LivingEntity)target).addEffect(new EffectInstance(Effects.WITHER, this.getEffectDuration(5), 0));
         }
         return damageDealt;
     }
