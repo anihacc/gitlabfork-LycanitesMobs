@@ -18,9 +18,7 @@ import net.minecraft.item.ItemUseContext;
 import net.minecraft.item.UseAction;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.text.*;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
@@ -71,7 +69,7 @@ public class BaseItem extends Item {
     }
 
     public ITextComponent getDescription(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flag) {
-    	return new TranslationTextComponent(this.getDescriptionId() + ".description");
+    	return new TranslationTextComponent(this.getDescriptionId() + ".description").withStyle(style -> style.withColor(Color.fromLegacyFormat(TextFormatting.GREEN)));
     }
 	
     

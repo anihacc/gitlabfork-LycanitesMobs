@@ -16,10 +16,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.text.*;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -64,19 +61,19 @@ public class ChargeItem extends BaseItem {
 
     @Override
     public ITextComponent getDescription(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        return new TranslationTextComponent("item.lycanitesmobs.charge.description");
+        return new TranslationTextComponent("item.lycanitesmobs.charge.description").withStyle(style -> style.withColor(Color.fromLegacyFormat(TextFormatting.GREEN)));
     }
 
     public List<ITextComponent> getAdditionalDescriptions(ItemStack itemStack, @Nullable World world, ITooltipFlag tooltipFlag) {
         List<ITextComponent> descriptions = new ArrayList<>();
 
         if(!this.getElements().isEmpty()) {
-            ITextComponent elements = new TranslationTextComponent("item.lycanitesmobs.charge.elements")
+            ITextComponent elements = new TranslationTextComponent("item.lycanitesmobs.charge.elements").withStyle(style -> style.withColor(Color.fromLegacyFormat(TextFormatting.GREEN)))
                     .append(" ").append(this.getElementNames());
             descriptions.add(elements);
         }
 
-        ITextComponent projectile = new TranslationTextComponent("item.lycanitesmobs.charge.projectile")
+        ITextComponent projectile = new TranslationTextComponent("item.lycanitesmobs.charge.projectile").withStyle(style -> style.withColor(Color.fromLegacyFormat(TextFormatting.GREEN)))
                 .append(" ").append(this.getProjectileName());
         descriptions.add(projectile);
 

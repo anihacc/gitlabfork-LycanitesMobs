@@ -6,9 +6,7 @@ import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.fluid.FlowingFluid;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.text.*;
 import net.minecraft.world.IBlockReader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -41,7 +39,7 @@ public class BlockFluidBase extends FlowingFluidBlock {
     }
 
     public ITextComponent getDescription(ItemStack itemStack, @Nullable IBlockReader world) {
-        return new TranslationTextComponent("block." + this.blockName + ".description");
+        return new TranslationTextComponent("block." + this.blockName + ".description").withStyle(style -> style.withColor(Color.fromLegacyFormat(TextFormatting.GREEN)));
     }
 
 

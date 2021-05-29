@@ -58,15 +58,21 @@ public abstract class RideableCreatureEntity extends TameableCreatureEntity {
     // ==================================================
     //                       Update
     // ==================================================
-    @Override
+	@Override
+	public void tick() {
+		// Detect Dismount:
+		if(this.lastRiddenByEntity != this.getControllingPassenger()) {
+			if(this.lastRiddenByEntity != null)
+				this.onDismounted(this.lastRiddenByEntity);
+			this.lastRiddenByEntity = this.getControllingPassenger();
+		}
+
+		super.tick();
+	}
+
+	@Override
     public void aiStep() {
     	super.aiStep();
-
-        if(this.lastRiddenByEntity != this.getControllingPassenger()) {
-            if(this.lastRiddenByEntity != null)
-                this.onDismounted(this.lastRiddenByEntity);
-            this.lastRiddenByEntity = this.getControllingPassenger();
-        }
 
 		if(this.hasRiderTarget()) {
 			// Rider Buffs:
@@ -183,8 +189,8 @@ public abstract class RideableCreatureEntity extends TameableCreatureEntity {
         	entity.startRiding(this);
     }
 
-    public float getStafeSpeed() {
-		return 0.5F;
+    public float getStrafeSpeed() {
+		return 0.25F;
 	}
     
     // ========== Move with Heading ==========
@@ -206,7 +212,7 @@ public abstract class RideableCreatureEntity extends TameableCreatureEntity {
             this.xRot = rider.xRot * 0.5F;
             this.setRot(this.yRot, this.xRot);
             this.yHeadRot = this.yBodyRot = this.yRot;
-            strafe = rider.xxa * this.getStafeSpeed();
+            strafe = rider.xxa * this.getStrafeSpeed();
             forward = rider.zza;
         }
 
