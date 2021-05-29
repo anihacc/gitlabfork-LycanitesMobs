@@ -33,7 +33,6 @@ public class ChunkSpawnFeature extends Feature<NoFeatureConfig> {
 
 	@Override
 	public boolean place(ISeedReader reader, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config) {
-		reader.setBlock(pos, Blocks.AIR.defaultBlockState(), 0);
 		if (reader instanceof WorldGenRegion) {
 			SpawnerEventListener.getInstance().onChunkGenerate(((WorldGenRegion)reader).getLevel().dimension().location().toString(), new ChunkPos(pos));
 		}
