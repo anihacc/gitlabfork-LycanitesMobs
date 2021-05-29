@@ -18,10 +18,10 @@ import java.util.List;
 
 public class OreBlockSpawnTrigger extends BlockSpawnTrigger {
 
-	/** If true, ores (ore blocks that drop as blocks as well as coal and monster egg) will trigger. **/
+	/** If true, ores (ore blocks that drop as blocks as well as coal, nether gold ore and monster egg) will trigger. **/
 	public boolean ores = true;
 
-	/** If true, gems (ore blocks that drop as items excluding coal and monster egg) will trigger. **/
+	/** If true, gems (ore blocks that drop as items excluding coal, nether gold ore and monster egg) will trigger. **/
 	public boolean gems = false;
 
 	/** Constructor **/
@@ -49,7 +49,7 @@ public class OreBlockSpawnTrigger extends BlockSpawnTrigger {
 		if(block instanceof SilverfishBlock) {
 			return this.ores;
 		}
-		if(block == Blocks.COAL_ORE) {
+		if(block == Blocks.COAL_ORE || block == Blocks.NETHER_GOLD_ORE) {
 			return this.ores;
 		}
 
