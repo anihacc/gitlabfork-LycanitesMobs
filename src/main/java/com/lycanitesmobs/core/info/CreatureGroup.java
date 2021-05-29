@@ -7,6 +7,8 @@ import com.lycanitesmobs.core.helpers.JSONHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.monster.AbstractIllagerEntity;
+import net.minecraft.entity.monster.piglin.AbstractPiglinEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.util.ResourceLocation;
 
@@ -203,7 +205,7 @@ public class CreatureGroup {
 		if(this.animals && entity instanceof AnimalEntity) {
 			return true;
 		}
-		if(this.humanoids && (entity.getType() == EntityType.PLAYER || entity.getType() == EntityType.VILLAGER || entity.getType() == EntityType.PILLAGER)) {
+		if(this.humanoids && (entity.getType() == EntityType.PLAYER || entity.getType() == EntityType.VILLAGER || entity instanceof AbstractIllagerEntity || entity instanceof AbstractPiglinEntity)) {
 			return true;
 		}
 		if(this.raiders && (entity.getType() == EntityType.PILLAGER || entity.getType() == EntityType.RAVAGER)) {
