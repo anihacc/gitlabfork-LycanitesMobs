@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.core.block.building.BlockVeswax;
+import com.lycanitesmobs.core.block.building.HiveBlock;
 import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
@@ -306,7 +306,7 @@ public class EntityVespidQueen extends AgeableCreatureEntity implements IMob {
 						if(this.isHiveBlock(checkPos)) {
                             BlockState state = this.getCommandSenderWorld().getBlockState(checkPos);
 							Block block = state.getBlock();
-							int orientationMeta = state.getValue(BlockVeswax.AGE) % 8;
+							int orientationMeta = state.getValue(HiveBlock.AGE) % 8;
 							Direction facing = Direction.from3DDataValue(orientationMeta);
 
 							if(facing.getStepX() == 0) {

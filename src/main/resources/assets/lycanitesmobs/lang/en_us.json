@@ -1030,7 +1030,7 @@
     "entity.lycanitesmobs.nymph.combat": "Nymphs are peaceful and will healing anything around them, this can be harmful to undead. If hit, Nymphs will flee firing flowers with sharp thorns that inflict bleed.",
     "_comment": "#############################",
     "entity.lycanitesmobs.kathoga": "Kathoga",
-    "entity.lycanitesmobs.kathoga.description": "Gluttonous beasts that especially love to devour live animals. Can be farmed and bred using live large animals. Baby kathoga can be tamed and when matured, can be used as battle mounts.",
+    "entity.lycanitesmobs.kathoga.description": "Gluttonous beasts that especially love to devour live animals. Can be farmed and bred using live large animals. Baby Kathoga can be tamed and when matured, can be used as battle mounts.",
     "entity.lycanitesmobs.kathoga.habitat": "Kathoga roam the Nether looking for anything to eat.",
     "entity.lycanitesmobs.kathoga.combat": "These demons are incredibly aggressive but will prioritize bigger juicier prey which ca be used to pure them.",
     "_comment": "#############################",

@@ -7,7 +7,7 @@ import com.lycanitesmobs.core.FileLoader;
 import com.lycanitesmobs.core.JSONLoader;
 import com.lycanitesmobs.core.StreamLoader;
 import com.lycanitesmobs.core.block.*;
-import com.lycanitesmobs.core.block.building.BlockVeswax;
+import com.lycanitesmobs.core.block.building.HiveBlock;
 import com.lycanitesmobs.core.block.effect.*;
 import com.lycanitesmobs.core.block.fluid.*;
 import com.lycanitesmobs.core.block.CustomFluid;
@@ -171,8 +171,8 @@ public class ItemManager extends JSONLoader {
 		ObjectManager.addBlock("soulcubedemonic", new BlockBase(Block.Properties.of(Material.STONE).sound(SoundType.STONE).strength(2F, 1200.0F), modInfo, "soulcubedemonic"));
 		ObjectManager.addBlock("soulcubeundead", new BlockBase(Block.Properties.of(Material.STONE).sound(SoundType.STONE).strength(2F, 1200.0F), modInfo, "soulcubeundead"));
 		ObjectManager.addBlock("soulcubeaberrant", new BlockBase(Block.Properties.of(Material.STONE).sound(SoundType.STONE).strength(2F, 1200.0F), modInfo, "soulcubeaberrant"));
-		ObjectManager.addBlock("propolis", new BlockVeswax(Block.Properties.of(Material.CLAY).sound(SoundType.WET_GRASS).strength(0.6F).randomTicks(), "propolis"));
-		ObjectManager.addBlock("veswax", new BlockVeswax(Block.Properties.of(Material.WOOD).sound(SoundType.WOOD).strength(0.6F).randomTicks(), "veswax"));
+		ObjectManager.addBlock("propolis", new HiveBlock(Block.Properties.of(Material.CLAY).sound(SoundType.WET_GRASS).strength(0.6F).randomTicks(), "propolis"));
+		ObjectManager.addBlock("veswax", new HiveBlock(Block.Properties.of(Material.WOOD).sound(SoundType.WOOD).strength(0.6F).randomTicks(), "veswax"));
 
 
 		// Effect Blocks:

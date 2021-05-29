@@ -16,11 +16,11 @@ import net.minecraft.world.server.ServerWorld;
 
 import java.util.Random;
 
-public class BlockVeswax extends BlockBase {
+public class HiveBlock extends BlockBase {
 	// ==================================================
 	//                   Constructor
 	// ==================================================
-	public BlockVeswax(Block.Properties properties, String name) {
+	public HiveBlock(Block.Properties properties, String name) {
 		super(properties);
 
 		this.group = LycanitesMobs.modInfo;
@@ -67,8 +67,8 @@ public class BlockVeswax extends BlockBase {
 
     // ========== Tick Update ==========
 	@Override
-	public void tick(BlockState state, ServerWorld world, BlockPos pos, Random random) { //tick()
-        if(world.isClientSide)
+	public void tick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+        if(world.isClientSide || state.getValue(AGE) >= 8)
             return;
         double range = 32D;
         if(!world.getEntitiesOfClass(EntityVespidQueen.class, new AxisAlignedBB(pos.getX() - range, pos.getY() - range, pos.getZ() - range, pos.getX() + range, pos.getY() + range, pos.getZ() + range)).isEmpty())

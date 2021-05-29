@@ -51,7 +51,7 @@ public class EntityEpion extends RideableCreatureEntity implements IMob {
 	}
 
 	@Override
-	public float getStafeSpeed() {
+	public float getStrafeSpeed() {
 		return 1F;
 	}
 	
@@ -170,7 +170,7 @@ public class EntityEpion extends RideableCreatureEntity implements IMob {
 	}
 
 	public float getStaminaCost() {
-		return 5;
+		return 2;
 	}
 
 	public int getStaminaRecoveryWarmup() {
