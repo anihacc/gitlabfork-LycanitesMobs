@@ -23,7 +23,6 @@ import com.lycanitesmobs.core.item.summoningstaff.*;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.fluid.FlowingFluid;
-import net.minecraft.fluid.Fluid;
 import net.minecraft.item.BucketItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -34,8 +33,6 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -167,11 +164,11 @@ public class ItemManager extends JSONLoader {
 
 
 		// Building Blocks:
-		BlockMaker.addStoneBlocks(modInfo, "lush");
-		BlockMaker.addStoneBlocks(modInfo, "desert");
-		BlockMaker.addStoneBlocks(modInfo, "shadow");
-		BlockMaker.addStoneBlocks(modInfo, "demon");
-		BlockMaker.addStoneBlocks(modInfo, "aberrant");
+		BlockMaker.addDungeonBlocks(modInfo, "lush");
+		BlockMaker.addDungeonBlocks(modInfo, "desert");
+		BlockMaker.addDungeonBlocks(modInfo, "shadow");
+		BlockMaker.addDungeonBlocks(modInfo, "demon");
+		BlockMaker.addDungeonBlocks(modInfo, "aberrant");
 		ObjectManager.addBlock("soulcubedemonic", new BlockBase(Block.Properties.of(Material.STONE).sound(SoundType.STONE).strength(2F, 1200.0F), modInfo, "soulcubedemonic"));
 		ObjectManager.addBlock("soulcubeundead", new BlockBase(Block.Properties.of(Material.STONE).sound(SoundType.STONE).strength(2F, 1200.0F), modInfo, "soulcubeundead"));
 		ObjectManager.addBlock("soulcubeaberrant", new BlockBase(Block.Properties.of(Material.STONE).sound(SoundType.STONE).strength(2F, 1200.0F), modInfo, "soulcubeaberrant"));
@@ -181,16 +178,17 @@ public class ItemManager extends JSONLoader {
 
 		// Effect Blocks:
 		Block.Properties fireProperties = Block.Properties.of(Material.FIRE).randomTicks().noCollission().dynamicShape().sound(SoundType.WOOL).noOcclusion();
+		Block.Properties brightFireProperties = Block.Properties.of(Material.FIRE).randomTicks().noCollission().dynamicShape().sound(SoundType.WOOL).noOcclusion().lightLevel((BlockState blockState) -> { return 15; });
 		ObjectManager.addSound("frostfire", modInfo, "block.frostfire");
 		ObjectManager.addBlock("frostfire", new BlockFrostfire(fireProperties));
 		ObjectManager.addSound("icefire", modInfo, "block.icefire");
 		ObjectManager.addBlock("icefire", new BlockIcefire(fireProperties));
 		ObjectManager.addSound("hellfire", modInfo, "block.hellfire");
-		ObjectManager.addBlock("hellfire", new BlockHellfire(fireProperties));
+		ObjectManager.addBlock("hellfire", new BlockHellfire(brightFireProperties));
 		ObjectManager.addSound("doomfire", modInfo, "block.doomfire");
-		ObjectManager.addBlock("doomfire", new BlockDoomfire(fireProperties));
+		ObjectManager.addBlock("doomfire", new BlockDoomfire(brightFireProperties));
 		ObjectManager.addSound("scorchfire", modInfo, "block.scorchfire");
-		ObjectManager.addBlock("scorchfire", new BlockScorchfire(fireProperties));
+		ObjectManager.addBlock("scorchfire", new BlockScorchfire(brightFireProperties));
 		ObjectManager.addSound("shadowfire", modInfo, "block.shadowfire");
 		ObjectManager.addBlock("shadowfire", new BlockShadowfire(fireProperties));
 
@@ -209,7 +207,7 @@ public class ItemManager extends JSONLoader {
 
 		// Fluids:
 		if (true) {
-			return; // TODO Fluids idsabled for now.
+			return; // TODO Fluids disabled for now.
 		}
 		Block.Properties waterBlockProperties = Block.Properties.of(Material.WATER).noCollission().strength(100).noDrops();
 		Block.Properties waterLightBlockProperties = Block.Properties.of(Material.WATER).noCollission().strength(100).noDrops().lightLevel((BlockState blockState) -> { return 10; });

@@ -10,13 +10,13 @@ import net.minecraft.block.material.Material;
 
 public class BlockMaker {
     // ==================================================
-    //                Add Stone Blocks
+    //                Add Dungeon Blocks
     // ==================================================
-    /** Creates a set of stone blocks such as tiles, bricks, pillars, etc as well as a crystal light source. The block name is added to a list that is used to automatically add each recipe at Post Init.
+    /** Creates a set of themed dungeon blocks such as tiles, bricks, pillars, etc as well as a crystal light source. The block name is added to a list that is used to automatically add each recipe at Post Init.
      * @param group The group info to add each block with.
      * @param stoneName The name of the stone block, such as "demon" or "shadow", etc. (stone and crystal are appended).
      * **/
-    public static void addStoneBlocks(ModInfo group, String stoneName) {
+    public static void addDungeonBlocks(ModInfo group, String stoneName) {
         Block.Properties properties = Block.Properties.of(Material.STONE).sound(SoundType.STONE).strength(2F, 1200.0F);
         Block.Properties crystalProperties = Block.Properties.of(Material.GLASS).sound(SoundType.GLASS).strength(0.5F, 1200.0F).lightLevel((BlockState blockState) -> { return 15; });
 
