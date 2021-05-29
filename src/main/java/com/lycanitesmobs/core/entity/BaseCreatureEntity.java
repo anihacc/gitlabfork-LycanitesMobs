@@ -2255,8 +2255,8 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     	if(!this.isFlying()) {
     		this.playJumpSound();
 		}
-    	float yaw = this.yRot;
-    	float pitch = this.xRot;
+    	double yaw = this.yRot;
+		double pitch = this.xRot;
     	double angle = Math.toRadians(yaw);
         double xAmount = -Math.sin(angle);
         double yAmount = leapHeight;
@@ -2269,13 +2269,6 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
                 yAmount,
                 zAmount * distance + this.getDeltaMovement().z() * 0.2D
         );
-    	if (this.getRider() != null) {
-			this.getRider().push(
-					xAmount * distance + this.getDeltaMovement().x() * 0.2D,
-					yAmount,
-					zAmount * distance + this.getDeltaMovement().z() * 0.2D
-			);
-		}
 		net.minecraftforge.common.ForgeHooks.onLivingJump(this);
     }
     

@@ -90,16 +90,15 @@ public class EntityUvaraptor extends RideableCreatureEntity {
     //                   Mount Ability
     // ==================================================
     public void mountAbility(Entity rider) {
-    	if(this.getCommandSenderWorld().isClientSide)
-    		return;
-    	
     	if(this.abilityToggled)
     		return;
     	if(this.getStamina() < this.getStaminaCost())
     		return;
     	
     	this.playJumpSound();
-    	this.leap(2.0D, 3D);
+		if(this.getCommandSenderWorld().isClientSide()) {
+			this.leap(2.0D, 3D);
+		}
     	
     	this.applyStaminaCost();
     }

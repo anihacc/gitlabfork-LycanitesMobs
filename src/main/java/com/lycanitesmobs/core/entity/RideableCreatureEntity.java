@@ -129,6 +129,7 @@ public abstract class RideableCreatureEntity extends TameableCreatureEntity {
     public void mountAbility(Entity rider) {}
 
     public void onDismounted(Entity entity) {
+		this.setDeltaMovement(Vector3d.ZERO);
 		if(this.isSitting()) {
 			int homeY = MathHelper.floor(this.position().y());
 			if(!this.isFlying()) {
