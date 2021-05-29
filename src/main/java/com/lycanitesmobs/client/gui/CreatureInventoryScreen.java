@@ -119,6 +119,10 @@ public class CreatureInventoryScreen extends BaseContainerScreen<CreatureContain
 
 	@Override
 	protected void renderForeground(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+		if (this.creature == null || this.creature.isDeadOrDying()) {
+			this.onClose();
+		}
+
         this.drawHelper.drawString(matrixStack, this.inventory.getName().getString(), this.leftPos + 8, this.topPos + this.imageHeight - 96 + 2, 4210752);
 		int backX = (this.width - this.imageWidth) / 2;
 		int backY = (this.height - this.imageHeight) / 2;
