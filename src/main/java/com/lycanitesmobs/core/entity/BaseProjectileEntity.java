@@ -16,6 +16,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ThrowableEntity;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
 import net.minecraft.network.datasync.DataParameter;
@@ -462,7 +463,8 @@ public class BaseProjectileEntity extends ThrowableEntity {
 	
 	//========== Can Destroy Block ==========
 	public boolean canDestroyBlock(BlockPos pos) {
-    	 return this.getCommandSenderWorld().isEmptyBlock(pos) && this.getCommandSenderWorld().getBlockState(pos.below()).canOcclude();
+    	 return this.getCommandSenderWorld().getBlockState(pos).canBeReplaced(Fluids.WATER) && !this.getCommandSenderWorld().isEmptyBlock(pos.below());
+//    	 return this.getCommandSenderWorld().isEmptyBlock(pos) && this.getCommandSenderWorld().getBlockState(pos.below()).canOcclude();
 	}
 	
 	//========== Place Block ==========

@@ -31,7 +31,7 @@ public class BlockBase extends Block {
 	
 	// Properties:
 	public ModInfo group;
-	public String blockName = "BlockBase";
+	public String blockName = "block_base";
     public static final IntegerProperty AGE = BlockStateProperties.AGE_15;
 	
 	// Stats:

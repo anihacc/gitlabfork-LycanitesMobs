@@ -12,6 +12,7 @@ import net.minecraft.fluid.FlowingFluid;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -21,11 +22,13 @@ import java.util.Random;
 import java.util.function.Supplier;
 
 public class BaseFluidBlock extends FlowingFluidBlock {
+	public String blockName;
 	protected ElementInfo element;
 
 	public BaseFluidBlock(Supplier<? extends FlowingFluid> fluidSupplier, Properties properties, String name, ElementInfo element) {
         super(fluidSupplier, properties);
         this.setRegistryName(LycanitesMobs.MODID, name);
+        this.blockName = name;
         this.element = element;
 	}
 
@@ -61,23 +64,15 @@ public class BaseFluidBlock extends FlowingFluidBlock {
         super.entityInside(blockState, world, pos, entity);
     }
 
-//    @Override
-//    public BlockRenderType getRenderShape(BlockState state) {
-//        return BlockRenderType.MODEL;
-//    }
-
+	/** Client side animation and sounds. **/
     @OnlyIn(Dist.CLIENT)
     public void animateTick(BlockState state, World world, BlockPos pos, Random random) {
-        float f; 
-        float f1;
-        float f2;
-        
-        if (random.nextInt(100) == 0) {
-            f = (float)pos.getX() + random.nextFloat();
-            f1 = (float)pos.getY() + random.nextFloat() * 0.5F;
-            f2 = (float)pos.getZ() + random.nextFloat();
-	        world.addParticle(ParticleTypes.RAIN, (double)f, (double)f1, (double)f2, 0.0D, 0.0D, 0.0D);
-        }
-        super.animateTick(state, world, pos, random);
+		double x = pos.getX();
+		double y = pos.getY();
+		double z = pos.getZ();
+		if(random.nextInt(24) == 0) {
+			world.playLocalSound(x + 0.5D, y + 0.5D, z + 0.5D, ObjectManager.getSound(this.blockName), SoundCategory.BLOCKS, 0.5F + random.nextFloat(), random.nextFloat() * 0.7F + 0.3F, false);
+		}
+		super.animateTick(state, world, pos, random);
     }
 }

@@ -17,7 +17,14 @@
 	"elements": [
 		"aether"
 	],
-	"behaviours": [],
+	"behaviours": [
+		{
+			"type": "placeBlocks",
+			"block": "lycanitesmobs:smitefire",
+			"radius": 1,
+			"height": 1
+		}
+	],
 	"waterproof": true,
 	"lavaproof": false,
 	"cutGrass": false,

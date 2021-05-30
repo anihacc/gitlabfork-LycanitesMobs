@@ -23,8 +23,6 @@ public class BlockFluidBase extends FlowingFluidBlock {
         this.blockName = blockName;
         this.group = group;
         this.setRegistryName(this.group.modid, this.blockName);
-
-        //this.setRenderLayer(BlockRenderLayer.TRANSLUCENT);
     }
 
     @Override
@@ -41,29 +39,4 @@ public class BlockFluidBase extends FlowingFluidBlock {
     public ITextComponent getDescription(ItemStack itemStack, @Nullable IBlockReader world) {
         return new TranslationTextComponent("block." + this.blockName + ".description").withStyle(style -> style.withColor(Color.fromLegacyFormat(TextFormatting.GREEN)));
     }
-
-
-    // ==================================================
-    //                Collision Effects
-    // ==================================================
-    /*@Override
-    public void onEntityCollidedWithBlock(World world, BlockPos pos, BlockState state, Entity entity) {
-        super.onEntityCollidedWithBlock(world, pos, state, entity);
-    }
-
-    @Override
-    public Boolean isEntityInsideMaterial(IBlockAccess world, BlockPos blockpos, BlockState state, Entity entity, double yToTest, Material materialIn, boolean testingHead) {
-        if(world instanceof World)
-            this.onEntityCollidedWithBlock((World)world, blockpos, state, entity);
-        return super.isEntityInsideMaterial(world, blockpos, state, entity, yToTest, materialIn, testingHead);
-    }*/
-
-
-    // ==================================================
-    //                      Visuals
-    // ==================================================
-    /*@Override
-    public EnumBlockRenderType getRenderType(BlockState blockState) {
-        return EnumBlockRenderType.MODEL;
-    }*/
 }

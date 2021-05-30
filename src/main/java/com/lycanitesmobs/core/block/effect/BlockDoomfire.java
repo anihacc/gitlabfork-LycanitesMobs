@@ -22,9 +22,6 @@ import java.util.Random;
 
 public class BlockDoomfire extends BlockFireBase {
 
-	// ==================================================
-	//                   Constructor
-	// ==================================================
 	public BlockDoomfire(Block.Properties properties) {
 		super(properties, LycanitesMobs.modInfo, "doomfire");
 
@@ -38,19 +35,11 @@ public class BlockDoomfire extends BlockFireBase {
         this.removeOnNoFireTick = false;
 	}
 
-
-    // ==================================================
-    //                       Break
-    // ==================================================
     /*@Override
     public Item getItemDropped(BlockState state, Random random, int zero) {
         return ObjectManager.getItem("doomfirecharge");
     }*/
 
-
-    // ==================================================
-    //                Collision Effects
-    // ==================================================
     @Override
     public void entityInside(BlockState blockState, World world, BlockPos pos, Entity entity) {
         super.entityInside(blockState, world, pos, entity);
@@ -66,7 +55,7 @@ public class BlockDoomfire extends BlockFireBase {
         }
 
         if(entity instanceof ItemEntity)
-            if(((ItemEntity)entity).getItem().getItem() == ObjectManager.getItem("hellfirecharge"))
+            if(((ItemEntity)entity).getItem().getItem() == ObjectManager.getItem("doomfirecharge"))
                 return;
 
         if(entity.isInvulnerableTo(DamageSource.IN_FIRE))
@@ -76,19 +65,12 @@ public class BlockDoomfire extends BlockFireBase {
         entity.setSecondsOnFire(5);
     }
 
-
-    // ==================================================
-    //                      Particles
-    // ==================================================
     @Override
     @OnlyIn(Dist.CLIENT)
     public void animateTick(BlockState state, World world, BlockPos pos, Random random) {
         double x = pos.getX();
         double y = pos.getY();
         double z = pos.getZ();
-        if(random.nextInt(24) == 0)
-            world.playLocalSound((double)((float)x + 0.5F), (double)((float)y + 0.5F), (double)((float)z + 0.5F), ObjectManager.getSound("doomfire"), SoundCategory.BLOCKS, 0.5F + random.nextFloat(), random.nextFloat() * 0.7F + 0.3F, false);
-
         if (random.nextInt(100) == 0) {
             x = pos.getX() + random.nextFloat();
             z = pos.getZ() + random.nextFloat();

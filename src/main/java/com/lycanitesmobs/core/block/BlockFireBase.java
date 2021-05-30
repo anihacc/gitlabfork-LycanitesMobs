@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.block;
 
 
+import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.info.ItemManager;
 import com.lycanitesmobs.core.info.ModInfo;
 import net.minecraft.block.Block;
@@ -8,13 +9,17 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.SixWayBlock;
 import net.minecraft.block.TNTBlock;
 import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.util.Direction;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.*;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.Map;
@@ -35,10 +40,6 @@ public class BlockFireBase extends BlockBase {
     public float spreadChance = 1;
     public boolean removeOnNoFireTick;
 
-
-    // ==================================================
-    //                   Constructor
-    // ==================================================
     public BlockFireBase(Block.Properties properties, ModInfo group, String name) {
         super(properties, group, name);
 
@@ -68,10 +69,6 @@ public class BlockFireBase extends BlockBase {
         builder.add(AGE, PERMANENT, NORTH, EAST, SOUTH, WEST, UP);
     }
 
-
-    // ==================================================
-    //                   Block States
-    // ==================================================
     @Override
     @Nullable
     public BlockState getStateForPlacement(BlockItemUseContext context) {
@@ -97,10 +94,6 @@ public class BlockFireBase extends BlockBase {
         return this.defaultBlockState();
     }
 
-
-    // ==================================================
-    //                  Block Placement
-    // ==================================================
     /** Returns true if this block can place another block at the specified location. **/
     @Override
     public boolean canSurvive(BlockState state, IWorldReader worldIn, BlockPos pos) {
@@ -123,18 +116,11 @@ public class BlockFireBase extends BlockBase {
         return this.getStateForPlacement(worldIn, currentPos).setValue(AGE, state.getValue(AGE));
     }
 
-
-
-    // ==================================================
-    //                     Ticking
-    // ==================================================
-    // ========== Tick Rate ==========
     @Override
     public int tickRate(IWorldReader world) {
         return this.tickRate;
     }
 
-    // ========== Tick Update ==========
     @Override
     public void tick(BlockState blockState, ServerWorld world, BlockPos pos, Random rand) {
         if (!world.isAreaLoaded(pos, 2)) {
@@ -226,7 +212,7 @@ public class BlockFireBase extends BlockBase {
                                 int spreadAge = age + rand.nextInt(5) / 4;
                                 if (spreadAge > 15)
                                     spreadAge = 15;
-                                world.setBlock(spreadPos, blockState.setValue(AGE, spreadAge).setValue(PERMANENT, false), 3);
+                                this.burnBlockReplace(world, spreadPos, spreadAge);
                             }
                         }
                     }
@@ -234,11 +220,6 @@ public class BlockFireBase extends BlockBase {
             }
         }
     }
-
-
-    // ==================================================
-    //                       Fire
-    // ==================================================
 
     /** Returns true if any adjacent blocks can catch fire. **/
     protected boolean canNeighborCatchFire(World worldIn, BlockPos pos) {
@@ -287,7 +268,7 @@ public class BlockFireBase extends BlockBase {
 
     /** Burns away a block, typically replacing it with this fire block, but can change it to other things depending on the type of fire block. **/
     public void burnBlockReplace(World world, BlockPos pos, int newFireAge) {
-        world.setBlock(pos, this.defaultBlockState().setValue(AGE, newFireAge), 3);
+        world.setBlock(pos, this.defaultBlockState().setValue(AGE, newFireAge).setValue(PERMANENT, false), 3);
     }
 
     /** Burns away a block, typically setting it to air but can change it to other things depending on the type of fire block. **/
@@ -313,5 +294,18 @@ public class BlockFireBase extends BlockBase {
     /** Returns true if this fire block should be extinguished, can check for rain and position, etc. **/
     protected boolean canDie(World world, BlockPos pos) {
         return world.isRainingAt(pos) || world.isRainingAt(pos.west()) || world.isRainingAt(pos.east()) || world.isRainingAt(pos.north()) || world.isRainingAt(pos.south());
+    }
+
+    /** Client side animation and sounds. **/
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void animateTick(BlockState state, World world, BlockPos pos, Random random) {
+        double x = pos.getX();
+        double y = pos.getY();
+        double z = pos.getZ();
+        if(random.nextInt(24) == 0) {
+            world.playLocalSound(x + 0.5D, y + 0.5D, z + 0.5D, ObjectManager.getSound(this.blockName), SoundCategory.BLOCKS, 0.5F + random.nextFloat(), random.nextFloat() * 0.7F + 0.3F, false);
+        }
+        super.animateTick(state, world, pos, random);
     }
 }

@@ -25,10 +25,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import java.util.Random;
 
 public class BlockHellfire extends BlockFireBase {
-	
-	// ==================================================
-	//                   Constructor
-	// ==================================================
+
 	public BlockHellfire(Block.Properties properties) {
         super(properties, LycanitesMobs.modInfo, "hellfire");
 
@@ -42,19 +39,11 @@ public class BlockHellfire extends BlockFireBase {
         this.removeOnNoFireTick = false;
 	}
 
-
-    // ==================================================
-    //                       Break
-    // ==================================================
     /*@Override
     public Item getItemDropped(BlockState state, Random random, int zero) {
         return ObjectManager.getItem("hellfirecharge");
     }*/
 
-
-    // ==================================================
-    //                Collision Effects
-    // ==================================================
     @Override
     public void entityInside(BlockState blockState, World world, BlockPos pos, Entity entity) {
         super.entityInside(blockState, world, pos, entity);
@@ -80,30 +69,19 @@ public class BlockHellfire extends BlockFireBase {
         entity.setSecondsOnFire(5);
     }
 
-
-    // ==================================================
-    //                        Fire
-    // ==================================================
     @Override
     public boolean isBlockFireSource(BlockState state, IWorldReader world, BlockPos pos, Direction side) {
         if(state.getBlock() == Blocks.OBSIDIAN)
             return true;
-        return false;
+        return super.isBlockFireSource(state, world, pos, side);
     }
 
-
-    // ==================================================
-    //                      Particles
-    // ==================================================
     @Override
     @OnlyIn(Dist.CLIENT)
     public void animateTick(BlockState state, World world, BlockPos pos, Random random) {
         double x = pos.getX();
         double y = pos.getY();
         double z = pos.getZ();
-        if(random.nextInt(24) == 0)
-            world.playLocalSound((double)((float)x + 0.5F), (double)((float)y + 0.5F), (double)((float)z + 0.5F), ObjectManager.getSound("hellfire"), SoundCategory.BLOCKS, 0.5F + random.nextFloat(), random.nextFloat() * 0.7F + 0.3F, false);
-
         if (random.nextInt(100) == 0) {
             x = pos.getX() + random.nextFloat();
             z = pos.getZ() + random.nextFloat();

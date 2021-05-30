@@ -26,9 +26,6 @@ import java.util.Random;
 
 public class BlockFrostfire extends BlockFireBase {
 
-    // ==================================================
-    //                   Constructor
-    // ==================================================
     public BlockFrostfire(Block.Properties properties) {
         this(properties, "frostfire");
     }
@@ -46,19 +43,11 @@ public class BlockFrostfire extends BlockFireBase {
         this.removeOnNoFireTick = false;
     }
 
-
-    // ==================================================
-    //                       Break
-    // ==================================================
     /*@Override
     public Item getItemDropped(BlockState state, Random random, int zero) {
         return ObjectManager.getItem("icefirecharge");
     }*/
 
-
-    // ==================================================
-    //                        Fire
-    // ==================================================
     @Override
     public boolean canCatchFire(IBlockReader world, BlockPos pos, Direction face) {
         Block block = world.getBlockState(pos).getBlock();
@@ -105,10 +94,6 @@ public class BlockFrostfire extends BlockFireBase {
         super.burnBlockDestroy(world, pos);
     }
 
-
-    // ==================================================
-    //                Collision Effects
-    // ==================================================
     @Override
     public void entityInside(BlockState blockState, World world, BlockPos pos, Entity entity) {
         super.entityInside(blockState, world, pos, entity);
@@ -128,19 +113,12 @@ public class BlockFrostfire extends BlockFireBase {
         entity.hurt(DamageSource.MAGIC, 2);
     }
 
-
-    // ==================================================
-    //                      Particles
-    // ==================================================
     @Override
     @OnlyIn(Dist.CLIENT)
     public void animateTick(BlockState state, World world, BlockPos pos, Random random) {
         double x = pos.getX();
         double y = pos.getY();
         double z = pos.getZ();
-        if(random.nextInt(24) == 0)
-            world.playLocalSound((double)((float)x + 0.5F), (double)((float)y + 0.5F), (double)((float)z + 0.5F), ObjectManager.getSound("frostfire"), SoundCategory.BLOCKS, 0.5F + random.nextFloat(), random.nextFloat() * 0.7F + 0.3F, false);
-
         if (random.nextInt(100) == 0) {
             x = pos.getX() + random.nextFloat();
             z = pos.getZ() + random.nextFloat();

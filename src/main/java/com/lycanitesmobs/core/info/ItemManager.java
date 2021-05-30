@@ -186,10 +186,14 @@ public class ItemManager extends JSONLoader {
 		ObjectManager.addBlock("hellfire", new BlockHellfire(brightFireProperties));
 		ObjectManager.addSound("doomfire", modInfo, "block.doomfire");
 		ObjectManager.addBlock("doomfire", new BlockDoomfire(brightFireProperties));
+		ObjectManager.addSound("primefire", modInfo, "block.primefire");
+		ObjectManager.addBlock("primefire", new BlockPrimefire(brightFireProperties));
 		ObjectManager.addSound("scorchfire", modInfo, "block.scorchfire");
 		ObjectManager.addBlock("scorchfire", new BlockScorchfire(brightFireProperties));
 		ObjectManager.addSound("shadowfire", modInfo, "block.shadowfire");
 		ObjectManager.addBlock("shadowfire", new BlockShadowfire(fireProperties));
+		ObjectManager.addSound("smitefire", modInfo, "block.smitefire");
+		ObjectManager.addBlock("smitefire", new BlockSmitefire(brightFireProperties));
 
 		Block.Properties cloudProperties = Block.Properties.of(Material.DECORATION).randomTicks().noCollission().dynamicShape().sound(SoundType.WOOL).noOcclusion();
 		ObjectManager.addSound("frostcloud", modInfo, "block.frostcloud");

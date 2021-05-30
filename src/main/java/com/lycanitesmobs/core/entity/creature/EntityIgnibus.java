@@ -14,7 +14,7 @@ import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -76,7 +76,7 @@ public class EntityIgnibus extends RideableCreatureEntity implements IGroupHeavy
             }
             else {
                 if(this.wantsToLand) {
-                    if(!this.isLanded && this.isSafeToLand()) {
+                    if(this.isSafeToLand()) {
                         this.isLanded = true;
                     }
                 }
@@ -168,70 +168,18 @@ public class EntityIgnibus extends RideableCreatureEntity implements IGroupHeavy
     @Override
     public void attackRanged(Entity target, float range) {
         // Type:
-        ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile("scorchfireball");
+        ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile("primeember");
         if(projectileInfo == null) {
             return;
         }
-        List<RapidFireProjectileEntity> projectiles = new ArrayList<>();
 
-        RapidFireProjectileEntity projectileEntry = new RapidFireProjectileEntity(ProjectileManager.getInstance().oldProjectileTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getCommandSenderWorld(), this, 15, 3);
-        projectiles.add(projectileEntry);
-
-        RapidFireProjectileEntity projectileEntry2 = new RapidFireProjectileEntity(ProjectileManager.getInstance().oldProjectileTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getCommandSenderWorld(), this, 15, 3);
-        projectileEntry2.offsetX += 1.0D;
-        projectileEntry2.setProjectileScale(0.25f);
-        projectiles.add(projectileEntry2);
-
-        RapidFireProjectileEntity projectileEntry3 = new RapidFireProjectileEntity(ProjectileManager.getInstance().oldProjectileTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getCommandSenderWorld(), this, 15, 3);
-        projectileEntry3.offsetX -= 1.0D;
-        projectileEntry3.setProjectileScale(0.25f);
-        projectiles.add(projectileEntry3);
-
-        RapidFireProjectileEntity projectileEntry4 = new RapidFireProjectileEntity(ProjectileManager.getInstance().oldProjectileTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getCommandSenderWorld(), this, 15, 3);
-        projectileEntry4.offsetZ += 1.0D;
-        projectileEntry4.setProjectileScale(0.25f);
-        projectiles.add(projectileEntry4);
-
-        RapidFireProjectileEntity projectileEntry5 = new RapidFireProjectileEntity(ProjectileManager.getInstance().oldProjectileTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getCommandSenderWorld(), this, 15, 3);
-        projectileEntry5.offsetZ -= 1.0D;
-        projectileEntry5.setProjectileScale(0.25f);
-        projectiles.add(projectileEntry5);
-
-        RapidFireProjectileEntity projectileEntry6 = new RapidFireProjectileEntity(ProjectileManager.getInstance().oldProjectileTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getCommandSenderWorld(), this, 15, 3);
-        projectileEntry6.offsetY += 1.0D;
-        projectileEntry6.setProjectileScale(0.25f);
-        projectiles.add(projectileEntry6);
-
-        RapidFireProjectileEntity projectileEntry7 = new RapidFireProjectileEntity(ProjectileManager.getInstance().oldProjectileTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getCommandSenderWorld(), this, 15, 3);
-        projectileEntry7.offsetY -= 1.0D;
-        projectileEntry7.setProjectileScale(0.25f);
-        projectiles.add(projectileEntry7);
-
-        for(RapidFireProjectileEntity projectile : projectiles) {
-            projectile.setProjectileScale(1f);
-
-            // Y Offset:
-            projectile.setPos(
-                    projectile.position().x(),
-                    projectile.position().y() - this.getDimensions(Pose.STANDING).height / 4,
-                    projectile.position().z()
-            );
-
-            // Accuracy:
-            float accuracy = 4.0F * (this.getRandom().nextFloat() - 0.5F);
-
-            // Set Velocities:
-            double d0 = target.position().x() - this.position().x() + accuracy;
-            double d1 = target.position().y() + (double)target.getEyeHeight() - 1.100000023841858D - projectile.position().y() + accuracy;
-            double d2 = target.position().z() - this.position().z() + accuracy;
-            float f1 = MathHelper.sqrt(d0 * d0 + d2 * d2) * 0.2F;
-            float velocity = 1.2F;
-            projectile.shoot(d0, d1 + (double)f1, d2, velocity, 6.0F);
-            projectile.setProjectileScale(4);
-
-            // Launch:
-            this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
-            this.getCommandSenderWorld().addFreshEntity(projectile);
+        for (int projectileX = -1; projectileX <= 1; projectileX++) {
+            for (int projectileY = -1; projectileY <= 1; projectileY++) {
+                Vector3d offset = this.getFacingPositionDouble(0, 0.5D * projectileY, 0, 4, this.yRot);
+                offset.add(this.getFacingPositionDouble(0, 0, 0, 2D * projectileX, this.yRot + 90D));
+                RapidFireProjectileEntity projectile = new RapidFireProjectileEntity(ProjectileManager.getInstance().oldProjectileTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getCommandSenderWorld(), this, 15, 3);
+                this.fireProjectile(projectile, target, range, 0, offset, 0.6f, 3f, 4F);
+            }
         }
 
         super.attackRanged(target, range);

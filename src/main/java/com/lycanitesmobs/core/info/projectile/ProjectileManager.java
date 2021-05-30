@@ -130,7 +130,7 @@ public class ProjectileManager extends JSONLoader {
 			throw new RuntimeException(e);
 		}
 
-		LycanitesMobs.logDebug("", "Added Entity Type: " + entityName + " Type: " + entityType);
+		LycanitesMobs.logDebug("Projectile", "Added (Projectile) Entity Type: " + entityName + " Type: " + entityType);
 		this.oldProjectileTypes.put(entityClass, entityType);
 		return entityType;
 	}
