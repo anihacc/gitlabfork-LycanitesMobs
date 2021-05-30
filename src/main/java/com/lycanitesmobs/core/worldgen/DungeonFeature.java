@@ -57,7 +57,7 @@ public class DungeonFeature extends Feature<NoFeatureConfig> {
 						dungeonInstance.setOrigin(dungeonPos);
 						if(dungeonInstance.init(world)) {
 							extendedWorld.addDungeonInstance(dungeonInstance, new UUID(rand.nextLong(), rand.nextLong()));
-							LycanitesMobs.logDebug("", "Dungeon (Feature) Created: " + dungeonInstance.toString());
+							LycanitesMobs.logDebug("Dungeon", "Feature Created: " + dungeonInstance.toString());
 						}
 					}
 				}

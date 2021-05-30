@@ -1,26 +1,25 @@
 package com.lycanitesmobs.core.entity.navigate;
 
 import com.google.common.collect.ImmutableSet;
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
+import com.lycanitesmobs.core.block.fluid.BaseFluidBlock;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.core.entity.creature.EntityJoustAlpha;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.Pose;
-import net.minecraft.network.DebugPacketSender;
-import net.minecraft.pathfinding.*;
+import net.minecraft.pathfinding.GroundPathNavigator;
+import net.minecraft.pathfinding.Path;
+import net.minecraft.pathfinding.PathFinder;
+import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
-
-import java.util.Iterator;
 
 public class CreaturePathNavigator extends GroundPathNavigator {
 
@@ -179,16 +178,55 @@ public class CreaturePathNavigator extends GroundPathNavigator {
 
     /** Returns true if the entity can move to the block position. **/
     @Override
-    public boolean isStableDestination(BlockPos pos) {
+    public boolean isStableDestination(BlockPos blockPos) {
+        BlockState blockState = this.level.getBlockState(blockPos);
+
         // Flight/Swimming:
         if(this.entityCreature.isFlying() || (this.entityCreature.isUnderWater() && this.entityCreature.isStrongSwimmer())) {
-            BlockState blockState = this.level.getBlockState(pos);
             if(blockState.getMaterial().isLiquid()) {
             	return this.entityCreature.isStrongSwimmer();
 			}
             return !blockState.getMaterial().isSolid();
         }
-        return super.isStableDestination(pos);
+
+        // Standing on Fluids:
+        if (blockState.getBlock() instanceof FlowingFluidBlock) {
+            FlowingFluidBlock fluidBlock = (FlowingFluidBlock) blockState.getBlock();
+            boolean safeFluid = true;
+            if (fluidBlock instanceof BaseFluidBlock) {
+                BaseFluidBlock baseFluidBlock = (BaseFluidBlock)fluidBlock;
+                if (!this.entityCreature.hasElement(baseFluidBlock.getElement())) {
+                    safeFluid = false;
+                }
+            }
+            if (safeFluid && this.entityCreature.canStandOnFluid(fluidBlock.getFluid())) {
+                if (blockState.is(Blocks.WATER) && !this.entityCreature.waterDamage()) {
+                    return true;
+                }
+                if (blockState.is(Blocks.LAVA) && this.entityCreature.isLavaCreature) {
+                    return true;
+                }
+            }
+        }
+
+        // Water/Lava Breathing:
+        if (!this.entityCreature.canBreatheAir() && !this.isSwimmableBlock(blockState.getBlock())) {
+            return false;
+        }
+
+        return super.isStableDestination(blockPos);
+    }
+
+    /** Checks if the given Path Node Type is valid for ground pathing. **/
+    @Override
+    protected boolean hasValidPathType(PathNodeType pathNodeType) {
+        if (pathNodeType == PathNodeType.WATER) {
+            return this.entityCreature.canWade() || this.entityCreature.isStrongSwimmer();
+        } else if (pathNodeType == PathNodeType.LAVA) {
+            return this.entityCreature.isLavaCreature;
+        } else {
+            return pathNodeType != PathNodeType.OPEN;
+        }
     }
 
     /** Follows the path moving to the next index when needed, etc. Called by tick() if canNavigate() and noPath() are both true. **/

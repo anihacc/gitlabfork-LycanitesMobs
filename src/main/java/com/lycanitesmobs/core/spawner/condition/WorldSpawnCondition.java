@@ -180,7 +180,7 @@ public class WorldSpawnCondition extends SpawnCondition {
 		}
 
 		// Check Moon Phase:
-		if(this.moonPhase >= 0 && world.getMoonPhase() != this.moonPhase) {
+		if(this.moonPhase >= 0 && world.dimensionType().moonPhase(world.dayTime()) != this.moonPhase) {
 			return false;
 		}
 

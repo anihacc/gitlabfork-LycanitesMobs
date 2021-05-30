@@ -3,15 +3,18 @@ package com.lycanitesmobs.core.entity.creature;
 import com.google.common.base.Predicate;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.CustomItemEntity;
+import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.entity.RideableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.*;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -21,10 +24,6 @@ import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import java.util.List;
 
 public class EntitySalamander extends RideableCreatureEntity implements IMob {
-
-    // ==================================================
- 	//                    Constructor
- 	// ==================================================
     public EntitySalamander(EntityType<? extends EntitySalamander> entityType, World world) {
         super(entityType, world);
         
@@ -47,18 +46,12 @@ public class EntitySalamander extends RideableCreatureEntity implements IMob {
         this.setPathfindingMalus(PathNodeType.LAVA, 0F);
     }
 
-    // ========== Init AI ==========
     @Override
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this));
     }
-	
-	
-    // ==================================================
-    //                      Updates
-    // ==================================================
-	// ========== Living Update ==========
+
 	@Override
     public void aiStep() {
         super.aiStep();
@@ -73,19 +66,13 @@ public class EntitySalamander extends RideableCreatureEntity implements IMob {
             rider.clearFire();
     }
 
-
-    // ==================================================
-    //                      Movement
-    // ==================================================
-    // ========== Movement Speed Modifier ==========
     @Override
     public float getAISpeedModifier() {
-        if(this.lavaContact())
-            return 2.0F;
-        return 1.0F;
+        if (!this.lavaContact())
+            return 0.5F;
+        return 2.0F;
     }
 
-    // Pathing Weight:
     @Override
     public float getBlockPathWeight(int x, int y, int z) {
         int waterWeight = 10;
@@ -102,17 +89,23 @@ public class EntitySalamander extends RideableCreatureEntity implements IMob {
         return false;
     }
 
-    // ========== Mounted Offset ==========
+    @Override
+    public boolean canStandOnFluid(Fluid fluid) {
+        if (this.getControllingPassenger() instanceof PlayerEntity) {
+            PlayerEntity player = (PlayerEntity) this.getControllingPassenger();
+            ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
+            if (playerExt != null && playerExt.isControlActive(ExtendedPlayer.CONTROL_ID.DESCEND)) {
+                return false;
+            }
+        }
+        return fluid.is(FluidTags.LAVA);
+    }
+
     @Override
     public double getPassengersRidingOffset() {
         return (double)this.getDimensions(Pose.STANDING).height * 0.85D;
     }
-    
-    
-    // ==================================================
-    //                      Attacks
-    // ==================================================
-    // ========== Special Attack ==========
+
     public void specialAttack() {
         // Firey Burst:
         double distance = 5.0D;
@@ -146,10 +139,6 @@ public class EntitySalamander extends RideableCreatureEntity implements IMob {
         this.triggerAttackCooldown();
     }
 
-
-    // ==================================================
-    //                   Mount Ability
-    // ==================================================
     @Override
     public void mountAbility(Entity rider) {
         if(this.getCommandSenderWorld().isClientSide)
@@ -183,24 +172,16 @@ public class EntitySalamander extends RideableCreatureEntity implements IMob {
     @Override
     public void onDismounted(Entity entity) {
         super.onDismounted(entity);
-        if(entity != null && entity instanceof LivingEntity) {
+        if(entity instanceof LivingEntity) {
             ((LivingEntity)entity).addEffect(new EffectInstance(Effects.FIRE_RESISTANCE, 5 * 20, 1));
         }
     }
 
-
-    // ==================================================
-    //                     Equipment
-    // ==================================================
     @Override
     public int getNoBagSize() { return 0; }
     @Override
     public int getBagSize() { return this.creatureInfo.BagSize; }
-    
-    
-    // ==================================================
-   	//                     Immunities
-   	// ==================================================
+
     @Override
     public boolean canBurn() { return false; }
     
@@ -221,42 +202,24 @@ public class EntitySalamander extends RideableCreatureEntity implements IMob {
     public float getFallResistance() {
         return 100;
     }
-    
-    
-    // ==================================================
-   	//                    Taking Damage
-   	// ==================================================
-    // ========== Damage Modifier ==========
+
     public float getDamageModifier(DamageSource damageSrc) {
     	if(damageSrc.isFire())
     		return 0F;
     	else return super.getDamageModifier(damageSrc);
     }
-    
-    
-    // ==================================================
-   	//                       Drops
-   	// ==================================================
-    // ========== Apply Drop Effects ==========
+
     /** Used to add effects or alter the dropped entity item. **/
     @Override
     public void applyDropEffects(CustomItemEntity entityItem) {
         entityItem.setCanBurn(false);
     }
-    
-    
-    // ==================================================
-    //                   Brightness
-    // ==================================================
+
     @Override
     public float getBrightness() {
         return 1.0F;
     }
-    
-    
-    // ==================================================
-    //                     Pet Control
-    // ==================================================
+
     @Override
     public boolean petControlsEnabled() { return true; }
 }

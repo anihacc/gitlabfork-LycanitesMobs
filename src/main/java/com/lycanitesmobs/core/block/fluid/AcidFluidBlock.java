@@ -2,6 +2,7 @@ package com.lycanitesmobs.core.block.fluid;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
+import com.lycanitesmobs.core.info.ElementInfo;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FlowingFluidBlock;
@@ -25,8 +26,8 @@ import java.util.function.Supplier;
 import net.minecraft.block.AbstractBlock.Properties;
 
 public class AcidFluidBlock extends BaseFluidBlock {
-	public AcidFluidBlock(Supplier<? extends FlowingFluid> fluidSupplier, Properties properties, String name) {
-        super(fluidSupplier, properties, name);
+	public AcidFluidBlock(Supplier<? extends FlowingFluid> fluidSupplier, Properties properties, String name, ElementInfo element) {
+        super(fluidSupplier, properties, name, element);
 	}
 
     @Override

@@ -2,6 +2,7 @@ package com.lycanitesmobs.core.block.fluid;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
+import com.lycanitesmobs.core.info.ElementInfo;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -24,8 +25,8 @@ import java.util.function.Supplier;
 import net.minecraft.block.AbstractBlock.Properties;
 
 public class PoisonFluidBlock extends BaseFluidBlock {
-	public PoisonFluidBlock(Supplier<? extends FlowingFluid> fluidSupplier, Properties properties, String name) {
-        super(fluidSupplier, properties, name);
+	public PoisonFluidBlock(Supplier<? extends FlowingFluid> fluidSupplier, Properties properties, String name, ElementInfo element) {
+        super(fluidSupplier, properties, name, element);
 	}
 
     public boolean shouldSpreadLiquid(World world, BlockPos neighborBlockPos, BlockState blockState) {

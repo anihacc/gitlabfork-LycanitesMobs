@@ -1,5 +1,6 @@
 package com.lycanitesmobs.core.entity;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.goals.actions.PlayerControlGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.CopyRiderAttackTargetGoal;
@@ -190,7 +191,10 @@ public abstract class RideableCreatureEntity extends TameableCreatureEntity {
     }
 
     public float getStrafeSpeed() {
-		return 0.25F;
+		if (this.isSwimming() || this.isFlying()) {
+			return 0.25F;
+		}
+		return 0.75F;
 	}
     
     // ========== Move with Heading ==========
@@ -213,7 +217,7 @@ public abstract class RideableCreatureEntity extends TameableCreatureEntity {
             this.setRot(this.yRot, this.xRot);
             this.yHeadRot = this.yBodyRot = this.yRot;
             strafe = rider.xxa * this.getStrafeSpeed();
-            forward = rider.zza;
+            forward = rider.zza * this.getAISpeedModifier();
         }
 
         // Swimming / Flying Controls:
@@ -315,8 +319,8 @@ public abstract class RideableCreatureEntity extends TameableCreatureEntity {
 				else if(this.isInLava()) {
 					if(!this.isStrongSwimmer()) {
 						verticalMotion *= 0.25f;
-						strafe *= 0.25f;
-						forward *= 0.25f;
+						strafe *= 0.5f;
+						forward *= 0.5f;
 					}
 					this.moveRelative(0.1F, new Vector3d(strafe, 0, forward));
 					this.move(MoverType.SELF, this.getDeltaMovement().add(0, verticalMotion / 16, 0));

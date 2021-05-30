@@ -153,7 +153,7 @@ public class CreatureNodeProcessor extends WalkNodeProcessor implements ICreatur
     public double getWidth(boolean blockChecks, Entity entity) {
 		return Math.min(3, (double)entity.getDimensions(Pose.STANDING).width);
 	}
-	
+
     /** Flight Pathing **/
     protected PathPoint getFlightNode(int x, int y, int z) {
         PathNodeType pathnodetype = this.isFlyablePathNode(x, y, z);

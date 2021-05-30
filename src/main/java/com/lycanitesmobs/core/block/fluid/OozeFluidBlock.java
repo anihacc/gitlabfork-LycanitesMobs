@@ -2,6 +2,7 @@ package com.lycanitesmobs.core.block.fluid;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
+import com.lycanitesmobs.core.info.ElementInfo;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -21,8 +22,8 @@ import java.util.Random;
 import java.util.function.Supplier;
 
 public class OozeFluidBlock extends BaseFluidBlock {
-	public OozeFluidBlock(Supplier<? extends FlowingFluid> fluidSupplier, Block.Properties properties, String name) {
-        super(fluidSupplier, properties, name);
+	public OozeFluidBlock(Supplier<? extends FlowingFluid> fluidSupplier, Block.Properties properties, String name, ElementInfo element) {
+        super(fluidSupplier, properties, name, element);
 	}
 
     @Override

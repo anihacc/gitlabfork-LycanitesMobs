@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.block.fluid;
 
 import com.lycanitesmobs.LycanitesMobs;
+import com.lycanitesmobs.core.info.ElementInfo;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -21,8 +22,8 @@ import java.util.Random;
 import java.util.function.Supplier;
 
 public class MoglavaFluidBlock extends BaseFluidBlock {
-	public MoglavaFluidBlock(Supplier<? extends FlowingFluid> fluidSupplier, Block.Properties properties, String name) {
-		super(fluidSupplier, properties, name);
+	public MoglavaFluidBlock(Supplier<? extends FlowingFluid> fluidSupplier, Block.Properties properties, String name, ElementInfo element) {
+		super(fluidSupplier, properties, name, element);
 	}
 
 	@Override

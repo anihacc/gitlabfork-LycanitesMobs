@@ -3,6 +3,7 @@ package com.lycanitesmobs.core.entity.creature;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.api.IGroupHeavy;
 import com.lycanitesmobs.core.entity.ExtendedEntity;
+import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.entity.RideableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import net.minecraft.block.Block;
@@ -11,9 +12,12 @@ import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -21,9 +25,6 @@ import net.minecraft.world.World;
 public class EntityDeioneus extends RideableCreatureEntity implements IGroupHeavy {
     protected int pickupCooldown = 100;
 
-    // ==================================================
- 	//                    Constructor
- 	// ==================================================
     public EntityDeioneus(EntityType<? extends EntityDeioneus> entityType, World world) {
         super(entityType, world);
         
@@ -43,19 +44,13 @@ public class EntityDeioneus extends RideableCreatureEntity implements IGroupHeav
         this.maxUpStep = 4.0F;
     }
 
-    // ========== Init AI ==========
     @Override
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(false));
     }
-	
-	
-    // ==================================================
-    //                      Updates
-    // ==================================================
+
     private int pickupTime = 0;
-	// ========== Living Update ==========
 	@Override
     public void aiStep() {
         super.aiStep();
@@ -90,10 +85,6 @@ public class EntityDeioneus extends RideableCreatureEntity implements IGroupHeav
         }
     }
 
-
-    // ==================================================
-    //                   Mount Ability
-    // ==================================================
     @Override
     public void mountAbility(Entity rider) {
         if(this.getCommandSenderWorld().isClientSide)
@@ -129,27 +120,32 @@ public class EntityDeioneus extends RideableCreatureEntity implements IGroupHeav
         return 1.0F;
     }
 
-	
-    // ==================================================
-    //                      Movement
-    // ==================================================
-    // ========== Movement Speed Modifier ==========
 	@Override
     public float getAISpeedModifier() {
     	if(this.isInWater()) // Checks specifically just for water.
-            return 2F;
+            return 1F;
     	if(this.waterContact()) // Checks for water, rain, etc.
-    		return 1.5F;
-        return super.getAISpeedModifier();
+    		return 0.9F;
+        return 0.75F;
     }
 
-    // Pushed By Water:
     @Override
     public boolean isPushedByFluid() {
         return false;
     }
-    
-	// Pathing Weight:
+
+    @Override
+    public boolean canStandOnFluid(Fluid fluid) {
+        if (this.getControllingPassenger() instanceof PlayerEntity) {
+            PlayerEntity player = (PlayerEntity) this.getControllingPassenger();
+            ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
+            if (playerExt != null && playerExt.isControlActive(ExtendedPlayer.CONTROL_ID.DESCEND)) {
+                return false;
+            }
+        }
+        return fluid.is(FluidTags.WATER);
+    }
+
 	@Override
 	public float getBlockPathWeight(int x, int y, int z) {
         int waterWeight = 10;
@@ -168,19 +164,12 @@ public class EntityDeioneus extends RideableCreatureEntity implements IGroupHeav
         return super.getBlockPathWeight(x, y, z);
     }
 
-
-    // ========== Get Wander Position ==========
     public BlockPos getWanderPosition(BlockPos wanderPosition) {
         BlockPos groundPos;
         for(groundPos = wanderPosition.below(); groundPos.getY() > 0 && !this.getCommandSenderWorld().getBlockState(groundPos).getMaterial().isSolid(); groundPos = groundPos.below()) {}
         return groundPos.above();
     }
 
-
-    // ==================================================
-    //                      Attacks
-    // ==================================================
-    // ========== Melee Attack ==========
     @Override
     public boolean attackMelee(Entity target, double damageScale) {
         if(!super.attackMelee(target, damageScale))
@@ -198,11 +187,6 @@ public class EntityDeioneus extends RideableCreatureEntity implements IGroupHeav
         return true;
     }
 
-
-    // ==================================================
-    //                   Taking Damage
-    // ==================================================
-    // ========== On Damage ==========
     /** Called when this mob has received damage. Here there is a random chance of this mob dropping any picked up entities. **/
     @Override
     public void onDamage(DamageSource damageSrc, float damage) {
@@ -210,11 +194,7 @@ public class EntityDeioneus extends RideableCreatureEntity implements IGroupHeav
             this.dropPickupEntity();
         super.onDamage(damageSrc, damage);
     }
-    
-    
-    // ==================================================
-   	//                     Immunities
-   	// ==================================================
+
     @Override
     public boolean canBreatheUnderwater() {
         return true;
@@ -225,16 +205,11 @@ public class EntityDeioneus extends RideableCreatureEntity implements IGroupHeav
         return 20;
     }
 
-
-    // ==================================================
-    //                     Abilities
-    // ==================================================
     @Override
     public double[] getPickupOffset(Entity entity) {
         return new double[]{0, 5.5D, 0};
     }
 
-    // ========== Pickup ==========
     public boolean canPickupEntity(LivingEntity entity) {
         if(!this.isTamed() && this.pickupCooldown > 0)
             return false;
@@ -248,16 +223,10 @@ public class EntityDeioneus extends RideableCreatureEntity implements IGroupHeav
         this.pickupEntity = null;
     }
 
-
-    // ==================================================
-    //                     Equipment
-    // ==================================================
     @Override
     public int getNoBagSize() { return 0; }
     @Override
     public int getBagSize() { return this.creatureInfo.BagSize; }
-    // ==================================================
-    //                     Pet Control
-    // ==================================================
+
     public boolean petControlsEnabled() { return true; }
 }

@@ -2,6 +2,7 @@ package com.lycanitesmobs.core.block.fluid;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
+import com.lycanitesmobs.core.info.ElementInfo;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FlowingFluidBlock;
@@ -20,9 +21,16 @@ import java.util.Random;
 import java.util.function.Supplier;
 
 public class BaseFluidBlock extends FlowingFluidBlock {
-	public BaseFluidBlock(Supplier<? extends FlowingFluid> fluidSupplier, Properties properties, String name) {
+	protected ElementInfo element;
+
+	public BaseFluidBlock(Supplier<? extends FlowingFluid> fluidSupplier, Properties properties, String name, ElementInfo element) {
         super(fluidSupplier, properties);
         this.setRegistryName(LycanitesMobs.MODID, name);
+        this.element = element;
+	}
+
+	public ElementInfo getElement() {
+		return this.element;
 	}
 
 	@Override
