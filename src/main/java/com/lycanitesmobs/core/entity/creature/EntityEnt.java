@@ -123,6 +123,14 @@ public class EntityEnt extends TameableCreatureEntity implements IMob {
     // ==================================================
     public boolean petControlsEnabled() { return true; }
 
+    // ==================================================
+    //                     Equipment
+    // ==================================================
+    @Override
+    public int getNoBagSize() { return 0; }
+    @Override
+    public int getBagSize() { return this.creatureInfo.BagSize; }
+
 
     // ==================================================
     //                       Visuals

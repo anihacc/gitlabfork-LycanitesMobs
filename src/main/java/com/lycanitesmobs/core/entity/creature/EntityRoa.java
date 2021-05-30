@@ -266,7 +266,9 @@ public class EntityRoa extends RideableCreatureEntity implements IMob {
     @Override
     public int getNoBagSize() { return 0; }
     @Override
-    public int getBagSize() { return 10; }
+    public int getBagSize() { return this.creatureInfo.BagSize; }
+
+
 
 
     // ==================================================

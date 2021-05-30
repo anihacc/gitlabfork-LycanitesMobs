@@ -1,0 +1,44 @@
+{
+	"itemName": "serpixmandible",
+	"loadDefault": true,
+	"slotType": "axe",
+	"dropMobId": "lycanitesmobs:serpix",
+	"dropChance": 0.5,
+	"levelMin": 1,
+	"levelMax": 3,
+	"elements": [
+		"frost"
+	],
+	"features": [
+		{
+			"featureType": "projectile",
+			"levelMax": 1,
+			"projectileName": "blizzard",
+			"projectileTrigger": "secondary",
+			"projectilePattern": "simple",
+			"cooldown": 20,
+			"count": 1
+		},
+		{
+			"featureType": "projectile",
+			"levelMin": 2,
+			"levelMax": 2,
+			"projectileName": "blizzard",
+			"projectileTrigger": "secondary",
+			"projectilePattern": "simple",
+			"cooldown": 16,
+			"count": 1,
+			"bonusDamage": 1
+		},
+		{
+			"featureType": "projectile",
+			"levelMin": 3,
+			"projectileName": "blizzard",
+			"projectileTrigger": "secondary",
+			"projectilePattern": "simple",
+			"cooldown": 8,
+			"count": 1,
+			"bonusDamage": 2
+		}
+	]
+}

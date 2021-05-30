@@ -1,6 +1,0 @@
-{
-	"parent": "lycanitesmobs:item/bloodleechscepter",
-	"textures": {
-		"layer0": "lycanitesmobs:items/bloodleechscepter_fire"
-	}
-}

@@ -1,6 +1,0 @@
-{
-	"parent": "lycanitesmobs:item/poisonrayscepter",
-	"textures": {
-		"layer0": "lycanitesmobs:items/poisonrayscepter_fire"
-	}
-}

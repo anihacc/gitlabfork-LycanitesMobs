@@ -51,6 +51,8 @@ subspecies.umber.name=Umber
 # Skins:
 subspecies.moloch.name=Moloch
 subspecies.void.name=Void
+subspecies.sand.name=Sand
+
 #
 #
 #
@@ -236,6 +238,7 @@ lyc.command.dungeon.invalid=Invalid arguments, usage: /lycanitesmobs spawners [r
 lyc.command.dungeon.reload=JSON Dungeons have been reloaded.
 lyc.command.dungeon.enable=Lycanites Dungeons have been enabled and will generate in new chunks.
 lyc.command.dungeon.disable=Lycanites Dungeons have been disabled and will no longer generate in new chunks.
+lyc.command.dungeon.locate=Nearby Dungeons:
 #
 # Creatures:
 lyc.command.creatures.invalid=Invalid arguments, usage: /lycanitesmobs creatures [reload]
@@ -448,6 +451,11 @@ tile.frostcloud.description=A small snow cloud that applies movement slowdown an
 tile.frostfire.name=Frostfire
 tile.frostfire.description=A magical flame that superfreezes, will cause damage and apply movement slowdown. Can spawn Reivers.
 #
+tile.smitefire.name=Smitefire
+tile.smitefire.description=A sacred flame that smites the abhorrent, damages and applies smite causing the afflicted to burn in sunlight.
+#
+tile.Primefire.name=Primefire
+tile.Primefire.description=A perfect white-blue flame of the highest temperature that burns everything aorund it rapidly, will cause high damage and apply smoldering.
 #
 # ========== Fluids ==========
 tile.moglava.name=Moglava
@@ -745,6 +753,11 @@ entity.lycanitesmobs.aglebemu.description=Large poisonous frogs with excellent s
 entity.lycanitesmobs.aglebemu.habitat=These amphibians are usually found in swamplands.
 entity.lycanitesmobs.aglebemu.combat=Aglebemu use their powerful, extremely long and sharp tongues to spear their victims and inject a deadly concoction of contagious bacteria.
 # ========================================================================
+entity.lycanitesmobs.archvile.name=Archvile
+entity.lycanitesmobs.archvile.description=Malicious demons that rule of areas of the nether, Archviles enjoy the smell of their victim's burning flesh and enjoy watching other demons tear their victims apart!
+entity.lycanitesmobs.archvile.habitat=Archviles live within the depths of the Nether.
+entity.lycanitesmobs.archvile.combat=Archviles prefer to avoid combat themselves, instead they will strengthen any nearby demons and they will slowly engulf their target in flames.
+# ========================================================================
 entity.lycanitesmobs.argus.name=Argus
 entity.lycanitesmobs.argus.description=Disruptive Chaos elementals, Argi (plural) spread havoc in their wake.
 entity.lycanitesmobs.argus.habitat=Being Chaos Elementals, Argi are formed when there is a large concentration of Chaos in the area, this can be caused by several things but usually destroying other Elementals causes a high concentration of Chaos.
@@ -955,6 +968,16 @@ entity.lycanitesmobs.gorger.name=Gorger
 entity.lycanitesmobs.gorger.description=Huge magma worms that swim through molten lava, they can also survive on land and can burrow into soft ground like dirt.
 entity.lycanitesmobs.gorger.habitat=These creatures can be found in large bodies of lava.
 entity.lycanitesmobs.gorger.combat=Gorgers attack by release several balls of lava everywhere, while these attacks are powerful, they are inaccurate leaving them open.
+# ========================================================================
+entity.lycanitesmobs.grell.name=Grell
+entity.lycanitesmobs.grell.description=Strange floating creatures of writhing flesh that produce a deadly acid.
+entity.lycanitesmobs.grell.habitat=These creatures inhabit the fleshscapes of the Nether.
+entity.lycanitesmobs.grell.combat=Grell fire a deadly glob of acid, have a wicked bite and let off pheromones to control nearby Grigori.
+# ========================================================================
+entity.lycanitesmobs.grigori.name=Grigori
+entity.lycanitesmobs.grigori.description=Aggressive lumps of flesh with bonecrushing teeth that float through the sky. Grigori are known to travel in large swarms and hunt using taste and smell.
+entity.lycanitesmobs.grigori.habitat=These creatures can be found floating through the skies of the Nether.
+entity.lycanitesmobs.grigori.combat=Grigori have a devastating bite that cause their victims to bleed, they are simple minded creatures that attack on instinct.
 # ========================================================================
 entity.lycanitesmobs.gorgomite.name=Gorgomite
 entity.lycanitesmobs.gorgomite.description=Small rock beetles, they are known to be quite aggressive but are scared of Manticores.
@@ -1246,6 +1269,11 @@ entity.lycanitesmobs.volcan.description=Searing Lava Elementals, Volcans will me
 entity.lycanitesmobs.volcan.habitat=Being Lava Elementals, Volcans manifest around large volumes of lava underground, they are quite rare.
 entity.lycanitesmobs.volcan.combat=Volcans will melt any stone around them into lava so must be eliminated fast. Volcans attack at melee and apply the smouldering effect, however they also have a heat aura burning anything close to them.
 # ========================================================================
+entity.lycanitesmobs.vorach.name=Vorach
+entity.lycanitesmobs.vorach.description=Foul demons that produce a deadly substance from the back of their heads, their tails evolved into a third leg to allow for climing.
+entity.lycanitesmobs.vorach.habitat=Vorach lurk around the dark corners of the nether.
+entity.lycanitesmobs.vorach.combat=These demons throw the substance that grows from the back of theirs heads, these projectiles have a mind of their own and will home in on the Vorach's target.
+# ========================================================================
 entity.lycanitesmobs.warg.name=Warg
 entity.lycanitesmobs.warg.description=Large wolf-like beasts with a vicious bite! They are known to hunt in packs. When tamed they make fantastic mounts!
 entity.lycanitesmobs.warg.habitat=These beasts often roam forests.
@@ -1304,21 +1332,25 @@ entity.lycanitesmobs.zoataur.combat=Zoataur are slow but hit hard, they will als
 creaturetype.spawn=Spawn
 creaturetype.beast.name=Beast
 creaturetype.avian.name=Avian
-creaturetype.arthropod.name=Arthropod
+creaturetype.amphibian.name=Amphibian
+creaturetype.reptile.name=Reptile
+creaturetype.insect.name=Insect
+creaturetype.arachnid.name=Arachnid
 creaturetype.plant.name=Plant
 creaturetype.aquatic.name=Aquatic
 creaturetype.aberration.name=Aberration
 creaturetype.undead.name=Undead
-creaturetype.brute.name=Brute
+creaturetype.anthronian.name=Anthronian
 creaturetype.imp.name=Imp
 creaturetype.demon.name=Demon
 creaturetype.angel.name=Angel
 creaturetype.elemental.name=Elemental
 creaturetype.dragon.name=Dragon
 creaturetype.worm.name=Worm
+creaturetype.golem.name=Golem
 # ========================================================================
 death.attack.ooze=%1$s was frozen in the icy ooze!
-death.attack.ooze=%1$s was painfully dissolved by acid!
+death.attack.acid=%1$s was painfully dissolved by acid!
 # ========================================================================
 # Effect names must also be included in the base en_US.lang for now.
 # Debuffs
@@ -1456,6 +1488,24 @@ effect.freezeaura.description=Slows enemies around the affected.
 effect.envenom=Envenom
 effect.envenom.description=Adds poison to any attacks.
 # ========================================================================
+element.xeno.name=Xeno
+element.xeno.description=As a Super element,Xeno is an unstable element which converts regular matter into Xeno magic on contact but is very unstable and decays quickly into chaos magic.
+#
+element.coda.name=Coda
+element.coda.description=As a Super element,Coda is able to rearrange the order of events and efficiently speed up and slow down time.
+#
+element.bose.name=Bose
+element.bose.description=As a Super element,Bose is a tightly packed set of molecules which are so dense they act as one particle, it is almost indestructible.
+#
+element.mote.name=Mote
+element.mote.description=As a Super element,Mote is an element of disintegration, blasts of it turn things into infinitely fine dust.
+#
+element.murati.name=Murati
+element.murati.description=As a Super element,Murati is a form of water which has a swarming property, it acts like a superfluid so it ripples indefinitely and swarms around things.
+#
+element.glasma.name=Glasma
+element.glasma.description=As a Super element,Glasma is an extremely hot substance forged with two fire crystals (which in turn are forged by the twin suns of the eldritch expanse), it flows upwards and burns everything it touches.
+#
 element.fire.name=Fire
 element.fire.description=A base element that represents plasma and raw energy. It can be extracted from the para elements: Acid, Lava, Lightning, Light and Shadow.
 #
@@ -1463,13 +1513,13 @@ element.water.name=Water
 element.water.description=A base element that represents fluids, predominantly water itself. Water can be extracted from the para elements: Acid, Arbour, Frost, Fae and Poison.
 #
 element.earth.name=Earth
-element.earth.description=A base element that represents solid form, from the dirt to rocks, crystals and even metal or bone. It can be extracted from the para elements: Lava, Arbour, Phase, Gravity and Quake.
+element.earth.description=A base element that represents solid form, from the dirt to rocks, crystals and even metal or bone. It can be extracted from the para elements: Lava, Arbour, Phase, arcane and Quake.
 #
 element.air.name=Air
 element.air.description=A base element that represents gas but is often known only for its ability to control the flow of wind. It can be extracted from the para elements: Lightning, Ice, Phase, Aether and Nether.
 #
 element.order.name=Order
-element.order.description=A base element that represents sequence and balance, while these are very hypothetical concepts, Order has a very physical presence in magical universes with a basic form being raw force. Order can be extracted from the para elements: Light, Fae, Gravity, Aether and Void.
+element.order.description=A base element that represents sequence and balance, while these are very hypothetical concepts, Order has a very physical presence in magical universes with a basic form being raw force. Order can be extracted from the para elements: Light, Fae, arcane, Aether and Void.
 #
 element.chaos.name=Chaos
 element.chaos.description=A base element that represents entropy, growth and destruction. It can be extracted from the para elements: Shadow, Poison, Quake, Nether and Void.
@@ -1498,25 +1548,25 @@ element.frost.description=A para element that represents cold where it actively 
 element.fae.name=Fae
 element.fae.description=A para element that represents life and adaption. Fae can be fused from Water and Order as it embodies the fluid nature of Water and the structure of Order.
 #
-element.poison.name=Poison
+element.poison=Poison
 element.poison.description=A para element that represents chemical substances, usually poisons or venom as well as narcotics and also medicines but can also take on many other forms as well such as oil. Poison can be fused from Water and Chaos where Water embodies a fluid form that can be altered which is manipulated by Chaos into all kinds of strange chemicals.
 #
-element.phase.name=Phase
+element.phase=Phase
 element.phase.description=A para element that represents phase shifting or spiritual reality, a space layered on top of the physical world, it is what spirits are made of and use. Phase can be fused from the base elements Earth and Air as it embodies the solid form of Earth and the flowing non-solid of Air.
 #
-element.gravity.name=Gravity
-element.gravity.description=A para element that represents gravitation, magnetism, bonding, compression and artificial structure. Gravity can be fused from Earth and Order where it embodies the solid physical presence of Earth and the structure and laws of Order.
+element.arcane=Arcane
+element.arcane.description=A para element that represents gravitation, magnetism, bonding, compression and artificial structure. arcane can be fused from Earth and Order where it embodies the solid physical presence of Earth and the structure and laws of Order.
 #
-element.quake.name=Quake
+element.quake=Quake
 element.quake.description=A para element that represents vibration, sound, combustion and destruction. Quake can be fused from Earth and Chaos where Earth embodies solid form which is then broke apart by Chaos.
 #
-element.aether.name=Aether
+element.aether=Aether
 element.aether.description=A para element that represents purity, divinity, faith and worship. Aether can be fused from Air and Order as it embodies the flowing aspect of Air with the structure and laws of Order.
 #
-element.nether.name=Nether
+element.nether=Nether
 element.nether.description=A para element that represents corruption, demonism, desire and rebellion. Nether can be fused from Air and Chaos where Air embodies flowing and Chaos twists it into corruption.
 #
-element.void.name=Void
+element.void=Void
 element.void.description=A para element that represents nothingness and removal. Void can be fused from Order and Chaos where Order embodies structure and consistency which is cancelled out by Chaos which embodies entropy and randomness.
 f:\projects\lycanites mobs 1.12.2\src\main\resources\assets\lycanitesmobs\lang\en_us\extract.txt
 # ========================================================================
@@ -1618,6 +1668,12 @@ item.waterjetcharge.description=Use to fire a water jet or fire from a dispenser
 item.devilstarcharge.name=Devilstar Charge
 item.devilstarcharge.description=Use to throw a small devilstar. Can also be rapid fired from a dispenser.
 #
+item.smitefireballcharge.name=Smite Fireball Charge
+item.smitefireballcharge.description=Use to launch a ball of smitefire. Can also be fired from a dispenser.
+#
+item.primefireember.name=Prime Ember Charge
+item.primefireember.description=Use to throw a small primefire ember. Can also be rapid fired from a dispenser.
+#
 # ========================================================================
 item.equipment.name=Crafted Equipment
 item.equipment.description=
@@ -1661,6 +1717,27 @@ item.vapulacrystal.name=Vapula Crystal
 item.reiverhorns.name=Reiver Horns
 item.eechetikarm.name=Eechetik Arm
 item.gammasphere.name=Gamma Sphere
+item.archvileclaw.name=Archvile Claw
+item.behemothhand.name=Behemoth Hand
+item.beholdereye.name=Beholder Eye
+item.belpharm.name=Belph Arm
+item.cacodemoneye.name=Cacodemon Eye
+item.conbabutt.name=Conba Butt
+item.epionwing.name=Epion Wing
+item.eyewigeye.name=Eyewig Eye
+item.frostweaverleg.name=Frostweaver Leg
+item.ioraystinger.name=Ioray Stinger
+item.lacedonhead.name=Lacedon Head
+item.quillbeastquill.name=Quillbeast Quill
+item.reaperclaw.name=Reaper Claw
+item.serpixmandible.name=Serpix Mandible
+item.wildkinarm.name=Wildkin Arm
+item.lobbercore.name=Lobber Core
+item.striderheart.name=Strider Heart
+item.afritlung.name=Afrit Lung
+item.arixbrain.name=Arix Brain
+item.erepededrill.name=Erepede Drill
+item.ettinclub.name=Ettin Club
 # ========================================================================
 item.raw_arisaur_meat.name=Raw Arisaur Meat
 item.raw_arisaur_meat.description=A beef-like meat. 'Stunningly good' to eat raw!
@@ -1901,6 +1978,24 @@ item.soulstone_undead.description=The tireless soul of an Undead creature reside
 item.soulstone_worm.name=Worm Soulstone
 item.soulstone_worm.description=The relentless soul of a Worm resides within this Soulstone, unleash it and make it yours!
 #
+item.soulstone_amphibian.name=Amphibian Soulstone
+item.soulstone_amphibian.description=The strange soul of an Amphibian resides within this Soulstone, unleash it and make it yours!
+#
+item.soulstone_arachnid.name=Arachnid Soulstone
+item.soulstone_arachnid.description=The twisted soul of an Arachnid resides within this Soulstone, unleash it and make it yours!
+#
+item.soulstone_insect.name=Insect Soulstone
+item.soulstone_insect.description=The creepy soul of an Insect resides within this Soulstone, unleash it and make it yours!
+#
+item.soulstone_reptile.name=Reptile Soulstone
+item.soulstone_reptile.description=The majestic soul of a Reptile resides within this Soulstone, unleash it and make it yours!
+#
+item.soulstone_golem.name=Golem Soulstone
+item.soulstone_golem.description=The mechanical soul of a Golem resides within this Soulstone, unleash it and make it yours!
+#
+item.soulstone_slime.name=Slime Soulstone
+item.soulstone_slime.description=The remnant soul of a Slime resides within this Soulstone, unleash it and make it yours!
+#
 #
 # ========== Spawns ==========
 item.forestspawn.name=Spawn
@@ -1916,85 +2011,6 @@ item.shadowspawn.name=Spawn
 item.infernospawn.name=Spawn
 item.demonspawn.name=Spawn
 item.freshwaterspawn.name=Spawn
-# ========================================================================
-item.aquapulsescepter.name=Aqua Pulse Scepter
-item.aquapulsescepter.description=Low Damage, Charge Up, Applies Penetration, Places Water
-#
-item.scorchfirescepter.name=Scorchfire Scepter
-item.scorchfirescepter.description=Low Damage, Rapid Fire, Applies Fire, Places Scorchfire
-#
-item.devilstarscepter.name=Devilstar Scepter
-item.devilstarscepter.description=Low Damage, Fast Rapid Fire
-#
-item.wraithsigil.name=Wraith Sigil
-item.wraithsigil.description=This skull is full to the brim with evil Wraiths! Use to fire a wave of angry Wraiths forwards towards your victim! Results can be explosive!
-#
-item.quillscepter.name=Quill Scepter
-item.quillscepter.description=Mid Damage, Rapid Fire
-#
-item.mudshotscepter.name=Mudshot Scepter
-item.mudshotscepter.description=Mid Damage, Rapid Fire, Applies Weakness
-#
-item.venomshotscepter.name=Venom Shot Scepter
-item.venomshotscepter.description=Low Damage, Rapid Fire, Applies Poison, Places Poison Clouds
-#
-item.blizzardscepter.name=Blizzard Scepter
-item.blizzardscepter.description=Mid Damage, Spray Fire, Places Icefire
-#
-item.bloodleechscepter.name=Bloodleech Scepter
-item.bloodleechscepter.description=Low Damage, Rapid Fire, Drains Health
-#
-item.waterjetscepter.name=Water Jet Scepter
-item.waterjetscepter.description=Mid Damage, Laser, Applies Penetration
-#
-item.doomfirescepter.name=Doomfire Scepter
-item.doomfirescepter.description=Mid Damage, Rapid Fire, Applies Fire, Places Fire
-#
-item.frostboltscepter.name=Frostbolt Scepter
-item.frostboltscepter.description=Mid Damage, Rapid Fire, Applies Move Slowdown
-#
-item.poopscepter.name=Poop Scepter
-item.poopscepter.description=Low Damage, Rapid Fire, Applies Slowness and Nausea, Places Poop Clouds
-#
-item.scythescepter.name=Scythe Scepter
-item.scythescepter.description=Mid Damage, Triple Pulse Fire
-#
-item.tundrascepter.name=Tundra Scepter
-item.tundrascepter.description=High Damage, Charge Up, Places Ooze
-#
-item.magmascepter.name=Magma Scepter
-item.magmascepter.description=High Damage, Charge Up, Applies Fire, Places Lava
-#
-item.hellfirescepter.name=Hellfire Scepter
-item.hellfirescepter.description=High Damage, Charge Up, Applies Fire, Places Hellfire
-#
-item.emberscepter.name=Ember Scepter
-item.emberscepter.description=Mid Damage, Spray Fire, Applies Fire
-#
-item.icefirescepter.name=Icefire Scepter
-item.icefirescepter.description=Low Damage, Rapid Fire, Places Icefire
-#
-item.poisonrayscepter.name=Poison Ray Scepter
-item.poisonrayscepter.description=Mid Damage, Laser, Applies Poison
-#
-item.arcanelaserstormscepter.name=Arcane Laser Storm Scepter
-item.arcanelaserstormscepter.description=High Damage, Charge Up, Lasers Fly Off
-#
-item.demoniclightningscepter.name=Demonic Lightning Scepter
-item.demoniclightningscepter.description=High Damage, Charge Up, Applies Wither, Damaging Sparks Fly Off
-#
-item.spectralboltscepter.name=Spectral Bolt Scepter
-item.spectralboltscepter.description=Medium Damage, Rapid Fire, Causes Fear
-#
-item.lifedrainscepter.name=Life Drain Scepter
-item.lifedrainscepter.description=Mid Damage, Laser, Drains Health
-#
-item.frostwebscepter.name=Frostweb Scepter
-item.frostwebscepter.description=Low Damage, Rapid Fire, Applies Move Slowdown, Places Frostwebs
-#
-item.boulderblastscepter.name=Boulder Blast Scepter
-item.boulderblastscepter.description=High Damage, Charge Up, Applies Dig Speed Slowdown
-#
 # ========================================================================
 # ========== Summoning Staves ==========
 item.summoningstaff.name=Summoning Staff
@@ -2041,17 +2057,14 @@ item.angeltreat.description=There are currently no Angel creatures added yet.
 item.aquatictreat.name=Aquatic Treat
 item.aquatictreat.description=Made from tender fish, you can tame some aquatic creatures with this.
 #
-item.arthropodtreat.name=Arthropod Treat
-item.arthropodtreat.description=Made from fresh fruits, all sorts of arthropods will want to gorge on this.
-#
 item.aviantreat.name=Avian Treat
 item.aviantreat.description=Made from light meats, you can tame some avian creatures with this.
 #
 item.beasttreat.name=Beast Treat
 item.beasttreat.description=Made from juicy meats, you can tame some beasts with this.
 #
-item.brutetreat.name=Brute Treat
-item.brutetreat.description=Made from fatty meats, Brutes are quite simple minded, could any be swayed by this?
+item.anthroniantreat.name=Anthronian Treat
+item.anthroniantreat.description=Made from fatty meats, Brutes are quite simple minded, could any be swayed by this?
 #
 item.demontreat.name=Demon Treat
 item.demontreat.description=All demons seem to enjoy snacking on Nether Wart between their meals of live flesh.
@@ -2073,6 +2086,21 @@ item.undeadtreat.description=Made from the finest rotten flesh, but can any unde
 #
 item.wormtreat.name=Worm Treat
 item.wormtreat.description=Made from very gamey meat, those worm creatures seem to like that.
+#
+item.arachnidtreat.name=Arachnid Treat
+item.arachnidtreat.description=Made from fresh fruits, all sorts of arachnids will want to gorge on this.
+#
+item.insecttreat.name=Insect Treat
+item.insecttreat.description=Made from fresh fruits, all sorts of insects will want to gorge on this.
+#
+item.reptiletreat.name=Reptile Treat
+item.reptiletreat.description=Made from juicy meats, you can tame some reptiles with this.
+#
+item.golemtreat.name=Golem Treat
+item.golemtreat.description=Made from the finest machine parts, those golem creatures seem to like that.
+#
+item.wormtreat.name=Slime Treat
+item.wormtreat.description=Made from very bouncy slime, those slime creatures seem to like that.
 # ========================================================================
 # %event% will be replaced with the name of the event, don't translate this!
 event.started=%event% has begun!
@@ -2082,6 +2110,9 @@ event.boss.started=%event% has been called!
 event.boss.extended=%event% is coming!
 event.boss.finished=%event% is unleashed!
 event.boss.phase=Phase
+boss.block.protection.place=The presence of a powerful being prevents you from placing this block.
+boss.block.protection.break=The presence of a powerful being prevents you from destroying that block.
+boss.damage.protection.range=That being is too powerful to be damaged from this range.
 #
 # ========== Event Names ==========
 mobevent.amalgalich.name=Amalgalich
@@ -2155,3 +2186,5 @@ entity.lycanitesmobs.aquapulse=Aqua Pulse
 entity.lycanitesmobs.arcanelaserstorm=Arcane Laser Storm
 entity.lycanitesmobs.aetherwave=Aetherwave
 entity.lycanitesmobs.summoningseed=Summoning Seed
+entity.lycanitesmobs.primefireember=Prime Ember
+entity.lycanitesmobs.smitefireball=Smitefireball

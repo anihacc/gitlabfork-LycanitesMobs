@@ -96,8 +96,16 @@ public class EntityYeti extends AgeableCreatureEntity {
     public boolean canBeLeashedTo(EntityPlayer player) {
 	    return true;
     }
-    
-    
+
+    // ==================================================
+    //                     Equipment
+    // ==================================================
+    @Override
+    public int getNoBagSize() { return 0; }
+    @Override
+    public int getBagSize() { return this.creatureInfo.BagSize; }
+
+
     // ==================================================
    	//                     Immunities
    	// ==================================================

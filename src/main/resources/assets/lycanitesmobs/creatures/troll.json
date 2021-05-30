@@ -1,6 +1,6 @@
 {
     "name": "troll",
-    "creatureType": "brute",
+    "creatureType": "anthronian",
     "groups": [
         "raider"
     ],
@@ -50,6 +50,7 @@
     "pierce": 1,
     "sight": 24,
     "knockbackResistance": 1,
+    "bagSize": 5,
     "eggBackColor": "#007711",
     "eggForeColor": "#EEEEEE",
     "subspecies": [

@@ -72,15 +72,19 @@ public class EntityZoataur extends RideableCreatureEntity implements IMob {
     public void setBlocking() {
     	this.currentBlockingTime = this.blockingTime + this.getRNG().nextInt(this.blockingTime / 2);
     }
-    
-    
+
+
     // ==================================================
     //                     Equipment
     // ==================================================
+    @Override
     public int getNoBagSize() { return 0; }
-    public int getBagSize() { return 10; }
-    
-    
+    @Override
+    public int getBagSize() { return this.creatureInfo.BagSize; }
+
+
+
+
     // ==================================================
    	//                     Immunities
    	// ==================================================

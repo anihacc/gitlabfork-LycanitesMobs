@@ -57,8 +57,16 @@ public class EntityRemobra extends TameableCreatureEntity implements IMob {
   	// ==================================================
     @Override
     public boolean isFlying() { return true; }
-    
-    
+
+    // ==================================================
+    //                     Equipment
+    // ==================================================
+    @Override
+    public int getNoBagSize() { return 0; }
+    @Override
+    public int getBagSize() { return this.creatureInfo.BagSize; }
+
+
     // ==================================================
     //                     Pet Control
     // ==================================================

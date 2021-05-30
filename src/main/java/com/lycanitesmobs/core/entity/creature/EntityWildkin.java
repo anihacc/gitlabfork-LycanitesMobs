@@ -65,10 +65,13 @@ public class EntityWildkin extends TameableCreatureEntity implements IMob {
     // ==================================================
     //                     Equipment
     // ==================================================
+    @Override
     public int getNoBagSize() { return 0; }
-    public int getBagSize() { return 10; }
-    
-    
+    @Override
+    public int getBagSize() { return this.creatureInfo.BagSize; }
+
+
+
     // ==================================================
     //                     Pet Control
     // ==================================================

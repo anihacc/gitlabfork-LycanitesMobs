@@ -268,7 +268,9 @@ public class EntityRoc extends RideableCreatureEntity implements IMob {
     @Override
     public int getNoBagSize() { return 0; }
     @Override
-    public int getBagSize() { return 5; }
+    public int getBagSize() { return this.creatureInfo.BagSize; }
+
+
 
 
     // ==================================================

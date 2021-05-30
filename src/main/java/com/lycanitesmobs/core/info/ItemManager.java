@@ -158,29 +158,6 @@ public class ItemManager extends JSONLoader {
 		this.addFluid("vesspoison", fluid, new BlockFluidVesspoison(fluid, "vesspoison"), 0, 1000, 8, 20, false, true);
 
 
-		// Charges and Scepters:
-		ObjectManager.addItem("frostwebscepter", new ItemScepterFrostweb(), 2, 1, 1);
-		ObjectManager.addItem("tundrascepter", new ItemScepterTundra(), 2, 1, 1);
-		ObjectManager.addItem("icefirescepter", new ItemScepterIcefire(), 2, 1, 1);
-		ObjectManager.addItem("blizzardscepter", new ItemScepterBlizzard(), 2, 1, 1);
-		ObjectManager.addItem("doomfirescepter", new ItemScepterDoomfire(), 2, 1, 1);
-		ObjectManager.addItem("hellfirescepter", new ItemScepterHellfire(), 2, 1, 1);
-		ObjectManager.addItem("demoniclightningscepter", new ItemScepterDemonicLightning(), 2, 1, 1);
-		ObjectManager.addItem("mudshotscepter", new ItemScepterMudshot(), 2, 1, 1);
-		ObjectManager.addItem("aquapulsescepter", new ItemScepterAquaPulse(), 2, 1, 1);
-		ObjectManager.addItem("lifedrainscepter", new ItemScepterLifeDrain(), 2, 1, 1);
-		ObjectManager.addItem("frostboltscepter", new ItemScepterFrostbolt(), 2, 1, 1);
-		ObjectManager.addItem("waterjetscepter", new ItemScepterWaterJet(), 2, 1, 1);
-		ObjectManager.addItem("magmascepter", new ItemScepterMagma(), 2, 1, 1);
-		ObjectManager.addItem("scorchfirescepter", new ItemScepterScorchfire(), 2, 1, 1);
-		ObjectManager.addItem("poopscepter", new ItemScepterPoop(), 2, 1, 1);
-		ObjectManager.addItem("boulderblastscepter", new ItemScepterBoulderBlast(), 2, 1, 1);
-		ObjectManager.addItem("arcanelaserstormscepter", new ItemScepterArcaneLaserStorm(), 2, 1, 1);
-		ObjectManager.addItem("quillscepter", new ItemScepterQuill(), 2, 1, 1);
-		ObjectManager.addItem("spectralboltscepter", new ItemScepterSpectralbolt(), 2, 1, 1);
-		ObjectManager.addItem("bloodleechscepter", new ItemScepterBloodleech(), 2, 1, 1);
-		ObjectManager.addItem("poisonrayscepter", new ItemScepterPoisonRay(), 2, 1, 1);
-
 
 		// Summoning Staves:
 		ObjectManager.addItem("summoningstaff", new ItemStaffSummoning("summoningstaff", "summoningstaff"));

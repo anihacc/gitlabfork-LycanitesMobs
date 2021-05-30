@@ -98,9 +98,17 @@ public class EntityArgus extends TameableCreatureEntity implements IMob, IFusabl
     //                     Pet Control
     // ==================================================
     public boolean petControlsEnabled() { return true; }
-    
-    
-    // ==================================================
+
+	// ==================================================
+	//                     Equipment
+	// ==================================================
+	@Override
+	public int getNoBagSize() { return 0; }
+	@Override
+	public int getBagSize() { return this.creatureInfo.BagSize; }
+
+
+	// ==================================================
    	//                     Immunities
    	// ==================================================
     @Override

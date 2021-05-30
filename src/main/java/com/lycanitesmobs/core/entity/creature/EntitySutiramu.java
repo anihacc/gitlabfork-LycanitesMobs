@@ -31,8 +31,16 @@ public class EntitySutiramu extends TameableCreatureEntity implements IMob {
         this.tasks.addTask(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setTargetClass(EntityPlayer.class).setLongMemory(false));
         this.tasks.addTask(this.nextCombatGoalIndex++, new AttackMeleeGoal(this));
     }
-    
-    
+
+    // ==================================================
+    //                     Equipment
+    // ==================================================
+    @Override
+    public int getNoBagSize() { return 0; }
+    @Override
+    public int getBagSize() { return this.creatureInfo.BagSize; }
+
+
     // ==================================================
    	//                     Immunities
    	// ==================================================

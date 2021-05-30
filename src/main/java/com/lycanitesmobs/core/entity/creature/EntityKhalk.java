@@ -185,7 +185,15 @@ public class EntityKhalk extends TameableCreatureEntity implements IMob, IGroupH
     public int getBrightnessForRender() {
         return 15728880;
     }
-	
+    // ==================================================
+    //                     Equipment
+    // ==================================================
+    @Override
+    public int getNoBagSize() { return 0; }
+    @Override
+    public int getBagSize() { return this.creatureInfo.BagSize; }
+
+
 
     // ==================================================
     //                     Pet Control

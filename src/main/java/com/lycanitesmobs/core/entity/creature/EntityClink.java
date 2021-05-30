@@ -69,8 +69,16 @@ public class EntityClink extends TameableCreatureEntity implements IMob {
     	if(type.equals("cactus")) return false;
     	return super.isDamageTypeApplicable(type, source, damage);
     }
-    
-    
+    // ==================================================
+    //                     Equipment
+    // ==================================================
+    @Override
+    public int getNoBagSize() { return 0; }
+    @Override
+    public int getBagSize() { return this.creatureInfo.BagSize; }
+
+
+
     // ==================================================
     //                     Pet Control
     // ==================================================

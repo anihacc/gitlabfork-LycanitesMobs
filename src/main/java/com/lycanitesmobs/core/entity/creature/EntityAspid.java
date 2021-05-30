@@ -86,8 +86,16 @@ public class EntityAspid extends AgeableCreatureEntity {
         }
         return super.getBlockPathWeight(x, y, z);
     }
-    
-	// ========== Can leash ==========
+    // ==================================================
+    //                     Equipment
+    // ==================================================
+    @Override
+    public int getNoBagSize() { return 0; }
+    @Override
+    public int getBagSize() { return this.creatureInfo.BagSize; }
+
+
+    // ========== Can leash ==========
     @Override
     public boolean canBeLeashedTo(EntityPlayer player) {
 	    if(!this.hasAttackTarget() && !this.hasMaster())

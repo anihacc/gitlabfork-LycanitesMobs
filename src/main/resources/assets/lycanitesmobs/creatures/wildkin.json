@@ -1,6 +1,6 @@
 {
     "name": "wildkin",
-    "creatureType": "brute",
+    "creatureType": "avian",
     "groups": [
         "raider"
     ],
@@ -52,6 +52,7 @@
     "pierce": 1,
     "sight": 24,
     "knockbackResistance": 1,
+    "bagSize": 5,
     "eggBackColor": "#433929",
     "eggForeColor": "#766f5a",
     "subspecies": [

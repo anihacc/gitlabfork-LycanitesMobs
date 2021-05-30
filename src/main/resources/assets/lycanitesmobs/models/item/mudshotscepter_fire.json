@@ -1,6 +1,0 @@
-{
-	"parent": "lycanitesmobs:item/mudshotscepter",
-	"textures": {
-		"layer0": "lycanitesmobs:items/mudshotscepter_fire"
-	}
-}

@@ -120,8 +120,16 @@ public class EntityBehemoth extends TameableCreatureEntity implements IMob {
         this.fireProjectile("hellfireball", target, range, 0, new Vec3d(0, 0, 0), 1.2f, 2f, 1F);
         super.attackRanged(target, range);
     }
-    
-    
+
+    // ==================================================
+    //                     Equipment
+    // ==================================================
+    @Override
+    public int getNoBagSize() { return 0; }
+    @Override
+    public int getBagSize() { return this.creatureInfo.BagSize; }
+
+
     // ==================================================
     //                     Immunities
     // ==================================================
