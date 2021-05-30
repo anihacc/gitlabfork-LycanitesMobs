@@ -3,6 +3,7 @@ package com.lycanitesmobs.core.entity.goals.actions;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import scala.xml.dtd.impl.Base;
 
 public class FollowMasterGoal extends FollowGoal {
 	// Targets:
@@ -43,6 +44,9 @@ public class FollowMasterGoal extends FollowGoal {
  	// ==================================================
     @Override
     public Entity getTarget() {
+    	if(this.host.getMasterTarget() != null && this.host.getMasterTarget() instanceof BaseCreatureEntity && ((BaseCreatureEntity)this.host.getMasterTarget()).isBossAlways()) {
+    		return null;
+		}
     	return this.host.getMasterTarget();
     }
 

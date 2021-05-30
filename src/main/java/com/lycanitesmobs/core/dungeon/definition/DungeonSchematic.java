@@ -248,7 +248,7 @@ public class DungeonSchematic {
 			}
 		}
 
-		if(!isValidBiome(world.getBiome(pos))) {
+		if(!this.isValidBiome(world.getBiome(pos))) {
 			return false;
 		}
 
@@ -397,8 +397,11 @@ public class DungeonSchematic {
 	 * @return The MobSpawn of the mob to spawn or null if no mob can be spawned.
 	 **/
 	public MobSpawn getRandomMobSpawn(int level, boolean boss, Random random) {
+		int levelMin = level;
+		int levelMax = level;
 		if(level < 0) {
-			level = -level * 2;
+			levelMax = -level * 2;
+			levelMin = levelMax - 1;
 		}
 
 		// Get Weights:
@@ -408,10 +411,10 @@ public class DungeonSchematic {
 			if(mobSpawn.dungeonBoss != boss) {
 				continue;
 			}
-			if(mobSpawn.dungeonLevelMin >= 0 && level < mobSpawn.dungeonLevelMin) {
+			if(mobSpawn.dungeonLevelMin >= 0 && mobSpawn.dungeonLevelMin > levelMax) {
 				continue;
 			}
-			if(mobSpawn.dungeonLevelMax >= 0 && level > mobSpawn.dungeonLevelMax) {
+			if(mobSpawn.dungeonLevelMax >= 0 && mobSpawn.dungeonLevelMax < levelMin) {
 				continue;
 			}
 			if(mobSpawn.getWeight() > 0) {
@@ -426,7 +429,7 @@ public class DungeonSchematic {
 		// Pick Random Spawn Using Weights:
 		int randomWeight = 1;
 		if(totalWeights > 1) {
-			randomWeight = random.nextInt(totalWeights - 1) + 1;
+			randomWeight = random.nextInt(totalWeights);
 		}
 		int searchWeight = 0;
 		MobSpawn chosenMobSpawn = null;

@@ -3,6 +3,7 @@ package com.lycanitesmobs.core.item.equipment;
 import com.google.common.collect.Multimap;
 import com.lycanitesmobs.client.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
+import com.lycanitesmobs.core.entity.ExtendedEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.item.ItemBase;
 import com.lycanitesmobs.core.item.equipment.features.*;
@@ -518,10 +519,21 @@ public class ItemEquipment extends ItemBase {
 	 */
 	@Override
 	public boolean hitEntity(ItemStack itemStack, EntityLivingBase primaryTarget, EntityLivingBase attacker) {
+		ExtendedEntity extendedEntity = ExtendedEntity.getForEntity(attacker);
+		boolean attackOnCooldown = false;
+		if(extendedEntity != null) {
+			int currentCooldown = extendedEntity.getProjectileCooldown(1, "equipment_melee");
+			int weaponCooldown = 9 * (int)this.getDamageCooldown(itemStack);
+			attackOnCooldown = currentCooldown > 0;
+			if(currentCooldown < weaponCooldown) {
+				extendedEntity.setProjectileCooldown(1, "equipment_melee", weaponCooldown);
+			}
+		}
+
 		// Sweeping:
 		List<EntityLivingBase> targets = new ArrayList<>();
 		targets.add(primaryTarget);
-		if(attacker != null && !attacker.getEntityWorld().isRemote && !attacker.isSneaking()) {
+		if(attacker != null && !attacker.getEntityWorld().isRemote && !attacker.isSneaking() && !attackOnCooldown) {
 			double sweepAngle = this.getDamageSweep(itemStack) / 2; // Halved for centering.
 			if(sweepAngle > 0) {
 				float sweepDamage = (float) this.getDamageAmount(itemStack);
@@ -533,6 +545,9 @@ public class ItemEquipment extends ItemBase {
 						continue;
 					}
 					if (!possibleTarget.isEntityAlive()) {
+						continue;
+					}
+					if (possibleTarget instanceof EntityPlayer) {
 						continue;
 					}
 					if (possibleTarget instanceof EntityTameable) {

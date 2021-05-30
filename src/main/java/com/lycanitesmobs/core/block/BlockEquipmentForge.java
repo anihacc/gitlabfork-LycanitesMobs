@@ -36,8 +36,6 @@ public class BlockEquipmentForge extends BlockBase implements ITileEntityProvide
 	// ==================================================
 	public BlockEquipmentForge(ModInfo group, int level) {
 		super(level <= 1 ? Material.WOOD : level == 2 ? Material.ROCK : Material.IRON);
-        this.setCreativeTab(LycanitesMobs.blocksTab);
-        this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
 		
 		// Properties:
 		this.group = group;
@@ -67,6 +65,9 @@ public class BlockEquipmentForge extends BlockBase implements ITileEntityProvide
 
         // Tile Entity:
         this.hasTileEntity = true;
+
+		this.setCreativeTab(LycanitesMobs.blocksTab);
+		this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
 	}
 
     @Override

@@ -266,8 +266,8 @@ public class ItemManager extends JSONLoader {
 		OreDictionary.registerOre("listAllfishcooked", ObjectManager.getItem("cooked_cephignis_meat"));
 		OreDictionary.registerOre("listAllchickenraw", ObjectManager.getItem("raw_concapede_meat"));
 		OreDictionary.registerOre("listAllchickencooked", ObjectManager.getItem("cooked_concapede_meat"));
-		OreDictionary.registerOre("listAllEntomo", ObjectManager.getItem("raw_concapede_meat"));
-		OreDictionary.registerOre("listAllEntomo", ObjectManager.getItem("cooked_concapede_meat"));
+		OreDictionary.registerOre("listAllEntomoraw", ObjectManager.getItem("raw_concapede_meat"));
+		OreDictionary.registerOre("listAllEntomocooked", ObjectManager.getItem("cooked_concapede_meat"));
 		OreDictionary.registerOre("listAllmuttonraw", ObjectManager.getItem("raw_yale_meat"));
 		OreDictionary.registerOre("listAllmuttoncooked", ObjectManager.getItem("cooked_yale_meat"));
 		OreDictionary.registerOre("listAllporkraw", ObjectManager.getItem("raw_maka_meat"));

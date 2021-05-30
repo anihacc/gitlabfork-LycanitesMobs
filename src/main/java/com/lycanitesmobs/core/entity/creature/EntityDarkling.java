@@ -88,6 +88,7 @@ public class EntityDarkling extends TameableCreatureEntity implements IMob {
             // Server:
             if(!this.getEntityWorld().isRemote) {
                 if(this.getLatchTarget().isEntityAlive() && !this.isInWater()) {
+                    this.setAttackTarget(this.getLatchTarget());
                     if (this.updateTick % 40 == 0) {
                         float damage = this.getAttackDamage(1);
                         if (this.attackMelee(this.getLatchTarget(), damage))

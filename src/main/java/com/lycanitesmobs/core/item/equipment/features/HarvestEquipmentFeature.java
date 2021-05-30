@@ -2,6 +2,7 @@ package com.lycanitesmobs.core.item.equipment.features;
 
 import com.google.common.collect.Sets;
 import com.google.gson.JsonObject;
+import com.lycanitesmobs.client.localisation.LanguageManager;
 import com.lycanitesmobs.core.helpers.JSONHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDirt;
@@ -12,12 +13,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
-import com.lycanitesmobs.client.localisation.LanguageManager;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -92,9 +91,9 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 	}
 
 	public String getHarvestRangeString(int level) {
-		String harvestRangeString = "" + this.harvestRange.getX();
-		harvestRangeString += "x" + this.harvestRange.getY();
-		harvestRangeString += "x" + this.harvestRange.getZ();
+		String harvestRangeString = "" + ((this.harvestRange.getX()) * 2 + 1);
+		harvestRangeString += "x" + (this.harvestRange.getY() + 1);
+		harvestRangeString += "x" + (this.harvestRange.getZ() + 1);
 		return harvestRangeString;
 	}
 
@@ -256,14 +255,14 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 		}
 		else {
 			selectionRanges[vert][min] = new Vec3i(
-					this.harvestRange.getY() * -Math.abs(facingH.getFrontOffsetX()),
-					this.harvestRange.getY() * -Math.abs(facingH.getFrontOffsetY()),
-					this.harvestRange.getY() * -Math.abs(facingH.getFrontOffsetZ())
+					this.harvestRange.getY() * -Math.abs(facingH.getFrontOffsetX()) * 0.5F,
+					this.harvestRange.getY() * -Math.abs(facingH.getFrontOffsetY()) * 0.5F,
+					this.harvestRange.getY() * -Math.abs(facingH.getFrontOffsetZ()) * 0.5F
 			);
 			selectionRanges[vert][max] = new Vec3i(
-					this.harvestRange.getY() * Math.abs(facingH.getFrontOffsetX()),
-					this.harvestRange.getY() * Math.abs(facingH.getFrontOffsetY()),
-					this.harvestRange.getY() * Math.abs(facingH.getFrontOffsetZ())
+					this.harvestRange.getY() * Math.abs(facingH.getFrontOffsetX()) * 0.5F,
+					this.harvestRange.getY() * Math.abs(facingH.getFrontOffsetY()) * 0.5F,
+					this.harvestRange.getY() * Math.abs(facingH.getFrontOffsetZ()) * 0.5F
 			);
 		}
 
@@ -357,6 +356,11 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 			return false;
 		}
 		IBlockState targetBlockState = world.getBlockState(targetPos);
+		if(targetBlockState.getBlock() == Blocks.REDSTONE_ORE || targetBlockState.getBlock() == Blocks.LIT_REDSTONE_ORE) {
+			if(harvestedBlockState.getBlock() == Blocks.REDSTONE_ORE || harvestedBlockState.getBlock() == Blocks.LIT_REDSTONE_ORE) {
+				return this.canHarvestBlock(world.getBlockState(targetPos));
+			}
+		}
 		if(targetBlockState.getBlock() != harvestedBlockState.getBlock()) {
 			return false;
 		}

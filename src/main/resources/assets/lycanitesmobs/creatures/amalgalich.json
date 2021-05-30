@@ -15,7 +15,7 @@
         "dimensionIds": [],
         "dimensionListType": "blacklist",
         "ignoreBiome": false,
-        "biomes": [
+        "biomeTags": [
             "spooky"
         ],
         "spawnWeight": 1,

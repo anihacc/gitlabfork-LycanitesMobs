@@ -46,8 +46,6 @@ public class BlockSummoningPedestal extends BlockBase implements ITileEntityProv
 	// ==================================================
 	public BlockSummoningPedestal(ModInfo group) {
 		super(Material.IRON);
-        this.setCreativeTab(LycanitesMobs.blocksTab);
-        this.setDefaultState(this.getBlockState().getBaseState().withProperty(PROPERTY_OWNER, EnumSummoningPedestal.NONE));
 		
 		// Properties:
 		this.group = group;
@@ -62,6 +60,9 @@ public class BlockSummoningPedestal extends BlockBase implements ITileEntityProv
 
         // Tile Entity:
         this.hasTileEntity = true;
+
+        this.setCreativeTab(LycanitesMobs.blocksTab);
+        this.setDefaultState(this.getBlockState().getBaseState().withProperty(PROPERTY_OWNER, EnumSummoningPedestal.NONE));
 	}
 
     @Override

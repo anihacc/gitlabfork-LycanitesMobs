@@ -2,6 +2,7 @@ package com.lycanitesmobs.core.dungeon.definition;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.helpers.JSONHelper;
 import net.minecraft.util.math.Vec3i;
 
@@ -60,14 +61,6 @@ public class DungeonSector {
 
 		this.sizeMax = JSONHelper.getVec3i(json, "sizeMax");
 
-		this.padding = JSONHelper.getVec3i(json, "padding");
-		if(this.padding.getX() <= 0) {
-			this.padding = new Vec3i(1, this.padding.getY(), this.padding.getZ());
-		}
-		if(this.padding.getZ() <= 0) {
-			this.padding = new Vec3i(this.padding.getX(), this.padding.getY(), 1);
-		}
-
 		if(json.has("weight"))
 			this.weight = json.get("weight").getAsInt();
 
@@ -92,6 +85,14 @@ public class DungeonSector {
 		if(json.has("ceiling")) {
 			this.ceiling = new SectorSegment();
 			this.ceiling.loadFromJSON(json.get("ceiling"));
+		}
+
+		this.padding = JSONHelper.getVec3i(json, "padding");
+		if(this.padding.getX() <= 0) {
+			this.padding = new Vec3i(this.wall.padding, this.padding.getY(), this.padding.getZ());
+		}
+		if(this.padding.getZ() <= 0) {
+			this.padding = new Vec3i(this.padding.getX(), this.padding.getY(), this.wall.padding);
 		}
 	}
 

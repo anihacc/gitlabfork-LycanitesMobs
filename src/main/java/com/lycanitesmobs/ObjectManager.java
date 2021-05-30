@@ -8,6 +8,7 @@ import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.info.ObjectLists;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
+import com.lycanitesmobs.core.item.GenericFoodItem;
 import com.lycanitesmobs.core.item.ItemBase;
 import com.lycanitesmobs.core.item.ItemBlockBase;
 import com.lycanitesmobs.core.item.ItemSlabCustom;
@@ -38,6 +39,7 @@ import net.minecraftforge.fml.common.registry.EntityEntryBuilder;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -266,6 +268,15 @@ public class ObjectManager {
             }
             event.getRegistry().register(item);
             LycanitesMobs.proxy.addItemRender(itemGroups.get(item), item);
+
+            if(item instanceof GenericFoodItem) {
+            	String itemName = ((GenericFoodItem)item).itemName;
+				if (item.getUnlocalizedName().contains("cooked_")) {
+					OreDictionary.registerOre("listAllmeatcooked", ObjectManager.getItem(itemName));
+				} else if (itemName.contains("raw_")) {
+					OreDictionary.registerOre("listAllmeatraw", ObjectManager.getItem(itemName));
+				}
+			}
         }
     }
 

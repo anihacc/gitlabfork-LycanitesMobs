@@ -17,7 +17,16 @@
 	"elements": [
 		"light"
 	],
-	"behaviours": [],
+	"behaviours": [
+		{
+			"type": "catch",
+			"catchEntityIds": [
+				"lycanitesmobs:wisp"
+			],
+			"resetAttackCooldown": true,
+			"preventDamage": true
+		}
+	],
 	"waterproof": true,
 	"lavaproof": false,
 	"cutGrass": false,

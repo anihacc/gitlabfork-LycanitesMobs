@@ -21,7 +21,7 @@
         ],
         "dimensionListType": "blacklist",
         "ignoreBiome": false,
-        "biomes": [
+        "biomeTags": [
             "swamp",
             "spooky"
         ],

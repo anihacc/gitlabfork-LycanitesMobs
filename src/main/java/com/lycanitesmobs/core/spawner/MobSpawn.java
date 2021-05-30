@@ -220,7 +220,7 @@ public class MobSpawn {
 	 * Returns if this mob can spawn at the provided coordinate. This is a light check and does not perform an environmental check.
 	 * @param world The world to spawn in.
 	 * @param blockCount The number of spawn blocks found.
-	 * @param biomes A list of biomes to check, if null, the biome check is ignored.
+	 * @param biome The biome to check, if null, the biome check is ignored.
 	 * @param forceIgnoreDimension If true, the dimension check is ignored.
 	 **/
 	public boolean canSpawn(World world, int blockCount, Biome biome, boolean forceIgnoreDimension) {

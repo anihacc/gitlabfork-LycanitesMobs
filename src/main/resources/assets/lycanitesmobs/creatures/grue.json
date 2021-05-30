@@ -2,7 +2,8 @@
     "name": "grue",
     "creatureType": "elemental",
     "groups": [
-        "monster"
+        "monster",
+        "dark"
     ],
     "entityClass": "com.lycanitesmobs.core.entity.creature.EntityGrue",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelGrue",
@@ -19,7 +20,7 @@
         ],
         "dimensionListType": "blacklist",
         "ignoreBiome": true,
-        "biomes": [],
+        "biomeTags": [],
         "spawnWeight": 8,
         "dungeonWeight": 200,
         "spawnAreaLimit": 5,

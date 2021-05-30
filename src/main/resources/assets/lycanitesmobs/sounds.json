@@ -292,6 +292,34 @@
         "category": "hostile",
         "sounds": [{"name": "lycanitesmobs:entity/maug/jump", "stream": false}]
     },
+    "entity.archvile.say": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/archvile/say", "stream": false}]
+    },
+    "entity.archvile.hurt": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/archvile/hurt", "stream": false}]
+    },
+    "entity.archvile.death": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/archvile/death", "stream": false}]
+    },
+    "entity.archvile.attack": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/archvile/attack", "stream": false}]
+    },
+    "entity.archvile.step": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/archvile/step", "stream": false}]
+    },
+    "entity.archvile.beg": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/archvile/beg", "stream": false}]
+    },
+    "entity.archvile.tame": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/archvile/tame", "stream": false}]
+    },
     "entity.belph.say": {
         "category": "hostile",
         "sounds": [{"name": "lycanitesmobs:entity/belph/say", "stream": false}]
@@ -1228,6 +1256,34 @@
         "category": "hostile",
         "sounds": [{"name": "lycanitesmobs:entity/vapula/tame", "stream": false}]
     },
+    "entity.vorach.say": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/vorach/say", "stream": false}]
+    },
+    "entity.vorach.hurt": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/vorach/hurt", "stream": false}]
+    },
+    "entity.vorach.death": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/vorach/death", "stream": false}]
+    },
+    "entity.vorach.attack": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/vorach/attack", "stream": false}]
+    },
+    "entity.vorach.beg": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/vorach/beg", "stream": false}]
+    },
+    "entity.vorach.tame": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/vorach/tame", "stream": false}]
+    },
+    "entity.vorach.step": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/vorach/step", "stream": false}]
+    },
     "entity.banshee.say": {
         "category": "hostile",
         "sounds":
@@ -1830,6 +1886,58 @@
     "entity.gorger.eat": {
         "category": "hostile",
         "sounds": [{"name": "lycanitesmobs:entity/gorger/eat", "stream": false}]
+    },
+    "entity.grell.say": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/grell/say", "stream": false}]
+    },
+    "entity.grell.hurt": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/grell/hurt", "stream": false}]
+    },
+    "entity.grell.death": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/grell/death", "stream": false}]
+    },
+    "entity.grell.attack": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/grell/attack", "stream": false}]
+    },
+    "entity.grell.beg": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/grell/beg", "stream": false}]
+    },
+    "entity.grell.tame": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/grell/tame", "stream": false}]
+    },
+    "entity.grell.eat": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/grell/eat", "stream": false}]
+    },
+    "entity.grigori.say": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/grigori/say", "stream": false}]
+    },
+    "entity.grigori.hurt": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/grigori/hurt", "stream": false}]
+    },
+    "entity.grigori.death": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/grigori/death", "stream": false}]
+    },
+    "entity.grigori.attack": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/grigori/attack", "stream": false}]
+    },
+    "entity.grigori.beg": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/grigori/beg", "stream": false}]
+    },
+    "entity.grigori.tame": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/grigori/tame", "stream": false}]
     },
     "entity.ignibus.say": {
         "category": "hostile",
@@ -3320,6 +3428,10 @@
         "category": "ambient",
         "sounds": [{"name": "lycanitesmobs:projectile/acidsplash_impact", "stream": false}]
     },
+    "projectile.acidglob": {
+        "category": "ambient",
+        "sounds": [{"name": "lycanitesmobs:projectile/acidglob", "stream": false}]
+    },
     "projectile.lifedrain": {
         "category": "ambient",
         "sounds": [{"name": "lycanitesmobs:projectile/lifedrain", "stream": false}]
@@ -3387,6 +3499,10 @@
     "projectile.venomshot": {
         "category": "ambient",
         "sounds": [{"name": "lycanitesmobs:projectile/venomshot", "stream": false}]
+    },
+    "projectile.vorebolt": {
+        "category": "ambient",
+        "sounds": [{"name": "lycanitesmobs:projectile/vorebolt", "stream": false}]
     },
     "projectile.waterjet": {
         "category": "ambient",

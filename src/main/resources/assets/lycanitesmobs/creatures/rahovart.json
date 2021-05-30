@@ -17,7 +17,7 @@
         ],
         "dimensionListType": "whitelist",
         "ignoreBiome": false,
-        "biomes": [
+        "biomeTags": [
             "nether"
         ],
         "spawnWeight": 1,
@@ -105,13 +105,13 @@
             "chance": 1
         },
         {
-            "item": "lycanitesmobs:doomfirecharge",
+            "item": "lycanitesmobs:doomfireballcharge",
             "minAmount": 10,
             "maxAmount": 20,
             "chance": 1
         },
         {
-            "item": "lycanitesmobs:hellfirecharge",
+            "item": "lycanitesmobs:hellfireballcharge",
             "minAmount": 10,
             "maxAmount": 20,
             "chance": 1

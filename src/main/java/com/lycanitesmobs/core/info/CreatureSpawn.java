@@ -145,11 +145,18 @@ public class CreatureSpawn {
 		// Biomes:
 		if(json.has("ignoreBiome"))
 			this.ignoreBiome = json.get("ignoreBiome").getAsBoolean();
-		if(json.has("biomes")) {
+
+		if(json.has("biomeTags")) {
+			this.biomeTags.clear();
+			this.biomesFromTags = null;
+			this.biomeTags = JSONHelper.getJsonStrings(json.get("biomeTags").getAsJsonArray());
+		}
+		else if(json.has("biomes")) {
 			this.biomeTags.clear();
 			this.biomesFromTags = null;
 			this.biomeTags = JSONHelper.getJsonStrings(json.get("biomes").getAsJsonArray());
 		}
+
 		if(json.has("biomeIds")) {
 			this.biomeIds.clear();
 			this.biomes = null;

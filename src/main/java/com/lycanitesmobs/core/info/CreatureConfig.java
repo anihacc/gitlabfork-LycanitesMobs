@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.info;
 
 import com.lycanitesmobs.core.config.ConfigBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +58,9 @@ public class CreatureConfig {
 	/** The time in tics that it takes for a pet to respawn. **/
 	public int petRespawnTime = 3 * 60 * 20;
 
+	/** How far in blocks pets stray from their owner when set to follow. **/
+	public int petFollowDistance = 8;
+
 
 	// Beastiary:
 	/** The chance that a creature gets added to the killing player's Beastiary on death, always 100% for bosses. **/
@@ -69,6 +73,9 @@ public class CreatureConfig {
 	// Bosses:
 	/** How much higher players must be relative to a boss' y position (feet) to trigger anti flight measures. **/
 	public double bossAntiFlight = 10;
+
+	/** Caps how much damage a boss can take per tick, this also affects Rare Variants and Dungeon Bosses. Set to 0 to disable the cap. **/
+	public int bossDamageCap = 50;
 
 
 	// Interaction:
@@ -152,7 +159,8 @@ public class CreatureConfig {
 		this.mountingEnabled = config.getBool("Pets", "Mounting", this.mountingEnabled, "Set to false to disable mounts.");
 		this.mountingFlightEnabled = config.getBool("Pets", "Flying Mounting", this.mountingFlightEnabled, "Set to false to disable flying mounts, if all mounts are disable this option doesn't matter.");
 		this.friendlyFire = config.getBool("Pets", "Friendly Fire", this.friendlyFire, "If true, pets, minions, etc can't harm their owners (with ranged attacks, etc).");
-		this.petRespawnTime = config.getInt("Pets", "Friendly Fire", this.petRespawnTime, "The time in tics that it takes for a pet to respawn.");
+		this.petRespawnTime = config.getInt("Pets", "Respawn Time", this.petRespawnTime, "The time in tics that it takes for a pet to respawn.");
+		this.petFollowDistance = config.getInt("Pets", "Follow Distance", this.petFollowDistance, "How far in blocks pets stray from their owner when set to follow.");
 
 		// Beastiary:
 		config.setCategoryComment("Beastiary", "Here you can control all settings related to the player's Beastiary.");
@@ -162,6 +170,8 @@ public class CreatureConfig {
 		// Bosses:
 		config.setCategoryComment("Bosses", "Here you can control all settings related to boss creatures, this does not include rare subspecies (mini bosses).");
 		this.bossAntiFlight = config.getDouble("Bosses", "How much higher players must be relative to a boss' y position (feet) to trigger anti flight measures.", this.bossAntiFlight);
+		this.bossDamageCap = config.getInt("Bosses", "Boss Damage Cap", this.bossDamageCap, "Caps how much damage a boss can take per tick, this also affects Rare Variants and Dungeon Bosses. Set to 0 to disable the cap.");
+		BaseCreatureEntity.BOSS_DAMAGE_LIMIT = this.bossDamageCap;
 
 		// Interaction:
 		config.setCategoryComment("Mob Interaction", "Here you can control how mobs interact with other mobs.");

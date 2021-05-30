@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.entity;
 
 import com.google.common.base.Optional;
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.client.AssetManager;
 import com.lycanitesmobs.client.localisation.LanguageManager;
@@ -103,7 +104,7 @@ public class TameableCreatureEntity extends AgeableCreatureEntity implements IEn
 		this.targetTasks.addTask(this.nextSpecialTargetIndex++, new DefendOwnerGoal(this));
 
 		// Lesser Actions:
-		this.tasks.addTask(this.nextTravelGoalIndex++, new FollowOwnerGoal(this).setStrayDistance(5).setLostDistance(32).setSpeed(1.5D));
+		this.tasks.addTask(this.nextTravelGoalIndex++, new FollowOwnerGoal(this).setStrayDistance(CreatureManager.getInstance().config.petFollowDistance).setLostDistance(32).setSpeed(1.5D));
 		this.tasks.addTask(this.nextIdleGoalIndex++, new BegGoal(this));
 	}
     
@@ -827,6 +828,7 @@ public class TameableCreatureEntity extends AgeableCreatureEntity implements IEn
 		this.setAggressive(false);
 		this.setPVP(true);
 		this.playTameSound();
+		this.spawnEventType = "";
 	}
 
 	@Override

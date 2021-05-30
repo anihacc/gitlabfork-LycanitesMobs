@@ -16,6 +16,8 @@ public class SectorSegment {
 	/** A list of layers that make up this segment. **/
 	public Map<Integer, SectorLayer> layers = new HashMap<>();
 
+	/** The padding of this segment, increased when negative layers are added. **/
+	public int padding = 0;
 
     /** Loads this Dungeon Sector Segment from the provided JSON data. **/
 	public void loadFromJSON(JsonElement json) {
@@ -27,6 +29,10 @@ public class SectorSegment {
 			if(!NumberUtils.isCreatable(layerNumber))
 				continue;
 			int layerIndex = NumberUtils.createInteger(layerNumber);
+
+			if(layerIndex < 0 && -layerIndex > this.padding) {
+				this.padding = -layerIndex;
+			}
 
 			SectorLayer layer = new SectorLayer();
 			layer.loadFromJSON(layerJson);

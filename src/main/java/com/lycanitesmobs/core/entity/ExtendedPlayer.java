@@ -238,21 +238,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
 
 			// Pet Manager Setup:
 			if (!this.player.getEntityWorld().isRemote) {
-				// Load Familiars:
-				Map<UUID, PetEntry> playerFamiliars = DonationFamiliars.instance.getFamiliarsForPlayer(this.player);
-				if (playerFamiliars != null) {
-					for (PetEntry petEntry : playerFamiliars.values()) {
-						if (this.petManager.hasEntry(petEntry)) {
-							PetEntry familiarEntry = this.petManager.getEntry(petEntry.petEntryID);
-							familiarEntry.copy(petEntry);
-						}
-						else {
-							this.petManager.addEntry(petEntry);
-							petEntry.entity = null;
-						}
-					}
-					this.sendPetEntriesToPlayer("familiar");
-				}
+				this.loadFamiliars();
 			}
 
 			// Mod Version Check:
@@ -337,6 +323,24 @@ public class ExtendedPlayer implements IExtendedPlayer {
 	/** Returns the player's beastiary, will also update the client, access the beastiary variable directly when loading NBT data as the network player is null at first. **/
 	public Beastiary getBeastiary() {
 		return this.beastiary;
+	}
+
+
+	public void loadFamiliars() {
+		Map<UUID, PetEntry> playerFamiliars = DonationFamiliars.instance.getFamiliarsForPlayer(this.player);
+		if (!playerFamiliars.isEmpty()) {
+			for (PetEntry petEntry : playerFamiliars.values()) {
+				if (this.petManager.hasEntry(petEntry)) {
+					PetEntry currentFamiliarEntry = this.petManager.getEntry(petEntry.petEntryID);
+					currentFamiliarEntry.copy(petEntry);
+				}
+				else {
+					this.petManager.addEntry(petEntry);
+					petEntry.entity = null;
+				}
+			}
+			this.sendPetEntriesToPlayer("familiar");
+		}
 	}
 	
 	

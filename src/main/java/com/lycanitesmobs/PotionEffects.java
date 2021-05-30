@@ -171,7 +171,7 @@ public class PotionEffects {
 		if(instability != null && !entity.getEntityWorld().isRemote && !(entity instanceof IGroupBoss)) {
 			if(!invulnerable && entity.isPotionActive(instability)) {
 				if(entity.getEntityWorld().rand.nextDouble() <= 0.1) {
-					double strength = (1 + entity.getActivePotionEffect(instability).getAmplifier()) * 0.5D;
+					double strength = 1 + entity.getActivePotionEffect(instability).getAmplifier();
 					entity.motionX += strength * (entity.getEntityWorld().rand.nextDouble() - 0.5D);
 					entity.motionY += strength * (entity.getEntityWorld().rand.nextDouble() - 0.5D);
 					entity.motionZ += strength * (entity.getEntityWorld().rand.nextDouble() - 0.5D);
@@ -445,7 +445,7 @@ public class PotionEffects {
 		if(penetration != null) {
 			if(event.getEntityLiving().isPotionActive(penetration)) {
 				float damage = event.getAmount();
-				float multiplier = event.getEntityLiving().getActivePotionEffect(penetration).getAmplifier();
+				float multiplier = 0.25F * (event.getEntityLiving().getActivePotionEffect(penetration).getAmplifier() + 1);
 				event.setAmount(damage + (damage * multiplier));
 			}
 		}
@@ -466,12 +466,17 @@ public class PotionEffects {
         // Leeching
 		PotionBase leech = ObjectManager.getEffect("leech");
 		if(leech != null && event.getSource().getTrueSource() != null) {
-            if(event.getSource().getTrueSource() instanceof EntityLivingBase) {
-                EntityLivingBase attackingEntity = (EntityLivingBase)(event.getSource().getTrueSource());
-                if(attackingEntity.isPotionActive(leech)) {
-                    float damage = event.getAmount();
-                    float multiplier = attackingEntity.getActivePotionEffect(leech).getAmplifier() + 1;
-                    attackingEntity.heal(Math.max(damage * multiplier * 0.25F, 1));
+			EntityLivingBase leechingEntity = null;
+				if(event.getSource().getImmediateSource() instanceof EntityLivingBase) {
+					leechingEntity = (EntityLivingBase)event.getSource().getImmediateSource();
+				}
+				else if(event.getSource().getTrueSource() instanceof EntityLivingBase) {
+					leechingEntity = (EntityLivingBase)event.getSource().getTrueSource();
+				}
+            if(leechingEntity != null) {
+                if(leechingEntity.isPotionActive(leech)) {
+                    int leeching = leechingEntity.getActivePotionEffect(leech).getAmplifier() + 1;
+					leechingEntity.heal(Math.max(leeching, 1));
                 }
             }
         }

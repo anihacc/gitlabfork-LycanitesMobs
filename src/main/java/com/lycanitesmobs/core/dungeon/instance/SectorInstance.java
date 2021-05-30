@@ -2,11 +2,14 @@ package com.lycanitesmobs.core.dungeon.instance;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.block.BlockFireBase;
+import com.lycanitesmobs.core.block.effect.BlockFrostCloud;
+import com.lycanitesmobs.core.block.effect.BlockPoisonCloud;
 import com.lycanitesmobs.core.dungeon.definition.DungeonSector;
 import com.lycanitesmobs.core.dungeon.definition.DungeonTheme;
 import com.lycanitesmobs.core.dungeon.definition.SectorLayer;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.spawner.MobSpawn;
+import net.minecraft.block.BlockChest;
 import net.minecraft.block.BlockFire;
 import net.minecraft.block.BlockTorch;
 import net.minecraft.block.state.IBlockState;
@@ -113,9 +116,7 @@ public class SectorInstance {
 		// Close Parent Connector:
 		this.parentConnector.childSector = this;
 		this.parentConnector.closed = true;
-		if(this.layout.openConnectors.contains(this.parentConnector)) {
-			this.layout.openConnectors.remove(this.parentConnector);
-		}
+		this.layout.openConnectors.remove(this.parentConnector);
 
 		// Theme:
 		if(this.dungeonSector.changeTheme || this.parentConnector.parentSector == null) {
@@ -289,11 +290,12 @@ public class SectorInstance {
 
 	/**
 	 * Returns a list of every ChunkPos that this Sector Instance occupies.
+	 * Applies an offset to occupied bounds for generating a chunk position.
 	 * @return A list of ChunkPos.
 	 */
 	public List<ChunkPos> getChunkPositions() {
-		ChunkPos minChunkPos = new ChunkPos(this.getOccupiedBoundsMin().add(-1, 0, -1));
-		ChunkPos maxChunkPos = new ChunkPos(this.getOccupiedBoundsMax().add(1, 0, 1));
+		ChunkPos minChunkPos = new ChunkPos(this.getOccupiedBoundsMin().add(-9, 0, -9));
+		ChunkPos maxChunkPos = new ChunkPos(this.getOccupiedBoundsMax().add(-7, 0, -7));
 		List<ChunkPos> chunkPosList = new ArrayList<>();
 		for(int x = minChunkPos.x; x <= maxChunkPos.x; x++) {
 			for(int z = minChunkPos.z; z <= maxChunkPos.z; z++) {
@@ -334,7 +336,7 @@ public class SectorInstance {
 	 * @return True on collision.
 	 */
 	public boolean collidesWith(SectorInstance sectorInstance) {
-		if(sectorInstance == this) {
+		if(sectorInstance == this || sectorInstance == this.parentConnector.parentSector) {
 			return false;
 		}
 
@@ -343,21 +345,25 @@ public class SectorInstance {
 		BlockPos targetMin = sectorInstance.getOccupiedBoundsMin();
 		BlockPos targetMax = sectorInstance.getOccupiedBoundsMax();
 
-		boolean withinX = boundsMin.getX() > targetMin.getX() && boundsMin.getX() < targetMax.getX();
+		if(boundsMin.getY() != targetMin.getY() && !sectorInstance.dungeonSector.type.equals("stairs")) {
+			return false; // Temporary simple y collision check (y doesn't take negative layer padding into account yet).
+		}
+
+		boolean withinX = boundsMin.getX() >= targetMin.getX() && boundsMin.getX() <= targetMax.getX();
 		if(!withinX)
-			withinX = boundsMax.getX() > targetMin.getX() && boundsMax.getX() < targetMax.getX();
+			withinX = boundsMax.getX() >= targetMin.getX() && boundsMax.getX() <= targetMax.getX();
 		if(!withinX)
 			return false;
 
-		boolean withinY = boundsMin.getY() > targetMin.getY() && boundsMin.getY() < targetMax.getY();
-		if(!withinY)
-			withinY = boundsMax.getY() > targetMin.getY() && boundsMax.getY() < targetMax.getY();
-		if(!withinY)
-			return false;
+//		boolean withinY = boundsMin.getY() >= targetMin.getY() && boundsMin.getY() <= targetMax.getY();
+//		if(!withinY)
+//			withinY = boundsMax.getY() >= targetMin.getY() && boundsMax.getY() <= targetMax.getY();
+//		if(!withinY)
+//			return false;
 
-		boolean withinZ = boundsMin.getZ() > targetMin.getZ() && boundsMin.getZ() < targetMax.getZ();
+		boolean withinZ = boundsMin.getZ() >= targetMin.getZ() && boundsMin.getZ() <= targetMax.getZ();
 		if(!withinZ)
-			withinZ = boundsMax.getZ() > targetMin.getZ() && boundsMax.getZ() < targetMax.getZ();
+			withinZ = boundsMax.getZ() >= targetMin.getZ() && boundsMax.getZ() <= targetMax.getZ();
 		if(!withinZ)
 			return false;
 
@@ -366,7 +372,9 @@ public class SectorInstance {
 
 
 	/**
-	 * Returns the room size of this sector. X and Z are swapped when facing EAST or WEST. This is how large the room to be built is excluding extra blocks added for layers or structures, etc. Use for building and sector collision testing.
+	 * Returns the room size of this sector. X and Z are swapped when facing EAST or WEST.
+	 * This is how large the room to be built is excluding extra blocks added for layers or structures, etc.
+	 * Used for building this sector.
 	 * @return A vector of the room size.
 	 */
 	public Vec3i getRoomSize() {
@@ -378,7 +386,9 @@ public class SectorInstance {
 
 
 	/**
-	 * Returns the collision size of this sector. X and Z are swapped when facing EAST or WEST. This is how large this sector is including extra blocks added for layers or structures, etc. Use for detecting what chunks this sector needs to generate in, etc.
+	 * Returns the collision size of this sector. X and Z are swapped when facing EAST or WEST.
+	 * This is how large this sector is including extra blocks added for layers or structures, etc.
+	 * Used for detecting what chunks this sector needs to generate in and sector collision detection.
 	 * @return A vector of the collision size.
 	 */
 	public Vec3i getOccupiedSize() {
@@ -487,7 +497,7 @@ public class SectorInstance {
 	 * @return The minimum bounds position (corner).
 	 */
 	public BlockPos getOccupiedBoundsMin() {
-		BlockPos occupiedBoundsMin = this.getBoundsMin(this.getOccupiedSize()).add(-8, 0, -8);
+		BlockPos occupiedBoundsMin = this.getBoundsMin(this.getOccupiedSize());
 		if("stairs".equals(this.dungeonSector.type)) {
 			occupiedBoundsMin = occupiedBoundsMin.subtract(new Vec3i(0, this.getRoomSize().getY() * 2, 0));
 		}
@@ -500,7 +510,7 @@ public class SectorInstance {
 	 * @return The maximum bounds position (corner).
 	 */
 	public BlockPos getOccupiedBoundsMax() {
-		return this.getBoundsMax(this.getOccupiedSize()).add(-8, 0, -8);
+		return this.getBoundsMax(this.getOccupiedSize());
 	}
 
 
@@ -574,8 +584,15 @@ public class SectorInstance {
 			flags = 0;
 		}
 
+		// Chest:
+		if(blockState.getBlock() == Blocks.CHEST) {
+			blockState = blockState.withProperty(BlockChest.FACING, facing);
+		}
+
 		// Don't Update:
-		if(blockState.getBlock() == Blocks.AIR || blockState.getBlock() instanceof BlockFluidBase || blockState instanceof BlockFire || blockState instanceof BlockFireBase) {
+		if(blockState.getBlock() == Blocks.AIR || blockState.getBlock() instanceof BlockFluidBase ||
+				blockState.getBlock() instanceof BlockFire || blockState.getBlock() instanceof BlockFireBase ||
+				blockState.getBlock() instanceof BlockPoisonCloud || blockState.getBlock() instanceof BlockFrostCloud) {
 			flags = 0;
 		}
 
@@ -605,7 +622,7 @@ public class SectorInstance {
 		// Chest:
 		if(blockState.getBlock() == Blocks.CHEST) {
 			TileEntity tileEntity = world.getTileEntity(blockPos);
-			if(tileEntity != null && tileEntity instanceof TileEntityChest) {
+			if(tileEntity instanceof TileEntityChest) {
 
 				// Apply Loot Table:
 				TileEntityChest chest = (TileEntityChest)tileEntity;
@@ -622,7 +639,7 @@ public class SectorInstance {
 
 
 	/**
-	 * Builds this sector. Wont build at y level 0 or below or beyond world height.
+	 * Builds this sector. Wont build at y level 0 or below, beyond world height or outside of the chunk.
 	 * @param world The world to build in.
 	 * @param chunkPos The chunk position to build within.
 	 * @param random The instance of random, used for characters that are random.
@@ -868,10 +885,10 @@ public class SectorInstance {
 					}
 
 					// Spiral Stairs:
-					int step = startY - y % 8;
+					int step = y % 8;
 					int offsetX = x - startX;
 					int offsetZ = z - startZ;
-					if(step % 4 == 0) {
+					if(step % 4 == 3) {
 						if (offsetX == 0 && offsetZ == 0) {
 							blockState = floorBlockState;
 						}
@@ -879,7 +896,7 @@ public class SectorInstance {
 							blockState = stairsBlockState;
 						}
 					}
-					if(step % 4 == 1) {
+					if(step % 4 == 2) {
 						if (offsetX == 0 && offsetZ == 2) {
 							blockState = floorBlockState;
 						}
@@ -887,7 +904,7 @@ public class SectorInstance {
 							blockState = stairsBlockState.withRotation(Rotation.COUNTERCLOCKWISE_90);
 						}
 					}
-					if(step % 4 == 2) {
+					if(step % 4 == 1) {
 						if (offsetX == 2 && offsetZ == 2) {
 							blockState = floorBlockState;
 						}
@@ -895,7 +912,7 @@ public class SectorInstance {
 							blockState = stairsBlockState.withRotation(Rotation.CLOCKWISE_180);
 						}
 					}
-					if(step % 4 == 3) {
+					if(step % 4 == 0) {
 						if (offsetX == 2 && offsetZ == 0) {
 							blockState = floorBlockState;
 						}

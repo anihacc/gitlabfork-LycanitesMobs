@@ -20,7 +20,7 @@ public class BlockMaker {
      * **/
     public static void addStoneBlocks(ModInfo group, String stoneName) {
         float hardness = 2F;
-        float resistance = 10F;
+        float resistance = 2000.0F;
 
         BlockBase stoneBlock = (BlockBase) new BlockBase(Material.ROCK, group, stoneName + "stone").setHardness(hardness).setResistance(resistance).setCreativeTab(LycanitesMobs.blocksTab);
         ObjectManager.addBlock(stoneName + "stone", stoneBlock);
@@ -44,6 +44,6 @@ public class BlockMaker {
         ObjectManager.addBlock(stoneName + "stonepolished", new BlockBase(Material.ROCK, group, stoneName + "stonepolished").setHardness(hardness).setResistance(resistance).setCreativeTab(LycanitesMobs.blocksTab));
         ObjectManager.addBlock(stoneName + "stonechiseled", new BlockBase(Material.ROCK, group, stoneName + "stonechiseled").setHardness(hardness).setResistance(resistance).setCreativeTab(LycanitesMobs.blocksTab));
         ObjectManager.addBlock(stoneName + "stonepillar", new BlockPillar(Material.ROCK, group, stoneName + "stonepillar").setHardness(hardness).setResistance(resistance).setCreativeTab(LycanitesMobs.blocksTab));
-        ObjectManager.addBlock(stoneName + "crystal", new BlockBase(Material.GLASS, group, stoneName + "crystal").setBlockStepSound(SoundType.GLASS).setHardness(0.3F).setResistance(resistance).setLightLevel(1.0F).setCreativeTab(LycanitesMobs.blocksTab));
+        ObjectManager.addBlock(stoneName + "crystal", new BlockBase(Material.GLASS, group, stoneName + "crystal").setBlockStepSound(SoundType.GLASS).setHardness(0.5F).setResistance(resistance).setLightLevel(1.0F).setCreativeTab(LycanitesMobs.blocksTab));
     }
 }

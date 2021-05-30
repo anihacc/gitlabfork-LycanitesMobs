@@ -180,7 +180,7 @@ public class ModelCreatureObj extends ModelCustom implements IAnimationModel {
     // ========== Add Animation Part ==========
     public void addAnimationPart(ModelObjPart animationPart) {
         if(this.animationParts.containsKey(animationPart.name)) {
-            LycanitesMobs.logWarning("", "Tried to add an animation part that already exists: " + animationPart.name + ".");
+            //LycanitesMobs.logWarning("", "Tried to add an animation part that already exists: " + animationPart.name + ".");
             return;
         }
         if(animationPart.parentName != null) {

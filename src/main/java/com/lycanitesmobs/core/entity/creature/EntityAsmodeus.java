@@ -4,7 +4,12 @@ import com.lycanitesmobs.api.IGroupBoss;
 import com.lycanitesmobs.api.IGroupHeavy;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
+import com.lycanitesmobs.core.entity.goals.GoalConditions;
 import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
+import com.lycanitesmobs.core.entity.goals.actions.FindNearbyPlayersGoal;
+import com.lycanitesmobs.core.entity.goals.actions.abilities.FaceTargetGoal;
+import com.lycanitesmobs.core.entity.goals.actions.abilities.FireProjectilesGoal;
+import com.lycanitesmobs.core.entity.goals.actions.abilities.HealWhenNoPlayersGoal;
 import com.lycanitesmobs.core.entity.goals.actions.abilities.SummonMinionsGoal;
 import com.lycanitesmobs.core.entity.navigate.ArenaNode;
 import com.lycanitesmobs.core.entity.navigate.ArenaNodeNetwork;
@@ -52,7 +57,6 @@ public class EntityAsmodeus extends BaseCreatureEntity implements IMob, IGroupHe
     // AI:
     public AttackRangedGoal aiRangedAttack;
 
-    public List<EntityPlayer> playerTargets = new ArrayList<>();
     public boolean firstPlayerTargetCheck = false;
     public List<EntityAstaroth> astarothMinions = new ArrayList<>();
     public List<EntityCacodemon> cacodemonMinions = new ArrayList<>();
@@ -104,12 +108,21 @@ public class EntityAsmodeus extends BaseCreatureEntity implements IMob, IGroupHe
     // ========== Init AI ==========
     @Override
     protected void initEntityAI() {
-        super.initEntityAI();
+        this.targetTasks.addTask(this.nextFindTargetIndex, new FindNearbyPlayersGoal(this));
+
+        // All Phases:
+        this.tasks.addTask(this.nextIdleGoalIndex, new FaceTargetGoal(this));
+        this.tasks.addTask(this.nextIdleGoalIndex, new HealWhenNoPlayersGoal(this));
+        this.tasks.addTask(this.nextIdleGoalIndex, new SummonMinionsGoal(this).setMinionInfo("spectre").setAntiFlight(true));
+
         this.aiRangedAttack = new AttackRangedGoal(this).setSpeed(1.0D).setStaminaTime(200).setStaminaDrainRate(3).setRange(90.0F).setChaseTime(0).setCheckSight(false);
         this.tasks.addTask(this.nextCombatGoalIndex++, this.aiRangedAttack);
 
         // Phase 1:
-        this.tasks.addTask(this.nextIdleGoalIndex, new SummonMinionsGoal(this).setMinionInfo("trite").setSummonRate(20 * 3).setSummonCap(3).setPerPlayer(true).setPhase(0));
+        this.tasks.addTask(this.nextIdleGoalIndex, new SummonMinionsGoal(this).setMinionInfo("trite").setSummonRate(20 * 3).setSummonCap(3).setPerPlayer(true)
+                .setConditions(new GoalConditions().setBattlePhase(0)));
+
+        super.initEntityAI();
     }
 
     // ========== Init ==========
@@ -165,40 +178,11 @@ public class EntityAsmodeus extends BaseCreatureEntity implements IMob, IGroupHe
     public void onLivingUpdate() {
         super.onLivingUpdate();
 
-        // Player Targets and No Player Healing:
-        if(!this.getEntityWorld().isRemote) {
-            if (this.updateTick % 200 == 0 || !this.firstPlayerTargetCheck) {
-                this.firstPlayerTargetCheck = true;
-                this.playerTargets = this.getNearbyEntities(EntityPlayer.class, null, 64);
-            }
-            if (this.updateTick % 20 == 0) {
-                if (this.playerTargets.isEmpty()) {
-                    this.heal(50);
-                }
-            }
-        }
-
         // Update Phases:
         if(!this.getEntityWorld().isRemote) {
             this.updatePhases();
             this.updateCurrentArenaNode();
             this.updateArenaMovement();
-        }
-
-        // Passive Attacks:
-        if(!this.getEntityWorld().isRemote && this.updateTick % 20 == 0) {
-            // Flying Player Wraith Attack:
-            for(EntityPlayer target : this.playerTargets) {
-                if(target.capabilities.disableDamage || target.isSpectator())
-                    continue;
-                if(CreatureManager.getInstance().config.bossAntiFlight > 0 && target.posY > this.posY + CreatureManager.getInstance().config.bossAntiFlight + 1) {
-                    for(int i = 0; i < 3; i++) {
-                        EntityWraith minion = (EntityWraith)CreatureManager.getInstance().getCreature("wraith").createEntity(this.getEntityWorld());
-                        this.summonMinion(minion, this.getRNG().nextDouble() * 360, 5);
-                        minion.setAttackTarget(target);
-                    }
-                }
-            }
         }
 
         // Clean Minion Lists:

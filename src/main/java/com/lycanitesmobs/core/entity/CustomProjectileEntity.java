@@ -199,6 +199,19 @@ public class CustomProjectileEntity extends BaseProjectileEntity {
 		}
 	}
 
+	@Override
+	public boolean canDamage(EntityLivingBase targetEntity) {
+		boolean canDamage = super.canDamage(targetEntity);
+		if(this.projectileInfo != null) {
+			for(ProjectileBehaviour behaviour : this.projectileInfo.behaviours) {
+				if(!behaviour.canDamage(this, this.getEntityWorld(), targetEntity, canDamage)) {
+					canDamage = false;
+				}
+			}
+		}
+		return canDamage;
+	}
+
 	/**
 	 * Returns true if this projectile should be channels where it's lifetime is reset constantly.
 	 * @return True if this projectile can be channeled.

@@ -1,7 +1,9 @@
 {
     "name": "wisp",
     "creatureType": "elemental",
-    "groups": [],
+    "groups": [
+        "light"
+    ],
     "entityClass": "com.lycanitesmobs.core.entity.creature.EntityWisp",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelWisp",
     "loadDefault": true,
@@ -16,7 +18,7 @@
         ],
         "dimensionListType": "blacklist",
         "ignoreBiome": true,
-        "biomes": [],
+        "biomeTags": [],
         "spawnWeight": 8,
         "dungeonWeight": 0,
         "spawnAreaLimit": 2,

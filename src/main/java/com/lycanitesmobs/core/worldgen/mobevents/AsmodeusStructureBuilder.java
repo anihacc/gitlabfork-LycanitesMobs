@@ -4,6 +4,7 @@ import com.lycanitesmobs.ExtendedWorld;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
+import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.mobevent.MobEventPlayerServer;
 import com.lycanitesmobs.core.mobevent.effects.StructureBuilder;
 import com.lycanitesmobs.core.entity.creature.EntityAsmodeus;
@@ -21,7 +22,7 @@ public class AsmodeusStructureBuilder extends StructureBuilder {
 	}
 
 	@Override
-	public void build(World world, EntityPlayer player, BlockPos pos, int level, int ticks, int subspecies) {
+	public void build(World world, EntityPlayer player, BlockPos pos, int level, int ticks, int variant) {
 		ExtendedWorld worldExt = ExtendedWorld.getForWorld(world);
 		int originX = pos.getX();
 		int originY = pos.getY();
@@ -44,6 +45,7 @@ public class AsmodeusStructureBuilder extends StructureBuilder {
 				world.spawnEntity(baseProjectileEntity);
 				if(worldExt != null) {
 					worldExt.bossUpdate(baseProjectileEntity);
+					worldExt.overrideBossRange(baseProjectileEntity, CreatureManager.getInstance().getCreature("asmodeus").bossNearbyRange);
 				}
 			}
 		}
@@ -77,7 +79,7 @@ public class AsmodeusStructureBuilder extends StructureBuilder {
 			if(worldExt != null) {
 				MobEventPlayerServer mobEventPlayerServer = worldExt.getMobEventPlayerServer(this.name);
 				if(mobEventPlayerServer != null) {
-					mobEventPlayerServer.mobEvent.onSpawn(baseCreatureEntity, world, player, pos, level, ticks, subspecies);
+					mobEventPlayerServer.mobEvent.onSpawn(baseCreatureEntity, world, player, pos, level, ticks, variant);
 				}
 			}
 		}

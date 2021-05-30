@@ -10,6 +10,7 @@ public class ModelTemplateBiped extends ModelCreatureObj {
     protected float tailScaleY = 1F;
     protected float flightBobScale = 1F;
     protected float mouthScale = 1F;
+    protected float mouthRate = 1F;
     protected float wingScale = 1F;
 
     // ==================================================
@@ -35,16 +36,16 @@ public class ModelTemplateBiped extends ModelCreatureObj {
 
         // Idle:
         if (partName.equals("mouth") || partName.contains("mouthbottom")) {
-            this.rotate((float)-Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.1F - 0.1F) * this.mouthScale, 0.0F, 0.0F);
+            this.rotate((float)-Math.toDegrees(MathHelper.cos(loop * this.mouthRate * 0.09F) * 0.1F - 0.1F) * this.mouthScale, 0.0F, 0.0F);
         }
         if (partName.contains("mouthtop")) {
-            this.rotate((float)Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.1F - 0.1F) * this.mouthScale, 0.0F, 0.0F);
+            this.rotate((float)Math.toDegrees(MathHelper.cos(loop * this.mouthRate * 0.09F) * 0.1F - 0.1F) * this.mouthScale, 0.0F, 0.0F);
         }
         if (partName.contains("mouthleft")) {
-            this.rotate(0.0F, (float)-Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.1F - 0.1F) * this.mouthScale, 0.0F);
+            this.rotate(0.0F, (float)-Math.toDegrees(MathHelper.cos(loop * this.mouthRate * 0.09F) * 0.1F - 0.1F) * this.mouthScale, 0.0F);
         }
         if (partName.contains("mouthright")) {
-            this.rotate(0.0F, (float)Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.1F - 0.1F) * this.mouthScale, 0.0F);
+            this.rotate(0.0F, (float)Math.toDegrees(MathHelper.cos(loop * this.mouthRate * 0.09F) * 0.1F - 0.1F) * this.mouthScale, 0.0F);
         }
         if(partName.equals("neck")) {
             this.rotate((float) -Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.1F - 0.05F), 0.0F, 0.0F);
@@ -112,17 +113,30 @@ public class ModelTemplateBiped extends ModelCreatureObj {
             float walkSwing = 0.6F;
             if(partName.contains("armleft") || partName.equals("wingright")) {
                 rotX += Math.toDegrees(MathHelper.cos(time * walkSwing) * 1.0F * distance * 0.5F);
-                rotZ -= Math.toDegrees(MathHelper.cos(time * walkSwing) * 0.5F * distance * 0.5F);
+                if(!partName.contains("lower")) {
+                    rotZ -= Math.toDegrees(MathHelper.cos(time * walkSwing) * 0.5F * distance * 0.5F);
+                }
             }
             if(partName.contains("armright") || partName.equals("wingleft")) {
                 rotX += Math.toDegrees(MathHelper.cos(time * walkSwing + (float)Math.PI) * 1.0F * distance * 0.5F);
-                rotZ += Math.toDegrees(MathHelper.cos(time * walkSwing + (float)Math.PI) * 0.5F * distance * 0.5F);
+                if(!partName.contains("lower")) {
+                    rotZ += Math.toDegrees(MathHelper.cos(time * walkSwing + (float) Math.PI) * 0.5F * distance * 0.5F);
+                }
             }
 
             if(partName.equals("legleft"))
                 rotX += Math.toDegrees(MathHelper.cos(time * walkSwing + (float)Math.PI) * 1.4F * distance);
             if(partName.equals("legright"))
                 rotX += Math.toDegrees(MathHelper.cos(time * walkSwing) * 1.4F * distance);
+
+            if(partName.equals("legleftupper"))
+                rotX += Math.toDegrees(MathHelper.cos(time * walkSwing + (float)Math.PI) * 1.4F * (distance * 0.5F));
+            if(partName.equals("legleftlower"))
+                rotX += Math.toDegrees(MathHelper.cos(time * walkSwing + (float)Math.PI) * 1.4F * (distance * 0.5F));
+            if(partName.equals("legrightupper"))
+                rotX += Math.toDegrees(MathHelper.cos(time * walkSwing) * 1.4F * (distance * 0.5F));
+            if(partName.equals("legrightlower"))
+                rotX += Math.toDegrees(MathHelper.cos(time * walkSwing) * 1.4F * (distance * 0.5F));
 
             if(partName.contains("legleft0"))
                 rotX += Math.toDegrees(MathHelper.cos(time * walkSwing + (float)Math.PI) * 0.6F * distance);
@@ -147,6 +161,14 @@ public class ModelTemplateBiped extends ModelCreatureObj {
                     float bob = MathHelper.sin(loop * 0.4F) * 0.15F;
                     posY += bob * this.flightBobScale;
                 }
+            }
+            if(partName.contains("legleft")) {
+                rotZ += Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F + 0.05F);
+                rotX += Math.toDegrees(MathHelper.sin(loop * 0.067F) * 0.05F);
+            }
+            if(partName.contains("legright")) {
+                rotZ -= Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F + 0.05F);
+                rotX -= Math.toDegrees(MathHelper.sin(loop * 0.067F) * 0.05F);
             }
         }
 

@@ -2,8 +2,9 @@ package com.lycanitesmobs.core.entity.goals.actions.abilities;
 
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
+import com.lycanitesmobs.core.entity.goals.BaseGoal;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
@@ -11,21 +12,19 @@ import net.minecraft.util.EntityDamageSource;
 
 import java.util.List;
 
-public class EffectAuraGoal extends EntityAIBase {
-	BaseCreatureEntity host;
-
+public class EffectAuraGoal extends BaseGoal {
     // Properties:
 	protected Potion effect;
 	protected float auraRange = 10F;
 	protected int effectSeconds = 5;
 	protected int effectAmplifier = 0;
 	protected boolean checkSight = true;
-	protected int phase = -1;
 	protected float damageAmount = 0;
 	protected int duration = 10 * 20;
 	protected int cooldownDuration = 0;
 	protected int tickRate = 40;
-	protected boolean targetAll = false;
+	protected byte targetTypes = BaseCreatureEntity.TARGET_TYPES.ENEMY.id;
+	protected String targetCreatureType = null;
 
 	public int abilityTime = 0;
 	public int cooldownTime = this.cooldownDuration;
@@ -35,18 +34,8 @@ public class EffectAuraGoal extends EntityAIBase {
 	 * @param setHost The creature using this goal.
 	 */
 	public EffectAuraGoal(BaseCreatureEntity setHost) {
-        this.host = setHost;
+		super(setHost);
     }
-
-	/**
-	 * Sets the battle phase to restrict this goal to.
-	 * @param phase The phase to restrict to, if below 0 phases are ignored.
-	 * @return This goal for chaining.
-	 */
-	public EffectAuraGoal setPhase(int phase) {
-		this.phase = phase;
-		return this;
-	}
 
 	/**
 	 * Sets the duration of firing (in ticks).
@@ -150,27 +139,24 @@ public class EffectAuraGoal extends EntityAIBase {
 	}
 
 	/**
-	 * If true, friendly targets are included.
-	 * @param targetAll True to disable attack target checking.
+	 * Sets the target types to affect.
+	 * @param targetTypes The target types to affect.
 	 * @return This goal for chaining.
 	 */
-	public EffectAuraGoal setTargetAll(boolean targetAll) {
-		this.targetAll = targetAll;
+	public EffectAuraGoal setTargetTypes(byte targetTypes) {
+		this.targetTypes = targetTypes;
 		return this;
 	}
 
-	@Override
-    public boolean shouldExecute() {
-		if(!this.host.isEntityAlive()) {
-			return false;
-		}
-
-		if(this.phase >= 0 && this.phase != this.host.getBattlePhase()) {
-			return false;
-		}
-
-		return true;
-    }
+	/**
+	 * Sets a specific Creature Type to target.
+	 * @param creatureTypeName The creature type to target.
+	 * @return This goal for chaining.
+	 */
+	public EffectAuraGoal setTargetCreatureType(String creatureTypeName) {
+		this.targetCreatureType = creatureTypeName;
+		return this;
+	}
 
 	@Override
     public void startExecuting() {
@@ -198,20 +184,51 @@ public class EffectAuraGoal extends EntityAIBase {
 		if(this.effect != null) {
 			effectInstance = new PotionEffect(this.effect, this.host.getEffectDuration(this.effectSeconds), this.effectAmplifier);
 		}
-		List aoeTargets = this.host.getNearbyEntities(EntityLivingBase.class, null, this.auraRange);
-		for(Object entityObj : aoeTargets) {
-			EntityLivingBase target = (EntityLivingBase) entityObj;
-			if (target == this.host) {
-				continue;
+
+		List<EntityLivingBase> aoeTargets = this.host.getNearbyEntities(EntityLivingBase.class, entity -> {
+			if(!(entity instanceof EntityLivingBase)) {
+				return false;
 			}
-			if(!this.targetAll) {
-				if (!this.host.canAttackClass(target.getClass()) || !this.host.canAttackEntity(target)) {
-					continue;
+
+			boolean validTarget = false;
+			if(entity == this.host) {
+				if ((this.targetTypes & BaseCreatureEntity.TARGET_TYPES.SELF.id) > 0) {
+					validTarget = true;
 				}
 			}
-			if(this.checkSight && !this.host.getEntitySenses().canSee(target)) {
-				continue;
+			else {
+				if ((this.targetTypes & BaseCreatureEntity.TARGET_TYPES.ALLY.id) > 0) {
+					if (this.host.isTamed() && this.host instanceof TameableCreatureEntity) {
+						if (entity instanceof TameableCreatureEntity && ((TameableCreatureEntity) entity).getPlayerOwner() == ((TameableCreatureEntity) this.host).getPlayerOwner()) {
+							validTarget = true;
+						}
+					} else if (entity instanceof BaseCreatureEntity && !((BaseCreatureEntity) entity).isTamed()) {
+						validTarget = true;
+					}
+				}
+				if ((this.targetTypes & BaseCreatureEntity.TARGET_TYPES.ENEMY.id) > 0) {
+					if (this.host.canAttackClass(entity.getClass()) || this.host.canAttackEntity((EntityLivingBase) entity)) {
+						validTarget = true;
+					}
+				}
 			}
+			if(!validTarget) {
+				return false;
+			}
+
+			if(this.targetCreatureType != null) {
+				if(entity instanceof BaseCreatureEntity && ((BaseCreatureEntity)entity).creatureInfo.creatureType != null) {
+					return this.targetCreatureType.equals(((BaseCreatureEntity)entity).creatureInfo.creatureType.getName());
+				}
+				return false;
+			}
+			if(this.checkSight && !this.host.getEntitySenses().canSee(entity)) {
+				return false;
+			}
+			return true;
+		}, this.auraRange);
+
+		for(EntityLivingBase target : aoeTargets) {
 
 			// Apply Effect:
 			if(effectInstance != null) {

@@ -138,6 +138,9 @@ public class CreatureInfo {
 	/** The Dungeon Level of this mob, for Lycanites Dungeons this affects what floor the mob appears on, but this is also used by other mods such as Doomlike Dungeons to assess difficulty. Default: -1 (All levels). **/
 	public int dungeonLevel = -1;
 
+	/** The range (in blocks) that players must be to be considered within range of this entity as a boss, used for block place/break boss protection. **/
+	public int bossNearbyRange = 60;
+
 
 	// Items:
 	/** A list of all the item drops available to this creature. **/
@@ -334,6 +337,8 @@ public class CreatureInfo {
 			this.summonCost = json.get("summonCost").getAsInt();
 		if(json.has("dungeonLevel"))
 			this.dungeonLevel = json.get("dungeonLevel").getAsInt();
+		if(json.has("bossNearbyRange"))
+			this.bossNearbyRange = json.get("bossNearbyRange").getAsInt();
 
 		// Item Drops:
 		if(json.has("drops")) {
@@ -385,7 +390,6 @@ public class CreatureInfo {
 		if(this.dummy) {
 			return;
 		}
-		LycanitesMobs.logDebug("", "Loading: " + this.getName());
 
 		// Add Stats:
 		ItemStack achievementStack = new ItemStack(ObjectManager.getItem("mobtoken"));

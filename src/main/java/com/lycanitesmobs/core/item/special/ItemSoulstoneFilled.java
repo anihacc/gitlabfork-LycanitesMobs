@@ -43,7 +43,7 @@ public class ItemSoulstoneFilled extends ItemSoulstone {
         }
         if(this.creatureType.tameableCreatures.isEmpty()) {
             LycanitesMobs.logInfo("", "Tried to use a " + this.creatureType.getSoulstoneName() + " but there are no tameable creatures for this type yet.");
-            return super.onItemRightClick(world, player, hand);
+            return new ActionResult(EnumActionResult.FAIL, player.getHeldItem(hand));
         }
 
         if(!player.getEntityWorld().isRemote) {
@@ -64,6 +64,9 @@ public class ItemSoulstoneFilled extends ItemSoulstone {
 
     @Override
     public boolean onItemRightClickOnEntity(EntityPlayer player, Entity entity, ItemStack itemStack) {
+        if(this.creatureType.tameableCreatures.isEmpty()) {
+            return super.onItemRightClickOnEntity(player, entity, itemStack);
+        }
         return false;
     }
 }

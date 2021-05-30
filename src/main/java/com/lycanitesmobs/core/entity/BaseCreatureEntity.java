@@ -150,6 +150,8 @@ public abstract class BaseCreatureEntity extends EntityLiving {
     public int battlePhase = 0;
     /** The maximum amount of damage this mob can take. If 0 or less, this is ignored. **/
     public int damageMax = 0;
+	/** If above 0, no more than this much health can be lost per second. **/
+	public float damageLimit = 0;
     /** The gorwing age of this mob. **/
     protected int growingAge;
 
@@ -160,8 +162,6 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 	public float damageTakenThisSec = 0;
 	/** How much health this creature had last tick. **/
 	public float healthLastTick = -1;
-	/** If above 0, no more than this much health can be lost per second. **/
-	public float damageLimit = 0;
 
 
 	// Abilities:
@@ -352,6 +352,13 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 	    ANIMATION_STATE_BITS(byte value) { this.id = value; }
 	    public byte getValue() { return id; }
 	}
+	/** Used by AI Goals to determine target types. **/
+	public enum TARGET_TYPES {
+		ENEMY((byte)1), ALLY((byte)2), SELF((byte)4);
+		public final byte id;
+		TARGET_TYPES(byte value) { this.id = value; }
+		public byte getValue() { return id; }
+	}
 
 
 	// Interact:
@@ -540,8 +547,6 @@ public abstract class BaseCreatureEntity extends EntityLiving {
         this.setWidth *= this.creatureInfo.hitboxScale;
         this.setHeight *= this.creatureInfo.hitboxScale;
         this.updateSize();
-        if(this.creatureInfo.sizeScale != 1)
-            this.setSizeScale(this.creatureInfo.sizeScale);
         
         // Stats:
         this.stepHeight = 0.5F;
@@ -554,6 +559,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 			for(ItemEquipmentPart itemEquipmentPart : ItemEquipmentPart.MOB_PART_DROPS.get(this.creatureInfo.getEntityId())) {
 				ItemDrop partDrop = new ItemDrop(itemEquipmentPart.getRegistryName().toString(), 0, itemEquipmentPart.dropChance).setMaxAmount(1);
 				partDrop.bonusAmount = false;
+				partDrop.amountMultiplier = false;
 				this.drops.add(partDrop);
 			}
 		}
@@ -1123,7 +1129,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
     /**
 	 * Summons the provided entity instance into the world as this creature's minion.
 	 * @param minion The entity instance to summon as a minion.
-	 * @param angle The spawn position angle of the minion reletive to this creature.
+	 * @param angle The spawn position angle of the minion relative to this creature.
 	 * @param distance How far from this creature to summon the minion.
 	 */
 	public void summonMinion(EntityLivingBase minion, double angle, double distance) {
@@ -1135,16 +1141,20 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 		}
         double z = this.posZ + ((this.width + distance) * Math.sin(angleRadians) + Math.cos(angleRadians));
         minion.setLocationAndAngles(x, y, z, this.rand.nextFloat() * 360.0F, 0.0F);
+		this.getEntityWorld().spawnEntity(minion);
         if(minion instanceof BaseCreatureEntity) {
             ((BaseCreatureEntity)minion).setMinion(true);
-            ((BaseCreatureEntity)minion).applyVariant(this.getVariantIndex());
+            if(!this.isRareVariant()) {
+				((BaseCreatureEntity) minion).applyVariant(this.getVariantIndex());
+			}
+            ((BaseCreatureEntity)minion).setSubspecies(this.getSubspeciesIndex());
             ((BaseCreatureEntity)minion).setMasterTarget(this);
             ((BaseCreatureEntity)minion).spawnEventType = this.spawnEventType;
             if(this.isTemporary) {
 				((BaseCreatureEntity)minion).setTemporary(this.temporaryDuration);
 			}
+			((BaseCreatureEntity)minion).onFirstSpawn();
         }
-        this.getEntityWorld().spawnEntity(minion);
         if(this.getAttackTarget() != null) {
 			minion.setRevengeTarget(this.getAttackTarget());
 		}
@@ -1244,6 +1254,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
     // ========== On Spawn ==========
     /** This is called when the mob is first spawned to the world either through natural spawning or from a Spawn Egg. **/
     public void onFirstSpawn() {
+		this.firstSpawn = false;
     	if(this.hasPetEntry()) {
     		if(this.getPetEntry().summonSet != null && this.getPetEntry().summonSet.playerExt != null) {
 				this.getPetEntry().summonSet.playerExt.sendPetEntryToPlayer(this.getPetEntry());
@@ -1487,8 +1498,8 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 				scaledExp = Math.round((float) (this.creatureInfo.experience * Variant.RARE_EXPERIENCE_SCALE));
 			this.experienceValue = Math.round(scaledExp);
 			if ("rare".equals(this.variant.rarity)) {
-				this.damageLimit = 40;
-				this.damageMax = 25;
+				this.damageLimit = BOSS_DAMAGE_LIMIT;
+				this.damageMax = BOSS_DAMAGE_LIMIT;
 			}
 		}
 	}
@@ -1857,7 +1868,6 @@ public abstract class BaseCreatureEntity extends EntityLiving {
         // First Spawn:
         if(!this.getEntityWorld().isRemote && this.firstSpawn) {
             this.onFirstSpawn();
-            this.firstSpawn = false;
         }
 
         // Fixate Target:
@@ -2391,7 +2401,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 	public boolean rollWanderChance() {
 		/*if(this.canBreatheAir() && !this.isStrongSwimmer() && !this.isFlying() && this.isInWater())
 			return true;*/
-		return this.getRNG().nextDouble() <= 0.008D;
+		return this.getRNG().nextDouble() <= 0.05D;
 	}
     
     // ========== Leash ==========
@@ -2769,8 +2779,8 @@ public abstract class BaseCreatureEntity extends EntityLiving {
     /** Sets the width and height of this mob. This applies sizeScale to the provided arguments. **/
 	@Override
 	protected void setSize(float width, float height) {
-        width *= (float)this.sizeScale;
-        height *= (float)this.sizeScale;
+        width *= (float)this.sizeScale * this.creatureInfo.sizeScale;
+        height *= (float)this.sizeScale * this.creatureInfo.sizeScale;
         super.setSize(width, height);
         this.hitAreas = null;
         if(!this.getEntityWorld().isRemote && this.getNavigator() != null && this.getNavigator().getNodeProcessor() instanceof ICreatureNodeProcessor) {
@@ -2791,7 +2801,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 
     /** Returns the model scale for rendering. **/
     public double getRenderScale() {
-        return this.sizeScale;
+        return this.sizeScale * this.creatureInfo.sizeScale;
     }
     
     
@@ -2933,6 +2943,9 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 	}
 
 	public boolean shouldCreatureGroupFlee(EntityLivingBase target) {
+		if(this.isBoss() || this.isRareVariant()) {
+			return false;
+		}
 		boolean shouldFlee = false;
 		boolean shouldPackHunt = false;
 		for(CreatureGroup group : this.creatureInfo.getGroups()) {
@@ -3675,8 +3688,14 @@ public abstract class BaseCreatureEntity extends EntityLiving {
     		return false;
     	}
 
-		if(type.getCreatureClass() == IMob.class) // If checking for EnumCreatureType.monster (IMob) return whether or not this creature is hostile instead.
-			return this.isHostile();
+		if(type.getCreatureClass() == IMob.class) { // If checking for EnumCreatureType.monster (IMob) return whether or not this creature is hostile instead.
+			try {
+				return this.isHostile();
+			}
+			catch (Exception e) {
+				return true;
+			}
+		}
         return type.getCreatureClass().isAssignableFrom(this.getClass());
     }
     
@@ -4452,7 +4471,12 @@ public abstract class BaseCreatureEntity extends EntityLiving {
         if(this.isBoss() || this.isRareVariant()) {
             if(entity == null)
                 return false;
-            return this.getDistance(entity) <= this.bossRange;
+			if(this.getDistance(entity) > this.bossRange) {
+				if(entity instanceof EntityPlayer) {
+					((EntityPlayer)entity).sendStatusMessage(new TextComponentString(LanguageManager.translate("boss.damage.protection.range")), true);
+				}
+				return false;
+			}
         }
         return true;
     }

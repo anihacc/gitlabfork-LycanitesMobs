@@ -1,5 +1,7 @@
 package com.lycanitesmobs;
 
+import com.lycanitesmobs.client.localisation.LanguageManager;
+import com.lycanitesmobs.core.block.BlockFireBase;
 import com.lycanitesmobs.core.capabilities.IExtendedEntity;
 import com.lycanitesmobs.core.capabilities.IExtendedPlayer;
 import com.lycanitesmobs.core.entity.*;
@@ -10,7 +12,6 @@ import com.lycanitesmobs.core.item.equipment.ItemEquipment;
 import com.lycanitesmobs.core.network.MessagePlayerLeftClick;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -28,6 +29,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.capabilities.Capability;
@@ -462,20 +464,21 @@ public class GameEventListener {
 	// ==================================================
 	@SubscribeEvent
 	public void onBlockBreak(BlockEvent.BreakEvent event) {
-		if(event.getState() == null || event.getWorld() == null || event.isCanceled()) {
+		if(event.getState() == null || event.getWorld() == null || event.isCanceled() || event.getWorld().isRemote) {
 			return;
 		}
 
-		if(event.getPlayer() == null || !event.getPlayer().isCreative()) {
+		if(event.getPlayer() != null && !event.getPlayer().isCreative()) {
 			ExtendedWorld extendedWorld = ExtendedWorld.getForWorld(event.getWorld());
-			if (extendedWorld.isBossNearby(new Vec3d(event.getPos()), 60)) {
+			if (!(event.getState().getBlock() instanceof BlockFireBase) && extendedWorld.isBossNearby(new Vec3d(event.getPos()))) {
 				event.setCanceled(true);
 				event.setResult(Result.DENY);
+				event.getPlayer().sendStatusMessage(new TextComponentString(LanguageManager.translate("boss.block.protection.break")), true);
 				return;
 			}
 		}
 
-		if(event.getPlayer() != null && event.getWorld().isRemote) {
+		if(event.getPlayer() != null) {
 			ExtendedPlayer extendedPlayer = ExtendedPlayer.getForPlayer(event.getPlayer());
 			if (extendedPlayer == null) {
 				return;
@@ -495,11 +498,12 @@ public class GameEventListener {
 			return;
 		}
 
-		if(event.getPlayer() == null || !event.getPlayer().isCreative()) {
+		if(event.getPlayer() != null && !event.getPlayer().isCreative()) {
 			ExtendedWorld extendedWorld = ExtendedWorld.getForWorld(event.getWorld());
-			if (extendedWorld.isBossNearby(new Vec3d(event.getPos()), 60)) {
+			if (extendedWorld.isBossNearby(new Vec3d(event.getPos()))) {
 				event.setCanceled(true);
 				event.setResult(Result.DENY);
+				event.getPlayer().sendStatusMessage(new TextComponentString(LanguageManager.translate("boss.block.protection.place")), true);
 			}
 		}
 	}
@@ -516,7 +520,11 @@ public class GameEventListener {
 		if(!event.isDismounting() || !(event.getEntityMounting() instanceof EntityPlayer) || !(event.getEntityBeingMounted() instanceof RideableCreatureEntity)) {
 			return;
 		}
-		event.setCanceled(event.getEntityMounting().isSneaking());
+		ExtendedPlayer extendedPlayer = ExtendedPlayer.getForPlayer((EntityPlayer)event.getEntityMounting());
+		if(extendedPlayer == null) {
+			return;
+		}
+		event.setCanceled(event.getEntityMounting().isSneaking() && !extendedPlayer.isControlActive(ExtendedPlayer.CONTROL_ID.MOUNT_DISMOUNT));
 	}
 
 

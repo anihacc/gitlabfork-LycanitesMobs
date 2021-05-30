@@ -2,7 +2,9 @@ package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
+import com.lycanitesmobs.core.entity.goals.GoalConditions;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
+import com.lycanitesmobs.core.entity.goals.actions.abilities.FireProjectilesGoal;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
@@ -23,8 +25,6 @@ public class EntityChupacabra extends TameableCreatureEntity {
         this.attribute = EnumCreatureAttribute.UNDEFINED;
         this.hasAttackSound = true;
         this.setupMob();
-        
-        this.attackCooldownMax = 15;
     }
 
     // ========== Init AI ==========
@@ -32,6 +32,8 @@ public class EntityChupacabra extends TameableCreatureEntity {
     protected void initEntityAI() {
         super.initEntityAI();
         this.tasks.addTask(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setSpeed(1.5D));
+        this.tasks.addTask(this.nextIdleGoalIndex, new FireProjectilesGoal(this).setProjectile("chaosorb").setFireRate(40).setVelocity(1.0F).setScale(0.5F)
+                .setConditions(new GoalConditions().setRareVariantOnly(true)));
     }
 
     @Override

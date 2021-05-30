@@ -112,8 +112,11 @@ public class MobEventListener {
 			if (worldExt.getWorldEventStartTargetTime() <= 0 || worldExt.getWorldEventStartTargetTime() > world.getTotalWorldTime() + MobEventManager.getInstance().maxTicksUntilEvent) {
 				worldExt.setWorldEventStartTargetTime(world.getTotalWorldTime() + worldExt.getRandomEventDelay(world.rand));
 			}
-			if (world.getTotalWorldTime() >= worldExt.getWorldEventStartTargetTime()) {
+			if (world.getTotalWorldTime() == worldExt.getWorldEventStartTargetTime()) {
 				this.triggerRandomMobEvent(world, worldExt);
+			}
+			else if (world.getTotalWorldTime() > worldExt.getWorldEventStartTargetTime()) {
+				worldExt.setWorldEventStartTargetTime(0);
 			}
 		}
     }

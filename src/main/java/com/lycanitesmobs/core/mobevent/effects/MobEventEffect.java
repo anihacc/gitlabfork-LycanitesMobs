@@ -73,9 +73,9 @@ public abstract class MobEventEffect {
 	 * @param pos Where the event origin will be. This is used by effects for generating structures as well as Mob Event Spawn Triggers and other things.
 	 * @param level The level of the event.
 	 * @param ticks The ticks that the event has been active for.
-	 * @param subspecies The subspecies to spawn mobs at, random if below 0.
+	 * @param variant The subspecies to spawn mobs at, random if below 0.
 	 */
-	public void onUpdate(World world, EntityPlayer player, BlockPos pos, int level, int ticks, int subspecies) {
+	public void onUpdate(World world, EntityPlayer player, BlockPos pos, int level, int ticks, int variant) {
 
 	}
 
