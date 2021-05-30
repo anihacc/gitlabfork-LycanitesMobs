@@ -1548,25 +1548,25 @@ element.frost.description=A para element that represents cold where it actively 
 element.fae.name=Fae
 element.fae.description=A para element that represents life and adaption. Fae can be fused from Water and Order as it embodies the fluid nature of Water and the structure of Order.
 #
-element.poison=Poison
+element.poison.name=Poison
 element.poison.description=A para element that represents chemical substances, usually poisons or venom as well as narcotics and also medicines but can also take on many other forms as well such as oil. Poison can be fused from Water and Chaos where Water embodies a fluid form that can be altered which is manipulated by Chaos into all kinds of strange chemicals.
 #
-element.phase=Phase
+element.phase.name=Phase
 element.phase.description=A para element that represents phase shifting or spiritual reality, a space layered on top of the physical world, it is what spirits are made of and use. Phase can be fused from the base elements Earth and Air as it embodies the solid form of Earth and the flowing non-solid of Air.
 #
-element.arcane=Arcane
+element.arcane.name=Arcane
 element.arcane.description=A para element that represents gravitation, magnetism, bonding, compression and artificial structure. arcane can be fused from Earth and Order where it embodies the solid physical presence of Earth and the structure and laws of Order.
 #
-element.quake=Quake
+element.quake.name=Quake
 element.quake.description=A para element that represents vibration, sound, combustion and destruction. Quake can be fused from Earth and Chaos where Earth embodies solid form which is then broke apart by Chaos.
 #
-element.aether=Aether
+element.aether.name=Aether
 element.aether.description=A para element that represents purity, divinity, faith and worship. Aether can be fused from Air and Order as it embodies the flowing aspect of Air with the structure and laws of Order.
 #
-element.nether=Nether
+element.nether.name=Nether
 element.nether.description=A para element that represents corruption, demonism, desire and rebellion. Nether can be fused from Air and Chaos where Air embodies flowing and Chaos twists it into corruption.
 #
-element.void=Void
+element.void.name=Void
 element.void.description=A para element that represents nothingness and removal. Void can be fused from Order and Chaos where Order embodies structure and consistency which is cancelled out by Chaos which embodies entropy and randomness.
 f:\projects\lycanites mobs 1.12.2\src\main\resources\assets\lycanitesmobs\lang\en_us\extract.txt
 # ========================================================================
@@ -2186,5 +2186,5 @@ entity.lycanitesmobs.aquapulse=Aqua Pulse
 entity.lycanitesmobs.arcanelaserstorm=Arcane Laser Storm
 entity.lycanitesmobs.aetherwave=Aetherwave
 entity.lycanitesmobs.summoningseed=Summoning Seed
-entity.lycanitesmobs.primefireember=Prime Ember
+entity.lycanitesmobs.primeember=Prime Ember
 entity.lycanitesmobs.smitefireball=Smitefireball
