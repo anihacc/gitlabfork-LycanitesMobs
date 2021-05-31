@@ -211,9 +211,9 @@ public class ItemManager extends JSONLoader {
 
 
 		// Fluids:
-		Block.Properties waterBlockProperties = Block.Properties.of(Material.WATER).noCollission().strength(100).noDrops();
-		Block.Properties waterBrightBlockProperties = Block.Properties.of(Material.WATER).noCollission().strength(100).noDrops().lightLevel((BlockState blockState) -> { return 10; });
-		Block.Properties lavaBlockProperties = Block.Properties.of(Material.LAVA).noCollission().strength(100).noDrops().lightLevel((BlockState blockState) -> { return 15; });
+		Block.Properties waterBlockProperties = Block.Properties.of(Material.WATER).noCollission().randomTicks().strength(100).noDrops();
+		Block.Properties waterBrightBlockProperties = Block.Properties.of(Material.WATER).noCollission().randomTicks().strength(100).noDrops().lightLevel((BlockState blockState) -> { return 10; });
+		Block.Properties lavaBlockProperties = Block.Properties.of(Material.LAVA).noCollission().randomTicks().strength(100).noDrops().lightLevel((BlockState blockState) -> { return 15; });
 		this.addFluid("ooze", 0x009F9F, 3000, 3000, 0, 10, false, OozeFluidBlock.class, waterBrightBlockProperties, "frost", true);
 		this.addFluid("rabbitooze", 0x00AFAF, 3000, 3000, 0, 10, true, OozeFluidBlock.class, waterBrightBlockProperties, "frost", false);
 		this.addFluid("moglava", 0xFF5722, 3000, 5000, 1100, 15, true, MoglavaFluidBlock.class, lavaBlockProperties, "lava", true);
@@ -227,7 +227,7 @@ public class ItemManager extends JSONLoader {
 
 	public void addFluid(String fluidName, int fluidColor, int density, int viscosity, int temperature, int luminosity, boolean multiply, Class<? extends BaseFluidBlock> blockClass, AbstractBlock.Properties blockProperties, String elementName, boolean worldgen) {
 		ElementInfo element = ElementManager.getInstance().getElement(elementName);
-		Supplier<ForgeFlowingFluid> stillFluidSupplier = () -> ObjectManager.getFluid(fluidName + "_still");
+		Supplier<ForgeFlowingFluid> stillFluidSupplier = () -> ObjectManager.getFluid(fluidName);
 		Supplier<ForgeFlowingFluid> flowingFluidSupplier = () -> ObjectManager.getFluid(fluidName + "_flowing");
 
 		FluidAttributes.Builder fluidBuilder = FluidAttributes.builder(new ResourceLocation(LycanitesMobs.MODID, "block/" + fluidName + "_still"), new ResourceLocation(LycanitesMobs.MODID, "block/" + fluidName + "_flowing"));
@@ -240,10 +240,10 @@ public class ItemManager extends JSONLoader {
 		if(multiply) {
 			fluidProperties.canMultiply();
 		}
-		fluidProperties.bucket(() -> ObjectManager.getItem("bucket" + fluidName));
+		fluidProperties.bucket(() -> ObjectManager.getItem(fluidName + "_bucket"));
 		fluidProperties.block(() -> (FlowingFluidBlock)ObjectManager.getBlock(fluidName));
 
-		ObjectManager.addFluid(fluidName + "_still", new CustomFluid.Still(fluidProperties, fluidName + "_still"));
+		ObjectManager.addFluid(fluidName, new CustomFluid.Still(fluidProperties, fluidName));
 		ObjectManager.addFluid(fluidName + "_flowing", new CustomFluid.Flowing(fluidProperties, fluidName + "_flowing"));
 		ObjectManager.addSound(fluidName, LycanitesMobs.modInfo, "block." + fluidName);
 

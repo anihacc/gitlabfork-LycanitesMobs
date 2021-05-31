@@ -70,7 +70,7 @@ public class BaseFluidBlock extends FlowingFluidBlock {
 		double x = pos.getX();
 		double y = pos.getY();
 		double z = pos.getZ();
-		if(random.nextInt(24) == 0) {
+		if(random.nextInt(52) == 0) {
 			world.playLocalSound(x + 0.5D, y + 0.5D, z + 0.5D, ObjectManager.getSound(this.blockName), SoundCategory.BLOCKS, 0.5F + random.nextFloat(), random.nextFloat() * 0.7F + 0.3F, false);
 		}
 		super.animateTick(state, world, pos, random);
