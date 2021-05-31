@@ -6,6 +6,7 @@ import com.lycanitesmobs.core.entity.RideableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import com.lycanitesmobs.core.entity.goals.actions.PlayerControlGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.FindAttackTargetGoal;
+import com.lycanitesmobs.core.info.ElementInfo;
 import net.minecraft.entity.*;
 import net.minecraft.entity.monster.EndermanEntity;
 import net.minecraft.entity.monster.HoglinEntity;
@@ -24,10 +25,7 @@ import java.util.List;
 public class EntityKathoga extends RideableCreatureEntity {
 	
 	PlayerControlGoal playerControlAI;
-	
-	// ==================================================
- 	//                    Constructor
- 	// ==================================================
+
     public EntityKathoga(EntityType<? extends EntityKathoga> entityType, World world) {
         super(entityType, world);
         
@@ -40,7 +38,11 @@ public class EntityKathoga extends RideableCreatureEntity {
         this.maxUpStep = 1.0F;
     }
 
-    // ========== Init AI ==========
+    @Override
+	public boolean canBurn() {
+		return false;
+	}
+
     @Override
     protected void registerGoals() {
         super.registerGoals();
@@ -60,12 +62,7 @@ public class EntityKathoga extends RideableCreatureEntity {
 	public boolean shouldCreatureGroupFlee(LivingEntity target) {
 		return false;
 	}
-	
-	
-    // ==================================================
-    //                      Updates
-    // ==================================================
-	// ========== Living Update ==========
+
 	@Override
     public void aiStep() {
         super.aiStep();
@@ -82,10 +79,6 @@ public class EntityKathoga extends RideableCreatureEntity {
             rider.setSecondsOnFire(0);
     }
 
-    
-    // ==================================================
-    //                   Mount Ability
-    // ==================================================
     @Override
     public void mountAbility(Entity rider) {
     	if(this.getCommandSenderWorld().isClientSide)
@@ -110,12 +103,7 @@ public class EntityKathoga extends RideableCreatureEntity {
     public float getStaminaRecoveryMax() {
     	return 1.0F;
     }
-	
-	
-	// ==================================================
-   	//                      Attacks
-   	// ==================================================
-    // ========== Melee Attack ==========
+
     @Override
     public boolean attackMelee(Entity target, double damageScale) {
         if(!super.attackMelee(target, damageScale))
@@ -128,7 +116,6 @@ public class EntityKathoga extends RideableCreatureEntity {
         return true;
     }
 
-    // ========== Special Attack ==========
     public void specialAttack() {
         // Withering Roar:
         double distance = 5.0D;
@@ -158,43 +145,23 @@ public class EntityKathoga extends RideableCreatureEntity {
         this.playAttackSound();
         this.triggerAttackCooldown();
     }
-    
-    
-    // ==================================================
-   	//                     Abilities
-   	// ==================================================
+
     public boolean canBeTempted() {
     	return this.isBaby();
     }
 
-
-    // ==================================================
-    //                     Pet Control
-    // ==================================================
     public boolean petControlsEnabled() { return true; }
 
-
-    // ==================================================
-    //                     Equipment
-    // ==================================================
     @Override
     public int getNoBagSize() { return 0; }
     @Override
     public int getBagSize() { return this.creatureInfo.BagSize; }
-    
-    // ==================================================
-    //                     Immunities
-    // ==================================================
+
     @Override
     public float getFallResistance() {
     	return 10;
     }
-    
-    
-    // ==================================================
-    //                     Breeding
-    // ==================================================
-	// ========== Breeding Item ==========
+
 	@Override
 	public boolean isBreedingItem(ItemStack itemStack) {
         return false; // Breeding is triggered by attacking specific mobs instead!

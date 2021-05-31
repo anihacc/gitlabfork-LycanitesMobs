@@ -101,6 +101,12 @@
             "minAmount": 1,
             "maxAmount": 1,
             "chance": 0.125
+        },
+        {
+            "item": "minecraft:nautilus_shell",
+            "minAmount": 1,
+            "maxAmount": 1,
+            "chance": 0.1
         }
     ],
     "sizeScale": 1,
