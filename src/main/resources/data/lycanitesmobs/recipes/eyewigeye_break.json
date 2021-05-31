@@ -1,11 +1,11 @@
 {
   "result": {
-    "item": "lycanitesmobs:chaosorbcharge",
+    "item": "lycanitesmobs:poisonraycharge",
     "count": 4
   },
   "ingredients": [
 	{
-      "item": "lycanitesmobs:equipmentpart_argustail"
+      "item": "lycanitesmobs:equipmentpart_eyewigeye"
     }
   ],
   "type": "minecraft:crafting_shapeless"

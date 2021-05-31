@@ -107,6 +107,12 @@
             "chance": 0.5
         },
         {
+            "item": "lycanitesmobs:demonicsparkcharge",
+            "minAmount": 3,
+            "maxAmount": 6,
+            "chance": 1
+        },
+        {
             "item": "lycanitesmobs:demonicblastcharge",
             "minAmount": 3,
             "maxAmount": 6,

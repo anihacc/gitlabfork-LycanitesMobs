@@ -9,13 +9,30 @@
 	"elements": [
 		"phase",
 		"shadow"
-		],
+	],
 	"features": [
 		{
 			"featureType": "harvest",
 			"harvestType": "shovel",
 			"harvestShape": "block",
-			"harvestRange": [1, 1, 1]
+			"harvestRange": [1, 1, 1],
+			"harvestRangeLevelMultiplier": 1
+		},
+		{
+			"featureType": "harvest",
+			"harvestType": "hoe",
+			"harvestSpeed": 6,
+			"harvestShape": "block",
+			"harvestRange": [1, 1, 1],
+			"harvestRangeLevelMultiplier": 1
+		},
+		{
+			"featureType": "harvest",
+			"harvestType": "shears",
+			"harvestSpeed": 6,
+			"harvestShape": "block",
+			"harvestRange": [1, 1, 1],
+			"harvestRangeLevelMultiplier": 1
 		},
 		{
 			"featureType": "damage",

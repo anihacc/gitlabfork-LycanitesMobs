@@ -69,7 +69,10 @@
             ]
         }
     ],
-    "element": "order",
+    "elements": [
+        "earth",
+        "quake"
+    ],
     "diets": [
         "carnivore",
         "piscivore",

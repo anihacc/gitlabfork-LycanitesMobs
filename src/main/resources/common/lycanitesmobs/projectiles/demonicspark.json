@@ -1,7 +1,7 @@
 {
 	"name": "demonicspark",
 	"loadDefault": true,
-	"noChargeItem": true,
+	"noChargeItem": false,
 	"width": 0.5,
 	"height": 0.5,
 	"scale": 0.5,

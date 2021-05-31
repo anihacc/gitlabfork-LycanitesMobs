@@ -1,7 +1,7 @@
 {
 	"itemName": "belphegorarm",
 	"loadDefault": true,
-	"slotType": "rod",
+	"slotType": "base",
 	"dropMobId": "lycanitesmobs:belphegor",
 	"dropChance": 0.5,
 	"levelMin": 1,

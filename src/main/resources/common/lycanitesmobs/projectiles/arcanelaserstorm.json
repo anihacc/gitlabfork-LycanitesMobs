@@ -13,7 +13,8 @@
 	"weight": 0,
 	"lifetime": 100,
 	"elements": [
-		"arcane"
+		"arcane",
+		"quake"
 	],
 	"behaviours": [
 		{
