@@ -173,14 +173,6 @@ public class ItemEquipmentPart extends BaseItem {
 		return descriptions;
 	}
 
-	/** Gets or creates an NBT Compound for the provided itemstack. **/
-	public CompoundNBT getTagCompound(ItemStack itemStack) {
-		if(itemStack.hasTag()) {
-			return itemStack.getTag();
-		}
-		return new CompoundNBT();
-	}
-
 	@OnlyIn(Dist.CLIENT)
 	@Nullable
 	@Override

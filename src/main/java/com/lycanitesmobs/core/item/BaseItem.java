@@ -16,6 +16,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.item.UseAction;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.*;
@@ -32,10 +33,7 @@ public class BaseItem extends Item {
 	
 	public String itemName = "unamed_item";
 	public ModInfo modInfo = LycanitesMobs.modInfo;
-	
-	// ==================================================
-	//                   Constructor
-	// ==================================================
+
     public BaseItem(Properties properties) {
     	super(properties);
     }
@@ -49,11 +47,7 @@ public class BaseItem extends Item {
 	public String getDescriptionId() {
     	return "item." + this.modInfo.modid + "." + this.itemName;
 	}
-    
-    
-	// ==================================================
-	//                      Info
-	// ==================================================
+
 	@Override
 	public ITextComponent getName(ItemStack stack) {
 		return new TranslationTextComponent(this.getDescriptionId(stack));
@@ -71,27 +65,17 @@ public class BaseItem extends Item {
     public ITextComponent getDescription(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flag) {
     	return new TranslationTextComponent(this.getDescriptionId() + ".description").withStyle(TextFormatting.GREEN);
     }
-	
-    
-	// ==================================================
-	//                      Update
-	// ==================================================
+
 	@Override
 	public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entity) {
 		return super.onEntityItemUpdate(stack, entity);
 	}
-    
-    
-	// ==================================================
-	//                       Use
-	// ==================================================
-    // ========== Use ==========
+
     @Override
     public ActionResultType useOn(ItemUseContext context) {
     	return super.useOn(context);
     }
-    
-    // ========== Start ==========
+
     @Override
     public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
     	return super.use(world, player, hand);
@@ -106,46 +90,39 @@ public class BaseItem extends Item {
     	return super.interactLivingEntity(stack, player, entity, hand);
 	}
 
-    // ========== Using ==========
     @Override
     public void onUsingTick(ItemStack itemStack, LivingEntity entity, int useRemaining) {
     	super.onUsingTick(itemStack, entity, useRemaining);
     }
-    
-    // ========== Stop ==========
+
     @Override
     public void releaseUsing(ItemStack stack, World worldIn, LivingEntity entityLiving, int timeLeft) {
     	super.releaseUsing(stack, worldIn, entityLiving, timeLeft);
     }
 
-    // ========== Animation ==========
     @Override
     public UseAction getUseAnimation(ItemStack itemStack) {
         return super.getUseAnimation(itemStack);
     }
 
-	
-	// ==================================================
-	//                     Enchanting
-	// ==================================================
     @Override
     public int getEnchantmentValue() {
         return 0;
     }
 
-	
-	// ==================================================
-	//                     Repairs
-	// ==================================================
     @Override
     public boolean isValidRepairItem(ItemStack itemStack, ItemStack repairStack) {
         return super.isValidRepairItem(itemStack, repairStack);
     }
 
+	/** Gets or creates an NBT Compound for the provided itemstack. **/
+	public CompoundNBT getTagCompound(ItemStack itemStack) {
+		if(itemStack.hasTag()) {
+			return itemStack.getTag();
+		}
+		return new CompoundNBT();
+	}
 
-    // ==================================================
-    //                      Sound
-    // ==================================================
     public void playSound(World world, double x, double y, double z, SoundEvent sound, SoundCategory category, float volume, float pitch) {
         world.playSound(null, x, y, z, sound, category, volume, pitch);
     }

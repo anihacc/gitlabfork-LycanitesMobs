@@ -13,6 +13,7 @@ import com.lycanitesmobs.core.block.fluid.*;
 import com.lycanitesmobs.core.item.*;
 import com.lycanitesmobs.core.item.consumable.*;
 import com.lycanitesmobs.core.item.equipment.ItemEquipment;
+import com.lycanitesmobs.core.item.special.ItemSoulContract;
 import com.lycanitesmobs.core.item.special.ItemSoulgazer;
 import com.lycanitesmobs.core.item.special.ItemSoulkey;
 import com.lycanitesmobs.core.item.special.ItemSoulstone;
@@ -119,6 +120,7 @@ public class ItemManager extends JSONLoader {
 		ObjectManager.addItem("soulgazer", new ItemSoulgazer(new Item.Properties().stacksTo(1).tab(this.itemsGroup)));
 		ObjectManager.addItem("mobtoken", new ItemMobToken(new Item.Properties(), modInfo));
 		ObjectManager.addItem("soulstone", new ItemSoulstone(itemProperties, null));
+		ObjectManager.addItem("soul_contract", new ItemSoulContract(itemProperties.stacksTo(1)));
 
 		// Equipment Pieces:
 		Item.Properties equipmentProperties = new Item.Properties().stacksTo(1).setNoRepair().setISTER(() -> com.lycanitesmobs.client.renderer.EquipmentRenderer::new);

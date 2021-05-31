@@ -1,14 +1,14 @@
 {
   "result": {
-    "item": "lycanitesmobs:rabbitooze_bucket",
+    "item": "lycanitesmobs:soul_contract",
     "count": 1
   },
   "ingredients": [
     {
-      "item": "lycanitesmobs:ooze_bucket"
+      "item": "minecraft:paper"
     },
     {
-      "item": "minecraft:ghast_tear"
+      "item": "lycanitesmobs:soulgazer"
     }
   ],
   "type": "minecraft:crafting_shapeless"

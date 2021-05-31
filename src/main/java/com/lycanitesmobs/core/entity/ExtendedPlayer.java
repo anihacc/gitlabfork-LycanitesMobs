@@ -376,6 +376,12 @@ public class ExtendedPlayer implements IExtendedPlayer {
         LycanitesMobs.packetHandler.sendToPlayer(message, (ServerPlayerEntity)this.player);
     }
 
+	public void sendPetEntryRemoveToPlayer(PetEntry petEntry) {
+		if(this.player.getCommandSenderWorld().isClientSide) return;
+		MessagePetEntryRemove message = new MessagePetEntryRemove(this, petEntry);
+		LycanitesMobs.packetHandler.sendToPlayer(message, (ServerPlayerEntity)this.player);
+	}
+
 	public void sendPetEntryToServer(PetEntry petEntry) {
 		if(!this.player.getCommandSenderWorld().isClientSide) return;
         MessagePetEntry message = new MessagePetEntry(this, petEntry);

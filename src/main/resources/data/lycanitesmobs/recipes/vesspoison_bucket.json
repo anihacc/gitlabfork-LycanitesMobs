@@ -5,7 +5,9 @@
   },
   "ingredients": [
     {
-      "item": "lycanitesmobs:poison_bucket",
+      "item": "lycanitesmobs:poison_bucket"
+    },
+    {
       "item": "minecraft:ghast_tear"
     }
   ],

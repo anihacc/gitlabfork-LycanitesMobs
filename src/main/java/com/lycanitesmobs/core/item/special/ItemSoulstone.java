@@ -25,10 +25,6 @@ import javax.annotation.Nullable;
 public class ItemSoulstone extends BaseItem {
 	public CreatureType creatureType;
 
-
-	// ==================================================
-	//                   Constructor
-	// ==================================================
     public ItemSoulstone(Item.Properties properties, @Nullable CreatureType creatureType) {
 		super(properties);
 		this.modInfo = LycanitesMobs.modInfo;
@@ -40,10 +36,6 @@ public class ItemSoulstone extends BaseItem {
         this.setup();
     }
 
-
-	// ==================================================
-	//                       Use
-	// ==================================================
 	@Override
 	public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
     	return super.use(world, player, hand);
