@@ -17,7 +17,7 @@
 		{
 			"featureType": "effect",
 			"levelMax": 1,
-			"effectType": "minecraft:resistance",
+			"effectType": "minecraft:strength",
 			"effectTarget": "self",
 			"effectDuration": 80,
 			"effectStrength": 1
@@ -26,7 +26,7 @@
 			"featureType": "effect",
 			"levelMin": 2,
 			"levelMax": 2,
-			"effectType": "minecraft:resistance",
+			"effectType": "minecraft:strength",
 			"effectTarget": "self",
 			"effectDuration": 80,
 			"effectStrength": 2
@@ -34,7 +34,7 @@
 		{
 			"featureType": "effect",
 			"levelMin": 3,
-			"effectType": "minecraft:resistance",
+			"effectType": "minecraft:strength",
 			"effectTarget": "self",
 			"effectDuration": 80,
 			"effectStrength": 3
