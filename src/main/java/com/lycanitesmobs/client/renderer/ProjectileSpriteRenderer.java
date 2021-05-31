@@ -37,7 +37,7 @@ public class ProjectileSpriteRenderer extends EntityRenderer<BaseProjectileEntit
 
 		// Render States:
     	float loop = (float)entity.tickCount + Math.min(1, partialTicks);
-    	float scale = entity.projectileScale;
+    	float scale = entity.getProjectileScale();
 
 		// Render Laser:
 		if(entity instanceof CustomProjectileEntity && ((CustomProjectileEntity)entity).getLaserEnd() != null) {

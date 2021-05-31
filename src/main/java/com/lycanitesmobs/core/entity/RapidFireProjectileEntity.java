@@ -172,7 +172,7 @@ public class RapidFireProjectileEntity extends BaseProjectileEntity {
                 ((BaseProjectileEntity) projectile).setProjectileScale(this.projectileScale);
             }
 	        
-	        world.addFreshEntity((Entity)projectile);
+	        world.addFreshEntity(projectile);
 		}
 		catch (Exception e) {
 			System.out.println("[WARNING] [LycanitesMobs] EntityRapidFire was unable to instantiate the given projectile class.");

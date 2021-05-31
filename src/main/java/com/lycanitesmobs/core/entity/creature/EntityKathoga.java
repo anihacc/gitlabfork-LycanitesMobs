@@ -135,7 +135,7 @@ public class EntityKathoga extends RideableCreatureEntity {
         List<LivingEntity> possibleTargets = this.getCommandSenderWorld().getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(distance, distance, distance), (Predicate<LivingEntity>) possibleTarget -> {
             if(!possibleTarget.isAlive()
                     || possibleTarget == EntityKathoga.this
-                    || EntityKathoga.this.hasIndirectPassenger(possibleTarget)
+                    || EntityKathoga.this.isEntityPassenger(possibleTarget, EntityKathoga.this)
                     || EntityKathoga.this.isAlliedTo(possibleTarget)
                     || !EntityKathoga.this.canAttackType(possibleTarget.getType())
                     || !EntityKathoga.this.canAttack(possibleTarget))

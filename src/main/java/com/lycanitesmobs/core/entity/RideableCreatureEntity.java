@@ -460,6 +460,20 @@ public abstract class RideableCreatureEntity extends TameableCreatureEntity {
         }
         return super.isAlliedTo(target);
     }
+
+	public boolean isEntityPassenger(Entity targetEntity, Entity nestedRider) {
+		for(Entity entity : nestedRider.getPassengers()) {
+			if (entity.equals(entity)) {
+				return true;
+			}
+
+			if (this.isEntityPassenger(targetEntity, entity)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
     
     
     // ==================================================
@@ -500,7 +514,7 @@ public abstract class RideableCreatureEntity extends TameableCreatureEntity {
     @Override
     public boolean hurt(DamageSource damageSource, float damageAmount) {
         Entity entity = damageSource.getEntity();
-        return this.getControllingPassenger() != null && this.hasIndirectPassenger(entity) ? false : super.hurt(damageSource, damageAmount);
+        return this.getControllingPassenger() != null && this.isEntityPassenger(entity, this) ? false : super.hurt(damageSource, damageAmount);
     }
     
     @Override

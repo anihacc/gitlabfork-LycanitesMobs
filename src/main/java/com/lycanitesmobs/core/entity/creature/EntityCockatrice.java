@@ -153,7 +153,7 @@ public class EntityCockatrice extends RideableCreatureEntity implements IMob {
 		List<LivingEntity> possibleTargets = this.getCommandSenderWorld().getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(distance, distance, distance), possibleTarget -> {
 				if(!possibleTarget.isAlive()
 						|| possibleTarget == EntityCockatrice.this
-						|| EntityCockatrice.this.hasIndirectPassenger(possibleTarget)
+						|| EntityCockatrice.this.isEntityPassenger(possibleTarget, EntityCockatrice.this)
 						|| EntityCockatrice.this.isAlliedTo(possibleTarget)
 						|| !EntityCockatrice.this.canAttackType(possibleTarget.getType())
 						|| !EntityCockatrice.this.canAttack(possibleTarget))

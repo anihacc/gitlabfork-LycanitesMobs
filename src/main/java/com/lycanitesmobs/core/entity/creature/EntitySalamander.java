@@ -114,7 +114,7 @@ public class EntitySalamander extends RideableCreatureEntity implements IMob {
             public boolean apply(LivingEntity possibleTarget) {
                 if(!possibleTarget.isAlive()
                         || possibleTarget == EntitySalamander.this
-                        || EntitySalamander.this.hasIndirectPassenger(possibleTarget)
+                        || EntitySalamander.this.isEntityPassenger(possibleTarget, EntitySalamander.this)
                         || EntitySalamander.this.isAlliedTo(possibleTarget)
                         || !EntitySalamander.this.canAttackType(possibleTarget.getType())
                         || !EntitySalamander.this.canAttack(possibleTarget))

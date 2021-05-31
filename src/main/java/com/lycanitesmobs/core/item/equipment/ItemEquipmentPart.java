@@ -13,8 +13,6 @@ import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.item.BaseItem;
 import com.lycanitesmobs.core.item.ChargeItem;
 import com.lycanitesmobs.core.item.equipment.features.EquipmentFeature;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -22,10 +20,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.text.*;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -140,7 +135,6 @@ public class ItemEquipmentPart extends BaseItem {
 	@Override
 	public void appendHoverText(ItemStack itemStack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag tooltipFlag) {
 		super.appendHoverText(itemStack, world, tooltip, tooltipFlag);
-		FontRenderer fontRenderer = Minecraft.getInstance().font;
 		for(ITextComponent description : this.getAdditionalDescriptions(itemStack, world, tooltipFlag)) {
 			tooltip.add(description);
 		}
@@ -148,7 +142,7 @@ public class ItemEquipmentPart extends BaseItem {
 
 	@Override
 	public ITextComponent getDescription(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-		return new TranslationTextComponent("item.lycanitesmobs.equipmentpart.description");
+		return new TranslationTextComponent("item.lycanitesmobs.equipmentpart.description").withStyle(TextFormatting.DARK_GREEN);
 	}
 
 	public List<ITextComponent> getAdditionalDescriptions(ItemStack itemStack, @Nullable World world, ITooltipFlag tooltipFlag) {
@@ -158,22 +152,16 @@ public class ItemEquipmentPart extends BaseItem {
 		int experienceMax = this.getExperienceForNextLevel(itemStack);
 
 		// Base Stats:
-		TextComponent baseFeature = (TextComponent) new TranslationTextComponent("equipment.slottype")
-				.append(" " + this.slotType)
-				.append("\n").append(new TranslationTextComponent("equipment.level"))
-				.append(" " + level + "/" + this.levelMax);
+		descriptions.add(new StringTextComponent("-------------------"));
+		descriptions.add(new TranslationTextComponent("equipment.slottype").append(" " + this.slotType).withStyle(TextFormatting.GOLD));
+		descriptions.add(new TranslationTextComponent("equipment.level").append(" " + level + "/" + this.levelMax).withStyle(TextFormatting.GOLD));
 		if(level < this.levelMax) {
-			baseFeature.append("\n").append(new TranslationTextComponent("entity.experience"))
-					.append(": " + experience + "/" + experienceMax);
+			descriptions.add(new TranslationTextComponent("entity.experience").append(": " + experience + "/" + experienceMax).withStyle(TextFormatting.GOLD));
 		}
-		descriptions.add(new StringTextComponent("-------------------\n"));
-		descriptions.add(baseFeature);
 		if(!this.elements.isEmpty()) {
-			ITextComponent elementFeature = new TranslationTextComponent("equipment.element")
-					.append(" ").append(this.getElementNames());
-			descriptions.add(elementFeature);
+			descriptions.add(new TranslationTextComponent("equipment.element").append(" ").append(this.getElementNames()).withStyle(TextFormatting.DARK_AQUA));
 		}
-		descriptions.add(new StringTextComponent("-------------------\n"));
+		descriptions.add(new StringTextComponent("-------------------"));
 
 
 		for(EquipmentFeature feature : this.features) {

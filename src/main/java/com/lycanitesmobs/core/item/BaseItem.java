@@ -69,7 +69,7 @@ public class BaseItem extends Item {
     }
 
     public ITextComponent getDescription(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flag) {
-    	return new TranslationTextComponent(this.getDescriptionId() + ".description").withStyle(style -> style.withColor(Color.fromLegacyFormat(TextFormatting.GREEN)));
+    	return new TranslationTextComponent(this.getDescriptionId() + ".description").withStyle(TextFormatting.GREEN);
     }
 	
     

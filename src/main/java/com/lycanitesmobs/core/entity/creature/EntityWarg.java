@@ -71,7 +71,7 @@ public class EntityWarg extends RideableCreatureEntity {
             List<LivingEntity> possibleTargets = this.getCommandSenderWorld().getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(distance, distance, distance), possibleTarget -> {
 				if (!possibleTarget.isAlive()
 						|| possibleTarget == EntityWarg.this
-						|| EntityWarg.this.hasIndirectPassenger(possibleTarget)
+						|| EntityWarg.this.isEntityPassenger(possibleTarget, EntityWarg.this)
 						|| EntityWarg.this.isAlliedTo(possibleTarget)
 						|| !EntityWarg.this.canAttackType(possibleTarget.getType())
 						|| !EntityWarg.this.canAttack(possibleTarget))

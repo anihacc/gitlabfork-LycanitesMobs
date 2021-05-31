@@ -10,9 +10,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.TallGrassBlock;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ThrowableEntity;
@@ -25,14 +23,13 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.*;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.fml.network.NetworkHooks;
+
+import javax.annotation.Nonnull;
 
 public class BaseProjectileEntity extends ThrowableEntity {
 	public String entityName = "projectile";
@@ -44,7 +41,7 @@ public class BaseProjectileEntity extends ThrowableEntity {
     public boolean movement = true;
 
     // Stats:
-	public float projectileScale = 1F;
+	protected float projectileScale = 1F;
 	public int projectileLife = 200;
 	public int damage = 1;
 	public int pierce = 1;
@@ -185,7 +182,11 @@ public class BaseProjectileEntity extends ThrowableEntity {
 
 	   // Sync Scale:
 	   if(this.getCommandSenderWorld().isClientSide) {
-		  this.projectileScale = this.entityData.get(SCALE);
+			float updatedScale = this.entityData.get(SCALE);
+			if (this.projectileScale != updatedScale) {
+				this.refreshDimensions();
+				this.projectileScale = updatedScale;
+			}
 	   }
 
 	   // Animation:
@@ -504,22 +505,34 @@ public class BaseProjectileEntity extends ThrowableEntity {
 	//				  Scale
 	// ==================================================
 	public void setProjectileScale(float scale) {
-		 this.projectileScale = scale;
-	    //this.getSize(Pose.STANDING).setSize(scale, scale); TODO Move to EntityType
+		this.projectileScale = scale;
 	    if(this.getCommandSenderWorld().isClientSide && !this.clientOnly)
 		   return;
-	    if(this.getOwner() != null && this.getOwner() instanceof BaseCreatureEntity)
-		   this.projectileScale *= ((BaseCreatureEntity)this.getOwner()).sizeScale;
-	    this.entityData.set(SCALE, this.projectileScale);
+	    if(this.getOwner() != null && this.getOwner() instanceof BaseCreatureEntity) {
+			this.projectileScale *= this.getOwner().getScale();
+		}
+	    this.entityData.set(SCALE, this.getProjectileScale());
+	    this.refreshDimensions();
 	}
-	
+
 	public float getProjectileScale() {
 	    return this.projectileScale;
 	}
 
-    public float getTextureOffsetY() {
-	   return 0;
-    }
+	@Override
+	@Nonnull
+	public EntitySize getDimensions(Pose pose) {
+		return this.getType().getDimensions().scale(this.getProjectileScale());
+	}
+
+	@Override
+	public AxisAlignedBB getBoundingBox() {
+		return super.getBoundingBox();
+	}
+
+	public float getTextureOffsetY() {
+		return 0;
+	}
 	
 	
 	// ==================================================

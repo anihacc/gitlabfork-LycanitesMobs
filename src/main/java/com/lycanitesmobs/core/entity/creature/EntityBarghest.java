@@ -73,7 +73,7 @@ public class EntityBarghest extends RideableCreatureEntity {
             List<LivingEntity> possibleTargets = this.getCommandSenderWorld().getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(distance, distance, distance), possibleTarget -> {
 				if (!possibleTarget.isAlive()
 						|| possibleTarget == EntityBarghest.this
-						|| EntityBarghest.this.hasIndirectPassenger(possibleTarget)
+						|| EntityBarghest.this.isEntityPassenger(possibleTarget, EntityBarghest.this)
 						|| EntityBarghest.this.isAlliedTo(possibleTarget)
 						|| !EntityBarghest.this.canAttackType(possibleTarget.getType())
 						|| !EntityBarghest.this.canAttack(possibleTarget))

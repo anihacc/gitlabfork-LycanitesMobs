@@ -13,9 +13,7 @@
 	"weight": 0,
 	"lifetime": 100,
 	"elements": [
-		"order",
-		"chaos",
-		"quake"
+		"arcane"
 	],
 	"behaviours": [
 		{

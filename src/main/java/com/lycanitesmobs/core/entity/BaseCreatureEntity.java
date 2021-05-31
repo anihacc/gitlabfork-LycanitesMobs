@@ -1322,20 +1322,26 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 			return SLEEPING_DIMENSIONS;
 		}
 		if(this.creatureSize == null) {
-			return super.getDimensions(pose);
+			this.creatureSize = this.getType().getDimensions();
 		}
-    	return this.creatureSize.scale(this.getScale() * (float)this.creatureInfo.sizeScale);
+    	return this.creatureSize.scale(this.getScale());
 	}
 
 	/** Sets the size scale of this creature. **/
 	public void setSizeScale(double scale) {
 		this.sizeScale = scale;
+		this.refreshDimensions();
 	}
 
-	/** Returns the model scale for rendering. **/
+	/** Returns the model scale. **/
 	@Override
 	public float getScale() {
 		return (float)this.sizeScale * (float)this.creatureInfo.sizeScale;
+	}
+
+	@Override
+	public AxisAlignedBB getBoundingBox() {
+		return super.getBoundingBox();
 	}
 
 	/** Returns the level of this mob, higher levels have higher stats. **/
@@ -1964,15 +1970,6 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
         if(!this.getCommandSenderWorld().isClientSide) {
             this.entityData.set(ARENA, this.getArenaCenter() != null ? Optional.of(this.getArenaCenter()) : Optional.empty());
         }
-    }
-
-    // ========== Get Collision Bounding Box ==========
-    @Override
-    public AxisAlignedBB getBoundingBox() {
-        if(this.solidCollision) { // TODO Figure out solid collision in 1.16.5+
-			return super.getBoundingBox();
-		}
-        return super.getBoundingBox();
     }
     
     

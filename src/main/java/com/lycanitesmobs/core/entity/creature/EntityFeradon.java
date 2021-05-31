@@ -72,7 +72,7 @@ public class EntityFeradon extends RideableCreatureEntity {
             List<LivingEntity> possibleTargets = this.getCommandSenderWorld().getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(distance, distance, distance), possibleTarget -> {
 				if (!possibleTarget.isAlive()
 						|| possibleTarget == EntityFeradon.this
-						|| EntityFeradon.this.hasIndirectPassenger(possibleTarget)
+						|| EntityFeradon.this.isEntityPassenger(possibleTarget, EntityFeradon.this)
 						|| EntityFeradon.this.isAlliedTo(possibleTarget)
 						|| !EntityFeradon.this.canAttackType(possibleTarget.getType())
 						|| !EntityFeradon.this.canAttack(possibleTarget))

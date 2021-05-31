@@ -112,7 +112,7 @@ public class EntityShade extends RideableCreatureEntity {
         List<LivingEntity> possibleTargets = this.getCommandSenderWorld().getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(distance, distance, distance), possibleTarget -> {
 			if(!possibleTarget.isAlive()
 					|| possibleTarget == EntityShade.this
-					|| EntityShade.this.hasIndirectPassenger(possibleTarget)
+					|| EntityShade.this.isEntityPassenger(possibleTarget, EntityShade.this)
 					|| EntityShade.this.isAlliedTo(possibleTarget)
 					|| !EntityShade.this.canAttackType(possibleTarget.getType())
 					|| !EntityShade.this.canAttack(possibleTarget))

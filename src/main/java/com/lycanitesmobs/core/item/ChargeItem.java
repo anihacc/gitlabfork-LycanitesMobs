@@ -61,21 +61,19 @@ public class ChargeItem extends BaseItem {
 
     @Override
     public ITextComponent getDescription(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        return new TranslationTextComponent("item.lycanitesmobs.charge.description").withStyle(style -> style.withColor(Color.fromLegacyFormat(TextFormatting.GREEN)));
+        return new TranslationTextComponent("item.lycanitesmobs.charge.description").withStyle(TextFormatting.GREEN);
     }
 
     public List<ITextComponent> getAdditionalDescriptions(ItemStack itemStack, @Nullable World world, ITooltipFlag tooltipFlag) {
         List<ITextComponent> descriptions = new ArrayList<>();
 
-        if(!this.getElements().isEmpty()) {
-            ITextComponent elements = new TranslationTextComponent("item.lycanitesmobs.charge.elements").withStyle(style -> style.withColor(Color.fromLegacyFormat(TextFormatting.GREEN)))
-                    .append(" ").append(this.getElementNames());
-            descriptions.add(elements);
-        }
+        descriptions.add(new TranslationTextComponent("item.lycanitesmobs.charge.projectile").withStyle(TextFormatting.GOLD)
+                .append(" ").append(this.getProjectileName()));
 
-        ITextComponent projectile = new TranslationTextComponent("item.lycanitesmobs.charge.projectile").withStyle(style -> style.withColor(Color.fromLegacyFormat(TextFormatting.GREEN)))
-                .append(" ").append(this.getProjectileName());
-        descriptions.add(projectile);
+        if(!this.getElements().isEmpty()) {
+            descriptions.add(new TranslationTextComponent("item.lycanitesmobs.charge.elements").withStyle(TextFormatting.DARK_AQUA)
+                    .append(" ").append(this.getElementNames()));
+        }
 
         return descriptions;
     }

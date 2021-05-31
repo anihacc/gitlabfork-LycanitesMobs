@@ -37,6 +37,6 @@ public class BlockFluidBase extends FlowingFluidBlock {
     }
 
     public ITextComponent getDescription(ItemStack itemStack, @Nullable IBlockReader world) {
-        return new TranslationTextComponent("block." + this.blockName + ".description").withStyle(style -> style.withColor(Color.fromLegacyFormat(TextFormatting.GREEN)));
+        return new TranslationTextComponent("block." + this.blockName + ".description").withStyle(TextFormatting.GREEN);
     }
 }

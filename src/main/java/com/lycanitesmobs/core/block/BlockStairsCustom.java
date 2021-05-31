@@ -36,6 +36,6 @@ public class BlockStairsCustom extends StairsBlock {
 	}
 
 	public ITextComponent getDescription(ItemStack itemStack, @Nullable IBlockReader world) {
-		return new TranslationTextComponent(this.getDescriptionId() + ".description").withStyle(style -> style.withColor(Color.fromLegacyFormat(TextFormatting.GREEN)));
+		return new TranslationTextComponent(this.getDescriptionId() + ".description").withStyle(TextFormatting.GREEN);
 	}
 }

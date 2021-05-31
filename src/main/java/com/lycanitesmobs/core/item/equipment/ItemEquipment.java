@@ -29,10 +29,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.text.*;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -85,26 +82,21 @@ public class ItemEquipment extends BaseItem {
 			if(equipmentPart == null)
 				continue;
 			int partLevel = equipmentPart.getPartLevel(equipmentPartStack);
-			descriptions.add(equipmentPart.getName(itemStack));
+			descriptions.add(equipmentPart.getName(itemStack).plainCopy().withStyle(TextFormatting.DARK_GREEN));
 		}
-		descriptions.add(new StringTextComponent("-------------------\n"));
+		descriptions.add(new StringTextComponent("-------------------"));
 
 		// Damage:
-		TextComponent damageDescription = (TextComponent) new TranslationTextComponent("equipment.feature.damage")
-				.append(" " + String.format("%.0f", this.getDamageAmount(itemStack) + 1));
-		damageDescription.append("\n")
-				.append(new TranslationTextComponent("equipment.feature.damage.cooldown"))
-				.append(" " + String.format("%.1f", this.getDamageCooldown(itemStack)));
-		damageDescription.append("\n")
-				.append(new TranslationTextComponent("equipment.feature.damage.knockback"))
-				.append(" " + String.format("%.0f", this.getDamageKnockback(itemStack)));
-		damageDescription.append("\n")
-				.append(new TranslationTextComponent("equipment.feature.damage.range"))
-				.append(" " + String.format("%.1f", this.getDamageRange(itemStack)));
-		damageDescription.append("\n")
-				.append(new TranslationTextComponent("equipment.feature.damage.sweep"))
-				.append(" " + String.format("%.0f", Math.min(this.getDamageSweep(itemStack), 360)));
-		descriptions.add(damageDescription);
+		descriptions.add(new TranslationTextComponent("equipment.feature.damage")
+				.append(" " + String.format("%.0f", this.getDamageAmount(itemStack) + 1)).withStyle(TextFormatting.GOLD));
+		descriptions.add(new TranslationTextComponent("equipment.feature.damage.cooldown")
+				.append(" " + String.format("%.1f", this.getDamageCooldown(itemStack))).withStyle(TextFormatting.GOLD));
+		descriptions.add(new TranslationTextComponent("equipment.feature.damage.knockback")
+				.append(" " + String.format("%.0f", this.getDamageKnockback(itemStack))).withStyle(TextFormatting.GOLD));
+		descriptions.add(new TranslationTextComponent("equipment.feature.damage.range")
+				.append(" " + String.format("%.1f", this.getDamageRange(itemStack))).withStyle(TextFormatting.GOLD));
+		descriptions.add(new TranslationTextComponent("equipment.feature.damage.sweep")
+				.append(" " + String.format("%.0f", Math.min(this.getDamageSweep(itemStack), 360))).withStyle(TextFormatting.GOLD));
 
 		// Summaries:
 		ITextComponent harvestSummaries = this.getFeatureSummaries(itemStack, "harvest");
@@ -112,30 +104,30 @@ public class ItemEquipment extends BaseItem {
 		ITextComponent projectileSummaries = this.getFeatureSummaries(itemStack, "projectile");
 		ITextComponent summonSummaries = this.getFeatureSummaries(itemStack, "summon");
 		if(!"".equals(harvestSummaries.getString()) || !"".equals(effectSummaries.getString()) || !"".equals(projectileSummaries.getString()) || !"".equals(summonSummaries.getString())) {
-			descriptions.add(new StringTextComponent("-------------------\n"));
+			descriptions.add(new StringTextComponent("-------------------"));
 
 			// Harvest:
 			if (!"".equals(harvestSummaries.getString())) {
 				descriptions.add(new TranslationTextComponent("equipment.feature.harvest")
-						.append(" ").append(harvestSummaries));
+						.append(" ").append(harvestSummaries).withStyle(TextFormatting.DARK_PURPLE));
 			}
 
 			// Effect:
 			if (!"".equals(effectSummaries.getString())) {
 				descriptions.add(new TranslationTextComponent("equipment.feature.effect")
-						.append(" ").append(effectSummaries));
+						.append(" ").append(effectSummaries).withStyle(TextFormatting.DARK_PURPLE));
 			}
 
 			// Projectile:
 			if (!"".equals(projectileSummaries.getString())) {
 				descriptions.add(new TranslationTextComponent("equipment.feature.projectile")
-						.append(" ").append(projectileSummaries));
+						.append(" ").append(projectileSummaries).withStyle(TextFormatting.DARK_PURPLE));
 			}
 
 			// Summon:
 			if (!"".equals(summonSummaries.getString())) {
 				descriptions.add(new TranslationTextComponent("equipment.feature.summon")
-						.append(" ").append(summonSummaries));
+						.append(" ").append(summonSummaries).withStyle(TextFormatting.DARK_PURPLE));
 			}
 		}
 

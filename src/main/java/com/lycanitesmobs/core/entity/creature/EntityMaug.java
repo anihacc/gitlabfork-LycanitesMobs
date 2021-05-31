@@ -76,7 +76,7 @@ public class EntityMaug extends RideableCreatureEntity {
                 public boolean apply(LivingEntity possibleTarget) {
                     if (!possibleTarget.isAlive()
                             || possibleTarget == EntityMaug.this
-                            || EntityMaug.this.hasIndirectPassenger(possibleTarget)
+                            || EntityMaug.this.isEntityPassenger(possibleTarget, EntityMaug.this)
                             || EntityMaug.this.isAlliedTo(possibleTarget)
                             || !EntityMaug.this.canAttackType(possibleTarget.getType())
                             || !EntityMaug.this.canAttack(possibleTarget))

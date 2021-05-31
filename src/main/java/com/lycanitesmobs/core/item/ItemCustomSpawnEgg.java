@@ -86,7 +86,7 @@ public class ItemCustomSpawnEgg extends BaseItem {
 			LycanitesMobs.logWarning("Mob Spawn Egg", "Unable to get Creature Info for id: " + creatureName);
 			return new StringTextComponent("Unable to get Creature Info for id: '" + creatureName + "' this spawn egg may have been created by a give command without NBT data.");
 		}
-		return creatureInfo.getDescription().plainCopy().withStyle(style -> style.withColor(Color.fromLegacyFormat(TextFormatting.GREEN)));
+		return creatureInfo.getDescription().plainCopy().withStyle(TextFormatting.GREEN);
     }
 
 
