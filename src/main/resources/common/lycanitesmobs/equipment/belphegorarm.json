@@ -11,6 +11,14 @@
 	],
 	"features": [
 		{
+			"featureType": "slot",
+			"slotType": "head"
+		},
+		{
+			"featureType": "slot",
+			"slotType": "pommel"
+		},
+		{
 			"featureType": "projectile",
 			"levelMax": 1,
 			"projectileName": "doomfire",
