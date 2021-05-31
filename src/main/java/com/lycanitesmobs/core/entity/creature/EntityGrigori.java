@@ -6,6 +6,7 @@ import com.lycanitesmobs.core.entity.goals.targeting.CopyMasterAttackTargetGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.FindMasterGoal;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.world.World;
 
@@ -31,14 +32,19 @@ public class EntityGrigori extends TameableCreatureEntity implements IMob {
     }
 
 	@Override
+	public boolean canAttack(LivingEntity target) {
+		if(target.getVehicle() instanceof EntityGrell)
+			return false;
+		return super.canAttack(target);
+	}
+
+	@Override
 	public boolean rollWanderChance() {
 		return this.getRandom().nextDouble() <= 0.25D;
 	}
 	
 	public boolean isFlying() { return true; }
-    // ==================================================
-    //                     Equipment
-    // ==================================================
+
     @Override
     public int getNoBagSize() { return 0; }
     @Override
