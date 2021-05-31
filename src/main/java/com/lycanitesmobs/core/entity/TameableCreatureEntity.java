@@ -911,6 +911,7 @@ public abstract class TameableCreatureEntity extends AgeableCreatureEntity {
 	// ============================================
 	//                   Minions
 	// ============================================
+	@Override
 	public void summonMinion(LivingEntity minion, double angle, double distance) {
 		if(this.getPlayerOwner() != null && minion instanceof TameableCreatureEntity) {
 			((TameableCreatureEntity)minion).setPlayerOwner(this.getPlayerOwner());

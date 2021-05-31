@@ -29,10 +29,7 @@ public class EntityBehemophet extends TameableCreatureEntity implements IMob {
 
     public int hellfireEnergy = 0;
     public List<EntityHellfireOrb> hellfireOrbs = new ArrayList<>();
-    
-    // ==================================================
- 	//                    Constructor
- 	// ==================================================
+
     public EntityBehemophet(EntityType<? extends EntityBehemophet> entityType, World world) {
         super(entityType, world);
         
@@ -42,26 +39,19 @@ public class EntityBehemophet extends TameableCreatureEntity implements IMob {
         this.setupMob();
     }
 
-    // ========== Init AI ==========
     @Override
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackRangedGoal(this).setSpeed(1.0D).setRange(16.0F).setMinChaseDistance(8.0F).setChaseTime(-1));
     }
 
-    // ========== Init ==========
     /** Initiates the entity setting all the values to be watched by the datawatcher. **/
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(HELLFIRE_ENERGY, this.hellfireEnergy);
     }
-	
-	
-    // ==================================================
-    //                      Updates
-    // ==================================================
-	// ========== Living Update ==========
+
 	@Override
     public void aiStep() {
         super.aiStep();
@@ -102,49 +92,30 @@ public class EntityBehemophet extends TameableCreatureEntity implements IMob {
             }
         }
     }
-	
-	
-	// ==================================================
-    //                      Attacks
-    // ==================================================
-    // ========== Set Attack Target ==========
+
     @Override
     public boolean canAttack(LivingEntity target) {
         if(target instanceof EntityBelphegor)
             return false;
         return super.canAttack(target);
     }
-    
-    // ========== Ranged Attack ==========
+
     @Override
     public void attackRanged(Entity target, float range) {
         this.fireProjectile("hellfireball", target, range, 0, new Vector3d(0, 0, 0), 1.2f, 2f, 1F);
         super.attackRanged(target, range);
     }
-    
-    
-    // ==================================================
-    //                     Immunities
-    // ==================================================
+
     @Override
     public boolean canBurn() { return false; }
-    
-    
-    // ==================================================
-    //                     Pet Control
-    // ==================================================
+
     public boolean petControlsEnabled() { return true; }
 
-    // ==================================================
-    //                     Equipment
-    // ==================================================
     @Override
     public int getNoBagSize() { return 0; }
     @Override
     public int getBagSize() { return this.creatureInfo.BagSize; }
-    // ==================================================
-    //                       Visuals
-    // ==================================================
+
     /** Returns this creature's main texture. Also checks for for subspecies. **/
     public ResourceLocation getTexture() {
         if(!this.hasCustomName() || !"Krampus".equals(this.getCustomName().getString()))

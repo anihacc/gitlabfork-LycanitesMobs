@@ -19,6 +19,7 @@ public class ModelVorach extends ModelTemplateBiped {
 
         this.trophyScale = 1.2F;
         this.trophyOffset = new float[] {0.0F, 0.0F, -0.4F};
+        this.walkSwing = 0.3F;
     }
 
     @Override
@@ -28,7 +29,7 @@ public class ModelVorach extends ModelTemplateBiped {
         // Walking:
         if(entity == null || entity.isOnGround() || entity.isInWater()) {
             if(partName.equals("legback"))
-                this.rotate((float)Math.toDegrees(MathHelper.cos(time * 0.4F + (float)Math.PI) * 1.4F * distance), 0, 0);
+                this.rotate((float)Math.toDegrees(MathHelper.cos(time * 0.4F - (float)Math.PI) * 1.4F * distance), 0, 0);
         }
     }
 }

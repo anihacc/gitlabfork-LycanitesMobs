@@ -1,5 +1,6 @@
 package com.lycanitesmobs.core.entity.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import net.minecraft.entity.CreatureAttribute;
@@ -10,7 +11,7 @@ import net.minecraft.world.World;
 
 public class EntityVorach extends TameableCreatureEntity implements IMob {
 
-	public EntityVorach(EntityType<? extends EntityBehemophet> entityType, World world) {
+	public EntityVorach(EntityType<? extends EntityVorach> entityType, World world) {
 		super(entityType, world);
 		this.attribute = CreatureAttribute.UNDEAD;
 		this.hasAttackSound = true;
@@ -39,13 +40,22 @@ public class EntityVorach extends TameableCreatureEntity implements IMob {
 	}
 
 	@Override
+	public float getAISpeedModifier() {
+		if (this.hasAttackTarget() && this.distanceToSqr(this.getTarget()) >= 60) {
+			if (this.isLookingAtMe(this.getTarget())) {
+				return 0;
+			}
+			return super.getAISpeedModifier() * 5;
+		}
+		return super.getAISpeedModifier();
+	}
+
+	@Override
 	public boolean canClimb() { return true; }
 
 	@Override
 	public boolean canBurn() { return false; }
-	// ==================================================
-	//                     Equipment
-	// ==================================================
+
 	@Override
 	public int getNoBagSize() { return 0; }
 	@Override

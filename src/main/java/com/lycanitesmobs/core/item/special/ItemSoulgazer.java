@@ -10,21 +10,13 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 
 public class ItemSoulgazer extends BaseItem {
-	
-	// ==================================================
-	//                   Constructor
-	// ==================================================
+
     public ItemSoulgazer(Item.Properties properties) {
         super(properties);
 		this.itemName = "soulgazer";
 		this.setup();
     }
-    
-    
-	// ==================================================
-	//                       Use
-	// ==================================================
-	// ========== Entity Interaction ==========
+
 	@Override
 	public ActionResultType interactLivingEntity(ItemStack stack, PlayerEntity player, LivingEntity entity, Hand hand) {
     	ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
@@ -33,6 +25,11 @@ public class ItemSoulgazer extends BaseItem {
 
     	return playerExt.beastiary.discoverCreature(entity, 2, true) ? ActionResultType.SUCCESS : ActionResultType.FAIL;
     }
+
+    @Override
+	public boolean hasContainerItem(ItemStack itemStack) {
+    	return true;
+	}
 
     @Override
 	public ItemStack getContainerItem(ItemStack itemStack) {

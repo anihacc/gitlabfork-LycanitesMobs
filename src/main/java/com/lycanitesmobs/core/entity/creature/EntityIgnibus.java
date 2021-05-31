@@ -21,13 +21,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EntityIgnibus extends RideableCreatureEntity implements IGroupHeavy {
-
     protected boolean wantsToLand;
     protected boolean  isLanded;
 
-    // ==================================================
- 	//                    Constructor
- 	// ==================================================
     public EntityIgnibus(EntityType<? extends EntityIgnibus> entityType, World world) {
         super(entityType, world);
         
@@ -46,18 +42,12 @@ public class EntityIgnibus extends RideableCreatureEntity implements IGroupHeavy
         this.hitAreaWidthScale = 1.5F;
     }
 
-    // ========== Init AI ==========
     @Override
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackRangedGoal(this).setSpeed(0.75D).setStaminaTime(100).setRange(20.0F).setMinChaseDistance(10.0F));
     }
 
-
-    // ==================================================
-    //                      Updates
-    // ==================================================
-    // ========== Living Update ==========
     @Override
     public void aiStep() {
         super.aiStep();
@@ -108,11 +98,6 @@ public class EntityIgnibus extends RideableCreatureEntity implements IGroupHeavy
         super.riderEffects(rider);
     }
 
-
-    // ==================================================
-    //                      Movement
-    // ==================================================
-    // ========== Get Wander Position ==========
     @Override
     public BlockPos getWanderPosition(BlockPos wanderPosition) {
         if(this.wantsToLand || !this.isLanded) {
@@ -125,7 +110,7 @@ public class EntityIgnibus extends RideableCreatureEntity implements IGroupHeavy
         return super.getWanderPosition(wanderPosition);
     }
 
-    // ========== Get Flight Offset ==========
+
     @Override
     public double getFlightOffset() {
         if(!this.wantsToLand) {
@@ -133,38 +118,20 @@ public class EntityIgnibus extends RideableCreatureEntity implements IGroupHeavy
         }
         return 0;
     }
-	
-	
-	// ==================================================
-  	//                     Abilities
-  	// ==================================================
+
     @Override
     public boolean isFlying() { return !this.isLanded; }
 
     @Override
     public boolean isStrongSwimmer() { return false; }
-    
-    
-    // ==================================================
-    //                     Pet Control
-    // ==================================================
+
     public boolean petControlsEnabled() { return true; }
 
-
-    // ==================================================
-    //                     Equipment
-    // ==================================================
     @Override
     public int getNoBagSize() { return 0; }
     @Override
     public int getBagSize() { return this.creatureInfo.BagSize; }
-	
-	
-	// ==================================================
-   	//                      Attacks
-   	// ==================================================
 
-    // ========== Ranged Attack ==========
     @Override
     public void attackRanged(Entity target, float range) {
         // Type:
@@ -185,10 +152,6 @@ public class EntityIgnibus extends RideableCreatureEntity implements IGroupHeavy
         super.attackRanged(target, range);
     }
 
-
-    // ==================================================
-    //                     Immunities
-    // ==================================================
     @Override
     public boolean canBurn() { return false; }
 
@@ -202,11 +165,6 @@ public class EntityIgnibus extends RideableCreatureEntity implements IGroupHeavy
         return 100;
     }
 
-
-    // ==================================================
-    //                    Taking Damage
-    // ==================================================
-    // ========== Damage Modifier ==========
     @Override
     public float getDamageModifier(DamageSource damageSrc) {
         if(damageSrc.isFire())
@@ -214,10 +172,6 @@ public class EntityIgnibus extends RideableCreatureEntity implements IGroupHeavy
         else return super.getDamageModifier(damageSrc);
     }
 
-
-    // ==================================================
-    //                      Movement
-    // ==================================================
     @Override
     public double getPassengersRidingOffset() {
         if(this.onGround) {
@@ -226,10 +180,6 @@ public class EntityIgnibus extends RideableCreatureEntity implements IGroupHeavy
         return (double)this.getDimensions(Pose.STANDING).height * 0.54D;
     }
 
-
-    // ==================================================
-    //                   Mount Ability
-    // ==================================================
     @Override
     public void mountAbility(Entity rider) {
         if(this.getCommandSenderWorld().isClientSide)
@@ -321,10 +271,6 @@ public class EntityIgnibus extends RideableCreatureEntity implements IGroupHeavy
         return 1.0F;
     }
 
-
-    // ==================================================
-    //                   Brightness
-    // ==================================================
     @Override
     public float getBrightness() {
         if(isAttackOnCooldown())
