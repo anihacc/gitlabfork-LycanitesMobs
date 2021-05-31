@@ -887,7 +887,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		double radius = this.creatureInfo.width;
 		double height = this.creatureInfo.height;
 		AxisAlignedBB spawnBoundries = new AxisAlignedBB(pos.getX() - radius, pos.getY(), pos.getZ() - radius, pos.getX() + radius, pos.getY() + height, pos.getZ() + radius);
-		if(!this.spawnsInBlock && !this.getCommandSenderWorld().isUnobstructed(this, VoxelShapes.create(spawnBoundries))) {
+		if(!this.spawnsInBlock && !world.noCollision(spawnBoundries)) {
 			return false;
 		}
 		return true;
