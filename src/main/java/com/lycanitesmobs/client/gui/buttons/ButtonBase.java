@@ -1,5 +1,6 @@
 package com.lycanitesmobs.client.gui.buttons;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.gui.DrawHelper;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;

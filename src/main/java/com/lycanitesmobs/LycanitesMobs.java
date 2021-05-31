@@ -108,7 +108,6 @@ public class LycanitesMobs {
 		modEventBus.register(WorldGenManager.getInstance());
 //		modEventBus.register(StatManager.getInstance()); TODO Stats
 		PROXY.registerEvents();
-//		ItemManager.FLUIDS.register(modEventBus); // TODO Fluids
 
 		// Game Event Listeners:
 		MinecraftForge.EVENT_BUS.register(this);
@@ -164,6 +163,9 @@ public class LycanitesMobs {
 		// Treat Lists:
 		ItemHalloweenTreat.createObjectLists();
 		ItemWinterGift.createObjectLists();
+
+		// World Gen:
+		WorldGenManager.getInstance().startup();
 	}
 
 	private void commonSetup(final FMLCommonSetupEvent event) {
@@ -193,8 +195,8 @@ public class LycanitesMobs {
 	}
 
 	@SubscribeEvent
-	public void serverStarting(FMLServerStartingEvent event) {
-		// TODO New Commands
+	public void serverStarting(final FMLServerStartingEvent event) {
+
 	}
 
 	public void loadConfigs() {

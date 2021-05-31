@@ -10,7 +10,6 @@ import com.lycanitesmobs.core.block.*;
 import com.lycanitesmobs.core.block.building.HiveBlock;
 import com.lycanitesmobs.core.block.effect.*;
 import com.lycanitesmobs.core.block.fluid.*;
-import com.lycanitesmobs.core.block.CustomFluid;
 import com.lycanitesmobs.core.item.*;
 import com.lycanitesmobs.core.item.consumable.*;
 import com.lycanitesmobs.core.item.equipment.ItemEquipment;
@@ -47,6 +46,9 @@ public class ItemManager extends JSONLoader {
 
 	/** A list of blocks that need to use the cutout renderer. **/
 	public List<Block> cutoutBlocks = new ArrayList<>();
+
+	/** A list of fluids blocks for reference (the worldgen manager uses this to automatically create lakes, etc). **/
+	public Map<String, BaseFluidBlock> worldgenFluidBlocks = new HashMap<>();
 
 	/** A list of mod groups that have loaded with this manager. **/
 	public List<ModInfo> loadedGroups = new ArrayList<>();
@@ -212,18 +214,18 @@ public class ItemManager extends JSONLoader {
 		Block.Properties waterBlockProperties = Block.Properties.of(Material.WATER).noCollission().strength(100).noDrops();
 		Block.Properties waterBrightBlockProperties = Block.Properties.of(Material.WATER).noCollission().strength(100).noDrops().lightLevel((BlockState blockState) -> { return 10; });
 		Block.Properties lavaBlockProperties = Block.Properties.of(Material.LAVA).noCollission().strength(100).noDrops().lightLevel((BlockState blockState) -> { return 15; });
-		this.addFluid("ooze", 0x009F9F, 3000, 3000, 0, 10, false, OozeFluidBlock.class, waterBrightBlockProperties, "frost");
-		this.addFluid("rabbitooze", 0x00AFAF, 3000, 3000, 0, 10, true, OozeFluidBlock.class, waterBrightBlockProperties, "frost");
-		this.addFluid("moglava", 0xFF5722, 3000, 5000, 1100, 15, true, MoglavaFluidBlock.class, lavaBlockProperties, "lava");
-		this.addFluid("acid", 0x8BC34A, 1000, 10, 40, 10, false, AcidFluidBlock.class, waterBrightBlockProperties, "acid");
-		this.addFluid("sharacid", 0x8BB35A, 1000, 10, 40, 10, true, AcidFluidBlock.class, waterBrightBlockProperties, "acid");
-		this.addFluid("poison", 0x9C27B0, 1000, 8, 20, 0, false, PoisonFluidBlock.class, waterBlockProperties, "poison");
-		this.addFluid("vesspoison", 0xAC27A0, 1000, 8, 20, 0, true, PoisonFluidBlock.class, waterBlockProperties, "poison");
+		this.addFluid("ooze", 0x009F9F, 3000, 3000, 0, 10, false, OozeFluidBlock.class, waterBrightBlockProperties, "frost", true);
+		this.addFluid("rabbitooze", 0x00AFAF, 3000, 3000, 0, 10, true, OozeFluidBlock.class, waterBrightBlockProperties, "frost", false);
+		this.addFluid("moglava", 0xFF5722, 3000, 5000, 1100, 15, true, MoglavaFluidBlock.class, lavaBlockProperties, "lava", true);
+		this.addFluid("acid", 0x8BC34A, 1000, 10, 40, 10, false, AcidFluidBlock.class, waterBrightBlockProperties, "acid", true);
+		this.addFluid("sharacid", 0x8BB35A, 1000, 10, 40, 10, true, AcidFluidBlock.class, waterBrightBlockProperties, "acid", false);
+		this.addFluid("poison", 0x9C27B0, 1000, 8, 20, 0, false, PoisonFluidBlock.class, waterBlockProperties, "poison", true);
+		this.addFluid("vesspoison", 0xAC27A0, 1000, 8, 20, 0, true, PoisonFluidBlock.class, waterBlockProperties, "poison", false);
 		ObjectManager.addDamageSource("ooze", new DamageSource("ooze"));
 		ObjectManager.addDamageSource("acid", new DamageSource("acid"));
 	}
 
-	public void addFluid(String fluidName, int fluidColor, int density, int viscosity, int temperature, int luminosity, boolean multiply, Class<? extends BaseFluidBlock> blockClass, AbstractBlock.Properties blockProperties, String elementName) {
+	public void addFluid(String fluidName, int fluidColor, int density, int viscosity, int temperature, int luminosity, boolean multiply, Class<? extends BaseFluidBlock> blockClass, AbstractBlock.Properties blockProperties, String elementName, boolean worldgen) {
 		ElementInfo element = ElementManager.getInstance().getElement(elementName);
 		Supplier<ForgeFlowingFluid> stillFluidSupplier = () -> ObjectManager.getFluid(fluidName + "_still");
 		Supplier<ForgeFlowingFluid> flowingFluidSupplier = () -> ObjectManager.getFluid(fluidName + "_flowing");
@@ -250,7 +252,11 @@ public class ItemManager extends JSONLoader {
 
 		try {
 			Constructor<? extends BaseFluidBlock> blockConstructor = blockClass.getDeclaredConstructor(Supplier.class, AbstractBlock.Properties.class, String.class, ElementInfo.class);
-			ObjectManager.addBlock(fluidName, blockConstructor.newInstance(stillFluidSupplier, blockProperties, fluidName, element));
+			BaseFluidBlock fluidBlock = blockConstructor.newInstance(stillFluidSupplier, blockProperties, fluidName, element);
+			ObjectManager.addBlock(fluidName, fluidBlock);
+			if (worldgen) {
+				this.worldgenFluidBlocks.put(fluidName, fluidBlock);
+			}
 		} catch (NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
 			throw new RuntimeException(e);
 		}
