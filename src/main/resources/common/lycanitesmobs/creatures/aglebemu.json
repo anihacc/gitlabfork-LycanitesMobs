@@ -75,7 +75,8 @@
     "diets": [
         "carnivore",
         "piscivore",
-        "insectivore"
+        "insectivore",
+        "venevore"
     ],
     "peaceful": false,
     "summonable": true,
