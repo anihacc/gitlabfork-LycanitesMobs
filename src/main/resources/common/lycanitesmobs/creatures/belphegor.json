@@ -20,8 +20,9 @@
         ],
         "dimensionListType": "whitelist",
         "ignoreBiome": false,
-        "biomeTags": [
-            "nether"
+        "biomeIds": [
+            "minecraft:nether_wastes",
+            "minecraft:soul_sand_valley"
         ],
         "spawnWeight": 8,
         "dungeonWeight": 200,

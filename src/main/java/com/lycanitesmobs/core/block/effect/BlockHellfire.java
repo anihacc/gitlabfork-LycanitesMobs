@@ -73,7 +73,7 @@ public class BlockHellfire extends BlockFireBase {
     public boolean isBlockFireSource(BlockState state, IWorldReader world, BlockPos pos, Direction side) {
         if(state.getBlock() == Blocks.OBSIDIAN)
             return true;
-        return super.isBlockFireSource(state, world, pos, side);
+        return false;
     }
 
     @Override

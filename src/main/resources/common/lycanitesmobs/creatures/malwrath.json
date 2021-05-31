@@ -20,8 +20,9 @@
         ],
         "dimensionListType": "whitelist",
         "ignoreBiome": false,
-        "biomeTags": [
-            "nether"
+        "biomeIds": [
+            "minecraft:nether_wastes",
+            "minecraft:basalt_deltas"
         ],
         "spawnWeight": 4,
         "dungeonWeight": 200,

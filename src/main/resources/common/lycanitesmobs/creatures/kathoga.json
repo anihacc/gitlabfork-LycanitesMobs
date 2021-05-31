@@ -23,8 +23,11 @@
         "dimensionListType": "whitelist",
         "ignoreBiome": false,
         "biomeTags": [
-            "nether",
             "end"
+        ],
+        "biomeIds": [
+            "minecraft:nether_wastes",
+            "minecraft:crimson_forest"
         ],
         "spawnWeight": 6,
         "dungeonWeight": 200,

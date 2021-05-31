@@ -8,10 +8,12 @@ import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.util.RegistryKey;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.ForgeRegistry;
 
@@ -24,7 +26,7 @@ public class DebugCommand {
 				.then(Commands.literal("log").then(Commands.argument("category", StringArgumentType.string()).executes(DebugCommand::log)))
 				.then(Commands.literal("list").executes(DebugCommand::list))
 				.then(Commands.literal("biomesfromtag").then(Commands.argument("biometag", StringArgumentType.string()).executes(DebugCommand::biomesfromtag)))
-				.then(Commands.literal("listbiometags").executes(DebugCommand::listbiometags))
+				.then(Commands.literal("listbiometags").executes(DebugCommand::listbiometags).then(Commands.argument("biome", StringArgumentType.string()).executes(DebugCommand::listbiometagsforbiome)))
 				.then(Commands.literal("overlay").executes(DebugCommand::overlay));
 	}
 
@@ -77,6 +79,28 @@ public class DebugCommand {
 	public static int listbiometags(final CommandContext<CommandSource> context) {
 		for(BiomeDictionary.Type biomeType : BiomeDictionary.Type.getAll()) {
 			context.getSource().sendSuccess(new StringTextComponent(biomeType.getName()), true);
+		}
+		return 0;
+	}
+
+	public static int listbiometagsforbiome(final CommandContext<CommandSource> context) {
+		String biomeId = StringArgumentType.getString(context, "biome");
+		ResourceLocation biomeResourceLocation = new ResourceLocation(biomeId);
+		Biome biome = GameRegistry.findRegistry(Biome.class).getValue(biomeResourceLocation);
+		if (biome == null) {
+			context.getSource().sendSuccess(new StringTextComponent("Cannot find a biome with that id."), true);
+			return 0;
+		}
+		for (BiomeDictionary.Type biomeType : BiomeDictionary.Type.getAll()) {
+			for(RegistryKey<Biome> biomeKey : BiomeDictionary.getBiomes(biomeType)) {
+				if (biomeKey.location().toString().equals(biomeId)) {
+					context.getSource().sendSuccess(new StringTextComponent("Tags for: " + biomeId), true);
+					for (BiomeDictionary.Type matchedBiomeType : BiomeDictionary.getTypes(biomeKey)) {
+						context.getSource().sendSuccess(new StringTextComponent(matchedBiomeType.getName()), true);
+					}
+					return 0;
+				}
+			}
 		}
 		return 0;
 	}

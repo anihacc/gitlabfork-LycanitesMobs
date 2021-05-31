@@ -11,9 +11,8 @@
 	"spawning": {
 		"enabled": true,
 		"spawners": [
-			"land",
-			"portal", 
-			"nether"
+			"land_deadly",
+			"portal"
 		],
 		"disableSubspecies": false,
         "dimensionIds": [
@@ -23,8 +22,11 @@
 		"dimensionListType": "whitelist",
 		"ignoreBiome": false,
 		"biomeTags": [
-			"nether", 
 			"end"
+		],
+		"biomeIds": [
+			"minecraft:warped_forest",
+			"minecraft:basalt_deltas"
 		],
 		"spawnWeight": 8,
 		"dungeonWeight": 200,

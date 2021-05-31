@@ -20,8 +20,8 @@
         ],
         "dimensionListType": "whitelist",
         "ignoreBiome": false,
-        "biomeTags": [
-            "nether"
+        "biomeIds": [
+            "minecraft:crimson_forest"
         ],
         "spawnWeight": 4,
         "dungeonWeight": 200,

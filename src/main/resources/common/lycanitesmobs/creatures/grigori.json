@@ -21,7 +21,9 @@
         ],
         "dimensionListType": "whitelist",
         "ignoreBiome": false,
-        "biomeTags": [],
+        "biomeIds": [
+            "minecraft:crimson_forest"
+        ],
         "spawnWeight": 8,
         "dungeonWeight": 200,
         "spawnAreaLimit": 8,

@@ -19,7 +19,10 @@
         ],
         "dimensionListType": "whitelist",
         "ignoreBiome": false,
-        "biomeTags": [],
+        "biomeTags": [
+            "all",
+            "-forest"
+        ],
         "spawnWeight": 8,
         "dungeonWeight": 200,
         "spawnAreaLimit": 5,

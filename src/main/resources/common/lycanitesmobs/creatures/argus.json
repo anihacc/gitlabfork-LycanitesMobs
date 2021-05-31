@@ -20,6 +20,9 @@
         "biomeTags": [
             "end"
         ],
+        "biomeIds": [
+            "minecraft:warped_forest"
+        ],
         "spawnWeight": 4,
         "dungeonWeight": 200,
         "spawnAreaLimit": 5,

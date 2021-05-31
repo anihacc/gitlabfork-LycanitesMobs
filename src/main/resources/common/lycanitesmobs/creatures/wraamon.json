@@ -17,10 +17,13 @@
         "disableSubspecies": false,
         "dimensionIds": [],
         "dimensionListType": "blacklist",
-        "ignoreBiome": true,
+        "ignoreBiome": false,
         "biomeTags": [
             "all",
             "-nether"
+        ],
+        "biomeIds": [
+            "minecraft:warped_forest"
         ],
         "spawnWeight": 8,
         "dungeonWeight": 200,

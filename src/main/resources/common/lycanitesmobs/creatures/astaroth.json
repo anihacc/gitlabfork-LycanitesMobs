@@ -22,8 +22,11 @@
         "dimensionListType": "whitelist",
         "ignoreBiome": false,
         "biomeTags": [
-            "nether",
             "end"
+        ],
+        "biomeIds": [
+            "minecraft:warped_forest",
+            "minecraft:basalt_deltas"
         ],
         "spawnWeight": 2,
         "dungeonWeight": 0,
