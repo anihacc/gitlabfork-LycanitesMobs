@@ -42,9 +42,6 @@ public class EntityGrell extends RideableCreatureEntity {
 
     public boolean isFlying() { return true; }
 
-    // ==================================================
-    //                     Equipment
-    // ==================================================
     @Override
     public int getNoBagSize() { return 0; }
     @Override
@@ -61,15 +58,12 @@ public class EntityGrell extends RideableCreatureEntity {
 
     @Override
     public double getPassengersRidingOffset() {
-        return (double)this.getDimensions(Pose.STANDING).height * 0.9D;
+        return (double)this.getDimensions(Pose.STANDING).height * 1.1D;
     }
 
     @Override
     public void mountAbility(Entity rider) {
         if(this.getCommandSenderWorld().isClientSide)
-            return;
-
-        if(this.abilityToggled)
             return;
 
         if(this.hasPickupEntity()) {
@@ -85,6 +79,8 @@ public class EntityGrell extends RideableCreatureEntity {
             ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile("acidglob");
             if(projectileInfo != null) {
                 BaseProjectileEntity projectile = projectileInfo.createProjectile(this.getCommandSenderWorld(), player);
+                projectile.setProjectileScale(2F);
+                projectile.shootFromRotation(player, player.xRot, player.yRot, -1, 1, 10);
                 this.getCommandSenderWorld().addFreshEntity(projectile);
                 this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
                 this.triggerAttackCooldown();
@@ -95,7 +91,7 @@ public class EntityGrell extends RideableCreatureEntity {
     }
 
     public float getStaminaCost() {
-        return 10;
+        return 2;
     }
 
     public int getStaminaRecoveryWarmup() {
