@@ -40,7 +40,7 @@ public class StructureSpawnLocation extends RandomSpawnLocation {
 		Structure<?> spawnStructure = RegistryManager.ACTIVE.getRegistry(Registry.STRUCTURE_FEATURE_REGISTRY).getValue(this.structureId);
 		if (spawnStructure == null) {
 			LycanitesMobs.logWarning("JSONSpawner", "Invalid Structure ID: " + this.structureId + ".");
-			return super.getSpawnPositions(world, player, triggerPos);
+			return new ArrayList<>();
 		}
 		LycanitesMobs.logDebug("JSONSpawner", "Getting Nearest " + this.structureId + " Structures Within Range");
 		if(!(world instanceof ServerWorld)) {
