@@ -74,69 +74,91 @@
     "dungeonLevel": 1,
     "drops": [
         {
-            "item": "minecraft:red_flower",
+            "item": "minecraft:dandelion",
             "minAmount": 1,
             "maxAmount": 3,
             "chance": 0.5
         },
         {
-            "item": "minecraft:red_flower",
-            "metadata": 1,
+            "item": "minecraft:poppy",
             "minAmount": 1,
             "maxAmount": 3,
             "chance": 0.5
         },
         {
-            "item": "minecraft:red_flower",
-            "metadata": 2,
+            "item": "minecraft:blue_orchid",
             "minAmount": 1,
             "maxAmount": 3,
             "chance": 0.5
         },
         {
-            "item": "minecraft:red_flower",
-            "metadata": 3,
+            "item": "minecraft:allium",
             "minAmount": 1,
             "maxAmount": 3,
             "chance": 0.5
         },
         {
-            "item": "minecraft:red_flower",
-            "metadata": 4,
+            "item": "minecraft:azure_bluet",
             "minAmount": 1,
             "maxAmount": 3,
             "chance": 0.5
         },
         {
-            "item": "minecraft:red_flower",
-            "metadata": 5,
+            "item": "minecraft:orange_tulip",
             "minAmount": 1,
             "maxAmount": 3,
             "chance": 0.5
         },
         {
-            "item": "minecraft:red_flower",
-            "metadata": 6,
+            "item": "minecraft:white_tulip",
             "minAmount": 1,
             "maxAmount": 3,
             "chance": 0.5
         },
         {
-            "item": "minecraft:red_flower",
-            "metadata": 7,
+            "item": "minecraft:pink_tulip",
             "minAmount": 1,
             "maxAmount": 3,
             "chance": 0.5
         },
         {
-            "item": "minecraft:red_flower",
-            "metadata": 8,
+            "item": "minecraft:oxeye_daisy",
             "minAmount": 1,
             "maxAmount": 3,
             "chance": 0.5
         },
         {
-            "item": "minecraft:yellow_flower",
+            "item": "minecraft:cornflower",
+            "minAmount": 1,
+            "maxAmount": 3,
+            "chance": 0.5
+        },
+        {
+            "item": "minecraft:lily_of_the_valley",
+            "minAmount": 1,
+            "maxAmount": 3,
+            "chance": 0.5
+        },
+        {
+            "item": "minecraft:sunflower",
+            "minAmount": 1,
+            "maxAmount": 3,
+            "chance": 0.5
+        },
+        {
+            "item": "minecraft:lilac",
+            "minAmount": 1,
+            "maxAmount": 3,
+            "chance": 0.5
+        },
+        {
+            "item": "minecraft:rose_bush",
+            "minAmount": 1,
+            "maxAmount": 3,
+            "chance": 0.5
+        },
+        {
+            "item": "minecraft:peony",
             "minAmount": 1,
             "maxAmount": 3,
             "chance": 0.5

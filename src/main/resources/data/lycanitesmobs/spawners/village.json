@@ -30,7 +30,7 @@
 			"limit": 32,
 			"solidGround": true,
 			"underground": false,
-			"structureType": "Village"
+			"structureId": "village"
 		}
 	],
 	"mobSpawns": [

@@ -24,7 +24,7 @@
         "biomeTags": [
             "ocean"
         ],
-        "spawnWeight": 4,
+        "spawnWeight": 6,
         "dungeonWeight": 200,
         "spawnAreaLimit": 3,
         "spawnGroupMin": 1,

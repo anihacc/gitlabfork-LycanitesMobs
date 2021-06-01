@@ -4,7 +4,7 @@
 	"type": "spawner",
 	"enabled": true,
 	"loadDefault": true,
-	"mobCountMin": 6,
+	"mobCountMin": 4,
 	"ignoreBiomes": false,
 	"ignoreLightLevel": true,
 	"groupLimitRange": 32,
@@ -18,7 +18,7 @@
 	"triggers": [
 		{
 			"type": "chunk",
-			"chance": 0.125
+			"chance": 0.05
 		}
 	],
 	"locations": [
