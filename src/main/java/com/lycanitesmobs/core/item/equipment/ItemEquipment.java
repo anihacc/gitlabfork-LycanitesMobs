@@ -32,7 +32,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nullable;
+
 import java.util.*;
 
 public class ItemEquipment extends ItemBase {
@@ -60,7 +60,7 @@ public class ItemEquipment extends ItemBase {
 	//                      Info
 	// ==================================================
 	@Override
-	public void addInformation(ItemStack itemStack, @Nullable World world, List<String> tooltip, ITooltipFlag tooltipFlag) {
+	public void addInformation(ItemStack itemStack,  World world, List<String> tooltip, ITooltipFlag tooltipFlag) {
 		super.addInformation(itemStack, world, tooltip, tooltipFlag);
 		FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
 		for(String description : this.getAdditionalDescriptions(itemStack, world, tooltipFlag)) {
@@ -73,11 +73,11 @@ public class ItemEquipment extends ItemBase {
 	}
 
 	@Override
-	public String getDescription(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+	public String getDescription(ItemStack stack,  World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		return LanguageManager.translate("item.equipment.description");
 	}
 
-	public List<String> getAdditionalDescriptions(ItemStack itemStack, @Nullable World world, ITooltipFlag tooltipFlag) {
+	public List<String> getAdditionalDescriptions(ItemStack itemStack,  World world, ITooltipFlag tooltipFlag) {
 		List<String> descriptions = new ArrayList<>();
 
 		// Part Names:
@@ -171,7 +171,7 @@ public class ItemEquipment extends ItemBase {
 	}
 
 	@SideOnly(Side.CLIENT)
-	@Nullable
+	
 	@Override
 	public net.minecraft.client.gui.FontRenderer getFontRenderer(ItemStack stack) {
 		return LycanitesMobs.proxy.getFontRenderer();
@@ -461,7 +461,7 @@ public class ItemEquipment extends ItemBase {
 	}
 
 	@Override
-	public int getHarvestLevel(ItemStack itemStack, String toolClass, @Nullable EntityPlayer player, @Nullable IBlockState blockState) {
+	public int getHarvestLevel(ItemStack itemStack, String toolClass,  EntityPlayer player,  IBlockState blockState) {
 		int harvestLevel = -1;
 		for(EquipmentFeature equipmentFeature : this.getFeaturesByType(itemStack, "harvest")) {
 			HarvestEquipmentFeature harvestFeature = (HarvestEquipmentFeature)equipmentFeature;

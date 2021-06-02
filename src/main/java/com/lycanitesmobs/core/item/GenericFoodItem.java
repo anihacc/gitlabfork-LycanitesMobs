@@ -14,7 +14,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
+
 import java.util.List;
 
 public class GenericFoodItem extends ItemFood {
@@ -40,7 +40,7 @@ public class GenericFoodItem extends ItemFood {
 	}
 
 	@Override
-	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+	public void addInformation(ItemStack stack,  World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		String description = this.getDescription(stack, worldIn, tooltip, flagIn);
 		if(!"".equalsIgnoreCase(description)) {
 			FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
@@ -53,7 +53,7 @@ public class GenericFoodItem extends ItemFood {
 		super.addInformation(stack, worldIn, tooltip, flagIn);
 	}
 
-	public String getDescription(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+	public String getDescription(ItemStack stack,  World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		return LanguageManager.translate(this.getUnlocalizedName() + ".description");
 	}
 

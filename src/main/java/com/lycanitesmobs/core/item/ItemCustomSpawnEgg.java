@@ -34,7 +34,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nullable;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -86,7 +86,7 @@ public class ItemCustomSpawnEgg extends ItemBase {
 	//                      Info
 	// ==================================================
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+    public void addInformation(ItemStack stack,  World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         String description = this.getDescription(stack, worldIn, tooltip, flagIn);
         if(!"".equalsIgnoreCase(description) && !("item." + this.itemName + ".description").equals(description)) {
             FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
@@ -98,7 +98,7 @@ public class ItemCustomSpawnEgg extends ItemBase {
         }
     }
 
-    public String getDescription(ItemStack itemStack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+    public String getDescription(ItemStack itemStack,  World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         CreatureInfo creatureInfo = this.getCreatureInfo(itemStack);
         if(creatureInfo == null) {
         	String creatureName = this.getCreatureName(itemStack);
@@ -323,7 +323,7 @@ public class ItemCustomSpawnEgg extends ItemBase {
 	 * @param stack
 	 * @param targetEntity
 	 */
-    public void applyItemEntityDataToEntity(World entityWorld, @Nullable EntityPlayer player, ItemStack stack, @Nullable Entity targetEntity) {
+    public void applyItemEntityDataToEntity(World entityWorld,  EntityPlayer player, ItemStack stack,  Entity targetEntity) {
         MinecraftServer minecraftserver = entityWorld.getMinecraftServer();
         if (minecraftserver != null && targetEntity != null) {
             NBTTagCompound nbttagcompound = stack.getTagCompound();

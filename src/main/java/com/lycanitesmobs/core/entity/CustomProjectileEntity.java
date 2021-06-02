@@ -153,6 +153,7 @@ public class CustomProjectileEntity extends BaseProjectileEntity {
 		this.cutsGrass = this.projectileInfo.cutGrass;
 		this.ripper = this.projectileInfo.ripper;
 		this.pierceBlocks = this.projectileInfo.pierceBlocks;
+		this.animationFrameMax = this.projectileInfo.animationFrames;
 	}
 
 
@@ -170,6 +171,17 @@ public class CustomProjectileEntity extends BaseProjectileEntity {
 		if(this.projectileInfo != null) {
 			for(ProjectileBehaviour behaviour : this.projectileInfo.behaviours) {
 				behaviour.onProjectileUpdate(this);
+			}
+
+			if (this.getEntityWorld().isRemote && this.projectileInfo.particleCount > 0) {
+				for (int i = 0; i < this.projectileInfo.particleCount; ++i) {
+					if (this.projectileInfo.waterParticleType != null && this.isInWater()) {
+						this.getEntityWorld().spawnParticle(this.projectileInfo.waterParticleType, this.posX + (this.rand.nextDouble() - 0.5D) * (double) this.width, this.posY + this.rand.nextDouble() * (double) this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double) this.width, 0.0D, 0.0D, 0.0D);
+					}
+					else if(this.projectileInfo.particleType != null) {
+						this.getEntityWorld().spawnParticle(this.projectileInfo.particleType, this.posX + (this.rand.nextDouble() - 0.5D) * (double) this.width, this.posY + this.rand.nextDouble() * (double) this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double) this.width, 0.0D, 0.0D, 0.0D);
+					}
+				}
 			}
 		}
 	}
@@ -234,13 +246,13 @@ public class CustomProjectileEntity extends BaseProjectileEntity {
 	@Override
 	public void onDamage(EntityLivingBase target, float damage, boolean attackSuccess) {
 		super.onDamage(target, damage, attackSuccess);
-		if(!this.getEntityWorld().isRemote && attackSuccess && this.projectileInfo != null) {
+		if (!this.getEntityWorld().isRemote && attackSuccess && this.projectileInfo != null) {
 			for(ElementInfo element : this.projectileInfo.elements) {
 				element.debuffEntity(target, this.projectileInfo.effectDuration * 20, this.projectileInfo.effectAmplifier);
 			}
 		}
 
-		if(attackSuccess && this.projectileInfo != null) {
+		if (attackSuccess && this.projectileInfo != null) {
 			for(ProjectileBehaviour behaviour : this.projectileInfo.behaviours) {
 				behaviour.onProjectileDamage(this, this.getEntityWorld(), target, damage);
 			}
@@ -341,7 +353,7 @@ public class CustomProjectileEntity extends BaseProjectileEntity {
 
 	@Override
 	public boolean isBurning() {
-		return this.projectileInfo.burningEffect;
+		return this.projectileInfo != null && this.projectileInfo.burningEffect;
 	}
 
 

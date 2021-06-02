@@ -22,6 +22,7 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
@@ -102,10 +103,19 @@ public class ProjectileInfo {
 	public boolean pierceBlocks = false;
 	/** If true, this projectile will play a sound on impact. **/
 	public boolean impactSound = false;
+
+	/** How many vertical animation frames the sprite has, set to 1 for no animation. **/
+	public int animationFrames = 1;
 	/** If true, this projectile glow in the dark. **/
 	public boolean glow = false;
 	/** If true, this projectile will have a burning effect on it. **/
 	public boolean burningEffect = false;
+	/** How many particles to create per tick. **/
+	public int particleCount = 0;
+	/** The vanilla particle to play from this projectile. **/
+	public EnumParticleTypes particleType = null;
+	/** The vanilla particle to play from this projectile when in water. **/
+	public EnumParticleTypes waterParticleType = null;
 
 
 	/**
@@ -213,10 +223,23 @@ public class ProjectileInfo {
 			this.pierceBlocks = json.get("pierceBlocks").getAsBoolean();
 		if(json.has("impactSound"))
 			this.impactSound = json.get("impactSound").getAsBoolean();
+
+		if(json.has("animationFrames"))
+			this.animationFrames = json.get("animationFrames").getAsInt();
 		if(json.has("glow"))
 			this.glow = json.get("glow").getAsBoolean();
 		if(json.has("burningEffect"))
 			this.burningEffect = json.get("burningEffect").getAsBoolean();
+		if(json.has("particleCount"))
+			this.particleCount = json.get("particleCount").getAsInt();
+		if(json.has("particleType")) {
+			String particleTypeName = json.get("particleType").getAsString();
+			this.particleType = EnumParticleTypes.getByName(particleTypeName);
+		}
+		if(json.has("waterParticleType")) {
+			String waterParticleTypeName = json.get("waterParticleType").getAsString();
+			this.waterParticleType = EnumParticleTypes.getByName(waterParticleTypeName);
+		}
 	}
 
 	/**

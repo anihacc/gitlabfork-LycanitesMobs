@@ -15,7 +15,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nullable;
+
 import java.util.List;
 
 public class GenericBucketItem extends ItemBucket {
@@ -45,7 +45,7 @@ public class GenericBucketItem extends ItemBucket {
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+    public void addInformation(ItemStack stack,  World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         String description = this.getDescription(stack, worldIn, tooltip, flagIn);
         if(!"".equalsIgnoreCase(description) && !("item." + this.itemName + ".description").equals(description)) {
             FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
@@ -58,7 +58,7 @@ public class GenericBucketItem extends ItemBucket {
         super.addInformation(stack, worldIn, tooltip, flagIn);
     }
 
-    public String getDescription(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+    public String getDescription(ItemStack stack,  World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         return LanguageManager.translate("item." + this.itemName + ".description");
     }
     

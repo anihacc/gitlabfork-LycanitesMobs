@@ -67,7 +67,7 @@ import net.minecraft.world.*;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nullable;
+
 import java.util.*;
 
 public abstract class BaseCreatureEntity extends EntityLiving {
@@ -1519,7 +1519,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 	}
 
 	/** Gets the variant of this mob, will return null if this is a base variant mob. **/
-	@Nullable
+	
 	public Variant getVariant() {
 		return this.variant;
 	}

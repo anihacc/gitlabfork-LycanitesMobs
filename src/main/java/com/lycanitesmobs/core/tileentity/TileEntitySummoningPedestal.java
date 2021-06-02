@@ -26,7 +26,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 
-import javax.annotation.Nullable;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -214,7 +214,7 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
 	}
 
 	/** Returns the name of the owner of this pedestal. **/
-	@Nullable
+	
 	public UUID getOwnerUUID() {
 		return this.ownerUUID;
 	}
@@ -225,7 +225,7 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
 	}
 
 	/** Returns the player that this belongs to or null if owned by no player. **/
-	@Nullable
+	
 	public EntityPlayer getPlayer() {
 		if(this.ownerUUID == null) {
 			return null;
@@ -234,7 +234,7 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
 	}
 
 	/** Returns the class that this is summoning. **/
-	@Nullable
+	
 	public Class getSummonClass() {
 		if(this.summonSet == null) {
 			return null;

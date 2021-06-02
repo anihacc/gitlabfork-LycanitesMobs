@@ -23,7 +23,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
+
 import java.util.List;
 
 public class EquipmentInfuserBlock extends BlockBase implements ITileEntityProvider {
@@ -59,11 +59,11 @@ public class EquipmentInfuserBlock extends BlockBase implements ITileEntityProvi
 	}
 
 	@Override
-	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
+	public void addInformation(ItemStack stack,  World world, List<String> tooltip, ITooltipFlag advanced) {
 		tooltip.add(this.getDescription(stack, world));
 	}
 
-	public String getDescription(ItemStack itemStack, @Nullable World world) {
+	public String getDescription(ItemStack itemStack,  World world) {
 		return LanguageManager.translate(this.getUnlocalizedName() + ".description");
 	}
 

@@ -21,7 +21,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nullable;
+
 import java.util.List;
 import java.util.Random;
 
@@ -95,11 +95,11 @@ public class BlockBase extends Block {
 	}
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
+    public void addInformation(ItemStack stack,  World world, List<String> tooltip, ITooltipFlag advanced) {
         tooltip.add(this.getDescription(stack, world));
     }
 
-    public String getDescription(ItemStack itemStack, @Nullable World world) {
+    public String getDescription(ItemStack itemStack,  World world) {
         return LanguageManager.translate("tile." + this.blockName + ".description");
     }
 	

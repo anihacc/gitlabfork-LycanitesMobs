@@ -18,7 +18,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,7 +57,7 @@ public class ChargeItem extends ItemBase {
     }
 
     @Override
-    public void addInformation(ItemStack itemStack, @Nullable World world, List<String> tooltip, ITooltipFlag tooltipFlag) {
+    public void addInformation(ItemStack itemStack,  World world, List<String> tooltip, ITooltipFlag tooltipFlag) {
         super.addInformation(itemStack, world, tooltip, tooltipFlag);
         FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
         for(String description : this.getAdditionalDescriptions(itemStack, world, tooltipFlag)) {
@@ -69,11 +69,11 @@ public class ChargeItem extends ItemBase {
         }
     }
 
-    public String getDescription(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+    public String getDescription(ItemStack stack,  World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         return LanguageManager.translate("item.lycanitesmobs.charge.description");
     }
 
-    public List<String> getAdditionalDescriptions(ItemStack itemStack, @Nullable World world, ITooltipFlag tooltipFlag) {
+    public List<String> getAdditionalDescriptions(ItemStack itemStack,  World world, ITooltipFlag tooltipFlag) {
         List<String> descriptions = new ArrayList<>();
 
         if(!this.getElements().isEmpty()) {

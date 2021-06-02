@@ -19,7 +19,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
+
 import java.util.Set;
 
 public class HarvestEquipmentFeature extends EquipmentFeature {
@@ -105,7 +105,7 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 	 * Gets the Tool Type provided by this Harvest Feature.
 	 * @return The Tool Type of this feature, will return null if it's not a Pickaxe, Axe or Shovel.
 	 */
-	@Nullable
+	
 	public String getToolType() {
 		return this.harvestType;
 	}

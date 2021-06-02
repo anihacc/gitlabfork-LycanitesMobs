@@ -23,7 +23,7 @@ import net.minecraft.world.biome.Biome;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fml.common.eventhandler.Event;
 
-import javax.annotation.Nullable;
+
 import java.util.*;
 
 public class Spawner {
@@ -606,7 +606,7 @@ public class Spawner {
 	 * @param biomes A list of all biomes within the spawning area. If null, biome checks will be ignored, all mob spawn will be added to a null map key.
 	 * @return A map of biomes and mob spawn lists with each mob spawn available to each biome.
 	 **/
-	public Map<Biome, List<MobSpawn>> getMobSpawns(World world, @Nullable EntityPlayer player, int blockCount, @Nullable List<Biome> biomes) {
+	public Map<Biome, List<MobSpawn>> getMobSpawns(World world,  EntityPlayer player, int blockCount,  List<Biome> biomes) {
 		Map<Biome, List<MobSpawn>> mobSpawns = new HashMap<>();
 
 		if(biomes == null) {
@@ -628,7 +628,7 @@ public class Spawner {
 	 * @param biome The biome to spawn in.
 	 * @return A list of mob spawns.
 	 */
-	public List<MobSpawn> getBiomeSpawns(World world, @Nullable EntityPlayer player, int blockCount, @Nullable Biome biome) {
+	public List<MobSpawn> getBiomeSpawns(World world,  EntityPlayer player, int blockCount,  Biome biome) {
 		List<MobSpawn> biomeSpawns = new ArrayList<>();
 
 		// Global Spawns:

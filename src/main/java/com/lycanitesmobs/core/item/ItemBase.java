@@ -4,7 +4,7 @@ import com.google.common.collect.Multimap;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.compatibility.Thaumcraft;
 import com.lycanitesmobs.core.info.ModInfo;
-import javax.annotation.Nullable;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -60,7 +60,7 @@ public class ItemBase extends Item {//implements IScanThing {
 	}
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+    public void addInformation(ItemStack stack,  World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
     	String description = this.getDescription(stack, worldIn, tooltip, flagIn);
     	if(!"".equalsIgnoreCase(description)) {
     		FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
@@ -73,7 +73,7 @@ public class ItemBase extends Item {//implements IScanThing {
     	super.addInformation(stack, worldIn, tooltip, flagIn);
     }
 
-    public String getDescription(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+    public String getDescription(ItemStack stack,  World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
     	return LanguageManager.translate(this.getUnlocalizedName() + ".description");
     }
 

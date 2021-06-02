@@ -15,7 +15,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nullable;
+
 
 @SideOnly(Side.CLIENT)
 public class RenderProjectileModel extends Render {
@@ -93,7 +93,7 @@ public class RenderProjectileModel extends Render {
         return true;
     }
 
-	@Nullable
+	
 	@Override
 	protected ResourceLocation getEntityTexture(Entity entity) {
     	if(entity instanceof BaseProjectileEntity) {

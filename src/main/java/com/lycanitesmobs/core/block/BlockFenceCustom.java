@@ -8,7 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
+
 import java.util.List;
 
 public class BlockFenceCustom extends BlockFence {
@@ -34,11 +34,11 @@ public class BlockFenceCustom extends BlockFence {
 	}
 
 	@Override
-	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
+	public void addInformation(ItemStack stack,  World world, List<String> tooltip, ITooltipFlag advanced) {
 		tooltip.add(this.getDescription(stack, world));
 	}
 
-	public String getDescription(ItemStack itemStack, @Nullable World world) {
+	public String getDescription(ItemStack itemStack,  World world) {
 		return LanguageManager.translate(this.getUnlocalizedName() + ".description");
 	}
 }

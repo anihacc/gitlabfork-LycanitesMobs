@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.info;
 
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.LycanitesMobs;
-import com.sun.istack.internal.NotNull;
+
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -242,7 +242,7 @@ public class ItemDrop {
 	 * Gets the base itemstack for this item drop.
 	 * @return The base itemstack to drop.
 	 */
-	@NotNull
+	
 	public ItemStack getItemStack() {
 		if(this.itemId == null) {
 			return ItemStack.EMPTY;
@@ -260,7 +260,7 @@ public class ItemDrop {
 	 * Gets the itemstack that burning entities should drop.
 	 * @return The burning itemstack or the base itemstack if not set.
 	 */
-	@NotNull
+	
 	public ItemStack getBurningItemStack() {
 		if(this.burningItemId == null) {
 			return this.getItemStack();
@@ -278,7 +278,7 @@ public class ItemDrop {
 	 * Gets the itemstack that entities with the provided effect should drop.
 	 * @return The effect itemstack or the base itemstack if not set.
 	 */
-	@NotNull
+	
 	public ItemStack getEffectItemStack(int effectId) {
 		if(!this.effectItemIds.containsKey(effectId) || !this.effectItemMetadata.containsKey(effectId)) {
 			return ItemStack.EMPTY;

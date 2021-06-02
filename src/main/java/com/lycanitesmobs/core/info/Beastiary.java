@@ -16,7 +16,7 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.text.TextComponentString;
 import com.lycanitesmobs.client.localisation.LanguageManager;
 
-import javax.annotation.Nullable;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -161,7 +161,7 @@ public class Beastiary {
 	 * @param creatureName The name of the creature to get the knowledge of.
 	 * @return The creature knowledge or knowledge if there is no knowledge.
 	 */
-	@Nullable
+	
 	public CreatureKnowledge getCreatureKnowledge(String creatureName) {
 		if(!this.creatureKnowledgeList.containsKey(creatureName)) {
 			return null;

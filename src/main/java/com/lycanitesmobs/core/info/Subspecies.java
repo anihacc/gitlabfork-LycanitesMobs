@@ -8,7 +8,7 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.localisation.LanguageManager;
 import com.lycanitesmobs.core.helpers.JSONHelper;
 import com.lycanitesmobs.core.spawner.condition.SpawnCondition;
-import javax.annotation.Nullable;
+
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -117,7 +117,7 @@ public class Subspecies {
 	 * @param name The skin of the Subspecies. Can be null for default subspecies.
 	 * @param index The index of the Subspecies. Should be 0 for the default subspecies.
 	 */
-	public Subspecies(@Nullable String name, int index) {
+	public Subspecies( String name, int index) {
         this.name = name;
 		this.index = index;
     }
@@ -221,7 +221,7 @@ public class Subspecies {
 	 * @param index The index of the variant for this creature, 0 for default variant (null).
 	 * @return Creature variant.
 	 */
-	@Nullable
+	
 	public Variant getVariant(int index) {
 		if(!this.variants.containsKey(index)) {
 			return null;
@@ -236,7 +236,7 @@ public class Subspecies {
 	 * @param partnerVariant The variant of the partner entity.
 	 * @return The varaint the child should have, null for base variant.
 	 */
-	public Variant getChildVariant(EntityLivingBase entity, @Nullable Variant hostVariant, @Nullable Variant partnerVariant) {
+	public Variant getChildVariant(EntityLivingBase entity,  Variant hostVariant,  Variant partnerVariant) {
 		int hostVariantIndex = (hostVariant != null ? hostVariant.index : 0);
 		int partnerVariantIndex = (partnerVariant != null ? partnerVariant.index : 0);
 		if(hostVariant == partnerVariant)

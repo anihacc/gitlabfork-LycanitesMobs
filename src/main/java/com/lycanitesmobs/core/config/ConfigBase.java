@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.config;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.info.ItemDrop;
-import javax.annotation.Nullable;
+
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 import org.apache.commons.io.FileUtils;
@@ -243,17 +243,17 @@ public class ConfigBase {
 	}
 
 	// ========== Get String ==========
-	@Nullable
+	
 	public ItemDrop getItemDrop(String category, String key) {
 		return this.getItemDrop(category, key, null);
 	}
 
-	@Nullable
+	
 	public ItemDrop getItemDrop(String category, String key, ItemDrop defaultValue) {
 		return this.getItemDrop(category, key, defaultValue, null);
 	}
 
-	@Nullable
+	
 	public ItemDrop getItemDrop(String category, String key, ItemDrop defaultValue, String comment) {
     	String defaultValueString = "";
     	if(defaultValue != null) {

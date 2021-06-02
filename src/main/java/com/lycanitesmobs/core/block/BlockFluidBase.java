@@ -15,7 +15,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fluids.BlockFluidClassic;
 import net.minecraftforge.fluids.Fluid;
 
-import javax.annotation.Nullable;
+
 import java.util.List;
 
 public class BlockFluidBase extends BlockFluidClassic {
@@ -45,11 +45,11 @@ public class BlockFluidBase extends BlockFluidClassic {
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
+    public void addInformation(ItemStack stack,  World world, List<String> tooltip, ITooltipFlag advanced) {
         tooltip.add(this.getDescription(stack, world));
     }
 
-    public String getDescription(ItemStack itemStack, @Nullable World world) {
+    public String getDescription(ItemStack itemStack,  World world) {
         return LanguageManager.translate(this.getUnlocalizedName() + ".description");
     }
 
