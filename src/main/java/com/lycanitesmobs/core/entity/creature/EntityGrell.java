@@ -61,13 +61,6 @@ public class EntityGrell extends RideableCreatureEntity {
     public int getBagSize() { return 5; }
 
     @Override
-    public boolean canAttackEntity(EntityLivingBase target) {
-        if(target instanceof  EntityTrite || target instanceof  EntityAstaroth || target instanceof  EntityAsmodeus || target instanceof  EntityWraith)
-            return false;
-        return super.canAttackEntity(target);
-    }
-
-    @Override
     public void attackRanged(Entity target, float range) {
         this.fireProjectile("acidglob", target, range, 0, new Vec3d(0, 0, 0), 0.6f, 2f, 1F);
         super.attackRanged(target, range);
@@ -84,9 +77,6 @@ public class EntityGrell extends RideableCreatureEntity {
     @Override
     public void mountAbility(Entity rider) {
         if(this.getEntityWorld().isRemote)
-            return;
-
-        if(this.abilityToggled)
             return;
 
         if(this.hasPickupEntity()) {
@@ -112,7 +102,7 @@ public class EntityGrell extends RideableCreatureEntity {
     }
 
     public float getStaminaCost() {
-        return 10;
+        return 2;
     }
 
     public int getStaminaRecoveryWarmup() {

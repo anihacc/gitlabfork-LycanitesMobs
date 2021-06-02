@@ -4,6 +4,7 @@ import com.google.common.collect.Multimap;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.compatibility.Thaumcraft;
 import com.lycanitesmobs.core.info.ModInfo;
+import javax.annotation.Nullable;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -24,7 +25,6 @@ import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 //import thaumcraft.api.research.IScanThing;

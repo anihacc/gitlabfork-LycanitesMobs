@@ -21,6 +21,9 @@ public class ProjectileBehaviourFireProjectiles extends ProjectileBehaviour {
 	/** How many projectiles fired on impact. **/
 	public int impactCount = 5;
 
+	/** The velocity of the fired projectile. **/
+	public float velocity = 1.2F;
+
 	@Override
 	public void loadFromJSON(JsonObject json) {
 		this.projectileName = json.get("projectileName").getAsString();
@@ -33,6 +36,9 @@ public class ProjectileBehaviourFireProjectiles extends ProjectileBehaviour {
 
 		if(json.has("persistentCount"))
 			this.persistentCount = json.get("persistentCount").getAsInt();
+
+		if(json.has("velocity"))
+			this.velocity = json.get("velocity").getAsFloat();
 	}
 
 	@Override
@@ -98,7 +104,6 @@ public class ProjectileBehaviourFireProjectiles extends ProjectileBehaviour {
 			((CustomProjectileEntity)projectile).spawnedProjectiles.add(childProjectile);
 		}
 
-		float velocity = 1.2F;
 		double motionT = projectile.motionX + projectile.motionY + projectile.motionZ;
 		if(projectile.motionX < 0)
 			motionT -= projectile.motionX * 2;
@@ -110,7 +115,7 @@ public class ProjectileBehaviourFireProjectiles extends ProjectileBehaviour {
 				projectile.motionX / motionT + (projectile.getEntityWorld().rand.nextGaussian() - 0.5D),
 				projectile.motionY / motionT + (projectile.getEntityWorld().rand.nextGaussian() - 0.5D),
 				projectile.motionZ / motionT + (projectile.getEntityWorld().rand.nextGaussian() - 0.5D),
-				velocity,
+				this.velocity,
 				0
 		);
 

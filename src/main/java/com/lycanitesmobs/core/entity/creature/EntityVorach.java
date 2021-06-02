@@ -1,11 +1,10 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
-import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
+import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class EntityVorach extends TameableCreatureEntity implements IMob {
@@ -19,13 +18,30 @@ public class EntityVorach extends TameableCreatureEntity implements IMob {
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(this.nextCombatGoalIndex++, new AttackRangedGoal(this).setSpeed(1.0D).setRange(16.0F).setMinChaseDistance(8.0F).setChaseTime(-1));
+        this.tasks.addTask(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setSpeed(1.5D));
     }
 
     @Override
-    public void attackRanged(Entity target, float range) {
-        this.fireProjectile("hellfireball", target, range, 0, new Vec3d(0, 0, 0), 1.2f, 2f, 1F);
-        super.attackRanged(target, range);
+    public boolean attackMelee(Entity target, double damageScale) {
+        if(!super.attackMelee(target, damageScale))
+            return false;
+
+        // Leech:
+        float leeching = Math.max(1, this.getAttackDamage(damageScale) / 2);
+        this.heal(leeching);
+
+        return true;
+    }
+
+    @Override
+    public float getAISpeedModifier() {
+        if (this.hasAttackTarget() && this.getDistanceSq(this.getAttackTarget()) >= 60) {
+            if (this.isLookingAtMe(this.getAttackTarget())) {
+                return 0;
+            }
+            return super.getAISpeedModifier() * 5;
+        }
+        return super.getAISpeedModifier();
     }
 
     @Override

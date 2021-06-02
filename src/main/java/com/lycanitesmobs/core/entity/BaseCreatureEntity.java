@@ -2616,6 +2616,28 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 				zAmount * distance + this.motionZ * 0.2D
 		);
 	}
+
+	/**
+	 * Returns true if the target entity is looking at this entity.
+	 * @param targetEntity The target entity to check.
+	 * @return True if the target is looking at this entity, additional checks are done for players.
+	 */
+	public boolean isLookingAtMe(Entity targetEntity) {
+		if (targetEntity == null) {
+			return false;
+		}
+		Vec3d targetViewVector = targetEntity.getLook(1.0F).normalize();
+		Vec3d distance = new Vec3d(this.posX - targetEntity.posX, (this.posY + this.getEyeHeight()) - (targetEntity.posY + targetEntity.getEyeHeight()), this.posZ - targetEntity.posZ);
+		double distanceStraight = distance.lengthVector();
+		distance = distance.normalize();
+		double lookDistance = targetViewVector.dotProduct(distance);
+		double lookRange = 1.5D;
+		double comparison = 1.0D - (lookRange / distanceStraight);
+		if (targetEntity instanceof EntityPlayer) {
+			return lookDistance > comparison && ((EntityPlayer) targetEntity).canEntityBeSeen(this);
+		}
+		return lookDistance > comparison;
+	}
     
     
     // ==================================================

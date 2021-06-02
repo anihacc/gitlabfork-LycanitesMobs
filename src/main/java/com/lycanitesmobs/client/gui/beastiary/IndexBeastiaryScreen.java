@@ -43,7 +43,7 @@ public class IndexBeastiaryScreen extends BeastiaryScreen {
 
 		int menuWidth = this.colRightWidth;
 
-		int buttonCount = 4;
+		int buttonCount = 5;
 		int buttonPadding = 2;
 		int buttonWidth = Math.round((float)(menuWidth / buttonCount)) - buttonPadding;
 		int buttonWidthPadded = buttonWidth + buttonPadding;
@@ -60,6 +60,8 @@ public class IndexBeastiaryScreen extends BeastiaryScreen {
 		button = new GuiButton(102, buttonX + (buttonWidthPadded * 2), buttonY, buttonWidth, buttonHeight, "Patreon");
 		this.buttonList.add(button);
 		button = new GuiButton(103, buttonX + (buttonWidthPadded * 3), buttonY, buttonWidth, buttonHeight, "Discord");
+		this.buttonList.add(button);
+		button = new GuiButton(104, buttonX + (buttonWidthPadded * 4), buttonY, buttonWidth, buttonHeight, "Card Game");
 		this.buttonList.add(button);
 
 		// Lists:
@@ -133,6 +135,11 @@ public class IndexBeastiaryScreen extends BeastiaryScreen {
 			if(guiButton.id == 103) {
 				try {
 					this.openURI(new URI(LycanitesMobs.discord));
+				} catch (URISyntaxException e) {}
+			}
+			if(guiButton.id == 104) {
+				try {
+					this.openURI(new URI("https://shardtcg.com"));
 				} catch (URISyntaxException e) {}
 			}
 			super.actionPerformed(guiButton);

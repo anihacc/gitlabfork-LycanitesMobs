@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.helpers.JSONHelper;
+import com.sun.istack.internal.NotNull;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
@@ -13,7 +14,6 @@ import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -195,7 +195,7 @@ public class CreatureGroup {
 	 * @param entity The entity to check for.
 	 * @return True if the entity is in this group, otherwise false.
 	 */
-	public boolean hasEntity(@Nonnull Entity entity) {
+	public boolean hasEntity(@NotNull Entity entity) {
 		if(entity instanceof BaseCreatureEntity) {
 			return ((BaseCreatureEntity)entity).creatureInfo.groups.contains(this);
 		}

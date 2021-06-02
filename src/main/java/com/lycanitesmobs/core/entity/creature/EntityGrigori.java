@@ -35,6 +35,13 @@ public class EntityGrigori extends TameableCreatureEntity implements IMob {
 		this.targetTasks.addTask(this.nextFindTargetIndex++, new CopyMasterAttackTargetGoal(this));
     }
 
+	@Override
+	public boolean canAttackEntity(EntityLivingBase target) {
+		if(target.getRidingEntity() instanceof EntityGrell)
+			return false;
+		return super.canAttackEntity(target);
+	}
+
     @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
