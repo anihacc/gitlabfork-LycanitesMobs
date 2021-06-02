@@ -120,7 +120,7 @@
 			"dungeonBoss": true,
 			"mobDrops": [
 				{
-					"item": "lycanitesmobs:spectralboltscepter",
+					"item": "lycanitesmobs:equipmentpart_reaperclaw",
 					"amountMultiplier": false
 				},
 				{
@@ -147,7 +147,7 @@
 			"dungeonBoss": true,
 			"mobDrops": [
 				{
-					"item": "lycanitesmobs:grueclaw",
+					"item": "lycanitesmobs:equipmentpart_grueclaw",
 					"amountMultiplier": false
 				},
 				{

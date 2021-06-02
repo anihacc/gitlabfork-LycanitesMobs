@@ -19,8 +19,8 @@
 	"triggers": [
 		{
 			"type": "world",
-			"chance": 1,
-			"tickRate": 600
+			"chance": 0.5,
+			"tickRate": 60
 		}
 	],
 	"locations": [
@@ -28,6 +28,7 @@
 			"type": "random",
 			"rangeMin": [24, 0, 24],
 			"rangeMax": [48, 48, 48],
+			"yMax": 120,
 			"sorting": "random",
 			"limit": 32,
 			"solidGround": true
