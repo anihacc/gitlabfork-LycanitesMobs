@@ -100,7 +100,7 @@
 			"dungeonBoss": true,
 			"mobDrops": [
 				{
-					"item": "lycanitesmobs:scorchfirescepter",
+					"item": "lycanitesmobs:equipmentpart_afritlung",
 					"amountMultiplier": false
 				},
 				{
@@ -123,7 +123,7 @@
 			"dungeonBoss": true,
 			"mobDrops": [
 				{
-					"item": "lycanitesmobs:clinkscythe",
+					"item": "lycanitesmobs:equipmentpart_clinkscythe",
 					"amountMultiplier": false
 				},
 				{
@@ -155,7 +155,7 @@
 					"amountMultiplier": false
 				},
 				{
-					"item": "lycanitesmobs:magmascepter",
+					"item": "lycanitesmobs:equipmentpart_cherufecore",
 					"amountMultiplier": false
 				},
 				{

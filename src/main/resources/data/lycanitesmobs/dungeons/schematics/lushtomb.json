@@ -100,7 +100,7 @@
 			"dungeonBoss": true,
 			"mobDrops": [
 				{
-					"item": "lycanitesmobs:poopscepter",
+					"item": "lycanitesmobs:equipmentpart_conbabutt",
 					"amountMultiplier": false
 				},
 				{
@@ -146,7 +146,7 @@
 			"dungeonBoss": true,
 			"mobDrops": [
 				{
-					"item": "lycanitesmobs:arcanelaserstormscepter",
+					"item": "lycanitesmobs:equipmentpart_naxiriseye",
 					"amountMultiplier": false
 				},
 				{

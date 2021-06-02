@@ -83,7 +83,7 @@
 			"dungeonBoss": true,
 			"mobDrops": [
 				{
-					"item": "lycanitesmobs:hellfirescepter",
+					"item": "lycanitesmobs:equipmentpart_behemophethand",
 					"amountMultiplier": false
 				},
 				{
@@ -129,7 +129,7 @@
 			"dungeonBoss": true,
 			"mobDrops": [
 				{
-					"item": "lycanitesmobs:demoniclightningscepter",
+					"item": "lycanitesmobs:equipmentpart_malwratheye",
 					"amountMultiplier": false
 				},
 				{
@@ -156,7 +156,7 @@
 			"dungeonBoss": true,
 			"mobDrops": [
 				{
-					"item": "lycanitesmobs:demoniclightningscepter",
+					"item": "lycanitesmobs:equipmentpart_apollyonclaw",
 					"amountMultiplier": false
 				},
 				{

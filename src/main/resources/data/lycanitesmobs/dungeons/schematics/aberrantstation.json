@@ -134,7 +134,7 @@
 			"dungeonBoss": true,
 			"mobDrops": [
 				{
-					"item": "lycanitesmobs:astarothclaw",
+					"item": "lycanitesmobs:equipmentpart_astarothclaw",
 					"amountMultiplier": false
 				},
 				{
@@ -186,7 +186,7 @@
 			"dungeonBoss": true,
 			"mobDrops": [
 				{
-					"item": "lycanitesmobs:astarothclaw",
+					"item": "lycanitesmobs:equipmentpart_astarothclaw",
 					"amountMultiplier": false
 				},
 				{
