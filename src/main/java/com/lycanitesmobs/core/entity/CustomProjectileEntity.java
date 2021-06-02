@@ -339,6 +339,11 @@ public class CustomProjectileEntity extends BaseProjectileEntity {
 		return this.laserEnd;
 	}
 
+	@Override
+	public boolean isBurning() {
+		return this.projectileInfo.burningEffect;
+	}
+
 
 	// ==================================================
 	//                       NBT

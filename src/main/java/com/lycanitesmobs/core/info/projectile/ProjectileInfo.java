@@ -104,6 +104,8 @@ public class ProjectileInfo {
 	public boolean impactSound = false;
 	/** If true, this projectile glow in the dark. **/
 	public boolean glow = false;
+	/** If true, this projectile will have a burning effect on it. **/
+	public boolean burningEffect = false;
 
 
 	/**
@@ -213,6 +215,8 @@ public class ProjectileInfo {
 			this.impactSound = json.get("impactSound").getAsBoolean();
 		if(json.has("glow"))
 			this.glow = json.get("glow").getAsBoolean();
+		if(json.has("burningEffect"))
+			this.burningEffect = json.get("burningEffect").getAsBoolean();
 	}
 
 	/**
