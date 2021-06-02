@@ -30,7 +30,7 @@
         ],
         "spawnWeight": 2,
         "dungeonWeight": 0,
-        "spawnAreaLimit": 2,
+        "spawnAreaLimit": 5,
         "spawnGroupMin": 1,
         "spawnGroupMax": 2,
         "spawnsInLight": true,
