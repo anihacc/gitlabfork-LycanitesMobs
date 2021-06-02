@@ -114,7 +114,7 @@ public class EntityBehemophet extends TameableCreatureEntity implements IMob {
     @Override
     public int getNoBagSize() { return 0; }
     @Override
-    public int getBagSize() { return this.creatureInfo.BagSize; }
+    public int getBagSize() { return this.creatureInfo.bagSize; }
 
     /** Returns this creature's main texture. Also checks for for subspecies. **/
     public ResourceLocation getTexture() {

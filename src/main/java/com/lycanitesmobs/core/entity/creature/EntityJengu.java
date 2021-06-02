@@ -15,8 +15,6 @@ import net.minecraft.world.World;
 
 import java.util.HashMap;
 
-import com.lycanitesmobs.core.entity.BaseCreatureEntity.COMMAND_PIORITIES;
-
 public class EntityJengu extends TameableCreatureEntity implements IMob, IFusable {
 
     // ==================================================
@@ -86,7 +84,7 @@ public class EntityJengu extends TameableCreatureEntity implements IMob, IFusabl
     @Override
     public int getNoBagSize() { return 0; }
     @Override
-    public int getBagSize() { return this.creatureInfo.BagSize; }
+    public int getBagSize() { return this.creatureInfo.bagSize; }
     
     // ==================================================
     //                     Pet Control

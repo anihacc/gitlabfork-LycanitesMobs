@@ -21,7 +21,6 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
 
 import javax.annotation.Nonnull;
 import java.awt.*;
@@ -85,8 +84,8 @@ public class CreatureInfo {
 
 	public double sight = 16.0D;
 	public double knockbackResistance = 0.0D;
-	public int BagSize = 5;
 
+	public int bagSize = 5;
 	public int packSize = 3;
 
 
@@ -276,9 +275,9 @@ public class CreatureInfo {
 			this.knockbackResistance = json.get("knockbackResistance").getAsDouble();
 		if(json.has("sight"))
 			this.sight = json.get("sight").getAsDouble();
-		if(json.has("bagSize"))
-			this.BagSize = json.get("bagSize").getAsInt();
 
+		if(json.has("bagSize"))
+			this.bagSize = json.get("bagSize").getAsInt();
 		if(json.has("packSize"))
 			this.packSize = json.get("packSize").getAsInt();
 

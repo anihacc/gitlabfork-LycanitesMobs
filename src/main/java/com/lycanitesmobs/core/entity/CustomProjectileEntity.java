@@ -13,6 +13,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
@@ -146,6 +147,7 @@ public class CustomProjectileEntity extends BaseProjectileEntity {
 		if(this.rollSpeed > 0 && this.random.nextBoolean()) {
 			this.rollSpeed = -this.rollSpeed;
 		}
+		this.animationFrameMax = this.projectileInfo.animationFrames;
 
 		// Flags:
 		this.waterProof = this.projectileInfo.waterproof;
@@ -172,6 +174,17 @@ public class CustomProjectileEntity extends BaseProjectileEntity {
 		if(this.projectileInfo != null) {
 			for(ProjectileBehaviour behaviour : this.projectileInfo.behaviours) {
 				behaviour.onProjectileUpdate(this);
+			}
+
+			if (this.getCommandSenderWorld().isClientSide && this.projectileInfo.particleCount > 0) {
+				for (int i = 0; i < this.projectileInfo.particleCount; ++i) {
+					if (this.projectileInfo.getWaterParticleType() != null && this.isInWater()) {
+						this.getCommandSenderWorld().addParticle(this.projectileInfo.getWaterParticleType().getType(), this.getX() + (this.random.nextDouble() - 0.5D) * (double) this.getBbWidth(), this.getY() + this.random.nextDouble() * (double) this.getBbHeight(), this.getZ() + (this.random.nextDouble() - 0.5D) * (double) this.getBbWidth(), 0.0D, 0.0D, 0.0D);
+					}
+					else if (this.projectileInfo.getParticleType() != null) {
+						this.getCommandSenderWorld().addParticle(this.projectileInfo.getParticleType().getType(), this.getX() + (this.random.nextDouble() - 0.5D) * (double) this.getBbWidth(), this.getY() + this.random.nextDouble() * (double) this.getBbHeight(), this.getZ() + (this.random.nextDouble() - 0.5D) * (double) this.getBbWidth(), 0.0D, 0.0D, 0.0D);
+					}
+				}
 			}
 		}
 	}
@@ -339,6 +352,11 @@ public class CustomProjectileEntity extends BaseProjectileEntity {
 			this.laserAngle = this.entityData.get(LASER_ANGLE);
 		}
 		return this.laserEnd;
+	}
+
+	@Override
+	public boolean isOnFire() {
+		return this.projectileInfo != null && this.projectileInfo.burningEffect;
 	}
 
 
