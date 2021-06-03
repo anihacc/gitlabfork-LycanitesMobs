@@ -45,7 +45,7 @@ public class EntityGrell extends RideableCreatureEntity {
     @Override
     public int getNoBagSize() { return 0; }
     @Override
-    public int getBagSize() { return this.creatureInfo.BagSize; }
+    public int getBagSize() { return this.creatureInfo.bagSize; }
 
     @Override
     public void attackRanged(Entity target, float range) {

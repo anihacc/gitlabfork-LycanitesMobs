@@ -98,7 +98,7 @@ public class EntityGorgomite extends BaseCreatureEntity implements IMob {
     @Override
     public int getNoBagSize() { return 0; }
     @Override
-    public int getBagSize() { return this.creatureInfo.BagSize; }
+    public int getBagSize() { return this.creatureInfo.bagSize; }
     // ==================================================
    	//                     Immunities
    	// ==================================================

@@ -27,8 +27,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import com.lycanitesmobs.core.entity.BaseCreatureEntity.TARGET_TYPES;
-
 public class EntityAmalgalich extends BaseCreatureEntity implements IMob, IGroupHeavy, IGroupBoss {
     private ForceGoal consumptionGoalP0;
     private ForceGoal consumptionGoalP2;
@@ -314,7 +312,7 @@ public class EntityAmalgalich extends BaseCreatureEntity implements IMob, IGroup
     @Override
     public int getNoBagSize() { return 0; }
     @Override
-    public int getBagSize() { return this.creatureInfo.BagSize; }
+    public int getBagSize() { return this.creatureInfo.bagSize; }
 
     // ==================================================
     //                    Taking Damage

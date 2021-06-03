@@ -8,7 +8,6 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.world.World;
 
 public class EntityZoataur extends RideableCreatureEntity implements IMob {
@@ -82,7 +81,7 @@ public class EntityZoataur extends RideableCreatureEntity implements IMob {
     @Override
     public int getNoBagSize() { return 0; }
     @Override
-    public int getBagSize() { return this.creatureInfo.BagSize; }
+    public int getBagSize() { return this.creatureInfo.bagSize; }
     // ==================================================
    	//                     Immunities
    	// ==================================================

@@ -19,8 +19,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.HashMap;
 
-import com.lycanitesmobs.core.entity.BaseCreatureEntity.COMMAND_PIORITIES;
-
 public class EntityXaphan extends TameableCreatureEntity implements IMob {
 	private int nextSplash = 20;
 
@@ -108,7 +106,7 @@ public class EntityXaphan extends TameableCreatureEntity implements IMob {
     @Override
     public int getNoBagSize() { return 0; }
     @Override
-    public int getBagSize() { return this.creatureInfo.BagSize; }
+    public int getBagSize() { return this.creatureInfo.bagSize; }
     
     
     // ==================================================

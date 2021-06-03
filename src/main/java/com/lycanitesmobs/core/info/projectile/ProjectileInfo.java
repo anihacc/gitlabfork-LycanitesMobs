@@ -23,12 +23,17 @@ import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
+import net.minecraft.particles.BasicParticleType;
+import net.minecraft.particles.ParticleType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.registries.RegistryManager;
 
 import javax.annotation.Nonnull;
 import java.lang.reflect.Constructor;
@@ -118,8 +123,23 @@ public class ProjectileInfo {
 	public boolean pierceBlocks = false;
 	/** If true, this projectile will play a sound on impact. **/
 	public boolean impactSound = false;
+
+	/** How many vertical animation frames the sprite has, set to 1 for no animation. **/
+	public int animationFrames = 1;
 	/** If true, this projectile glow in the dark. **/
 	public boolean glow = false;
+	/** If true, this projectile will have a burning effect on it. **/
+	public boolean burningEffect = false;
+	/** How many particles to create per tick. **/
+	public int particleCount = 0;
+	/** The vanilla particle to play from this projectile. **/
+	public String particleId = null;
+	/** The vanilla particle to play from this projectile when in water. **/
+	public String waterParticleId = null;
+	/** The vanilla particle to play from this projectile. **/
+	public BasicParticleType particleType = null;
+	/** The vanilla particle to play from this projectile when in water. **/
+	public BasicParticleType waterParticleType = null;
 
 
 	/**
@@ -231,10 +251,23 @@ public class ProjectileInfo {
 			this.ripper = json.get("ripper").getAsBoolean();
 		if(json.has("pierceBlocks"))
 			this.pierceBlocks = json.get("pierceBlocks").getAsBoolean();
+
+		if(json.has("animationFrames"))
+			this.animationFrames = json.get("animationFrames").getAsInt();
 		if(json.has("impactSound"))
 			this.impactSound = json.get("impactSound").getAsBoolean();
 		if(json.has("glow"))
 			this.glow = json.get("glow").getAsBoolean();
+		if(json.has("burningEffect"))
+			this.burningEffect = json.get("burningEffect").getAsBoolean();
+		if(json.has("particleCount"))
+			this.particleCount = json.get("particleCount").getAsInt();
+		if(json.has("particleId")) {
+			this.particleId = json.get("particleId").getAsString();
+		}
+		if(json.has("waterParticleId")) {
+			this.waterParticleId = json.get("waterParticleId").getAsString();
+		}
 	}
 
 	/**
@@ -278,6 +311,32 @@ public class ProjectileInfo {
 	 */
 	public String getEntityId() {
 		return this.modInfo.modid + ":" + this.getName();
+	}
+
+	public BasicParticleType getParticleType() {
+		if (this.particleCount <= 0 || this.particleId == null) {
+			return null;
+		}
+		if (this.particleType == null) {
+			ParticleType<?> particleType = RegistryManager.ACTIVE.getRegistry(Registry.PARTICLE_TYPE_REGISTRY).getValue(new ResourceLocation(this.particleId));
+			if(particleType instanceof BasicParticleType) {
+				this.particleType = (BasicParticleType)particleType;
+			}
+		}
+		return this.particleType;
+	}
+
+	public BasicParticleType getWaterParticleType() {
+		if (this.particleCount <= 0 || this.waterParticleId == null) {
+			return null;
+		}
+		if (this.waterParticleType == null) {
+			ParticleType<?> particleType = RegistryManager.ACTIVE.getRegistry(Registry.PARTICLE_TYPE_REGISTRY).getValue(new ResourceLocation(this.waterParticleId));
+			if(particleType instanceof BasicParticleType) {
+				this.waterParticleType = (BasicParticleType)particleType;
+			}
+		}
+		return this.waterParticleType;
 	}
 
 

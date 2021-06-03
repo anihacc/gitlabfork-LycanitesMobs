@@ -20,8 +20,6 @@ import net.minecraft.world.World;
 import java.util.HashMap;
 import java.util.List;
 
-import com.lycanitesmobs.core.entity.BaseCreatureEntity.COMMAND_PIORITIES;
-
 public class EntityVolcan extends TameableCreatureEntity implements IMob {
 
 	public int blockMeltingRadius = 2;
@@ -180,7 +178,7 @@ public class EntityVolcan extends TameableCreatureEntity implements IMob {
 	@Override
 	public int getNoBagSize() { return 0; }
 	@Override
-	public int getBagSize() { return this.creatureInfo.BagSize; }
+	public int getBagSize() { return this.creatureInfo.bagSize; }
     // ==================================================
    	//                     Immunities
    	// ==================================================

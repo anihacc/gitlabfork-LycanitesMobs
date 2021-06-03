@@ -1,6 +1,5 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import net.minecraft.entity.CreatureAttribute;
@@ -59,7 +58,7 @@ public class EntityVorach extends TameableCreatureEntity implements IMob {
 	@Override
 	public int getNoBagSize() { return 0; }
 	@Override
-	public int getBagSize() { return this.creatureInfo.BagSize; }
+	public int getBagSize() { return this.creatureInfo.bagSize; }
 
 	@Override
 	public float getFallResistance() {

@@ -188,7 +188,7 @@ public class EntitySerpix extends TameableCreatureEntity implements IGroupHeavy 
     @Override
     public int getNoBagSize() { return 0; }
     @Override
-    public int getBagSize() { return this.creatureInfo.BagSize; }
+    public int getBagSize() { return this.creatureInfo.bagSize; }
     
     // ==================================================
    	//                     Immunities

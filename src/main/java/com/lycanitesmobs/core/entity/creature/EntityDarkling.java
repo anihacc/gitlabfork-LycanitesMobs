@@ -16,7 +16,6 @@ import net.minecraft.particles.RedstoneParticleData;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.world.World;
 
 public class EntityDarkling extends TameableCreatureEntity implements IMob {
@@ -249,7 +248,7 @@ public class EntityDarkling extends TameableCreatureEntity implements IMob {
     @Override
     public int getNoBagSize() { return 0; }
     @Override
-    public int getBagSize() { return this.creatureInfo.BagSize; }
+    public int getBagSize() { return this.creatureInfo.bagSize; }
     // ==================================================
   	//                     Immunities
   	// ==================================================
