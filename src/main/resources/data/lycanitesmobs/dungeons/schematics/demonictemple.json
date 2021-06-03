@@ -9,7 +9,9 @@
 		{
 			"type": "world",
 			"dimensionIds": ["minecraft:the_nether"],
-			"dimensionListType": "whitelist"
+			"dimensionListType": "whitelist",
+			"biomeIds": ["minecraft:nether_wastes", "minecraft:soul_sand_valley", "minecraft:crimson_forest"],
+			"biomeIdListType": "whitelist"
 		}
 	],
 	"themes": ["demonic"],

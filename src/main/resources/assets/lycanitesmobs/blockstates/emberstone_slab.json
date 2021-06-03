@@ -1,0 +1,7 @@
+{
+    "variants": {
+        "type=bottom": { "model": "lycanitesmobs:block/emberstone_slab" },
+        "type=top": { "model": "lycanitesmobs:block/emberstone_slab_top" },
+        "type=double": { "model": "lycanitesmobs:block/emberstone_slab_double" }
+    }
+}
