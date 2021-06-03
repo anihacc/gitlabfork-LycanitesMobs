@@ -74,9 +74,8 @@
         }
     ],
     "elements": [
-        "water",
-        "quake",
-		"arcane"
+        "arcane",
+        "quake"
     ],
     "diets": [
         "carnivore",

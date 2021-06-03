@@ -79,6 +79,10 @@ public class ExtendedPlayer implements IExtendedPlayer {
 	public int summonSetMax = 5;
 	public PortalEntity staffPortal;
 
+	// Creature Studying:
+	public int creatureStudyCooldown = 0;
+	public int creatureStudyCooldownMax = 200;
+
     // Initial Setup:
     private boolean initialSetup = false;
 	
@@ -228,6 +232,11 @@ public class ExtendedPlayer implements IExtendedPlayer {
 			}
 		}
 
+		// Creature Study Cooldown Update:
+		if (this.creatureStudyCooldown > 0) {
+			this.creatureStudyCooldown--;
+		}
+
 		// Sync Stats To Client:
 		if(!this.player.getCommandSenderWorld().isClientSide) {
 			if(sync) {
@@ -347,6 +356,11 @@ public class ExtendedPlayer implements IExtendedPlayer {
 			this.sendPetEntriesToPlayer("familiar");
 		}
 	}
+
+	public void studyCreature(LivingEntity entity, int experience) {
+		this.beastiary.addCreatureKnowledge(entity, experience);
+		this.creatureStudyCooldown = this.creatureStudyCooldownMax;
+	}
 	
 	
 	// ==================================================
@@ -449,6 +463,9 @@ public class ExtendedPlayer implements IExtendedPlayer {
 		if(extTagCompound.contains("Spirit"))
 			this.spirit = extTagCompound.getInt("Spirit");
 
+		if(extTagCompound.contains("CreatureStudyCooldown"))
+			this.creatureStudyCooldown = extTagCompound.getInt("CreatureStudyCooldown");
+
 		if(extTagCompound.contains("SelectedSummonSet"))
 			this.selectedSummonSet = extTagCompound.getInt("SelectedSummonSet");
 
@@ -476,6 +493,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
 
 		extTagCompound.putInt("SummonFocus", this.summonFocus);
 		extTagCompound.putInt("Spirit", this.spirit);
+		extTagCompound.putInt("CreatureStudyCooldown", this.creatureStudyCooldown);
 		extTagCompound.putInt("SelectedSummonSet", this.selectedSummonSet);
 		extTagCompound.putLong("TimePlayed", this.timePlayed);
 

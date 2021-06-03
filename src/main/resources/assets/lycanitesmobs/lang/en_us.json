@@ -191,6 +191,8 @@
     "message.pet.tamed.suffix": "seems to love you now!",
     "message.pet.tamefail.prefix": "The",
     "message.pet.tamefail.suffix": "wants more!",
+    "message.pet.tamefail.knowledge.prefix": "You need Knowledge Rank 2 in your Beastiary to tame a",
+    "message.pet.tamefail.knowledge.suffix": "",
     "message.pet.mount.baby.prefix": "The",
     "message.pet.mount.baby.suffix": "is too young to carry you!",
     "_comment": "========== Commands ==========",

@@ -14,11 +14,13 @@ import java.util.function.Supplier;
 public class MessageCreatureKnowledge {
 	public String creatureName;
 	public int rank;
-	
+	public int experience;
+
 	public MessageCreatureKnowledge() {}
 	public MessageCreatureKnowledge(CreatureKnowledge creatureKnowledge) {
 		this.creatureName = creatureKnowledge.creatureName;
 		this.rank = creatureKnowledge.rank;
+		this.experience = creatureKnowledge.experience;
 	}
 
 	/**
@@ -34,7 +36,7 @@ public class MessageCreatureKnowledge {
 		if(playerExt == null)
 			return;
 		
-		playerExt.beastiary.addCreatureKnowledge(new CreatureKnowledge(playerExt.beastiary, message.creatureName, message.rank));
+		playerExt.beastiary.addCreatureKnowledge(new CreatureKnowledge(playerExt.beastiary, message.creatureName, message.rank, message.experience), false);
 	}
 	
 	/**
@@ -45,6 +47,7 @@ public class MessageCreatureKnowledge {
 		try {
 			message.creatureName = packet.readUtf(256);
 			message.rank = packet.readInt();
+			message.experience = packet.readInt();
 		}
 		catch(Exception e) {
 			LycanitesMobs.logWarning("", "There was a problem decoding the packet: " + packet + ".");
@@ -59,6 +62,7 @@ public class MessageCreatureKnowledge {
 	public static void encode(MessageCreatureKnowledge message, PacketBuffer packet) {
 		packet.writeUtf(message.creatureName);
         packet.writeInt(message.rank);
+        packet.writeInt(message.experience);
 	}
 	
 }

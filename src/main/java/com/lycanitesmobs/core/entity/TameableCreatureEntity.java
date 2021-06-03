@@ -8,6 +8,7 @@ import com.lycanitesmobs.core.entity.goals.actions.StayGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.CopyOwnerAttackTargetGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.DefendOwnerGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.RevengeOwnerGoal;
+import com.lycanitesmobs.core.info.CreatureKnowledge;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ElementInfo;
 import com.lycanitesmobs.core.item.ChargeItem;
@@ -777,6 +778,24 @@ public abstract class TameableCreatureEntity extends AgeableCreatureEntity {
 	 */
     public boolean tame(PlayerEntity player) {
     	if(!this.getCommandSenderWorld().isClientSide && !this.isRareVariant() && !this.isBoss()) {
+			ExtendedPlayer extendedPlayer = ExtendedPlayer.getForPlayer(player);
+			if(extendedPlayer == null) {
+				return this.isTamed();
+			}
+
+			// Require Knowledge Rank 2:
+			CreatureKnowledge creatureKnowledge = extendedPlayer.getBeastiary().getCreatureKnowledge(this.creatureInfo.getName());
+			if (creatureKnowledge == null || creatureKnowledge.rank < 2) {
+				ITextComponent tameMessage = new TranslationTextComponent("message.pet.tamefail.knowledge.prefix")
+						.append(" ")
+						.append(this.getSpeciesName())
+						.append(" ")
+						.append(new TranslationTextComponent("message.pet.tamefail.knowledge.suffix"));
+				player.sendMessage(tameMessage, Util.NIL_UUID);
+				return this.isTamed();
+			}
+
+			// Random Tame Chance:
 			if (this.random.nextInt(3) == 0) {
 				this.setPlayerOwner(player);
 				this.onTamedByPlayer();
@@ -791,10 +810,6 @@ public abstract class TameableCreatureEntity extends AgeableCreatureEntity {
 				//player.addStat(ObjectManager.getStat(this.creatureInfo.getName() + ".tame"), 1); TODO Player Stats
 				if (this.portalTime > this.getDimensionChangingDelay()) {
 					this.portalTime = this.getDimensionChangingDelay();
-				}
-				ExtendedPlayer extendedPlayer = ExtendedPlayer.getForPlayer(player);
-				if(extendedPlayer != null) {
-					extendedPlayer.getBeastiary().discoverCreature(this, 2, false);
 				}
 			}
 			else {

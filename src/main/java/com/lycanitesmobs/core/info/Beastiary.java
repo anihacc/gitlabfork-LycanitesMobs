@@ -11,7 +11,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
-import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.Util;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -40,38 +39,46 @@ public class Beastiary {
 	/**
 	 * Adds Creature Knowledge to this Beastiary after checking rank, etc.
 	 * @param newKnowledge The new knowledge to add.
-	 * @return The increase of knowledge rank or 0 on failure.
+	 * @param sendToClient If true, send a network packet to the client.
+	 * @return True if new knowledge is added and false if not.
 	 */
-	public int addCreatureKnowledge(CreatureKnowledge newKnowledge) {
+	public boolean addCreatureKnowledge(CreatureKnowledge newKnowledge, boolean sendToClient) {
 		CreatureInfo creatureInfo = CreatureManager.getInstance().getCreature(newKnowledge.creatureName);
 		if(creatureInfo == null)
-			return 0;
+			return false;
 		if(creatureInfo.dummy)
-			return 0;
+			return false;
 
 		CreatureKnowledge currentKnowledge = this.getCreatureKnowledge(creatureInfo.getName());
 		if(currentKnowledge != null) {
-			if(currentKnowledge.rank >= newKnowledge.rank) {
-				return 0;
+			if(currentKnowledge.rank > newKnowledge.rank || currentKnowledge.getMaxExperience() <= 0) {
+				return false;
 			}
-			int rankIncrease = newKnowledge.rank - currentKnowledge.rank;
+			if(currentKnowledge.experience > newKnowledge.experience) {
+				return false;
+			}
 			currentKnowledge.rank = newKnowledge.rank;
-			return rankIncrease;
+			currentKnowledge.experience = newKnowledge.experience;
+			this.sendToClient(currentKnowledge);
+			return true;
 		}
 
 		this.creatureKnowledgeList.put(newKnowledge.creatureName, newKnowledge);
-		return newKnowledge.rank;
+		if (sendToClient) {
+			this.sendAddedMessage(newKnowledge);
+			this.sendToClient(newKnowledge);
+		}
+		return true;
 	}
 
 
 	/**
 	 * Attempt to add Creature Knowledge to this Beastiary based on the provided entity and sends feedback to the player.
 	 * @param entity The entity being discovered.
-	 * @param rank The Knowledge rank being discovered.
-	 * @param knownMessage If true, if the creature is already known at the same or higher rank a message will be sent to the player.
+	 * @param experience The Knowledge experience being gained.
 	 * @return True if new knowledge is gained and false if not.
 	 */
-	public boolean discoverCreature(Entity entity, int rank, boolean knownMessage) {
+	public boolean addCreatureKnowledge(Entity entity, int experience) {
 		// Invalid Entity:
 		if(!(entity instanceof BaseCreatureEntity)) {
 			if (!this.extendedPlayer.player.getCommandSenderWorld().isClientSide) {
@@ -84,30 +91,15 @@ public class Beastiary {
 		}
 
 		CreatureInfo creatureInfo = ((BaseCreatureEntity)entity).creatureInfo;
-		CreatureKnowledge newKnowledge = new CreatureKnowledge(this.extendedPlayer.getBeastiary(), creatureInfo.getName(), rank);
-		int rankChange = this.extendedPlayer.getBeastiary().addCreatureKnowledge(newKnowledge);
-
-		// Already Known:
-		if(rankChange <= 0) {
-			if(knownMessage) {
-				this.sendKnownMessage(newKnowledge);
-			}
-			return false;
+		CreatureKnowledge newKnowledge = this.getCreatureKnowledge(creatureInfo.getName());
+		if (newKnowledge == null) {
+			newKnowledge = new CreatureKnowledge(this.extendedPlayer.getBeastiary(), creatureInfo.getName(), 1, experience);
 		}
-
-		// Success:
-		//this.extendedPlayer.player.addStat(StatManager.getInstance().getStat("learn", creatureInfo.name), 1); TODO Stats
-		this.sendAddedMessage(newKnowledge);
-		this.sendToClient(newKnowledge);
-		if(this.extendedPlayer.player.getCommandSenderWorld().isClientSide) {
-			for(int i = 0; i < 32; ++i) {
-				entity.getCommandSenderWorld().addParticle(ParticleTypes.HAPPY_VILLAGER,
-						entity.position().x() + (4.0F * this.extendedPlayer.player.getRandom().nextFloat()) - 2.0F,
-						entity.position().y() + (4.0F * this.extendedPlayer.player.getRandom().nextFloat()) - 2.0F,
-						entity.position().z() + (4.0F * this.extendedPlayer.player.getRandom().nextFloat()) - 2.0F,
-						0.0D, 0.0D, 0.0D);
-			}
+		else {
+			newKnowledge.addExperience(experience);
 		}
+		this.addCreatureKnowledge(newKnowledge, true);
+
 		return true;
 	}
 
@@ -282,15 +274,17 @@ public class Beastiary {
 				if(nbtKnowledge.contains("Rank")) {
 					rank = nbtKnowledge.getInt("Rank");
 				}
-				else if(nbtKnowledge.contains("Completion")) {
-					rank = 2;
+				int experience = 0;
+				if(nbtKnowledge.contains("Experience")) {
+					experience = nbtKnowledge.getInt("Experience");
 				}
 	    		CreatureKnowledge creatureKnowledge = new CreatureKnowledge(
                         this,
 	    				creatureName,
-	    				rank
+	    				rank,
+						experience
 	    			);
-	    		this.addCreatureKnowledge(creatureKnowledge);
+	    		this.addCreatureKnowledge(creatureKnowledge, false);
     		}
     	}
     }
