@@ -9,12 +9,12 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class AltarInfoEbonCacodemon extends AltarInfo {
+public class AltarInfoRoyalApollyon extends AltarInfo {
 
     // ==================================================
     //                    Constructor
     // ==================================================
-    public AltarInfoEbonCacodemon(String name) {
+    public AltarInfoRoyalApollyon(String name) {
         super(name);
     }
 
@@ -39,15 +39,13 @@ public class AltarInfoEbonCacodemon extends AltarInfo {
         Block bodyBlock = Blocks.OBSIDIAN;
 
         // Upper:
-        if(world.getBlockState(pos.offset(0, 1, 0)).getBlock() != bodyBlock)
-            return false;
         if(world.getBlockState(pos.offset(0, 2, 0)).getBlock() != bodyBlock)
+            return false;
+        if(world.getBlockState(pos.offset(0, 1, 0)).getBlock() != bodyBlock)
             return false;
 
         // Lower:
         if(world.getBlockState(pos.offset(0, -1, 0)).getBlock() != bodyBlock)
-            return false;
-        if(world.getBlockState(pos.offset(0, -2, 0)).getBlock() != bodyBlock)
             return false;
 
         // X Rotation:
@@ -60,44 +58,32 @@ public class AltarInfoEbonCacodemon extends AltarInfo {
 
 
     private boolean checkRotationX(Block bodyBlock, Entity entity, World world, BlockPos pos) {
-        // Left Arm:
+        // Left:
         if(world.getBlockState(pos.offset(-1, 2, 0)).getBlock() != bodyBlock)
             return false;
-        if(world.getBlockState(pos.offset(-1, 1, 0)).getBlock() != bodyBlock)
+        if(world.getBlockState(pos.offset(-2, 2, 0)).getBlock() != bodyBlock)
             return false;
         if(world.getBlockState(pos.offset(-2, 1, 0)).getBlock() != bodyBlock)
             return false;
-        if(world.getBlockState(pos.offset(-1, 0, 0)).getBlock() != bodyBlock)
-            return false;
-        if(world.getBlockState(pos.offset(-2, 0, 0)).getBlock() != bodyBlock)
-            return false;
-
-        // Right Arm:
-        if(world.getBlockState(pos.offset(1, 2, 0)).getBlock() != bodyBlock)
-            return false;
-        if(world.getBlockState(pos.offset(1, 1, 0)).getBlock() != bodyBlock)
-            return false;
-        if(world.getBlockState(pos.offset(2, 1, 0)).getBlock() != bodyBlock)
-            return false;
-        if(world.getBlockState(pos.offset(1, 0, 0)).getBlock() != bodyBlock)
-            return false;
-        if(world.getBlockState(pos.offset(2, 0, 0)).getBlock() != bodyBlock)
-            return false;
-
-        // Left Leg:
         if(world.getBlockState(pos.offset(-1, -1, 0)).getBlock() != bodyBlock)
-            return false;
-        if(world.getBlockState(pos.offset(-1, -2, 0)).getBlock() != bodyBlock)
             return false;
         if(world.getBlockState(pos.offset(-2, -1, 0)).getBlock() != bodyBlock)
             return false;
+        if(world.getBlockState(pos.offset(-2, -2, 0)).getBlock() != bodyBlock)
+            return false;
 
-        // Right Leg:
+        // Right:
+        if(world.getBlockState(pos.offset(1, 2, 0)).getBlock() != bodyBlock)
+            return false;
+        if(world.getBlockState(pos.offset(2, 2, 0)).getBlock() != bodyBlock)
+            return false;
+        if(world.getBlockState(pos.offset(2, 1, 0)).getBlock() != bodyBlock)
+            return false;
         if(world.getBlockState(pos.offset(1, -1, 0)).getBlock() != bodyBlock)
             return false;
-        if(world.getBlockState(pos.offset(1, -2, 0)).getBlock() != bodyBlock)
-            return false;
         if(world.getBlockState(pos.offset(2, -1, 0)).getBlock() != bodyBlock)
+            return false;
+        if(world.getBlockState(pos.offset(2, -2, 0)).getBlock() != bodyBlock)
             return false;
 
         return true;
@@ -105,44 +91,32 @@ public class AltarInfoEbonCacodemon extends AltarInfo {
 
 
     private boolean checkRotationZ(Block bodyBlock, Entity entity, World world, BlockPos pos) {
-        // Left Arm:
+        // Left:
         if(world.getBlockState(pos.offset(0, 2, -1)).getBlock() != bodyBlock)
             return false;
-        if(world.getBlockState(pos.offset(0, 1, -1)).getBlock() != bodyBlock)
+        if(world.getBlockState(pos.offset(0, 2, -2)).getBlock() != bodyBlock)
             return false;
         if(world.getBlockState(pos.offset(0, 1, -2)).getBlock() != bodyBlock)
             return false;
-        if(world.getBlockState(pos.offset(0, 0, -1)).getBlock() != bodyBlock)
-            return false;
-        if(world.getBlockState(pos.offset(0, 0, -2)).getBlock() != bodyBlock)
-            return false;
-
-        // Right Arm:
-        if(world.getBlockState(pos.offset(0, 2, 1)).getBlock() != bodyBlock)
-            return false;
-        if(world.getBlockState(pos.offset(0, 1, 1)).getBlock() != bodyBlock)
-            return false;
-        if(world.getBlockState(pos.offset(0, 1, 2)).getBlock() != bodyBlock)
-            return false;
-        if(world.getBlockState(pos.offset(0, 0, 1)).getBlock() != bodyBlock)
-            return false;
-        if(world.getBlockState(pos.offset(0, 0, 2)).getBlock() != bodyBlock)
-            return false;
-
-        // Left Leg:
         if(world.getBlockState(pos.offset(0, -1, -1)).getBlock() != bodyBlock)
-            return false;
-        if(world.getBlockState(pos.offset(0, -2, -1)).getBlock() != bodyBlock)
             return false;
         if(world.getBlockState(pos.offset(0, -1, -2)).getBlock() != bodyBlock)
             return false;
+        if(world.getBlockState(pos.offset(0, -2, -2)).getBlock() != bodyBlock)
+            return false;
 
-        // Right Leg:
+        // Right:
+        if(world.getBlockState(pos.offset(0, 2, 1)).getBlock() != bodyBlock)
+            return false;
+        if(world.getBlockState(pos.offset(0, 2, 2)).getBlock() != bodyBlock)
+            return false;
+        if(world.getBlockState(pos.offset(0, 1, 2)).getBlock() != bodyBlock)
+            return false;
         if(world.getBlockState(pos.offset(0, -1, 1)).getBlock() != bodyBlock)
             return false;
-        if(world.getBlockState(pos.offset(0, -2, 1)).getBlock() != bodyBlock)
-            return false;
         if(world.getBlockState(pos.offset(0, -1, 2)).getBlock() != bodyBlock)
+            return false;
+        if(world.getBlockState(pos.offset(0, -2, 2)).getBlock() != bodyBlock)
             return false;
 
         return true;
@@ -163,7 +137,7 @@ public class AltarInfoEbonCacodemon extends AltarInfo {
         int z = pos.getZ();
 
         // Create Mini Boss:
-        BaseCreatureEntity entityCreature = (BaseCreatureEntity) CreatureManager.getInstance().getCreature("cacodemon").createEntity(world);
+        BaseCreatureEntity entityCreature = (BaseCreatureEntity) CreatureManager.getInstance().getCreature("apollyon").createEntity(world);
         if(checkDimensions && !entityCreature.isNativeDimension(world))
             return false;
 

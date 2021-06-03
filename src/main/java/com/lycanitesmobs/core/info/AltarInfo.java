@@ -70,8 +70,8 @@ public class AltarInfo {
     //                   Create Altars
     // ==================================================
     public static void createAltars() {
-        AltarInfo ebonCacodemonAltar = new AltarInfoEbonCacodemon("EbonCacodemonAltar");
-        addAltar(ebonCacodemonAltar);
+        AltarInfo ebonMalwrathAltar = new AltarInfoEbonMalwrath("EbonMalwrathAltar");
+        addAltar(ebonMalwrathAltar);
 
         AltarInfo rahovartAltar = new AltarInfoRahovart("RahovartAltar");
         addAltar(rahovartAltar);
@@ -85,8 +85,8 @@ public class AltarInfo {
         addAltar(amalgalichAltar);
         StructureBuilder.addStructureBuilder(new AmalgalichStructureBuilder());
 
-        AltarInfo umberLobberAltar = new AltarInfoUmberLobber("UmberLobberAltar");
-        addAltar(umberLobberAltar);
+        AltarInfo umberCherufeAltar = new AltarInfoUmberCherufe("UmberCherufeAltar");
+        addAltar(umberCherufeAltar);
 
         AltarInfo celestialGeonachAltar = new AltarInfoCelestialGeonach("CelestialGeonachAltar");
         addAltar(celestialGeonachAltar);
@@ -100,8 +100,8 @@ public class AltarInfo {
         AltarInfo crimsonEpionAltar = new AltarInfoCrimsonEpion("CrimsonEpion");
         addAltar(crimsonEpionAltar);
 
-        AltarInfo royalArchvileAltar = new AltarInfoRoyalArchvile("RoyalArchvile");
-        addAltar(royalArchvileAltar);
+        AltarInfo royalApollyonAltar = new AltarInfoRoyalApollyon("RoyalApollyon");
+        addAltar(royalApollyonAltar);
 
         AltarInfo phosphorescentChupacabraAltar = new AltarInfoPhosphorescentChupacabra("PhosphorescentChupacabra");
         addAltar(phosphorescentChupacabraAltar);

@@ -9,12 +9,12 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class AltarInfoUmberLobber extends AltarInfo {
+public class AltarInfoEbonMalwrath extends AltarInfo {
 
     // ==================================================
     //                    Constructor
     // ==================================================
-    public AltarInfoUmberLobber(String name) {
+    public AltarInfoEbonMalwrath(String name) {
         super(name);
     }
 
@@ -36,99 +36,113 @@ public class AltarInfoUmberLobber extends AltarInfo {
         if(!this.quickCheck(entity, world, pos))
             return false;
 
-        int x = pos.getX();
-        int y = pos.getY();
-        int z = pos.getZ();
-
         Block bodyBlock = Blocks.OBSIDIAN;
 
         // Upper:
-        if(world.getBlockState(new BlockPos(x, y + 1, z)).getBlock() != bodyBlock)
+        if(world.getBlockState(pos.offset(0, 1, 0)).getBlock() != bodyBlock)
             return false;
-        if(world.getBlockState(new BlockPos(x, y + 2, z)).getBlock() != bodyBlock)
+        if(world.getBlockState(pos.offset(0, 2, 0)).getBlock() != bodyBlock)
             return false;
 
         // Lower:
-        if(world.getBlockState(new BlockPos(x, y - 1, z)).getBlock() != bodyBlock)
+        if(world.getBlockState(pos.offset(0, -1, 0)).getBlock() != bodyBlock)
+            return false;
+        if(world.getBlockState(pos.offset(0, -2, 0)).getBlock() != bodyBlock)
             return false;
 
         // X Rotation:
-        if(this.checkRotationX(bodyBlock, entity, world, x, y, z))
+        if(this.checkRotationX(bodyBlock, entity, world, pos))
             return true;
 
         // Z Rotation:
-        return this.checkRotationZ(bodyBlock, entity, world, x, y, z);
+        return this.checkRotationZ(bodyBlock, entity, world, pos);
     }
 
 
-    private boolean checkRotationX(Block bodyBlock, Entity entity, World world, int x, int y, int z) {
+    private boolean checkRotationX(Block bodyBlock, Entity entity, World world, BlockPos pos) {
         // Left Arm:
-        if(world.getBlockState(new BlockPos(x - 1, y + 2, z)).getBlock() != bodyBlock)
+        if(world.getBlockState(pos.offset(-1, 2, 0)).getBlock() != bodyBlock)
             return false;
-        if(world.getBlockState(new BlockPos(x - 2, y + 2, z)).getBlock() != bodyBlock)
+        if(world.getBlockState(pos.offset(-1, 1, 0)).getBlock() != bodyBlock)
             return false;
-        if(world.getBlockState(new BlockPos(x - 2, y + 1, z)).getBlock() != bodyBlock)
+        if(world.getBlockState(pos.offset(-2, 1, 0)).getBlock() != bodyBlock)
+            return false;
+        if(world.getBlockState(pos.offset(-1, 0, 0)).getBlock() != bodyBlock)
+            return false;
+        if(world.getBlockState(pos.offset(-2, 0, 0)).getBlock() != bodyBlock)
             return false;
 
         // Right Arm:
-        if(world.getBlockState(new BlockPos(x + 1, y + 2, z)).getBlock() != bodyBlock)
+        if(world.getBlockState(pos.offset(1, 2, 0)).getBlock() != bodyBlock)
             return false;
-        if(world.getBlockState(new BlockPos(x + 2, y + 2, z)).getBlock() != bodyBlock)
+        if(world.getBlockState(pos.offset(1, 1, 0)).getBlock() != bodyBlock)
             return false;
-        if(world.getBlockState(new BlockPos(x + 2, y + 1, z)).getBlock() != bodyBlock)
+        if(world.getBlockState(pos.offset(2, 1, 0)).getBlock() != bodyBlock)
+            return false;
+        if(world.getBlockState(pos.offset(1, 0, 0)).getBlock() != bodyBlock)
+            return false;
+        if(world.getBlockState(pos.offset(2, 0, 0)).getBlock() != bodyBlock)
             return false;
 
         // Left Leg:
-        if(world.getBlockState(new BlockPos(x - 1, y - 1, z)).getBlock() != bodyBlock)
+        if(world.getBlockState(pos.offset(-1, -1, 0)).getBlock() != bodyBlock)
             return false;
-        if(world.getBlockState(new BlockPos(x - 1, y - 2, z)).getBlock() != bodyBlock)
+        if(world.getBlockState(pos.offset(-1, -2, 0)).getBlock() != bodyBlock)
             return false;
-        if(world.getBlockState(new BlockPos(x - 2, y - 2, z)).getBlock() != bodyBlock)
+        if(world.getBlockState(pos.offset(-2, -1, 0)).getBlock() != bodyBlock)
             return false;
 
         // Right Leg:
-        if(world.getBlockState(new BlockPos(x + 1, y - 1, z)).getBlock() != bodyBlock)
+        if(world.getBlockState(pos.offset(1, -1, 0)).getBlock() != bodyBlock)
             return false;
-        if(world.getBlockState(new BlockPos(x + 1, y - 2, z)).getBlock() != bodyBlock)
+        if(world.getBlockState(pos.offset(1, -2, 0)).getBlock() != bodyBlock)
             return false;
-        if(world.getBlockState(new BlockPos(x + 2, y - 2, z)).getBlock() != bodyBlock)
+        if(world.getBlockState(pos.offset(2, -1, 0)).getBlock() != bodyBlock)
             return false;
 
         return true;
     }
 
 
-    private boolean checkRotationZ(Block bodyBlock, Entity entity, World world, int x, int y, int z) {
+    private boolean checkRotationZ(Block bodyBlock, Entity entity, World world, BlockPos pos) {
         // Left Arm:
-        if(world.getBlockState(new BlockPos(x, y + 2, z - 1)).getBlock() != bodyBlock)
+        if(world.getBlockState(pos.offset(0, 2, -1)).getBlock() != bodyBlock)
             return false;
-        if(world.getBlockState(new BlockPos(x, y + 2, z - 2)).getBlock() != bodyBlock)
+        if(world.getBlockState(pos.offset(0, 1, -1)).getBlock() != bodyBlock)
             return false;
-        if(world.getBlockState(new BlockPos(x, y + 1, z - 2)).getBlock() != bodyBlock)
+        if(world.getBlockState(pos.offset(0, 1, -2)).getBlock() != bodyBlock)
+            return false;
+        if(world.getBlockState(pos.offset(0, 0, -1)).getBlock() != bodyBlock)
+            return false;
+        if(world.getBlockState(pos.offset(0, 0, -2)).getBlock() != bodyBlock)
             return false;
 
         // Right Arm:
-        if(world.getBlockState(new BlockPos(x, y + 2, z + 1)).getBlock() != bodyBlock)
+        if(world.getBlockState(pos.offset(0, 2, 1)).getBlock() != bodyBlock)
             return false;
-        if(world.getBlockState(new BlockPos(x, y + 2, z + 2)).getBlock() != bodyBlock)
+        if(world.getBlockState(pos.offset(0, 1, 1)).getBlock() != bodyBlock)
             return false;
-        if(world.getBlockState(new BlockPos(x, y + 1, z + 2)).getBlock() != bodyBlock)
+        if(world.getBlockState(pos.offset(0, 1, 2)).getBlock() != bodyBlock)
+            return false;
+        if(world.getBlockState(pos.offset(0, 0, 1)).getBlock() != bodyBlock)
+            return false;
+        if(world.getBlockState(pos.offset(0, 0, 2)).getBlock() != bodyBlock)
             return false;
 
         // Left Leg:
-        if(world.getBlockState(new BlockPos(x, y - 1, z - 1)).getBlock() != bodyBlock)
+        if(world.getBlockState(pos.offset(0, -1, -1)).getBlock() != bodyBlock)
             return false;
-        if(world.getBlockState(new BlockPos(x, y - 2, z - 1)).getBlock() != bodyBlock)
+        if(world.getBlockState(pos.offset(0, -2, -1)).getBlock() != bodyBlock)
             return false;
-        if(world.getBlockState(new BlockPos(x, y - 2, z - 2)).getBlock() != bodyBlock)
+        if(world.getBlockState(pos.offset(0, -1, -2)).getBlock() != bodyBlock)
             return false;
 
         // Right Leg:
-        if(world.getBlockState(new BlockPos(x, y - 1, z + 1)).getBlock() != bodyBlock)
+        if(world.getBlockState(pos.offset(0, -1, 1)).getBlock() != bodyBlock)
             return false;
-        if(world.getBlockState(new BlockPos(x, y - 2, z + 1)).getBlock() != bodyBlock)
+        if(world.getBlockState(pos.offset(0, -2, 1)).getBlock() != bodyBlock)
             return false;
-        if(world.getBlockState(new BlockPos(x, y - 2, z + 2)).getBlock() != bodyBlock)
+        if(world.getBlockState(pos.offset(0, -1, 2)).getBlock() != bodyBlock)
             return false;
 
         return true;
@@ -149,8 +163,8 @@ public class AltarInfoUmberLobber extends AltarInfo {
         int z = pos.getZ();
 
         // Create Mini Boss:
-        BaseCreatureEntity entityLobber = (BaseCreatureEntity) CreatureManager.getInstance().getCreature("lobber").createEntity(world);
-        if(checkDimensions && !entityLobber.isNativeDimension(world))
+        BaseCreatureEntity entityCreature = (BaseCreatureEntity) CreatureManager.getInstance().getCreature("malwrath").createEntity(world);
+        if(checkDimensions && !entityCreature.isNativeDimension(world))
             return false;
 
         // Destroy Altar:
@@ -179,12 +193,12 @@ public class AltarInfoUmberLobber extends AltarInfo {
         }
 
         // Spawn Mini Boss:
-        entityLobber.altarSummoned = true;
-        entityLobber.forceBossHealthBar = true;
-        entityLobber.applyVariant(3);
-        entityLobber.moveTo(x, y - 2, z, 0, 0);
-        world.addFreshEntity(entityLobber);
-        entityLobber.destroyArea(x, y, z, 10000, false, 2);
+        entityCreature.altarSummoned = true;
+        entityCreature.forceBossHealthBar = true;
+        entityCreature.applyVariant(3);
+        entityCreature.moveTo(x, y - 2, z, 0, 0);
+        world.addFreshEntity(entityCreature);
+        entityCreature.destroyArea(x, y, z, 10000, false, 2);
 
         return true;
     }
