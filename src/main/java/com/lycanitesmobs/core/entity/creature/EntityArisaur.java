@@ -58,8 +58,16 @@ public class EntityArisaur extends AgeableCreatureEntity implements IGroupHeavy 
 		}
         return super.getBlockPathWeight(x, y, z);
     }
-    
-	// ========== Can leash ==========
+    // ==================================================
+    //                     Equipment
+    // ==================================================
+    @Override
+    public int getNoBagSize() { return 0; }
+    @Override
+    public int getBagSize() { return this.creatureInfo.BagSize; }
+
+
+    // ========== Can leash ==========
     @Override
     public boolean canBeLeashedTo(EntityPlayer player) {
 	    return true;

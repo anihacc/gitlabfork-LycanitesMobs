@@ -119,8 +119,16 @@ public class EntityWraith extends TameableCreatureEntity implements IMob {
 		}
         super.onDeath(par1DamageSource);
     }
-    
-    
+    // ==================================================
+    //                     Equipment
+    // ==================================================
+    @Override
+    public int getNoBagSize() { return 0; }
+    @Override
+    public int getBagSize() { return this.creatureInfo.BagSize; }
+
+
+
     // ==================================================
     //                     Immunities
     // ==================================================

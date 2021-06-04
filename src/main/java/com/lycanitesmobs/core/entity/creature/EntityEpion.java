@@ -120,9 +120,17 @@ public class EntityEpion extends RideableCreatureEntity implements IMob {
     //                     Pet Control
     // ==================================================
     public boolean petControlsEnabled() { return true; }
-    
-    
-    // ==================================================
+
+	// ==================================================
+	//                     Equipment
+	// ==================================================
+	@Override
+	public int getNoBagSize() { return 0; }
+	@Override
+	public int getBagSize() { return this.creatureInfo.BagSize; }
+
+
+	// ==================================================
    	//                     Immunities
    	// ==================================================
     /** Returns true if this mob should be damaged by the sun. **/

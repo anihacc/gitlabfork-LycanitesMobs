@@ -1,6 +1,0 @@
-{
-	"parent": "lycanitesmobs:item/arcanelaserstormscepter",
-	"textures": {
-		"layer0": "lycanitesmobs:items/arcanelaserstormscepter_fire"
-	}
-}

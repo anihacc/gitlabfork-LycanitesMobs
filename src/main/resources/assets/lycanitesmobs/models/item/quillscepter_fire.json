@@ -1,6 +1,0 @@
-{
-	"parent": "lycanitesmobs:item/quillscepter",
-	"textures": {
-		"layer0": "lycanitesmobs:items/quillscepter_fire"
-	}
-}

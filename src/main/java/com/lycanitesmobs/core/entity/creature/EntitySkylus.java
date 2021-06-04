@@ -168,8 +168,16 @@ public class EntitySkylus extends TameableCreatureEntity implements IMob {
     		return 0.25F;
     	return 1.0F;
     }
-    
-    
+    // ==================================================
+    //                     Equipment
+    // ==================================================
+    @Override
+    public int getNoBagSize() { return 0; }
+    @Override
+    public int getBagSize() { return this.creatureInfo.BagSize; }
+
+
+
     // ==================================================
     //                     Pet Control
     // ==================================================

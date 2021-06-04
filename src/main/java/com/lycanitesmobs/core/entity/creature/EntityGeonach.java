@@ -160,9 +160,17 @@ public class EntityGeonach extends TameableCreatureEntity implements IMob, IFusa
     //                     Pet Control
     // ==================================================
     public boolean petControlsEnabled() { return true; }
-    
-    
-    // ==================================================
+
+	// ==================================================
+	//                     Equipment
+	// ==================================================
+	@Override
+	public int getNoBagSize() { return 0; }
+	@Override
+	public int getBagSize() { return this.creatureInfo.BagSize; }
+
+
+	// ==================================================
    	//                    Taking Damage
    	// ==================================================
     // ========== Damage Modifier ==========

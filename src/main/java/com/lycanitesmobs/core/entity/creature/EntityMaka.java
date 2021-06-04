@@ -65,9 +65,17 @@ public class EntityMaka extends AgeableCreatureEntity {
         }
         super.onFirstSpawn();
     }
-	
-	
-	// ==================================================
+
+    // ==================================================
+    //                     Equipment
+    // ==================================================
+    @Override
+    public int getNoBagSize() { return 0; }
+    @Override
+    public int getBagSize() { return this.creatureInfo.BagSize; }
+
+
+    // ==================================================
    	//                      Movement
    	// ==================================================
 	// ========== Pathing Weight ==========

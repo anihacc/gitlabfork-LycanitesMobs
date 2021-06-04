@@ -153,16 +153,20 @@ public class EntityIgnibus extends RideableCreatureEntity implements IGroupHeavy
     //                     Pet Control
     // ==================================================
     public boolean petControlsEnabled() { return true; }
-    
-    
+
+
     // ==================================================
     //                     Equipment
     // ==================================================
+    @Override
     public int getNoBagSize() { return 0; }
-    public int getBagSize() { return 5; }
-	
-	
-	// ==================================================
+    @Override
+    public int getBagSize() { return this.creatureInfo.BagSize; }
+
+
+
+
+    // ==================================================
    	//                      Attacks
    	// ==================================================
 
@@ -170,7 +174,7 @@ public class EntityIgnibus extends RideableCreatureEntity implements IGroupHeavy
     @Override
     public void attackRanged(Entity target, float range) {
         // Type:
-        ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile("scorchfireball");
+        ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile("primeember");
         if(projectileInfo == null) {
             return;
         }
@@ -299,7 +303,7 @@ public class EntityIgnibus extends RideableCreatureEntity implements IGroupHeavy
         if(rider instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer)rider;
             // Type:
-            ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile("scorchfireball");
+            ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile("primeember");
             if(projectileInfo == null) {
                 return;
             }

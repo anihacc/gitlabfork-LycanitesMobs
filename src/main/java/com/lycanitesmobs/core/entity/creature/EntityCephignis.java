@@ -97,8 +97,16 @@ public class EntityCephignis extends AgeableCreatureEntity {
             return false;
         else return super.canBeTempted();
     }
-    
-    
+
+    // ==================================================
+    //                     Equipment
+    // ==================================================
+    @Override
+    public int getNoBagSize() { return 0; }
+    @Override
+    public int getBagSize() { return this.creatureInfo.BagSize; }
+
+
     // ==================================================
    	//                     Immunities
    	// ==================================================

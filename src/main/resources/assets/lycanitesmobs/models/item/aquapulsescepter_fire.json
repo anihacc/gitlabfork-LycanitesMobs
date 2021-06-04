@@ -1,6 +1,0 @@
-{
-	"parent": "lycanitesmobs:item/aquapulsescepter",
-	"textures": {
-		"layer0": "lycanitesmobs:items/aquapulsescepter_fire"
-	}
-}

@@ -99,8 +99,16 @@ public class EntityAglebemu extends TameableCreatureEntity implements IMob {
     public boolean isPushedByWater() {
         return false;
     }
-    
-    
+
+    // ==================================================
+    //                     Equipment
+    // ==================================================
+    @Override
+    public int getNoBagSize() { return 0; }
+    @Override
+    public int getBagSize() { return this.creatureInfo.BagSize; }
+
+
     // ==================================================
    	//                     Immunities
    	// ==================================================
@@ -120,14 +128,7 @@ public class EntityAglebemu extends TameableCreatureEntity implements IMob {
     }
 
 
-    // ==================================================
-    //                     Equipment
-    // ==================================================
-    @Override
-    public int getNoBagSize() { return 0; }
-    @Override
-    public int getBagSize() { return 5; }
-	
+
 
     // ==================================================
     //                     Pet Control

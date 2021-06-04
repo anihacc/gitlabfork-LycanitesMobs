@@ -1,7 +1,0 @@
-{
-	"parent": "item/generated",
-	"textures": {
-		"layer0": "lycanitesmobs:items/spawns/brute",
-		"layer1": "lycanitesmobs:items/spawns/brute_overlay"
-	}
-}

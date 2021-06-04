@@ -89,9 +89,17 @@ public class EntityVespidQueen extends AgeableCreatureEntity implements IMob {
     		return true;
     	return super.isPersistant();
     }
-	
-	
-    // ==================================================
+
+	// ==================================================
+	//                     Equipment
+	// ==================================================
+	@Override
+	public int getNoBagSize() { return 0; }
+	@Override
+	public int getBagSize() { return this.creatureInfo.BagSize; }
+
+
+	// ==================================================
     //                      Updates
     // ==================================================
 	// ========== Living Update ==========

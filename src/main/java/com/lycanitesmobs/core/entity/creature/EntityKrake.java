@@ -103,8 +103,16 @@ public class EntityKrake extends AgeableCreatureEntity implements IMob {
         for(groundPos = wanderPosition.down(); groundPos.getY() > 0 && !this.getEntityWorld().getBlockState(groundPos).getMaterial().isSolid(); groundPos = groundPos.down()) {}
         return groundPos.up();
     }
-    
-    
+
+    // ==================================================
+    //                     Equipment
+    // ==================================================
+    @Override
+    public int getNoBagSize() { return 0; }
+    @Override
+    public int getBagSize() { return this.creatureInfo.BagSize; }
+
+
     // ==================================================
    	//                     Immunities
    	// ==================================================

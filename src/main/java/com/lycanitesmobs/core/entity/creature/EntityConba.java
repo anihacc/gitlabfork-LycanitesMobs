@@ -192,8 +192,16 @@ public class EntityConba extends TameableCreatureEntity implements IMob {
 	    else
 	    	return this.extraAnimation01;
     }
-    
-    
+
+    // ==================================================
+    //                     Equipment
+    // ==================================================
+    @Override
+    public int getNoBagSize() { return 0; }
+    @Override
+    public int getBagSize() { return this.creatureInfo.BagSize; }
+
+
     // ==================================================
     //                     Immunities
     // ==================================================

@@ -1,6 +1,6 @@
 {
     "name": "erepede",
-    "creatureType": "arthropod",
+    "creatureType": "insect",
     "groups": [
         "predator"
     ],
@@ -54,6 +54,7 @@
     "pierce": 1,
     "sight": 24,
     "knockbackResistance": 0.25,
+    "bagSize": 5,
     "eggBackColor": "#DD9922",
     "eggForeColor": "#FFDDFF",
     "subspecies": [

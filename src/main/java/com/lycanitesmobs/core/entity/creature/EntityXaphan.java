@@ -101,10 +101,13 @@ public class EntityXaphan extends TameableCreatureEntity implements IMob {
     // ==================================================
     //                     Equipment
     // ==================================================
+    @Override
     public int getNoBagSize() { return 0; }
-    public int getBagSize() { return 5; }
-    
-    
+    @Override
+    public int getBagSize() { return this.creatureInfo.BagSize; }
+
+
+
     // ==================================================
     //                     Pet Control
     // ==================================================

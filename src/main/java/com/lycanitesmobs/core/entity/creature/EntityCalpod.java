@@ -99,9 +99,17 @@ public class EntityCalpod extends BaseCreatureEntity implements IMob {
 	// ========== Movement ==========
 	@Override
 	public boolean canClimb() { return true; }
-    
-    
-    // ==================================================
+
+	// ==================================================
+	//                     Equipment
+	// ==================================================
+	@Override
+	public int getNoBagSize() { return 0; }
+	@Override
+	public int getBagSize() { return this.creatureInfo.BagSize; }
+
+
+	// ==================================================
    	//                     Immunities
    	// ==================================================
     @Override

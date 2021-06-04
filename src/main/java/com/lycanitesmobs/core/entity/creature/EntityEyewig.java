@@ -146,16 +146,19 @@ public class EntityEyewig extends RideableCreatureEntity {
 
 	@Override
 	public boolean isStrongSwimmer() { return true; }
-    
-    
-    // ==================================================
-    //                     Equipment
-    // ==================================================
-    public int getNoBagSize() { return 0; }
-    public int getBagSize() { return 10; }
-    
-    
-    // ==================================================
+
+
+	// ==================================================
+	//                     Equipment
+	// ==================================================
+	@Override
+	public int getNoBagSize() { return 0; }
+	@Override
+	public int getBagSize() { return this.creatureInfo.BagSize; }
+
+
+
+	// ==================================================
    	//                     Immunities
    	// ==================================================
     @Override

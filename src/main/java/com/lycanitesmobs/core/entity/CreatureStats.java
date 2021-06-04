@@ -268,6 +268,13 @@ public class CreatureStats {
 		statValue *= this.getLevelMultiplier(statName);
 		return statValue;
 	}
+	/**
+	 * Returns the Bag Size this entity should use.
+	 * @return Base Bag Size.
+	 */
+	public int BagSize() {
+		return this.entity.creatureInfo.BagSize;
+	}
 
 
 	/**

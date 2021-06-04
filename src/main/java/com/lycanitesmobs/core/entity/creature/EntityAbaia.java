@@ -113,8 +113,16 @@ public class EntityAbaia extends TameableCreatureEntity implements IMob {
 	public boolean canWalk() {
 		return false;
 	}
-    
-    
+
+    // ==================================================
+    //                     Equipment
+    // ==================================================
+    @Override
+    public int getNoBagSize() { return 0; }
+    @Override
+    public int getBagSize() { return this.creatureInfo.BagSize; }
+
+
     // ==================================================
    	//                     Immunities
    	// ==================================================
