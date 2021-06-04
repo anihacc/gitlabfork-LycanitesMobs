@@ -22,12 +22,18 @@ public class BlockModelsGenerator extends BlockModelsProvider {
         dungeonBlockStates("aberrant");
     }
 
+    /**
+     https://github.com/reetamb/GatorLab/blob/main/src/main/java/com/reetam/gatorlab/datagen/provider/LabBlockProvider.java
+     Resource for functioning block model generation
+     */
+    //TODO: FIX BLOCK DATAGEN
+
     private void dungeonBlockStates(String name) {
-        fullBlock("aberrantstone");
-//        fullBlock(name + "stonebrick");
-//        fullBlock(name + "stonetile");
-//        fullBlock(name + "stonepolished");
-//        fullBlock(name + "stonechiseled");
+        fullBlock(name + "stone");
+        fullBlock(name + "stonebrick");
+        fullBlock(name + "stonetile");
+        fullBlock(name + "stonepolished");
+        fullBlock(name + "stonechiseled");
     }
 
     private void fullBlock(String name) {
