@@ -1389,8 +1389,8 @@ element.poison.description=化学物質、通常は有毒または毒、麻薬�
 element.phase.name=フェーズ
 element.phase.description=位相シフトまたはスピリチュアルな現実を表す複合元素。物質世界の上の階層化された空間であり、スピリットの構成と使用です。アスペクトは、大地の固体形状と風の非流動性を反映するため、基本元素の大地と風からマージできます。
 #
-element.gravity.name=重力
-element.gravity.description=重力、磁気、結合、圧縮、および人工構造を表す複合元素。重力は、大地と秩序から融合できます。重力は、大地の物理的存在と秩序の構造と法則を反映しています。
+element.arcane.name=重力
+element.arcane.description=重力、磁気、結合、圧縮、および人工構造を表す複合元素。重力は、大地と秩序から融合できます。重力は、大地の物理的存在と秩序の構造と法則を反映しています。
 #
 element.quake.name=振動
 element.quake.description=振動、音、燃焼、破壊を表す複合元素。地震は大地とカオスから融合することができます。そこでは、大地は固体の形を取り、カオスによって分割されます。

@@ -4,9 +4,9 @@
 		"count": 4
 	},
 	"pattern": [
-		" MM",
+		" PM",
 		"BBM",
-		" MM"
+		" PM"
 	],
 	"type": "forge:ore_shaped",
 	"key": {
@@ -15,7 +15,11 @@
 		},
 		"M": {
 			"type": "forge:ore_dict",
-			"ore": "listAllrabbitcooked"
+			"ore": "listAllbeefcooked"
+		},
+		"P": {
+			"type": "forge:ore_dict",
+			"ore": "listAllporkcooked"
 		}
 	}
 }

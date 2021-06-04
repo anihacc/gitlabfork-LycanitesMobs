@@ -5,7 +5,7 @@
   },
   "ingredients": [
 	{
-      "item": "lycanitesmobs:djinncloud"
+      "item": "lycanitesmobs:zephyrcloud"
     }
   ],
   "type": "forge:ore_shapeless"

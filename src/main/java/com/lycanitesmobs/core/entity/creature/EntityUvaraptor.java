@@ -2,11 +2,9 @@ package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.core.entity.RideableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
-import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 public class EntityUvaraptor extends RideableCreatureEntity {
@@ -120,7 +118,7 @@ public class EntityUvaraptor extends RideableCreatureEntity {
     @Override
     public int getNoBagSize() { return 0; }
     @Override
-    public int getBagSize() { return this.creatureInfo.BagSize; }
+    public int getBagSize() { return this.creatureInfo.bagSize; }
 
 
 

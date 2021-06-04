@@ -273,7 +273,7 @@ public class CreatureStats {
 	 * @return Base Bag Size.
 	 */
 	public int BagSize() {
-		return this.entity.creatureInfo.BagSize;
+		return this.entity.creatureInfo.bagSize;
 	}
 
 

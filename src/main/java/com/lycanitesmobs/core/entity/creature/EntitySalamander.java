@@ -5,12 +5,10 @@ import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.EntityItemCustom;
 import com.lycanitesmobs.core.entity.RideableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
-import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.init.Blocks;
 import net.minecraft.entity.*;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.init.MobEffects;
@@ -199,7 +197,7 @@ public class EntitySalamander extends RideableCreatureEntity implements IMob {
     @Override
     public int getNoBagSize() { return 0; }
     @Override
-    public int getBagSize() { return this.creatureInfo.BagSize; }
+    public int getBagSize() { return this.creatureInfo.bagSize; }
 
 
 

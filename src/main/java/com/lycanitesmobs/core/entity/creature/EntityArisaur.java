@@ -4,13 +4,11 @@ import com.lycanitesmobs.api.IGroupHeavy;
 import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import com.lycanitesmobs.core.entity.goals.actions.TemptGoal;
-import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -64,7 +62,7 @@ public class EntityArisaur extends AgeableCreatureEntity implements IGroupHeavy 
     @Override
     public int getNoBagSize() { return 0; }
     @Override
-    public int getBagSize() { return this.creatureInfo.BagSize; }
+    public int getBagSize() { return this.creatureInfo.bagSize; }
 
 
     // ========== Can leash ==========

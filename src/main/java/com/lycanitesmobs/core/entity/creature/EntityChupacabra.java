@@ -5,7 +5,6 @@ import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.GoalConditions;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import com.lycanitesmobs.core.entity.goals.actions.abilities.FireProjectilesGoal;
-import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.Entity;
@@ -83,7 +82,7 @@ public class EntityChupacabra extends TameableCreatureEntity {
     @Override
     public int getNoBagSize() { return 0; }
     @Override
-    public int getBagSize() { return this.creatureInfo.BagSize; }
+    public int getBagSize() { return this.creatureInfo.bagSize; }
 
 
 

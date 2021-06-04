@@ -1,6 +1,5 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.core.config.ConfigBase;
 import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
@@ -205,7 +204,7 @@ public class EntityYale extends AgeableCreatureEntity implements IShearable {
 	@Override
 	public int getNoBagSize() { return 0; }
 	@Override
-	public int getBagSize() { return this.creatureInfo.BagSize; }
+	public int getBagSize() { return this.creatureInfo.bagSize; }
 
 
 	// ==================================================

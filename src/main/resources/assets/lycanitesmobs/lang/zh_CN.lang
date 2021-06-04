@@ -1384,8 +1384,8 @@ element.poison.description=一种代表化学物质的复合元素，通常是�
 element.phase.name=相位
 element.phase.description=一种代表移相或精神实相的复合元素，一个分层在物质世界之上的空间，它是精神的构成和使用。相位可以从基础元素大地和风中融合，因为它体现了大地的固体形态和风的流动性非固体性。
 #
-element.gravity.name=重力
-element.gravity.description=一种代表万有引力、磁性、键合、压缩和人造结构的复合元素。重力可以从大地和秩序中融合，在那里它体现了大地的固体物理存在以及秩序的结构和规律。
+element.arcane.name=重力
+element.arcane.description=一种代表万有引力、磁性、键合、压缩和人造结构的复合元素。重力可以从大地和秩序中融合，在那里它体现了大地的固体物理存在以及秩序的结构和规律。
 #
 element.quake.name=震动
 element.quake.description=一种代表震动、声音、燃烧和破坏的复合元素。地震可以从大地和混沌中融合，在那里大地呈现出固体形态，然后被混沌分裂。

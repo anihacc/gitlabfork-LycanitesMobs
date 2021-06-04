@@ -1,6 +1,5 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.ExtendedEntity;
 import com.lycanitesmobs.core.entity.RideableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
@@ -11,7 +10,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
@@ -268,7 +266,7 @@ public class EntityRoc extends RideableCreatureEntity implements IMob {
     @Override
     public int getNoBagSize() { return 0; }
     @Override
-    public int getBagSize() { return this.creatureInfo.BagSize; }
+    public int getBagSize() { return this.creatureInfo.bagSize; }
 
 
 

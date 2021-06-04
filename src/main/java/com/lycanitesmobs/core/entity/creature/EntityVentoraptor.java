@@ -1,12 +1,9 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.RideableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
-import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.entity.*;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.init.MobEffects;
 import net.minecraft.world.World;
 
@@ -125,7 +122,7 @@ public class EntityVentoraptor extends RideableCreatureEntity {
     @Override
     public int getNoBagSize() { return 0; }
     @Override
-    public int getBagSize() { return this.creatureInfo.BagSize; }
+    public int getBagSize() { return this.creatureInfo.bagSize; }
 
 
 

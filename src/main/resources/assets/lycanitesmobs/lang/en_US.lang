@@ -628,7 +628,7 @@ tile.desertstonetile_stairs.name=Desertstone Tile Stairs
 tile.desertstonetile_stairs.description=Decorated desertstone used to pave the floors of great monuments.
 #
 tile.soulcubedesertic.name=Desertic Soulcube
-tile.soulcubedesertic.description=A strange device full of complex light, gravity and earth magic.
+tile.soulcubedesertic.description=A strange device full of complex light, arcane and earth magic.
 # ========================================================================
 tile.lushstonebrick_stairs.name=Lushstone Brick Stairs
 tile.lushstonebrick_stairs.description=The very essence of nature courses through this stone.
@@ -755,10 +755,10 @@ entity.lycanitesmobs.aglebemu.description=Large poisonous frogs with excellent s
 entity.lycanitesmobs.aglebemu.habitat=These amphibians are usually found in swamplands.
 entity.lycanitesmobs.aglebemu.combat=Aglebemu use their powerful, extremely long and sharp tongues to spear their victims and inject a deadly concoction of contagious bacteria.
 # ========================================================================
-entity.lycanitesmobs.archvile.name=Archvile
-entity.lycanitesmobs.archvile.description=Malicious demons that rule of areas of the nether, Archviles enjoy the smell of their victim's burning flesh and enjoy watching other demons tear their victims apart!
-entity.lycanitesmobs.archvile.habitat=Archviles live within the depths of the Nether.
-entity.lycanitesmobs.archvile.combat=Archviles prefer to avoid combat themselves, instead they will strengthen any nearby demons and they will slowly engulf their target in flames.
+entity.lycanitesmobs.archvile.name=Apollyon
+entity.lycanitesmobs.archvile.description=Malicious demons that rule of areas of the nether, Apollyon enjoy the smell of their victim's burning flesh and enjoy watching other demons tear their victims apart!
+entity.lycanitesmobs.archvile.habitat=Apollyon live within the depths of the Nether.
+entity.lycanitesmobs.archvile.combat=Apollyon prefer to avoid combat themselves, instead they will strengthen any nearby demons and they will slowly engulf their target in flames.
 # ========================================================================
 entity.lycanitesmobs.argus.name=Argus
 entity.lycanitesmobs.argus.description=Disruptive Chaos elementals, Argi (plural) spread havoc in their wake.
@@ -791,7 +791,7 @@ entity.lycanitesmobs.astaroth.habitat=These demons are said to originate from th
 entity.lycanitesmobs.astaroth.combat=Astaroth use powerful rapid weapons that extract their demonic energizes into powerful projectiles called Devil Stars, on impact these can cause wither. Should an Astaroth fall, a small force of Trites will come out of their corpse and proceed to attack!
 # ========================================================================
 entity.lycanitesmobs.banshee.name=Banshee
-entity.lycanitesmobs.banshee.description=Banshees are terrifying Phase Elementals that can phase through reality itself, they can often be heard 'singing'. It is said that the elemental is actually the pair of eyes and not the corpse that it 're-purposed'. Geonach and Djinn elementals can also fuse into a powerful Banshee.
+entity.lycanitesmobs.banshee.description=Banshees are terrifying Phase Elementals that can phase through reality itself, they can often be heard 'singing'. It is said that the elemental is actually the pair of eyes and not the corpse that it 're-purposed'. Geonach and Zephyr elementals can also fuse into a powerful Banshee.
 entity.lycanitesmobs.banshee.habitat=These elementals haunt eerie and abandoned places where they are usually found around abandoned mineshafts as well as dark forests and other locations that embody unease.
 entity.lycanitesmobs.banshee.combat=On contact with Banshees, the very soul of their victim is shocked with Phase Magic, this usually induces fear and panic.
 # ========================================================================
@@ -800,25 +800,25 @@ entity.lycanitesmobs.barghest.description=Deadly mountain predators capable of m
 entity.lycanitesmobs.barghest.habitat=These beasts are usually found in mountainous areas as well as savannas.
 entity.lycanitesmobs.barghest.combat=Barghests are known to leap at their prey and tear at them causing bleeding.
 # ========================================================================
-entity.lycanitesmobs.behemoth.name=Behemoth
-entity.lycanitesmobs.behemoth.description=Tall demonic monstrosities, Behemoth are powerful demons bent on destruction.
-entity.lycanitesmobs.behemoth.habitat=Behemoth can be found in the Nether and will also invade through unprotected portals if they are large enough.
+entity.lycanitesmobs.behemoth.name=Behemophet
+entity.lycanitesmobs.behemoth.description=Tall demonic monstrosities, Behemophet are powerful demons bent on destruction.
+entity.lycanitesmobs.behemoth.habitat=Behemophet can be found in the Nether and will also invade through unprotected portals if they are large enough.
 entity.lycanitesmobs.behemoth.combat=These demons lob balls of Hellfire, a green flame created by tearing apart souls, not only do these flames burn, but they wither as well.
 # ========================================================================
-entity.lycanitesmobs.beholder.name=Beholder
+entity.lycanitesmobs.beholder.name=Naxiris
 entity.lycanitesmobs.beholder.description=Large hostile masses of eyes and tentacles with an eternal hunger for magic energy!
-entity.lycanitesmobs.beholder.habitat=Beholders can be found in the mountains as they like high up places and dwell in large caves and ruins and come out at night.
-entity.lycanitesmobs.beholder.combat=These Aberrations bend gravity and void magic to create powerful Arcane Storms, that they blast from their mouths, these attacks then release deadly lasers in all directions and can be explosive on impact.
+entity.lycanitesmobs.beholder.habitat=Naxiris can be found in the mountains as they like high up places and dwell in large caves and ruins and come out at night.
+entity.lycanitesmobs.beholder.combat=These Aberrations create powerful Arcane Storms that they blast from their mouths, these attacks then release deadly lasers in all directions and can be explosive on impact.
 # ========================================================================
-entity.lycanitesmobs.belph.name=Belph
+entity.lycanitesmobs.belph.name=Belphegor
 entity.lycanitesmobs.belph.description=Small but dangerous demons with a one track mind bent on killing and eating.
 entity.lycanitesmobs.belph.habitat=These demons can be found in the Nether and will invade through portals.
-entity.lycanitesmobs.belph.combat=Belphs throw balls of Doomfire, a flame made from Nether Magic, that burn an unnatural red.
+entity.lycanitesmobs.belph.combat=Belphegor throw balls of Doomfire, a flame made from Nether Magic, that burn an unnatural red.
 # ========================================================================
-entity.lycanitesmobs.cacodemon.name=Cacodemon
-entity.lycanitesmobs.cacodemon.description=Large floating abominations of life. Cacodemons like to bully Ghasts for their delicious tears. Can be tamed as a flying pet.
+entity.lycanitesmobs.cacodemon.name=Malwrath
+entity.lycanitesmobs.cacodemon.description=Large floating abominations of life. Malwrath like to bully Ghasts for their delicious tears. Can be tamed as a flying pet.
 entity.lycanitesmobs.cacodemon.habitat=These demons fly around the fiery skies of the Nether.
-entity.lycanitesmobs.cacodemon.combat=Cacodemons spit large balls of Demonic Lightning, while not actually electrical, these are balls of explosive Nether energy that will wither on impact and release smaller Demonic Sparks in all direction.
+entity.lycanitesmobs.cacodemon.combat=Malwrath spit large balls of Demonic Lightning, while not actually electrical, these are balls of explosive Nether energy that will wither on impact and release smaller Demonic Sparks in all direction.
 # ========================================================================
 entity.lycanitesmobs.calpod.name=Calpod
 entity.lycanitesmobs.calpod.description=Nasty termite-like insects that swarm their prey!
@@ -886,15 +886,15 @@ entity.lycanitesmobs.dawon.description=Crystaline felines, sometimes rare crysta
 entity.lycanitesmobs.dawon.habitat=These beasts can be found in jungles.
 entity.lycanitesmobs.dawon.combat=Dawon will pounce at their target, crippling their prey reducing movement speed.
 # ========================================================================
-entity.lycanitesmobs.djinn.name=Djinn
+entity.lycanitesmobs.djinn.name=Zephyr
 entity.lycanitesmobs.djinn.description=Proud Air Elementals that guard the skies from those that they think shouldn't be up there!
 entity.lycanitesmobs.djinn.habitat=Being Air Elementals, these creatures commonly manifest high up in the sky.
-entity.lycanitesmobs.djinn.combat=Djinn unleash deadly whirlwind rings that inflict the levitation debuff on impact.
+entity.lycanitesmobs.djinn.combat=Zephyr unleash deadly whirlwind rings that inflict the levitation debuff on impact.
 # ========================================================================
-entity.lycanitesmobs.dweller.name=Dweller
+entity.lycanitesmobs.dweller.name=Ningen
 entity.lycanitesmobs.dweller.description=Water bound amphibians that can sliver onto land for a small period of time, they must return to the water when they get too dry as they can die if on land for too long. They are fast and deadly in the water and can survive on land during rain.
 entity.lycanitesmobs.dweller.habitat=These creatures can be found in the waters of swamps, dark forests and jungles.
-entity.lycanitesmobs.dweller.combat=Dwellers have a poisonous scratch and excel when in water, on land they can be defeated easily unless it is raining.
+entity.lycanitesmobs.dweller.combat=Ningen have a poisonous scratch and excel when in water, on land they can be defeated easily unless it is raining.
 # ========================================================================
 entity.lycanitesmobs.eechetik.name=Eechetik
 entity.lycanitesmobs.eechetik.description=Dangerous Poison Elementals bursting with deadly plagues that infect all around them. They have a fondness for mushrooms! Jengu and Argus elementals can also fuse into a powerful Eechetik.
@@ -912,7 +912,7 @@ entity.lycanitesmobs.epion.habitat=These bats come out at night during a full mo
 entity.lycanitesmobs.epion.combat=Epions spit Bloodleeches at their victims, draining health on hit.
 # ========================================================================
 entity.lycanitesmobs.erepede.name=Erepede
-entity.lycanitesmobs.erepede.description=Wild rock covered insectsthat like to hunt Jousts and will attack Crusks on sight too.
+entity.lycanitesmobs.erepede.description=Wild rock covered insects that like to hunt Jousts and will attack Crusks on sight too.
 entity.lycanitesmobs.erepede.habitat=These insects can be found roaming hot, dry terrains like deserts and mesas.
 entity.lycanitesmobs.erepede.combat=Erepedes spit out a dangerous mud shots that weakens the target.
 # ========================================================================
@@ -1056,10 +1056,10 @@ entity.lycanitesmobs.lacedon.description=Strange humanoid aquatic creatures, the
 entity.lycanitesmobs.lacedon.habitat=Lacedon can be found in saltwater oceans.
 entity.lycanitesmobs.lacedon.combat=Lacedon inflict a weight debuff when attacking which will usually end with their victim being dragged into the bottom of the ocean.
 # ========================================================================
-entity.lycanitesmobs.lobber.name=Lobber
-entity.lycanitesmobs.lobber.description=Large lava brutes, Lobbers are incredibly powerful creatures.
-entity.lycanitesmobs.lobber.habitat=These brutes are found in lava lakes.
-entity.lycanitesmobs.lobber.combat=Lobbers are named for their attacks where they lob large balls of magma at their victims, this very quickly begins to flood the area with temporary lava.
+entity.lycanitesmobs.lobber.name=Cherufe
+entity.lycanitesmobs.lobber.description=Large lava brutes, Cherufes are incredibly powerful creatures.
+entity.lycanitesmobs.lobber.habitat=These golems are found in lava lakes.
+entity.lycanitesmobs.lobber.combat=Cherufes are named for their attacks where they lob large balls of magma at their victims, this very quickly begins to flood the area with temporary lava.
 # ========================================================================
 entity.lycanitesmobs.lurker.name=Lurker
 entity.lycanitesmobs.lurker.description=Lurkers are able to completely blend in with their environment. Their Once inflicted, they will hide, letting the poison do the work. Can be tamed as excellent pets, also great as Creeper guards!
@@ -1096,9 +1096,9 @@ entity.lycanitesmobs.nymph.description=Whimsical Fae Elementals bursting with he
 entity.lycanitesmobs.nymph.habitat=Being Fae Elementals, Nymphs manifest around sources of life and as such manifest around flowers in sunlight.
 entity.lycanitesmobs.nymph.combat=Nymphs are peaceful and will healing anything around them, this can be harmful to undead. If hit, Nymphs will flee firing flowers with sharp thorns that inflict bleed.
 # ========================================================================
-entity.lycanitesmobs.pinky.name=Pinky
-entity.lycanitesmobs.pinky.description=Gluttonous beasts that especially love to devour live animals. Can be farmed and bred using live large animals. Baby Pinkies can be tamed and when matured, can be used as battle mounts.
-entity.lycanitesmobs.pinky.habitat=Pinkies roam the Nether looking for anything to eat.
+entity.lycanitesmobs.pinky.name=Kathoga
+entity.lycanitesmobs.pinky.description=Gluttonous beasts that especially love to devour live animals. Can be farmed and bred using live large animals. Baby Kathoga can be tamed and when matured, can be used as battle mounts.
+entity.lycanitesmobs.pinky.habitat=Kathoga roam the Nether looking for anything to eat.
 entity.lycanitesmobs.pinky.combat=These demons are incredibly aggressive but will prioritize bigger juicier prey which ca be used to pure them.
 # ========================================================================
 entity.lycanitesmobs.pixen.name=Pixen
@@ -1111,10 +1111,10 @@ entity.lycanitesmobs.quetzodracl.description=Powerful flying wyvern dragons that
 entity.lycanitesmobs.quetzodracl.habitat=These wyverns can be found flying over oceans.
 entity.lycanitesmobs.quetzodracl.combat=Quetzodracl are incredibly power and will pickup their prey, it is best to use their size against them.
 # ========================================================================
-entity.lycanitesmobs.quillbeast.name=Quillbeast
+entity.lycanitesmobs.quillbeast.name=Brucha
 entity.lycanitesmobs.quillbeast.description=Large rodents with razor sharp quills on their back, they are easily threatened and will fire these quills from afar.
 entity.lycanitesmobs.quillbeast.habitat=These beasts can be found in plains, savannas and forests.
-entity.lycanitesmobs.quillbeast.combat=Quillbeasts attack with their deadly quills that also cut through long grass.
+entity.lycanitesmobs.quillbeast.combat=Brucha attack with their deadly quills that also cut through long grass.
 # ========================================================================
 entity.lycanitesmobs.rahovart.name=Rahovart
 entity.lycanitesmobs.rahovart.description=As the lord of the underworld, Rahovart's name alone strikes fear and terror into the hearts of even the most evil of beings.
@@ -1132,7 +1132,7 @@ entity.lycanitesmobs.reaper.habitat=These spirits sometimes appear when a creatu
 entity.lycanitesmobs.reaper.combat=Reapers have ranged attacks cause their victims to run around fear!
 # ========================================================================
 entity.lycanitesmobs.reiver.name=Reiver
-entity.lycanitesmobs.reiver.description=Icy Frost Elementals, Reivers seek to freeze everything around them. Jengu and Djinn Elementals can fuse to create powerful Reivers.
+entity.lycanitesmobs.reiver.description=Icy Frost Elementals, Reivers seek to freeze everything around them. Jengu and Zephyr Elementals can fuse to create powerful Reivers.
 entity.lycanitesmobs.reiver.habitat=Reivers are sometimes found roaming the night sky in cold areas and will also manifest from Frostfire spread by other creatures.
 entity.lycanitesmobs.reiver.combat=These elementals fire icy frostbolts that freeze victims hit slowing their movement.
 # ========================================================================
@@ -1191,10 +1191,10 @@ entity.lycanitesmobs.spriggan.description=Mystical Arbour Elementals, Spriggans 
 entity.lycanitesmobs.spriggan.habitat=Being Arbour Elementals, Spriggans can be found occasionally wandering forests and rapidly manifest in the defense of plant life so take care when harvesting plants.
 entity.lycanitesmobs.spriggan.combat=Spriggans fire powerful lasers that are poisonous and drain life healing the Spriggan.
 # ========================================================================
-entity.lycanitesmobs.strider.name=Strider
+entity.lycanitesmobs.strider.name=Deioneus
 entity.lycanitesmobs.strider.description=These giant amphibious creatures somewhat resemble a shrimp, they are feared for their dreadful tentacle claws from which they ensnare and consume their victims.
 entity.lycanitesmobs.strider.habitat=These creatures are usually found in large lakes or rivers.
-entity.lycanitesmobs.strider.combat=Striders will pickup their victims and slowly drain the life out of them, they are also fast when in the water or if it raining.
+entity.lycanitesmobs.strider.combat=Deioneus will pickup their victims and slowly drain the life out of them, they are also fast when in the water or if it raining.
 # ========================================================================
 entity.lycanitesmobs.sutiramu.name=Sutiramu
 entity.lycanitesmobs.sutiramu.description=Aggressive giant scorpions.
@@ -1202,13 +1202,13 @@ entity.lycanitesmobs.sutiramu.habitat=These creatures can be found roaming the d
 entity.lycanitesmobs.sutiramu.combat=Sutiramu attack with a venom that induce hunger.
 # ========================================================================
 entity.lycanitesmobs.sylph.name=Sylph
-entity.lycanitesmobs.sylph.description=Holy Aether Elementals that curse those who trespass upon holy ground. Djinn and Aegis can fuse to create powerful Sylphs.
+entity.lycanitesmobs.sylph.description=Holy Aether Elementals that curse those who trespass upon holy ground. Zephyr and Aegis can fuse to create powerful Sylphs.
 entity.lycanitesmobs.sylph.habitat=Being Aether Elementals, Sylphs manifest in areas of worship such as Pyramids or Temples.
 entity.lycanitesmobs.sylph.combat=Sylphs will release a large wave of Aether Magic smiting those hit where they will burn in the sunlight!
 # ========================================================================
-entity.lycanitesmobs.tarantula.name=Tarantula
+entity.lycanitesmobs.tarantula.name=Lycosa
 entity.lycanitesmobs.tarantula.description=Poisonous jumping spiders that leave behind a trail of temporary sticky green webbing.
-entity.lycanitesmobs.tarantula.habitat=Tarantulas can be found in jungles and swamps.
+entity.lycanitesmobs.tarantula.habitat=Lycosa can be found in jungles and swamps.
 entity.lycanitesmobs.tarantula.combat=These spiders have a poisonous bite and jump frequently, it is important to be wary of their sticky green webs.
 # ========================================================================
 entity.lycanitesmobs.thresher.name=Thresher
@@ -1302,7 +1302,7 @@ entity.lycanitesmobs.wraamon.habitat=These rodents live deep underground, it is 
 entity.lycanitesmobs.wraamon.combat=Wraamon can be a big menace, their bites inflict instability, a powerful chaos curse that causes the afflicted to randomly jolt about the place. They are fairly weak but small and fast.
 # ========================================================================
 entity.lycanitesmobs.wraith.name=Wraith
-entity.lycanitesmobs.wraith.description=Wicked Nether Elementals that are a symbol of pain and suffering. Djinn and Argus Elementals can fuse to create a powerful Wraith.
+entity.lycanitesmobs.wraith.description=Wicked Nether Elementals that are a symbol of pain and suffering. Zephyr and Argus Elementals can fuse to create a powerful Wraith.
 entity.lycanitesmobs.wraith.habitat=Being Nether Elementals, Wraiths manifest in areas of concentrated evil such as the skies of the Nether.
 entity.lycanitesmobs.wraith.combat=Wraiths are fast and will fly recklessly to their victim and attack on impact, they are fairly weak but explode upon their destruction.
 # ========================================================================
@@ -1321,10 +1321,10 @@ entity.lycanitesmobs.yeti.description=Large frosty mammals that like to eat the 
 entity.lycanitesmobs.yeti.habitat=These beasts often roam cold and snowy areas such as taiga.
 entity.lycanitesmobs.yeti.combat=Yetis are usually passive.
 # ========================================================================
-entity.lycanitesmobs.zephyr.name=Zephyr
-entity.lycanitesmobs.zephyr.description=Fierce Electric Elementals with a powerful electric field around them. Cinders and Djinn Elementals can fuse to create powerful Zephyr.
-entity.lycanitesmobs.zephyr.habitat=Being Electric Elementals, Zephyr manifest from electric weather such as thunderstorms, they can also rarely manifest during regular rainstorms as well.
-entity.lycanitesmobs.zephyr.combat=Zephyrs will shock any foe close to them and direct attacks from them cause paralysis.
+entity.lycanitesmobs.zephyr.name=Raidra
+entity.lycanitesmobs.zephyr.description=Fierce Electric Elementals with a powerful electric field around them. Cinders and Zephyr Elementals can fuse to create powerful Raidra.
+entity.lycanitesmobs.zephyr.habitat=Being Electric Elementals, Raidra manifest from electric weather such as thunderstorms, they can also rarely manifest during regular rainstorms as well.
+entity.lycanitesmobs.zephyr.combat=Raidra will shock any foe close to them and direct attacks from them cause paralysis.
 # ========================================================================
 entity.lycanitesmobs.zoataur.name=Zoataur
 entity.lycanitesmobs.zoataur.description=Zoataur are incredibly resilient drakes, while they are too bulky to be able to fly, their wings are incredibly dense and are used to block enemy attacks.
@@ -1696,14 +1696,14 @@ item.grueclaw.name=Grue Claw
 item.geonachspear.name=Geonach Spear
 item.remobrawing.name=Remobra Wing
 item.astarothclaw.name=Astaroth Claw
-item.zephyrblade.name=Zephyr Blade
+item.raidrablade.name=Raidra Blade
 item.sutiramustinger.name=Sutiramu Stinger
 item.wendigoantler.name=Wendigo Antler
 item.clinkscythe.name=Clink Scythe
 item.vespidstinger.name=Vespid Stinger
 item.argustail.name=Argus Tail
 item.wargskull.name=Warg Skull
-item.djinncloud.name=Djinn Cloud
+item.zephyrcloud.name=Zephyr Cloud
 item.ventoraptorskull.name=Ventoraptor Skull
 item.uvaraptorskull.name=Uvaraptor Skull
 item.darklingskull.name=Darkling Skull
@@ -1719,23 +1719,23 @@ item.vapulacrystal.name=Vapula Crystal
 item.reiverhorns.name=Reiver Horns
 item.eechetikarm.name=Eechetik Arm
 item.gammasphere.name=Gamma Sphere
-item.archvileclaw.name=Archvile Claw
-item.behemothhand.name=Behemoth Hand
-item.beholdereye.name=Beholder Eye
-item.belpharm.name=Belph Arm
-item.cacodemoneye.name=Cacodemon Eye
+item.apollyonclaw.name=Apollyon Claw
+item.behemophethand.name=Behemophet Hand
+item.naxiriseye.name=Naxiris Eye
+item.belphegorarm.name=Belphegor Arm
+item.malwratheye.name=Malwrath Eye
 item.conbabutt.name=Conba Butt
 item.epionwing.name=Epion Wing
 item.eyewigeye.name=Eyewig Eye
 item.frostweaverleg.name=Frostweaver Leg
 item.ioraystinger.name=Ioray Stinger
 item.lacedonhead.name=Lacedon Head
-item.quillbeastquill.name=Quillbeast Quill
+item.bruchaquill.name=Brucha Quill
 item.reaperclaw.name=Reaper Claw
 item.serpixmandible.name=Serpix Mandible
 item.wildkinarm.name=Wildkin Arm
-item.lobbercore.name=Lobber Core
-item.striderheart.name=Strider Heart
+item.cherufecore.name=Cherufe Core
+item.deioneusheart.name=Deioneus Heart
 item.afritlung.name=Afrit Lung
 item.arixbrain.name=Arix Brain
 item.erepededrill.name=Erepede Drill

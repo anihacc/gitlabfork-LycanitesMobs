@@ -10,7 +10,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.init.MobEffects;
 import net.minecraft.util.DamageSource;
@@ -96,7 +95,7 @@ public class EntityJoustAlpha extends AgeableCreatureEntity {
 	@Override
 	public int getNoBagSize() { return 0; }
 	@Override
-	public int getBagSize() { return this.creatureInfo.BagSize; }
+	public int getBagSize() { return this.creatureInfo.bagSize; }
 
 
 	// ==================================================

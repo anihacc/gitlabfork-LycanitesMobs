@@ -242,7 +242,7 @@ public class ItemManager extends JSONLoader {
 		OreDictionary.registerOre("listAllVegetables", Items.POTATO);
 		OreDictionary.registerOre("listAllVegetables", Items.BAKED_POTATO);
 		OreDictionary.registerOre("listAllVegetables", Items.BEETROOT);
-		OreDictionary.registerOre("listAllVegetables", Items.MUSHROOM_STEW);
+		OreDictionary.registerOre("listAllFungi", Items.MUSHROOM_STEW);
 		OreDictionary.registerOre("listAllFruit", Items.APPLE);
 		OreDictionary.registerOre("listAllFruit", Items.MELON);
 		OreDictionary.registerOre("listAllSweet", Items.CAKE);
@@ -286,8 +286,10 @@ public class ItemManager extends JSONLoader {
 	 * Adds items to the ore dictionary.
 	 */
 	public void registerBlockOres() {
-		OreDictionary.registerOre("listAllVegetables", Blocks.RED_MUSHROOM);
-		OreDictionary.registerOre("listAllVegetables", Blocks.BROWN_MUSHROOM);
+		OreDictionary.registerOre("listAllFungi", Blocks.RED_MUSHROOM);
+		OreDictionary.registerOre("listAllFungi", Blocks.RED_MUSHROOM_BLOCK);
+		OreDictionary.registerOre("listAllFungi", Blocks.BROWN_MUSHROOM);
+		OreDictionary.registerOre("listAllFungi", Blocks.BROWN_MUSHROOM_BLOCK);
 		OreDictionary.registerOre("listAllVegetables", Blocks.PUMPKIN);
 	}
 }

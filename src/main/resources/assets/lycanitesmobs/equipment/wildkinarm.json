@@ -17,7 +17,7 @@
 			"projectileTrigger": "primary",
 			"projectilePattern": "simple",
 			"cooldown": 40,
-			"count": 5,
+			"count": 5
 		},
 		{
 			"featureType": "projectile",
@@ -28,7 +28,7 @@
 			"projectilePattern": "simple",
 			"cooldown": 30,
 			"count": 9,
-			"bonusDamage": 1,
+			"bonusDamage": 1
 		},
 		{
 			"featureType": "projectile",
@@ -38,7 +38,7 @@
 			"projectilePattern": "simple",
 			"cooldown": 20,
 			"count": 16,
-			"bonusDamage": 2,
+			"bonusDamage": 2
 		},
 		{
 			"featureType": "projectile",

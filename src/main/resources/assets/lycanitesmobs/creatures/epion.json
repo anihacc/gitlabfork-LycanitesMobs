@@ -72,7 +72,7 @@
             ]
         }
     ],
-    "element": "void",
+    "element": "shadow",
     "diets": [
         "carnivore",
         "insectivore",

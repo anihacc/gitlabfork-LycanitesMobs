@@ -11,7 +11,6 @@ import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.EntityIronGolem;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
@@ -96,7 +95,7 @@ public class EntityAegis extends TameableCreatureEntity implements IFusable {
 	@Override
 	public int getNoBagSize() { return 0; }
 	@Override
-	public int getBagSize() { return this.creatureInfo.BagSize; }
+	public int getBagSize() { return this.creatureInfo.bagSize; }
 
 
 	// ==================================================

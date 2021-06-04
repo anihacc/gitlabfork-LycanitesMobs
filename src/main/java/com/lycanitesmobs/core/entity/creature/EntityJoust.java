@@ -7,14 +7,12 @@ import com.lycanitesmobs.core.entity.goals.targeting.CopyMasterAttackTargetGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.FindMasterGoal;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
-import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -112,7 +110,7 @@ public class EntityJoust extends AgeableCreatureEntity {
     @Override
     public int getNoBagSize() { return 0; }
     @Override
-    public int getBagSize() { return this.creatureInfo.BagSize; }
+    public int getBagSize() { return this.creatureInfo.bagSize; }
 
 
     // ==================================================

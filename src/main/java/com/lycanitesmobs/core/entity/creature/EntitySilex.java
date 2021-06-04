@@ -6,8 +6,6 @@ import com.lycanitesmobs.core.entity.goals.actions.TemptGoal;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.entity.EnumCreatureAttribute;
-import net.minecraft.item.ItemStack;
-import net.minecraft.init.Items;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -80,7 +78,7 @@ public class EntitySilex extends AgeableCreatureEntity {
     @Override
     public int getNoBagSize() { return 0; }
     @Override
-    public int getBagSize() { return this.creatureInfo.BagSize; }
+    public int getBagSize() { return this.creatureInfo.bagSize; }
 
 
     // ==================================================

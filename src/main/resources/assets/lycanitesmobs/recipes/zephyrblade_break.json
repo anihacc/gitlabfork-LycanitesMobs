@@ -5,7 +5,7 @@
   },
   "ingredients": [
 	{
-      "item": "lycanitesmobs:zephyrblade"
+      "item": "lycanitesmobs:raidrablade"
     }
   ],
   "type": "forge:ore_shapeless"

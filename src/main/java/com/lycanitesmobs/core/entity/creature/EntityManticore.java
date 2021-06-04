@@ -62,7 +62,7 @@ public class EntityManticore extends TameableCreatureEntity implements IMob {
     @Override
     public int getNoBagSize() { return 0; }
     @Override
-    public int getBagSize() { return this.creatureInfo.BagSize; }
+    public int getBagSize() { return this.creatureInfo.bagSize; }
 
 
     // ==================================================

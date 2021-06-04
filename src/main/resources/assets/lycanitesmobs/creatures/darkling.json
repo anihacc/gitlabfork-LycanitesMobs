@@ -1,6 +1,6 @@
 {
     "name": "darkling",
-    "creatureType": "arachnid",
+    "creatureType": "insect",
     "groups": [
         "predator",
         "dark"

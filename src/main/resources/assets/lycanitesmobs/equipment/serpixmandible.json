@@ -11,6 +11,52 @@
 	],
 	"features": [
 		{
+			"featureType": "harvest",
+			"levelMax": 1,
+			"harvestType": "pickaxe",
+			"harvestSpeed": 6,
+			"harvestShape": "block",
+			"harvestRange": [1, 1, 2],
+			"harvestRangeLevelMultiplier": 1
+		},
+		{
+			"featureType": "harvest",
+			"levelMin": 2,
+			"levelMax": 2,
+			"harvestType": "pickaxe",
+			"harvestSpeed": 7,
+			"harvestShape": "block",
+			"harvestRange": [2, 1, 2],
+			"harvestRangeLevelMultiplier": 1
+		},
+		{
+			"featureType": "harvest",
+			"harvestType": "pickaxe",
+			"levelMin": 3,
+			"harvestSpeed": 8,
+			"harvestShape": "block",
+			"harvestRange": [3, 2, 4],
+			"harvestRangeLevelMultiplier": 1
+		},
+		{
+			"featureType": "damage",
+			"levelMax": 2,
+			"damageAmount": 4,
+			"damageKnockback": 2,
+			"damageCooldown": 2,
+			"damageRange": 1,
+			"damageSweep": 360
+		},
+		{
+			"featureType": "damage",
+			"levelMin": 3,
+			"damageAmount": 5,
+			"damageKnockback": 2,
+			"damageCooldown": 2,
+			"damageRange": 1,
+			"damageSweep": 360
+		},
+		{
 			"featureType": "projectile",
 			"levelMax": 1,
 			"projectileName": "blizzard",

@@ -1,6 +1,5 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
 import com.lycanitesmobs.core.entity.goals.actions.TemptGoal;
@@ -192,7 +191,7 @@ public class EntityPixen extends TameableCreatureEntity implements IMob {
     @Override
     public int getNoBagSize() { return 0; }
     @Override
-    public int getBagSize() { return this.creatureInfo.BagSize; }
+    public int getBagSize() { return this.creatureInfo.bagSize; }
 
 
 
