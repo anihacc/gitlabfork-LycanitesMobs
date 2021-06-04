@@ -84,7 +84,7 @@ public class CreatureInfo {
 	public double knockbackResistance = 0.0D;
 
 	public int packSize = 3;
-	public int tamingReputation = 1000;
+	public int tamingReputation = 500;
 
 	public int bagSize = 5;
 
