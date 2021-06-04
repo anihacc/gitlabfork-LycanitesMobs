@@ -88,7 +88,7 @@ public class CreatureInfo {
 	public int bagSize = 5;
 
 	public int packSize = 3;
-	public int tamingReputation = 1000;
+	public int tamingReputation = 500;
 
 
 	// Spawn Egg:

@@ -51,6 +51,7 @@
     "sight": 32,
     "knockbackResistance": 0,
 	"bagSize": 10,
+    "tamingReputation": 500,
     "eggBackColor": "#5247ca",
     "eggForeColor": "#ccd6ec",
     "subspecies": [
