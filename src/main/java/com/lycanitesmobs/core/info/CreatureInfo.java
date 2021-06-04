@@ -86,7 +86,9 @@ public class CreatureInfo {
 	public double knockbackResistance = 0.0D;
 
 	public int bagSize = 5;
+
 	public int packSize = 3;
+	public int tamingReputation = 500;
 
 
 	// Spawn Egg:
@@ -276,10 +278,13 @@ public class CreatureInfo {
 		if(json.has("sight"))
 			this.sight = json.get("sight").getAsDouble();
 
-		if(json.has("bagSize"))
-			this.bagSize = json.get("bagSize").getAsInt();
 		if(json.has("packSize"))
 			this.packSize = json.get("packSize").getAsInt();
+		if(json.has("tamingReputation"))
+			this.tamingReputation = json.get("tamingReputation").getAsInt();
+
+		if(json.has("bagSize"))
+			this.bagSize = json.get("bagSize").getAsInt();
 
 		// Spawn Egg:
 		this.eggBackColor = Color.decode(json.get("eggBackColor").getAsString()).getRGB();

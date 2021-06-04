@@ -1,6 +1,5 @@
 package com.lycanitesmobs.client.gui.beastiary.lists;
 
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.gui.beastiary.BeastiaryScreen;
 import com.lycanitesmobs.client.gui.widgets.BaseListEntry;
 import com.lycanitesmobs.core.info.CreatureInfo;
@@ -38,7 +37,7 @@ public class CreatureTypeList extends CreatureFilterList {
 		creatureTypes.addAll(CreatureManager.getInstance().creatureTypes.values());
 		creatureTypes.sort(Comparator.comparing(CreatureType::getName));
 		for(CreatureType creatureType : creatureTypes) {
-			if(this.screen.playerExt.beastiary.getCreaturesDescovered(creatureType) > 0) {
+			if(this.screen.playerExt.beastiary.getCreaturesDiscovered(creatureType) > 0) {
 				this.addEntry(new Entry(this, typeIndex++, creatureType));
 			}
 		}

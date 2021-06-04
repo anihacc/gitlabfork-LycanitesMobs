@@ -4,9 +4,8 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.VersionChecker;
 import com.lycanitesmobs.core.capabilities.IExtendedPlayer;
 import com.lycanitesmobs.core.config.ConfigExtra;
-import com.lycanitesmobs.core.info.Beastiary;
-import com.lycanitesmobs.core.info.CreatureInfo;
-import com.lycanitesmobs.core.info.CreatureType;
+import com.lycanitesmobs.core.config.ConfigGeneral;
+import com.lycanitesmobs.core.info.*;
 import com.lycanitesmobs.core.item.summoningstaff.ItemStaffSummoning;
 import com.lycanitesmobs.core.network.*;
 import com.lycanitesmobs.core.pets.DonationFamiliars;
@@ -79,6 +78,10 @@ public class ExtendedPlayer implements IExtendedPlayer {
 	public int summonSetMax = 5;
 	public PortalEntity staffPortal;
 
+	// Creature Studying:
+	public int creatureStudyCooldown = 0;
+	public int creatureStudyCooldownMax = 200;
+
     // Initial Setup:
     private boolean initialSetup = false;
 	
@@ -126,6 +129,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
     public ExtendedPlayer() {
         this.beastiary = new Beastiary(this);
         this.petManager = new PetManager(this.player);
+        this.creatureStudyCooldownMax = CreatureManager.getInstance().config.creatureStudyCooldown;
     }
 	
 	
@@ -226,6 +230,11 @@ public class ExtendedPlayer implements IExtendedPlayer {
                     || this.player.getOffhandItem().getItem() instanceof ItemStaffSummoning) {
 				sync = true;
 			}
+		}
+
+		// Creature Study Cooldown Update:
+		if (this.creatureStudyCooldown > 0) {
+			this.creatureStudyCooldown--;
 		}
 
 		// Sync Stats To Client:
@@ -347,6 +356,11 @@ public class ExtendedPlayer implements IExtendedPlayer {
 			this.sendPetEntriesToPlayer("familiar");
 		}
 	}
+
+	public void studyCreature(LivingEntity entity, int experience) {
+		this.beastiary.addCreatureKnowledge(entity, experience);
+		this.creatureStudyCooldown = this.creatureStudyCooldownMax;
+	}
 	
 	
 	// ==================================================
@@ -449,6 +463,9 @@ public class ExtendedPlayer implements IExtendedPlayer {
 		if(extTagCompound.contains("Spirit"))
 			this.spirit = extTagCompound.getInt("Spirit");
 
+		if(extTagCompound.contains("CreatureStudyCooldown"))
+			this.creatureStudyCooldown = extTagCompound.getInt("CreatureStudyCooldown");
+
 		if(extTagCompound.contains("SelectedSummonSet"))
 			this.selectedSummonSet = extTagCompound.getInt("SelectedSummonSet");
 
@@ -476,6 +493,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
 
 		extTagCompound.putInt("SummonFocus", this.summonFocus);
 		extTagCompound.putInt("Spirit", this.spirit);
+		extTagCompound.putInt("CreatureStudyCooldown", this.creatureStudyCooldown);
 		extTagCompound.putInt("SelectedSummonSet", this.selectedSummonSet);
 		extTagCompound.putLong("TimePlayed", this.timePlayed);
 

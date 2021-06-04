@@ -119,10 +119,28 @@ public class CreaturesBeastiaryScreen extends BeastiaryScreen {
 			// Knowledge Rank:
 			nextY += 2 + this.drawHelper.getWordWrappedHeight(text, width);
 			text = "\u00A7l" + new TranslationTextComponent("creature.stat.knowledge").getString() + ": " + "\u00A7r";
+			int rankX = nextX + this.drawHelper.getStringWidth(text);
+			int barX = rankX + 29;
+			int barWidth = (256 / 4) + 16;
+			int barHeight = (32 / 4) + 2;
+			int barCenter = barX + (barWidth / 2);
+
 			this.drawHelper.drawStringWrapped(matrixStack, text, nextX, nextY, width, 0xFFFFFF, true);
-			this.drawHelper.drawBar(matrixStack, TextureManager.getTexture("GUIPetSpiritEmpty"), nextX + this.drawHelper.getStringWidth(text), nextY, 0, 9, 9, 3, 10);
+			this.drawHelper.drawBar(matrixStack, TextureManager.getTexture("GUIPetSpiritEmpty"), rankX, nextY, 0, 9, 9, 3, 10);
+			this.drawHelper.drawTexture(matrixStack, TextureManager.getTexture("GUIPetBarEmpty"), barX, nextY, 0, 1, 1, barWidth, barHeight);
+
 			if(creatureKnowledge != null) {
-				this.drawHelper.drawBar(matrixStack, TextureManager.getTexture("GUIPetSpiritUsed"), nextX + this.drawHelper.getStringWidth(text), nextY, 0, 9, 9, creatureKnowledge.rank, 10);
+				this.drawHelper.drawBar(matrixStack, TextureManager.getTexture("GUIPetSpiritUsed"), rankX, nextY, 0, 9, 9, creatureKnowledge.rank, 10);
+				float experienceNormal = 1;
+				if (creatureKnowledge.getMaxExperience() > 0) {
+					experienceNormal = (float)creatureKnowledge.experience / creatureKnowledge.getMaxExperience();
+				}
+				this.drawHelper.drawTexture(matrixStack, TextureManager.getTexture("GUIBarExperience"), barX, nextY, 0, experienceNormal, 1, barWidth * experienceNormal, barHeight);
+				String experienceText = "100%";
+				if (creatureKnowledge.getMaxExperience() > 0) {
+					experienceText = creatureKnowledge.experience + "/" + creatureKnowledge.getMaxExperience();
+				}
+				this.drawHelper.getFontRenderer().draw(matrixStack, experienceText, barCenter - ((float)this.drawHelper.getStringWidth(experienceText) / 2), nextY + 2, 0xFFFFFF);
 			}
 		}
 
@@ -133,10 +151,10 @@ public class CreaturesBeastiaryScreen extends BeastiaryScreen {
 			String text = this.playerExt.selectedCreatureType.getTitle().getString();
 			this.drawHelper.drawStringWrapped(matrixStack, text, nextX, nextY, width, 0xFFFFFF, true);
 
-			// Descovered:
+			// Discovered:
 			nextY += 12 + this.drawHelper.getFontRenderer().wordWrapHeight(text, colRightWidth);
 			text = new TranslationTextComponent("gui.beastiary.creatures.descovered").getString() + ": ";
-			text += this.playerExt.getBeastiary().getCreaturesDescovered(this.playerExt.selectedCreatureType);
+			text += this.playerExt.getBeastiary().getCreaturesDiscovered(this.playerExt.selectedCreatureType);
 			text += "/" + this.playerExt.selectedCreatureType.creatures.size();
 			this.drawHelper.drawString(matrixStack, text, nextX, nextY, 0xFFFFFF, true);
 		}

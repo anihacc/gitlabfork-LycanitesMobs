@@ -35,7 +35,7 @@ public class BeastiaryCommand {
 
 		Beastiary beastiary = extendedPlayer.getBeastiary();
 		for(CreatureInfo creatureInfo : CreatureManager.getInstance().creatures.values()) {
-			beastiary.addCreatureKnowledge(new CreatureKnowledge(beastiary, creatureInfo.getName(), rank));
+			beastiary.addCreatureKnowledge(new CreatureKnowledge(beastiary, creatureInfo.getName(), rank, 0), true);
 		}
 		beastiary.sendAllToClient();
 
@@ -80,10 +80,9 @@ public class BeastiaryCommand {
 			return 0;
 		}
 
-		CreatureKnowledge creatureKnowledge = new CreatureKnowledge(beastiary, creatureInfo.getName(), rank);
-		if(beastiary.addCreatureKnowledge(creatureKnowledge) > 0) {
+		CreatureKnowledge creatureKnowledge = new CreatureKnowledge(beastiary, creatureInfo.getName(), rank, 0);
+		if(beastiary.addCreatureKnowledge(creatureKnowledge, true)) {
 			beastiary.sendAddedMessage(creatureKnowledge);
-			beastiary.sendToClient(creatureKnowledge);
 		}
 		else {
 			beastiary.sendKnownMessage(creatureKnowledge);

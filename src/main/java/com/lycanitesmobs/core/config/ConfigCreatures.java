@@ -33,9 +33,15 @@ public class ConfigCreatures {
 	public final ForgeConfigSpec.ConfigValue<Integer> petRespawnTime;
 	public final ForgeConfigSpec.ConfigValue<Integer> petFollowDistance;
 
-	public final ForgeConfigSpec.ConfigValue<Double> beastiaryAddOnDeathChance;
 	public final ForgeConfigSpec.ConfigValue<Boolean> beastiaryKnowledgeMessages;
-	
+	public final ForgeConfigSpec.ConfigValue<Integer> creatureProximityKnowledge;
+	public final ForgeConfigSpec.ConfigValue<Integer> creatureKillKnowledge;
+	public final ForgeConfigSpec.ConfigValue<Integer> creatureTreatKnowledge;
+	public final ForgeConfigSpec.ConfigValue<Integer> creatureStudyKnowledge;
+	public final ForgeConfigSpec.ConfigValue<Integer> creatureStudyCooldown;
+	public final ForgeConfigSpec.ConfigValue<Double> creatureVariantKnowledgeScale;
+	public final ForgeConfigSpec.ConfigValue<Double> creatureBossKnowledgeScale;
+
 	public final ForgeConfigSpec.ConfigValue<Double> bossAntiFlight;
 
 	public final ForgeConfigSpec.ConfigValue<Boolean> mobsAttackVillagers;
@@ -113,12 +119,30 @@ public class ConfigCreatures {
 				.translation(CoreConfig.CONFIG_PREFIX + "creatures.petFollowDistance")
 				.define("petFollowDistance", 8);
 
-		beastiaryAddOnDeathChance = builder.comment("The chance that creatures are added to the player's Beastiary when killed, the Soulgazer can also be used to add creatures. Bosses are always a 100% chance.")
-				.translation(CoreConfig.CONFIG_PREFIX + "creatures.beastiaryAddOnDeathChance")
-				.define("beastiaryAddOnDeathChance", 0.15D);
 		beastiaryKnowledgeMessages = builder.comment("If true, a chat message will be displayed when gaining Beastiary Knowledge.")
 				.translation(CoreConfig.CONFIG_PREFIX + "creatures.beastiaryKnowledgeMessages")
 				.define("beastiaryKnowledgeMessages", true);
+		creatureProximityKnowledge = builder.comment("How much knowledge experience standing near a creature gives per second.")
+				.translation(CoreConfig.CONFIG_PREFIX + "creatures.creatureProximityKnowledge")
+				.define("creatureProximityKnowledge", 1);
+		creatureKillKnowledge = builder.comment("How much knowledge experience killing a creature gives.")
+				.translation(CoreConfig.CONFIG_PREFIX + "creatures.creatureKillKnowledge")
+				.define("creatureKillKnowledge", 50);
+		creatureTreatKnowledge = builder.comment("How much knowledge experience feeding a treat to a creature gives.")
+				.translation(CoreConfig.CONFIG_PREFIX + "creatures.creatureTreatKnowledge")
+				.define("creatureTreatKnowledge", 100);
+		creatureStudyKnowledge = builder.comment("How much knowledge experience studying (using a Soulgazer on) a creature gives.")
+				.translation(CoreConfig.CONFIG_PREFIX + "creatures.creatureStudyKnowledge")
+				.define("creatureStudyKnowledge", 25);
+		creatureStudyCooldown = builder.comment("The time in ticks it takes to be able to use a Soulgazer for knowledge again. Default is 200 (10 seconds).")
+				.translation(CoreConfig.CONFIG_PREFIX + "creatures.creatureStudyCooldown")
+				.define("creatureStudyCooldown", 200);
+		creatureVariantKnowledgeScale = builder.comment("The knowledge experience scale for variant creatures.")
+				.translation(CoreConfig.CONFIG_PREFIX + "creatures.creatureVariantKnowledgeScale")
+				.define("creatureVariantKnowledgeScale", 2D);
+		creatureBossKnowledgeScale = builder.comment("The knowledge experience scale for boss creatures.")
+				.translation(CoreConfig.CONFIG_PREFIX + "creatures.creatureBossKnowledgeScale")
+				.define("creatureBossKnowledgeScale", 5D);
 
 		bossAntiFlight = builder.comment("How much higher players must be relative to a boss' y position (feet) to trigger anti flight measures.")
 				.translation(CoreConfig.CONFIG_PREFIX + "creatures.bossAntiFlight")
