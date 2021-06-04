@@ -11,7 +11,6 @@ import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureKnowledge;
 import com.lycanitesmobs.client.localisation.LanguageManager;
 import com.lycanitesmobs.core.info.Subspecies;
-import com.lycanitesmobs.core.info.Variant;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
 
@@ -138,9 +137,31 @@ public class CreaturesBeastiaryScreen extends BeastiaryScreen {
 			// Knowledge Rank:
 			nextY += 2 + this.getFontRenderer().getWordWrappedHeight(text, width);
 			text = "\u00A7l" + LanguageManager.translate("creature.stat.knowledge") + ": " + "\u00A7r";
+			int rankX = nextX + this.getFontRenderer().getStringWidth(text);
+			int barX = rankX + 29;
+			int barWidth = (256 / 4) + 16;
+			int barHeight = (32 / 4) + 2;
+			int barCenter = barX + (barWidth / 2);
+
 			this.getFontRenderer().drawString(text, nextX, nextY, 0xFFFFFF, true);
-			this.drawBar(AssetManager.getTexture("GUIPetSpiritEmpty"), nextX + this.getFontRenderer().getStringWidth(text), nextY, 0, 9, 9, 3, 10);
-			this.drawBar(AssetManager.getTexture("GUIPetSpiritUsed"), nextX + this.getFontRenderer().getStringWidth(text), nextY, 0, 9, 9, creatureKnowledge.rank, 10);
+			this.drawBar(AssetManager.getTexture("GUIPetSpiritEmpty"), rankX, nextY, 0, 9, 9, 3, 10);
+			this.drawTexture(AssetManager.getTexture("GUIPetBarEmpty"), barX, nextY, 0, 1, 1, barWidth, barHeight);
+
+			if(creatureKnowledge != null) {
+				this.drawBar(AssetManager.getTexture("GUIPetSpiritUsed"), rankX, nextY, 0, 9, 9, creatureKnowledge.rank, 10);
+
+				this.drawBar(AssetManager.getTexture("GUIPetSpiritUsed"), rankX, nextY, 0, 9, 9, creatureKnowledge.rank, 10);
+				float experienceNormal = 1;
+				if (creatureKnowledge.getMaxExperience() > 0) {
+					experienceNormal = (float)creatureKnowledge.experience / creatureKnowledge.getMaxExperience();
+				}
+				this.drawTexture(AssetManager.getTexture("GUIBarExperience"), barX, nextY, 0, experienceNormal, 1, barWidth * experienceNormal, barHeight);
+				String experienceText = "100%";
+				if (creatureKnowledge.getMaxExperience() > 0) {
+					experienceText = creatureKnowledge.experience + "/" + creatureKnowledge.getMaxExperience();
+				}
+				this.getFontRenderer().drawString(experienceText, Math.round(barCenter - ((float)this.getFontRenderer().getStringWidth(experienceText) / 2)), nextY + 2, 0xFFFFFF);
+			}
 
 			// Description:
 			this.descriptionList.creatureKnowledge = creatureKnowledge;
@@ -152,7 +173,7 @@ public class CreaturesBeastiaryScreen extends BeastiaryScreen {
 			// Descovered:
 			nextY += 20;
 			String text = LanguageManager.translate("gui.beastiary.creatures.descovered") + ": ";
-			text += this.playerExt.getBeastiary().getCreaturesDescovered(this.playerExt.selectedCreatureType);
+			text += this.playerExt.getBeastiary().getCreaturesDiscovered(this.playerExt.selectedCreatureType);
 			text += "/" + this.playerExt.selectedCreatureType.creatures.size();
 			this.getFontRenderer().drawString(text, nextX, nextY, 0xFFFFFF, true);
 		}

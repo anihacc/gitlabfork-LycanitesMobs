@@ -84,6 +84,7 @@ public class CreatureInfo {
 	public double knockbackResistance = 0.0D;
 
 	public int packSize = 3;
+	public int tamingReputation = 1000;
 
 
 	// Spawn Egg:
@@ -276,6 +277,8 @@ public class CreatureInfo {
 
 		if(json.has("packSize"))
 			this.packSize = json.get("packSize").getAsInt();
+		if(json.has("tamingReputation"))
+			this.tamingReputation = json.get("tamingReputation").getAsInt();
 
 		// Spawn Egg:
 		this.eggBackColor = Color.decode(json.get("eggBackColor").getAsString()).getRGB();

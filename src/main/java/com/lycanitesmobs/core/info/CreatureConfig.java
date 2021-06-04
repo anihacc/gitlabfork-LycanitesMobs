@@ -63,11 +63,29 @@ public class CreatureConfig {
 
 
 	// Beastiary:
-	/** The chance that a creature gets added to the killing player's Beastiary on death, always 100% for bosses. **/
-	public double beastiaryAddOnDeathChance = 0.15;
-
 	/** If true, a chat message will be displayed when gaining Beastiary Knowledge. **/
 	public boolean beastiaryKnowledgeMessages = true;
+
+	/** How much knowledge experience standing near a creature gives per second. **/
+	public int creatureProximityKnowledge = 1;
+
+	/** How much knowledge experience killing a creature gives. **/
+	public int creatureKillKnowledge = 50;
+
+	/** How much knowledge experience feeding a treat to a creature gives. **/
+	public int creatureTreatKnowledge = 100;
+
+	/** How much knowledge experience studying (using a soulgazer on) a creature gives. **/
+	public int creatureStudyKnowledge = 25;
+
+	/** The time in ticks it takes to be able to use a Soulgazer for knowledge again. Default is 200 (10 seconds).. **/
+	public int creatureStudyCooldown = 200;
+
+	/** The knowledge experience scale for variant creatures. **/
+	public double creatureVariantKnowledgeScale = 2;
+
+	/** The knowledge experience scale for boss creatures. **/
+	public double creatureBossKnowledgeScale = 5;
 
 
 	// Bosses:
@@ -164,8 +182,14 @@ public class CreatureConfig {
 
 		// Beastiary:
 		config.setCategoryComment("Beastiary", "Here you can control all settings related to the player's Beastiary.");
-		this.beastiaryAddOnDeathChance = config.getDouble("Beastiary", "Add Creature On Kill Chance", this.beastiaryAddOnDeathChance, "The chance that creatures are added to the player's Beastiary when killed, the Soulgazer can also be used to add creatures. Bosses are always a 100% chance.");
 		this.beastiaryKnowledgeMessages = config.getBool("Beastiary", "Beastiary Knowledge Messages", this.beastiaryKnowledgeMessages, "If true, a chat message will be displayed when gaining Beastiary Knowledge.");
+		this.creatureProximityKnowledge = config.getInt("Beastiary", "Creature Proximity Knowledge", this.creatureProximityKnowledge, "How much knowledge experience standing near a creature gives per second.");
+		this.creatureKillKnowledge = config.getInt("Beastiary", "Creature Kill Knowledge", this.creatureKillKnowledge, "How much knowledge experience killing a creature gives.");
+		this.creatureTreatKnowledge = config.getInt("Beastiary", "Creature Treat Knowledge", this.creatureTreatKnowledge, "How much knowledge experience feeding a treat to a creature gives.");
+		this.creatureStudyKnowledge = config.getInt("Beastiary", "Creature Study Knowledge", this.creatureStudyKnowledge, "How much knowledge experience studying (using a Soulgazer on) a creature gives.");
+		this.creatureStudyCooldown = config.getInt("Beastiary", "Creature Study Cooldown", this.creatureStudyCooldown, "The time in ticks it takes to be able to use a Soulgazer for knowledge again. Default is 200 (10 seconds).");
+		this.creatureVariantKnowledgeScale = config.getDouble("Beastiary", "Creature Variant Knowledge Scale", this.creatureVariantKnowledgeScale, "The knowledge experience scale for variant creatures.");
+		this.creatureBossKnowledgeScale = config.getDouble("Beastiary", "Creature Boss Knowledge Scale", this.creatureBossKnowledgeScale, "The knowledge experience scale for boss creatures.");
 
 		// Bosses:
 		config.setCategoryComment("Bosses", "Here you can control all settings related to boss creatures, this does not include rare subspecies (mini bosses).");

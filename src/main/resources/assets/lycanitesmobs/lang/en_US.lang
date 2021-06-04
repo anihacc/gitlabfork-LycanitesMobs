@@ -186,6 +186,7 @@ diet.geovore=Geovore
 # ========== Messages ==========
 # Beastiary:
 message.beastiary.new=You have gained Knowledge Rank %rank% of the %creature%! Check your Beastiary!
+message.beastiary.tameable=You are now able to tame the %creature%.
 message.beastiary.summonable=You are now able to summon the %creature% as a temporary minion! You will need a Summoning Item to summon it.
 message.beastiary.summonable.colors=You can now summon variations of the %creature%!
 message.beastiary.summonable.skins=You can now summon subspecies of the %creature%!
@@ -210,6 +211,7 @@ message.soulkey.active=The Soulkey activates the Altar!
 # %creature% will be replaced with the name of the tamed creature, don't translate this!
 message.pet.tamed=The %creature% seems to love you now!
 message.pet.tamefail=The %creature% wants more!
+message.pet.tamefail.knowledge=You need Knowledge Rank 2 in your Beastiary to tame a %creature%.
 message.pet.mount.baby=The %creature% is too young to carry you!
 #
 #

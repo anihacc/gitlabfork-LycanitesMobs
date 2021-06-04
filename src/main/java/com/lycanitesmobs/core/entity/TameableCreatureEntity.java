@@ -1,7 +1,6 @@
 package com.lycanitesmobs.core.entity;
 
 import com.google.common.base.Optional;
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.client.AssetManager;
 import com.lycanitesmobs.client.localisation.LanguageManager;
@@ -12,6 +11,7 @@ import com.lycanitesmobs.core.entity.goals.actions.StayGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.CopyOwnerAttackTargetGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.DefendOwnerGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.RevengeOwnerGoal;
+import com.lycanitesmobs.core.info.CreatureKnowledge;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ElementInfo;
 import com.lycanitesmobs.core.item.ChargeItem;
@@ -32,10 +32,8 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.scoreboard.Team;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EntityDamageSource;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.SoundEvent;
+import net.minecraft.util.*;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -788,7 +786,24 @@ public class TameableCreatureEntity extends AgeableCreatureEntity implements IEn
 	 */
     public boolean tame(EntityPlayer player) {
     	if(!this.getEntityWorld().isRemote && !this.isRareVariant() && !this.isBoss()) {
-			if (this.rand.nextInt(3) == 0) {
+			ExtendedPlayer extendedPlayer = ExtendedPlayer.getForPlayer(player);
+			if(extendedPlayer == null) {
+				return this.isTamed();
+			}
+
+			extendedPlayer.studyCreature(this, this.scaleKnowledgeExperience(CreatureManager.getInstance().config.creatureTreatKnowledge));
+
+			// Require Knowledge Rank 2:
+			CreatureKnowledge creatureKnowledge = extendedPlayer.getBeastiary().getCreatureKnowledge(this.creatureInfo.getName());
+			if (creatureKnowledge == null || creatureKnowledge.rank < 2) {
+				String tameMessage = LanguageManager.translate("message.pet.tamefail.knowledge");
+				tameMessage = tameMessage.replace("%creature%", this.getSpeciesName());
+				player.sendMessage(new TextComponentString(tameMessage));
+				return this.isTamed();
+			}
+
+			// Random Tame Chance:
+			if (this.getRNG().nextInt(3) == 0) {
 				this.setPlayerOwner(player);
 				this.onTamedByPlayer();
 				this.unsetTemporary();
@@ -799,10 +814,6 @@ public class TameableCreatureEntity extends AgeableCreatureEntity implements IEn
 				player.addStat(ObjectManager.getStat(this.creatureInfo.getName() + ".tame"), 1);
 				if (this.timeUntilPortal > this.getPortalCooldown()) {
 					this.timeUntilPortal = this.getPortalCooldown();
-				}
-				ExtendedPlayer extendedPlayer = ExtendedPlayer.getForPlayer(player);
-				if(extendedPlayer != null) {
-					extendedPlayer.getBeastiary().discoverCreature(this, 2, false);
 				}
 			}
 			else {

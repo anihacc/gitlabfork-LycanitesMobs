@@ -16,6 +16,7 @@ public class MessageBeastiary implements IMessage, IMessageHandler<MessageBeasti
 	public int entryAmount = 0;
 	public String[] creatureNames;
 	public int[] ranks;
+	public int[] experience;
 	
 	
 	// ==================================================
@@ -27,10 +28,12 @@ public class MessageBeastiary implements IMessage, IMessageHandler<MessageBeasti
 		if(this.entryAmount > 0) {
 			this.creatureNames = new String[this.entryAmount];
 			this.ranks = new int[this.entryAmount];
+			this.experience = new int[this.entryAmount];
 			int i = 0;
 			for(CreatureKnowledge creatureKnowledge : beastiary.creatureKnowledgeList.values()) {
 				this.creatureNames[i] = creatureKnowledge.creatureName;
 				this.ranks[i] = creatureKnowledge.rank;
+				this.experience[i] = creatureKnowledge.experience;
 				i++;
 			}
 		}
@@ -60,7 +63,8 @@ public class MessageBeastiary implements IMessage, IMessageHandler<MessageBeasti
 		for(int i = 0; i < message.entryAmount; i++) {
 			String creatureName = message.creatureNames[i];
 			int rank = message.ranks[i];
-			CreatureKnowledge creatureKnowledge = new CreatureKnowledge(playerExt.getBeastiary(), creatureName, rank);
+			int experience = message.experience[i];
+			CreatureKnowledge creatureKnowledge = new CreatureKnowledge(playerExt.getBeastiary(), creatureName, rank, experience);
 			playerExt.getBeastiary().creatureKnowledgeList.put(creatureKnowledge.creatureName, creatureKnowledge);
 		}
 		LycanitesMobs.logDebug("Packets", "Added " + message.entryAmount + " entries from the Beastairy Packet.");
@@ -84,9 +88,11 @@ public class MessageBeastiary implements IMessage, IMessageHandler<MessageBeasti
         if(this.entryAmount > 0) {
             this.creatureNames = new String[this.entryAmount];
             this.ranks = new int[this.entryAmount];
+            this.experience = new int[this.entryAmount];
             for(int i = 0; i < this.entryAmount; i++) {
                 this.creatureNames[i] = packet.readString(32767);
                 this.ranks[i] = packet.readInt();
+				this.experience[i] = packet.readInt();
             }
         }
 	}
@@ -106,6 +112,7 @@ public class MessageBeastiary implements IMessage, IMessageHandler<MessageBeasti
             for(int i = 0; i < this.entryAmount; i++) {
                 packet.writeString(this.creatureNames[i]);
                 packet.writeInt(this.ranks[i]);
+				packet.writeInt(this.experience[i]);
             }
         }
 	}

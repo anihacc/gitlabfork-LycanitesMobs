@@ -34,7 +34,7 @@ public class CreatureTypeList extends CreatureFilterList {
 		creatureTypes.addAll(CreatureManager.getInstance().creatureTypes.values());
 		creatureTypes.sort(Comparator.comparing(CreatureType::getTitle));
 		for(CreatureType creatureType : creatureTypes) {
-			if(this.parentGui.playerExt.beastiary.getCreaturesDescovered(creatureType) > 0) {
+			if(this.parentGui.playerExt.beastiary.getCreaturesDiscovered(creatureType) > 0) {
 				this.creatureTypeList.put(groupIndex++, creatureType);
 			}
 		}

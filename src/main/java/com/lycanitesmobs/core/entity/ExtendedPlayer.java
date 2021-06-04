@@ -4,9 +4,7 @@ import com.lycanitesmobs.GuiHandler;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.VersionChecker;
 import com.lycanitesmobs.core.capabilities.IExtendedPlayer;
-import com.lycanitesmobs.core.info.Beastiary;
-import com.lycanitesmobs.core.info.CreatureInfo;
-import com.lycanitesmobs.core.info.CreatureType;
+import com.lycanitesmobs.core.info.*;
 import com.lycanitesmobs.core.item.temp.ItemStaffSummoning;
 import com.lycanitesmobs.core.network.*;
 import com.lycanitesmobs.core.pets.DonationFamiliars;
@@ -79,6 +77,10 @@ public class ExtendedPlayer implements IExtendedPlayer {
 	public int summonSetMax = 5;
 	public PortalEntity staffPortal;
 
+	// Creature Studying:
+	public int creatureStudyCooldown = 0;
+	public int creatureStudyCooldownMax = 200;
+
     // Initial Setup:
     private boolean initialSetup = false;
 	
@@ -124,6 +126,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
 
         this.spiritRecharge = LycanitesMobs.config.getInt("Player", "Spirit Recharge", this.spiritRecharge, "How much spirit a player regains per second. Default is 10, was 1 in earlier versions.");
 		this.summonFocusRecharge = LycanitesMobs.config.getInt("Player", "Summoning Focus Recharge", this.summonFocusRecharge, "How much summoning focus a player regains per second. Default is 10, was 1 in earlier versions.");
+		this.creatureStudyCooldownMax = CreatureManager.getInstance().config.creatureStudyCooldown;
     }
 	
 	
@@ -223,6 +226,11 @@ public class ExtendedPlayer implements IExtendedPlayer {
                     || (!this.player.getHeldItemOffhand().isEmpty() && this.player.getHeldItemOffhand().getItem() instanceof ItemStaffSummoning)) {
 				sync = true;
 			}
+		}
+
+		// Creature Study Cooldown Update:
+		if (this.creatureStudyCooldown > 0) {
+			this.creatureStudyCooldown--;
 		}
 
 		// Sync Stats To Client:
@@ -341,6 +349,11 @@ public class ExtendedPlayer implements IExtendedPlayer {
 			}
 			this.sendPetEntriesToPlayer("familiar");
 		}
+	}
+
+	public void studyCreature(Entity entity, int experience) {
+		this.beastiary.addCreatureKnowledge(entity, experience);
+		this.creatureStudyCooldown = this.creatureStudyCooldownMax;
 	}
 	
 	

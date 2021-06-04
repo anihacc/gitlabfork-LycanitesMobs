@@ -2,6 +2,7 @@ package com.lycanitesmobs.core.inventory;
 
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.RideableCreatureEntity;
+import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -18,6 +19,7 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -470,6 +472,9 @@ public class InventoryCreature implements IInventory {
 		// Bag:
 		if(itemStack.getItem() == Item.getItemFromBlock(Blocks.CHEST))
 			return "bag";
+		if(ObjectLists.isInOreDictionary("chestWood", itemStack)) {
+			return "bag";
+		}
 		
 		return null;
 	}

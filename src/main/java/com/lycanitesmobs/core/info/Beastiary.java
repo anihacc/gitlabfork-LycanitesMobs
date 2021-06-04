@@ -13,6 +13,8 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.Util;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import com.lycanitesmobs.client.localisation.LanguageManager;
 
@@ -42,36 +44,39 @@ public class Beastiary {
 	 * @param newKnowledge The new knowledge to add.
 	 * @return The increase of knowledge rank or 0 on failure.
 	 */
-	public int addCreatureKnowledge(CreatureKnowledge newKnowledge) {
+	public boolean addCreatureKnowledge(CreatureKnowledge newKnowledge, boolean sendToClient) {
 		CreatureInfo creatureInfo = CreatureManager.getInstance().getCreature(newKnowledge.creatureName);
 		if(creatureInfo == null)
-			return 0;
+			return false;
 		if(creatureInfo.dummy)
-			return 0;
+			return false;
 
 		CreatureKnowledge currentKnowledge = this.getCreatureKnowledge(creatureInfo.getName());
 		if(currentKnowledge != null) {
-			if(currentKnowledge.rank >= newKnowledge.rank) {
-				return 0;
-			}
-			int rankIncrease = newKnowledge.rank - currentKnowledge.rank;
 			currentKnowledge.rank = newKnowledge.rank;
-			return rankIncrease;
+			currentKnowledge.experience = newKnowledge.experience;
+			if (sendToClient) {
+				this.sendToClient(currentKnowledge);
+			}
+			return true;
 		}
 
 		this.creatureKnowledgeList.put(newKnowledge.creatureName, newKnowledge);
-		return newKnowledge.rank;
+		if (sendToClient) {
+			this.sendAddedMessage(newKnowledge);
+			this.sendToClient(newKnowledge);
+		}
+		return true;
 	}
 
 
 	/**
-	 * Attemtp to add Creature Knowledge to this Beastiary based on the provided entity and sends feedback to the player.
-	 * @param entity The entity being descovered.
-	 * @param rank The Knowledge rank being descovered.
-	 * @param knownMessage If true, if the creature is already known at the same or higher rank a message will be sent to the player.
+	 * Attempt to add Creature Knowledge to this Beastiary based on the provided entity and sends feedback to the player.
+	 * @param entity The entity being discovered.
+	 * @param experience The Knowledge experience being gained.
 	 * @return True if new knowledge is gained and false if not.
 	 */
-	public boolean discoverCreature(Entity entity, int rank, boolean knownMessage) {
+	public boolean addCreatureKnowledge(Entity entity, int experience) {
 		// Invalid Entity:
 		if(!(entity instanceof BaseCreatureEntity)) {
 			if (!this.extendedPlayer.player.getEntityWorld().isRemote) {
@@ -84,30 +89,18 @@ public class Beastiary {
 		}
 
 		CreatureInfo creatureInfo = ((BaseCreatureEntity)entity).creatureInfo;
-		CreatureKnowledge newKnowledge = new CreatureKnowledge(this.extendedPlayer.getBeastiary(), creatureInfo.getName(), rank);
-		int rankChange = this.extendedPlayer.getBeastiary().addCreatureKnowledge(newKnowledge);
-
-		// Already Known:
-		if(rankChange <= 0) {
-			if(knownMessage) {
-				this.sendKnownMessage(newKnowledge);
-			}
-			return false;
+		CreatureKnowledge newKnowledge = this.getCreatureKnowledge(creatureInfo.getName());
+		if (newKnowledge == null) {
+			newKnowledge = new CreatureKnowledge(this.extendedPlayer.getBeastiary(), creatureInfo.getName(), 1, experience);
 		}
-
-		// Success:
-		this.extendedPlayer.player.addStat(ObjectManager.getStat(creatureInfo.name + ".learn"), 1);
-		this.sendAddedMessage(newKnowledge);
-		this.sendToClient(newKnowledge);
-		if(this.extendedPlayer.player.getEntityWorld().isRemote) {
-			for(int i = 0; i < 32; ++i) {
-				entity.getEntityWorld().spawnParticle(EnumParticleTypes.VILLAGER_HAPPY,
-						entity.posX + (4.0F * this.extendedPlayer.player.getRNG().nextFloat()) - 2.0F,
-						entity.posY + (4.0F * this.extendedPlayer.player.getRNG().nextFloat()) - 2.0F,
-						entity.posZ + (4.0F * this.extendedPlayer.player.getRNG().nextFloat()) - 2.0F,
-						0.0D, 0.0D, 0.0D);
+		else {
+			if (newKnowledge.getMaxExperience() <= 0) {
+				return false;
 			}
+			newKnowledge.addExperience(experience);
 		}
+		this.addCreatureKnowledge(newKnowledge, true);
+
 		return true;
 	}
 
@@ -125,6 +118,7 @@ public class Beastiary {
 		message = message.replace("%creature%", creatureInfo.getTitle());
 		message = message.replace("%rank%", "" + creatureKnowledge.rank);
 		this.extendedPlayer.player.sendMessage(new TextComponentString(message));
+
 		if(creatureInfo.isSummonable()) {
 			String summonMessage = LanguageManager.translate("message.beastiary.summonable");
 			if(creatureKnowledge.rank >= 3) {
@@ -135,6 +129,12 @@ public class Beastiary {
 			}
 			summonMessage = summonMessage.replace("%creature%", creatureInfo.getTitle());
 			this.extendedPlayer.player.sendMessage(new TextComponentString(summonMessage));
+		}
+
+		if(creatureInfo.isTameable() && creatureKnowledge.rank == 2) {
+			String tameMessage = LanguageManager.translate("message.beastiary.tameable");
+			tameMessage = tameMessage.replace("%creature%", creatureInfo.getTitle());
+			this.extendedPlayer.player.sendMessage(new TextComponentString(tameMessage));
 		}
 	}
 
@@ -190,7 +190,7 @@ public class Beastiary {
 	 * @param creatureType Creature Type to check with.
 	 * @return True if the player has at least one creature form the specific creature type.
 	 */
-	public int getCreaturesDescovered(CreatureType creatureType) {
+	public int getCreaturesDiscovered(CreatureType creatureType) {
 		if(this.creatureKnowledgeList.size() == 0) {
 			return 0;
 		}
@@ -259,15 +259,17 @@ public class Beastiary {
 				if(nbtKnowledge.hasKey("Rank")) {
 					rank = nbtKnowledge.getInteger("Rank");
 				}
-				else if(nbtKnowledge.hasKey("Completion")) {
-					rank = 2;
+				int experience = 0;
+				if(nbtKnowledge.hasKey("Experience")) {
+					experience = nbtKnowledge.getInteger("Experience");
 				}
 	    		CreatureKnowledge creatureKnowledge = new CreatureKnowledge(
                         this,
 	    				creatureName,
-	    				rank
+	    				rank,
+						experience
 	    			);
-	    		this.addCreatureKnowledge(creatureKnowledge);
+	    		this.addCreatureKnowledge(creatureKnowledge, false);
     		}
     	}
     }
@@ -280,6 +282,7 @@ public class Beastiary {
 			NBTTagCompound nbtKnowledge = new NBTTagCompound();
 			nbtKnowledge.setString("CreatureName", creatureKnowledge.creatureName);
 			nbtKnowledge.setInteger("Rank", creatureKnowledge.rank);
+			nbtKnowledge.setInteger("Experience", creatureKnowledge.experience);
 			knowledgeList.appendTag(nbtKnowledge);
 		}
 		nbtTagCompound.setTag("CreatureKnowledge", knowledgeList);
