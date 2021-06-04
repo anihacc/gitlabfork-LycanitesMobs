@@ -121,12 +121,12 @@ public class Beastiary {
 
 		if(creatureInfo.isSummonable()) {
 			String summonMessage = LanguageManager.translate("message.beastiary.summonable");
-			if(creatureKnowledge.rank >= 3) {
-				summonMessage = LanguageManager.translate("message.beastiary.summonable.skins");
-			}
-			else if(creatureKnowledge.rank == 2) {
-				summonMessage = LanguageManager.translate("message.beastiary.summonable.colors");
-			}
+//			if(creatureKnowledge.rank >= 3) {
+//				summonMessage = LanguageManager.translate("message.beastiary.summonable.skins");
+//			}
+//			else if(creatureKnowledge.rank == 2) {
+//				summonMessage = LanguageManager.translate("message.beastiary.summonable.colors");
+//			}
 			summonMessage = summonMessage.replace("%creature%", creatureInfo.getTitle());
 			this.extendedPlayer.player.sendMessage(new TextComponentString(summonMessage));
 		}
@@ -214,7 +214,8 @@ public class Beastiary {
 		Map<Integer, String> minionList = new HashMap<>();
 		int minionIndex = 0;
 		for(String minionName : this.creatureKnowledgeList.keySet()) {
-			if(SummonSet.isSummonableCreature(minionName)) {
+			CreatureKnowledge creatureKnowledge = this.creatureKnowledgeList.get(minionName);
+			if(creatureKnowledge.rank >= 2 && SummonSet.isSummonableCreature(minionName)) {
 				minionList.put(minionIndex++, minionName);
 			}
 		}

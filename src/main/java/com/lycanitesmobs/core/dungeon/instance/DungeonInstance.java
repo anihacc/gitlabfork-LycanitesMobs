@@ -106,7 +106,7 @@ public class DungeonInstance {
 			this.layout = new DungeonLayout(this);
 			this.layout.generate(this.random);
 		}
-		LycanitesMobs.logInfo("", "[Dungeon] Generated New Dungeon Instance " + this);
+		LycanitesMobs.logInfo("Dungeon", "Generated New Dungeon Instance " + this);
 
 		// Mark For Save:
 		ExtendedWorld extendedWorld = ExtendedWorld.getForWorld(world);

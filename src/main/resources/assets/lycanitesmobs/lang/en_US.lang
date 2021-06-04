@@ -213,7 +213,7 @@ message.soulkey.active=The Soulkey activates the Altar!
 # %creature% will be replaced with the name of the tamed creature, don't translate this!
 message.pet.tamed=The %creature% seems to love you now!
 message.pet.tamefail=The %creature% wants more!
-message.pet.tamefail.knowledge=You need Knowledge Rank 2 in your Beastiary to tame a %creature%.
+message.pet.tamefail.knowledge=You gained knowledge by feeding the %creature%. At Rank 2 you may tame it!
 message.pet.mount.baby=The %creature% is too young to carry you!
 #
 #
@@ -1061,10 +1061,10 @@ entity.lycanitesmobs.lobber.description=Large lava brutes, Cherufes are incredib
 entity.lycanitesmobs.lobber.habitat=These golems are found in lava lakes.
 entity.lycanitesmobs.lobber.combat=Cherufes are named for their attacks where they lob large balls of magma at their victims, this very quickly begins to flood the area with temporary lava.
 # ========================================================================
-entity.lycanitesmobs.lurker.name=Lurker
-entity.lycanitesmobs.lurker.description=Lurkers are able to completely blend in with their environment. Their Once inflicted, they will hide, letting the poison do the work. Can be tamed as excellent pets, also great as Creeper guards!
+entity.lycanitesmobs.lurker.name=Ostimien
+entity.lycanitesmobs.lurker.description=Ostimien are able to completely blend in with their environment. They bite with a chaotic venom and once their victims are inflicted, they will hide, letting the poison do the work. Can be tamed as excellent pets, also great as Creeper guards!
 entity.lycanitesmobs.lurker.habitat=These creatures can be found in forests and swamps but avoid cold areas.
-entity.lycanitesmobs.lurker.combat=Lurker bites will both poison and blind, after biting the Lurker will flee and attempt to hide allowing the poison to do it's work, they will attack again if the poison wears off.
+entity.lycanitesmobs.lurker.combat=Ostimien bites will both poison and blind, after biting the Lurker will flee and attempt to hide allowing the poison to do it's work, they will attack again if the poison wears off.
 # ========================================================================
 entity.lycanitesmobs.maka.name=Maka
 entity.lycanitesmobs.maka.description=Large peaceful herbivores. Can be farmed with vegetables for their meat and leather. Be careful around alphas.
