@@ -206,7 +206,7 @@ public class Beastiary {
 	 * @param creatureType Creature Type to check with.
 	 * @return True if the player has at least one creature form the specific creature type.
 	 */
-	public int getCreaturesDescovered(CreatureType creatureType) {
+	public int getCreaturesDiscovered(CreatureType creatureType) {
 		if(this.creatureKnowledgeList.size() == 0) {
 			return 0;
 		}
@@ -297,6 +297,7 @@ public class Beastiary {
 			CompoundNBT nbtKnowledge = new CompoundNBT();
 			nbtKnowledge.putString("CreatureName", creatureKnowledge.creatureName);
 			nbtKnowledge.putInt("Rank", creatureKnowledge.rank);
+			nbtKnowledge.putInt("Experience", creatureKnowledge.experience);
 			knowledgeList.add(nbtKnowledge);
 		}
 		nbtTagCompound.put("CreatureKnowledge", knowledgeList);
