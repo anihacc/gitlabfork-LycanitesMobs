@@ -1,8 +1,0 @@
-{
-	"parent": "block/slab",
-	"textures": {
-		"bottom": "lycanitesmobs:block/emberstonetile",
-        "top": "lycanitesmobs:block/emberstonetile",
-        "side": "lycanitesmobs:block/emberstonetile"
-	}
-}

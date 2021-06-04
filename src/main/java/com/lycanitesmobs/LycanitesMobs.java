@@ -12,6 +12,8 @@ import com.lycanitesmobs.core.command.CommandManager;
 import com.lycanitesmobs.core.compatibility.DLDungeons;
 import com.lycanitesmobs.core.config.ConfigDebug;
 import com.lycanitesmobs.core.config.CoreConfig;
+import com.lycanitesmobs.core.datagen.BlockModelsGenerator;
+import com.lycanitesmobs.core.datagen.BlockModelsProvider;
 import com.lycanitesmobs.core.dungeon.DungeonManager;
 import com.lycanitesmobs.core.entity.ExtendedEntity;
 import com.lycanitesmobs.core.entity.ExtendedPlayer;
@@ -28,22 +30,21 @@ import com.lycanitesmobs.core.spawner.SpawnerEventListener;
 import com.lycanitesmobs.core.spawner.SpawnerManager;
 import com.lycanitesmobs.core.worldgen.WorldGenManager;
 import com.lycanitesmobs.core.worldgen.WorldGenerator;
+import net.minecraft.data.DataGenerator;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
-import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
+import net.minecraftforge.fml.event.lifecycle.*;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
@@ -101,6 +102,7 @@ public class LycanitesMobs {
 //		modEventBus.addListener(this::serverStarting);
 		modEventBus.addListener(this::enqueueIMC);
 		modEventBus.addListener(this::processIMC);
+		modEventBus.addListener(this::generateData);
 		modEventBus.register(ObjectManager.getInstance());
 		modEventBus.register(ItemManager.getInstance());
 		modEventBus.register(CreatureManager.getInstance());
@@ -197,6 +199,16 @@ public class LycanitesMobs {
 	@SubscribeEvent
 	public void serverStarting(final FMLServerStartingEvent event) {
 
+	}
+
+	private void generateData(final GatherDataEvent event) {
+		DataGenerator generator = event.getGenerator();
+		ExistingFileHelper helper = event.getExistingFileHelper();
+
+		if (event.includeClient()) {
+			generator.addProvider(new BlockModelsGenerator(generator, helper));
+			// generator.addProvider(new ItemModelsGenerator(generator, helper));
+		}
 	}
 
 	public void loadConfigs() {
