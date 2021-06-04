@@ -783,6 +783,8 @@ public abstract class TameableCreatureEntity extends AgeableCreatureEntity {
 				return this.isTamed();
 			}
 
+			extendedPlayer.studyCreature(this, this.scaleKnowledgeExperience(CreatureManager.getInstance().config.creatureTreatKnowledge));
+
 			// Require Knowledge Rank 2:
 			CreatureKnowledge creatureKnowledge = extendedPlayer.getBeastiary().getCreatureKnowledge(this.creatureInfo.getName());
 			if (creatureKnowledge == null || creatureKnowledge.rank < 2) {

@@ -1574,6 +1574,21 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		return this.getVariant() != null && "rare".equals(this.getVariant().rarity);
 	}
 
+	/**
+	 * Scales the provided Beastiary Creature Knowledge Experience based on this creature's properties, config values, etc.
+	 * @param knowledgeExperience The experience to apply a scale to.
+	 * @return The scaled experience.
+	 */
+	public int scaleKnowledgeExperience(int knowledgeExperience) {
+		if (this.isBoss()) {
+			knowledgeExperience = Math.round((float)CreatureManager.getInstance().config.creatureBossKnowledgeScale * knowledgeExperience);
+		}
+		else if (this.getVariant() != null) {
+			knowledgeExperience = Math.round((float)CreatureManager.getInstance().config.creatureVariantKnowledgeScale * knowledgeExperience);
+		}
+		return knowledgeExperience;
+	}
+
 
     // ==================================================
   	//                     Updates
@@ -1645,7 +1660,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 					if(extendedPlayer != null) {
 						CreatureKnowledge creatureKnowledge = extendedPlayer.getBeastiary().getCreatureKnowledge(this.creatureInfo.getName());
 						if (creatureKnowledge == null || creatureKnowledge.rank < 2) {
-							extendedPlayer.getBeastiary().addCreatureKnowledge(this, 1);
+							extendedPlayer.getBeastiary().addCreatureKnowledge(this, this.scaleKnowledgeExperience(CreatureManager.getInstance().config.creatureProximityKnowledge));
 						}
 					}
 				}
@@ -3098,9 +3113,9 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
                     try {
                         PlayerEntity player = (PlayerEntity) damageSource.getEntity();
                         //player.addStat(ObjectManager.getStat(this.creatureInfo.getName() + ".kill"), 1); TODO Player Stats
-						ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
-						if (playerExt != null) {
-							playerExt.getBeastiary().addCreatureKnowledge(this, this.isBoss() ? 500 : 50);
+						ExtendedPlayer extendedPlayer = ExtendedPlayer.getForPlayer(player);
+						if (extendedPlayer != null) {
+							extendedPlayer.getBeastiary().addCreatureKnowledge(this, this.scaleKnowledgeExperience(CreatureManager.getInstance().config.creatureKillKnowledge));
 						}
                     }
                     catch(Exception e) {}

@@ -154,6 +154,8 @@
     "message.beastiary.new.prefix": "You have gained Knowledge Rank",
     "message.beastiary.new.of": "of the",
     "message.beastiary.new.suffix": "Check your Beastiary!",
+    "message.beastiary.tameable.prefix": "You are now able to tame the",
+    "message.beastiary.tameable.suffix": "!",
     "message.beastiary.summonable.prefix": "You are now able to summon the",
     "message.beastiary.summonable.suffix": "as a temporary minion! You will need a Summoning Item to summon it.",
     "message.beastiary.summonable.colors.prefix": "You can now summon variations of the",

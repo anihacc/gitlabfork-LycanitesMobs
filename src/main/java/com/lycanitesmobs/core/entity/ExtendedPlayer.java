@@ -4,9 +4,8 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.VersionChecker;
 import com.lycanitesmobs.core.capabilities.IExtendedPlayer;
 import com.lycanitesmobs.core.config.ConfigExtra;
-import com.lycanitesmobs.core.info.Beastiary;
-import com.lycanitesmobs.core.info.CreatureInfo;
-import com.lycanitesmobs.core.info.CreatureType;
+import com.lycanitesmobs.core.config.ConfigGeneral;
+import com.lycanitesmobs.core.info.*;
 import com.lycanitesmobs.core.item.summoningstaff.ItemStaffSummoning;
 import com.lycanitesmobs.core.network.*;
 import com.lycanitesmobs.core.pets.DonationFamiliars;
@@ -130,6 +129,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
     public ExtendedPlayer() {
         this.beastiary = new Beastiary(this);
         this.petManager = new PetManager(this.player);
+        this.creatureStudyCooldownMax = CreatureManager.getInstance().config.creatureStudyCooldown;
     }
 	
 	

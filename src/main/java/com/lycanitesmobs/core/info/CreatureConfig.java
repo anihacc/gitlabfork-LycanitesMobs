@@ -2,6 +2,7 @@ package com.lycanitesmobs.core.info;
 
 import com.lycanitesmobs.core.config.ConfigCreatures;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import net.minecraftforge.common.ForgeConfigSpec;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,11 +64,29 @@ public class CreatureConfig {
 
 
 	// Beastiary:
-	/** The chance that a creature gets added to the killing player's Beastiary on death, always 100% for bosses. **/
-	public double beastiaryAddOnDeathChance = 0.15;
-
 	/** If true, a chat message will be displayed when gaining Beastiary Knowledge. **/
 	public boolean beastiaryKnowledgeMessages = true;
+
+	/** How much knowledge experience standing near a creature gives per second. **/
+	public int creatureProximityKnowledge = 1;
+
+	/** How much knowledge experience killing a creature gives. **/
+	public int creatureKillKnowledge = 50;
+
+	/** How much knowledge experience feeding a treat to a creature gives. **/
+	public int creatureTreatKnowledge = 100;
+
+	/** How much knowledge experience studying (using a Soulgazer on) a creature gives. **/
+	public int creatureStudyKnowledge = 25;
+
+	/** The time in ticks it takes to be able to use a Soulgazer for knowledge again. Default is 200 (10 seconds). **/
+	public int creatureStudyCooldown = 200;
+
+	/** The knowledge experience scale for variant creatures. **/
+	public double creatureVariantKnowledgeScale = 2;
+
+	/** The knowledge experience scale for boss creatures. **/
+	public double creatureBossKnowledgeScale = 5;
 
 
 	// Bosses:
@@ -150,8 +169,14 @@ public class CreatureConfig {
 		this.petFollowDistance = ConfigCreatures.INSTANCE.petFollowDistance.get();
 
 		// Beastiary:
-		this.beastiaryAddOnDeathChance = ConfigCreatures.INSTANCE.beastiaryAddOnDeathChance.get();
 		this.beastiaryKnowledgeMessages = ConfigCreatures.INSTANCE.beastiaryKnowledgeMessages.get();
+		this.creatureProximityKnowledge = ConfigCreatures.INSTANCE.creatureProximityKnowledge.get();
+		this.creatureKillKnowledge = ConfigCreatures.INSTANCE.creatureKillKnowledge.get();
+		this.creatureTreatKnowledge = ConfigCreatures.INSTANCE.creatureTreatKnowledge.get();
+		this.creatureStudyKnowledge = ConfigCreatures.INSTANCE.creatureStudyKnowledge.get();
+		this.creatureStudyCooldown = ConfigCreatures.INSTANCE.creatureStudyCooldown.get();
+		this.creatureVariantKnowledgeScale = ConfigCreatures.INSTANCE.creatureVariantKnowledgeScale.get();
+		this.creatureBossKnowledgeScale = ConfigCreatures.INSTANCE.creatureBossKnowledgeScale.get();
 
 		// Bosses:
 		this.bossAntiFlight = ConfigCreatures.INSTANCE.bossAntiFlight.get();

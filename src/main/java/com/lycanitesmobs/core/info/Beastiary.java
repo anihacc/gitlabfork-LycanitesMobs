@@ -51,15 +51,11 @@ public class Beastiary {
 
 		CreatureKnowledge currentKnowledge = this.getCreatureKnowledge(creatureInfo.getName());
 		if(currentKnowledge != null) {
-			if(currentKnowledge.rank > newKnowledge.rank || currentKnowledge.getMaxExperience() <= 0) {
-				return false;
-			}
-			if(currentKnowledge.experience > newKnowledge.experience) {
-				return false;
-			}
 			currentKnowledge.rank = newKnowledge.rank;
 			currentKnowledge.experience = newKnowledge.experience;
-			this.sendToClient(currentKnowledge);
+			if (sendToClient) {
+				this.sendToClient(currentKnowledge);
+			}
 			return true;
 		}
 
@@ -123,13 +119,11 @@ public class Beastiary {
 		this.extendedPlayer.player.sendMessage(message, Util.NIL_UUID);
 
 		if(creatureInfo.isSummonable()) {
-
 			ITextComponent summonMessage = new TranslationTextComponent("message.beastiary.summonable.prefix")
 					.append(" ")
 					.append(creatureInfo.getTitle())
 					.append(" ")
 					.append(new TranslationTextComponent("message.beastiary.summonable.suffix"));
-
 			if(creatureKnowledge.rank >= 3) {
 				summonMessage = new TranslationTextComponent("message.beastiary.summonable.skins.prefix")
 						.append(" ")
@@ -137,7 +131,6 @@ public class Beastiary {
 						.append(" ")
 						.append(new TranslationTextComponent("message.beastiary.summonable.skins.suffix"));
 			}
-
 			else if(creatureKnowledge.rank == 2) {
 				summonMessage = new TranslationTextComponent("message.beastiary.summonable.colors.prefix")
 						.append(" ")
@@ -147,6 +140,15 @@ public class Beastiary {
 			}
 
 			this.extendedPlayer.player.sendMessage(summonMessage, Util.NIL_UUID);
+		}
+
+		if(creatureInfo.isTameable() && creatureKnowledge.rank == 2) {
+			ITextComponent tameMessage = new TranslationTextComponent("message.beastiary.tameable.prefix")
+					.append(" ")
+					.append(creatureInfo.getTitle())
+					.append(" ")
+					.append(new TranslationTextComponent("message.beastiary.tameable.suffix"));
+			this.extendedPlayer.player.sendMessage(tameMessage, Util.NIL_UUID);
 		}
 	}
 
