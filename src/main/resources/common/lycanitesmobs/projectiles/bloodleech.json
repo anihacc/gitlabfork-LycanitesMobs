@@ -30,7 +30,8 @@
 	"pierceBlocks": false,
 	"glow": false,
 	"rollSpeed": 4,
-	"particleId": "minecraft:dust",
-	"waterParticleId": "minecraft:dust",
+	"particleCount": 5,
+	"particleId": "minecraft:dust:redstone",
+	"waterParticleId": "minecraft:dust:redstone",
 	"animationFrames": 4
 }

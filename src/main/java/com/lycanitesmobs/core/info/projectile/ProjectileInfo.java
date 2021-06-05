@@ -25,6 +25,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
 import net.minecraft.particles.BasicParticleType;
 import net.minecraft.particles.ParticleType;
+import net.minecraft.particles.RedstoneParticleData;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.registry.Registry;
@@ -319,7 +320,7 @@ public class ProjectileInfo {
 		}
 		if (this.particleType == null) {
 			ParticleType<?> particleType = RegistryManager.ACTIVE.getRegistry(Registry.PARTICLE_TYPE_REGISTRY).getValue(new ResourceLocation(this.particleId));
-			if(particleType instanceof BasicParticleType) {
+			if (particleType instanceof BasicParticleType) {
 				this.particleType = (BasicParticleType)particleType;
 			}
 		}

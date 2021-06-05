@@ -24,6 +24,7 @@
 	"pierceBlocks": false,
 	"glow": true,
 	"rollSpeed": 4,
+	"particleCount": 1,
 	"particleId": "minecraft:spit",
 	"waterParticleId": "minecraft:cloud",
 	"animationFrames": 4

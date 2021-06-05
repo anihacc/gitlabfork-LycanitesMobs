@@ -25,7 +25,8 @@
 	"pierceBlocks": false,
 	"glow": false,
 	"rollSpeed": 4,
-	"particleId": "minecraft:falling_dust",
+	"particleCount": 5,
+	"particleId": "minecraft:dust_falling:dirt",
 	"waterParticleId": "minecraft:bubble",
 	"animationFrames": 4
 }

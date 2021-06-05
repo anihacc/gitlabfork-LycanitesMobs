@@ -24,6 +24,7 @@
 	"pierceBlocks": false,
 	"glow": false,
 	"rollSpeed": 0,
+	"particleCount": 1,
 	"particleId": "minecraft:cloud",
 	"waterParticleId": "minecraft:bubble",
 	"animationFrames": 4

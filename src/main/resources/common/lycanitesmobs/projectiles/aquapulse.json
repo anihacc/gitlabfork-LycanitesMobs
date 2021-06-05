@@ -31,6 +31,7 @@
 	"pierceBlocks": false,
 	"glow": false,
 	"rollSpeed": 1,
+	"particleCount": 10,
 	"particleId": "minecraft:dripping_water",
 	"waterParticleId": "minecraft:bubble",
 	"animationFrames": 5

@@ -32,6 +32,7 @@
 	"pierceBlocks": false,
 	"glow": true,
 	"rollSpeed": 0,
+	"particleCount": 1,
 	"particleId": "minecraft:flame",
 	"waterParticleId": "minecraft:bubble",
 	"animationFrames": 3
