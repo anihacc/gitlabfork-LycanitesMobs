@@ -5,39 +5,31 @@
   },
   "ingredients": [
     {
-      "item": "minecraft:obsidian"
+      "item": "minecraft:end_stone"
     },
     {
-      "item": "minecraft:stone",
-      "data": 5
+      "item": "minecraft:cobblestone"
     },
     {
-      "item": "minecraft:stone",
-      "data": 5
+      "item": "minecraft:cobblestone"
     },
     {
-      "item": "minecraft:stone",
-      "data": 5
+      "item": "minecraft:cobblestone"
     },
     {
-      "item": "minecraft:stone",
-      "data": 5
+      "item": "minecraft:cobblestone"
     },
     {
-      "item": "minecraft:stone",
-      "data": 5
+      "item": "minecraft:cobblestone"
     },
     {
-      "item": "minecraft:stone",
-      "data": 5
+      "item": "minecraft:cobblestone"
     },
     {
-      "item": "minecraft:stone",
-      "data": 5
+      "item": "minecraft:cobblestone"
     },
     {
-      "item": "minecraft:stone",
-      "data": 5
+      "item": "minecraft:cobblestone"
     }
   ],
   "type": "forge:ore_shapeless"

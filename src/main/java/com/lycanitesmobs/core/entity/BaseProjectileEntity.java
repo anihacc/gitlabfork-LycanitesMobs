@@ -1,5 +1,6 @@
 package com.lycanitesmobs.core.entity;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.AssetManager;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ModInfo;
@@ -22,6 +23,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
@@ -253,10 +255,8 @@ public class BaseProjectileEntity extends EntityThrowable {
 						}
 
 						// Apply Damage Effects If Not Blocking:
-						if(!(target.isActiveItemStackBlocking() && target.getActiveItemStack().getItem().isShield(target.getActiveItemStack(), target))) {
-							this.onEntityLivingDamage(target); // Old Projectiles
-							this.onDamage(target, damageInit, attackSuccess); // JSON Projectiles
-						}
+						this.onEntityLivingDamage(target); // Old Projectiles
+						this.onDamage(target, damageInit, attackSuccess); // JSON Projectiles
 
 						// Restore Knockback:
 						if (stopKnockback) {
@@ -354,6 +354,33 @@ public class BaseProjectileEntity extends EntityThrowable {
  	        }
      	}
      }
+
+	/**
+	 * Determines if the provided entity is blocking this projectile, takes into account where players are looking also.
+	 * Note: This may be completely redundant.
+	 * @param targetEntity The entity to check.
+	 * @return True if this projectile is being blocked by the entity.
+	 */
+	public boolean isBlockedByEntity(EntityLivingBase targetEntity) {
+		if (targetEntity == null || !targetEntity.isActiveItemStackBlocking() || !targetEntity.getActiveItemStack().getItem().isShield(targetEntity.getActiveItemStack(), targetEntity)) {
+			return false;
+		}
+
+		// Check Player Blocking Angle:
+		if (targetEntity instanceof EntityPlayer) {
+			LycanitesMobs.logDebug("", "Checking if player is blocking: " + targetEntity);
+			Vec3d targetViewVector = targetEntity.getLook(1.0F).normalize();
+			Vec3d distance = new Vec3d(this.posX - targetEntity.posX, (this.posY + this.getEyeHeight()) - (targetEntity.posY + targetEntity.getEyeHeight()), this.posZ - targetEntity.posZ);
+			double distanceStraight = distance.lengthVector();
+			distance = distance.normalize();
+			double lookDistance = targetViewVector.dotProduct(distance);
+			double lookRange = 1.5D;
+			double comparison = 1.0D - (lookRange / distanceStraight);
+			return lookDistance > comparison && targetEntity.canEntityBeSeen(this);
+		}
+
+		return true;
+	}
      
      //========== Do Damage Check ==========
      public boolean canDamage(EntityLivingBase targetEntity) {
