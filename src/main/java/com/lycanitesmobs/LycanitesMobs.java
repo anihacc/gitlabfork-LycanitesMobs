@@ -12,8 +12,6 @@ import com.lycanitesmobs.core.command.CommandManager;
 import com.lycanitesmobs.core.compatibility.DLDungeons;
 import com.lycanitesmobs.core.config.ConfigDebug;
 import com.lycanitesmobs.core.config.CoreConfig;
-import com.lycanitesmobs.core.datagen.BlockModelsGenerator;
-import com.lycanitesmobs.core.datagen.BlockModelsProvider;
 import com.lycanitesmobs.core.dungeon.DungeonManager;
 import com.lycanitesmobs.core.entity.ExtendedEntity;
 import com.lycanitesmobs.core.entity.ExtendedPlayer;
@@ -102,7 +100,6 @@ public class LycanitesMobs {
 //		modEventBus.addListener(this::serverStarting);
 		modEventBus.addListener(this::enqueueIMC);
 		modEventBus.addListener(this::processIMC);
-		modEventBus.addListener(this::generateData);
 		modEventBus.register(ObjectManager.getInstance());
 		modEventBus.register(ItemManager.getInstance());
 		modEventBus.register(CreatureManager.getInstance());
@@ -199,16 +196,6 @@ public class LycanitesMobs {
 	@SubscribeEvent
 	public void serverStarting(final FMLServerStartingEvent event) {
 
-	}
-
-	private void generateData(final GatherDataEvent event) {
-		DataGenerator generator = event.getGenerator();
-		ExistingFileHelper helper = event.getExistingFileHelper();
-
-		if (event.includeClient()) {
-			generator.addProvider(new BlockModelsGenerator(generator, helper));
-			// generator.addProvider(new ItemModelsGenerator(generator, helper));
-		}
 	}
 
 	public void loadConfigs() {
