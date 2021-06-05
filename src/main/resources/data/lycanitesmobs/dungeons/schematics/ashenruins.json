@@ -1,5 +1,5 @@
 {
-	"name": "volcanicshrine",
+	"name": "ashenruins",
 	"loadDefault": true,
 	"sectorCountMin": 10,
 	"sectorCountMax": 20,
@@ -14,7 +14,7 @@
 			"biomeIdListType": "whitelist"
 		}
 	],
-	"themes": ["volcanic"],
+	"themes": ["ashen"],
 	"entrances": ["entrancebasic"],
 	"rooms": ["roombasic", "roombasicloot", "roombasicmob", "roombasicpit", "roomdiamondpit"],
 	"corridors": ["corridorbasic", "corridorbasicdark", "corridorbasicloot", "corridorbasicmob"],
@@ -80,7 +80,7 @@
 			"mobId": "lycanitesmobs:umibas",
 			"weight": 1,
 			"variant": 0,
-			"mobNameTag": "The Great Magmawyrm",
+			"mobNameTag": "The Magmawyrm",
 			"mobSizeScale": 3,
 			"naturalDespawn": "false",
 			"mobLevel": 30,
@@ -128,7 +128,7 @@
 			"weight": 1,
 			"variant": 0,
 			"mobSizeScale": 1.1,
-			"mobNameTag": "Smaug",
+			"mobNameTag": "Drake of Infernos",
 			"naturalDespawn": "false",
 			"mobLevel": 10,
 			"spawnAsBoss": true,

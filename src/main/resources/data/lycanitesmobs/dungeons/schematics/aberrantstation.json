@@ -10,8 +10,10 @@
 			"type": "world",
 			"dimensionIds": [],
 			"dimensionListType": "blacklist",
-			"biomeTags": ["spooky", "mountain", "cold", "nether", "end"],
-			"biomeTagListType": "whitelist"
+			"biomeTags": ["spooky", "mountain", "cold", "end"],
+			"biomeTagListType": "whitelist",
+			"biomeIds": ["minecraft:warped_forest"],
+			"biomeIdListType": "whitelist"
 		}
 	],
 	"themes": ["aberrant"],
