@@ -24,6 +24,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.*;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
@@ -299,10 +300,8 @@ public class BaseProjectileEntity extends ThrowableEntity {
 						}
 
 						// Apply Damage Effects If Not Blocking:
-						if(!(target.isBlocking() && target.getUseItem().isShield(target))) {
-							this.onEntityLivingDamage(target); // Old Projectiles
-							this.onDamage(target, damageInit, attackSuccess); // JSON Projectiles
-						}
+						this.onEntityLivingDamage(target); // Old Projectiles
+						this.onDamage(target, damageInit, attackSuccess); // JSON Projectiles
 
 						// Restore Knockback:
 						if (stopKnockback) {
@@ -393,6 +392,32 @@ public class BaseProjectileEntity extends ThrowableEntity {
 				}
  		   }
 		}
+	}
+
+	/**
+	 * Determines if the provided entity is blocking this projectile, takes into account where players are looking also.
+	 * Note: This may be completely redundant.
+	 * @param targetEntity The entity to check.
+	 * @return True if this projectile is being blocked by the entity.
+	 */
+	public boolean isBlockedByEntity(LivingEntity targetEntity) {
+		if (targetEntity == null || !targetEntity.isBlocking() || !targetEntity.getUseItem().isShield(targetEntity)) {
+			return false;
+		}
+
+		// Check Player Blocking Angle:
+		if (targetEntity instanceof PlayerEntity) {
+			Vector3d targetViewVector = targetEntity.getViewVector(1.0F).normalize();
+			Vector3d distance = new Vector3d(this.getX() - targetEntity.getX(), this.getEyeY() - targetEntity.getEyeY(), this.getZ() - targetEntity.getZ());
+			double distanceStraight = distance.length();
+			distance = distance.normalize();
+			double lookDistance = targetViewVector.dot(distance);
+			double lookRange = 1.5D;
+			double comparison = 1.0D - (lookRange / distanceStraight);
+			return lookDistance > comparison && targetEntity.canSee(this);
+		}
+
+		return true;
 	}
 	
 	//========== Do Damage Check ==========
