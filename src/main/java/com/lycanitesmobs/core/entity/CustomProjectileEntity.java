@@ -244,6 +244,14 @@ public class CustomProjectileEntity extends BaseProjectileEntity {
 	//                      Projectile
 	// ==================================================
 	@Override
+	public void setProjectileScale(float scale) {
+		super.setProjectileScale(scale);
+		if (this.projectileInfo != null) {
+			this.setSize(this.projectileInfo.width * this.projectileScale, this.projectileInfo.height * this.projectileScale);
+		}
+	}
+
+	@Override
 	public void onDamage(EntityLivingBase target, float damage, boolean attackSuccess) {
 		super.onDamage(target, damage, attackSuccess);
 		if (!this.getEntityWorld().isRemote && attackSuccess && this.projectileInfo != null) {

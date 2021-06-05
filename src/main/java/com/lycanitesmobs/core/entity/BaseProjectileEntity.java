@@ -463,11 +463,14 @@ public class BaseProjectileEntity extends EntityThrowable {
      // ==================================================
      public void setProjectileScale(float scale) {
      	 this.projectileScale = scale;
-         this.setSize(scale, scale);
-         if(this.getEntityWorld().isRemote && !this.clientOnly)
-             return;
-         if(this.getThrower() != null && this.getThrower() instanceof BaseCreatureEntity)
-             this.projectileScale *= ((BaseCreatureEntity)this.getThrower()).sizeScale;
+         if(this.getEntityWorld().isRemote && !this.clientOnly) {
+			 this.setSize(this.projectileScale, this.projectileScale);
+			 return;
+		 }
+         if(this.getThrower() != null && this.getThrower() instanceof BaseCreatureEntity) {
+			 this.projectileScale *= ((BaseCreatureEntity) this.getThrower()).sizeScale;
+		 }
+		 this.setSize(this.projectileScale, this.projectileScale);
          this.dataManager.set(SCALE, this.projectileScale);
      }
      

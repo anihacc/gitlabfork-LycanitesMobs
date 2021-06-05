@@ -434,15 +434,23 @@ public class CommandMain implements ICommand {
 						ConfigBase config = ConfigBase.getConfig(LycanitesMobs.modInfo, "mobevents");
 						config.setBool("Global", "Mob Events Enabled", true);
 					}
-					
-					reply = LanguageManager.translate("lyc.command.mobevent.start");
-					commandSender.sendMessage(new TextComponentString(reply));
+
+					// Get Player:
 					EntityPlayer player = null;
 					BlockPos pos = new BlockPos(0, 0, 0);
 					if(commandSender instanceof EntityPlayer) {
 						player = (EntityPlayer)commandSender;
 						pos = player.getPosition();
 					}
+
+					// Check Conditions:
+					MobEvent mobEvent = MobEventManager.getInstance().getMobEvent(mobEventName);
+					if (!mobEvent.canStart(world, player)) {
+						reply = LanguageManager.translate("lyc.command.mobevent.start.conditions");
+						commandSender.sendMessage(new TextComponentString(reply));
+						return;
+					}
+
 					int level = 1;
 					if(args.length >= 5 && NumberUtils.isNumber(args[4])) {
 						level = Integer.parseInt(args[4]);
@@ -451,6 +459,8 @@ public class CommandMain implements ICommand {
 					if(args.length >= 6 && NumberUtils.isNumber(args[5])) {
 						subspecies = Integer.parseInt(args[5]);
 					}
+					reply = LanguageManager.translate("lyc.command.mobevent.start");
+					commandSender.sendMessage(new TextComponentString(reply));
                     worldExt.startMobEvent(mobEventName, player, pos, level, subspecies);
 					return;
 				}

@@ -258,6 +258,7 @@ lyc.command.mobevent.invalid=Invalid arguments, usage: /lycanitesmobs mobevent [
 lyc.command.mobevent.start.invalid=Invalid arguments, usage: mobevent start <event name> for example mobevent start hellsfury
 lyc.command.mobevent.start.unknown=Unknown mob event. Use /lycanitesmobs mobevent list for a list of event names.
 lyc.command.mobevent.start.noworld=Command Sender dimension ID object not found, please enter a valid dimension ID.
+lyc.command.mobevent.start.conditions=Mob Event cannot start at this location.
 lyc.command.mobevent.start=Mob Event started.
 lyc.command.mobevent.random=Random Mob Event started.
 lyc.command.mobevent.stop=Stopped all Mob Events.

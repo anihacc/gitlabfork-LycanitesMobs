@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.spawner.condition;
 
 import com.google.gson.JsonObject;
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.helpers.JSONHelper;
 import net.minecraft.entity.player.EntityPlayer;
@@ -28,6 +29,15 @@ public class PlayerSpawnCondition extends SpawnCondition {
 
 	/** The maximum distance from world spawn. **/
 	public float spawnDistanceMax = -1;
+
+	/** A specific position to base distance from. **/
+	public BlockPos position = null;
+
+	/** The minimum distance from a specific position. **/
+	public float positionDistanceMin = -1;
+
+	/** The maximum distance from a specific position. **/
+	public float positionDistanceMax = -1;
 
     /** The minimum level of the player. **/
     public int levelMin = -1;
@@ -82,6 +92,15 @@ public class PlayerSpawnCondition extends SpawnCondition {
 
 		if(json.has("spawnDistanceMax"))
 			this.spawnDistanceMax = json.get("spawnDistanceMax").getAsFloat();
+
+		if(json.has("position"))
+			this.position = new BlockPos(JSONHelper.getVec3i(json, "position"));
+
+		if(json.has("positionDistanceMin"))
+			this.positionDistanceMin = json.get("positionDistanceMin").getAsFloat();
+
+		if(json.has("positionDistanceMax"))
+			this.positionDistanceMax = json.get("positionDistanceMax").getAsFloat();
 
 		if(json.has("levelMin"))
 			this.levelMin = json.get("levelMin").getAsInt();
@@ -150,11 +169,23 @@ public class PlayerSpawnCondition extends SpawnCondition {
 		}
 
 		// Check Spawn Distance:
-		if(this.spawnDistanceMin >= 0 && player.getDistanceSq(world.getSpawnPoint()) < this.spawnDistanceMin) {
+		double spawnDistance = Math.sqrt(player.getPosition().distanceSq(world.getSpawnPoint()));
+		if(this.spawnDistanceMin >= 0 && spawnDistance < this.spawnDistanceMin) {
 			return false;
 		}
-		if(this.spawnDistanceMax >= 0 && player.getDistanceSq(world.getSpawnPoint()) > this.spawnDistanceMax) {
+		if(this.spawnDistanceMax >= 0 && spawnDistance > this.spawnDistanceMax) {
 			return false;
+		}
+
+		// Check Specific Position:
+		if (this.position != null) {
+			double positionDistance = player.getPosition().getDistance(this.position.getX(), this.position.getY(), this.position.getZ());
+			if (this.positionDistanceMin >= 0 && positionDistance < this.positionDistanceMin) {
+				return false;
+			}
+			if (this.positionDistanceMax >= 0 && positionDistance > this.positionDistanceMax) {
+				return false;
+			}
 		}
 
 		// Check Level:
