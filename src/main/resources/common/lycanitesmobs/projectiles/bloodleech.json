@@ -29,5 +29,9 @@
 	"ripper": false,
 	"pierceBlocks": false,
 	"glow": false,
-	"rollSpeed": 4
+	"rollSpeed": 4,
+	"particleCount": 5,
+	"particleId": "minecraft:dust_redstone",
+	"waterParticleId": "minecraft:dust_redstone",
+	"animationFrames": 4
 }

@@ -7,7 +7,7 @@
 	"damage": 3,
 	"pierce": 1,
 	"knockbackChance": 0,
-	"effectDuration": 5,
+	"effectDuration": 10,
 	"effectAmplifier": 1,
 	"velocity": 0.6,
 	"weight": 0,
@@ -31,5 +31,9 @@
 	"ripper": true,
 	"pierceBlocks": false,
 	"glow": true,
-	"rollSpeed": 4
+	"rollSpeed": 0,
+	"particleCount": 1,
+	"particleId": "minecraft:flame",
+	"waterParticleId": "minecraft:bubble",
+	"animationFrames": 3
 }

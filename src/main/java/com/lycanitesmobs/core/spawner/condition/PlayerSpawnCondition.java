@@ -7,6 +7,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
@@ -32,6 +33,15 @@ public class PlayerSpawnCondition extends SpawnCondition {
 
 	/** The maximum distance from world spawn. **/
 	public float spawnDistanceMax = -1;
+
+	/** A specific position to base distance from. **/
+	public BlockPos position = null;
+
+	/** The minimum distance from a specific position. **/
+	public float positionDistanceMin = -1;
+
+	/** The maximum distance from a specific position. **/
+	public float positionDistanceMax = -1;
 
     /** The minimum level of the player. **/
     public int levelMin = -1;
@@ -89,6 +99,15 @@ public class PlayerSpawnCondition extends SpawnCondition {
 
 		if(json.has("spawnDistanceMax"))
 			this.spawnDistanceMax = json.get("spawnDistanceMax").getAsFloat();
+
+		if(json.has("position"))
+			this.position = new BlockPos(JSONHelper.getVector3i(json, "position"));
+
+		if(json.has("positionDistanceMin"))
+			this.positionDistanceMin = json.get("positionDistanceMin").getAsFloat();
+
+		if(json.has("positionDistanceMax"))
+			this.positionDistanceMax = json.get("positionDistanceMax").getAsFloat();
 
 		if(json.has("levelMin"))
 			this.levelMin = json.get("levelMin").getAsInt();
@@ -162,11 +181,23 @@ public class PlayerSpawnCondition extends SpawnCondition {
 		}
 
 		// Check Spawn Distance:
-		if(this.spawnDistanceMin >= 0 && player.distanceToSqr(new Vector3d(world.getLevelData().getXSpawn(), world.getLevelData().getYSpawn(), world.getLevelData().getZSpawn())) < this.spawnDistanceMin) {
+		double spawnDistance = Math.sqrt(player.position().distanceTo(new Vector3d(world.getLevelData().getXSpawn(), world.getLevelData().getYSpawn(), world.getLevelData().getZSpawn())));
+		if(this.spawnDistanceMin >= 0 && spawnDistance < this.spawnDistanceMin) {
 			return false;
 		}
-		if(this.spawnDistanceMax >= 0 && player.distanceToSqr(new Vector3d(world.getLevelData().getXSpawn(), world.getLevelData().getYSpawn(), world.getLevelData().getZSpawn())) > this.spawnDistanceMax) {
+		if(this.spawnDistanceMax >= 0 && spawnDistance > this.spawnDistanceMax) {
 			return false;
+		}
+
+		// Check Specific Position:
+		if (this.position != null) {
+			double positionDistance = Math.sqrt(player.position().distanceTo(new Vector3d(this.position.getX(), this.position.getY(), this.position.getZ())));
+			if (this.positionDistanceMin >= 0 && positionDistance < this.positionDistanceMin) {
+				return false;
+			}
+			if (this.positionDistanceMax >= 0 && positionDistance > this.positionDistanceMax) {
+				return false;
+			}
 		}
 
 		// Check Level:

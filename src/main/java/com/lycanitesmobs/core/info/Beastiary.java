@@ -124,21 +124,20 @@ public class Beastiary {
 					.append(creatureInfo.getTitle())
 					.append(" ")
 					.append(new TranslationTextComponent("message.beastiary.summonable.suffix"));
-			if(creatureKnowledge.rank >= 3) {
-				summonMessage = new TranslationTextComponent("message.beastiary.summonable.skins.prefix")
-						.append(" ")
-						.append(creatureInfo.getTitle())
-						.append(" ")
-						.append(new TranslationTextComponent("message.beastiary.summonable.skins.suffix"));
-			}
-			else if(creatureKnowledge.rank == 2) {
-				summonMessage = new TranslationTextComponent("message.beastiary.summonable.colors.prefix")
-						.append(" ")
-						.append(creatureInfo.getTitle())
-						.append(" ")
-						.append(new TranslationTextComponent("message.beastiary.summonable.colors.suffix"));
-			}
-
+//			if(creatureKnowledge.rank >= 3) {
+//				summonMessage = new TranslationTextComponent("message.beastiary.summonable.skins.prefix")
+//						.append(" ")
+//						.append(creatureInfo.getTitle())
+//						.append(" ")
+//						.append(new TranslationTextComponent("message.beastiary.summonable.skins.suffix"));
+//			}
+//			else if(creatureKnowledge.rank == 2) {
+//				summonMessage = new TranslationTextComponent("message.beastiary.summonable.colors.prefix")
+//						.append(" ")
+//						.append(creatureInfo.getTitle())
+//						.append(" ")
+//						.append(new TranslationTextComponent("message.beastiary.summonable.colors.suffix"));
+//			}
 			this.extendedPlayer.player.sendMessage(summonMessage, Util.NIL_UUID);
 		}
 
@@ -232,7 +231,8 @@ public class Beastiary {
 		Map<Integer, String> minionList = new HashMap<>();
 		int minionIndex = 0;
 		for(String minionName : this.creatureKnowledgeList.keySet()) {
-			if(SummonSet.isSummonableCreature(minionName)) {
+			CreatureKnowledge creatureKnowledge = this.creatureKnowledgeList.get(minionName);
+			if(creatureKnowledge.rank >= 2 && SummonSet.isSummonableCreature(minionName)) {
 				minionList.put(minionIndex++, minionName);
 			}
 		}

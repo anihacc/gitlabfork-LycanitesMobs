@@ -5,31 +5,31 @@
   },
   "ingredients": [
     {
-      "item": "minecraft:obsidian"
+      "item": "minecraft:end_stone"
     },
     {
-      "item": "minecraft:andesite"
+      "item": "minecraft:cobblestone"
     },
     {
-      "item": "minecraft:andesite"
+      "item": "minecraft:cobblestone"
     },
     {
-      "item": "minecraft:andesite"
+      "item": "minecraft:cobblestone"
     },
     {
-      "item": "minecraft:andesite"
+      "item": "minecraft:cobblestone"
     },
     {
-      "item": "minecraft:andesite"
+      "item": "minecraft:cobblestone"
     },
     {
-      "item": "minecraft:andesite"
+      "item": "minecraft:cobblestone"
     },
     {
-      "item": "minecraft:andesite"
+      "item": "minecraft:cobblestone"
     },
     {
-      "item": "minecraft:andesite"
+      "item": "minecraft:cobblestone"
     }
   ],
   "type": "minecraft:crafting_shapeless"

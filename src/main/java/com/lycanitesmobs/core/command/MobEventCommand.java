@@ -1,6 +1,8 @@
 package com.lycanitesmobs.core.command;
 
 import com.lycanitesmobs.ExtendedWorld;
+import com.lycanitesmobs.client.localisation.LanguageManager;
+import com.lycanitesmobs.core.mobevent.MobEvent;
 import com.lycanitesmobs.core.mobevent.MobEventListener;
 import com.lycanitesmobs.core.mobevent.MobEventManager;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
@@ -55,9 +57,24 @@ public class MobEventCommand {
 		if(extendedWorld == null) {
 			return 0;
 		}
+
+		PlayerEntity player = null;
+		BlockPos pos = new BlockPos(0, 0, 0);
+
 		if(context.getSource().getEntity() instanceof PlayerEntity) {
-			extendedWorld.startMobEvent(eventName, (PlayerEntity)context.getSource().getEntity(), new BlockPos(context.getSource().getEntity().position()), level, subspecies);
+			player = (PlayerEntity)context.getSource().getEntity();
+			pos = new BlockPos(player.position());
+
+			// Check Conditions:
+			MobEvent mobEvent = MobEventManager.getInstance().getMobEvent(eventName);
+			if (!mobEvent.canStart(world, player)) {
+				context.getSource().sendSuccess(new TranslationTextComponent("lyc.command.mobevent.start.conditions"), true);
+				return 0;
+			}
+
 		}
+
+		extendedWorld.startMobEvent(eventName, player, pos, level, subspecies);
 		context.getSource().sendSuccess(new TranslationTextComponent("lyc.command.mobevent.start"), true);
 		return 0;
 	}
@@ -79,9 +96,24 @@ public class MobEventCommand {
 		if(extendedWorld == null) {
 			return 0;
 		}
+
+		PlayerEntity player = null;
+		BlockPos pos = new BlockPos(0, 0, 0);
+
 		if(context.getSource().getEntity() instanceof PlayerEntity) {
-			extendedWorld.startMobEvent(eventName, (PlayerEntity)context.getSource().getEntity(), new BlockPos(context.getSource().getEntity().position()), level, subspecies);
+			player = (PlayerEntity)context.getSource().getEntity();
+			pos = new BlockPos(player.position());
+
+			// Check Conditions:
+			MobEvent mobEvent = MobEventManager.getInstance().getMobEvent(eventName);
+			if (!mobEvent.canStart(world, player)) {
+				context.getSource().sendSuccess(new TranslationTextComponent("lyc.command.mobevent.start.conditions"), true);
+				return 0;
+			}
+
 		}
+
+		extendedWorld.startMobEvent(eventName, player, pos, level, subspecies);
 		context.getSource().sendSuccess(new TranslationTextComponent("lyc.command.mobevent.start"), true);
 		return 0;
 	}

@@ -1698,7 +1698,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 			if (this.healthLastTick < 0)
 				this.healthLastTick = this.getHealth();
 			if (this.healthLastTick - this.getHealth() > this.damageLimit)
-				this.setHealth(this.healthLastTick);
+				this.setHealth(this.healthLastTick - this.damageLimit);
 			this.healthLastTick = this.getHealth();
 			if (!this.getCommandSenderWorld().isClientSide && this.updateTick % 20 == 0) {
 				this.damageTakenThisSec = 0;
@@ -2767,13 +2767,22 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	public boolean doRangedDamage(Entity target, ThrowableEntity projectile, float damage) {
 		damage *= this.creatureStats.getDamage() / 2;
 		double pierceDamage = this.creatureStats.getPierce();
+		if (target instanceof LivingEntity) {
+			LivingEntity targetLiving = (LivingEntity)target;
+			if (targetLiving.isBlocking() || !targetLiving.getUseItem().isShield(targetLiving)) {
+				pierceDamage = 0;
+			}
+		}
+
 		boolean success;
 		if(damage <= pierceDamage) {
 			success = target.hurt(this.getDamageSource((EntityDamageSource) DamageSource.thrown(projectile, this).bypassArmor()).bypassMagic(), damage);
 		}
 		else {
 			int hurtResistantTimeBefore = target.invulnerableTime;
-			target.hurt(this.getDamageSource((EntityDamageSource)DamageSource.thrown(projectile, this).bypassArmor()).bypassMagic(), (float)pierceDamage);
+			if (pierceDamage > 0) {
+				target.hurt(this.getDamageSource((EntityDamageSource) DamageSource.thrown(projectile, this).bypassArmor()).bypassMagic(), (float) pierceDamage);
+			}
 			target.invulnerableTime = hurtResistantTimeBefore;
 			damage -= pierceDamage;
 			success = target.hurt(this.getDamageSource((EntityDamageSource)DamageSource.thrown(projectile, this)), damage);
