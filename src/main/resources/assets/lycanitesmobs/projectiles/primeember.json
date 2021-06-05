@@ -1,22 +1,29 @@
 {
 	"name": "primeember",
 	"loadDefault": true,
-	"width": 0.5,
-	"height": 0.5,
-	"scale": 0.5,
+	"width": 1.0,
+	"height": 1.0,
+	"scale": 1.0,
 	"damage": 1,
 	"pierce": 1,
 	"knockbackChance": 0,
-	"effectDuration": 3,
+	"effectDuration": 10,
 	"effectAmplifier": 1,
 	"velocity": 0.6,
 	"weight": 0,
-	"lifetime": 10,
+	"lifetime": 40,
 	"elements": [
 		"fire",
 		"lava"
 	],
-	"behaviours": [],
+	"behaviours": [
+		{
+			"type": "placeBlocks",
+			"block": "lycanitesmobs:primefire",
+			"radius": 2,
+			"height": 1
+		}
+	],
 	"waterproof": false,
 	"lavaproof": false,
 	"cutGrass": false,
@@ -24,5 +31,9 @@
 	"ripper": true,
 	"pierceBlocks": false,
 	"glow": true,
-	"rollSpeed": 4
+	"rollSpeed": 0,
+	"particleCount": 1,
+	"particleType": "flame",
+	"waterParticleType": "bubble",
+	"animationFrames": 3
 }

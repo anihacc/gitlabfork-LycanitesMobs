@@ -436,6 +436,9 @@ tile.poopcloud.description=A very smelly cloud that applies slowness and nausea!
 tile.scorchfire.name=Scorchfire
 tile.scorchfire.description=An enchanted fire, not as hot as normal fire but it applies penetration, increasing the damage taken.
 #
+tile.primefire.name=Primefire
+tile.primefire.description=A perfect white-blue flame of the highest temperature that burns everything aorund it rapidly, will cause high damage and apply smoldering.
+#
 tile.doomfire.name=Doomfire
 tile.doomfire.description=An evil flame writhing with demonic rage. Burns and spreads faster than regular fire.
 #

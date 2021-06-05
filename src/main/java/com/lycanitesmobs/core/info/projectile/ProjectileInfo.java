@@ -18,7 +18,6 @@ import com.lycanitesmobs.core.info.projectile.behaviours.ProjectileBehaviour;
 import com.lycanitesmobs.core.item.ChargeItem;
 import com.lycanitesmobs.client.localisation.LanguageManager;
 import net.minecraft.block.BlockDispenser;
-import net.minecraft.client.model.ModelBase;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
@@ -230,6 +229,7 @@ public class ProjectileInfo {
 			this.glow = json.get("glow").getAsBoolean();
 		if(json.has("burningEffect"))
 			this.burningEffect = json.get("burningEffect").getAsBoolean();
+
 		if(json.has("particleCount"))
 			this.particleCount = json.get("particleCount").getAsInt();
 		if(json.has("particleType")) {

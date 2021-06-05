@@ -7,8 +7,10 @@ import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import com.lycanitesmobs.core.info.projectile.behaviours.ProjectileBehaviour;
 import com.lycanitesmobs.core.info.projectile.behaviours.ProjectileBehaviourLaser;
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -176,10 +178,10 @@ public class CustomProjectileEntity extends BaseProjectileEntity {
 			if (this.getEntityWorld().isRemote && this.projectileInfo.particleCount > 0) {
 				for (int i = 0; i < this.projectileInfo.particleCount; ++i) {
 					if (this.projectileInfo.waterParticleType != null && this.isInWater()) {
-						this.getEntityWorld().spawnParticle(this.projectileInfo.waterParticleType, this.posX + (this.rand.nextDouble() - 0.5D) * (double) this.width, this.posY + this.rand.nextDouble() * (double) this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double) this.width, 0.0D, 0.0D, 0.0D);
+						this.getEntityWorld().spawnParticle(this.projectileInfo.waterParticleType, this.posX + (this.rand.nextDouble() - 0.5D) * (double) this.width, this.posY + this.rand.nextDouble() * (double) this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double) this.width, 0.0D, 0.0D, 0.0D, Block.getStateId(Blocks.DIRT.getDefaultState()));
 					}
 					else if(this.projectileInfo.particleType != null) {
-						this.getEntityWorld().spawnParticle(this.projectileInfo.particleType, this.posX + (this.rand.nextDouble() - 0.5D) * (double) this.width, this.posY + this.rand.nextDouble() * (double) this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double) this.width, 0.0D, 0.0D, 0.0D);
+						this.getEntityWorld().spawnParticle(this.projectileInfo.particleType, this.posX + (this.rand.nextDouble() - 0.5D) * (double) this.width, this.posY + this.rand.nextDouble() * (double) this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double) this.width, 0.0D, 0.0D, 0.0D, Block.getStateId(Blocks.DIRT.getDefaultState()));
 					}
 				}
 			}

@@ -29,7 +29,7 @@
 		{
 			"featureType": "summon",
 			"levelMin": 2,
-			"summonMobId": "lycanitesmobs.zephyr",
+			"summonMobId": "lycanitesmobs.djinn",
 			"summonChance": 0.05,
 			"summonDuration": 10,
 			"summonCountMin": 1,

@@ -196,6 +196,8 @@ public class ItemManager extends JSONLoader {
 		ObjectManager.addBlock("doomfire", new BlockDoomfire());
 		AssetManager.addSound("scorchfire", group, "block.scorchfire");
 		ObjectManager.addBlock("scorchfire", new BlockScorchfire());
+		AssetManager.addSound("primefire", group, "block.primefire");
+		ObjectManager.addBlock("primefire", new BlockPrimefire());
 		AssetManager.addSound("shadowfire", group, "block.shadowfire");
 		ObjectManager.addBlock("shadowfire", new BlockShadowfire());
 		AssetManager.addSound("poisoncloud", group, "block.poisoncloud");

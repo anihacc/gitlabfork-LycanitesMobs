@@ -185,36 +185,36 @@ public class EntityIgnibus extends RideableCreatureEntity implements IGroupHeavy
 
         RapidFireProjectileEntity projectileEntry2 = new RapidFireProjectileEntity(projectileInfo, this.getEntityWorld(), this, 15, 3);
         projectileEntry2.offsetX += 1.0D;
-        projectileEntry2.setProjectileScale(0.25f);
+        projectileEntry2.setProjectileScale(0.125f);
         projectiles.add(projectileEntry2);
 
         RapidFireProjectileEntity projectileEntry3 = new RapidFireProjectileEntity(projectileInfo, this.getEntityWorld(), this, 15, 3);
         projectileEntry3.offsetX -= 1.0D;
-        projectileEntry3.setProjectileScale(0.25f);
+        projectileEntry3.setProjectileScale(0.125f);
         projectiles.add(projectileEntry3);
 
         RapidFireProjectileEntity projectileEntry4 = new RapidFireProjectileEntity(projectileInfo, this.getEntityWorld(), this, 15, 3);
         projectileEntry4.offsetZ += 1.0D;
-        projectileEntry4.setProjectileScale(0.25f);
+        projectileEntry4.setProjectileScale(0.125f);
         projectiles.add(projectileEntry4);
 
         RapidFireProjectileEntity projectileEntry5 = new RapidFireProjectileEntity(projectileInfo, this.getEntityWorld(), this, 15, 3);
         projectileEntry5.offsetZ -= 1.0D;
-        projectileEntry5.setProjectileScale(0.25f);
+        projectileEntry5.setProjectileScale(0.125f);
         projectiles.add(projectileEntry5);
 
         RapidFireProjectileEntity projectileEntry6 = new RapidFireProjectileEntity(projectileInfo, this.getEntityWorld(), this, 15, 3);
         projectileEntry6.offsetY += 1.0D;
-        projectileEntry6.setProjectileScale(0.25f);
+        projectileEntry6.setProjectileScale(0.125f);
         projectiles.add(projectileEntry6);
 
         RapidFireProjectileEntity projectileEntry7 = new RapidFireProjectileEntity(projectileInfo, this.getEntityWorld(), this, 15, 3);
         projectileEntry7.offsetY -= 1.0D;
-        projectileEntry7.setProjectileScale(0.25f);
+        projectileEntry7.setProjectileScale(0.125f);
         projectiles.add(projectileEntry7);
 
         for(RapidFireProjectileEntity projectile : projectiles) {
-            projectile.setProjectileScale(1f);
+            projectile.setProjectileScale(0.125f);
 
             // Y Offset:
             projectile.posY -= this.height / 4;
@@ -229,7 +229,7 @@ public class EntityIgnibus extends RideableCreatureEntity implements IGroupHeavy
             float f1 = MathHelper.sqrt(d0 * d0 + d2 * d2) * 0.2F;
             float velocity = 1.2F;
             projectile.shoot(d0, d1 + (double)f1, d2, velocity, 6.0F);
-            projectile.setProjectileScale(4);
+            projectile.setProjectileScale(2);
 
             // Launch:
             this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
