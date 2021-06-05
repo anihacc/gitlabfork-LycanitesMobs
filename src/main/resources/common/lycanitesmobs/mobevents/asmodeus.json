@@ -10,6 +10,11 @@
 			"type": "world",
 			"dimensionIds": [],
 			"dimensionListType": "blacklist"
+		},
+		{
+			"type": "player",
+			"position": [0, 70, 0],
+			"positionDistanceMin": 300
 		}
 	],
 	"levelBoostMax": 0,
