@@ -4,7 +4,7 @@
 	"width": 2.0,
 	"height": 2.0,
 	"scale": 2.0,
-	"damage": 4,
+	"damage": 6,
 	"pierce": 1,
 	"knockbackChance": 0.5,
 	"effectDuration": 5,
@@ -30,5 +30,8 @@
 	"ripper": false,
 	"pierceBlocks": false,
 	"glow": false,
-	"rollSpeed": 1
+	"rollSpeed": 1,
+	"particleId": "minecraft:dripping_water",
+	"waterParticleId": "minecraft:bubble",
+	"animationFrames": 5
 }

@@ -24,5 +24,8 @@
 	"ripper": false,
 	"pierceBlocks": false,
 	"glow": false,
-	"rollSpeed": 1
+	"rollSpeed": 1,
+	"particleId": "minecraft:smoke",
+	"waterParticleId": "minecraft:bubble",
+	"animationFrames": 4
 }
