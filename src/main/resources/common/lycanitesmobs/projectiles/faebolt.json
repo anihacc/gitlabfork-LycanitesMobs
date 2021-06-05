@@ -24,7 +24,8 @@
 	"pierceBlocks": false,
 	"glow": true,
 	"rollSpeed": 4,
-	"particleId": "minecraft:enchant",
+	"particleCount": 5,
+	"particleId": "minecraft:witch",
 	"waterParticleId": "minecraft:bubble",
 	"animationFrames": 4
 }

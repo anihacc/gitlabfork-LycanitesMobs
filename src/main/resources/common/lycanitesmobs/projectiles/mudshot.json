@@ -26,7 +26,7 @@
 	"glow": false,
 	"rollSpeed": 4,
 	"particleCount": 5,
-	"particleId": "minecraft:dust_falling:dirt",
+	"particleId": "minecraft:dust_falling_dirt",
 	"waterParticleId": "minecraft:bubble",
 	"animationFrames": 4
 }

@@ -188,10 +188,10 @@ public class CustomProjectileEntity extends BaseProjectileEntity {
 						if (this.projectileInfo.getWaterParticleType() != null) {
 							this.getCommandSenderWorld().addParticle(this.projectileInfo.getWaterParticleType().getType(), this.getX() + (this.random.nextDouble() - 0.5D) * (double) this.getBbWidth(), this.getY() + this.random.nextDouble() * (double) this.getBbHeight(), this.getZ() + (this.random.nextDouble() - 0.5D) * (double) this.getBbWidth(), 0.0D, 0.0D, 0.0D);
 						}
-						else if ("minecraft:dust:redstone".equalsIgnoreCase(this.projectileInfo.waterParticleId)) {
+						else if ("minecraft:dust_redstone".equalsIgnoreCase(this.projectileInfo.waterParticleId)) {
 							this.getCommandSenderWorld().addParticle(RedstoneParticleData.REDSTONE, this.getX() + (this.random.nextDouble() - 0.5D) * (double) this.getBbWidth(), this.getY() + this.random.nextDouble() * (double) this.getBbHeight(), this.getZ() + (this.random.nextDouble() - 0.5D) * (double) this.getBbWidth(), 0.0D, 0.0D, 0.0D);
 						}
-						else if ("minecraft:dust_falling:dirt".equalsIgnoreCase(this.projectileInfo.waterParticleId)) {
+						else if ("minecraft:dust_falling_dirt".equalsIgnoreCase(this.projectileInfo.waterParticleId)) {
 							this.getCommandSenderWorld().addParticle(new BlockParticleData(ParticleTypes.BLOCK, Blocks.DIRT.defaultBlockState()), this.getX() + (this.random.nextDouble() - 0.5D) * (double) this.getBbWidth(), this.getY() + this.random.nextDouble() * (double) this.getBbHeight(), this.getZ() + (this.random.nextDouble() - 0.5D) * (double) this.getBbWidth(), 0.0D, 0.0D, 0.0D);
 						}
 					}
@@ -199,10 +199,10 @@ public class CustomProjectileEntity extends BaseProjectileEntity {
 						if (this.projectileInfo.getParticleType() != null) {
 							this.getCommandSenderWorld().addParticle(this.projectileInfo.getParticleType().getType(), this.getX() + (this.random.nextDouble() - 0.5D) * (double) this.getBbWidth(), this.getY() + this.random.nextDouble() * (double) this.getBbHeight(), this.getZ() + (this.random.nextDouble() - 0.5D) * (double) this.getBbWidth(), 0.0D, 0.0D, 0.0D);
 						}
-						else if ("minecraft:dust:redstone".equalsIgnoreCase(this.projectileInfo.particleId)) {
+						else if ("minecraft:dust_redstone".equalsIgnoreCase(this.projectileInfo.particleId)) {
 							this.getCommandSenderWorld().addParticle(RedstoneParticleData.REDSTONE, this.getX() + (this.random.nextDouble() - 0.5D) * (double) this.getBbWidth(), this.getY() + this.random.nextDouble() * (double) this.getBbHeight(), this.getZ() + (this.random.nextDouble() - 0.5D) * (double) this.getBbWidth(), 0.0D, 0.0D, 0.0D);
 						}
-						else if ("minecraft:dust_falling:dirt".equalsIgnoreCase(this.projectileInfo.particleId)) {
+						else if ("minecraft:dust_falling_dirt".equalsIgnoreCase(this.projectileInfo.particleId)) {
 							this.getCommandSenderWorld().addParticle(new BlockParticleData(ParticleTypes.BLOCK, Blocks.DIRT.defaultBlockState()), this.getX() + (this.random.nextDouble() - 0.5D) * (double) this.getBbWidth(), this.getY() + this.random.nextDouble() * (double) this.getBbHeight(), this.getZ() + (this.random.nextDouble() - 0.5D) * (double) this.getBbWidth(), 0.0D, 0.0D, 0.0D);
 						}
 					}

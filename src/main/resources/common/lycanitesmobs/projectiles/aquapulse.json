@@ -30,7 +30,7 @@
 	"ripper": false,
 	"pierceBlocks": false,
 	"glow": false,
-	"rollSpeed": 1,
+	"rollSpeed": 4,
 	"particleCount": 10,
 	"particleId": "minecraft:dripping_water",
 	"waterParticleId": "minecraft:bubble",
