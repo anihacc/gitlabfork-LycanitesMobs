@@ -1,5 +1,6 @@
 package com.lycanitesmobs.core.item.special;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.localisation.LanguageManager;
 import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.item.ItemBase;
@@ -54,4 +55,26 @@ public class ItemSoulgazer extends ItemBase {
 
     	return true;
     }
+
+	@Override
+	public boolean showDurabilityBar(ItemStack itemStack) {
+    	if (LycanitesMobs.proxy.getClientPlayer() != null) {
+    		ExtendedPlayer extendedPlayer = ExtendedPlayer.getForPlayer(LycanitesMobs.proxy.getClientPlayer());
+    		if (extendedPlayer != null) {
+    			return extendedPlayer.creatureStudyCooldown > 0;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public double getDurabilityForDisplay(ItemStack itemStack) {
+		if (LycanitesMobs.proxy.getClientPlayer() != null) {
+			ExtendedPlayer extendedPlayer = ExtendedPlayer.getForPlayer(LycanitesMobs.proxy.getClientPlayer());
+			if (extendedPlayer != null) {
+				return ((double)extendedPlayer.creatureStudyCooldown / extendedPlayer.creatureStudyCooldownMax);
+			}
+		}
+		return 0;
+	}
 }

@@ -31,10 +31,6 @@ public class ClientEventListener {
         ITEM_RENDER_MODE = 2;
     }
 
-
-    // ==================================================
-    //                Client Fog Color
-    // ==================================================
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
     public void onFogDensity(EntityViewRenderEvent.FogDensity event) {
@@ -48,10 +44,6 @@ public class ClientEventListener {
         }
     }
 
-
-    // ==================================================
-    //                First Person Fire
-    // ==================================================
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
     public void onBlockOverlay(RenderBlockOverlayEvent event) {

@@ -30,6 +30,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.capabilities.Capability;
@@ -44,6 +45,7 @@ import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.LivingSetAttackTargetEvent;
 import net.minecraftforge.event.entity.player.FillBucketEvent;
+import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
@@ -504,6 +506,25 @@ public class GameEventListener {
 				event.setCanceled(true);
 				event.setResult(Result.DENY);
 				event.getPlayer().sendStatusMessage(new TextComponentString(LanguageManager.translate("boss.block.protection.place")), true);
+			}
+		}
+	}
+
+
+	// ==================================================
+	//                     Tooltips
+	// ==================================================
+	@SubscribeEvent
+	public void onItemTooltip(ItemTooltipEvent event) {
+		int sharpness = ItemManager.getInstance().getEquipmentSharpnessRepair(event.getItemStack());
+		int mana = ItemManager.getInstance().getEquipmentManaRepair(event.getItemStack());
+		if (sharpness > 0 || mana > 0) {
+			event.getToolTip().add(LanguageManager.translate("equipment.item.repair"));
+			if (sharpness > 0) {
+				event.getToolTip().add(LanguageManager.translate("equipment.item.repair"));
+			}
+			if (mana > 0) {
+				event.getToolTip().add(LanguageManager.translate("equipment.item.repair"));
 			}
 		}
 	}

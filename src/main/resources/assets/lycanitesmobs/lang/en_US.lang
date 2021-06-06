@@ -354,6 +354,7 @@ equipment.element=Charge Elements:
 equipment.level=Level:
 equipment.sharpness=Sharpness:
 equipment.mana=Mana:
+equipment.item.repair=This item can be used to repair Crafted Equipment.
 equipment.feature.slot=Adds Slot:
 equipment.feature.damage=Damage:
 equipment.feature.damage.cooldown=Cooldown:
