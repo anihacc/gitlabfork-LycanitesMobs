@@ -92,6 +92,16 @@ public class EntityConcapedeHead extends AgeableCreatureEntity {
 	public boolean shouldFollowParent() {
 		return false; // Never follow parents.
 	}
+
+	@Override
+	public boolean rollLookChance() {
+		return false;
+	}
+
+	@Override
+	public boolean rollWanderChance() {
+		return false;
+	}
 	
 	
 	// ==================================================

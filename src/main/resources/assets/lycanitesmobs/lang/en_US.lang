@@ -681,9 +681,6 @@ tile.lushstonepolished.description=The very essence of nature courses through th
 #
 tile.lushstonetile_stairs.name=Lushstone Tile Stairs
 tile.lushstonetile_stairs.description=The very essence of nature courses through this stone.
-#
-tile.soulcubelushic.name=Lushic Soulcube
-tile.soulcubelushic.description=Enchanted crystal glass that glows like moonlight.
 # ========================================================================
 #
 tile.shadowstonebrick_stairs.name=Umbrastone Brick Stairs
@@ -733,6 +730,54 @@ tile.shadowstonetile_slab.description=Walk upon the darkness and smile, you have
 #
 tile.shadowstonebrick_wall.name=Umbrastone Brick Wall
 tile.shadowstonebrick_wall.description=The caps between the bricks seem to suck in the light.
+# ========================================================================
+tile.ashenstonebrick_stairs.name=Ashenstone Brick Stairs
+tile.ashenstonebrick_stairs.description=The primordial forces of earth and lava surge through this stone.
+#
+tile.ashencrystal.name=Ashen Crystal
+tile.ashencrystal.description=A powerful bond of lava and earth magic power this crystal endlessly.
+#
+tile.ashenstonechiseled.name=Chiseled Ashenstone
+tile.ashenstonechiseled.description=The primordial forces of earth and lava surge through this stone.
+#
+tile.ashenstonebrick_wall.name=Ashenstone Brick Wall
+tile.ashenstonebrick_wall.description=The primordial forces of earth and lava surge through this stone.
+#
+tile.ashenstone.name=Ashenstone
+tile.ashenstone.description=The primordial forces of earth and lava surge through this stone.
+#
+tile.ashenstonebrick_slab.name=Ashenstone Brick Slab
+tile.ashenstonebrick_slab.description=The primordial forces of earth and lava surge through this stone.
+#
+tile.ashenstone_stairs.name=Ashenstone Stairs
+tile.ashenstone_stairs.description=The primordial forces of earth and lava surge through this stone.
+#
+tile.ashenstone_slab.name=Ashenstone Slab
+tile.ashenstone_slab.description=The primordial forces of earth and lava surge through this stone.
+#
+tile.ashenstonebrick_fence.name=Ashenstone Brick Fence
+tile.ashenstonebrick_fence.description=The primordial forces of earth and lava surge through this stone.
+#
+tile.ashenstonepillar.name=Ashenstone Pillar
+tile.ashenstonepillar.description=The primordial forces of earth and lava surge through this stone.
+#
+tile.ashenstonetile_slab.name=Ashenstone Tile Slab
+tile.ashenstonetile_slab.description=The primordial forces of earth and lava surge through this stone.
+#
+tile.ashenstonetile.name=Ashenstone Tile
+tile.ashenstonetile.description=The primordial forces of earth and lava surge through this stone.
+#
+tile.ashenstone_slab_double.name=Double Ashenstone Slab
+tile.ashenstone_slab_double.description=The primordial forces of earth and lava surge through this stone.
+#
+tile.ashenstonebrick.name=Ashenstone Brick
+tile.ashenstonebrick.description=The primordial forces of earth and lava surge through this stone.
+#
+tile.ashenstonepolished.name=Polished Ashenstone
+tile.ashenstonepolished.description=The primordial forces of earth and lava surge through this stone.
+#
+tile.ashenstonetile_stairs.name=Ashenstone Tile Stairs
+tile.ashenstonetile_stairs.description=The primordial forces of earth and lava surge through this stone.
 # ========================================================================
 entity.lycanitesmobs.abaia.name=Abaia
 entity.lycanitesmobs.abaia.description=Aggressive eels that generate an electric current through their body.
@@ -1602,6 +1647,9 @@ item.boulderblastcharge.description=Use to throw a giant boulder! Can be fired f
 item.acidsplashcharge.name=Acid Splash Charge
 item.acidsplashcharge.description=Use to fire a wave of acid. Can also be fired from a dispenser.
 #
+item.acidglobcharge.name=Acid Glob Charge
+item.acidglobcharge.description=Use to fire a glob of acid. Can also be fired from a dispenser.
+#
 item.faeboltcharge.name=Faebolt Charge
 item.faeboltcharge.description=Use to fire a bolt of fae energy, this deals no damage but applies the lifeleak debuff converting all damage dealt into healing. Can also be fired from a dispenser.
 #
@@ -2176,6 +2224,7 @@ entity.lycanitesmobs.demonicblast=Demonic Blast
 entity.lycanitesmobs.demonicspark=Demonic Spark
 entity.lycanitesmobs.bloodleech=Bloodleech
 entity.lycanitesmobs.acidsplash=Acid Splash
+entity.lycanitesmobs.acidglob=Acid Glob
 entity.lycanitesmobs.lobdarklings=Lob Darklings
 entity.lycanitesmobs.faebolt=Faebolt
 entity.lycanitesmobs.frostweb=Frost Web

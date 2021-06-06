@@ -174,6 +174,7 @@ public class ItemManager extends JSONLoader {
 		BlockMaker.addStoneBlocks(group, "shadow");
 		BlockMaker.addStoneBlocks(group, "demon");
 		BlockMaker.addStoneBlocks(group, "aberrant");
+		BlockMaker.addStoneBlocks(group, "ashen");
 		ObjectManager.addBlock("soulcubedemonic", new BlockSoulcube(group, "soulcubedemonic"));
 		ObjectManager.addBlock("soulcubeundead", new BlockSoulcube(group, "soulcubeundead"));
 		ObjectManager.addBlock("soulcubeaberrant", new BlockSoulcube(group, "soulcubeaberrant"));
