@@ -9,6 +9,7 @@ import com.lycanitesmobs.core.info.ItemConfig;
 import com.lycanitesmobs.core.info.ItemManager;
 import com.lycanitesmobs.core.item.ItemBase;
 import com.lycanitesmobs.core.item.equipment.ItemEquipment;
+import com.lycanitesmobs.core.item.special.ItemSoulgazer;
 import com.lycanitesmobs.core.network.MessagePlayerLeftClick;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
@@ -525,6 +526,13 @@ public class GameEventListener {
 			}
 			if (mana > 0) {
 				event.getToolTip().add(LanguageManager.translate("equipment.item.repair"));
+			}
+		}
+
+		if (event.getItemStack().getItem() instanceof ItemSoulgazer) {
+			ExtendedPlayer extendedPlayer = ExtendedPlayer.getForPlayer(event.getEntityPlayer());
+			if (extendedPlayer != null && extendedPlayer.creatureStudyCooldown > 0) {
+				event.getToolTip().add(LanguageManager.translate("message.beastiary.study.cooldown") + " " + String.format("%.0f", (float)extendedPlayer.creatureStudyCooldown / 20) + "s");
 			}
 		}
 	}

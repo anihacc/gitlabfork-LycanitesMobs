@@ -196,6 +196,7 @@ message.beastiary.known=You have already have Knowledge Rank %rank% of the %crea
 message.beastiary.unknown=There is nothing to be learnt about this creature.
 message.beastiary.study=You gain knowledge by studying this creature.
 message.beastiary.study.recharging=You must wait a moment before you are able to study a creature again.
+message.beastiary.study.cooldown=Study Cooldown:
 #
 # Soulstone:
 message.soulstone.untamed=The Soulstone can only bind to a tamed creature.

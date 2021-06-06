@@ -3,10 +3,7 @@ package com.lycanitesmobs.client.gui.beastiary.lists;
 import com.lycanitesmobs.client.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.gui.beastiary.BeastiaryScreen;
-import com.lycanitesmobs.core.info.CreatureInfo;
-import com.lycanitesmobs.core.info.CreatureManager;
-import com.lycanitesmobs.core.info.Subspecies;
-import com.lycanitesmobs.core.info.Variant;
+import com.lycanitesmobs.core.info.*;
 import com.lycanitesmobs.core.network.MessageSummonSetSelection;
 import com.lycanitesmobs.core.pets.PetEntry;
 import net.minecraft.client.Minecraft;
@@ -68,8 +65,13 @@ public class CreatureList extends GuiScrollingList {
 			creatures.sort(Collator.getInstance(new Locale("US")));
 			for(String creatureName : creatures) {
 				CreatureInfo creatureInfo = CreatureManager.getInstance().getCreature(creatureName.toLowerCase());
-				if(this.listType == Type.SUMMONABLE && !creatureInfo.isSummonable()) {
-					continue;
+				if(this.listType == Type.SUMMONABLE) {
+					if (!creatureInfo.isSummonable()) {
+						continue;
+					}
+					if (this.parentGui.playerExt.getBeastiary().getCreatureKnowledge(creatureName) == null || this.parentGui.playerExt.getBeastiary().getCreatureKnowledge(creatureName).rank < 2) {
+						continue;
+					}
 				}
 				if (creatureInfo != null && (this.filterList == null || this.filterList.canListCreature(creatureInfo, this.listType))) {
 					this.creatureList.put(creatureIndex++, creatureInfo);
