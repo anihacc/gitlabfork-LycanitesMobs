@@ -1,15 +1,13 @@
 package com.lycanitesmobs;
 
 import com.lycanitesmobs.core.EffectBase;
-import com.lycanitesmobs.core.container.CreatureContainer;
-import com.lycanitesmobs.core.container.EquipmentForgeContainer;
-import com.lycanitesmobs.core.container.EquipmentInfuserContainer;
-import com.lycanitesmobs.core.container.SummoningPedestalContainer;
+import com.lycanitesmobs.core.container.*;
 import com.lycanitesmobs.core.entity.EntityFactory;
 import com.lycanitesmobs.core.info.ItemManager;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.info.ObjectLists;
 import com.lycanitesmobs.core.tileentity.EquipmentInfuserTileEntity;
+import com.lycanitesmobs.core.tileentity.EquipmentStationTileEntity;
 import com.lycanitesmobs.core.tileentity.TileEntityEquipmentForge;
 import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
 import net.minecraft.block.Block;
@@ -294,6 +292,7 @@ public class ObjectManager {
 		event.getRegistry().register(SummoningPedestalContainer.TYPE);
 		event.getRegistry().register(EquipmentForgeContainer.TYPE);
 		event.getRegistry().register(EquipmentInfuserContainer.TYPE);
+		event.getRegistry().register(EquipmentStationContainer.TYPE);
 	}
 
 	// ========== Tile Entities ==========
@@ -321,5 +320,12 @@ public class ObjectManager {
 		equipmentInfuserType.setRegistryName(LycanitesMobs.MODID, "equipment_infuser");
 		event.getRegistry().register(equipmentInfuserType);
 		tileEntityTypes.put(EquipmentInfuserTileEntity.class, equipmentInfuserType);
+
+		TileEntityType<TileEntity> equipmentStationType = TileEntityType.Builder.of((Supplier<TileEntity>) EquipmentStationTileEntity::new,
+				getBlock("equipment_station")
+		).build(null);
+		equipmentStationType.setRegistryName(LycanitesMobs.MODID, "equipment_station");
+		event.getRegistry().register(equipmentStationType);
+		tileEntityTypes.put(EquipmentStationTileEntity.class, equipmentStationType);
 	}
 }

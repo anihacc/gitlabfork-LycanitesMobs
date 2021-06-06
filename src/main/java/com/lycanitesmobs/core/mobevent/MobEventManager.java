@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.mobevent;
 
 import com.google.gson.*;
-import com.lycanitesmobs.ClientManager;
+import com.lycanitesmobs.client.ClientManager;
 import com.lycanitesmobs.ExtendedWorld;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;

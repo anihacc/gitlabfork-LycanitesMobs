@@ -5,6 +5,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.storage.IServerWorldInfo;
 
 public class WorldMobEventEffect extends MobEventEffect {
 
@@ -36,6 +37,11 @@ public class WorldMobEventEffect extends MobEventEffect {
 	@Override
 	public void onUpdate(World world, PlayerEntity player, BlockPos pos, int level, int ticks, int variant) {
 		if(ticks == 0) {
+			IServerWorldInfo serverWorldInfo = null;
+			if (world instanceof IServerWorldInfo) {
+				serverWorldInfo = (IServerWorldInfo)world;
+			}
+
 			// Rain:
 			if ("start".equalsIgnoreCase(this.rain)) {
 				world.getLevelData().setRaining(true);
@@ -44,10 +50,12 @@ public class WorldMobEventEffect extends MobEventEffect {
 			}
 
 			// Lightning:
-			if ("start".equalsIgnoreCase(this.thunder)) {
-				world.setThunderLevel(1.0F);
-			} else if ("stop".equalsIgnoreCase(this.thunder)) {
-				world.setThunderLevel(1.0F);
+			if (serverWorldInfo != null) {
+				if ("start".equalsIgnoreCase(this.thunder)) {
+					serverWorldInfo.setThundering(true);
+				} else if ("stop".equalsIgnoreCase(this.thunder)) {
+					serverWorldInfo.setThundering(false);
+				}
 			}
 
 			// Day Time:

@@ -41,7 +41,7 @@ public class ConfigExtra {
 		this.familiarBlacklist = builder
 				.comment("Donation Familiars help support the development of this mod but can be turned of for individual players be adding their username to this list.")
 				.translation(CoreConfig.CONFIG_PREFIX + "familiars.blacklist")
-				.defineList("familiars.blacklist", Lists.newArrayList("Jbams"), o -> o instanceof String);
+				.defineList("familiars.blacklist", Lists.newArrayList(), o -> o instanceof String);
 
 		builder.pop();
 	}

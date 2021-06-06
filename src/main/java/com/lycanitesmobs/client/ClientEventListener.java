@@ -1,6 +1,9 @@
 package com.lycanitesmobs.client;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.potion.Effects;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -16,12 +19,15 @@ public class ClientEventListener {
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
     public void onFogDensity(EntityViewRenderEvent.FogDensity event) {
-        /*FogRenderer fogRenderer = event.getFogRenderer();
+        GameRenderer fogRenderer = event.getRenderer();
         LivingEntity entityLiving = Minecraft.getInstance().player;
-        if(event.getState().getMaterial() == Material.LAVA && (!event.getEntity().isBurning() || entityLiving.isPotionActive(Effects.FIRE_RESISTANCE))) {
+        if (entityLiving == null) {
+            return;
+        }
+        if(entityLiving.isInLava() && (!entityLiving.isOnFire() || entityLiving.hasEffect(Effects.FIRE_RESISTANCE))) {
             event.setDensity(0.5F);
             event.setCanceled(true);
-        }*/
+        }
     }
 
 

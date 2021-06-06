@@ -1,17 +1,25 @@
 package com.lycanitesmobs.client.renderer;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.ModelManager;
 import com.lycanitesmobs.client.model.EquipmentModel;
 import com.lycanitesmobs.client.renderer.layer.LayerItem;
 import com.lycanitesmobs.core.item.equipment.ItemEquipment;
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.vector.Quaternion;
 import net.minecraft.util.math.vector.Vector3f;
 
 import java.util.ArrayList;
@@ -42,6 +50,40 @@ public class EquipmentRenderer extends ItemStackTileEntityRenderer implements II
 		equipmentModel.render(itemStack, hand, matrixStack, renderTypeBuffer, this, loop, brightness);
 
 		matrixStack.popPose();
+
+		// Mana Bar:
+		ItemEquipment itemEquipment = (ItemEquipment)itemStack.getItem();
+		double manaNormal = (double)itemEquipment.getMana(itemStack) / ItemEquipment.MANA_MAX;
+		if (manaNormal < 1) {
+			RenderSystem.disableDepthTest();
+			RenderSystem.disableTexture();
+			RenderSystem.disableAlphaTest();
+			RenderSystem.disableBlend();
+			IVertexBuilder vertexBuilder = renderTypeBuffer.getBuffer(RenderType.lines());
+			double barX = -0.375D;
+			double barWidth = 0.825D;
+			double barFill = barWidth * manaNormal;
+
+			for (int i = 0; i <= 2; i++) {
+				vertexBuilder.vertex(barX, -0.25D + (i * 0.05D), 1).color(0, 0, 0, 255).endVertex();
+				vertexBuilder.vertex(barX + barWidth, -0.25D + (i * 0.05D), 1).color(0, 0, 0, 255).endVertex();
+			}
+			vertexBuilder.vertex(barX, -0.2D, 1).color(64, 0, 128, 255).endVertex();
+			vertexBuilder.vertex(barX + barFill, -0.2D, 1).color(0, 128, 255, 255).endVertex();
+
+			RenderSystem.enableBlend();
+			RenderSystem.enableAlphaTest();
+			RenderSystem.enableTexture();
+			RenderSystem.enableDepthTest();
+		}
+	}
+
+	protected void drawBar(IVertexBuilder vertexBuilder, int x, int y, int width, int height, int r, int g, int b, int a) {
+		double z = 1D;
+		vertexBuilder.vertex(x + 0, (y + 0), z).color(r, g, b, a).endVertex();
+		vertexBuilder.vertex((x + 0), (y + height), z).color(r, g, b, a).endVertex();
+		vertexBuilder.vertex((x + width), (y + height), z).color(r, g, b, a).endVertex();
+		vertexBuilder.vertex((x + width), (y + 0), z).color(r, g, b, a).endVertex();
 	}
 
 	@Override

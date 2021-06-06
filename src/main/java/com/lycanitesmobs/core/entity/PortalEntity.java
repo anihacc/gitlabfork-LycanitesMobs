@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.entity;
 
-import com.lycanitesmobs.ClientManager;
+import com.lycanitesmobs.client.ClientManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.Utilities;
 import com.lycanitesmobs.client.TextureManager;

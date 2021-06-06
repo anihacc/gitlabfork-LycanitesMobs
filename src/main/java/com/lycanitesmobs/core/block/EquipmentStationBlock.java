@@ -1,9 +1,8 @@
 package com.lycanitesmobs.core.block;
 
-import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.container.EquipmentForgeContainerProvider;
+import com.lycanitesmobs.core.container.EquipmentStationContainerProvider;
 import com.lycanitesmobs.core.info.ModInfo;
-import com.lycanitesmobs.core.tileentity.TileEntityEquipmentForge;
+import com.lycanitesmobs.core.tileentity.EquipmentStationTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
@@ -23,29 +22,15 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class BlockEquipmentForge extends BlockBase {
+public class EquipmentStationBlock extends BlockBase {
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
-    public int level;
 
-	// ==================================================
-	//                   Constructor
-	// ==================================================
-	public BlockEquipmentForge(Block.Properties properties, ModInfo group, int level) {
+	public EquipmentStationBlock(Properties properties, ModInfo group) {
 		super(properties);
 		
 		// Properties:
 		this.group = group;
-		this.level = level;
-		if(level <= 1) {
-			this.blockName = "equipmentforge_lesser";
-		}
-		else if(level == 2) {
-			this.blockName = "equipmentforge_greater";
-		}
-		else {
-			this.blockName = "equipmentforge_master";
-		}
-
+		this.blockName = "equipment_station";
 		this.setRegistryName(this.group.modid, this.blockName.toLowerCase());
 		this.registerDefaultState(this.getStateDefinition().any().setValue(FACING, Direction.NORTH));
 	}
@@ -87,17 +72,16 @@ public class BlockEquipmentForge extends BlockBase {
 
 	@Override
 	public TileEntity createTileEntity(BlockState blockState, IBlockReader world) {
-		TileEntityEquipmentForge tileEntityEquipmentForge = new TileEntityEquipmentForge();
-		tileEntityEquipmentForge.setLevel(this.level);
-		return tileEntityEquipmentForge;
+		EquipmentStationTileEntity tileEntity = new EquipmentStationTileEntity();
+		return tileEntity;
 	}
 
-	@Override //onBlockActivated()
+	@Override
 	public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
 		if(!world.isClientSide() && player instanceof ServerPlayerEntity) {
 			TileEntity tileEntity = world.getBlockEntity(pos);
-			if(tileEntity instanceof TileEntityEquipmentForge) {
-				NetworkHooks.openGui((ServerPlayerEntity) player, new EquipmentForgeContainerProvider((TileEntityEquipmentForge)tileEntity), buf -> buf.writeBlockPos(pos));
+			if(tileEntity instanceof EquipmentStationTileEntity) {
+				NetworkHooks.openGui((ServerPlayerEntity) player, new EquipmentStationContainerProvider((EquipmentStationTileEntity)tileEntity), buf -> buf.writeBlockPos(pos));
 			}
 		}
 		return ActionResultType.SUCCESS;

@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.item.equipment;
 
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
-import com.lycanitesmobs.ClientManager;
+import com.lycanitesmobs.client.ClientManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.core.entity.ExtendedEntity;
@@ -43,6 +43,8 @@ public class ItemEquipment extends BaseItem {
 	/** The maximum amount of parts that can be added to an Equipment Piece. **/
 	public static int PART_LIMIT = 20;
 
+	public static int SHARPNESS_MAX = 1500;
+	public static int MANA_MAX = 1500;
 
 	/**
 	 * Constructor
@@ -76,12 +78,16 @@ public class ItemEquipment extends BaseItem {
 	public List<ITextComponent> getAdditionalDescriptions(ItemStack itemStack, @Nullable World world, ITooltipFlag tooltipFlag) {
 		List<ITextComponent> descriptions = new ArrayList<>();
 
+		// Condition:
+		descriptions.add(new TranslationTextComponent("equipment.sharpness").append(" " + this.getSharpness(itemStack) + "/" + SHARPNESS_MAX).withStyle(TextFormatting.BLUE));
+		descriptions.add(new TranslationTextComponent("equipment.mana").append(" " + this.getMana(itemStack) + "/" + MANA_MAX).withStyle(TextFormatting.BLUE));
+		descriptions.add(new StringTextComponent("-------------------"));
+
 		// Part Names:
 		for(ItemStack equipmentPartStack : this.getEquipmentPartStacks(itemStack)) {
 			ItemEquipmentPart equipmentPart = this.getEquipmentPart(equipmentPartStack);
 			if(equipmentPart == null)
 				continue;
-			int partLevel = equipmentPart.getPartLevel(equipmentPartStack);
 			descriptions.add(equipmentPart.getName(itemStack).plainCopy().withStyle(TextFormatting.DARK_GREEN));
 		}
 		descriptions.add(new StringTextComponent("-------------------"));
@@ -165,6 +171,16 @@ public class ItemEquipment extends BaseItem {
 		return ClientManager.getInstance().getFontRenderer();
 	}
 
+	@Override
+	public boolean showDurabilityBar(ItemStack itemStack) {
+		return (double)this.getSharpness(itemStack) < SHARPNESS_MAX;
+	}
+
+	@Override
+	public double getDurabilityForDisplay(ItemStack itemStack) {
+		return 1D - (double)this.getSharpness(itemStack) / SHARPNESS_MAX;
+	}
+
 
 	// ==================================================
 	//                  Equipment Piece
@@ -183,7 +199,6 @@ public class ItemEquipment extends BaseItem {
 		return itemStacks;
 	}
 
-
 	/**
 	 * Counts how many Equipment Parts this Piece is made out of.
 	 * @param itemStack The Equipment ItemStack to count the Equipment Part ItemStacks from.
@@ -199,7 +214,6 @@ public class ItemEquipment extends BaseItem {
 		return partCount;
 	}
 
-
 	/**
 	 * Returns the Equipment Part for the provided ItemStack or null in empty or a different item.
 	 * @param itemStack The Equipment Part ItemStack to get the Equipment Part from.
@@ -214,7 +228,6 @@ public class ItemEquipment extends BaseItem {
 		}
 		return (ItemEquipmentPart)itemStack.getItem();
 	}
-
 
 	/**
 	 * Adds an Equipment Part ItemStack to the provided Equipment ItemStack.
@@ -232,7 +245,6 @@ public class ItemEquipment extends BaseItem {
 		ItemStackHelper.saveAllItems(nbt, itemStacks);
 		equipmentStack.setTag(nbt);
 	}
-
 
 	/**
 	 * Searches for the provided active features by type and returns a list of them.
@@ -256,7 +268,6 @@ public class ItemEquipment extends BaseItem {
 		return features;
 	}
 
-
 	/**
 	 * Searches for the provided active features by type and returns a map of them with the feature as the key and the stack they are from as the value.
 	 * @param equipmentStack The itemStack of the Equipment.
@@ -279,7 +290,6 @@ public class ItemEquipment extends BaseItem {
 		return features;
 	}
 
-
 	/**
 	 * Cycles through each Equipment Part and lowers their level to the provided level cap, used by lower level Forges.
 	 * @param equipmentStack The itemStack of the Equipment.
@@ -294,7 +304,6 @@ public class ItemEquipment extends BaseItem {
 			equipmentPart.setLevel(equipmentPartStack, Math.min(levelCap, equipmentPart.getPartLevel(equipmentPartStack)));
 		}
 	}
-
 
 	/**
 	 * Cycles through each Equipment Part returns the highest part level found.
@@ -316,7 +325,6 @@ public class ItemEquipment extends BaseItem {
 		return highestLevel;
 	}
 
-
 	/**
 	 * Gets the Equipment Part level from the provided itemstack.
 	 * @param partStack The itemstack to get a part level from.
@@ -329,6 +337,114 @@ public class ItemEquipment extends BaseItem {
 		}
 		ItemEquipmentPart featurePart = (ItemEquipmentPart)featureItem;
 		return featurePart.getPartLevel(partStack);
+	}
+
+	/**
+	 * Determines the Sharpness of this Equipment using the part with the least amount of Sharpness.
+	 * @param equipmentStack The itemStack of the Equipment.
+	 * @return The lowest part sharpness found.
+	 */
+	public int getSharpness(ItemStack equipmentStack) {
+		int lowestSharpness = SHARPNESS_MAX;
+		for(ItemStack equipmentPartStack : this.getEquipmentPartStacks(equipmentStack)) {
+			ItemEquipmentPart equipmentPart = this.getEquipmentPart(equipmentPartStack);
+			if(equipmentPart == null) {
+				continue;
+			}
+			int partSharpness = equipmentPart.getSharpness(equipmentPartStack);
+			if(partSharpness < lowestSharpness) {
+				lowestSharpness = partSharpness;
+			}
+		}
+		return lowestSharpness;
+	}
+
+	/**
+	 * Increases the Sharpness of this Equipment by increasing the Sharpness of all parts.
+	 * @param equipmentStack The itemStack of the Equipment.
+	 * @return True if Sharpness was increased at all.
+	 */
+	public boolean addSharpness(ItemStack equipmentStack, int sharpness) {
+		boolean sharpnessIncreased = false;
+		for(ItemStack equipmentPartStack : this.getEquipmentPartStacks(equipmentStack)) {
+			ItemEquipmentPart equipmentPart = this.getEquipmentPart(equipmentPartStack);
+			if(equipmentPart == null) {
+				continue;
+			}
+			sharpnessIncreased = equipmentPart.addSharpness(equipmentPartStack, sharpness) || sharpnessIncreased;
+		}
+		return sharpnessIncreased;
+	}
+
+	/**
+	 * Decreases the Sharpness of this Equipment by decreasing the Sharpness of all parts.
+	 * @param equipmentStack The itemStack of the Equipment.
+	 * @return True if Sharpness was decreased at all.
+	 */
+	public boolean removeSharpness(ItemStack equipmentStack, int sharpness) {
+		boolean sharpnessDecreased = false;
+		for(ItemStack equipmentPartStack : this.getEquipmentPartStacks(equipmentStack)) {
+			ItemEquipmentPart equipmentPart = this.getEquipmentPart(equipmentPartStack);
+			if(equipmentPart == null) {
+				continue;
+			}
+			sharpnessDecreased = equipmentPart.removeSharpness(equipmentPartStack, sharpness) || sharpnessDecreased;
+		}
+		return sharpnessDecreased;
+	}
+
+	/**
+	 * Determines the Mana of this Equipment using the part with the least amount of Mana.
+	 * @param equipmentStack The itemStack of the Equipment.
+	 * @return The lowest part mana found.
+	 */
+	public int getMana(ItemStack equipmentStack) {
+		int lowestMana = MANA_MAX;
+		for(ItemStack equipmentPartStack : this.getEquipmentPartStacks(equipmentStack)) {
+			ItemEquipmentPart equipmentPart = this.getEquipmentPart(equipmentPartStack);
+			if(equipmentPart == null) {
+				continue;
+			}
+			int partMana = equipmentPart.getMana(equipmentPartStack);
+			if(partMana < lowestMana) {
+				lowestMana = partMana;
+			}
+		}
+		return lowestMana;
+	}
+
+	/**
+	 * Increases the Mana of this Equipment by increasing the Mana of all parts.
+	 * @param equipmentStack The itemStack of the Equipment.
+	 * @return True if Mana was increased at all.
+	 */
+	public boolean addMana(ItemStack equipmentStack, int mana) {
+		boolean manaIncreased = false;
+		for(ItemStack equipmentPartStack : this.getEquipmentPartStacks(equipmentStack)) {
+			ItemEquipmentPart equipmentPart = this.getEquipmentPart(equipmentPartStack);
+			if(equipmentPart == null) {
+				continue;
+			}
+			manaIncreased = equipmentPart.addMana(equipmentPartStack, mana) || manaIncreased;
+		}
+		return manaIncreased;
+	}
+
+	/**
+	 * Decreases the Mana of this Equipment by decreasing the Mana of all parts.
+	 * @param equipmentStack The itemStack of the Equipment.
+	 * @return True if Mana was decreased at all.
+	 */
+	public boolean removeMana(ItemStack equipmentStack, int mana) {
+		boolean manaDecreased = false;
+		for(ItemStack equipmentPartStack : this.getEquipmentPartStacks(equipmentStack)) {
+			ItemEquipmentPart equipmentPart = this.getEquipmentPart(equipmentPartStack);
+			if(equipmentPart == null) {
+				continue;
+			}
+			manaDecreased = equipmentPart.removeMana(equipmentPartStack, mana) || manaDecreased;
+		}
+		return manaDecreased;
 	}
 
 
@@ -348,6 +464,9 @@ public class ItemEquipment extends BaseItem {
 	@Override
 	public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
 		ItemStack itemStack = player.getItemInHand(hand);
+		if(this.getMana(itemStack) <= 0) {
+			return new ActionResult<>(ActionResultType.FAIL, itemStack);
+		}
 		boolean active = false;
 
 		// Projectiles:
@@ -367,14 +486,19 @@ public class ItemEquipment extends BaseItem {
 
 	@Override
 	public void onUsingTick(ItemStack itemStack, LivingEntity user, int count) {
-		if(!user.isUsingItem()) {
+		if(!user.isUsingItem() || this.getMana(itemStack) <= 0) {
 			return;
 		}
+		boolean usedMana = false;
 
 		// Projectiles:
 		for(EquipmentFeature equipmentFeature : this.getFeaturesByType(itemStack, "projectile")) {
 			ProjectileEquipmentFeature projectileFeature = (ProjectileEquipmentFeature)equipmentFeature;
-			projectileFeature.onHoldSecondary(user, count);
+			usedMana = projectileFeature.onHoldSecondary(user, count) || usedMana;
+		}
+
+		if (usedMana) {
+			this.removeMana(itemStack, 1);
 		}
 	}
 
@@ -386,20 +510,32 @@ public class ItemEquipment extends BaseItem {
 	 */
 	public void onItemLeftClick(World world, PlayerEntity player, Hand hand) {
 		ItemStack itemStack = player.getItemInHand(hand);
+		if(this.getMana(itemStack) <= 0) {
+			return;
+		}
+		boolean usedMana = false;
 
 		// Projectiles:
 		for(EquipmentFeature equipmentFeature : this.getFeaturesByType(itemStack, "projectile")) {
 			ProjectileEquipmentFeature projectileFeature = (ProjectileEquipmentFeature)equipmentFeature;
-			projectileFeature.onUsePrimary(world, player, hand);
+			usedMana = projectileFeature.onUsePrimary(world, player, hand) || usedMana;
+		}
+
+		if (usedMana) {
+			this.removeMana(itemStack, 1);
 		}
 	}
 
 	@Override
 	public ActionResultType useOn(ItemUseContext context) {
 		boolean active = false;
+		ItemStack itemStack = context.getItemInHand();
+		if(this.getMana(itemStack) <= 0) {
+			return super.useOn(context);
+		}
 
 		// Harvesting:
-		for(EquipmentFeature equipmentFeature : this.getFeaturesByType(context.getItemInHand(), "harvest")) {
+		for(EquipmentFeature equipmentFeature : this.getFeaturesByType(itemStack, "harvest")) {
 			HarvestEquipmentFeature harvestFeature = (HarvestEquipmentFeature)equipmentFeature;
 			if(harvestFeature.onBlockUsed(context)) {
 				active = true;
@@ -408,6 +544,7 @@ public class ItemEquipment extends BaseItem {
 
 		if(active) {
 			context.getPlayer().startUsingItem(context.getHand());
+			this.removeSharpness(itemStack, 1);
 			return ActionResultType.SUCCESS;
 		}
 		return super.useOn(context);
@@ -425,8 +562,10 @@ public class ItemEquipment extends BaseItem {
 			}
 		}
 
-		if(entityInteraction)
+		if(entityInteraction) {
+			this.removeSharpness(itemStack, 1);
 			return ActionResultType.SUCCESS;
+		}
 		return ActionResultType.FAIL;
 	}
 
@@ -438,6 +577,9 @@ public class ItemEquipment extends BaseItem {
 	@Nonnull
 	public Set<ToolType> getToolTypes(ItemStack itemStack) {
 		Map<ToolType, Boolean> toolTypes = new HashMap<>();
+		if(this.getSharpness(itemStack) <= 0) {
+			return toolTypes.keySet();
+		}
 		for(EquipmentFeature equipmentFeature : this.getFeaturesByType(itemStack, "harvest")) {
 			HarvestEquipmentFeature harvestFeature = (HarvestEquipmentFeature)equipmentFeature;
 			ToolType toolType = harvestFeature.getToolType();
@@ -450,6 +592,10 @@ public class ItemEquipment extends BaseItem {
 
 	@Override
 	public int getHarvestLevel(ItemStack itemStack, ToolType tool, @Nullable PlayerEntity player, @Nullable BlockState blockState) {
+		if(this.getSharpness(itemStack) <= 0) {
+			return -1;
+		}
+
 		int harvestLevel = -1;
 		for(EquipmentFeature equipmentFeature : this.getFeaturesByType(itemStack, "harvest")) {
 			HarvestEquipmentFeature harvestFeature = (HarvestEquipmentFeature)equipmentFeature;
@@ -462,6 +608,10 @@ public class ItemEquipment extends BaseItem {
 
 	@Override
 	public boolean canHarvestBlock(ItemStack itemStack, BlockState blockState) {
+		if(this.getSharpness(itemStack) <= 0) {
+			return false;
+		}
+
 		for(EquipmentFeature equipmentFeature : this.getFeaturesByType(itemStack, "harvest")) {
 			HarvestEquipmentFeature harvestFeature = (HarvestEquipmentFeature)equipmentFeature;
 			if(harvestFeature.canHarvestBlock(blockState)) {
@@ -473,6 +623,10 @@ public class ItemEquipment extends BaseItem {
 
 	@Override
 	public float getDestroySpeed(ItemStack itemStack, BlockState blockState) {
+		if(this.getSharpness(itemStack) <= 0) {
+			return 1;
+		}
+
 		float speed = 1;
 		for(EquipmentFeature equipmentFeature : this.getFeaturesByType(itemStack, "harvest")) {
 			HarvestEquipmentFeature harvestFeature = (HarvestEquipmentFeature)equipmentFeature;
@@ -483,12 +637,16 @@ public class ItemEquipment extends BaseItem {
 
 	@Override
 	public boolean mineBlock(ItemStack itemStack, World world, BlockState blockState, BlockPos pos, LivingEntity entityLiving) {
+		if(this.getSharpness(itemStack) <= 0) {
+			return super.mineBlock(itemStack, world, blockState, pos, entityLiving);
+		}
 		if(!world.isClientSide) {
 			for (EquipmentFeature equipmentFeature : this.getFeaturesByType(itemStack, "harvest")) {
 				HarvestEquipmentFeature harvestFeature = (HarvestEquipmentFeature) equipmentFeature;
 				harvestFeature.onBlockDestroyed(world, blockState, pos, entityLiving);
 			}
 		}
+		this.removeSharpness(itemStack, 1);
 		return super.mineBlock(itemStack, world, blockState, pos, entityLiving);
 	}
 
@@ -505,6 +663,10 @@ public class ItemEquipment extends BaseItem {
 	 */
 	@Override
 	public boolean hurtEnemy(ItemStack itemStack, LivingEntity primaryTarget, LivingEntity attacker) {
+		if(this.getSharpness(itemStack) <= 0) {
+			return true;
+		}
+
 		ExtendedEntity extendedEntity = ExtendedEntity.getForEntity(attacker);
 		boolean attackOnCooldown = false;
 		if(extendedEntity != null) {
@@ -516,10 +678,11 @@ public class ItemEquipment extends BaseItem {
 			}
 		}
 
-		// Sweeping:
 		List<LivingEntity> targets = new ArrayList<>();
 		targets.add(primaryTarget);
-		if(attacker != null && !attacker.getCommandSenderWorld().isClientSide && !attacker.isShiftKeyDown() && !attackOnCooldown) {
+
+		// Sweeping:
+		if(!attacker.getCommandSenderWorld().isClientSide && !attacker.isShiftKeyDown() && !attackOnCooldown) {
 			double sweepAngle = this.getDamageSweep(itemStack);
 			if(sweepAngle > 0) {
 				float sweepDamage = (float) this.getDamageAmount(itemStack);
@@ -584,6 +747,7 @@ public class ItemEquipment extends BaseItem {
 			attacker.getCommandSenderWorld().playSound(null, attacker.position().x(), attacker.position().y(), attacker.position().z(), SoundEvents.PLAYER_ATTACK_SWEEP, attacker.getSoundSource(), 1.0F, 1.0F);
 		}
 
+		boolean usedMana = false;
 		for(LivingEntity target : targets) {
 			// Knockback:
 			double knockback = this.getDamageKnockback(itemStack);
@@ -610,15 +774,20 @@ public class ItemEquipment extends BaseItem {
 			// Summons:
 			for(EquipmentFeature equipmentFeature : this.getFeaturesByType(itemStack, "summon")) {
 				SummonEquipmentFeature summonFeature = (SummonEquipmentFeature)equipmentFeature;
-				summonFeature.onHitEntity(itemStack, target, attacker);
+				usedMana = summonFeature.onHitEntity(itemStack, target, attacker) || usedMana;
 			}
 
 			// Projectiles:
 			for(EquipmentFeature equipmentFeature : this.getFeaturesByType(itemStack, "projectile")) {
 				ProjectileEquipmentFeature projectileFeature = (ProjectileEquipmentFeature)equipmentFeature;
-				projectileFeature.onHitEntity(itemStack, target, attacker);
+				usedMana = projectileFeature.onHitEntity(itemStack, target, attacker) || usedMana;
 			}
 		}
+
+		if (usedMana) {
+			this.removeMana(itemStack, 1);
+		}
+		this.removeSharpness(itemStack, 1);
 
 		return true;
 	}
@@ -645,6 +814,10 @@ public class ItemEquipment extends BaseItem {
 	 * @return The amount of base damage.
 	 */
 	public double getDamageAmount(ItemStack itemStack) {
+		if(this.getSharpness(itemStack) <= 0) {
+			return 0;
+		}
+
 		double damage = 0;
 		for(EquipmentFeature equipmentFeature : this.getFeaturesByType(itemStack, "damage")) {
 			DamageEquipmentFeature damageFeature = (DamageEquipmentFeature)equipmentFeature;
@@ -695,6 +868,10 @@ public class ItemEquipment extends BaseItem {
 	 * @return The amount of knockback.
 	 */
 	public double getDamageKnockback(ItemStack itemStack) {
+		if(this.getSharpness(itemStack) <= 0) {
+			return 0;
+		}
+
 		double knockback = 0;
 		for(EquipmentFeature equipmentFeature : this.getFeaturesByType(itemStack, "damage")) {
 			DamageEquipmentFeature damageFeature = (DamageEquipmentFeature)equipmentFeature;
@@ -709,6 +886,10 @@ public class ItemEquipment extends BaseItem {
 	 * @return The amount of knockback.
 	 */
 	public double getDamageSweep(ItemStack itemStack) {
+		if(this.getSharpness(itemStack) <= 0) {
+			return 0;
+		}
+
 		double sweep = 0;
 		for(EquipmentFeature equipmentFeature : this.getFeaturesByType(itemStack, "damage")) {
 			DamageEquipmentFeature damageFeature = (DamageEquipmentFeature)equipmentFeature;

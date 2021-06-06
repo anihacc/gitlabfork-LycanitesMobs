@@ -1,6 +1,6 @@
 package com.lycanitesmobs.client.mobevent;
 
-import com.lycanitesmobs.ClientManager;
+import com.lycanitesmobs.client.ClientManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.client.TextureManager;

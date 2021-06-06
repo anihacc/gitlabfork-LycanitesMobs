@@ -83,8 +83,10 @@ public class ItemSoulkey extends BaseItem {
                 return ActionResultType.SUCCESS;
             }
         }
-        ITextComponent message = new TranslationTextComponent("message.soulkey.invalid");
-        player.sendMessage(message, Util.NIL_UUID);
+        if(!player.getCommandSenderWorld().isClientSide) {
+            ITextComponent message = new TranslationTextComponent("message.soulkey.invalid");
+            player.sendMessage(message, Util.NIL_UUID);
+        }
 
         return ActionResultType.FAIL;
     }

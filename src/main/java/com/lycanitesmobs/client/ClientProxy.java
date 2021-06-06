@@ -1,6 +1,5 @@
 package com.lycanitesmobs.client;
 
-import com.lycanitesmobs.ClientManager;
 import com.lycanitesmobs.core.IProxy;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;

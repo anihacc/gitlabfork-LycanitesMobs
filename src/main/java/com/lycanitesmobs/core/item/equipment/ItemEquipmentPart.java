@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.item.equipment;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.lycanitesmobs.ClientManager;
+import com.lycanitesmobs.client.ClientManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.core.helpers.JSONHelper;
@@ -302,6 +302,80 @@ public class ItemEquipmentPart extends BaseItem {
 			}
 		}
 		return experience;
+	}
+
+	/** Returns the Equipment Part Sharpness for the provided ItemStack. **/
+	public int getSharpness(ItemStack itemStack) {
+		CompoundNBT nbt = this.getTagCompound(itemStack);
+		int sharpness = ItemEquipment.SHARPNESS_MAX;
+		if(nbt.contains("equipmentSharpness")) {
+			sharpness = nbt.getInt("equipmentSharpness");
+		}
+		return sharpness;
+	}
+
+	/** Sets the sharpness of the provided Equipment Item Stack. **/
+	public void setSharpness(ItemStack itemStack, int sharpness) {
+		CompoundNBT nbt = this.getTagCompound(itemStack);
+		nbt.putInt("equipmentSharpness", Math.max(Math.min(sharpness, ItemEquipment.SHARPNESS_MAX), 0));
+		itemStack.setTag(nbt);
+	}
+
+	/** Increases the sharpness of the provided Equipment Item Stack. This will also level up the part if the sharpness is enough. **/
+	public boolean addSharpness(ItemStack itemStack, int sharpness) {
+		int currentSharpness = this.getSharpness(itemStack);
+		if(currentSharpness >= ItemEquipment.SHARPNESS_MAX) {
+			return false;
+		}
+		this.setSharpness(itemStack, this.getSharpness(itemStack) + sharpness);
+		return true;
+	}
+
+	/** Decreases the sharpness of the provided Equipment Item Stack. This will also level up the part if the sharpness is enough. **/
+	public boolean removeSharpness(ItemStack itemStack, int sharpness) {
+		int currentSharpness = this.getSharpness(itemStack);
+		if(currentSharpness <= 0) {
+			return false;
+		}
+		this.setSharpness(itemStack, this.getSharpness(itemStack) - sharpness);
+		return true;
+	}
+
+	/** Returns the Equipment Part Mana for the provided ItemStack. **/
+	public int getMana(ItemStack itemStack) {
+		CompoundNBT nbt = this.getTagCompound(itemStack);
+		int mana = ItemEquipment.MANA_MAX;
+		if(nbt.contains("equipmentMana")) {
+			mana = nbt.getInt("equipmentMana");
+		}
+		return mana;
+	}
+
+	/** Sets the mana of the provided Equipment Item Stack. **/
+	public void setMana(ItemStack itemStack, int mana) {
+		CompoundNBT nbt = this.getTagCompound(itemStack);
+		nbt.putInt("equipmentMana", Math.max(Math.min(mana, ItemEquipment.MANA_MAX), 0));
+		itemStack.setTag(nbt);
+	}
+
+	/** Increases the mana of the provided Equipment Item Stack. This will also level up the part if the mana is enough. **/
+	public boolean addMana(ItemStack itemStack, int mana) {
+		int currentMana = this.getMana(itemStack);
+		if(currentMana >= ItemEquipment.MANA_MAX) {
+			return false;
+		}
+		this.setMana(itemStack, this.getMana(itemStack) + mana);
+		return true;
+	}
+
+	/** Decreases the mana of the provided Equipment Item Stack. This will also level up the part if the mana is enough. **/
+	public boolean removeMana(ItemStack itemStack, int mana) {
+		int currentMana = this.getMana(itemStack);
+		if(currentMana <= 0) {
+			return false;
+		}
+		this.setMana(itemStack, this.getMana(itemStack) - mana);
+		return true;
 	}
 
 	/** Returns the dyed color for the provided ItemStack. **/

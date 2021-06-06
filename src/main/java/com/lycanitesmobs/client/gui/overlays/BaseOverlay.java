@@ -1,6 +1,6 @@
 package com.lycanitesmobs.client.gui.overlays;
 
-import com.lycanitesmobs.ClientManager;
+import com.lycanitesmobs.client.ClientManager;
 import com.lycanitesmobs.ExtendedWorld;
 import com.lycanitesmobs.client.KeyHandler;
 import com.lycanitesmobs.client.TextureManager;

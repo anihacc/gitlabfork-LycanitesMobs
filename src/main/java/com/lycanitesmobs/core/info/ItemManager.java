@@ -20,10 +20,7 @@ import com.lycanitesmobs.core.item.special.ItemSoulstone;
 import com.lycanitesmobs.core.item.summoningstaff.*;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
-import net.minecraft.item.BucketItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.Items;
+import net.minecraft.item.*;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
@@ -138,6 +135,7 @@ public class ItemManager extends JSONLoader {
 		ObjectManager.addBlock("equipmentforge_greater", new BlockEquipmentForge(Block.Properties.of(Material.STONE).strength(5, 20).sound(SoundType.STONE), modInfo, 2));
 		ObjectManager.addBlock("equipmentforge_master", new BlockEquipmentForge(Block.Properties.of(Material.METAL).strength(5, 1000).sound(SoundType.METAL), modInfo, 3));
 		ObjectManager.addBlock("equipment_infuser", new EquipmentInfuserBlock(Block.Properties.of(Material.METAL).strength(5, 1000).sound(SoundType.METAL), modInfo));
+		ObjectManager.addBlock("equipment_station", new EquipmentStationBlock(Block.Properties.of(Material.METAL).strength(5, 1000).sound(SoundType.METAL), modInfo));
 
 
 		// Buff Items:
@@ -263,5 +261,77 @@ public class ItemManager extends JSONLoader {
 		} catch (NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	/**
+	 * Determines the Equipment Sharpness repair amount of the provided itemstack. Stack size is not taken into account.
+	 * @param itemStack The itemstack to check the item and nbt data of.
+	 * @return The amount of Sharpness the provided itemstack restores.
+	 */
+	public int getEquipmentSharpnessRepair(ItemStack itemStack) {
+		if (itemStack.isEmpty()) {
+			return 0;
+		}
+
+		Item item = itemStack.getItem();
+		for (String itemId : ItemConfig.lowEquipmentSharpnessItems) {
+			if (new ResourceLocation(itemId).equals(item.getRegistryName())) {
+				return ItemConfig.lowEquipmentRepairAmount;
+			}
+		}
+		for (String itemId : ItemConfig.mediumEquipmentSharpnessItems) {
+			if (new ResourceLocation(itemId).equals(item.getRegistryName())) {
+				return ItemConfig.mediumEquipmentRepairAmount;
+			}
+		}
+		for (String itemId : ItemConfig.highEquipmentSharpnessItems) {
+			if (new ResourceLocation(itemId).equals(item.getRegistryName())) {
+				return ItemConfig.highEquipmentRepairAmount;
+			}
+		}
+		for (String itemId : ItemConfig.maxEquipmentSharpnessItems) {
+			if (new ResourceLocation(itemId).equals(item.getRegistryName())) {
+				return ItemEquipment.SHARPNESS_MAX;
+			}
+		}
+		return 0;
+	}
+
+	/**
+	 * Determines the Equipment Mana repair amount of the provided itemstack. Stack size is not taken into account.
+	 * @param itemStack The itemstack to check the item and nbt data of.
+	 * @return The amount of Mana the provided itemstack restores.
+	 */
+	public int getEquipmentManaRepair(ItemStack itemStack) {
+		if (itemStack.isEmpty()) {
+			return 0;
+		}
+
+		Item item = itemStack.getItem();
+		if (item instanceof ChargeItem) {
+			return ItemConfig.highEquipmentRepairAmount;
+		}
+		for (String itemId : ItemConfig.lowEquipmentManaItems) {
+			if (new ResourceLocation(itemId).equals(item.getRegistryName())) {
+				return ItemConfig.lowEquipmentRepairAmount;
+			}
+		}
+		for (String itemId : ItemConfig.mediumEquipmentManaItems) {
+			LycanitesMobs.logDebug("", "ITEM: " + itemStack.getItem().getRegistryName() + " vs " + itemId);
+			if (new ResourceLocation(itemId).equals(item.getRegistryName())) {
+				return ItemConfig.mediumEquipmentRepairAmount;
+			}
+		}
+		for (String itemId : ItemConfig.highEquipmentManaItems) {
+			if (new ResourceLocation(itemId).equals(item.getRegistryName())) {
+				return ItemConfig.highEquipmentRepairAmount;
+			}
+		}
+		for (String itemId : ItemConfig.maxEquipmentManaItems) {
+			if (new ResourceLocation(itemId).equals(item.getRegistryName())) {
+				return ItemEquipment.MANA_MAX;
+			}
+		}
+		return 0;
 	}
 }

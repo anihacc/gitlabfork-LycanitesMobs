@@ -173,13 +173,13 @@ public class DrawHelper {
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder buffer = tessellator.getBuilder();
 		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-		buffer.vertex((double)(x + 0), (double)(y + height), z)
+		buffer.vertex(x + 0, y + height, z)
 				.uv(((u + 0) * scaleX), (v + height) * scaleY).endVertex();
-		buffer.vertex((double)(x + width), (double)(y + height), z)
+		buffer.vertex(x + width, y + height, z)
 				.uv(((u + width) * scaleX), ((v + height) * scaleY)).endVertex();
-		buffer.vertex((double)(x + width), (double)(y + 0), z)
+		buffer.vertex(x + width, y + 0, z)
 				.uv(((u + width) * scaleX), ((v + 0) * scaleY)).endVertex();
-		buffer.vertex((double)(x + 0), (double)(y + 0), z)
+		buffer.vertex(x + 0, y + 0, z)
 				.uv(((u + 0) * scaleX), ((v + 0) * scaleY)).endVertex();
 		tessellator.end();
 

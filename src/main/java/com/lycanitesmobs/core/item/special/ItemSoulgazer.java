@@ -9,6 +9,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Util;
+import net.minecraft.util.text.TranslationTextComponent;
 
 public class ItemSoulgazer extends BaseItem {
 
@@ -20,11 +22,18 @@ public class ItemSoulgazer extends BaseItem {
 
 	@Override
 	public ActionResultType interactLivingEntity(ItemStack stack, PlayerEntity player, LivingEntity entity, Hand hand) {
-    	ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
-    	if(playerExt == null || playerExt.creatureStudyCooldown > 0) {
+    	ExtendedPlayer extendedPlayer = ExtendedPlayer.getForPlayer(player);
+    	if(extendedPlayer == null || extendedPlayer.creatureStudyCooldown > 0) {
+			if (!player.getCommandSenderWorld().isClientSide) {
+				player.sendMessage(new TranslationTextComponent("message.beastiary.study.recharging"), Util.NIL_UUID);
+			}
 			return ActionResultType.FAIL;
 		}
-    	playerExt.studyCreature(entity, 25);
+
+    	extendedPlayer.studyCreature(entity, 25);
+		if (!player.getCommandSenderWorld().isClientSide) {
+			player.sendMessage(new TranslationTextComponent("message.beastiary.study"), Util.NIL_UUID);
+		}
 
 		if(player.getCommandSenderWorld().isClientSide) {
 			for(int i = 0; i < 32; ++i) {

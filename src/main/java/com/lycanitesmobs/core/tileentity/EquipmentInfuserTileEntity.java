@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.tileentity;
 
 import com.lycanitesmobs.ObjectManager;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ItemStackHelper;
@@ -147,8 +148,8 @@ public class EquipmentInfuserTileEntity extends TileEntityBase implements IInven
 	}
 
 	@Override
-	public void read(CompoundNBT nbtTagCompound) {
-		super.read(nbtTagCompound);
+	public void load(BlockState blockState, CompoundNBT nbtTagCompound) {
+		super.load(blockState, nbtTagCompound);
 		if(nbtTagCompound.contains("Items")) {
 			ItemStackHelper.loadAllItems(nbtTagCompound, this.itemStacks);
 		}

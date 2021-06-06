@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.network;
 
-import com.lycanitesmobs.ClientManager;
+import com.lycanitesmobs.client.ClientManager;
 import com.lycanitesmobs.core.entity.ExtendedEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;

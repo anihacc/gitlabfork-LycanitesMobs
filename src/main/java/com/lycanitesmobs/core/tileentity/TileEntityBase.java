@@ -95,7 +95,4 @@ public abstract class TileEntityBase extends TileEntity implements ITickableTile
     public CompoundNBT save(CompoundNBT nbtTagCompound) {
         return super.save(nbtTagCompound);
     }
-
-    protected void read(CompoundNBT nbtTagCompound) {
-    }
 }

@@ -1,5 +1,6 @@
 package com.lycanitesmobs;
 
+import com.lycanitesmobs.client.ClientManager;
 import com.lycanitesmobs.core.dungeon.instance.DungeonInstance;
 import com.lycanitesmobs.core.entity.BossEntry;
 import com.lycanitesmobs.core.mobevent.MobEvent;

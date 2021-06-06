@@ -97,9 +97,9 @@ public class SummonEquipmentFeature extends EquipmentFeature {
 	 * @param target The target entity being hit.
 	 * @param attacker The entity using this item to hit.
 	 */
-	public void onHitEntity(ItemStack itemStack, LivingEntity target, LivingEntity attacker) {
+	public boolean onHitEntity(ItemStack itemStack, LivingEntity target, LivingEntity attacker) {
 		if(target == null || attacker == null || attacker.getCommandSenderWorld().isClientSide) {
-			return;
+			return false;
 		}
 
 		// Summon:
@@ -115,13 +115,14 @@ public class SummonEquipmentFeature extends EquipmentFeature {
 			}
 		}
 		if(entityType == null) {
-			return;
+			return false;
 		}
 
 		int summonCount = this.summonCountMin;
 		if(this.summonCountMax > this.summonCountMin) {
 			summonCount = this.summonCountMin + attacker.getRandom().nextInt(this.summonCountMax - this.summonCountMin);
 		}
+		int summonedCreatures = 0;
 		for(int i = 0; i < summonCount; i++) {
 			if (attacker.getRandom().nextDouble() <= this.summonChance) {
 				try {
@@ -152,11 +153,14 @@ public class SummonEquipmentFeature extends EquipmentFeature {
 						entity.moveTo(spawnPos.getX(), spawnPos.getY(), spawnPos.getZ(), attacker.yRot, 0.0F);
 						entityCreature.setTarget(target);
 						entity.getCommandSenderWorld().addFreshEntity(entity);
+						summonedCreatures++;
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		}
+
+		return summonedCreatures > 0;
 	}
 }
