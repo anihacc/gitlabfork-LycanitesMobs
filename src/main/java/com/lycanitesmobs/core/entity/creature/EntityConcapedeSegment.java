@@ -127,47 +127,34 @@ public class EntityConcapedeSegment extends AgeableCreatureEntity {
 
         	// Force position to front with offset:
         	if(this.hasParent()) {
-        		this.lookAt(this.getParentTarget(), 360, 360);
-        		
-        		double segmentDistance = 0.65D;
-        		Vector3d pos;
-        		if(this.getParentTarget() instanceof BaseCreatureEntity)
-        			pos = ((BaseCreatureEntity)this.getParentTarget()).getFacingPositionDouble(this.getParentTarget().position().x(), this.getParentTarget().position().y(), this.getParentTarget().position().z(), -0.25D, 0);
-        		else
-					pos = new Vector3d(this.getParentTarget().position().x(), this.getParentTarget().position().y(), this.getParentTarget().position().z());
+				this.getLookControl().setLookAt(this.getParentTarget(), 360.0F, 360.0F);
+				this.lookAt(this.getParentTarget(), 360, 360);
 
-        		double followX = this.position().x();
-        		double followY = this.position().y();
-        		double followZ = this.position().z();
-
-        		if(this.position().x() - pos.x > segmentDistance)
-					followX = pos.x + segmentDistance;
-        		else if(this.position().x() - pos.x < -segmentDistance)
-					followX = pos.x - segmentDistance;
-        		
-        		if(this.position().y() - pos.y > segmentDistance)
-					followY = pos.y;
-        		else if(this.position().y() - pos.y < -(segmentDistance / 2))
-					followY = pos.y;
-        		
-        		if(this.position().z() - pos.z > segmentDistance)
-					followZ = pos.z + segmentDistance;
-        		else if(this.position().z() - pos.z < -segmentDistance)
-					followZ = pos.z - segmentDistance;
-
-        		this.setPos(followX, followY, followZ);
+				Vector3d parentPos = this.getFacingPositionDouble(this.getParentTarget().getX(), this.getParentTarget().getY(), this.getParentTarget().getZ(), -0.65D, this.getParentTarget().yRot);
+				double segmentPullThreshold = 0.15D;
+				double segmentDistance = Math.sqrt(this.distanceToSqr(parentPos));
+				if (segmentDistance > segmentPullThreshold) {
+					double dragAmount = segmentPullThreshold / 2;
+					Vector3d posVector = new Vector3d(this.getX(), this.getY(), this.getZ());
+					Vector3d dragPos = this.getFacingPositionDouble(parentPos.x, parentPos.y, parentPos.z, dragAmount, posVector.dot(parentPos));
+					double distY = (parentPos.y - this.getY());
+					double dragY = this.getY() + (distY / 2);
+					this.setPos(dragPos.x, dragY, dragPos.z);
+				}
         	}
-
-			// Look at parent:
-			if(this.hasParent()) {
-				this.getLookControl().setLookAt(this.getParentTarget(), 30.0F, 30.0F);
-			}
 
 			// Growth Into Head:
 			if(!this.getCommandSenderWorld().isClientSide && this.getGrowingAge() <= 0)
 				this.setGrowingAge(-this.growthTime);
         }
     }
+
+	@Override
+	public boolean rollLookChance() {
+		if(this.hasParent())
+			return false;
+		return super.rollLookChance();
+	}
 
 	@Override
 	public boolean rollWanderChance() {

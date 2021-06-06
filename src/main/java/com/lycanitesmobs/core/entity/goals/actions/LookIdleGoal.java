@@ -45,7 +45,7 @@ public class LookIdleGoal extends Goal {
    	// ==================================================
 	@Override
     public boolean canUse() {
-        return this.host.getRandom().nextFloat() < 0.02F;
+        return this.host.rollLookChance();
     }
     
     
