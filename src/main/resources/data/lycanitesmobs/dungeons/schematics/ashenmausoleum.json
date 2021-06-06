@@ -1,5 +1,5 @@
 {
-	"name": "ashenshrine",
+	"name": "ashenmausoleum",
 	"loadDefault": true,
 	"sectorCountMin": 10,
 	"sectorCountMax": 20,
@@ -80,7 +80,7 @@
 			"mobId": "lycanitesmobs:umibas",
 			"weight": 1,
 			"variant": 0,
-			"mobNameTag": "The Magmawyrm",
+			"mobNameTag": "Mantle Gorger",
 			"mobSizeScale": 3,
 			"naturalDespawn": "false",
 			"mobLevel": 30,
@@ -126,9 +126,9 @@
 		{
 			"mobId": "lycanitesmobs:ignibus",
 			"weight": 1,
-			"variant": 0,
+			"variant": 1,
 			"mobSizeScale": 1.1,
-			"mobNameTag": "Drake of Infernos",
+			"mobNameTag": "The Tyrant Dragon",
 			"naturalDespawn": "false",
 			"mobLevel": 10,
 			"spawnAsBoss": true,
