@@ -1,5 +1,6 @@
 package com.lycanitesmobs;
 
+import com.lycanitesmobs.client.localisation.LanguageManager;
 import com.lycanitesmobs.core.block.BlockFireBase;
 import com.lycanitesmobs.core.capabilities.CapabilityProviderEntity;
 import com.lycanitesmobs.core.capabilities.CapabilityProviderPlayer;
@@ -8,6 +9,7 @@ import com.lycanitesmobs.core.entity.*;
 import com.lycanitesmobs.core.info.ItemConfig;
 import com.lycanitesmobs.core.info.ItemManager;
 import com.lycanitesmobs.core.item.equipment.ItemEquipment;
+import com.lycanitesmobs.core.item.special.ItemSoulgazer;
 import com.lycanitesmobs.core.network.MessagePlayerLeftClick;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
@@ -439,6 +441,13 @@ public class GameEventListener {
 			}
 			if (mana > 0) {
 				event.getToolTip().add(new TranslationTextComponent("equipment.mana").append(" " + mana).withStyle(TextFormatting.BLUE));
+			}
+		}
+
+		if (event.getItemStack().getItem() instanceof ItemSoulgazer) {
+			ExtendedPlayer extendedPlayer = ExtendedPlayer.getForPlayer(event.getPlayer());
+			if (extendedPlayer != null && extendedPlayer.creatureStudyCooldown > 0) {
+				event.getToolTip().add(new TranslationTextComponent("message.beastiary.study.cooldown").append(" " + String.format("%.0f", (float)extendedPlayer.creatureStudyCooldown / 20) + "s").withStyle(TextFormatting.BLUE));
 			}
 		}
 	}

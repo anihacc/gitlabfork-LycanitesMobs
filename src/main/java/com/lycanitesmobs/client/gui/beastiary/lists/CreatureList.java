@@ -67,8 +67,13 @@ public class CreatureList extends BaseList<BeastiaryScreen> {
 			creatures.sort(Collator.getInstance(new Locale("US")));
 			for(String creatureName : creatures) {
 				CreatureInfo creatureInfo = CreatureManager.getInstance().getCreature(creatureName.toLowerCase());
-				if(this.listType == Type.SUMMONABLE && !creatureInfo.isSummonable()) {
-					continue;
+				if(this.listType == Type.SUMMONABLE) {
+					if (!creatureInfo.isSummonable()) {
+						continue;
+					}
+					if (this.screen.playerExt.getBeastiary().getCreatureKnowledge(creatureName) == null || this.screen.playerExt.getBeastiary().getCreatureKnowledge(creatureName).rank < 2) {
+						continue;
+					}
 				}
 				if (creatureInfo != null && (this.filterList == null || this.filterList.canListCreature(creatureInfo, this.listType))) {
 					this.addEntry(new Entry(this, creatureIndex++, creatureInfo));
