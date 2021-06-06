@@ -312,12 +312,12 @@ public class ItemManager extends JSONLoader {
 			return ItemConfig.highEquipmentRepairAmount;
 		}
 		for (String itemId : ItemConfig.lowEquipmentManaItems) {
+			LycanitesMobs.logDebug("", "ITEM: " + itemStack.getItem().getRegistryName() + " vs " + itemId);
 			if (new ResourceLocation(itemId).equals(item.getRegistryName())) {
 				return ItemConfig.lowEquipmentRepairAmount;
 			}
 		}
 		for (String itemId : ItemConfig.mediumEquipmentManaItems) {
-			LycanitesMobs.logDebug("", "ITEM: " + itemStack.getItem().getRegistryName() + " vs " + itemId);
 			if (new ResourceLocation(itemId).equals(item.getRegistryName())) {
 				return ItemConfig.mediumEquipmentRepairAmount;
 			}
