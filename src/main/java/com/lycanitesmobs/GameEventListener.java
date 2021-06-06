@@ -6,6 +6,7 @@ import com.lycanitesmobs.core.capabilities.CapabilityProviderPlayer;
 import com.lycanitesmobs.core.config.ConfigExtra;
 import com.lycanitesmobs.core.entity.*;
 import com.lycanitesmobs.core.info.ItemConfig;
+import com.lycanitesmobs.core.info.ItemManager;
 import com.lycanitesmobs.core.item.equipment.ItemEquipment;
 import com.lycanitesmobs.core.network.MessagePlayerLeftClick;
 import net.minecraft.block.Block;
@@ -22,6 +23,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
@@ -30,6 +32,7 @@ import net.minecraftforge.event.entity.EntityMountEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.player.FillBucketEvent;
+import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
@@ -417,6 +420,25 @@ public class GameEventListener {
 					((PlayerEntity)event.getEntity()).displayClientMessage(new TranslationTextComponent("boss.block.protection.place"), true);
 					return;
 				}
+			}
+		}
+	}
+
+
+	// ==================================================
+	//                     Tooltips
+	// ==================================================
+	@SubscribeEvent
+	public void onItemTooltip(ItemTooltipEvent event) {
+		int sharpness = ItemManager.getInstance().getEquipmentSharpnessRepair(event.getItemStack());
+		int mana = ItemManager.getInstance().getEquipmentManaRepair(event.getItemStack());
+		if (sharpness > 0 || mana > 0) {
+			event.getToolTip().add(new TranslationTextComponent("equipment.item.repair").withStyle(TextFormatting.BLUE));
+			if (sharpness > 0) {
+				event.getToolTip().add(new TranslationTextComponent("equipment.sharpness").append(" " + sharpness).withStyle(TextFormatting.BLUE));
+			}
+			if (mana > 0) {
+				event.getToolTip().add(new TranslationTextComponent("equipment.mana").append(" " + mana).withStyle(TextFormatting.BLUE));
 			}
 		}
 	}

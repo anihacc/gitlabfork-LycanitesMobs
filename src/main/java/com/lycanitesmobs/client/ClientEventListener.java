@@ -9,13 +9,11 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.RenderBlockOverlayEvent;
+import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class ClientEventListener {
 
-    // ==================================================
-    //                Client Fog Color
-    // ==================================================
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
     public void onFogDensity(EntityViewRenderEvent.FogDensity event) {
@@ -30,10 +28,6 @@ public class ClientEventListener {
         }
     }
 
-
-    // ==================================================
-    //                First Person Fire
-    // ==================================================
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
     public void onBlockOverlay(RenderBlockOverlayEvent event) {

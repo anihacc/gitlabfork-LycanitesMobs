@@ -95,6 +95,7 @@ public class ConfigItem {
 				.translation(CoreConfig.CONFIG_PREFIX + "item.equipment.lowEquipmentManaItems")
 				.defineList("item.equipment.lowEquipmentManaItems", Lists.newArrayList(
 						"minecraft:redstone",
+						"minecraft:glowstone_dust",
 						"minecraft:slime_ball"
 				), o -> o instanceof String);
 
@@ -113,7 +114,7 @@ public class ConfigItem {
 		this.highEquipmentManaItems = builder
 				.comment("A list of ids for items that grant a high amount of Equipment Mana.")
 				.translation(CoreConfig.CONFIG_PREFIX + "item.equipment.highEquipmentManaItems")
-				.defineList("item.equipment.mediumEquipmentManaItems", Lists.newArrayList(
+				.defineList("item.equipment.highEquipmentManaItems", Lists.newArrayList(
 						"minecraft:experience_bottle",
 						"minecraft:magma_cream"
 				), o -> o instanceof String);

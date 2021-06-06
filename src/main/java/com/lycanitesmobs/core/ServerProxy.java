@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.World;
 
 public class ServerProxy implements IProxy {
@@ -17,5 +18,10 @@ public class ServerProxy implements IProxy {
 	@Override
 	public void addEntityToWorld(int entityId, Entity entity) {
 
+	}
+
+	@Override
+	public PlayerEntity getClientPlayer() {
+		return null;
 	}
 }

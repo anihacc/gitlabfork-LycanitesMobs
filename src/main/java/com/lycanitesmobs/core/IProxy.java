@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.World;
 
 public interface IProxy {
@@ -9,4 +10,6 @@ public interface IProxy {
 	World getWorld();
 
 	void addEntityToWorld(int entityId, Entity entity);
+
+	public PlayerEntity getClientPlayer();
 }

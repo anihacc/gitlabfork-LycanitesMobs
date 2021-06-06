@@ -1,5 +1,6 @@
 package com.lycanitesmobs.core.item.special;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.item.BaseItem;
 import net.minecraft.entity.LivingEntity;
@@ -56,5 +57,27 @@ public class ItemSoulgazer extends BaseItem {
     @Override
 	public ItemStack getContainerItem(ItemStack itemStack) {
     	return new ItemStack(this, 1);
+	}
+
+	@Override
+	public boolean showDurabilityBar(ItemStack itemStack) {
+		if (LycanitesMobs.PROXY.getClientPlayer() != null) {
+			ExtendedPlayer extendedPlayer = ExtendedPlayer.getForPlayer(LycanitesMobs.PROXY.getClientPlayer());
+			if (extendedPlayer != null) {
+				return extendedPlayer.creatureStudyCooldown > 0;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public double getDurabilityForDisplay(ItemStack itemStack) {
+		if (LycanitesMobs.PROXY.getClientPlayer() != null) {
+			ExtendedPlayer extendedPlayer = ExtendedPlayer.getForPlayer(LycanitesMobs.PROXY.getClientPlayer());
+			if (extendedPlayer != null) {
+				return ((double)extendedPlayer.creatureStudyCooldown / extendedPlayer.creatureStudyCooldownMax);
+			}
+		}
+		return 0;
 	}
 }
