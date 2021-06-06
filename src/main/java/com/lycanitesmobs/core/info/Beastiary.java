@@ -118,7 +118,7 @@ public class Beastiary {
 				.append(new TranslationTextComponent("message.beastiary.new.suffix"));
 		this.extendedPlayer.player.sendMessage(message, Util.NIL_UUID);
 
-		if(creatureInfo.isSummonable()) {
+		if(creatureInfo.isSummonable() && creatureKnowledge.rank >= 2) {
 			ITextComponent summonMessage = new TranslationTextComponent("message.beastiary.summonable.prefix")
 					.append(" ")
 					.append(creatureInfo.getTitle())
