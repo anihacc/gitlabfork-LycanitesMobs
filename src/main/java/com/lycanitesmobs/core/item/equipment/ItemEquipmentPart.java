@@ -341,6 +341,80 @@ public class ItemEquipmentPart extends ItemBase {
 		return experience;
 	}
 
+	/** Returns the Equipment Part Sharpness for the provided ItemStack. **/
+	public int getSharpness(ItemStack itemStack) {
+		NBTTagCompound nbt = this.getTagCompound(itemStack);
+		int sharpness = ItemEquipment.SHARPNESS_MAX;
+		if(nbt.hasKey("equipmentSharpness")) {
+			sharpness = nbt.getInteger("equipmentSharpness");
+		}
+		return sharpness;
+	}
+
+	/** Sets the sharpness of the provided Equipment Item Stack. **/
+	public void setSharpness(ItemStack itemStack, int sharpness) {
+		NBTTagCompound nbt = this.getTagCompound(itemStack);
+		nbt.setInteger("equipmentSharpness", Math.max(Math.min(sharpness, ItemEquipment.SHARPNESS_MAX), 0));
+		itemStack.setTagCompound(nbt);
+	}
+
+	/** Increases the sharpness of the provided Equipment Item Stack. This will also level up the part if the sharpness is enough. **/
+	public boolean addSharpness(ItemStack itemStack, int sharpness) {
+		int currentSharpness = this.getSharpness(itemStack);
+		if(currentSharpness >= ItemEquipment.SHARPNESS_MAX) {
+			return false;
+		}
+		this.setSharpness(itemStack, this.getSharpness(itemStack) + sharpness);
+		return true;
+	}
+
+	/** Decreases the sharpness of the provided Equipment Item Stack. This will also level up the part if the sharpness is enough. **/
+	public boolean removeSharpness(ItemStack itemStack, int sharpness) {
+		int currentSharpness = this.getSharpness(itemStack);
+		if(currentSharpness <= 0) {
+			return false;
+		}
+		this.setSharpness(itemStack, this.getSharpness(itemStack) - sharpness);
+		return true;
+	}
+
+	/** Returns the Equipment Part Mana for the provided ItemStack. **/
+	public int getMana(ItemStack itemStack) {
+		NBTTagCompound nbt = this.getTagCompound(itemStack);
+		int mana = ItemEquipment.MANA_MAX;
+		if(nbt.hasKey("equipmentMana")) {
+			mana = nbt.getInteger("equipmentMana");
+		}
+		return mana;
+	}
+
+	/** Sets the mana of the provided Equipment Item Stack. **/
+	public void setMana(ItemStack itemStack, int mana) {
+		NBTTagCompound nbt = this.getTagCompound(itemStack);
+		nbt.setInteger("equipmentMana", Math.max(Math.min(mana, ItemEquipment.MANA_MAX), 0));
+		itemStack.setTagCompound(nbt);
+	}
+
+	/** Increases the mana of the provided Equipment Item Stack. This will also level up the part if the mana is enough. **/
+	public boolean addMana(ItemStack itemStack, int mana) {
+		int currentMana = this.getMana(itemStack);
+		if(currentMana >= ItemEquipment.MANA_MAX) {
+			return false;
+		}
+		this.setMana(itemStack, this.getMana(itemStack) + mana);
+		return true;
+	}
+
+	/** Decreases the mana of the provided Equipment Item Stack. This will also level up the part if the mana is enough. **/
+	public boolean removeMana(ItemStack itemStack, int mana) {
+		int currentMana = this.getMana(itemStack);
+		if(currentMana <= 0) {
+			return false;
+		}
+		this.setMana(itemStack, this.getMana(itemStack) - mana);
+		return true;
+	}
+
 	/** Returns the dyed color for the provided ItemStack. **/
 	public Vector4f getColor(ItemStack itemStack) {
 		NBTTagCompound nbt = this.getTagCompound(itemStack);

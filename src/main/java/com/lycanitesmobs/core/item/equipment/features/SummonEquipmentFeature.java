@@ -95,9 +95,9 @@ public class SummonEquipmentFeature extends EquipmentFeature {
 	 * @param target The target entity being hit.
 	 * @param attacker The entity using this item to hit.
 	 */
-	public void onHitEntity(ItemStack itemStack, EntityLivingBase target, EntityLivingBase attacker) {
+	public boolean onHitEntity(ItemStack itemStack, EntityLivingBase target, EntityLivingBase attacker) {
 		if(target == null || attacker == null || attacker.getEntityWorld().isRemote) {
-			return;
+			return false;
 		}
 
 		// Summon:
@@ -105,6 +105,7 @@ public class SummonEquipmentFeature extends EquipmentFeature {
 		if(this.summonCountMax > this.summonCountMin) {
 			summonCount = this.summonCountMin + attacker.getRNG().nextInt(this.summonCountMax - this.summonCountMin);
 		}
+		int summonedCreatures = 0;
 		for(int i = 0; i < summonCount; i++) {
 			if (attacker.getRNG().nextDouble() <= this.summonChance) {
 				try {
@@ -146,6 +147,7 @@ public class SummonEquipmentFeature extends EquipmentFeature {
 							entity.setLocationAndAngles(spawnPos.getX(), spawnPos.getY(), spawnPos.getZ(), attacker.rotationYaw, 0.0F);
 							attacker.getEntityWorld().spawnEntity(entity);
 							entityCreature.setAttackTarget(target);
+							summonedCreatures++;
 						}
 					}
 				} catch (Exception e) {
@@ -153,5 +155,7 @@ public class SummonEquipmentFeature extends EquipmentFeature {
 				}
 			}
 		}
+
+		return summonedCreatures > 0;
 	}
 }

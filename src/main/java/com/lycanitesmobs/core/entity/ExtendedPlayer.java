@@ -5,6 +5,7 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.VersionChecker;
 import com.lycanitesmobs.core.capabilities.IExtendedPlayer;
 import com.lycanitesmobs.core.info.*;
+import com.lycanitesmobs.core.item.equipment.ItemEquipment;
 import com.lycanitesmobs.core.item.temp.ItemStaffSummoning;
 import com.lycanitesmobs.core.network.*;
 import com.lycanitesmobs.core.pets.DonationFamiliars;
@@ -54,7 +55,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
 	// Action Controls:
 	public byte controlStates = 0;
 	public static enum CONTROL_ID {
-		JUMP((byte)1), MOUNT_DISMOUNT((byte)2), MOUNT_ABILITY((byte)4), MOUNT_INVENTORY((byte)8), ATTACK((byte)16), DESCEND((byte)32);
+		JUMP((byte)1), MOUNT_DISMOUNT((byte)2), MOUNT_ABILITY((byte)4), MOUNT_INVENTORY((byte)8), ATTACK((byte)16), DESCEND((byte)32), RIGHT_MOUSE((byte)64);
 		public byte id;
 		CONTROL_ID(byte i) { id = i; }
 	}
@@ -274,6 +275,13 @@ public class ExtendedPlayer implements IExtendedPlayer {
 		
 		this.currentTick++;
 		this.needsFullSync = false;
+
+		// Right Click Fix:
+		if (!this.isControlActive(CONTROL_ID.RIGHT_MOUSE)) {
+			if (this.player.getHeldItemMainhand().getItem() instanceof ItemEquipment || this.player.getHeldItemOffhand().getItem() instanceof ItemEquipment) {
+				this.player.stopActiveHand();
+			}
+		}
 	}
 
 	/**

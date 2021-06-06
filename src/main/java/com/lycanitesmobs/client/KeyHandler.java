@@ -8,6 +8,7 @@ import com.lycanitesmobs.client.gui.beastiary.CreaturesBeastiaryScreen;
 import com.lycanitesmobs.client.gui.beastiary.IndexBeastiaryScreen;
 import com.lycanitesmobs.client.gui.beastiary.PetsBeastiaryScreen;
 import com.lycanitesmobs.client.gui.beastiary.SummoningBeastiaryScreen;
+import com.lycanitesmobs.core.item.equipment.ItemEquipment;
 import com.lycanitesmobs.core.network.MessagePlayerAttack;
 import com.lycanitesmobs.core.network.MessagePlayerControl;
 import net.minecraft.client.Minecraft;
@@ -68,6 +69,11 @@ public class KeyHandler {
 		if(playerExt == null)
 			return;
 		byte controlStates = 0;
+
+		// Right (Fix Hold Releasing):
+		if (Mouse.isButtonDown(1)) {
+			controlStates += ExtendedPlayer.CONTROL_ID.RIGHT_MOUSE.id;
+		}
 		
 		// ========== GUI Keys ==========
 		// Player Inventory: Adds extra buttons to the GUI.

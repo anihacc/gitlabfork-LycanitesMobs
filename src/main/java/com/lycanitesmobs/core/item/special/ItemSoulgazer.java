@@ -1,5 +1,6 @@
 package com.lycanitesmobs.core.item.special;
 
+import com.lycanitesmobs.client.localisation.LanguageManager;
 import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.item.ItemBase;
 import net.minecraft.client.particle.IParticleFactory;
@@ -7,6 +8,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.Util;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 
 public class ItemSoulgazer extends ItemBase {
@@ -28,9 +31,16 @@ public class ItemSoulgazer extends ItemBase {
     public boolean onItemRightClickOnEntity(EntityPlayer player, Entity entity, ItemStack itemStack) {
 		ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
 		if(playerExt == null || playerExt.creatureStudyCooldown > 0) {
+			if (!player.getEntityWorld().isRemote) {
+				player.sendMessage(new TextComponentString(LanguageManager.translate("message.beastiary.study.recharging")));
+			}
 			return false;
 		}
+
 		playerExt.studyCreature(entity, 25);
+		if (!player.getEntityWorld().isRemote) {
+			player.sendMessage(new TextComponentString(LanguageManager.translate("message.beastiary.study")));
+		}
 
 		if(player.getEntityWorld().isRemote) {
 			for(int i = 0; i < 32; ++i) {

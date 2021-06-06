@@ -46,7 +46,7 @@ public class ItemSoulkey extends ItemBase {
     @Override
     public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         ItemStack itemStack = player.getHeldItem(hand);
-        if(!AltarInfo.checkAltarsEnabled() && !player.getEntityWorld().isRemote) {
+        if (!AltarInfo.checkAltarsEnabled() && !player.getEntityWorld().isRemote) {
             String message = LanguageManager.translate("message.soulkey.disabled");
             player.sendMessage(new TextComponentString(message));
             return EnumActionResult.FAIL;
@@ -54,26 +54,26 @@ public class ItemSoulkey extends ItemBase {
 
         // Get Possible Altars:
         List<AltarInfo> possibleAltars = new ArrayList<>();
-        if(AltarInfo.altars.isEmpty())
+        if (AltarInfo.altars.isEmpty())
             LycanitesMobs.logWarning("", "No altars have been registered, Soulkeys will not work at all.");
-        for(AltarInfo altarInfo : AltarInfo.altars.values()) {
-            if(altarInfo.checkBlockEvent(player, world, pos) && altarInfo.quickCheck(player, world, pos)) {
+        for (AltarInfo altarInfo : AltarInfo.altars.values()) {
+            if (altarInfo.checkBlockEvent(player, world, pos) && altarInfo.quickCheck(player, world, pos)) {
                 possibleAltars.add(altarInfo);
             }
         }
-        if(possibleAltars.isEmpty()) {
+        if (possibleAltars.isEmpty()) {
             String message = LanguageManager.translate("message.soulkey.none");
             player.sendMessage(new TextComponentString(message));
             return EnumActionResult.FAIL;
         }
 
         // Activate First Valid Altar:
-        for(AltarInfo altarInfo : possibleAltars) {
-            if(altarInfo.fullCheck(player, world, pos)) {
+        for (AltarInfo altarInfo : possibleAltars) {
+            if (altarInfo.fullCheck(player, world, pos)) {
 
                 // Valid Altar:
-                if(!player.getEntityWorld().isRemote) {
-                    if(!altarInfo.activate(player, world, pos, this.variant)) {
+                if (!player.getEntityWorld().isRemote) {
+                    if (!altarInfo.activate(player, world, pos, this.variant)) {
                         String message = LanguageManager.translate("message.soulkey.badlocation");
                         player.sendMessage(new TextComponentString(message));
                         return EnumActionResult.FAIL;
@@ -88,8 +88,11 @@ public class ItemSoulkey extends ItemBase {
                 return EnumActionResult.SUCCESS;
             }
         }
-        String message = LanguageManager.translate("message.soulkey.invalid");
-        player.sendMessage(new TextComponentString(message));
+
+        if (!player.capabilities.isCreativeMode) {
+            String message = LanguageManager.translate("message.soulkey.invalid");
+            player.sendMessage(new TextComponentString(message));
+        }
 
         return EnumActionResult.FAIL;
     }

@@ -269,6 +269,9 @@ public class InventoryCreature implements IInventory {
 	// ========== Decrease Stack Size ==========
 	@Override
 	public ItemStack decrStackSize(int slot, int amount) {
+		if (!this.creature.isEntityAlive()) {
+			return ItemStack.EMPTY;
+		}
 		ItemStack[] splitStacks = this.decrStackSize(this.getStackInSlot(slot), amount);
 		this.setInventorySlotContents(slot, splitStacks[0]);
         this.onInventoryChanged(false);
@@ -300,6 +303,9 @@ public class InventoryCreature implements IInventory {
 
 	@Override
 	public boolean isItemValidForSlot(int slotID, ItemStack itemStack) {
+		if (!this.creature.isEntityAlive()) {
+			return false;
+		}
 		String type = this.getTypeFromSlot(slotID);
 		if(type != null) {
 			if(!this.isEquipmentValidForSlot(type, itemStack))
@@ -340,10 +346,9 @@ public class InventoryCreature implements IInventory {
 	
 	// ========== Auto Insert Item Stack ==========
 	public ItemStack autoInsertStack(ItemStack itemStack) {
-		if(itemStack == null)
-			return itemStack;
-		if(itemStack.getItem() == null || itemStack.getCount() < 1)
-			return null;
+		if(itemStack == null || itemStack.getCount() < 1 || !this.creature.isEntityAlive()) {
+			return ItemStack.EMPTY;
+		}
 
 		for(int slotID = 0; slotID < this.inventoryContents.size(); slotID++) {
 			ItemStack slotStack = this.inventoryContents.get(slotID);

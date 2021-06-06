@@ -27,6 +27,7 @@ import com.lycanitesmobs.core.pets.DonationFamiliars;
 import com.lycanitesmobs.core.spawner.SpawnerEventListener;
 import com.lycanitesmobs.core.spawner.SpawnerManager;
 import com.lycanitesmobs.core.tileentity.EquipmentInfuserTileEntity;
+import com.lycanitesmobs.core.tileentity.EquipmentStationTileEntity;
 import com.lycanitesmobs.core.tileentity.TileEntityEquipmentForge;
 import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
 import com.lycanitesmobs.core.worldgen.WorldGeneratorDungeon;
@@ -141,7 +142,7 @@ public class LycanitesMobs {
 
 		// Familiars:
 		DonationFamiliars.instance.familiarBlacklist = new ArrayList<>();
-		String[] familiarBlacklist = config.getStringList("Extras", "Familiar Username Blacklist", new String[] {"Jbams"}, "Donation Familiars help support the development of this mod but can be turned of for individual players be adding their username to this list.");
+		String[] familiarBlacklist = config.getStringList("Extras", "Familiar Username Blacklist", new String[] {}, "Donation Familiars help support the development of this mod but can be turned of for individual players be adding their username to this list.");
 		DonationFamiliars.instance.familiarBlacklist.addAll(Arrays.asList(familiarBlacklist));
 
 		// Version Checker:
@@ -182,6 +183,7 @@ public class LycanitesMobs {
 		ObjectManager.addTileEntity("summoningpedestal", TileEntitySummoningPedestal.class);
 		ObjectManager.addTileEntity("equipmentforge", TileEntityEquipmentForge.class);
 		ObjectManager.addTileEntity("equipment_infuser", EquipmentInfuserTileEntity.class);
+		ObjectManager.addTileEntity("equipment_station", EquipmentStationTileEntity.class);
 
 		// Special Entities:
 		ObjectManager.addSpecialEntity("hitarea", EntityHitArea.class);

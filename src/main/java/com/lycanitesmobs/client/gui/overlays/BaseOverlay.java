@@ -46,6 +46,9 @@ public class BaseOverlay extends BaseGui {
             return;
         EntityPlayer player = LycanitesMobs.proxy.getClientPlayer();
 
+//        LycanitesMobs.logDebug("", event.getPartialTicks() + " for " + event.getType());
+
+		// HUD Overlay:
 		if(event.isCancelable() || event.getType() != ElementType.EXPERIENCE)
 	      return;
 

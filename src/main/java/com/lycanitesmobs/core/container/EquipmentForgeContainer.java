@@ -171,7 +171,12 @@ public class EquipmentForgeContainer extends BaseContainer {
 		}
 
 		// Put Piece Stack:
-		slotPiece.putStack(pieceStack);
+		if (itemEquipment.getEquipmentPartCount(pieceStack) > 0) {
+			slotPiece.putStack(pieceStack);
+		}
+		else {
+			slotPiece.putStack(ItemStack.EMPTY);
+		}
 	}
 
 

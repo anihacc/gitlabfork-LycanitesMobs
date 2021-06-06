@@ -136,19 +136,20 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 	 * @param shooter The player using the equipment.
 	 * @param hand The hand the player is holding the equipment in.
 	 */
-	public void onUsePrimary(World world, EntityPlayer shooter, EnumHand hand) {
+	public boolean onUsePrimary(World world, EntityPlayer shooter, EnumHand hand) {
 		if(!"primary".equalsIgnoreCase(this.projectileTrigger)) {
-			return;
+			return false;
 		}
 		ExtendedEntity shooterExt = ExtendedEntity.getForEntity(shooter);
 		if(shooterExt == null) {
-			return;
+			return false;
 		}
 		if(shooterExt.getProjectileCooldown(1, this.projectileName) > 0) {
-			return;
+			return false;
 		}
 		shooterExt.setProjectileCooldown(1, this.projectileName, this.cooldown);
 		this.fireProjectile(shooter);
+		return true;
 	}
 
 	/**
@@ -167,19 +168,20 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 	 * @param shooter The entity using the equipment.
 	 * @param count How long (in ticks) the equipment has been used for.
 	 */
-	public void onHoldSecondary(EntityLivingBase shooter, int count) {
+	public boolean onHoldSecondary(EntityLivingBase shooter, int count) {
 		if(!"secondary".equalsIgnoreCase(this.projectileTrigger)) {
-			return;
+			return false;
 		}
 		ExtendedEntity shooterExt = ExtendedEntity.getForEntity(shooter);
 		if(shooterExt == null) {
-			return;
+			return false;
 		}
 		if(shooterExt.getProjectileCooldown(2, this.projectileName) > 0) {
-			return;
+			return false;
 		}
 		shooterExt.setProjectileCooldown(2, this.projectileName, this.cooldown);
 		this.fireProjectile(shooter);
+		return true;
 	}
 
 	/**
@@ -188,15 +190,18 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 	 * @param target The target entity being hit.
 	 * @param attacker The entity using this item to hit.
 	 */
-	public void onHitEntity(ItemStack itemStack, EntityLivingBase target, EntityLivingBase attacker) {
+	public boolean onHitEntity(ItemStack itemStack, EntityLivingBase target, EntityLivingBase attacker) {
 		if(target == null || attacker == null || attacker.getEntityWorld().isRemote || attacker.isSneaking() || !"hit".equals(this.projectileTrigger)) {
-			return;
+			return false;
 		}
 
 		// Fire Projectile:
 		if(attacker.getRNG().nextDouble() <= this.hitChance) {
 			this.fireProjectile(attacker);
+			return true;
 		}
+
+		return false;
 	}
 
 	/**
@@ -223,14 +228,6 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 		BaseProjectileEntity mainProjectile = null;
 		Vec3d firePos = new Vec3d(shooter.posX, shooter.posY + (shooter.height * 0.65), shooter.posZ);
 		double offsetX = 0;
-		/*if(shooter.isHandActive()) {
-			offsetX = 0.75D;
-			if(shooter.getActiveHand() == EnumHand.OFF_HAND) {
-				offsetX = -offsetX;
-			}
-			Vec3d playerFirePos = this.getFacingPosition(shooter, offsetX, shooter.rotationYaw + 90);
-			firePos = new Vec3d(playerFirePos.x, firePos.y, playerFirePos.z);
-		}*/
 
 		// Patterns:
 		if("spread".equals(this.projectilePattern)) {

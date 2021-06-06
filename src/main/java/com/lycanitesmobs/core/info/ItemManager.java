@@ -11,6 +11,7 @@ import com.lycanitesmobs.core.block.building.BlockPropolis;
 import com.lycanitesmobs.core.block.building.BlockVeswax;
 import com.lycanitesmobs.core.block.effect.*;
 import com.lycanitesmobs.core.block.fluid.*;
+import com.lycanitesmobs.core.item.ChargeItem;
 import com.lycanitesmobs.core.item.GenericBucketItem;
 import com.lycanitesmobs.core.item.ItemMobToken;
 import com.lycanitesmobs.core.item.consumable.*;
@@ -19,8 +20,10 @@ import com.lycanitesmobs.core.item.special.*;
 import com.lycanitesmobs.core.item.temp.*;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
@@ -114,6 +117,7 @@ public class ItemManager extends JSONLoader {
 		ObjectManager.addBlock("equipmentforge_greater", new BlockEquipmentForge(group, 2));
 		ObjectManager.addBlock("equipmentforge_master", new BlockEquipmentForge(group, 3));
 		ObjectManager.addBlock("equipment_infuser", new EquipmentInfuserBlock(group));
+		ObjectManager.addBlock("equipment_station", new EquipmentStationBlock(group));
 
 
 		// Buff Items:
@@ -294,5 +298,90 @@ public class ItemManager extends JSONLoader {
 		OreDictionary.registerOre("listAllFungi", Blocks.BROWN_MUSHROOM);
 		OreDictionary.registerOre("listAllFungi", Blocks.BROWN_MUSHROOM_BLOCK);
 		OreDictionary.registerOre("listAllVegetables", Blocks.PUMPKIN);
+	}
+
+	/**
+	 * Determines the Equipment Sharpness repair amount of the provided itemstack. Stack size is not taken into account.
+	 * @param itemStack The itemstack to check the item and nbt data of.
+	 * @return The amount of Sharpness the provided itemstack restores.
+	 */
+	public int getEquipmentSharpnessRepair(ItemStack itemStack) {
+		if (itemStack.isEmpty()) {
+			return 0;
+		}
+
+		Item item = itemStack.getItem();
+		ResourceLocation checkId = item.getRegistryName();
+		if (item == Items.DYE) {
+			if (item.getMetadata(itemStack) == 4) {
+				checkId = new ResourceLocation("minecraft:lapis_lazuli");
+			}
+		}
+
+		for (String itemId : ItemConfig.lowEquipmentSharpnessItems) {
+			if (new ResourceLocation(itemId).equals(checkId)) {
+				return ItemConfig.lowEquipmentRepairAmount;
+			}
+		}
+		for (String itemId : ItemConfig.mediumEquipmentSharpnessItems) {
+			if (new ResourceLocation(itemId).equals(checkId)) {
+				return ItemConfig.mediumEquipmentRepairAmount;
+			}
+		}
+		for (String itemId : ItemConfig.highEquipmentSharpnessItems) {
+			if (new ResourceLocation(itemId).equals(checkId)) {
+				return ItemConfig.highEquipmentRepairAmount;
+			}
+		}
+		for (String itemId : ItemConfig.maxEquipmentSharpnessItems) {
+			if (new ResourceLocation(itemId).equals(checkId)) {
+				return ItemEquipment.SHARPNESS_MAX;
+			}
+		}
+		return 0;
+	}
+
+	/**
+	 * Determines the Equipment Mana repair amount of the provided itemstack. Stack size is not taken into account.
+	 * @param itemStack The itemstack to check the item and nbt data of.
+	 * @return The amount of Mana the provided itemstack restores.
+	 */
+	public int getEquipmentManaRepair(ItemStack itemStack) {
+		if (itemStack.isEmpty()) {
+			return 0;
+		}
+
+		Item item = itemStack.getItem();
+		ResourceLocation checkId = item.getRegistryName();
+		if (item == Items.DYE) {
+			if (item.getMetadata(itemStack) == 4) {
+				checkId = new ResourceLocation("minecraft:lapis_lazuli");
+			}
+		}
+
+		if (item instanceof ChargeItem) {
+			return ItemConfig.highEquipmentRepairAmount;
+		}
+		for (String itemId : ItemConfig.lowEquipmentManaItems) {
+			if (new ResourceLocation(itemId).equals(checkId)) {
+				return ItemConfig.lowEquipmentRepairAmount;
+			}
+		}
+		for (String itemId : ItemConfig.mediumEquipmentManaItems) {
+			if (new ResourceLocation(itemId).equals(checkId)) {
+				return ItemConfig.mediumEquipmentRepairAmount;
+			}
+		}
+		for (String itemId : ItemConfig.highEquipmentManaItems) {
+			if (new ResourceLocation(itemId).equals(checkId)) {
+				return ItemConfig.highEquipmentRepairAmount;
+			}
+		}
+		for (String itemId : ItemConfig.maxEquipmentManaItems) {
+			if (new ResourceLocation(itemId).equals(checkId)) {
+				return ItemEquipment.MANA_MAX;
+			}
+		}
+		return 0;
 	}
 }

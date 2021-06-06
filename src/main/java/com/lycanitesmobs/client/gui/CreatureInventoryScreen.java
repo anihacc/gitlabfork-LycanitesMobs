@@ -53,6 +53,10 @@ public class CreatureInventoryScreen extends BaseContainerScreen {
   	// ==================================================
 	@Override
 	protected void drawGuiContainerForegroundLayer(int i, int j) {
+		if (this.creature == null || !this.creature.isEntityAlive()) {
+			this.onGuiClosed();
+		}
+
 		this.fontRenderer.drawString(this.creatureInventory.getName(), 8, 6, 4210752);
         this.fontRenderer.drawString(LanguageManager.translate(this.playerInventory.getName()), 8, this.ySize - 96 + 2, 4210752);
 		this.drawBars(0, 0);

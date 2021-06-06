@@ -194,6 +194,8 @@ message.beastiary.summonable.colors=You can now summon variations of the %creatu
 message.beastiary.summonable.skins=You can now summon subspecies of the %creature%!
 message.beastiary.known=You have already have Knowledge Rank %rank% of the %creature%.
 message.beastiary.unknown=There is nothing to be learnt about this creature.
+message.beastiary.study=You gain knowledge by studying this creature.
+message.beastiary.study.recharging=You must wait a moment before you are able to study a creature again.
 #
 # Soulstone:
 message.soulstone.untamed=The Soulstone can only bind to a tamed creature.
@@ -350,6 +352,8 @@ key.minions=Minion Selection
 equipment.slottype=Slot Type:
 equipment.element=Charge Elements:
 equipment.level=Level:
+equipment.sharpness=Sharpness:
+equipment.mana=Mana:
 equipment.feature.slot=Adds Slot:
 equipment.feature.damage=Damage:
 equipment.feature.damage.cooldown=Cooldown:
@@ -416,6 +420,9 @@ tile.equipmentforge_master.description=This forge can be used to create new Equi
 #
 tile.equipment_infuser=Equipment Infuser
 tile.equipment_infuser.description=Used to infuse Charge items into Equipment Parts with matching Elements in order to level them up. Can also be used to apply dyes to equipment parts.
+#
+tile.equipment_station=Equipment Station
+tile.equipment_station.description=Used to restore Equipment Sharpness and Mana.
 #
 #
 # ========== Special ==========

@@ -28,6 +28,7 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import com.lycanitesmobs.client.localisation.LanguageManager;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -41,6 +42,9 @@ public class ItemEquipment extends ItemBase {
 
 	/** The maximum amount of parts that can be added to an Equipment Piece. **/
 	public static int PART_LIMIT = 20;
+
+	public static int SHARPNESS_MAX = 1500;
+	public static int MANA_MAX = 1500;
 
 
 	/**
@@ -79,6 +83,11 @@ public class ItemEquipment extends ItemBase {
 
 	public List<String> getAdditionalDescriptions(ItemStack itemStack,  World world, ITooltipFlag tooltipFlag) {
 		List<String> descriptions = new ArrayList<>();
+
+		// Condition:
+		descriptions.add(LanguageManager.translate("equipment.sharpness") + " " + this.getSharpness(itemStack) + "/" + SHARPNESS_MAX);
+		descriptions.add(LanguageManager.translate("equipment.mana") + " " + this.getMana(itemStack) + "/" + MANA_MAX);
+		descriptions.add("-------------------");
 
 		// Part Names:
 		for(ItemStack equipmentPartStack : this.getEquipmentPartStacks(itemStack)) {
@@ -175,6 +184,16 @@ public class ItemEquipment extends ItemBase {
 	@Override
 	public net.minecraft.client.gui.FontRenderer getFontRenderer(ItemStack stack) {
 		return LycanitesMobs.proxy.getFontRenderer();
+	}
+
+	@Override
+	public boolean showDurabilityBar(ItemStack itemStack) {
+		return (double)this.getSharpness(itemStack) < SHARPNESS_MAX;
+	}
+
+	@Override
+	public double getDurabilityForDisplay(ItemStack itemStack) {
+		return 1D - ((double)this.getSharpness(itemStack) / SHARPNESS_MAX);
 	}
 
 
@@ -343,6 +362,114 @@ public class ItemEquipment extends ItemBase {
 		return featurePart.getLevel(partStack);
 	}
 
+	/**
+	 * Determines the Sharpness of this Equipment using the part with the least amount of Sharpness.
+	 * @param equipmentStack The itemStack of the Equipment.
+	 * @return The lowest part sharpness found.
+	 */
+	public int getSharpness(ItemStack equipmentStack) {
+		int lowestSharpness = SHARPNESS_MAX;
+		for(ItemStack equipmentPartStack : this.getEquipmentPartStacks(equipmentStack)) {
+			ItemEquipmentPart equipmentPart = this.getEquipmentPart(equipmentPartStack);
+			if(equipmentPart == null) {
+				continue;
+			}
+			int partSharpness = equipmentPart.getSharpness(equipmentPartStack);
+			if(partSharpness < lowestSharpness) {
+				lowestSharpness = partSharpness;
+			}
+		}
+		return lowestSharpness;
+	}
+
+	/**
+	 * Increases the Sharpness of this Equipment by increasing the Sharpness of all parts.
+	 * @param equipmentStack The itemStack of the Equipment.
+	 * @return True if Sharpness was increased at all.
+	 */
+	public boolean addSharpness(ItemStack equipmentStack, int sharpness) {
+		boolean sharpnessIncreased = false;
+		for(ItemStack equipmentPartStack : this.getEquipmentPartStacks(equipmentStack)) {
+			ItemEquipmentPart equipmentPart = this.getEquipmentPart(equipmentPartStack);
+			if(equipmentPart == null) {
+				continue;
+			}
+			sharpnessIncreased = equipmentPart.addSharpness(equipmentPartStack, sharpness) || sharpnessIncreased;
+		}
+		return sharpnessIncreased;
+	}
+
+	/**
+	 * Decreases the Sharpness of this Equipment by decreasing the Sharpness of all parts.
+	 * @param equipmentStack The itemStack of the Equipment.
+	 * @return True if Sharpness was decreased at all.
+	 */
+	public boolean removeSharpness(ItemStack equipmentStack, int sharpness) {
+		boolean sharpnessDecreased = false;
+		for(ItemStack equipmentPartStack : this.getEquipmentPartStacks(equipmentStack)) {
+			ItemEquipmentPart equipmentPart = this.getEquipmentPart(equipmentPartStack);
+			if(equipmentPart == null) {
+				continue;
+			}
+			sharpnessDecreased = equipmentPart.removeSharpness(equipmentPartStack, sharpness) || sharpnessDecreased;
+		}
+		return sharpnessDecreased;
+	}
+
+	/**
+	 * Determines the Mana of this Equipment using the part with the least amount of Mana.
+	 * @param equipmentStack The itemStack of the Equipment.
+	 * @return The lowest part mana found.
+	 */
+	public int getMana(ItemStack equipmentStack) {
+		int lowestMana = MANA_MAX;
+		for(ItemStack equipmentPartStack : this.getEquipmentPartStacks(equipmentStack)) {
+			ItemEquipmentPart equipmentPart = this.getEquipmentPart(equipmentPartStack);
+			if(equipmentPart == null) {
+				continue;
+			}
+			int partMana = equipmentPart.getMana(equipmentPartStack);
+			if(partMana < lowestMana) {
+				lowestMana = partMana;
+			}
+		}
+		return lowestMana;
+	}
+
+	/**
+	 * Increases the Mana of this Equipment by increasing the Mana of all parts.
+	 * @param equipmentStack The itemStack of the Equipment.
+	 * @return True if Mana was increased at all.
+	 */
+	public boolean addMana(ItemStack equipmentStack, int mana) {
+		boolean manaIncreased = false;
+		for(ItemStack equipmentPartStack : this.getEquipmentPartStacks(equipmentStack)) {
+			ItemEquipmentPart equipmentPart = this.getEquipmentPart(equipmentPartStack);
+			if(equipmentPart == null) {
+				continue;
+			}
+			manaIncreased = equipmentPart.addMana(equipmentPartStack, mana) || manaIncreased;
+		}
+		return manaIncreased;
+	}
+
+	/**
+	 * Decreases the Mana of this Equipment by decreasing the Mana of all parts.
+	 * @param equipmentStack The itemStack of the Equipment.
+	 * @return True if Mana was decreased at all.
+	 */
+	public boolean removeMana(ItemStack equipmentStack, int mana) {
+		boolean manaDecreased = false;
+		for(ItemStack equipmentPartStack : this.getEquipmentPartStacks(equipmentStack)) {
+			ItemEquipmentPart equipmentPart = this.getEquipmentPart(equipmentPartStack);
+			if(equipmentPart == null) {
+				continue;
+			}
+			manaDecreased = equipmentPart.removeMana(equipmentPartStack, mana) || manaDecreased;
+		}
+		return manaDecreased;
+	}
+
 
 	// ==================================================
 	//                       Using
@@ -360,6 +487,9 @@ public class ItemEquipment extends ItemBase {
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
 		ItemStack itemStack = player.getHeldItem(hand);
+		if(this.getMana(itemStack) <= 0) {
+			return new ActionResult<>(EnumActionResult.FAIL, itemStack);
+		}
 		boolean active = false;
 
 		// Projectiles:
@@ -379,14 +509,19 @@ public class ItemEquipment extends ItemBase {
 
 	@Override
 	public void onUsingTick(ItemStack itemStack, EntityLivingBase user, int count) {
-		if(!user.isHandActive()) {
+		if(!user.isHandActive() || this.getMana(itemStack) <= 0) {
 			return;
 		}
+		boolean usedMana = false;
 
 		// Projectiles:
 		for(EquipmentFeature equipmentFeature : this.getFeaturesByType(itemStack, "projectile")) {
 			ProjectileEquipmentFeature projectileFeature = (ProjectileEquipmentFeature)equipmentFeature;
-			projectileFeature.onHoldSecondary(user, count);
+			usedMana = projectileFeature.onHoldSecondary(user, count) || usedMana;
+		}
+
+		if (usedMana) {
+			this.removeMana(itemStack, 1);
 		}
 	}
 
@@ -398,17 +533,29 @@ public class ItemEquipment extends ItemBase {
 	 */
 	public void onItemLeftClick(World world, EntityPlayer player, EnumHand hand) {
 		ItemStack itemStack = player.getHeldItem(hand);
+		if(this.getMana(itemStack) <= 0) {
+			return;
+		}
+		boolean usedMana = false;
 
 		// Projectiles:
 		for(EquipmentFeature equipmentFeature : this.getFeaturesByType(itemStack, "projectile")) {
 			ProjectileEquipmentFeature projectileFeature = (ProjectileEquipmentFeature)equipmentFeature;
-			projectileFeature.onUsePrimary(world, player, hand);
+			usedMana = projectileFeature.onUsePrimary(world, player, hand) || usedMana;
+		}
+
+		if (usedMana) {
+			this.removeMana(itemStack, 1);
 		}
 	}
 
 	@Override
 	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		ItemStack itemStack = player.getHeldItem(hand);
+		if(this.getMana(itemStack) <= 0) {
+			return super.onItemUse(player, world, pos, hand, facing, hitX, hitY, hitZ);
+		}
+
 		boolean active = false;
 
 		// Harvesting:
@@ -421,6 +568,7 @@ public class ItemEquipment extends ItemBase {
 
 		if(active) {
 			player.setActiveHand(hand);
+			this.removeSharpness(itemStack, 1);
 			return EnumActionResult.SUCCESS;
 		}
 		return super.onItemUse(player, world, pos, hand, facing, hitX, hitY, hitZ);
@@ -429,6 +577,9 @@ public class ItemEquipment extends ItemBase {
 	@Override
 	public boolean itemInteractionForEntity(ItemStack itemStack, EntityPlayer player, EntityLivingBase target, EnumHand hand) {
 		boolean entityInteraction = false;
+		if(this.getMana(itemStack) <= 0) {
+			return false;
+		}
 
 		// Harvesting:
 		for(EquipmentFeature equipmentFeature : this.getFeaturesByType(itemStack, "harvest")) {
@@ -438,8 +589,10 @@ public class ItemEquipment extends ItemBase {
 			}
 		}
 
-		if(entityInteraction)
+		if(entityInteraction) {
+			this.removeSharpness(itemStack, 1);
 			return true;
+		}
 		return false;
 	}
 
@@ -462,6 +615,10 @@ public class ItemEquipment extends ItemBase {
 
 	@Override
 	public int getHarvestLevel(ItemStack itemStack, String toolClass,  EntityPlayer player,  IBlockState blockState) {
+		if(this.getSharpness(itemStack) <= 0) {
+			return -1;
+		}
+
 		int harvestLevel = -1;
 		for(EquipmentFeature equipmentFeature : this.getFeaturesByType(itemStack, "harvest")) {
 			HarvestEquipmentFeature harvestFeature = (HarvestEquipmentFeature)equipmentFeature;
@@ -474,6 +631,10 @@ public class ItemEquipment extends ItemBase {
 
 	@Override
 	public boolean canHarvestBlock(IBlockState blockState, ItemStack itemStack) {
+		if(this.getSharpness(itemStack) <= 0) {
+			return false;
+		}
+
 		for(EquipmentFeature equipmentFeature : this.getFeaturesByType(itemStack, "harvest")) {
 			HarvestEquipmentFeature harvestFeature = (HarvestEquipmentFeature)equipmentFeature;
 			if(harvestFeature.canHarvestBlock(blockState)) {
@@ -485,6 +646,10 @@ public class ItemEquipment extends ItemBase {
 
 	@Override
 	public float getDestroySpeed(ItemStack itemStack, IBlockState blockState) {
+		if(this.getSharpness(itemStack) <= 0) {
+			return 1;
+		}
+
 		float speed = 1;
 		for(EquipmentFeature equipmentFeature : this.getFeaturesByType(itemStack, "harvest")) {
 			HarvestEquipmentFeature harvestFeature = (HarvestEquipmentFeature)equipmentFeature;
@@ -494,8 +659,11 @@ public class ItemEquipment extends ItemBase {
 	}
 
 	@Override
-	public boolean onBlockDestroyed(ItemStack itemStack, World worldIn, IBlockState blockState, BlockPos pos, EntityLivingBase entityLiving)
-	{
+	public boolean onBlockDestroyed(ItemStack itemStack, World worldIn, IBlockState blockState, BlockPos pos, EntityLivingBase entityLiving) {
+		if(this.getSharpness(itemStack) <= 0) {
+			return super.onBlockDestroyed(itemStack, worldIn, blockState, pos, entityLiving);
+		}
+
 		if(worldIn.isRemote) {
 			return super.onBlockDestroyed(itemStack, worldIn, blockState, pos, entityLiving);
 		}
@@ -503,6 +671,7 @@ public class ItemEquipment extends ItemBase {
 			HarvestEquipmentFeature harvestFeature = (HarvestEquipmentFeature)equipmentFeature;
 			harvestFeature.onBlockDestroyed(worldIn, blockState, pos, entityLiving);
 		}
+		this.removeSharpness(itemStack, 1);
 		return super.onBlockDestroyed(itemStack, worldIn, blockState, pos, entityLiving);
 	}
 
@@ -519,6 +688,10 @@ public class ItemEquipment extends ItemBase {
 	 */
 	@Override
 	public boolean hitEntity(ItemStack itemStack, EntityLivingBase primaryTarget, EntityLivingBase attacker) {
+		if(this.getSharpness(itemStack) <= 0) {
+			return true;
+		}
+
 		ExtendedEntity extendedEntity = ExtendedEntity.getForEntity(attacker);
 		boolean attackOnCooldown = false;
 		if(extendedEntity != null) {
@@ -598,6 +771,7 @@ public class ItemEquipment extends ItemBase {
 			attacker.getEntityWorld().playSound(null, attacker.posX, attacker.posY, attacker.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, attacker.getSoundCategory(), 1.0F, 1.0F);
 		}
 
+		boolean usedMana = false;
 		for(EntityLivingBase target : targets) {
 			// Knockback:
 			double knockback = this.getDamageKnockback(itemStack);
@@ -624,15 +798,20 @@ public class ItemEquipment extends ItemBase {
 			// Summons:
 			for(EquipmentFeature equipmentFeature : this.getFeaturesByType(itemStack, "summon")) {
 				SummonEquipmentFeature summonFeature = (SummonEquipmentFeature)equipmentFeature;
-				summonFeature.onHitEntity(itemStack, target, attacker);
+				usedMana = summonFeature.onHitEntity(itemStack, target, attacker) || usedMana;
 			}
 
 			// Projectiles:
 			for(EquipmentFeature equipmentFeature : this.getFeaturesByType(itemStack, "projectile")) {
 				ProjectileEquipmentFeature projectileFeature = (ProjectileEquipmentFeature)equipmentFeature;
-				projectileFeature.onHitEntity(itemStack, target, attacker);
+				usedMana = projectileFeature.onHitEntity(itemStack, target, attacker) || usedMana;
 			}
 		}
+
+		if (usedMana) {
+			this.removeMana(itemStack, 1);
+		}
+		this.removeSharpness(itemStack, 1);
 
 		return true;
 	}
@@ -659,6 +838,10 @@ public class ItemEquipment extends ItemBase {
 	 * @return The amount of base damage.
 	 */
 	public double getDamageAmount(ItemStack itemStack) {
+		if(this.getSharpness(itemStack) <= 0) {
+			return 0;
+		}
+
 		double damage = 0;
 		for(EquipmentFeature equipmentFeature : this.getFeaturesByType(itemStack, "damage")) {
 			DamageEquipmentFeature damageFeature = (DamageEquipmentFeature)equipmentFeature;
@@ -709,6 +892,10 @@ public class ItemEquipment extends ItemBase {
 	 * @return The amount of knockback.
 	 */
 	public double getDamageKnockback(ItemStack itemStack) {
+		if(this.getSharpness(itemStack) <= 0) {
+			return 0;
+		}
+
 		double knockback = 0;
 		for(EquipmentFeature equipmentFeature : this.getFeaturesByType(itemStack, "damage")) {
 			DamageEquipmentFeature damageFeature = (DamageEquipmentFeature)equipmentFeature;
@@ -723,6 +910,10 @@ public class ItemEquipment extends ItemBase {
 	 * @return The amount of knockback.
 	 */
 	public double getDamageSweep(ItemStack itemStack) {
+		if(this.getSharpness(itemStack) <= 0) {
+			return 0;
+		}
+
 		double sweep = 0;
 		for(EquipmentFeature equipmentFeature : this.getFeaturesByType(itemStack, "damage")) {
 			DamageEquipmentFeature damageFeature = (DamageEquipmentFeature)equipmentFeature;
