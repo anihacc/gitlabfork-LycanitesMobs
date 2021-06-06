@@ -78,6 +78,11 @@ public class EntityConcapedeHead extends AgeableCreatureEntity {
         }
         super.onFirstSpawn();
 	}
+
+	@Override
+	public boolean canBePushed() {
+    	return false;
+	}
 	
 	
     // ==================================================

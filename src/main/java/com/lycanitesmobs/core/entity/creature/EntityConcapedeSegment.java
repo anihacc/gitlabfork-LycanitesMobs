@@ -1,5 +1,6 @@
 package com.lycanitesmobs.core.entity.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.FollowParentGoal;
@@ -7,6 +8,7 @@ import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.player.EntityPlayer;
@@ -14,6 +16,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
@@ -49,7 +52,7 @@ public class EntityConcapedeSegment extends AgeableCreatureEntity {
     // ========== Init AI ==========
     @Override
     protected void initEntityAI() {
-		this.tasks.addTask(this.nextTravelGoalIndex++, new FollowParentGoal(this).setSpeed(1.0D).setStrayDistance(0.5D));
+		this.tasks.addTask(this.nextTravelGoalIndex++, new FollowParentGoal(this).setSpeed(4.0D).setStrayDistance(4.0D));
         super.initEntityAI();
     }
 
@@ -92,7 +95,7 @@ public class EntityConcapedeSegment extends AgeableCreatureEntity {
     // ==================================================
 	// ========== Living Update ==========
 	@Override
-    public void onLivingUpdate() {
+    public void onUpdate() {
         // Try to Load Parent from UUID:
         if(!this.getEntityWorld().isRemote && !this.hasParent() && this.parentUUID != null && this.updateTick > 0 && this.updateTick % 40 == 0) {
 	        double range = 64D;
@@ -108,7 +111,7 @@ public class EntityConcapedeSegment extends AgeableCreatureEntity {
 	        this.parentUUID = null;
         }
         
-        super.onLivingUpdate();
+        super.onUpdate();
         
         // Concapede Connections:
         if(!this.getEntityWorld().isRemote) {
@@ -126,47 +129,55 @@ public class EntityConcapedeSegment extends AgeableCreatureEntity {
 
         	// Force position to front with offset:
         	if(this.hasParent()) {
-        		this.faceEntity(this.getParentTarget(), 360, 360);
-        		
-        		double segmentDistance = 0.65D;
-        		Vec3d pos;
-        		if(this.getParentTarget() instanceof BaseCreatureEntity)
-        			pos = ((BaseCreatureEntity)this.getParentTarget()).getFacingPositionDouble(this.getParentTarget().posX, this.getParentTarget().posY, this.getParentTarget().posZ, -0.25D, 0);
-        		else
-					pos = new Vec3d(this.getParentTarget().posX, this.getParentTarget().posY, this.getParentTarget().posZ);
+				this.getLookHelper().setLookPositionWithEntity(this.getParentTarget(), 360.0F, 360.0F);
+				this.faceEntity(this.getParentTarget(), 360, 360);
 
-        		if(this.posX - pos.x > segmentDistance)
-        			this.posX = pos.x + segmentDistance;
-        		else if(this.posX - pos.x < -segmentDistance)
-        			this.posX = pos.x - segmentDistance;
-        		
-        		if(this.posY - pos.y > segmentDistance)
-        			this.posY = pos.y;
-        		else if(this.posY - pos.y < -(segmentDistance / 2))
-        			this.posY = pos.y;
-        		
-        		if(this.posZ - pos.z > segmentDistance)
-        			this.posZ = pos.z + segmentDistance;
-        		else if(this.posZ - pos.z < -segmentDistance)
-        			this.posZ = pos.z - segmentDistance;
+				Vec3d parentPos = this.getFacingPositionDouble(this.getParentTarget().posX, this.getParentTarget().posY, this.getParentTarget().posZ, -0.65D, this.getParentTarget().rotationYaw);//this.parentRotationLerp);
+				double segmentPullThreshold = 0.15D;
+				double segmentDistance = Math.sqrt(this.getDistanceSq(parentPos.x, parentPos.y, parentPos.z));
+				if (segmentDistance > segmentPullThreshold) {
+					double dragAmount = segmentPullThreshold / 2;
+					Vec3d dragPos = this.getFacingPositionDouble(parentPos.x, parentPos.y, parentPos.z, dragAmount, this.getPositionVector().dotProduct(parentPos));
+					double distY = (parentPos.y - this.posY);
+					double dragY = this.posY + (distY / 2);
+					this.setPosition(dragPos.x, dragY, dragPos.z);
+				}
         	}
 
-			// Look at parent:
-			if(this.hasParent()) {
-				this.getLookHelper().setLookPositionWithEntity(this.getParentTarget(), 30.0F, 30.0F);
-			}
-
 			// Growth Into Head:
-			if(!this.getEntityWorld().isRemote && this.getGrowingAge() <= 0)
+			if(!this.getEntityWorld().isRemote && this.getGrowingAge() <= 0) {
 				this.setGrowingAge(-this.growthTime);
+			}
         }
     }
+
+	@Override
+	public boolean rollLookChance() {
+		if(this.hasParent())
+			return false;
+		return super.rollLookChance();
+	}
 
     @Override
 	public boolean rollWanderChance() {
 		if(this.hasParent())
     		return false;
 		return super.rollWanderChance();
+	}
+
+	@Override
+	public boolean isFlying() {
+    	return false;
+    }
+
+	@Override
+	public boolean canEntityBeSeen(Entity target) {
+		return this.hasParent() && target == this.getParentTarget();
+	}
+
+	@Override
+	public boolean canBePushed() {
+		return !this.hasParent();
 	}
 	
 	
@@ -230,11 +241,6 @@ public class EntityConcapedeSegment extends AgeableCreatureEntity {
     		return 0.0D;
     	return super.getFallingMod();
     }
-
-	@Override
-	public boolean useDirectNavigator() {
-		return this.hasParent();
-	}
     
     
     // ==================================================

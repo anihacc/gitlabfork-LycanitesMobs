@@ -2415,6 +2415,11 @@ public abstract class BaseCreatureEntity extends EntityLiving {
         	this.directNavigator.clearTargetPosition(1.0D);
     }
 
+	/** Can be overridden to add a random chance of looking around. **/
+	public boolean rollLookChance() {
+		return this.getRNG().nextFloat() < 0.02F;
+	}
+
 	/** Can be overridden to add a random chance of wandering around. **/
 	public boolean rollWanderChance() {
 		/*if(this.canBreatheAir() && !this.isStrongSwimmer() && !this.isFlying() && this.isInWater())

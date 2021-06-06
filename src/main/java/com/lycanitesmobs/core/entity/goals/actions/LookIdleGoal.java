@@ -41,7 +41,7 @@ public class LookIdleGoal extends EntityAIBase {
    	// ==================================================
 	@Override
     public boolean shouldExecute() {
-        return this.host.getRNG().nextFloat() < 0.02F;
+        return this.host.rollLookChance();
     }
     
     
