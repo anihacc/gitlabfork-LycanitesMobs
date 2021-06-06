@@ -119,7 +119,7 @@ public class Beastiary {
 		message = message.replace("%rank%", "" + creatureKnowledge.rank);
 		this.extendedPlayer.player.sendMessage(new TextComponentString(message));
 
-		if(creatureInfo.isSummonable()) {
+		if(creatureInfo.isSummonable() && creatureKnowledge.rank >= 2) {
 			String summonMessage = LanguageManager.translate("message.beastiary.summonable");
 //			if(creatureKnowledge.rank >= 3) {
 //				summonMessage = LanguageManager.translate("message.beastiary.summonable.skins");
