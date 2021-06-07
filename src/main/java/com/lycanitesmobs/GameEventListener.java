@@ -522,10 +522,10 @@ public class GameEventListener {
 		if (sharpness > 0 || mana > 0) {
 			event.getToolTip().add(LanguageManager.translate("equipment.item.repair"));
 			if (sharpness > 0) {
-				event.getToolTip().add(LanguageManager.translate("equipment.item.repair"));
+				event.getToolTip().add(LanguageManager.translate("equipment.sharpness") + " " + sharpness);
 			}
 			if (mana > 0) {
-				event.getToolTip().add(LanguageManager.translate("equipment.item.repair"));
+				event.getToolTip().add(LanguageManager.translate("equipment.mana") + " " + mana);
 			}
 		}
 

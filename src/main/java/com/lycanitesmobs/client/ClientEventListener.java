@@ -21,20 +21,19 @@ public class ClientEventListener {
     @SideOnly(Side.CLIENT)
     public void onRenderHand(RenderGameOverlayEvent event) {
         if (event.getType() == RenderGameOverlayEvent.ElementType.EXPERIENCE) {
-//            ITEM_RENDER_MODE = 2;
+            ITEM_RENDER_MODE = 2;
         }
     }
 
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
     public void onRenderWorldLast(RenderWorldLastEvent event) {
-        ITEM_RENDER_MODE = 2;
+        ITEM_RENDER_MODE = 1;
     }
 
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
     public void onFogDensity(EntityViewRenderEvent.FogDensity event) {
-        ITEM_RENDER_MODE = 2;
         if(!(event.getEntity() instanceof EntityLivingBase))
             return;
         EntityLivingBase entityLiving = (EntityLivingBase)event.getEntity();

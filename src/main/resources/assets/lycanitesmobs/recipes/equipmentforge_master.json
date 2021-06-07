@@ -1,13 +1,13 @@
 {
   "result": {
-    "item": "lycanitesmobs:equipmentforge_greater"
+    "item": "lycanitesmobs:equipmentforge_master"
   },
   "ingredients": [
     {
-      "item": "lycanitesmobs:equipmentforge_lesser"
+      "item": "lycanitesmobs:equipmentforge_greater"
     },
     {
-      "item": "minecraft:iron_block"
+      "item": "minecraft:diamond_block"
     }
   ],
   "type": "forge:ore_shapeless"

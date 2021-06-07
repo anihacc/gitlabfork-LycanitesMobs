@@ -1,13 +1,13 @@
 {
   "result": {
-    "item": "lycanitesmobs:equipmentforge_greater"
+    "item": "lycanitesmobs:equipment_station"
   },
   "ingredients": [
     {
       "item": "lycanitesmobs:equipmentforge_lesser"
     },
     {
-      "item": "minecraft:iron_block"
+      "item": "minecraft:crafting_table"
     }
   ],
   "type": "forge:ore_shapeless"
