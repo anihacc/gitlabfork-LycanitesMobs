@@ -41,6 +41,10 @@
 		{
 			"mobId": "lycanitesmobs:zephyr",
 			"weight": 2
+		},
+		{
+			"mobId": "lycanitesmobs:raidra",
+			"weight": 2
 		}
 	]
 }
