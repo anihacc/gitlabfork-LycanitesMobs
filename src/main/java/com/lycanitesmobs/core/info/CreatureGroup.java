@@ -63,6 +63,12 @@ public class CreatureGroup {
 	/** If true, this group includes humanoids like Players, Villagers or Pillagers. **/
 	public boolean humanoids = false;
 
+	/** If true, this group includes Players. **/
+	public boolean players = false;
+
+	/** If true, this group includes humanoids Villagers but not Pillagers. **/
+	public boolean villagers = false;
+
 	/** If true, this group includes raiders like Pillagers and Ravagers. **/
 	public boolean raiders = false;
 
@@ -109,6 +115,12 @@ public class CreatureGroup {
 		}
 		if(json.has("humanoids")) {
 			this.humanoids = json.get("humanoids").getAsBoolean();
+		}
+		if(json.has("players")) {
+			this.players = json.get("players").getAsBoolean();
+		}
+		if(json.has("villagers")) {
+			this.villagers = json.get("villagers").getAsBoolean();
 		}
 		if(json.has("raiders")) {
 			this.raiders = json.get("raiders").getAsBoolean();
@@ -206,6 +218,12 @@ public class CreatureGroup {
 			return true;
 		}
 		if(this.humanoids && (entity.getType() == EntityType.PLAYER || entity.getType() == EntityType.VILLAGER || entity instanceof AbstractIllagerEntity || entity instanceof AbstractPiglinEntity)) {
+			return true;
+		}
+		if(this.players && entity.getType() == EntityType.PLAYER) {
+			return true;
+		}
+		if(this.villagers && (entity.getType() == EntityType.VILLAGER || entity instanceof AbstractIllagerEntity || entity instanceof AbstractPiglinEntity)) {
 			return true;
 		}
 		if(this.raiders && (entity.getType() == EntityType.PILLAGER || entity.getType() == EntityType.RAVAGER)) {
