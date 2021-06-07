@@ -36,18 +36,18 @@ public class CreatureNodeProcessor extends WalkNodeProcessor implements ICreatur
 
     @Override
     public void prepare(Region region, MobEntity mob) {
+        this.updateEntitySize(mob);
         super.prepare(region, mob);
         if(mob instanceof BaseCreatureEntity) {
             this.entityCreature = (BaseCreatureEntity) mob;
         }
-        this.updateEntitySize(mob);
     }
 
     @Override
     public void updateEntitySize(Entity updateEntity) {
-        this.entityWidth = MathHelper.floor(this.getWidth(true, updateEntity) + 1.0F);
-        this.entityHeight = MathHelper.floor(updateEntity.getDimensions(Pose.STANDING).height + 1.0F);
-        this.entityDepth = MathHelper.floor(this.getWidth(true, updateEntity) + 1.0F);
+        this.entityWidth = Math.min(MathHelper.floor(this.getWidth(true, updateEntity) + 1.0F), 3);
+        this.entityHeight = Math.min(MathHelper.floor(updateEntity.getDimensions(Pose.STANDING).height + 1.0F), 3);
+        this.entityDepth = Math.min(MathHelper.floor(this.getWidth(true, updateEntity) + 1.0F), 3);
     }
 
     /** Returns the starting position to create a new path from. **/
@@ -109,7 +109,7 @@ public class CreatureNodeProcessor extends WalkNodeProcessor implements ICreatur
         if(this.swimming()) {
             return PathNodeType.WATER;
         }
-        return super.getBlockPathType(world, x, y, z, mobEntity, xSize, ySize, zSize, canBreakDoorsIn, canEnterDoorsIn);
+        return super.getBlockPathType(world, x, y, z, mobEntity, Math.min(3, xSize), Math.min(3, ySize), Math.min(3, zSize), canBreakDoorsIn, canEnterDoorsIn);
     }
 
 

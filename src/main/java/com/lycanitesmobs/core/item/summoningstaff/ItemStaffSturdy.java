@@ -33,7 +33,7 @@ public class ItemStaffSturdy extends ItemStaffSummoning {
     
     // ========== Summon Duration ==========
     public int getSummonDuration() {
-    	return 60 * 20;
+    	return 120 * 20;
     }
     
 	

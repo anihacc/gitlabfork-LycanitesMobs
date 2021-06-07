@@ -32,6 +32,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.IForgeShearable;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
@@ -118,13 +119,13 @@ public class EntityYale extends AgeableCreatureEntity implements IForgeShearable
     //                      Abilities
     // ==================================================
 	// ========== IShearable ==========
-
-	public boolean isShearable(@Nonnull ItemStack item, IWorldReader world, BlockPos pos) {
+	@Override
+	public boolean isShearable(@Nonnull ItemStack item, World world, BlockPos pos) {
 		return this.hasFur() && !this.isBaby();
 	}
 
-
-	public ArrayList<ItemStack> onSheared(@Nonnull ItemStack item, IWorld world, BlockPos pos, int fortune) {
+	@Override
+	public ArrayList<ItemStack> onSheared(@Nullable PlayerEntity player, @Nonnull ItemStack item, World world, BlockPos pos, int fortune) {
 		ArrayList<ItemStack> dropStacks = new ArrayList<>();
 		if(this.woolDrop == null) {
 			return dropStacks;

@@ -2050,10 +2050,11 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
 	@Override
 	public void move(MoverType type, Vector3d pos) {
-		double x = Math.max(Math.min(pos.x(), 10), -10);
-		double y = Math.max(Math.min(pos.y(), 10), -10);
-		double z = Math.max(Math.min(pos.z(), 10), -10);
-		super.move(type, new Vector3d(x, y, z));
+		super.move(type, pos);
+//		double x = Math.max(Math.min(pos.x(), 10), -10);
+//		double y = Math.max(Math.min(pos.y(), 10), -10);
+//		double z = Math.max(Math.min(pos.z(), 10), -10);
+//		super.move(type, new Vector3d(x, y, z));
 	}
 
     // ========== Move with Heading ==========
