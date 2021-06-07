@@ -147,7 +147,7 @@ public class EntityZephyr extends TameableCreatureEntity implements IMob, IFusab
     @Override
 	public EntityType<? extends LivingEntity> getFusionType(IFusable fusable) {
 		if(fusable instanceof EntityCinder) {
-			return CreatureManager.getInstance().getEntityType("zephyr");
+			return CreatureManager.getInstance().getEntityType("raidra");
 		}
         if(fusable instanceof EntityJengu) {
 			return CreatureManager.getInstance().getEntityType("reiver");
