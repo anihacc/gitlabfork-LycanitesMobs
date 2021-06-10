@@ -1,6 +1,9 @@
 package com.lycanitesmobs.core.entity.goals.actions;
 
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Pose;
 import net.minecraft.entity.ai.goal.Goal;
@@ -56,33 +59,42 @@ public class StayByWaterGoal extends Goal {
    	// ==================================================
 	@Override
     public boolean canUse() {
-    	if(this.host.canBreatheAir())
-    		return false;
+    	if(this.host.canBreatheAir()) {
+			return false;
+		}
+		boolean inWater = this.host.isInWater();
 
     	// Set home when in water or lava (for lava creatures).
-    	if(this.host.isInWater()) {
-    		FluidState fluidState = this.host.getCommandSenderWorld().getFluidState(this.host.blockPosition());
-    		if((!this.host.isLavaCreature && fluidState.is(FluidTags.WATER)) ||
-    			(this.host.isLavaCreature && fluidState.is(FluidTags.LAVA))) {
+    	if(inWater) {
+    		BlockState blockState = this.host.getCommandSenderWorld().getBlockState(this.host.blockPosition());
+    		if((!this.host.isLavaCreature && blockState.getBlock() == Blocks.WATER) ||
+    			(this.host.isLavaCreature && blockState.getBlock() == Blocks.LAVA)) {
 	    		this.waterPos = this.host.blockPosition();
 	    		this.hasWaterPos = true;
 	    		return false;
     		}
+			FluidState fluidState = this.host.getCommandSenderWorld().getFluidState(this.host.blockPosition());
+			if((!this.host.isLavaCreature && fluidState.is(FluidTags.WATER)) ||
+					(this.host.isLavaCreature && fluidState.is(FluidTags.LAVA))) {
+				this.waterPos = this.host.blockPosition();
+				this.hasWaterPos = true;
+				return false;
+			}
     	}
     	
     	// If we're not in water:
-    	if(!this.host.isInWater()) {
+    	else {
     		// If we have a water position but it is no longer water/lava, clear the water position. It is up to the water searcher, wander AI and path weights for find a new water position.
     		if(this.hasWaterPos && !this.isValidWaterPosition(this.waterPos)) {
 	    		this.hasWaterPos = false;
     		}
     		
-    		// If we don't have a water position, search for one every 2 seconds, if we do, check if there is a close one every 5 seconds:
+    		// If we don't have a water position, search for one every 4 seconds, if we do, check if there is a close one every 10 seconds:
     		if(this.waterSearchRate-- <= 0) {
 	    		if(!this.hasWaterPos)
-	    			this.waterSearchRate = 40;
+	    			this.waterSearchRate = 80;
 	    		else
-	    			this.waterSearchRate = 100;
+	    			this.waterSearchRate = 200;
 	    		
 	    		// Search within a 64x8x64 block area and find the closest water/lava block:
 	    		double closestDistance = 99999;
