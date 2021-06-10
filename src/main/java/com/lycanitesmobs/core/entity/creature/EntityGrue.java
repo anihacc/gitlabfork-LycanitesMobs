@@ -96,7 +96,6 @@ public class EntityGrue extends TameableCreatureEntity implements IMob {
     @Override
     public boolean canStealth() {
     	if(this.getCommandSenderWorld().isClientSide) return false;
-		if(this.isMoving()) return false;
     	return this.testLightLevel() <= 0;
     }
     
