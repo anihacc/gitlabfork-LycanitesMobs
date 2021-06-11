@@ -154,6 +154,34 @@
 					"amountMultiplier": false
 				}
 			]
+		},
+		{
+			"mobId": "lycanitesmobs:volcan",
+			"weight": 1,
+			"variant": 1,
+			"mobNameTag": "Prime Lava Soul",
+			"mobSizeScale": 3.5,
+			"naturalDespawn": "false",
+			"mobLevel": 50,
+			"spawnAsBoss": true,
+			"dungeonLevelMin": 5,
+			"dungeonBoss": true,
+			"mobDrops": [
+				{
+					"item": "lycanitesmobs:embercharge",
+					"minAmount": 50,
+					"amountMultiplier": false
+				},
+				{
+					"item": "lycanitesmobs:soulstone_elemental",
+					"amountMultiplier": false
+				},
+				{
+					"item": "minecraft:diamond",
+					"minAmount": 50,
+					"amountMultiplier": false
+				}
+			]
 		}
 	]
 }
