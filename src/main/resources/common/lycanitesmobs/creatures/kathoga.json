@@ -98,7 +98,7 @@
                 {
                     "type": "world",
                     "dimensionIds": [
-                        1
+                        "minecraft:the_end"
                     ],
                     "dimensionListType": "whitelist"
                 }
