@@ -151,6 +151,11 @@ public class ItemEquipmentPart extends BaseItem {
 		int experience = this.getExperience(itemStack);
 		int experienceMax = this.getExperienceForNextLevel(itemStack);
 
+		// Condition:
+		descriptions.add(new StringTextComponent("-------------------"));
+		descriptions.add(new TranslationTextComponent("equipment.sharpness").append(" " + this.getSharpness(itemStack) + "/" + ItemEquipment.SHARPNESS_MAX).withStyle(TextFormatting.BLUE));
+		descriptions.add(new TranslationTextComponent("equipment.mana").append(" " + this.getMana(itemStack) + "/" + ItemEquipment.MANA_MAX).withStyle(TextFormatting.BLUE));
+
 		// Base Stats:
 		descriptions.add(new StringTextComponent("-------------------"));
 		descriptions.add(new TranslationTextComponent("equipment.slottype").append(" " + this.slotType).withStyle(TextFormatting.GOLD));
@@ -327,7 +332,7 @@ public class ItemEquipmentPart extends BaseItem {
 		if(currentSharpness >= ItemEquipment.SHARPNESS_MAX) {
 			return false;
 		}
-		this.setSharpness(itemStack, this.getSharpness(itemStack) + sharpness);
+		this.setSharpness(itemStack, currentSharpness + sharpness);
 		return true;
 	}
 
@@ -337,7 +342,7 @@ public class ItemEquipmentPart extends BaseItem {
 		if(currentSharpness <= 0) {
 			return false;
 		}
-		this.setSharpness(itemStack, this.getSharpness(itemStack) - sharpness);
+		this.setSharpness(itemStack, currentSharpness - sharpness);
 		return true;
 	}
 
@@ -364,7 +369,7 @@ public class ItemEquipmentPart extends BaseItem {
 		if(currentMana >= ItemEquipment.MANA_MAX) {
 			return false;
 		}
-		this.setMana(itemStack, this.getMana(itemStack) + mana);
+		this.setMana(itemStack, currentMana + mana);
 		return true;
 	}
 
@@ -374,7 +379,7 @@ public class ItemEquipmentPart extends BaseItem {
 		if(currentMana <= 0) {
 			return false;
 		}
-		this.setMana(itemStack, this.getMana(itemStack) - mana);
+		this.setMana(itemStack, currentMana - mana);
 		return true;
 	}
 
