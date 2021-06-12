@@ -1,6 +1,5 @@
 package com.lycanitesmobs.core.item.special;
 
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.localisation.LanguageManager;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.ExtendedPlayer;

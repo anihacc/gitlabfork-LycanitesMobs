@@ -73,7 +73,7 @@ public class ItemCustomSpawnEgg extends ItemBase {
 				creatureTitle = creatureInfo.getTitle();
 			}
 			else {
-				creatureTitle = LanguageManager.translate("entity." + this.modInfo.modid + "." + creatureName + ".name");
+				creatureTitle = LanguageManager.translate("entity." + creatureName + ".name");
 			}
             displayName += creatureTitle;
         }
