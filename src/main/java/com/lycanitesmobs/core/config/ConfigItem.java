@@ -106,6 +106,7 @@ public class ConfigItem {
 						"minecraft:lapis_lazuli",
 						"minecraft:blaze_powder",
 						"minecraft:gunpowder",
+						"minecraft:phantom_membrane",
 						"lycanitesmobs:frostyfur",
 						"lycanitesmobs:poisongland",
 						"lycanitesmobs:geistliver"
