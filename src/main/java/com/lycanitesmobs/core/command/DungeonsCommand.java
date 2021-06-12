@@ -26,12 +26,18 @@ public class DungeonsCommand {
 	}
 
 	public static int reload(final CommandContext<CommandSource> context) {
+		if (!context.getSource().hasPermission(2)) {
+			return 0;
+		}
 		DungeonManager.getInstance().reload();
 		context.getSource().sendSuccess(new TranslationTextComponent("lyc.command.dungeons.reload"), true);
 		return 0;
 	}
 
 	public static int enable(final CommandContext<CommandSource> context) {
+		if (!context.getSource().hasPermission(2)) {
+			return 0;
+		}
 		ConfigDungeons.INSTANCE.dungeonsEnabled.set(true);
 		ConfigDungeons.INSTANCE.dungeonsEnabled.save();
 		context.getSource().sendSuccess(new TranslationTextComponent("lyc.command.dungeons.enable"), true);
@@ -39,6 +45,9 @@ public class DungeonsCommand {
 	}
 
 	public static int disable(final CommandContext<CommandSource> context) {
+		if (!context.getSource().hasPermission(2)) {
+			return 0;
+		}
 		ConfigDungeons.INSTANCE.dungeonsEnabled.set(false);
 		ConfigDungeons.INSTANCE.dungeonsEnabled.save();
 		context.getSource().sendSuccess(new TranslationTextComponent("lyc.command.dungeons.disable"), true);
@@ -46,6 +55,9 @@ public class DungeonsCommand {
 	}
 
 	public static int locate(final CommandContext<CommandSource> context) {
+		if (!context.getSource().hasPermission(2)) {
+			return 0;
+		}
 		context.getSource().sendSuccess(new TranslationTextComponent("lyc.command.dungeons.locate"), true);
 		World world = context.getSource().getLevel();
 		ExtendedWorld extendedWorld = ExtendedWorld.getForWorld(world);

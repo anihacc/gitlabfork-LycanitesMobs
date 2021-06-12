@@ -22,6 +22,9 @@ public class SpawnerCommand {
 	}
 
 	public static int test(final CommandContext<CommandSource> context) {
+		if (!context.getSource().hasPermission(2)) {
+			return 0;
+		}
 		String spawnerName = StringArgumentType.getString(context, "spawner");
 		int level = Math.max(1, IntegerArgumentType.getInteger(context, "level"));
 		if(!SpawnerManager.getInstance().spawners.containsKey(spawnerName)) {
@@ -43,6 +46,9 @@ public class SpawnerCommand {
 	}
 
 	public static int lightTest(final CommandContext<CommandSource> context) {
+		if (!context.getSource().hasPermission(2)) {
+			return 0;
+		}
 		if(context.getSource().getEntity() == null) {
 			return 0;
 		}

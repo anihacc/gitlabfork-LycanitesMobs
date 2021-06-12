@@ -62,7 +62,9 @@ public class Beastiary {
 		this.creatureKnowledgeList.put(newKnowledge.creatureName, newKnowledge);
 		if (sendToClient) {
 			this.sendAddedMessage(newKnowledge);
-			this.sendToClient(newKnowledge);
+			if (!this.extendedPlayer.player.getCommandSenderWorld().isClientSide) {
+				this.sendToClient(newKnowledge);
+			}
 		}
 		return true;
 	}

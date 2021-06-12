@@ -31,6 +31,9 @@ public class DebugCommand {
 	}
 
 	public static int log(final CommandContext<CommandSource> context) {
+		if (!context.getSource().hasPermission(2)) {
+			return 0;
+		}
 		String category = StringArgumentType.getString(context, "category").toLowerCase();
 		List<String> enabledLogs = new ArrayList<>();
 		enabledLogs.addAll(ConfigDebug.INSTANCE.enabled.get());
@@ -51,6 +54,9 @@ public class DebugCommand {
 	}
 
 	public static int list(final CommandContext<CommandSource> context) {
+		if (!context.getSource().hasPermission(2)) {
+			return 0;
+		}
 		context.getSource().sendSuccess(new TranslationTextComponent("lyc.command.debug.list"), true);
 		String[] debugCategories = new String[] {"jsonspawner", "mobspawns", "entity", "subspecies", "creature", "mobevents", "dungeon", "items", "equipment"};
 		for(String debugCategory : debugCategories) {
@@ -60,6 +66,9 @@ public class DebugCommand {
 	}
 
 	public static int biomesfromtag(final CommandContext<CommandSource> context) {
+		if (!context.getSource().hasPermission(2)) {
+			return 0;
+		}
 		String biomeTag = StringArgumentType.getString(context, "biometag").toLowerCase();
 		BiomeDictionary.Type biomeType = null;
 		try {
@@ -77,6 +86,9 @@ public class DebugCommand {
 	}
 
 	public static int listbiometags(final CommandContext<CommandSource> context) {
+		if (!context.getSource().hasPermission(2)) {
+			return 0;
+		}
 		for(BiomeDictionary.Type biomeType : BiomeDictionary.Type.getAll()) {
 			context.getSource().sendSuccess(new StringTextComponent(biomeType.getName()), true);
 		}
@@ -84,6 +96,9 @@ public class DebugCommand {
 	}
 
 	public static int listbiometagsforbiome(final CommandContext<CommandSource> context) {
+		if (!context.getSource().hasPermission(2)) {
+			return 0;
+		}
 		String biomeId = StringArgumentType.getString(context, "biome");
 		ResourceLocation biomeResourceLocation = new ResourceLocation(biomeId);
 		Biome biome = GameRegistry.findRegistry(Biome.class).getValue(biomeResourceLocation);
@@ -106,6 +121,9 @@ public class DebugCommand {
 	}
 
 	public static int overlay(final CommandContext<CommandSource> context) {
+		if (!context.getSource().hasPermission(2)) {
+			return 0;
+		}
 		ConfigDebug.INSTANCE.creatureOverlay.set(!ConfigDebug.INSTANCE.creatureOverlay.get());
 		ConfigDebug.INSTANCE.creatureOverlay.save();
 		context.getSource().sendSuccess(new TranslationTextComponent("lyc.command.debug.overlay"), true);

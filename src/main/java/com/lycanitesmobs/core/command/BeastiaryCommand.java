@@ -23,7 +23,7 @@ public class BeastiaryCommand {
 	}
 
 	public static int complete(final CommandContext<CommandSource> context) {
-		if(!(context.getSource().getEntity() instanceof PlayerEntity)) {
+		if(!(context.getSource().getEntity() instanceof PlayerEntity) || !context.getSource().hasPermission(2)) {
 			return 0;
 		}
 
@@ -44,7 +44,7 @@ public class BeastiaryCommand {
 	}
 
 	public static int clear(final CommandContext<CommandSource> context) {
-		if(!(context.getSource().getEntity() instanceof PlayerEntity)) {
+		if(!(context.getSource().getEntity() instanceof PlayerEntity) || !context.getSource().hasPermission(2)) {
 			return 0;
 		}
 
@@ -62,7 +62,7 @@ public class BeastiaryCommand {
 	}
 
 	public static int add(final CommandContext<CommandSource> context) {
-		if(!(context.getSource().getEntity() instanceof PlayerEntity)) {
+		if(!(context.getSource().getEntity() instanceof PlayerEntity) || !context.getSource().hasPermission(2)) {
 			return 0;
 		}
 

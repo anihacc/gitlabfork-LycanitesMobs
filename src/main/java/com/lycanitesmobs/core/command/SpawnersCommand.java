@@ -21,24 +21,36 @@ public class SpawnersCommand {
 	}
 
 	public static int reload(final CommandContext<CommandSource> context) {
+		if (!context.getSource().hasPermission(2)) {
+			return 0;
+		}
 		SpawnerManager.getInstance().reload();
 		context.getSource().sendSuccess(new TranslationTextComponent("lyc.command.spawners.reload"), true);
 		return 0;
 	}
 
 	public static int creativeEnable(final CommandContext<CommandSource> context) {
+		if (!context.getSource().hasPermission(2)) {
+			return 0;
+		}
 		SpawnerEventListener.testOnCreative = true;
 		context.getSource().sendSuccess(new TranslationTextComponent("lyc.command.spawners.creative.enable"), true);
 		return 0;
 	}
 
 	public static int creativeDisable(final CommandContext<CommandSource> context) {
+		if (!context.getSource().hasPermission(2)) {
+			return 0;
+		}
 		SpawnerEventListener.testOnCreative = false;
 		context.getSource().sendSuccess(new TranslationTextComponent("lyc.command.spawners.creative.disable"), true);
 		return 0;
 	}
 
 	public static int list(final CommandContext<CommandSource> context) {
+		if (!context.getSource().hasPermission(2)) {
+			return 0;
+		}
 		context.getSource().sendSuccess(new TranslationTextComponent("lyc.command.spawners.list"), true);
 		for(Spawner spawner : SpawnerManager.getInstance().spawners.values()) {
 			if(!"".equals(spawner.eventName)) {

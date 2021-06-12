@@ -43,6 +43,9 @@ public class MobEventCommand {
 	}
 
 	public static int start(final CommandContext<CommandSource> context) {
+		if (!context.getSource().hasPermission(2)) {
+			return 0;
+		}
 		World world = context.getSource().getLevel();
 		String eventName = StringArgumentType.getString(context, "mobevent");
 		int level = Math.max(1, IntegerArgumentType.getInteger(context, "level"));
@@ -80,6 +83,9 @@ public class MobEventCommand {
 	}
 
 	public static int startWorld(final CommandContext<CommandSource> context) {
+		if (!context.getSource().hasPermission(2)) {
+			return 0;
+		}
 		String eventName = StringArgumentType.getString(context, "mobevent");
 		int level = Math.max(1, IntegerArgumentType.getInteger(context, "level"));
 		int subspecies = Math.max(-1, IntegerArgumentType.getInteger(context, "subspecies"));
@@ -119,6 +125,9 @@ public class MobEventCommand {
 	}
 
 	public static int random(final CommandContext<CommandSource> context) {
+		if (!context.getSource().hasPermission(2)) {
+			return 0;
+		}
 		World world = context.getSource().getLevel();
 		int level = Math.max(1, IntegerArgumentType.getInteger(context, "level"));
 
@@ -133,6 +142,9 @@ public class MobEventCommand {
 	}
 
 	public static int randomWorld(final CommandContext<CommandSource> context) {
+		if (!context.getSource().hasPermission(2)) {
+			return 0;
+		}
 		int level = Math.max(1, IntegerArgumentType.getInteger(context, "level"));
 		int worldId = IntegerArgumentType.getInteger(context, "world");
 
@@ -149,6 +161,9 @@ public class MobEventCommand {
 	}
 
 	public static int stop(final CommandContext<CommandSource> context) {
+		if (!context.getSource().hasPermission(2)) {
+			return 0;
+		}
 		World world = context.getSource().getLevel();
 		ExtendedWorld extendedWorld = ExtendedWorld.getForWorld(world);
 		if(extendedWorld == null) {
@@ -160,6 +175,9 @@ public class MobEventCommand {
 	}
 
 	public static int stopWorld(final CommandContext<CommandSource> context) {
+		if (!context.getSource().hasPermission(2)) {
+			return 0;
+		}
 		int worldId = IntegerArgumentType.getInteger(context, "world");
 //		World world = DimensionManager.getWorld(context.getSource().getServer(), DimensionType.getById(worldId), false, false); TODO Get world from id instead!
 		World world = context.getSource().getLevel();

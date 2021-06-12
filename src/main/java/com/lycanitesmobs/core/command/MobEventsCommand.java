@@ -24,12 +24,18 @@ public class MobEventsCommand {
 	}
 
 	public static int reload(final CommandContext<CommandSource> context) {
+		if (!context.getSource().hasPermission(2)) {
+			return 0;
+		}
 		MobEventManager.getInstance().reload();
 		context.getSource().sendSuccess(new TranslationTextComponent("lyc.command.mobevents.reload"), true);
 		return 0;
 	}
 
 	public static int enable(final CommandContext<CommandSource> context) {
+		if (!context.getSource().hasPermission(2)) {
+			return 0;
+		}
 		MobEventManager.getInstance().mobEventsEnabled = true;
 		ConfigMobEvent.INSTANCE.mobEventsEnabled.set(true);
 		ConfigMobEvent.INSTANCE.mobEventsEnabled.save();
@@ -41,6 +47,9 @@ public class MobEventsCommand {
 	}
 
 	public static int disable(final CommandContext<CommandSource> context) {
+		if (!context.getSource().hasPermission(2)) {
+			return 0;
+		}
 		MobEventManager.getInstance().mobEventsRandom = false;
 		ConfigMobEvent.INSTANCE.mobEventsRandom.set(false);
 		ConfigMobEvent.INSTANCE.mobEventsRandom.save();
@@ -49,18 +58,27 @@ public class MobEventsCommand {
 	}
 
 	public static int creativeEnable(final CommandContext<CommandSource> context) {
+		if (!context.getSource().hasPermission(2)) {
+			return 0;
+		}
 		MobEventPlayerServer.testOnCreative = true;
 		context.getSource().sendSuccess(new TranslationTextComponent("lyc.command.mobevents.creative.enable"), true);
 		return 0;
 	}
 
 	public static int creativeDisable(final CommandContext<CommandSource> context) {
+		if (!context.getSource().hasPermission(2)) {
+			return 0;
+		}
 		MobEventPlayerServer.testOnCreative = false;
 		context.getSource().sendSuccess(new TranslationTextComponent("lyc.command.mobevents.creative.disable"), true);
 		return 0;
 	}
 
 	public static int list(final CommandContext<CommandSource> context) {
+		if (!context.getSource().hasPermission(2)) {
+			return 0;
+		}
 		context.getSource().sendSuccess(new TranslationTextComponent("lyc.command.mobevents.list"), true);
 		for(MobEvent mobEvent : MobEventManager.getInstance().mobEvents.values()) {
 			String eventName = mobEvent.name + " (" + mobEvent.getTitle().getString() + ")";
