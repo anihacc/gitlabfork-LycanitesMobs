@@ -70,8 +70,8 @@ public class DungeonFeature extends Feature<NoFeatureConfig> {
 			}
 		}
 		catch(Exception e) {
-			LycanitesMobs.logWarning("", "An exception occurred when trying to generate a dungeon.");
-			e.printStackTrace();
+//			LycanitesMobs.logWarning("", "An exception occurred when trying to generate a dungeon.");
+//			e.printStackTrace();
 		}
 		return true;
 	}
