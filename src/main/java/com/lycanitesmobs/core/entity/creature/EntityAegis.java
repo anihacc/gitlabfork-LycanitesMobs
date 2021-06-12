@@ -16,9 +16,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
 public class EntityAegis extends TameableCreatureEntity implements IFusable {
-    // ==================================================
- 	//                    Constructor
- 	// ==================================================
+
     public EntityAegis(EntityType<? extends EntityAegis> entityType, World world) {
         super(entityType, world);
         
@@ -30,7 +28,6 @@ public class EntityAegis extends TameableCreatureEntity implements IFusable {
         this.maxUpStep = 1.0F;
 	}
 
-    // ========== Init AI ==========
     @Override
     protected void registerGoals() {
         super.registerGoals();
@@ -39,12 +36,7 @@ public class EntityAegis extends TameableCreatureEntity implements IFusable {
 		this.targetSelector.addGoal(this.nextSpecialTargetIndex++, new DefendVillageGoal(this));
 		this.targetSelector.addGoal(this.nextSpecialTargetIndex++, new DefendEntitiesGoal(this, VillagerEntity.class));
     }
-	
-	
-    // ==================================================
-    //                      Updates
-    // ==================================================
-	// ========== Living Update ==========
+
 	@Override
     public void aiStep() {
         super.aiStep();
@@ -71,11 +63,7 @@ public class EntityAegis extends TameableCreatureEntity implements IFusable {
 		}
 		return super.shouldCreatureGroupHunt(target);
 	}
-    
-    
-    // ==================================================
-  	//                     Abilities
-  	// ==================================================
+
     @Override
     public boolean isFlying() { return true; }
 
@@ -83,23 +71,14 @@ public class EntityAegis extends TameableCreatureEntity implements IFusable {
 	public boolean canAttackWhileBlocking() {
 		return false;
 	}
-    
-    
-    // ==================================================
-    //                     Pet Control
-    // ==================================================
+
     public boolean petControlsEnabled() { return true; }
 
-	// ==================================================
-	//                     Equipment
-	// ==================================================
 	@Override
 	public int getNoBagSize() { return 0; }
 	@Override
 	public int getBagSize() { return this.creatureInfo.bagSize; }
-    // ==================================================
-   	//                     Immunities
-   	// ==================================================
+
     @Override
     public boolean isVulnerableTo(String type, DamageSource source, float damage) {
     	if(type.equals("cactus") || type.equals("inWall"))
@@ -107,11 +86,6 @@ public class EntityAegis extends TameableCreatureEntity implements IFusable {
 		return super.isVulnerableTo(type, source, damage);
     }
 
-
-	// ==================================================
-	//                   Taking Damage
-	// ==================================================
-	// ========== On Damage ==========
 	/** Called when this mob has received damage. Here a random blocking chance is applied. **/
 	@Override
 	public void onDamage(DamageSource damageSrc, float damage) {
@@ -124,15 +98,19 @@ public class EntityAegis extends TameableCreatureEntity implements IFusable {
 		super.onDamage(damageSrc, damage);
 	}
 
-	// ========== Blocking ==========
+	@Override
 	public void setBlocking() {
 		this.currentBlockingTime = this.blockingTime + this.getRandom().nextInt(this.blockingTime / 2);
 	}
 
+	@Override
+	public float getDamageModifier(DamageSource damageSrc) {
+		if (!this.isBlocking()) {
+			return 2.0F;
+		}
+		return super.getDamageModifier(damageSrc);
+	}
 
-	// ==================================================
-	//                      Fusion
-	// ==================================================
 	protected IFusable fusionTarget;
 
 	@Override
