@@ -202,14 +202,6 @@ public class ItemEquipmentPart extends ItemBase {
 		return super.getMetadata(stack);
 	}
 
-	/** Gets or creates an NBT Compound for the provided itemstack. **/
-	public NBTTagCompound getTagCompound(ItemStack itemStack) {
-		if(itemStack.hasTagCompound()) {
-			return itemStack.getTagCompound();
-		}
-		return new NBTTagCompound();
-	}
-
 	@SideOnly(Side.CLIENT)
 	
 	@Override

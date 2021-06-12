@@ -103,6 +103,7 @@ public class ItemManager extends JSONLoader {
 		ModInfo group = LycanitesMobs.modInfo;
 		ObjectManager.addItem("soulgazer", new ItemSoulgazer());
 		ObjectManager.addItem("soulstone", new ItemSoulstone(group));
+		ObjectManager.addItem("soul_contract", new ItemSoulContract());
 		ObjectManager.addItem("equipment", new ItemEquipment());
 		ObjectManager.addItem("mobtoken", new ItemMobToken(group));
 

@@ -17,6 +17,7 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import com.lycanitesmobs.client.localisation.LanguageManager;
@@ -81,6 +82,15 @@ public class ItemBase extends Item {//implements IScanThing {
     public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
         return super.getAttributeModifiers(slot, stack);
     }
+
+
+	/** Gets or creates an NBT Compound for the provided itemstack. **/
+	public NBTTagCompound getTagCompound(ItemStack itemStack) {
+		if(itemStack.hasTagCompound()) {
+			return itemStack.getTagCompound();
+		}
+		return new NBTTagCompound();
+	}
 	
     
 	// ==================================================

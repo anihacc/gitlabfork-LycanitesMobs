@@ -212,6 +212,15 @@ message.soulkey.invalid=The Soulkey begins to trigger the Altar... But the Altar
 message.soulkey.badlocation=The Soulkey almost activates, but then fails, it seems this is the wrong place...
 message.soulkey.active=The Soulkey activates the Altar!
 #
+# Soul Contract:
+message.soul_contract.invalid= This creature does not have it's soul bound, first attempt to use a Soulstone to bind it for contract magic.
+message.soul_contract.not_owner= The creature's soul is not bound to you, first have it's owner bind the creature's soul to this contract.
+message.soul_contract.wrong_target= This contract is not bound to this creature.
+message.soul_contract.owner_missing= This contract owner must be present.
+message.soul_contract.bound= The creature's soul has been bound to this contract, you may now trade this contract to a new owner where they must use it on the bound creature to claim it.
+message.soul_contract.unbound= The creature's soul has been unbound from this contract.
+message.soul_contract.transferred= The creature's soulbind has been transferred successfully.
+#
 # Pet:
 # %creature% will be replaced with the name of the tamed creature, don't translate this!
 message.pet.tamed=The %creature% seems to love you now!
@@ -1925,6 +1934,13 @@ item.caecilian_ramen.description=A delightful dish with a fresh fried egg on top
 # ========================================================================
 item.soulgazer.name=Soulgazer
 item.soulgazer.description=Use on a creature to add it to the Beastiary. To open your Beastiary, either click on the Beastiary tab of your survival inventory or press the Beastiary key (set via the Controls menu).
+#
+item.lycanitesmobs.soul_contract.name= Soul Contract
+item.lycanitesmobs.soul_contract.description= This Contract is signed using magic to bind souls. The owner of a pet must first use this contract on their pet to bind it, then the new owner must take this contract and also click on the pet to transfer the soulbind.
+item.lycanitesmobs.soul_contract.bound= Bound To:
+item.lycanitesmobs.soul_contract.owner= Owned By:
+item.lycanitesmobs.soul_contract.offline= Owner not present.
+item.lycanitesmobs.soul_contract.released= The bound creature has been released, this contract is void.
 #
 item.mobtoken.name=Mob Token
 item.mobtoken.description=A cosmetic item used to display creature models as achievement icons, etc.

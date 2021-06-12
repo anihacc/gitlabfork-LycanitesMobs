@@ -393,6 +393,12 @@ public class ExtendedPlayer implements IExtendedPlayer {
         LycanitesMobs.packetHandler.sendToPlayer(message, (EntityPlayerMP)this.player);
     }
 
+	public void sendPetEntryRemoveToPlayer(PetEntry petEntry) {
+		if(this.player.getEntityWorld().isRemote) return;
+		MessagePetEntryRemove message = new MessagePetEntryRemove(this, petEntry);
+		LycanitesMobs.packetHandler.sendToPlayer(message, (EntityPlayerMP)this.player);
+	}
+
 	public void sendPetEntryToServer(PetEntry petEntry) {
 		if(!this.player.getEntityWorld().isRemote) return;
         MessagePetEntry message = new MessagePetEntry(this, petEntry);

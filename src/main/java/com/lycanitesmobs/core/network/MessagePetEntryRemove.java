@@ -61,7 +61,8 @@ public class MessagePetEntryRemove implements IMessage, IMessageHandler<MessageP
         // Client Side:
         EntityPlayer player = LycanitesMobs.proxy.getClientPlayer();
         ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
-		if(playerExt == null) return null;
+		if(playerExt == null)
+			return null;
 
         PetManager petManager = playerExt.petManager;
         PetEntry petEntry = petManager.getEntry(message.petEntryID);
