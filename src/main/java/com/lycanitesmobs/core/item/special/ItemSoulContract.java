@@ -199,7 +199,7 @@ public class ItemSoulContract extends BaseItem {
 		if (creatureEntity instanceof TameableCreatureEntity) {
 			((TameableCreatureEntity) creatureEntity).setPlayerOwner(player);
 		}
-//		player.inventory.setItem(player.inventory.selected, ItemStack.EMPTY);
+		player.inventory.setItem(player.inventory.selected, ItemStack.EMPTY);
 
 		return ActionResultType.SUCCESS;
 	}

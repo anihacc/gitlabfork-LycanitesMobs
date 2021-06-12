@@ -28,7 +28,7 @@ public class CreatureConfig {
 	public int startingLevelMin = 1;
 
 	/** The maximum base starting level of every mob. Ignored when not greater than the min level. **/
-	public int startingLevelMax = 1;
+	public int startingLevelMax = 5;
 
 	/** Increases the base start level by this amount of every world day that has gone by, use this to slowly level up mobs as the world gets older. Fractions can be used such as 0.05 levels per day. The levels are rounded down so +0.9 would be +0 levels. **/
 	public double levelPerDay = 0;

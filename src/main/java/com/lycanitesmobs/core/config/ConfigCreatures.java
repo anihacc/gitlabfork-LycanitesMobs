@@ -81,7 +81,7 @@ public class ConfigCreatures {
 				.define("startingLevelMin", 1);
 		startingLevelMax = builder.comment("The maximum base starting level of every mob. Ignored when not greater than the min level.")
 				.translation(CoreConfig.CONFIG_PREFIX + "creatures.startingLevelMax")
-				.define("startingLevelMax", 1);
+				.define("startingLevelMax", 5);
 		levelPerDay = builder.comment("Increases the base start level by this amount of every world day that has gone by, use this to slowly level up mobs as the world gets older. Fractions can be used such as 0.05 levels per day. The levels are rounded down so +0.9 would be +0 levels.")
 				.translation(CoreConfig.CONFIG_PREFIX + "creatures.levelPerDay")
 				.define("levelPerDay", 0D);
