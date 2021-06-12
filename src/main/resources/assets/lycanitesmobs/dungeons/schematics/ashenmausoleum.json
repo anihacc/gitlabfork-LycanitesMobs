@@ -81,7 +81,7 @@
 			"mobNameTag": "Mantle Gorger",
 			"mobSizeScale": 3,
 			"naturalDespawn": "false",
-			"mobLevel": 30,
+			"mobLevel": 100,
 			"spawnAsBoss": true,
 			"dungeonLevelMin": 0,
 			"dungeonLevelMax": 2,
@@ -104,7 +104,7 @@
 			"mobNameTag": "Molten Titan",
 			"mobSizeScale": 3,
 			"naturalDespawn": "false",
-			"mobLevel": 50,
+			"mobLevel": 1,
 			"spawnAsBoss": true,
 			"dungeonLevelMin": 3,
 			"dungeonLevelMax": 4,
@@ -117,6 +117,35 @@
 				},
 				{
 					"item": "lycanitesmobs:soulstone_anthronian",
+					"amountMultiplier": false
+				}
+			]
+		},
+		{
+			"mobId": "lycanitesmobs:volcan",
+			"weight": 1,
+			"variant": 1,
+			"mobNameTag": "Prime Lava Soul",
+			"mobSizeScale": 3.5,
+			"naturalDespawn": "false",
+			"mobLevel": 50,
+			"spawnAsBoss": true,
+			"dungeonLevelMin": 3,
+			"dungeonLevelMax": 4,
+			"dungeonBoss": true,
+			"mobDrops": [
+				{
+					"item": "lycanitesmobs:embercharge",
+					"minAmount": 50,
+					"amountMultiplier": false
+				},
+				{
+					"item": "lycanitesmobs:soulstone_elemental",
+					"amountMultiplier": false
+				},
+				{
+					"item": "minecraft:diamond",
+					"minAmount": 10,
 					"amountMultiplier": false
 				}
 			]

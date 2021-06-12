@@ -48,11 +48,13 @@ public class StayByWaterGoal extends EntityAIBase {
    	// ==================================================
 	@Override
     public boolean shouldExecute() {
-    	if(this.host.canBreatheAir())
-    		return false;
+    	if(this.host.canBreatheAir()) {
+			return false;
+		}
+    	boolean inWater = this.host.isInWater();
 
     	// Set home when in water or lava (for lava creatures).
-		if(this.host.isInWater()) {
+		if(inWater) {
 			IBlockState waterBlock = this.host.getEntityWorld().getBlockState(this.host.getPosition());
 			if((!this.host.isLavaCreature && waterBlock.getMaterial() == Material.WATER) ||
 					(this.host.isLavaCreature && waterBlock.getMaterial() == Material.LAVA)) {
@@ -63,18 +65,18 @@ public class StayByWaterGoal extends EntityAIBase {
 		}
 
 		// If we're not in water:
-		if(!this.host.isInWater()) {
+		else {
 			// If we have a water position but it is no longer water/lava, clear the water position. It is up to the water searcher, wander AI and path weights for find a new water position.
 			if(this.hasWaterPos && !this.isValidWaterPosition(this.waterPos)) {
 				this.hasWaterPos = false;
 			}
 
-			// If we don't have a water position, search for one every 2 seconds, if we do, check if there is a close one every 5 seconds:
+			// If we don't have a water position, search for one every 4 seconds, if we do, check if there is a close one every 5 seconds:
 			if(this.waterSearchRate-- <= 0) {
 				if(!this.hasWaterPos)
-					this.waterSearchRate = 40;
+					this.waterSearchRate = 80;
 				else
-					this.waterSearchRate = 100;
+					this.waterSearchRate = 200;
 
 				// Search within a 64x8x64 block area and find the closest water/lava block:
 				double closestDistance = 99999;

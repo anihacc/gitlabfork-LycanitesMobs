@@ -505,7 +505,7 @@ public class CreatureInfo {
 	 * @return Creature language key.
 	 */
 	public String getLocalisationKey() {
-		return this.modInfo.modid + "." + this.getName();
+		return this.getName();
 	}
 
 
