@@ -2959,7 +2959,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 			targetZ = newY + this.position().z();
 
 			distanceX = targetX - this.position().x();
-			distanceY = target.getBoundingBox().minY + (target.getDimensions(Pose.STANDING).height * 0.5D) - projectile.position().y();
+			distanceY = target.getBoundingBox().minY + (target.getDimensions(Pose.STANDING).height * 0.5D) - projectile.position().y() + offset.y;
 			distanceZ = targetZ - this.position().z();
 		}
 

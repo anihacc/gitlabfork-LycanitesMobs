@@ -142,7 +142,7 @@ public class EntityIgnibus extends RideableCreatureEntity implements IGroupHeavy
 
         for (int projectileX = -1; projectileX <= 1; projectileX++) {
             for (int projectileY = -1; projectileY <= 1; projectileY++) {
-                Vector3d offset = this.getFacingPositionDouble(0, 0.5D * projectileY, 0, 4, this.yRot);
+                Vector3d offset = this.getFacingPositionDouble(0, -6D + (0.5D * projectileY), 0, 4, this.yRot);
                 offset.add(this.getFacingPositionDouble(0, 0, 0, 2D * projectileX, this.yRot + 90D));
                 RapidFireProjectileEntity projectile = new RapidFireProjectileEntity(ProjectileManager.getInstance().oldProjectileTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getCommandSenderWorld(), this, 15, 3);
                 this.fireProjectile(projectile, target, range, 0, offset, 0.6f, 3f, 4F);
