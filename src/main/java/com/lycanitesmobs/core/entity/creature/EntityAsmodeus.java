@@ -56,7 +56,7 @@ public class EntityAsmodeus extends BaseCreatureEntity implements IMob, IGroupHe
 
     public boolean firstPlayerTargetCheck = false;
     public List<EntityAstaroth> astarothMinions = new ArrayList<>();
-    public List<EntityMalwrath> cacodemonMinions = new ArrayList<>();
+    public List<EntityMalwrath> malwrathMinions = new ArrayList<>();
 
     // First Phase:
     public int devilstarStreamTime = 0;
@@ -190,10 +190,10 @@ public class EntityAsmodeus extends BaseCreatureEntity implements IMob, IGroupHe
                         this.astarothMinions.remove(minion);
                 }
             }
-            if(!this.cacodemonMinions.isEmpty()) {
-                for (EntityMalwrath minion : this.cacodemonMinions.toArray(new EntityMalwrath[this.cacodemonMinions.size()])) {
+            if(!this.malwrathMinions.isEmpty()) {
+                for (EntityMalwrath minion : this.malwrathMinions.toArray(new EntityMalwrath[this.malwrathMinions.size()])) {
                     if(minion == null || !minion.isAlive() || minion.getMasterTarget() != this)
-                        this.cacodemonMinions.remove(minion);
+                        this.malwrathMinions.remove(minion);
                 }
             }
         }
@@ -356,17 +356,17 @@ public class EntityAsmodeus extends BaseCreatureEntity implements IMob, IGroupHe
                 }
             }
 
-            // Summon Cacodemon:
-            if(this.cacodemonMinions.size() < playerCount * 6 && this.updateTick % 10 * 20 == 0) {
+            // Summon Malwrath:
+            if(this.malwrathMinions.size() < playerCount * 6 && this.updateTick % 10 * 20 == 0) {
                 for (int i = 0; i < 5 * playerCount; i++) {
-                    EntityMalwrath minion = (EntityMalwrath)CreatureManager.getInstance().getCreature("cacodemon").createEntity(this.getCommandSenderWorld());
+                    EntityMalwrath minion = (EntityMalwrath)CreatureManager.getInstance().getCreature("malwrath").createEntity(this.getCommandSenderWorld());
                     this.summonMinion(minion, this.getRandom().nextDouble() * 360, 10);
                     minion.setPos(
                             minion.position().x(),
                             minion.position().y() + 10 + this.getRandom().nextInt(20),
                             minion.position().z()
                     );
-                    this.cacodemonMinions.add(minion);
+                    this.malwrathMinions.add(minion);
                 }
             }
 
@@ -478,8 +478,8 @@ public class EntityAsmodeus extends BaseCreatureEntity implements IMob, IGroupHe
         if(minion instanceof EntityAstaroth && this.astarothMinions.contains(minion)) {
             this.astarothMinions.remove(minion);
         }
-        if(minion instanceof EntityMalwrath && this.cacodemonMinions.contains(minion)) {
-            this.cacodemonMinions.remove(minion);
+        if(minion instanceof EntityMalwrath && this.malwrathMinions.contains(minion)) {
+            this.malwrathMinions.remove(minion);
         }
         super.onMinionDeath(minion, damageSource);
     }

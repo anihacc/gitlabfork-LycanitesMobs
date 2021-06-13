@@ -50,10 +50,10 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
     protected static final DataParameter<Integer> HELLFIRE_ENERGY = EntityDataManager.defineId(EntityRahovart.class, DataSerializers.INT);
 
     // First Phase:
-    public List<EntityBelphegor> hellfireBelphMinions = new ArrayList<>();
+    public List<EntityBelphegor> hellfireBelphegorMinions = new ArrayList<>();
 
     // Second Phase:
-    public List<EntityBehemophet> hellfireBehemothMinions = new ArrayList<>();
+    public List<EntityBehemophet> hellfireBehemophetMinions = new ArrayList<>();
     public int hellfireWallTime = 0;
     public int hellfireWallTimeMax = 20 * 20;
     public boolean hellfireWallClockwise = false;
@@ -191,18 +191,18 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
         // ===== First Phase - Hellfire Wave =====
         if(this.getBattlePhase() == 0) {
             // Clean Up:
-            if(!this.hellfireBehemothMinions.isEmpty()) {
-                for (EntityBehemophet minion : this.hellfireBehemothMinions.toArray(new EntityBehemophet[this.hellfireBehemothMinions.size()])) {
+            if(!this.hellfireBehemophetMinions.isEmpty()) {
+                for (EntityBehemophet minion : this.hellfireBehemophetMinions.toArray(new EntityBehemophet[this.hellfireBehemophetMinions.size()])) {
                     minion.hellfireEnergy = 0;
                 }
-                this.hellfireBehemothMinions = new ArrayList<>();
+                this.hellfireBehemophetMinions = new ArrayList<>();
             }
             this.hellfireWallTime = 0;
             this.hellfireBarrierCleanup();
 
             // Hellfire Minion Update - Every Second:
             if(this.updateTick % 20 == 0) {
-                for (EntityBelphegor minion : this.hellfireBelphMinions.toArray(new EntityBelphegor[this.hellfireBelphMinions.size()])) {
+                for (EntityBelphegor minion : this.hellfireBelphegorMinions.toArray(new EntityBelphegor[this.hellfireBelphegorMinions.size()])) {
                     if (!minion.isAlive()) {
                         this.onMinionDeath(minion, null);
                         continue;
@@ -233,13 +233,13 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
 
             // Every 5 Secs:
             if(this.updateTick % 100 == 0) {
-                int summonAmount = this.getRandom().nextInt(4); // 0-3 Hellfire Belphs
+                int summonAmount = this.getRandom().nextInt(4); // 0-3 Hellfire Belphegors
                 summonAmount *= this.playerTargets.size();
                 if(summonAmount > 0)
                     for(int summonCount = 0; summonCount <= summonAmount; summonCount++) {
-                        EntityBelphegor minion = (EntityBelphegor)CreatureManager.getInstance().getCreature("belph").createEntity(this.getCommandSenderWorld());
+                        EntityBelphegor minion = (EntityBelphegor)CreatureManager.getInstance().getCreature("belphegor").createEntity(this.getCommandSenderWorld());
                         this.summonMinion(minion, this.getRandom().nextDouble() * 360, 5);
-                        this.hellfireBelphMinions.add(minion);
+                        this.hellfireBelphegorMinions.add(minion);
                     }
             }
         }
@@ -247,17 +247,17 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
         // ===== Second Phase - Hellfire Wall =====
         if(this.getBattlePhase() == 1) {
             // Clean Up:
-            if(!this.hellfireBelphMinions.isEmpty()) {
-                for (EntityBelphegor minion : this.hellfireBelphMinions.toArray(new EntityBelphegor[this.hellfireBelphMinions.size()])) {
+            if(!this.hellfireBelphegorMinions.isEmpty()) {
+                for (EntityBelphegor minion : this.hellfireBelphegorMinions.toArray(new EntityBelphegor[this.hellfireBelphegorMinions.size()])) {
                     minion.hellfireEnergy = 0;
                 }
-                this.hellfireBelphMinions = new ArrayList<>();
+                this.hellfireBelphegorMinions = new ArrayList<>();
             }
             this.hellfireBarrierCleanup();
 
             // Hellfire Minion Update - Every Second:
             if(this.hellfireWallTime <= 0 && this.updateTick % 20 == 0) {
-                for (EntityBehemophet minion : this.hellfireBehemothMinions.toArray(new EntityBehemophet[this.hellfireBehemothMinions.size()])) {
+                for (EntityBehemophet minion : this.hellfireBehemophetMinions.toArray(new EntityBehemophet[this.hellfireBehemophetMinions.size()])) {
                     if (!minion.isAlive()) {
                         this.onMinionDeath(minion, null);
                         continue;
@@ -288,21 +288,21 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
 
             // Every 20 Secs:
             if(this.updateTick % 400 == 0) {
-                int summonAmount = 2; // 2 Hellfire Behemoth
+                int summonAmount = 2; // 2 Hellfire Behemophet
                 summonAmount *= this.playerTargets.size();
                 if(summonAmount > 0)
                     for(int summonCount = 0; summonCount <= summonAmount; summonCount++) {
-                        EntityBehemophet minion = (EntityBehemophet)CreatureManager.getInstance().getCreature("behemoth").createEntity(this.getCommandSenderWorld());
+                        EntityBehemophet minion = (EntityBehemophet)CreatureManager.getInstance().getCreature("behemophet").createEntity(this.getCommandSenderWorld());
                         this.summonMinion(minion, this.getRandom().nextDouble() * 360, 5);
-                        this.hellfireBehemothMinions.add(minion);
+                        this.hellfireBehemophetMinions.add(minion);
                     }
             }
 
             // Every 10 Secs:
             if(this.updateTick % 200 == 0) {
-                int summonAmount = this.getRandom().nextInt(4) - 1; // 0-2 Belphs with 50% fail chance.
+                int summonAmount = this.getRandom().nextInt(4) - 1; // 0-2 Belphegors with 50% fail chance.
                 for(int summonCount = 0; summonCount <= summonAmount; summonCount++) {
-                    EntityBelphegor minion = (EntityBelphegor)CreatureManager.getInstance().getCreature("belph").createEntity(this.getCommandSenderWorld());
+                    EntityBelphegor minion = (EntityBelphegor)CreatureManager.getInstance().getCreature("belphegor").createEntity(this.getCommandSenderWorld());
                     this.summonMinion(minion, this.getRandom().nextDouble() * 360, 5);
                 }
             }
@@ -311,17 +311,17 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
         // ===== Third Phase - Hellfire Barrier =====
         if(this.getBattlePhase() >= 2) {
             // Clean Up:
-            if(!this.hellfireBelphMinions.isEmpty()) {
-                for (EntityBelphegor minion : this.hellfireBelphMinions.toArray(new EntityBelphegor[this.hellfireBelphMinions.size()])) {
+            if(!this.hellfireBelphegorMinions.isEmpty()) {
+                for (EntityBelphegor minion : this.hellfireBelphegorMinions.toArray(new EntityBelphegor[this.hellfireBelphegorMinions.size()])) {
                     minion.hellfireEnergy = 0;
                 }
-                this.hellfireBelphMinions = new ArrayList<>();
+                this.hellfireBelphegorMinions = new ArrayList<>();
             }
-            if(!this.hellfireBehemothMinions.isEmpty()) {
-                for (EntityBehemophet minion : this.hellfireBehemothMinions.toArray(new EntityBehemophet[this.hellfireBehemothMinions.size()])) {
+            if(!this.hellfireBehemophetMinions.isEmpty()) {
+                for (EntityBehemophet minion : this.hellfireBehemophetMinions.toArray(new EntityBehemophet[this.hellfireBehemophetMinions.size()])) {
                     minion.hellfireEnergy = 0;
                 }
-                this.hellfireBehemothMinions = new ArrayList<>();
+                this.hellfireBehemophetMinions = new ArrayList<>();
             }
             this.hellfireWallTime = 0;
 
@@ -343,23 +343,23 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
 
             // Every 10 Secs:
             if(this.updateTick % 200 == 0) {
-                int summonAmount = this.getRandom().nextInt(2); // 0-1 Hellfire Behemoth
+                int summonAmount = this.getRandom().nextInt(2); // 0-1 Hellfire Behemophet
                 summonAmount *= this.playerTargets.size();
                 if(summonAmount > 0)
                     for(int summonCount = 0; summonCount <= summonAmount; summonCount++) {
-                        EntityBehemophet minion = (EntityBehemophet)CreatureManager.getInstance().getCreature("behemoth").createEntity(this.getCommandSenderWorld());
+                        EntityBehemophet minion = (EntityBehemophet)CreatureManager.getInstance().getCreature("behemophet").createEntity(this.getCommandSenderWorld());
                         this.summonMinion(minion, this.getRandom().nextDouble() * 360, 5);
-                        this.hellfireBehemothMinions.add(minion);
+                        this.hellfireBehemophetMinions.add(minion);
                     }
             }
 
             // Every 20 Secs:
             if(this.updateTick % 400 == 0) {
-                int summonAmount = this.getRandom().nextInt(4); // 0-3 Belphs
+                int summonAmount = this.getRandom().nextInt(4); // 0-3 Belphegors
                 summonAmount *= this.playerTargets.size();
                 if(summonAmount > 0)
                 for(int summonCount = 0; summonCount <= summonAmount; summonCount++) {
-                    EntityBelphegor minion = (EntityBelphegor)CreatureManager.getInstance().getCreature("belph").createEntity(this.getCommandSenderWorld());
+                    EntityBelphegor minion = (EntityBelphegor)CreatureManager.getInstance().getCreature("belphegor").createEntity(this.getCommandSenderWorld());
                     this.summonMinion(minion, this.getRandom().nextDouble() * 360, 5);
                 }
                 summonAmount = this.getRandom().nextInt(3); // 0-2 Wraiths
@@ -379,12 +379,12 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
     // ========== Minion Death ==========
     @Override
     public void onMinionDeath(LivingEntity minion, DamageSource damageSource) {
-        if(minion instanceof EntityBelphegor && this.hellfireBelphMinions.contains(minion)) {
-            this.hellfireBelphMinions.remove(minion);
+        if(minion instanceof EntityBelphegor && this.hellfireBelphegorMinions.contains(minion)) {
+            this.hellfireBelphegorMinions.remove(minion);
             return;
         }
-        if(minion instanceof EntityBehemophet && this.hellfireBehemothMinions.contains(minion)) {
-            this.hellfireBehemothMinions.remove(minion);
+        if(minion instanceof EntityBehemophet && this.hellfireBehemophetMinions.contains(minion)) {
+            this.hellfireBehemophetMinions.remove(minion);
             return;
         }
         if(this.hellfireBarriers.size() > 0) {
@@ -680,25 +680,25 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
         if(nbtTagCompound.contains("HellfireWallTime")) {
             this.hellfireWallTime = nbtTagCompound.getInt("HellfireWallTime");
         }
-        if(nbtTagCompound.contains("BelphIDs")) {
-            ListNBT belphIDs = nbtTagCompound.getList("BelphIDs", 10);
-            for(int i = 0; i < belphIDs.size(); i++) {
-                CompoundNBT belphID = belphIDs.getCompound(i);
-                if(belphID.contains("ID")) {
-                    Entity entity = this.getCommandSenderWorld().getEntity(belphID.getInt("ID"));
+        if(nbtTagCompound.contains("BelphegorIDs")) {
+            ListNBT belphegorIDs = nbtTagCompound.getList("BelphegorIDs", 10);
+            for(int i = 0; i < belphegorIDs.size(); i++) {
+                CompoundNBT belphegorID = belphegorIDs.getCompound(i);
+                if(belphegorID.contains("ID")) {
+                    Entity entity = this.getCommandSenderWorld().getEntity(belphegorID.getInt("ID"));
                     if(entity != null && entity instanceof EntityBelphegor)
-                        this.hellfireBelphMinions.add((EntityBelphegor)entity);
+                        this.hellfireBelphegorMinions.add((EntityBelphegor)entity);
                 }
             }
         }
-        if(nbtTagCompound.contains("BehemothIDs")) {
-            ListNBT behemothIDs = nbtTagCompound.getList("BehemothIDs", 10);
-            for(int i = 0; i < behemothIDs.size(); i++) {
-                CompoundNBT behemothID = behemothIDs.getCompound(i);
-                if(behemothID.contains("ID")) {
-                    Entity entity = this.getCommandSenderWorld().getEntity(behemothID.getInt("ID"));
+        if(nbtTagCompound.contains("BehemophetIDs")) {
+            ListNBT behemophetIDs = nbtTagCompound.getList("BehemophetIDs", 10);
+            for(int i = 0; i < behemophetIDs.size(); i++) {
+                CompoundNBT behemophetID = behemophetIDs.getCompound(i);
+                if(behemophetID.contains("ID")) {
+                    Entity entity = this.getCommandSenderWorld().getEntity(behemophetID.getInt("ID"));
                     if(entity != null && entity instanceof EntityBehemophet)
-                        this.hellfireBehemothMinions.add((EntityBehemophet)entity);
+                        this.hellfireBehemophetMinions.add((EntityBehemophet)entity);
                 }
             }
         }
@@ -712,22 +712,22 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
         nbtTagCompound.putInt("HellfireEnergy", this.hellfireEnergy);
         nbtTagCompound.putInt("HellfireWallTime", this.hellfireWallTime);
         if(this.getBattlePhase() == 0) {
-            ListNBT belphIDs = new ListNBT();
-            for(EntityBelphegor entityBelphegor : this.hellfireBelphMinions) {
-                CompoundNBT belphID = new CompoundNBT();
-                belphID.putInt("ID", entityBelphegor.getId());
-                belphIDs.add(belphID);
+            ListNBT belphegorIDs = new ListNBT();
+            for(EntityBelphegor entityBelphegoregor : this.hellfireBelphegorMinions) {
+                CompoundNBT belphegorID = new CompoundNBT();
+                belphegorID.putInt("ID", entityBelphegoregor.getId());
+                belphegorIDs.add(belphegorID);
             }
-            nbtTagCompound.put("BelphIDs", belphIDs);
+            nbtTagCompound.put("BelphegorIDs", belphegorIDs);
         }
         if(this.getBattlePhase() == 1) {
-            ListNBT behemothIDs = new ListNBT();
-            for(EntityBehemophet entityBehemophet : this.hellfireBehemothMinions) {
-                CompoundNBT behemothID = new CompoundNBT();
-                behemothID.putInt("ID", entityBehemophet.getId());
-                behemothIDs.add(behemothID);
+            ListNBT behemophetIDs = new ListNBT();
+            for(EntityBehemophet entityBehemophet : this.hellfireBehemophetMinions) {
+                CompoundNBT behemophetID = new CompoundNBT();
+                behemophetID.putInt("ID", entityBehemophet.getId());
+                behemophetIDs.add(behemophetID);
             }
-            nbtTagCompound.put("BehemothIDs", behemothIDs);
+            nbtTagCompound.put("BehemophetIDs", behemophetIDs);
         }
     }
 
