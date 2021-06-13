@@ -125,6 +125,7 @@ public class StealthGoal extends EntityAIBase {
     // ==================================================
  	//                  Update Task
  	// ==================================================
+	@Override
 	public void updateTask() {
 		float nextStealth = (float)this.stealthTime / (float)this.stealthTimeMax;
 		this.host.setStealth(nextStealth);
