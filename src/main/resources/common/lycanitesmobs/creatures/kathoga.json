@@ -11,9 +11,8 @@
     "spawning": {
         "enabled": true,
         "spawners": [
-            "land_animal",
-            "portal",
-            "land_deadly"
+            "land_underground_animal",
+            "portal"
         ],
         "disableSubspecies": false,
         "dimensionIds": [
