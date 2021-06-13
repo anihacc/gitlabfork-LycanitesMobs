@@ -20,9 +20,11 @@ import com.lycanitesmobs.core.entity.navigate.DirectNavigator;
 import com.lycanitesmobs.core.info.*;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
-import com.lycanitesmobs.core.inventory.InventoryCreature;
+import com.lycanitesmobs.core.inventory.CreatureInventory;
 import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
 import com.lycanitesmobs.core.item.special.ItemSoulgazer;
+import com.lycanitesmobs.core.network.MessageCreature;
+import com.lycanitesmobs.core.network.PacketHandler;
 import com.lycanitesmobs.core.pets.PetEntry;
 import com.lycanitesmobs.core.spawner.SpawnerEventListener;
 import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
@@ -92,12 +94,16 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	public Variant variant = null;
 	/** What attribute is this creature, used for effects such as Bane of Arthropods. **/
 	public CreatureAttribute attribute = CreatureAttribute.UNDEAD;
+	/** The Creature's relationships, for advanced memory and taming. **/
+	public CreatureRelationships relationships;
 	/** A class that opens up extra stats and behaviours for NBT based customization.**/
 	public ExtraMobBehaviour extraMobBehaviour;
 
 	// Info:
 	/** The living update tick. **/
 	public long updateTick = 0;
+	/** Set to true when an advanced network sync is required. **/
+	protected boolean syncQueued = true;
 	/** The name of the event that spawned this mob if any, an empty string ("") if none. **/
 	public String spawnEventType = "";
 	/** The number of the event that spawned this mob. Used for despawning this mob when a new event starts. Ignored if the spawnEventType is blank or the count is less than 0. **/
@@ -380,7 +386,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
 	// Items:
     /** The inventory object of the creature, this is used for managing and using the creature's inventory. **/
-	public InventoryCreature inventory;
+	public CreatureInventory inventory;
     /** A collection of drops which are used when randomly drop items on death. **/
     public List<ItemDrop> drops = new ArrayList<>();
 	/** A collection of drops to be stored in NBT data. **/
@@ -442,7 +448,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	}
 
 	/**
-	 * Registers all Data Manager Parameters.
+	 * Registers all Data Manager Parameters and Creature Subsystems.
 	 */
 	@Override
 	protected void defineSynchedData() {
@@ -464,12 +470,13 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		this.entityData.define(VARIANT, (byte) 0);
 
 		this.entityData.define(ARENA, Optional.empty());
-		InventoryCreature.registerData(this.entityData);
+		CreatureInventory.registerData(this.entityData);
 
 		this.loadCreatureFlags();
 		this.creatureSize = new EntitySize((float)this.creatureInfo.width, (float)this.creatureInfo.height, false);
 
 		this.creatureStats = new CreatureStats(this);
+		this.relationships = new CreatureRelationships(this);
 		this.extraMobBehaviour = new ExtraMobBehaviour(this);
 		this.directNavigator = new DirectNavigator(this);
 
@@ -568,7 +575,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     public void setupMob() {
         // Stats:
         this.maxUpStep = 0.5F;
-        this.inventory = new InventoryCreature(this.getName().getString(), this);
+        this.inventory = new CreatureInventory(this.getName().getString(), this);
 
         // Drops:
         this.loadItemDrops();
@@ -671,8 +678,42 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
 
     // ==================================================
-    //                     Data Manager
+    //              Data Manager and Network
     // ==================================================
+	/**
+	 * Queues an advanced network sync of this entity to all clients for the next update tick.
+	 * Called by various Creature Subsystems to sync more specific information.
+	 * Ignored when called client side, safe to call for convenience.
+	 */
+	public void queueSync() {
+    	if (this.getCommandSenderWorld().isClientSide()) {
+    		return;
+		}
+    	this.syncQueued = true;
+	}
+
+	/**
+	 * Performs an advanced network sync of this entity to all clients.
+	 * Used by various Creature Subsystems to sync more specific information.
+	 * Ignored when called client side, safe to call for convenience.
+	 */
+	public void doSync() {
+    	if (this.getCommandSenderWorld().isClientSide()) {
+    		return;
+		}
+		this.syncQueued = false;
+
+    	// Relationships:
+		for (PlayerEntity player : this.relationships.getPlayers()) {
+			CreatureRelationshipEntry relationshipEntry = this.relationships.getEntry(player);
+			if (relationshipEntry == null) {
+				continue;
+			}
+			MessageCreature message = new MessageCreature(this, relationshipEntry.reputation);
+			LycanitesMobs.packetHandler.sendToPlayer(message, (ServerPlayerEntity)player);
+		}
+	}
+
 	@Override
 	public void onSyncedDataUpdated(DataParameter<?> key) {
     	// TODO Move data manager sync to here and remove these getters.
@@ -1873,6 +1914,10 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     // ========== Sync Update ==========
     /** An update that is called to sync things with the client and server such as various entity targets, attack phases, animations, etc. **/
     public void onSyncUpdate() {
+    	if (this.syncQueued) {
+    		this.doSync();
+		}
+
     	// Sync Target Status:
     	if(!this.getCommandSenderWorld().isClientSide) {
     		byte targets = 0;
@@ -2587,6 +2632,12 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 			return false;
 		}
 
+		// Relationships:
+		CreatureRelationshipEntry relationshipEntry = this.relationships.getEntry(targetEntity);
+		if (relationshipEntry != null && !relationshipEntry.canAttack()) {
+			return false;
+		}
+
         // Creatures:
         if(targetEntity instanceof BaseCreatureEntity) {
 			BaseCreatureEntity targetCreature = (BaseCreatureEntity)targetEntity;
@@ -3093,17 +3144,23 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
         if(super.hurt(damageSrc, damageAmount)) {
         	this.onDamage(damageSrc, damageAmount);
             Entity entity = damageSrc.getDirectEntity();
-            if(entity instanceof ThrowableEntity)
-            	entity = ((ThrowableEntity)entity).getOwner();
-            
+            if(entity instanceof ThrowableEntity) {
+				entity = ((ThrowableEntity) entity).getOwner();
+			}
+
+            // Damaged by Living Entity:
             if(entity instanceof LivingEntity && this.getRider() != entity && this.getVehicle() != entity) {
-                if(entity != this)
-                    this.setLastHurtByMob((LivingEntity)entity);
-                return true;
-            }
-            else
-                return true;
-        }
+                if(entity != this) {
+					this.setLastHurtByMob((LivingEntity) entity);
+
+					// Decrease Reputation:
+					CreatureRelationshipEntry relationshipEntry = this.relationships.getOrCreateEntry(entity);
+					int reputationAmount = 50 + this.getRandom().nextInt(50);
+					relationshipEntry.decreaseReputation(reputationAmount);
+				}
+			}
+			return true;
+		}
         return false;
     }
     
@@ -4730,102 +4787,104 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
    	// ========== Read ===========
     /** Used when loading this mob from a saved chunk. **/
     @Override
-    public void readAdditionalSaveData(CompoundNBT nbtTagCompound) {
+    public void readAdditionalSaveData(CompoundNBT nbt) {
 		if(this.creatureInfo.dummy) {
-			super.readAdditionalSaveData(nbtTagCompound);
+			super.readAdditionalSaveData(nbt);
 			return;
 		}
 
-		if(nbtTagCompound.contains("FirstSpawn")) {
-            this.firstSpawn = nbtTagCompound.getBoolean("FirstSpawn");
+		if(nbt.contains("FirstSpawn")) {
+            this.firstSpawn = nbt.getBoolean("FirstSpawn");
     	}
     	else {
     		this.firstSpawn = true;
     	}
     	
-    	if(nbtTagCompound.contains("SpawnEventType")) {
-    		this.spawnEventType = nbtTagCompound.getString("SpawnEventType");
+    	if(nbt.contains("SpawnEventType")) {
+    		this.spawnEventType = nbt.getString("SpawnEventType");
     	}
     	
-    	if(nbtTagCompound.contains("SpawnEventCount")) {
-    		this.spawnEventCount = nbtTagCompound.getInt("SpawnEventCount");
+    	if(nbt.contains("SpawnEventCount")) {
+    		this.spawnEventCount = nbt.getInt("SpawnEventCount");
     	}
     	
-    	if(nbtTagCompound.contains("Stealth")) {
-    		this.setStealth(nbtTagCompound.getFloat("Stealth"));
+    	if(nbt.contains("Stealth")) {
+    		this.setStealth(nbt.getFloat("Stealth"));
     	}
     	
-    	if(nbtTagCompound.contains("IsMinion")) {
-    		this.setMinion(nbtTagCompound.getBoolean("IsMinion"));
+    	if(nbt.contains("IsMinion")) {
+    		this.setMinion(nbt.getBoolean("IsMinion"));
     	}
     	
-    	if(nbtTagCompound.contains("IsTemporary") && nbtTagCompound.getBoolean("IsTemporary") && nbtTagCompound.contains("TemporaryDuration")) {
-    		this.setTemporary(nbtTagCompound.getInt("TemporaryDuration"));
+    	if(nbt.contains("IsTemporary") && nbt.getBoolean("IsTemporary") && nbt.contains("TemporaryDuration")) {
+    		this.setTemporary(nbt.getInt("TemporaryDuration"));
     	}
     	else {
     		this.unsetTemporary();
     	}
 
-        if(nbtTagCompound.contains("IsBoundPet")) {
-            if(nbtTagCompound.getBoolean("IsBoundPet")) {
+        if(nbt.contains("IsBoundPet")) {
+            if(nbt.getBoolean("IsBoundPet")) {
                 if(!this.hasPetEntry())
                     this.remove();
             }
         }
     	
-    	if(nbtTagCompound.contains("ForceNoDespawn")) {
-    		if(nbtTagCompound.getBoolean("ForceNoDespawn")) {
+    	if(nbt.contains("ForceNoDespawn")) {
+    		if(nbt.getBoolean("ForceNoDespawn")) {
 				this.setPersistenceRequired();
 			}
     	}
     	
-    	if(nbtTagCompound.contains("Color")) {
-    		this.setColor(DyeColor.byId(nbtTagCompound.getByte("Color")));
+    	if(nbt.contains("Color")) {
+    		this.setColor(DyeColor.byId(nbt.getByte("Color")));
     	}
 
-		if(nbtTagCompound.contains("Size")) {
-			this.setSizeScale(nbtTagCompound.getDouble("Size"));
+		if(nbt.contains("Size")) {
+			this.setSizeScale(nbt.getDouble("Size"));
 		}
 
-		if(!this.firstSpawn && nbtTagCompound.contains("Subspecies") && !nbtTagCompound.contains("Variant")) { // Convert Old Subspecies IDs:
-			this.setSubspecies(Variant.getIndexFromOld(nbtTagCompound.getByte("Subspecies")));
-			this.setVariant(Variant.getIndexFromOld(nbtTagCompound.getByte("Subspecies")));
+		if(!this.firstSpawn && nbt.contains("Subspecies") && !nbt.contains("Variant")) { // Convert Old Subspecies IDs:
+			this.setSubspecies(Variant.getIndexFromOld(nbt.getByte("Subspecies")));
+			this.setVariant(Variant.getIndexFromOld(nbt.getByte("Subspecies")));
 		}
 		else {
-			if (nbtTagCompound.contains("Subspecies")) {
-				this.setSubspecies(nbtTagCompound.getByte("Subspecies"));
+			if (nbt.contains("Subspecies")) {
+				this.setSubspecies(nbt.getByte("Subspecies"));
 			}
-			if (nbtTagCompound.contains("Variant")) {
+			if (nbt.contains("Variant")) {
 				if (this.firstSpawn) {
-					this.applyVariant(nbtTagCompound.getByte("Variant"));
+					this.applyVariant(nbt.getByte("Variant"));
 				} else {
-					this.setVariant(nbtTagCompound.getByte("Variant"));
+					this.setVariant(nbt.getByte("Variant"));
 				}
 			}
 		}
 
-		if(nbtTagCompound.contains("MobLevel")) {
+		if(nbt.contains("MobLevel")) {
 			if(this.firstSpawn) {
-				this.applyLevel(nbtTagCompound.getInt("MobLevel"));
+				this.applyLevel(nbt.getInt("MobLevel"));
 			}
 			else {
-				this.setLevel(nbtTagCompound.getInt("MobLevel"));
+				this.setLevel(nbt.getInt("MobLevel"));
 			}
 		}
 
-		if(nbtTagCompound.contains("Experience")) {
-			this.setExperience(nbtTagCompound.getInt("Experience"));
+		if(nbt.contains("Experience")) {
+			this.setExperience(nbt.getInt("Experience"));
 		}
 
-		if(nbtTagCompound.contains("SpawnedAsBoss")) {
-			this.spawnedAsBoss = nbtTagCompound.getBoolean("SpawnedAsBoss");
+		if(nbt.contains("SpawnedAsBoss")) {
+			this.spawnedAsBoss = nbt.getBoolean("SpawnedAsBoss");
 		}
     	
-        super.readAdditionalSaveData(nbtTagCompound);
-        this.inventory.read(nbtTagCompound);
+        super.readAdditionalSaveData(nbt);
 
-        if(nbtTagCompound.contains("Drops")) {
-			ListNBT nbtDropList = nbtTagCompound.getList("Drops", 10);
+        this.relationships.load(nbt);
+        this.inventory.load(nbt);
+
+        if(nbt.contains("Drops")) {
+			ListNBT nbtDropList = nbt.getList("Drops", 10);
 			for(int i = 0; i < nbtDropList.size(); i++) {
 				CompoundNBT dropNBT = nbtDropList.getCompound(i);
 				ItemDrop drop = new ItemDrop(dropNBT);
@@ -4833,24 +4892,24 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 			}
 		}
         
-        if(nbtTagCompound.contains("ExtraBehaviour")) {
-        	this.extraMobBehaviour.read(nbtTagCompound.getCompound("ExtraBehaviour"));
+        if(nbt.contains("ExtraBehaviour")) {
+        	this.extraMobBehaviour.read(nbt.getCompound("ExtraBehaviour"));
         }
         
-        if(nbtTagCompound.contains("HomeX") && nbtTagCompound.contains("HomeY") && nbtTagCompound.contains("HomeZ") && nbtTagCompound.contains("HomeDistanceMax")) {
-        	this.setHome(nbtTagCompound.getInt("HomeX"), nbtTagCompound.getInt("HomeY"), nbtTagCompound.getInt("HomeZ"), nbtTagCompound.getFloat("HomeDistanceMax"));
+        if(nbt.contains("HomeX") && nbt.contains("HomeY") && nbt.contains("HomeZ") && nbt.contains("HomeDistanceMax")) {
+        	this.setHome(nbt.getInt("HomeX"), nbt.getInt("HomeY"), nbt.getInt("HomeZ"), nbt.getFloat("HomeDistanceMax"));
         }
 
-        if(nbtTagCompound.contains("ArenaX") && nbtTagCompound.contains("ArenaY") && nbtTagCompound.contains("ArenaZ")) {
-            this.setArenaCenter(new BlockPos(nbtTagCompound.getInt("ArenaX"), nbtTagCompound.getInt("ArenaY"), nbtTagCompound.getInt("ArenaZ")));
+        if(nbt.contains("ArenaX") && nbt.contains("ArenaY") && nbt.contains("ArenaZ")) {
+            this.setArenaCenter(new BlockPos(nbt.getInt("ArenaX"), nbt.getInt("ArenaY"), nbt.getInt("ArenaZ")));
         }
 
-		if(nbtTagCompound.contains("FixateUUIDMost") && nbtTagCompound.contains("FixateUUIDLeast")) {
-			this.fixateUUID = new UUID(nbtTagCompound.getLong("FixateUUIDMost"), nbtTagCompound.getLong("FixateUUIDLeast"));
+		if(nbt.contains("FixateUUIDMost") && nbt.contains("FixateUUIDLeast")) {
+			this.fixateUUID = new UUID(nbt.getLong("FixateUUIDMost"), nbt.getLong("FixateUUIDLeast"));
 		}
 
-		if(nbtTagCompound.contains("MinionIds")) {
-			ListNBT minionIds = nbtTagCompound.getList("MinionIds", 10);
+		if(nbt.contains("MinionIds")) {
+			ListNBT minionIds = nbt.getList("MinionIds", 10);
 			for(int i = 0; i < minionIds.size(); i++) {
 				CompoundNBT minionId = minionIds.getCompound(i);
 				if(minionId.contains("ID")) {
@@ -4865,48 +4924,48 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     // ========== Write ==========
     /** Used when saving this mob to a chunk. **/
     @Override
-    public void addAdditionalSaveData(CompoundNBT nbtTagCompound) {
+    public void addAdditionalSaveData(CompoundNBT nbt) {
 		if(this.creatureInfo.dummy) {
-			super.addAdditionalSaveData(nbtTagCompound);
+			super.addAdditionalSaveData(nbt);
 			return;
 		}
 
-		nbtTagCompound.putBoolean("FirstSpawn", this.firstSpawn);
-    	nbtTagCompound.putString("SpawnEventType", this.spawnEventType);
-    	nbtTagCompound.putInt("SpawnEventCount", this.spawnEventCount);
+		nbt.putBoolean("FirstSpawn", this.firstSpawn);
+    	nbt.putString("SpawnEventType", this.spawnEventType);
+    	nbt.putInt("SpawnEventCount", this.spawnEventCount);
     	
-    	nbtTagCompound.putFloat("Stealth", this.getStealth());
-    	nbtTagCompound.putBoolean("IsMinion", this.isMinion());
-    	nbtTagCompound.putBoolean("IsTemporary", this.isTemporary);
-    	nbtTagCompound.putInt("TemporaryDuration", this.temporaryDuration);
-        nbtTagCompound.putBoolean("IsBoundPet", this.isBoundPet());
-    	nbtTagCompound.putBoolean("ForceNoDespawn", this.forceNoDespawn);
-    	nbtTagCompound.putByte("Color", (byte) this.getColor().getId());
-        nbtTagCompound.putByte("Subspecies", (byte) this.getSubspeciesIndex());
-        nbtTagCompound.putByte("Variant", (byte) this.getVariantIndex());
-    	nbtTagCompound.putDouble("Size", this.sizeScale);
-		nbtTagCompound.putInt("MobLevel", this.getMobLevel());
-		nbtTagCompound.putInt("Experience", this.getExperience());
-		nbtTagCompound.putBoolean("SpawnedAsBoss", this.spawnedAsBoss);
+    	nbt.putFloat("Stealth", this.getStealth());
+    	nbt.putBoolean("IsMinion", this.isMinion());
+    	nbt.putBoolean("IsTemporary", this.isTemporary);
+    	nbt.putInt("TemporaryDuration", this.temporaryDuration);
+        nbt.putBoolean("IsBoundPet", this.isBoundPet());
+    	nbt.putBoolean("ForceNoDespawn", this.forceNoDespawn);
+    	nbt.putByte("Color", (byte) this.getColor().getId());
+        nbt.putByte("Subspecies", (byte) this.getSubspeciesIndex());
+        nbt.putByte("Variant", (byte) this.getVariantIndex());
+    	nbt.putDouble("Size", this.sizeScale);
+		nbt.putInt("MobLevel", this.getMobLevel());
+		nbt.putInt("Experience", this.getExperience());
+		nbt.putBoolean("SpawnedAsBoss", this.spawnedAsBoss);
     	
     	if(this.hasHome()) {
     		BlockPos homePos = this.getRestrictCenter();
-    		nbtTagCompound.putInt("HomeX", homePos.getX());
-    		nbtTagCompound.putInt("HomeY", homePos.getY());
-    		nbtTagCompound.putInt("HomeZ", homePos.getZ());
-    		nbtTagCompound.putFloat("HomeDistanceMax", this.getHomeDistanceMax());
+    		nbt.putInt("HomeX", homePos.getX());
+    		nbt.putInt("HomeY", homePos.getY());
+    		nbt.putInt("HomeZ", homePos.getZ());
+    		nbt.putFloat("HomeDistanceMax", this.getHomeDistanceMax());
     	}
 
         if(this.hasArenaCenter()) {
             BlockPos arenaPos = this.getArenaCenter();
-            nbtTagCompound.putInt("ArenaX", arenaPos.getX());
-            nbtTagCompound.putInt("ArenaY", arenaPos.getY());
-            nbtTagCompound.putInt("ArenaZ", arenaPos.getZ());
+            nbt.putInt("ArenaX", arenaPos.getX());
+            nbt.putInt("ArenaY", arenaPos.getY());
+            nbt.putInt("ArenaZ", arenaPos.getZ());
         }
 
 		if(this.getFixateTarget() != null) {
-			nbtTagCompound.putLong("FixateUUIDMost", this.getFixateTarget().getUUID().getMostSignificantBits());
-			nbtTagCompound.putLong("FixateUUIDLeast", this.getFixateTarget().getUUID().getLeastSignificantBits());
+			nbt.putLong("FixateUUIDMost", this.getFixateTarget().getUUID().getMostSignificantBits());
+			nbt.putLong("FixateUUIDLeast", this.getFixateTarget().getUUID().getLeastSignificantBits());
 		}
 
 		try {
@@ -4916,8 +4975,12 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 			LycanitesMobs.logError(t.getMessage());
 			t.printStackTrace();
 		}
-		super.addAdditionalSaveData(nbtTagCompound);
-        this.inventory.write(nbtTagCompound);
+
+		super.addAdditionalSaveData(nbt);
+
+        this.relationships.save(nbt);
+        this.inventory.save(nbt);
+
 		ListNBT nbtDropList = new ListNBT();
         for(ItemDrop drop : this.savedDrops) {
 			CompoundNBT dropNBT = new CompoundNBT();
@@ -4925,11 +4988,11 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 				nbtDropList.add(dropNBT);
 			}
 		}
-		nbtTagCompound.put("Drops", nbtDropList);
+		nbt.put("Drops", nbtDropList);
         
         CompoundNBT extTagCompound = new CompoundNBT();
         this.extraMobBehaviour.write(extTagCompound);
-        nbtTagCompound.put("ExtraBehaviour", extTagCompound);
+        nbt.put("ExtraBehaviour", extTagCompound);
 
 		ListNBT minionIds = new ListNBT();
 		for(LivingEntity minion : this.minions) {
@@ -4937,7 +5000,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 			minionId.putInt("ID", minion.getId());
 			minionIds.add(minionId);
 		}
-		nbtTagCompound.put("MinionIds", minionIds);
+		nbt.put("MinionIds", minionIds);
     }
     
     

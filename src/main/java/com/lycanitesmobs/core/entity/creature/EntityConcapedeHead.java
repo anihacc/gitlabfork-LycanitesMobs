@@ -273,18 +273,18 @@ public class EntityConcapedeHead extends AgeableCreatureEntity {
 	// ========== Read ===========
 	/** Used when loading this mob from a saved chunk. **/
 	@Override
-	public void readAdditionalSaveData(CompoundNBT nbtTagCompound) {
-		if(nbtTagCompound.contains("IsHungry")) {
-			this.isHungry = nbtTagCompound.getBoolean("IsHungry");
+	public void readAdditionalSaveData(CompoundNBT nbt) {
+		if(nbt.contains("IsHungry")) {
+			this.isHungry = nbt.getBoolean("IsHungry");
 		}
-		super.readAdditionalSaveData(nbtTagCompound);
+		super.readAdditionalSaveData(nbt);
 	}
 
 	// ========== Write ==========
 	/** Used when saving this mob to a chunk. **/
 	@Override
-	public void addAdditionalSaveData(CompoundNBT nbtTagCompound) {
-		super.addAdditionalSaveData(nbtTagCompound);
-		nbtTagCompound.putBoolean("IsHungry", this.isHungry);
+	public void addAdditionalSaveData(CompoundNBT nbt) {
+		super.addAdditionalSaveData(nbt);
+		nbt.putBoolean("IsHungry", this.isHungry);
 	}
 }

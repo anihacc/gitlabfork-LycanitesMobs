@@ -7,7 +7,7 @@ import com.lycanitesmobs.core.container.BaseContainer;
 import com.lycanitesmobs.core.container.CreatureContainer;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
-import com.lycanitesmobs.core.inventory.InventoryCreature;
+import com.lycanitesmobs.core.inventory.CreatureInventory;
 import com.lycanitesmobs.core.network.MessageEntityGUICommand;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.gui.widget.button.Button;
@@ -21,7 +21,7 @@ import java.util.List;
 
 public class CreatureInventoryScreen extends BaseContainerScreen<CreatureContainer> {
 	public BaseCreatureEntity creature;
-	public InventoryCreature creatureInventory;
+	public CreatureInventory creatureInventory;
 
 	/**
 	 * Constructor
@@ -141,7 +141,7 @@ public class CreatureInventoryScreen extends BaseContainerScreen<CreatureContain
 		float healthNormal = Math.min(1, this.creature.getHealth() / this.creature.getMaxHealth());
 		this.drawHelper.drawTexture(matrixStack, TextureManager.getTexture("GUIPetBarHealth"), barX, barY, 0, healthNormal, 1, barWidth * healthNormal, barHeight);
 		String healthText = new TranslationTextComponent("entity.health").getString() + ": " + String.format("%.0f", this.creature.getHealth()) + "/" + String.format("%.0f", this.creature.getMaxHealth());
-		this.drawHelper.fontRenderer.draw(matrixStack, healthText, barCenter - ((float)this.drawHelper.getStringWidth(healthText) / 2), barY + 2, 0xFFFFFF);
+		this.drawHelper.getFontRenderer().draw(matrixStack, healthText, barCenter - ((float)this.drawHelper.getStringWidth(healthText) / 2), barY + 2, 0xFFFFFF);
 		barY += barHeight + 1;
 
 		// XP Bar:
@@ -149,12 +149,12 @@ public class CreatureInventoryScreen extends BaseContainerScreen<CreatureContain
 		float experienceNormal = Math.min(1, (float)this.creature.getExperience() / this.creature.creatureStats.getExperienceForNextLevel());
 		this.drawHelper.drawTexture(matrixStack, TextureManager.getTexture("GUIBarExperience"), barX, barY, 0, experienceNormal, 1, barWidth * experienceNormal, barHeight);
 		String experienceText = new TranslationTextComponent("entity.experience").getString() + ": " + this.creature.getExperience() + "/" + this.creature.creatureStats.getExperienceForNextLevel();
-		this.drawHelper.fontRenderer.draw(matrixStack, experienceText, barCenter - ((float)this.drawHelper.getStringWidth(experienceText) / 2), barY + 2, 0xFFFFFF);
+		this.drawHelper.getFontRenderer().draw(matrixStack, experienceText, barCenter - ((float)this.drawHelper.getStringWidth(experienceText) / 2), barY + 2, 0xFFFFFF);
 		barY += barHeight + 1;
 
 		// Level:
 		String levelText = new TranslationTextComponent("entity.level").getString() + ": " + this.creature.getMobLevel();
-		this.drawHelper.fontRenderer.draw(matrixStack, levelText, barCenter - ((float)this.drawHelper.getStringWidth(levelText) / 2), barY + 2, 0xFFFFFF);
+		this.drawHelper.getFontRenderer().draw(matrixStack, levelText, barCenter - ((float)this.drawHelper.getStringWidth(levelText) / 2), barY + 2, 0xFFFFFF);
 	}
 
 	@Override

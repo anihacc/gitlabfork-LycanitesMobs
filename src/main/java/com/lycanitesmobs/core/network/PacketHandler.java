@@ -30,6 +30,7 @@ public class PacketHandler {
 		int messageID = 0;
 
 		HANDLER.registerMessage(messageID++, MessageBeastiary.class, MessageBeastiary::encode, MessageBeastiary::decode, MessageBeastiary::handle);
+		HANDLER.registerMessage(messageID++, MessageCreature.class, MessageCreature::encode, MessageCreature::decode, MessageCreature::handle);
 		HANDLER.registerMessage(messageID++, MessageCreatureKnowledge.class, MessageCreatureKnowledge::encode, MessageCreatureKnowledge::decode, MessageCreatureKnowledge::handle);
 		HANDLER.registerMessage(messageID++, MessagePlayerStats.class, MessagePlayerStats::encode, MessagePlayerStats::decode, MessagePlayerStats::handle);
 		HANDLER.registerMessage(messageID++, MessagePetEntry.class, MessagePetEntry::encode, MessagePetEntry::decode, MessagePetEntry::handle);

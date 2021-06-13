@@ -220,24 +220,24 @@ public class EntityConba extends TameableCreatureEntity implements IMob {
    	// ========== Read ===========
     /** Used when loading this mob from a saved chunk. **/
     @Override
-    public void readAdditionalSaveData(CompoundNBT nbtTagCompound) {
-    	super.readAdditionalSaveData(nbtTagCompound);
+    public void readAdditionalSaveData(CompoundNBT nbt) {
+    	super.readAdditionalSaveData(nbt);
         
-        if(nbtTagCompound.contains("VespidInfection")) {
-        	this.vespidInfection = nbtTagCompound.getBoolean("VespidInfection");
+        if(nbt.contains("VespidInfection")) {
+        	this.vespidInfection = nbt.getBoolean("VespidInfection");
         }
-        if(nbtTagCompound.contains("VespidInfectionTime")) {
-        	this.vespidInfectionTime = nbtTagCompound.getInt("VespidInfectionTime");
+        if(nbt.contains("VespidInfectionTime")) {
+        	this.vespidInfectionTime = nbt.getInt("VespidInfectionTime");
         }
     }
     
     // ========== Write ==========
     /** Used when saving this mob to a chunk. **/
     @Override
-    public void addAdditionalSaveData(CompoundNBT nbtTagCompound) {
-        super.addAdditionalSaveData(nbtTagCompound);
-    	nbtTagCompound.putBoolean("VespidInfection", this.vespidInfection);
+    public void addAdditionalSaveData(CompoundNBT nbt) {
+        super.addAdditionalSaveData(nbt);
+    	nbt.putBoolean("VespidInfection", this.vespidInfection);
     	if(this.vespidInfection)
-        	nbtTagCompound.putInt("VespidInfectionTime", this.vespidInfectionTime);
+        	nbt.putInt("VespidInfectionTime", this.vespidInfectionTime);
     }
 }

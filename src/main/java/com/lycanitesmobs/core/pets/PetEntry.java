@@ -641,7 +641,7 @@ public class PetEntry {
 		// Creature Base:
         if(this.entity instanceof BaseCreatureEntity) {
             BaseCreatureEntity baseCreatureEntity = (BaseCreatureEntity)this.entity;
-            baseCreatureEntity.inventory.write(this.entityNBT);
+            baseCreatureEntity.inventory.save(this.entityNBT);
 
             if(this.entity instanceof AgeableCreatureEntity) {
                 AgeableCreatureEntity ageableCreatureEntity = (AgeableCreatureEntity)this.entity;
@@ -680,7 +680,7 @@ public class PetEntry {
 
         if(this.entity instanceof BaseCreatureEntity) {
             BaseCreatureEntity baseCreatureEntity = (BaseCreatureEntity)this.entity;
-            baseCreatureEntity.inventory.read(this.entityNBT);
+            baseCreatureEntity.inventory.load(this.entityNBT);
             if(this.entity instanceof AgeableCreatureEntity) {
                 AgeableCreatureEntity ageableCreatureEntity = (AgeableCreatureEntity)this.entity;
                 if(this.entityNBT.contains("Age"))

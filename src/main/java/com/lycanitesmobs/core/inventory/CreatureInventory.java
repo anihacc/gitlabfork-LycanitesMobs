@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class InventoryCreature implements IInventory {
+public class CreatureInventory implements IInventory {
 
     // Basic Armor Values: (Copied values from EntityHorse)
     public static final Map<String, Integer> armorValues = new HashMap<>();
@@ -81,7 +81,7 @@ public class InventoryCreature implements IInventory {
 	// ==================================================
   	//                    Constructor
   	// ==================================================
-	public InventoryCreature(String inventoryName, BaseCreatureEntity creature) {
+	public CreatureInventory(String inventoryName, BaseCreatureEntity creature) {
 		this.inventoryName = inventoryName;
 		this.creature = creature;
 		this.addEquipmentSlot("chest");
@@ -516,10 +516,8 @@ public class InventoryCreature implements IInventory {
 	public void dropInventory() {
 		for(int slotID = 0; slotID < this.inventoryContents.size(); slotID++) {
 			ItemStack itemStack = this.inventoryContents.get(slotID);
-			if (itemStack != null) {
-				this.creature.dropItem(itemStack);
-				this.setInventorySlotContentsNoUpdate(slotID, ItemStack.EMPTY);
-			}
+			this.creature.dropItem(itemStack);
+			this.setInventorySlotContentsNoUpdate(slotID, ItemStack.EMPTY);
 		}
 	}
     
@@ -527,11 +525,14 @@ public class InventoryCreature implements IInventory {
     // ==================================================
     //                        NBT
     // ==================================================
-   	// ========== Read ===========
-    public void read(CompoundNBT nbtTagCompound) {
+	/**
+	 * Loads inventory from nbt data.
+	 * @param nbt The nbt data to load from.
+	 */
+	public void load(CompoundNBT nbt) {
     	// Read Items:
         NonNullList<ItemStack> itemStacks = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
-        ItemStackHelper.loadAllItems(nbtTagCompound, itemStacks); // Reads ItemStack into a List from "Items" tag.
+        ItemStackHelper.loadAllItems(nbt, itemStacks); // Reads ItemStack into a List from "Items" tag.
 
     	for(int i = 0; i < itemStacks.size(); ++i) {
     		if(i < this.getContainerSize()) {
@@ -545,9 +546,12 @@ public class InventoryCreature implements IInventory {
     	}
     	this.onInventoryChanged(false);
     }
-    
-    // ========== Write ==========
-    public void write(CompoundNBT nbtTagCompound) {
+
+	/**
+	 * Saves inventory to nbt data.
+	 * @param nbt The nbt data to save to.
+	 */
+	public void save(CompoundNBT nbt) {
     	// Write Items:
         NonNullList<ItemStack> itemStacks = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
         for(int i = 0; i < this.getContainerSize(); i++) {
@@ -555,7 +559,7 @@ public class InventoryCreature implements IInventory {
 				itemStacks.set(i, this.getItem(i));
 			}
         }
-        ItemStackHelper.saveAllItems(nbtTagCompound, itemStacks); // Adds ItemStack NBT into the NBT Tag Compound.
+        ItemStackHelper.saveAllItems(nbt, itemStacks); // Adds ItemStack NBT into the NBT Tag Compound.
     	
     }
 

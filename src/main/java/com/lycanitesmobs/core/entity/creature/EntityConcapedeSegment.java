@@ -319,20 +319,20 @@ public class EntityConcapedeSegment extends AgeableCreatureEntity {
    	// ========== Read ===========
     /** Used when loading this mob from a saved chunk. **/
     @Override
-    public void readAdditionalSaveData(CompoundNBT nbtTagCompound) {
-    	if(nbtTagCompound.hasUUID("ParentUUID")) {
-            this.parentUUID = nbtTagCompound.getUUID("ParentUUID");
+    public void readAdditionalSaveData(CompoundNBT nbt) {
+    	if(nbt.hasUUID("ParentUUID")) {
+            this.parentUUID = nbt.getUUID("ParentUUID");
         }
-        super.readAdditionalSaveData(nbtTagCompound);
+        super.readAdditionalSaveData(nbt);
     }
     
     // ========== Write ==========
     /** Used when saving this mob to a chunk. **/
     @Override
-    public void addAdditionalSaveData(CompoundNBT nbtTagCompound) {
-		super.addAdditionalSaveData(nbtTagCompound);
+    public void addAdditionalSaveData(CompoundNBT nbt) {
+		super.addAdditionalSaveData(nbt);
     	if(this.hasParent()) {
-			nbtTagCompound.putUUID("ParentUUID", this.getParentTarget().getUUID());
+			nbt.putUUID("ParentUUID", this.getParentTarget().getUUID());
     	}
     }
 }

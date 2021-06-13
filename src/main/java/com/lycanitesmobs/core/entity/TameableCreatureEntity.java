@@ -785,6 +785,11 @@ public abstract class TameableCreatureEntity extends AgeableCreatureEntity {
 
 			extendedPlayer.studyCreature(this, this.scaleKnowledgeExperience(CreatureManager.getInstance().config.creatureTreatKnowledge));
 
+			// Already Tamed:
+			if (this.isTamed()) {
+				return true;
+			}
+
 			// Require Knowledge Rank 2:
 			CreatureKnowledge creatureKnowledge = extendedPlayer.getBeastiary().getCreatureKnowledge(this.creatureInfo.getName());
 			if (creatureKnowledge == null || creatureKnowledge.rank < 2) {
@@ -797,8 +802,13 @@ public abstract class TameableCreatureEntity extends AgeableCreatureEntity {
 				return this.isTamed();
 			}
 
-			// Random Tame Chance:
-			if (this.random.nextInt(3) == 0) {
+			// Increase Reputation:
+			CreatureRelationshipEntry relationshipEntry = this.relationships.getOrCreateEntry(player);
+			int reputationAmount = 50 + this.getRandom().nextInt(50);
+			relationshipEntry.increaseReputation(reputationAmount);
+
+			// Apply Tame:
+			if (relationshipEntry.getReputation() >= this.creatureInfo.getTamingReputation()) {
 				this.setPlayerOwner(player);
 				this.onTamedByPlayer();
 				this.unsetTemporary();
@@ -815,14 +825,15 @@ public abstract class TameableCreatureEntity extends AgeableCreatureEntity {
 				}
 			}
 			else {
-				ITextComponent tameMessage = new TranslationTextComponent("message.pet.tamefail.prefix")
-						.append(" ")
-						.append(this.getSpeciesName())
-						.append(" ")
-						.append(new TranslationTextComponent("message.pet.tamefail.suffix"));
-				player.sendMessage(tameMessage, Util.NIL_UUID);
-				this.playTameEffect(this.isTamed());
+//				ITextComponent tameMessage = new TranslationTextComponent("message.pet.tamefail.prefix")
+//						.append(" ")
+//						.append(this.getSpeciesName())
+//						.append(" ")
+//						.append(new TranslationTextComponent("message.pet.tamefail.suffix"));
+//				player.sendMessage(tameMessage, Util.NIL_UUID);
 			}
+
+			this.playTameEffect(this.isTamed());
 		}
     	return this.isTamed();
     }
@@ -1216,78 +1227,78 @@ public abstract class TameableCreatureEntity extends AgeableCreatureEntity {
     // ==================================================
    	// ========== Read ===========
     @Override
-    public void readAdditionalSaveData(CompoundNBT nbtTagCompound) {
-        super.readAdditionalSaveData(nbtTagCompound);
+    public void readAdditionalSaveData(CompoundNBT nbt) {
+        super.readAdditionalSaveData(nbt);
 
 		// UUID NBT:
-        if(nbtTagCompound.hasUUID("OwnerId")) {
-            this.setOwnerId(nbtTagCompound.getUUID("OwnerId"));
+        if(nbt.hasUUID("OwnerId")) {
+            this.setOwnerId(nbt.getUUID("OwnerId"));
         }
         else {
 			this.setOwnerId(null);
         }
         
-        if(nbtTagCompound.contains("Sitting")) {
-	        this.setSitting(nbtTagCompound.getBoolean("Sitting"));
+        if(nbt.contains("Sitting")) {
+	        this.setSitting(nbt.getBoolean("Sitting"));
         }
         else {
         	this.setSitting(false);
         }
         
-        if(nbtTagCompound.contains("Following")) {
-	        this.setFollowing(nbtTagCompound.getBoolean("Following"));
+        if(nbt.contains("Following")) {
+	        this.setFollowing(nbt.getBoolean("Following"));
         }
         else {
         	this.setFollowing(true);
         }
         
-        if(nbtTagCompound.contains("Passive")) {
-	        this.setPassive(nbtTagCompound.getBoolean("Passive"));
+        if(nbt.contains("Passive")) {
+	        this.setPassive(nbt.getBoolean("Passive"));
         }
         else {
         	this.setPassive(false);
         }
         
-        if(nbtTagCompound.contains("Aggressive")) {
-	        this.setAggressive(nbtTagCompound.getBoolean("Aggressive"));
+        if(nbt.contains("Aggressive")) {
+	        this.setAggressive(nbt.getBoolean("Aggressive"));
         }
         else {
         	this.setAggressive(false);
         }
         
-        if(nbtTagCompound.contains("PVP")) {
-	        this.setPVP(nbtTagCompound.getBoolean("PVP"));
+        if(nbt.contains("PVP")) {
+	        this.setPVP(nbt.getBoolean("PVP"));
         }
         else {
         	this.setPVP(true);
         }
         
-        if(nbtTagCompound.contains("Hunger")) {
-        	this.setCreatureHunger(nbtTagCompound.getFloat("Hunger"));
+        if(nbt.contains("Hunger")) {
+        	this.setCreatureHunger(nbt.getFloat("Hunger"));
         }
         else {
         	this.setCreatureHunger(this.getCreatureHungerMax());
         }
         
-        if(nbtTagCompound.contains("Stamina")) {
-        	this.setStamina(nbtTagCompound.getFloat("Stamina"));
+        if(nbt.contains("Stamina")) {
+        	this.setStamina(nbt.getFloat("Stamina"));
         }
     }
     
     // ========== Write ==========
     @Override
-    public void addAdditionalSaveData(CompoundNBT nbtTagCompound) {
-        super.addAdditionalSaveData(nbtTagCompound);
+    public void addAdditionalSaveData(CompoundNBT nbt) {
+        super.addAdditionalSaveData(nbt);
         if(this.getOwnerId() != null) {
-            nbtTagCompound.putUUID("OwnerId", this.getOwnerId());
+            nbt.putUUID("OwnerId", this.getOwnerId());
         }
-        nbtTagCompound.putBoolean("Sitting", this.isSitting());
-        nbtTagCompound.putBoolean("Following", this.isFollowing());
-        nbtTagCompound.putBoolean("Passive", this.isPassive());
-        nbtTagCompound.putBoolean("Aggressive", this.isAggressive());
-        nbtTagCompound.putBoolean("PVP", this.isPVP());
-        nbtTagCompound.putFloat("Hunger", this.getCreatureHunger());
-        nbtTagCompound.putFloat("Stamina", this.getStamina());
+        nbt.putBoolean("Sitting", this.isSitting());
+        nbt.putBoolean("Following", this.isFollowing());
+        nbt.putBoolean("Passive", this.isPassive());
+        nbt.putBoolean("Aggressive", this.isAggressive());
+        nbt.putBoolean("PVP", this.isPVP());
+        nbt.putFloat("Hunger", this.getCreatureHunger());
+        nbt.putFloat("Stamina", this.getStamina());
     }
     
     

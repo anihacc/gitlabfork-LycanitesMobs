@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.container;
 
-import com.lycanitesmobs.core.inventory.InventoryCreature;
+import com.lycanitesmobs.core.inventory.CreatureInventory;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
@@ -26,8 +26,8 @@ public class BaseSlot extends Slot {
     }
 	
 	public int getMaxStackSize() {
-		if(this.container instanceof InventoryCreature)
-			if(((InventoryCreature)this.container).getTypeFromSlot(this.getSlotIndex()) != null)
+		if(this.container instanceof CreatureInventory)
+			if(((CreatureInventory)this.container).getTypeFromSlot(this.getSlotIndex()) != null)
 				return 1;
         return this.container.getMaxStackSize();
     }

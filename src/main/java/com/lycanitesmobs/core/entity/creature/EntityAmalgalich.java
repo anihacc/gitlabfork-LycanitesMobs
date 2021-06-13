@@ -334,15 +334,15 @@ public class EntityAmalgalich extends BaseCreatureEntity implements IMob, IGroup
     // ==================================================
     // ========== Read ===========
     @Override
-    public void readAdditionalSaveData(CompoundNBT nbtTagCompound) {
-        super.readAdditionalSaveData(nbtTagCompound);
+    public void readAdditionalSaveData(CompoundNBT nbt) {
+        super.readAdditionalSaveData(nbt);
     }
 
     // ========== Write ==========
     /** Used when saving this mob to a chunk. **/
     @Override
-    public void addAdditionalSaveData(CompoundNBT nbtTagCompound) {
-        super.addAdditionalSaveData(nbtTagCompound);
+    public void addAdditionalSaveData(CompoundNBT nbt) {
+        super.addAdditionalSaveData(nbt);
     }
 
 

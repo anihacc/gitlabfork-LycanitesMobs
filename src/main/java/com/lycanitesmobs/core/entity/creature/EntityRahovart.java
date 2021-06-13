@@ -672,16 +672,16 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
     // ==================================================
     // ========== Read ===========
     @Override
-    public void readAdditionalSaveData(CompoundNBT nbtTagCompound) {
-        super.readAdditionalSaveData(nbtTagCompound);
-        if(nbtTagCompound.contains("HellfireEnergy")) {
-            this.hellfireEnergy = nbtTagCompound.getInt("HellfireEnergy");
+    public void readAdditionalSaveData(CompoundNBT nbt) {
+        super.readAdditionalSaveData(nbt);
+        if(nbt.contains("HellfireEnergy")) {
+            this.hellfireEnergy = nbt.getInt("HellfireEnergy");
         }
-        if(nbtTagCompound.contains("HellfireWallTime")) {
-            this.hellfireWallTime = nbtTagCompound.getInt("HellfireWallTime");
+        if(nbt.contains("HellfireWallTime")) {
+            this.hellfireWallTime = nbt.getInt("HellfireWallTime");
         }
-        if(nbtTagCompound.contains("BelphegorIDs")) {
-            ListNBT belphegorIDs = nbtTagCompound.getList("BelphegorIDs", 10);
+        if(nbt.contains("BelphegorIDs")) {
+            ListNBT belphegorIDs = nbt.getList("BelphegorIDs", 10);
             for(int i = 0; i < belphegorIDs.size(); i++) {
                 CompoundNBT belphegorID = belphegorIDs.getCompound(i);
                 if(belphegorID.contains("ID")) {
@@ -691,8 +691,8 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
                 }
             }
         }
-        if(nbtTagCompound.contains("BehemophetIDs")) {
-            ListNBT behemophetIDs = nbtTagCompound.getList("BehemophetIDs", 10);
+        if(nbt.contains("BehemophetIDs")) {
+            ListNBT behemophetIDs = nbt.getList("BehemophetIDs", 10);
             for(int i = 0; i < behemophetIDs.size(); i++) {
                 CompoundNBT behemophetID = behemophetIDs.getCompound(i);
                 if(behemophetID.contains("ID")) {
@@ -707,10 +707,10 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
     // ========== Write ==========
     /** Used when saving this mob to a chunk. **/
     @Override
-    public void addAdditionalSaveData(CompoundNBT nbtTagCompound) {
-        super.addAdditionalSaveData(nbtTagCompound);
-        nbtTagCompound.putInt("HellfireEnergy", this.hellfireEnergy);
-        nbtTagCompound.putInt("HellfireWallTime", this.hellfireWallTime);
+    public void addAdditionalSaveData(CompoundNBT nbt) {
+        super.addAdditionalSaveData(nbt);
+        nbt.putInt("HellfireEnergy", this.hellfireEnergy);
+        nbt.putInt("HellfireWallTime", this.hellfireWallTime);
         if(this.getBattlePhase() == 0) {
             ListNBT belphegorIDs = new ListNBT();
             for(EntityBelphegor entityBelphegoregor : this.hellfireBelphegorMinions) {
@@ -718,7 +718,7 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
                 belphegorID.putInt("ID", entityBelphegoregor.getId());
                 belphegorIDs.add(belphegorID);
             }
-            nbtTagCompound.put("BelphegorIDs", belphegorIDs);
+            nbt.put("BelphegorIDs", belphegorIDs);
         }
         if(this.getBattlePhase() == 1) {
             ListNBT behemophetIDs = new ListNBT();
@@ -727,7 +727,7 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
                 behemophetID.putInt("ID", entityBehemophet.getId());
                 behemophetIDs.add(behemophetID);
             }
-            nbtTagCompound.put("BehemophetIDs", behemophetIDs);
+            nbt.put("BehemophetIDs", behemophetIDs);
         }
     }
 

@@ -565,16 +565,16 @@ public class EntityAsmodeus extends BaseCreatureEntity implements IMob, IGroupHe
     // ==================================================
     // ========== Read ===========
     @Override
-    public void readAdditionalSaveData(CompoundNBT nbtTagCompound) {
-        super.readAdditionalSaveData(nbtTagCompound);
-        if(nbtTagCompound.contains("DevilstarStreamCharge")) {
-            this.devilstarStreamCharge = nbtTagCompound.getInt("DevilstarStreamCharge");
+    public void readAdditionalSaveData(CompoundNBT nbt) {
+        super.readAdditionalSaveData(nbt);
+        if(nbt.contains("DevilstarStreamCharge")) {
+            this.devilstarStreamCharge = nbt.getInt("DevilstarStreamCharge");
         }
-        if(nbtTagCompound.contains("DevilstarStreamTime")) {
-            this.devilstarStreamTime = nbtTagCompound.getInt("DevilstarStreamTime");
+        if(nbt.contains("DevilstarStreamTime")) {
+            this.devilstarStreamTime = nbt.getInt("DevilstarStreamTime");
         }
-        if(nbtTagCompound.contains("AstarothIDs")) {
-            ListNBT astarothIDs = nbtTagCompound.getList("AstarothIDs", 10);
+        if(nbt.contains("AstarothIDs")) {
+            ListNBT astarothIDs = nbt.getList("AstarothIDs", 10);
             for(int i = 0; i < astarothIDs.size(); i++) {
                 CompoundNBT astarothID = astarothIDs.getCompound(i);
                 if(astarothID.contains("ID")) {
@@ -589,10 +589,10 @@ public class EntityAsmodeus extends BaseCreatureEntity implements IMob, IGroupHe
     // ========== Write ==========
     /** Used when saving this mob to a chunk. **/
     @Override
-    public void addAdditionalSaveData(CompoundNBT nbtTagCompound) {
-        super.addAdditionalSaveData(nbtTagCompound);
-        nbtTagCompound.putInt("DevilstarStreamCharge", this.devilstarStreamCharge);
-        nbtTagCompound.putInt("DevilstarStreamTime", this.devilstarStreamTime);
+    public void addAdditionalSaveData(CompoundNBT nbt) {
+        super.addAdditionalSaveData(nbt);
+        nbt.putInt("DevilstarStreamCharge", this.devilstarStreamCharge);
+        nbt.putInt("DevilstarStreamTime", this.devilstarStreamTime);
         if(this.getBattlePhase() > 0) {
             ListNBT astarothIDs = new ListNBT();
             for(EntityAstaroth entityAstaroth : this.astarothMinions) {
@@ -600,7 +600,7 @@ public class EntityAsmodeus extends BaseCreatureEntity implements IMob, IGroupHe
                 astarothID.putInt("ID", entityAstaroth.getId());
                 astarothIDs.add(astarothID);
             }
-            nbtTagCompound.put("AstarothIDs", astarothIDs);
+            nbt.put("AstarothIDs", astarothIDs);
         }
     }
 

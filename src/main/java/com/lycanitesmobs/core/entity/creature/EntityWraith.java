@@ -152,19 +152,19 @@ public class EntityWraith extends TameableCreatureEntity implements IMob {
 	// ==================================================
 	// ========== Read ===========
 	@Override
-	public void readAdditionalSaveData(CompoundNBT nbtTagCompound) {
-		super.readAdditionalSaveData(nbtTagCompound);
-		if(nbtTagCompound.contains("DetonateTimer")) {
-			this.detonateTimer = nbtTagCompound.getInt("DetonateTimer");
+	public void readAdditionalSaveData(CompoundNBT nbt) {
+		super.readAdditionalSaveData(nbt);
+		if(nbt.contains("DetonateTimer")) {
+			this.detonateTimer = nbt.getInt("DetonateTimer");
 		}
 	}
 
 	// ========== Write ==========
 	@Override
-	public void addAdditionalSaveData(CompoundNBT nbtTagCompound) {
-		super.addAdditionalSaveData(nbtTagCompound);
+	public void addAdditionalSaveData(CompoundNBT nbt) {
+		super.addAdditionalSaveData(nbt);
 		if(this.detonateTimer > -1) {
-			nbtTagCompound.putInt("DetonateTimer", this.detonateTimer);
+			nbt.putInt("DetonateTimer", this.detonateTimer);
 		}
 	}
 }

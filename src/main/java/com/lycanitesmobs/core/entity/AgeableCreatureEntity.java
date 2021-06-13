@@ -409,24 +409,24 @@ public abstract class AgeableCreatureEntity extends BaseCreatureEntity {
   	// ==================================================
 	// ========== Read ==========
     @Override
-	public void readAdditionalSaveData(CompoundNBT nbtTagCompound) {
-        super.readAdditionalSaveData(nbtTagCompound);
-        if(nbtTagCompound.contains("Age")) {
-        	this.setGrowingAge(nbtTagCompound.getInt("Age"));
+	public void readAdditionalSaveData(CompoundNBT nbt) {
+        super.readAdditionalSaveData(nbt);
+        if(nbt.contains("Age")) {
+        	this.setGrowingAge(nbt.getInt("Age"));
         }
         else {
         	this.setGrowingAge(0);
         }
         
-        if(nbtTagCompound.contains("InLove")) {
-        	this.loveTime = nbtTagCompound.getInt("InLove");
+        if(nbt.contains("InLove")) {
+        	this.loveTime = nbt.getInt("InLove");
         }
         else {
         	this.loveTime = 0;
         }
         
-        if(nbtTagCompound.contains("HasBeenFarmed")) {
-        	if(nbtTagCompound.getBoolean("HasBeenFarmed")) {
+        if(nbt.contains("HasBeenFarmed")) {
+        	if(nbt.getBoolean("HasBeenFarmed")) {
         		this.setFarmed();
         	}
         }
@@ -434,10 +434,10 @@ public abstract class AgeableCreatureEntity extends BaseCreatureEntity {
 	
 	// ========== Write ==========
     @Override
-	public void addAdditionalSaveData(CompoundNBT nbtTagCompound) {
-        super.addAdditionalSaveData(nbtTagCompound);
-        nbtTagCompound.putInt("Age", this.getGrowingAge());
-        nbtTagCompound.putInt("InLove", this.loveTime);
-        nbtTagCompound.putBoolean("HasBeenFarmed", this.hasBeenFarmed);
+	public void addAdditionalSaveData(CompoundNBT nbt) {
+        super.addAdditionalSaveData(nbt);
+        nbt.putInt("Age", this.getGrowingAge());
+        nbt.putInt("InLove", this.loveTime);
+        nbt.putBoolean("HasBeenFarmed", this.hasBeenFarmed);
     }
 }

@@ -2,14 +2,13 @@ package com.lycanitesmobs.core.entity.goals.targeting;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.CreatureRelationshipEntry;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 
 import java.util.*;
-
-import net.minecraft.entity.ai.goal.Goal.Flag;
 
 public class FindAttackTargetGoal extends TargetingGoal {
 	// Targets:
@@ -135,6 +134,12 @@ public class FindAttackTargetGoal extends TargetingGoal {
 
         // Entity Check:
 		if(!this.host.canAttack(target)) {
+			return false;
+		}
+
+		// Relationships Check:
+		CreatureRelationshipEntry relationshipEntry = this.host.relationships.getEntry(target);
+		if (relationshipEntry != null && !relationshipEntry.canHunt()) {
 			return false;
 		}
         

@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.entity;
 
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.core.inventory.InventoryCreature;
+import com.lycanitesmobs.core.inventory.CreatureInventory;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.FlyingEntity;
 import net.minecraft.entity.LivingEntity;
@@ -48,7 +48,7 @@ public class FearEntity extends BaseCreatureEntity {
 
         // Stats:
         this.xpReward = 0;
-        this.inventory = new InventoryCreature(this.getName().toString(), this);
+        this.inventory = new CreatureInventory(this.getName().toString(), this);
     }
 	
 	// ========== Default Drops ==========

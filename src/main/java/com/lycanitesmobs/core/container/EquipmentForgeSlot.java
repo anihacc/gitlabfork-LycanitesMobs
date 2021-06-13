@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.container;
 
-import com.lycanitesmobs.core.inventory.InventoryCreature;
+import com.lycanitesmobs.core.inventory.CreatureInventory;
 import com.lycanitesmobs.core.item.equipment.ItemEquipment;
 import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
 import com.lycanitesmobs.core.item.equipment.features.EquipmentFeature;
@@ -73,8 +73,8 @@ public class EquipmentForgeSlot extends BaseSlot {
 
 	@Override
 	public int getMaxStackSize() {
-		if(this.container instanceof InventoryCreature)
-			if(((InventoryCreature)this.container).getTypeFromSlot(this.getSlotIndex()) != null)
+		if(this.container instanceof CreatureInventory)
+			if(((CreatureInventory)this.container).getTypeFromSlot(this.getSlotIndex()) != null)
 				return 1;
         return this.container.getMaxStackSize();
     }

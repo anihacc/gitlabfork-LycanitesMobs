@@ -88,7 +88,7 @@ public class CreatureInfo {
 	public int bagSize = 5;
 
 	public int packSize = 3;
-	public int tamingReputation = 500;
+	protected int tamingReputation = 500;
 
 
 	// Spawn Egg:
@@ -789,6 +789,22 @@ public class CreatureInfo {
 		// Get Random Subspecies:
 		int randomIndex =  entity.getRandom().nextInt(possibleSubspecies.size());
 		return possibleSubspecies.get(randomIndex);
+	}
+
+	/**
+	 * Returns the amount of Relationship Reputation required to become friendly.
+	 * @return The reputation required to be friendly.
+	 */
+	public int getFriendlyReputation() {
+		return Math.round((float)this.tamingReputation / 2);
+	}
+
+	/**
+	 * Returns the amount of Relationship Reputation required to trigger a tame.
+	 * @return The reputation required to tame.
+	 */
+	public int getTamingReputation() {
+		return this.tamingReputation;
 	}
 
 	/**

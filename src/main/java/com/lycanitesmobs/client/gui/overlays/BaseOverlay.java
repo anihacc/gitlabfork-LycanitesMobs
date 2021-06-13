@@ -7,10 +7,8 @@ import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.client.gui.BaseGui;
 import com.lycanitesmobs.client.gui.DrawHelper;
 import com.lycanitesmobs.core.config.ConfigDebug;
-import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.core.entity.ExtendedPlayer;
-import com.lycanitesmobs.core.entity.RideableCreatureEntity;
-import com.lycanitesmobs.core.entity.TameableCreatureEntity;
+import com.lycanitesmobs.core.entity.*;
+import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.item.summoningstaff.ItemStaffSummoning;
 import com.lycanitesmobs.client.mobevent.MobEventPlayerClient;
 import com.mojang.blaze3d.matrix.MatrixStack;
@@ -162,6 +160,34 @@ public class BaseOverlay extends BaseGui {
 		else
 			this.mountMessageTime = this.mountMessageTimeMax;
 
+		// ========== Taming Reputation Bar ==========
+		RayTraceResult mouseOver = Minecraft.getInstance().hitResult;
+		if(mouseOver instanceof EntityRayTraceResult) {
+			Entity mouseOverEntity = ((EntityRayTraceResult) mouseOver).getEntity();
+			if (mouseOverEntity instanceof BaseCreatureEntity) {
+				BaseCreatureEntity creatureEntity = (BaseCreatureEntity)mouseOverEntity;
+				CreatureInfo creatureInfo = creatureEntity.creatureInfo;
+				CreatureRelationshipEntry relationshipEntry = creatureEntity.relationships.getEntry(player);
+				if (relationshipEntry != null && relationshipEntry.getReputation() > 0 && !creatureEntity.isTamed()) {
+					float barWidth = 100;
+					float barHeight = 11;
+					float barX = ((float) this.minecraft.getWindow().getGuiScaledWidth() / 2) - (barWidth / 2);
+					float barY = (float) this.minecraft.getWindow().getGuiScaledHeight() * 0.75F;
+					float barCenter = barX + (barWidth / 2);
+
+					this.drawHelper.drawTexture(matrixStack, TextureManager.getTexture("GUIPetBarEmpty"), barX, barY, 0, 1, 1, barWidth, barHeight);
+					float reputationNormal = Math.min(1, (float)relationshipEntry.getReputation() / creatureInfo.getTamingReputation());
+					String barFillTexture = "GUIPetBarRespawn";
+					if (relationshipEntry.getReputation() >= creatureInfo.getFriendlyReputation()) {
+						barFillTexture = "GUIPetBarHealth";
+					}
+					this.drawHelper.drawTexture(matrixStack, TextureManager.getTexture(barFillTexture), barX, barY, 0, reputationNormal, 1, barWidth * reputationNormal, barHeight);
+					String reputationText = new TranslationTextComponent("entity.reputation").getString() + ": " + relationshipEntry.getReputation() + "/" + creatureInfo.getTamingReputation();
+					this.drawHelper.getFontRenderer().draw(matrixStack, reputationText, barCenter - ((float) this.drawHelper.getStringWidth(reputationText) / 2), barY + 2, 0xFFFFFF);
+				}
+			}
+		}
+
 		matrixStack.popPose();
 		this.minecraft.getTextureManager().bind(GUI_ICONS_LOCATION);
 	}
@@ -212,9 +238,13 @@ public class BaseOverlay extends BaseGui {
 				event.getLeft().add("Has Avoid Target: " + mouseOverCreature.hasAvoidTarget());
 				event.getLeft().add("Has Master Target: " + mouseOverCreature.hasMaster());
 				event.getLeft().add("Has Parent Target: " + mouseOverCreature.hasParent());
+
+				event.getLeft().add("");
+				CreatureRelationshipEntry relationshipEntry = mouseOverCreature.relationships.getEntry(this.minecraft.player);
+				event.getLeft().add("Reputation with Player: " + (relationshipEntry != null ? relationshipEntry.getReputation() : 0) + "/" + mouseOverCreature.creatureInfo.getTamingReputation());
+
 				if(mouseOverEntity instanceof TameableCreatureEntity) {
 					TameableCreatureEntity mouseOverTameable = (TameableCreatureEntity)mouseOverCreature;
-					event.getLeft().add("");
 					event.getLeft().add("Owner ID: " + (mouseOverTameable.getOwnerId() != null ? mouseOverTameable.getOwnerId().toString() : "None"));
 					event.getLeft().add("Owner Name: " + mouseOverTameable.getOwnerName().getString());
 				}

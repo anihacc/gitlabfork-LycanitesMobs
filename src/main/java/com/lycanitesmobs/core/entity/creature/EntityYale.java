@@ -306,18 +306,18 @@ public class EntityYale extends AgeableCreatureEntity implements IForgeShearable
    	// ========== Read ===========
     /** Used when loading this mob from a saved chunk. **/
     @Override
-    public void readAdditionalSaveData(CompoundNBT nbtTagCompound) {
-    	super.readAdditionalSaveData(nbtTagCompound);
-    	if(nbtTagCompound.contains("HasFur")) {
-    		this.setFur(nbtTagCompound.getBoolean("HasFur"));
+    public void readAdditionalSaveData(CompoundNBT nbt) {
+    	super.readAdditionalSaveData(nbt);
+    	if(nbt.contains("HasFur")) {
+    		this.setFur(nbt.getBoolean("HasFur"));
     	}
     }
     
     // ========== Write ==========
     /** Used when saving this mob to a chunk. **/
     @Override
-    public void addAdditionalSaveData(CompoundNBT nbtTagCompound) {
-    	super.addAdditionalSaveData(nbtTagCompound);
-    	nbtTagCompound.putBoolean("HasFur", this.hasFur());
+    public void addAdditionalSaveData(CompoundNBT nbt) {
+    	super.addAdditionalSaveData(nbt);
+    	nbt.putBoolean("HasFur", this.hasFur());
     }
 }
