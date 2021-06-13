@@ -11,6 +11,7 @@
     "spawning": {
         "enabled": true,
         "spawners": [
+            "land_animal",
             "land_underground_animal",
             "portal"
         ],
