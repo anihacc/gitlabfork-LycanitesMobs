@@ -49,7 +49,10 @@ public class LayerCreatureEffect extends LayerCreatureBase {
 
     @Override
     public ResourceLocation getLayerTexture(BaseCreatureEntity entity) {
-		return entity.getTexture(this.textureSuffix);
+    	if (this.subspecies) {
+			return entity.getTexture(this.textureSuffix);
+		}
+    	return entity.getSubTexture(this.textureSuffix);
     }
 
 	@Override
