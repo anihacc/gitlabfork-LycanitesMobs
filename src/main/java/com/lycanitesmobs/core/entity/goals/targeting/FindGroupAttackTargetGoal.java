@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.entity.goals.targeting;
 
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.CreatureRelationshipEntry;
 import com.lycanitesmobs.core.info.CreatureGroup;
 import net.minecraft.entity.EntityLivingBase;
 
@@ -84,6 +85,12 @@ public class FindGroupAttackTargetGoal extends FindAttackTargetGoal {
 
         // Entity Check:
 		if(!this.host.canAttackEntity(target)) {
+			return false;
+		}
+
+		// Relationships Check:
+		CreatureRelationshipEntry relationshipEntry = this.host.relationships.getEntry(target);
+		if (relationshipEntry != null && !relationshipEntry.canHunt()) {
 			return false;
 		}
 

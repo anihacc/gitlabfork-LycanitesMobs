@@ -22,6 +22,7 @@ public class PacketHandler {
 		
 		// Server to Client:
 		this.network.registerMessage(MessageBeastiary.class, MessageBeastiary.class, messageID++, Side.CLIENT);
+		this.network.registerMessage(MessageCreature.class, MessageCreature.class, messageID++, Side.CLIENT);
 		this.network.registerMessage(MessageCreatureKnowledge.class, MessageCreatureKnowledge.class, messageID++, Side.CLIENT);
 		this.network.registerMessage(MessagePlayerStats.class, MessagePlayerStats.class, messageID++, Side.CLIENT);
         this.network.registerMessage(MessagePetEntry.class, MessagePetEntry.class, messageID++, Side.CLIENT);

@@ -793,6 +793,11 @@ public class TameableCreatureEntity extends AgeableCreatureEntity implements IEn
 
 			extendedPlayer.studyCreature(this, this.scaleKnowledgeExperience(CreatureManager.getInstance().config.creatureTreatKnowledge));
 
+			// Already Tamed:
+			if (this.isTamed()) {
+				return true;
+			}
+
 			// Require Knowledge Rank 2:
 			CreatureKnowledge creatureKnowledge = extendedPlayer.getBeastiary().getCreatureKnowledge(this.creatureInfo.getName());
 			if (creatureKnowledge == null || creatureKnowledge.rank < 2) {
@@ -802,8 +807,13 @@ public class TameableCreatureEntity extends AgeableCreatureEntity implements IEn
 				return this.isTamed();
 			}
 
-			// Random Tame Chance:
-			if (this.getRNG().nextInt(3) == 0) {
+			// Increase Reputation:
+			CreatureRelationshipEntry relationshipEntry = this.relationships.getOrCreateEntry(player);
+			int reputationAmount = 50 + this.getRNG().nextInt(50);
+			relationshipEntry.increaseReputation(reputationAmount);
+
+			// Apply Tame:
+			if (relationshipEntry.getReputation() >= this.creatureInfo.getTamingReputation()) {
 				this.setPlayerOwner(player);
 				this.onTamedByPlayer();
 				this.unsetTemporary();
@@ -817,11 +827,12 @@ public class TameableCreatureEntity extends AgeableCreatureEntity implements IEn
 				}
 			}
 			else {
-				String tameFailedMessage = LanguageManager.translate("message.pet.tamefail");
-				tameFailedMessage = tameFailedMessage.replace("%creature%", this.getSpeciesName());
-				player.sendMessage(new TextComponentString(tameFailedMessage));
-				this.playTameEffect(this.isTamed());
+//				String tameFailedMessage = LanguageManager.translate("message.pet.tamefail");
+//				tameFailedMessage = tameFailedMessage.replace("%creature%", this.getSpeciesName());
+//				player.sendMessage(new TextComponentString(tameFailedMessage));
 			}
+
+			this.playTameEffect(this.isTamed());
 		}
     	return this.isTamed();
     }

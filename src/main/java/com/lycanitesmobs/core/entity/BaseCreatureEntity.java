@@ -21,6 +21,7 @@ import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import com.lycanitesmobs.core.inventory.InventoryCreature;
 import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
+import com.lycanitesmobs.core.network.MessageCreature;
 import com.lycanitesmobs.core.pets.PetEntry;
 import com.lycanitesmobs.core.spawner.SpawnerEventListener;
 import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
@@ -87,6 +88,8 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 	public Variant variant = null;
 	/** What attribute is this creature, used for effects such as Bane of Arthropods. **/
 	public EnumCreatureAttribute attribute = EnumCreatureAttribute.UNDEAD;
+	/** The Creature's relationships, for advanced memory and taming. **/
+	public CreatureRelationships relationships;
 	/** A class that opens up extra stats and behaviours for NBT based customization.**/
 	public ExtraMobBehaviour extraMobBehaviour;
 
@@ -94,6 +97,8 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 	// Info:
 	/** The living update tick. **/
 	public long updateTick = 0;
+	/** Set to true when an advanced network sync is required. **/
+	protected boolean syncQueued = true;
 	/** The name of the event that spawned this mob if any, an empty string ("") if none. **/
 	public String spawnEventType = "";
 	/** The number of the event that spawned this mob. Used for despawning this mob when a new event starts. Ignored if the spawnEventType is blank or the count is less than 0. **/
@@ -452,6 +457,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 		this.loadCreatureFlags();
 
 		this.creatureStats = new CreatureStats(this);
+		this.relationships = new CreatureRelationships(this);
 		this.extraMobBehaviour = new ExtraMobBehaviour(this);
 		this.directNavigator = new DirectNavigator(this);
 
@@ -666,8 +672,42 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 
 
     // ==================================================
-    //                     Data Manager
+	//              Data Manager and Network
     // ==================================================
+	/**
+	 * Queues an advanced network sync of this entity to all clients for the next update tick.
+	 * Called by various Creature Subsystems to sync more specific information.
+	 * Ignored when called client side, safe to call for convenience.
+	 */
+	public void queueSync() {
+		if (this.getEntityWorld().isRemote) {
+			return;
+		}
+		this.syncQueued = true;
+	}
+
+	/**
+	 * Performs an advanced network sync of this entity to all clients.
+	 * Used by various Creature Subsystems to sync more specific information.
+	 * Ignored when called client side, safe to call for convenience.
+	 */
+	public void doSync() {
+		this.syncQueued = false;
+		if (this.getEntityWorld().isRemote) {
+			return;
+		}
+
+		// Relationships:
+		for (EntityPlayer player : this.relationships.getPlayers()) {
+			CreatureRelationshipEntry relationshipEntry = this.relationships.getEntry(player);
+			if (relationshipEntry == null) {
+				continue;
+			}
+			MessageCreature message = new MessageCreature(this, relationshipEntry.reputation);
+			LycanitesMobs.packetHandler.sendToPlayer(message, (EntityPlayerMP)player);
+		}
+	}
+
     public boolean getBoolFromDataManager(DataParameter<Boolean> key) {
         try {
             return this.getDataManager().get(key);
@@ -2039,7 +2079,11 @@ public abstract class BaseCreatureEntity extends EntityLiving {
     // ========== Sync Update ==========
     /** An update that is called to sync things with the client and server such as various entity targets, attack phases, animations, etc. **/
     public void onSyncUpdate() {
-    	// Sync Target Status:
+		if (this.syncQueued) {
+			this.doSync();
+		}
+
+		// Sync Target Status:
     	if(!this.getEntityWorld().isRemote) {
     		byte targets = 0;
     		if(this.getAttackTarget() != null)
@@ -2891,6 +2935,12 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 			return false;
 		}
 
+		// Relationships:
+		CreatureRelationshipEntry relationshipEntry = this.relationships.getEntry(targetEntity);
+		if (relationshipEntry != null && !relationshipEntry.canAttack()) {
+			return false;
+		}
+
         // Creatures:
         if(targetEntity instanceof BaseCreatureEntity) {
 			BaseCreatureEntity targetCreature = (BaseCreatureEntity)targetEntity;
@@ -3410,17 +3460,23 @@ public abstract class BaseCreatureEntity extends EntityLiving {
         if(super.attackEntityFrom(damageSrc, damageAmount)) {
         	this.onDamage(damageSrc, damageAmount);
             Entity entity = damageSrc.getImmediateSource();
-            if(entity instanceof EntityThrowable)
-            	entity = ((EntityThrowable)entity).getThrower();
-            
+            if(entity instanceof EntityThrowable) {
+				entity = ((EntityThrowable) entity).getThrower();
+			}
+
+			// Damaged by Living Entity:
             if(entity instanceof EntityLivingBase && this.getRider() != entity && this.getRidingEntity() != entity) {
-                if(entity != this)
-                    this.setRevengeTarget((EntityLivingBase)entity);
-                return true;
-            }
-            else
-                return true;
-        }
+                if(entity != this) {
+					this.setRevengeTarget((EntityLivingBase) entity);
+
+					// Decrease Reputation:
+					CreatureRelationshipEntry relationshipEntry = this.relationships.getOrCreateEntry(entity);
+					int reputationAmount = 50 + this.getRNG().nextInt(50);
+					relationshipEntry.decreaseReputation(reputationAmount);
+				}
+			}
+			return true;
+		}
         return false;
     }
 
@@ -4937,6 +4993,8 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 		}
     	
         super.readEntityFromNBT(nbtTagCompound);
+
+        this.relationships.load(nbtTagCompound);
         this.inventory.readFromNBT(nbtTagCompound);
 
         if(nbtTagCompound.hasKey("Drops")) {
@@ -5025,7 +5083,10 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 		}
     	
         super.writeEntityToNBT(nbtTagCompound);
+
+        this.relationships.save(nbtTagCompound);
         this.inventory.writeToNBT(nbtTagCompound);
+
 		NBTTagList nbtDropList = new NBTTagList();
         for(ItemDrop drop : this.savedDrops) {
 			NBTTagCompound dropNBT = new NBTTagCompound();

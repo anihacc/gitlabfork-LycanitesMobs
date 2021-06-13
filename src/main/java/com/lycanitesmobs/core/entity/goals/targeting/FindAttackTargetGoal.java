@@ -2,8 +2,7 @@ package com.lycanitesmobs.core.entity.goals.targeting;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.core.entity.creature.EntityArgus;
-import com.lycanitesmobs.core.entity.creature.EntityBanshee;
+import com.lycanitesmobs.core.entity.CreatureRelationshipEntry;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -121,6 +120,12 @@ public class FindAttackTargetGoal extends TargetingGoal {
 
         // Entity Check:
 		if(!this.host.canAttackEntity(target)) {
+			return false;
+		}
+
+		// Relationships Check:
+		CreatureRelationshipEntry relationshipEntry = this.host.relationships.getEntry(target);
+		if (relationshipEntry != null && !relationshipEntry.canHunt()) {
 			return false;
 		}
         

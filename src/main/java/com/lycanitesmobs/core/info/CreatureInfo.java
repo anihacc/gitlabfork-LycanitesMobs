@@ -796,6 +796,22 @@ public class CreatureInfo {
 	}
 
 	/**
+	 * Returns the amount of Relationship Reputation required to become friendly.
+	 * @return The reputation required to be friendly.
+	 */
+	public int getFriendlyReputation() {
+		return Math.round((float)this.tamingReputation / 2);
+	}
+
+	/**
+	 * Returns the amount of Relationship Reputation required to trigger a tame.
+	 * @return The reputation required to tame.
+	 */
+	public int getTamingReputation() {
+		return this.tamingReputation;
+	}
+
+	/**
 	 * Returns if this creature can eat the provided item as food for healing, breeding, etc.
 	 * @param itemStack The item to eat.
 	 * @return True if the item can be eaten.

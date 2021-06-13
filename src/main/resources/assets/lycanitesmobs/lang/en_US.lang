@@ -4,6 +4,7 @@ lycanitesmobs.name=Lycanites Mobs
 entity.level=Lvl
 entity.health=HP
 entity.experience=XP
+entity.reputation=Taming
 entity.summoningportal.name=Summoning Portal
 entity.fear.name=Feared
 #
@@ -2136,6 +2137,9 @@ item.angeltreat.description=There are currently no Angel creatures added yet.
 item.aquatictreat.name=Aquatic Treat
 item.aquatictreat.description=Made from tender fish, you can tame some aquatic creatures with this.
 #
+item.amphibiantreat.name=Amphibian Treat
+item.amphibiantreat.description=Made from smelly slimes, you can tame some amphibians creatures with this.
+#
 item.aviantreat.name=Avian Treat
 item.aviantreat.description=Made from light meats, you can tame some avian creatures with this.
 #
@@ -2178,8 +2182,8 @@ item.reptiletreat.description=Made from juicy meats, you can tame some reptiles 
 item.golemtreat.name=Golem Treat
 item.golemtreat.description=Made from the finest machine parts, those golem creatures seem to like that.
 #
-item.wormtreat.name=Slime Treat
-item.wormtreat.description=Made from very bouncy slime, those slime creatures seem to like that.
+item.slimetreat.name=Slime Treat
+item.slimetreat.description=Made from very bouncy slime, those slime creatures seem to like that.
 # ========================================================================
 # %event% will be replaced with the name of the event, don't translate this!
 event.started=%event% has begun!

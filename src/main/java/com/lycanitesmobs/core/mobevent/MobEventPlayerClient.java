@@ -119,7 +119,7 @@ public class MobEventPlayerClient {
         x += 3 - (this.ticks % 6);
         y += 2 - (this.ticks % 4);
 
-        gui.mc.getTextureManager().bindTexture(this.getTexture());
+        gui.minecraft.getTextureManager().bindTexture(this.getTexture());
         GL11.glColor4f(1.0F, 1.0F, 1.0F, animation);
         if(animation > 0) {
 			gui.drawTexturedModalRect(x, y, u, v, width, height);

@@ -12,11 +12,9 @@ import com.lycanitesmobs.core.item.equipment.ItemEquipment;
 import com.lycanitesmobs.core.network.MessagePlayerLeftClick;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.Item;
@@ -31,7 +29,6 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
@@ -52,8 +49,6 @@ import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.EntityEntry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class GameEventListener {
 
@@ -525,63 +520,5 @@ public class GameEventListener {
 			return;
 		}
 		event.setCanceled(event.getEntityMounting().isSneaking() && !extendedPlayer.isControlActive(ExtendedPlayer.CONTROL_ID.MOUNT_DISMOUNT));
-	}
-
-
-	// ==================================================
-	//                 Debug Overlay
-	// ==================================================
-	@SideOnly(Side.CLIENT)
-	@SubscribeEvent
-	public void onGameOverlay(RenderGameOverlayEvent.Text event) {
-		if(!LycanitesMobs.config.getBool("Debug", "Overlay", false)) {
-			return;
-		}
-
-		// Entity:
-		RayTraceResult mouseOver = Minecraft.getMinecraft().objectMouseOver;
-		if(mouseOver != null) {
-			Entity mouseOverEntity = mouseOver.entityHit;
-			if(mouseOverEntity != null) {
-				if(mouseOverEntity instanceof BaseCreatureEntity) {
-					BaseCreatureEntity mouseOverCreature = (BaseCreatureEntity)mouseOverEntity;
-					event.getLeft().add("");
-					event.getLeft().add("Target Creature: " + mouseOverCreature.getName());
-					event.getLeft().add("Distance To player: " + mouseOverCreature.getDistance(Minecraft.getMinecraft().player));
-					event.getLeft().add("Elements: " + mouseOverCreature.creatureInfo.getElementNames(mouseOverCreature.getSubspecies()));
-					event.getLeft().add("Subspecies: " + mouseOverCreature.getSubspeciesIndex());
-					event.getLeft().add("Variant: " + mouseOverCreature.getVariantIndex());
-					event.getLeft().add("Level: " + mouseOverCreature.getLevel());
-					event.getLeft().add("Experience: " + mouseOverCreature.getExperience() + "/" + mouseOverCreature.creatureStats.getExperienceForNextLevel());
-					event.getLeft().add("Size: " + mouseOverCreature.sizeScale);
-					event.getLeft().add("");
-					event.getLeft().add("Health: " + mouseOverCreature.getHealth() + "/" + mouseOverCreature.getMaxHealth() + " Fresh: " + mouseOverCreature.creatureStats.getHealth());
-					event.getLeft().add("Speed: " + mouseOverCreature.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue() + "/" + mouseOverCreature.creatureStats.getSpeed());
-					event.getLeft().add("");
-					event.getLeft().add("Defense: " + mouseOverCreature.creatureStats.getDefense());
-					event.getLeft().add("Armor: " + mouseOverCreature.getTotalArmorValue());
-					event.getLeft().add("");
-					event.getLeft().add("Damage: " + mouseOverCreature.creatureStats.getDamage());
-					event.getLeft().add("Melee Speed: " + mouseOverCreature.creatureStats.getAttackSpeed());
-					event.getLeft().add("Melee Range: " + mouseOverCreature.getPhysicalRange());
-					event.getLeft().add("Ranged Speed: " + mouseOverCreature.creatureStats.getRangedSpeed());
-					event.getLeft().add("Pierce: " + mouseOverCreature.creatureStats.getPierce());
-					event.getLeft().add("");
-					event.getLeft().add("Effect Duration: " + mouseOverCreature.creatureStats.getEffect() + " Base Seconds");
-					event.getLeft().add("Effect Amplifier: x" + mouseOverCreature.creatureStats.getAmplifier());
-					event.getLeft().add("");
-					event.getLeft().add("Has Attack Target: " + mouseOverCreature.hasAttackTarget());
-					event.getLeft().add("Has Avoid Target: " + mouseOverCreature.hasAvoidTarget());
-					event.getLeft().add("Has Master Target: " + mouseOverCreature.hasMaster());
-					event.getLeft().add("Has Parent Target: " + mouseOverCreature.hasParent());
-					if(mouseOverEntity instanceof TameableCreatureEntity) {
-						TameableCreatureEntity mouseOverTameable = (TameableCreatureEntity)mouseOverCreature;
-						event.getLeft().add("");
-						event.getLeft().add("Owner ID: " + (mouseOverTameable.getOwnerId() != null ? mouseOverTameable.getOwnerId().toString() : "None"));
-						event.getLeft().add("Owner Name: " + mouseOverTameable.getOwnerName());
-					}
-				}
-			}
-		}
 	}
 }
