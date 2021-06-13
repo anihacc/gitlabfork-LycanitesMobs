@@ -53,7 +53,7 @@ public class LycanitesMobs {
 
 	public static final String MODID = "lycanitesmobs";
 	public static final String name = "Lycanites Mobs";
-	public static final String versionNumber = "2.3.1.2";
+	public static final String versionNumber = "2.3.2.0";
 	public static final String versionMC = "1.16.5";
 	public static final String version = versionNumber + " - MC " + versionMC;
 	public static final String website = "https://lycanitesmobs.com";
@@ -175,8 +175,8 @@ public class LycanitesMobs {
 		CapabilityManager.INSTANCE.register(IExtendedPlayer.class, new ExtendedPlayerStorage(), ExtendedPlayer::new);
 		CapabilityManager.INSTANCE.register(IExtendedEntity.class, new ExtendedEntityStorage(), ExtendedEntity::new);
 
-		// Change Health Limit:
-		LMReflectionHelper.setPrivateFinalValue(RangedAttribute.class, (RangedAttribute) Attributes.MAX_HEALTH, Double.MAX_VALUE, "maxValue");
+		// Fix Health Limit:
+		LMReflectionHelper.fixMaxHealth();
 
 		// Mod Support:
 		DLDungeons.init();
