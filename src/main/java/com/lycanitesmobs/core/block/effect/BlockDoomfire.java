@@ -51,7 +51,7 @@ public class BlockDoomfire extends BlockFireBase {
     // ==================================================
     @Override
     public Item getItemDropped(IBlockState state, Random random, int zero) {
-        return ObjectManager.getItem("doomfirecharge");
+        return null;
     }
 
 

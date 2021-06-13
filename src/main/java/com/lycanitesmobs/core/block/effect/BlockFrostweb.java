@@ -55,7 +55,7 @@ public class BlockFrostweb extends BlockBase {
 	// ==================================================
     @Override
     public Item getItemDropped(IBlockState blockState, Random random, int fortune) {
-        return ObjectManager.getItem("frostwebcharge");
+		return null;
     }
 
     @Override

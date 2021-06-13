@@ -77,7 +77,7 @@ public class BlockFrostCloud extends BlockBase {
 	// ==================================================
     @Override
     public Item getItemDropped(IBlockState blockState, Random random, int fortune) {
-        return ObjectManager.getItem("frostyfur");
+		return null;
     }
 
     @Override

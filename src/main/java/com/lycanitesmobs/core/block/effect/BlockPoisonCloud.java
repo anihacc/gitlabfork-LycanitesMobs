@@ -91,7 +91,7 @@ public class BlockPoisonCloud extends BlockBase {
 	// ==================================================
 	@Override
 	public Item getItemDropped(IBlockState blockState, Random random, int fortune) {
-		return ObjectManager.getItem("poisongland");
+    	return null;
 	}
 	
 	@Override

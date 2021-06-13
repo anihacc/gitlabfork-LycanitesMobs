@@ -1935,8 +1935,8 @@ item.caecilian_ramen.description=A delightful dish with a fresh fried egg on top
 item.soulgazer.name=Soulgazer
 item.soulgazer.description=Use on a creature to add it to the Beastiary. To open your Beastiary, either click on the Beastiary tab of your survival inventory or press the Beastiary key (set via the Controls menu).
 #
-item.lycanitesmobs.soul_contract.name= Soul Contract
-item.lycanitesmobs.soul_contract.description= This Contract is signed using magic to bind souls. The owner of a pet must first use this contract on their pet to bind it, then the new owner must take this contract and also click on the pet to transfer the soulbind.
+item.soul_contract.name= Soul Contract
+item.soul_contract.description= This Contract is signed using magic to bind souls. The owner of a pet must first use this contract on their pet to bind it, then the new owner must take this contract and also click on the pet to transfer the soulbind.
 item.lycanitesmobs.soul_contract.bound= Bound To:
 item.lycanitesmobs.soul_contract.owner= Owned By:
 item.lycanitesmobs.soul_contract.offline= Owner not present.

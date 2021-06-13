@@ -3067,6 +3067,37 @@ public abstract class BaseCreatureEntity extends EntityLiving {
     	return false;
     }
 
+	// ========== Hitscan ==========
+	/** Used to make this entity perform a hitscan attack on the target entity with the given damage scale. **/
+	public boolean attackHitscan(Entity target, double damageScale) {
+		if(this.isBlocking() && !this.canAttackWhileBlocking()) {
+			return false;
+		}
+		if (target == null || !this.canEntityBeSeen(target)) {
+			return false;
+		}
+
+		if(this.attackEntityAsMob(target, damageScale)) {
+
+			// Apply Damage Effects If Not Blocked:
+			if(target instanceof EntityLivingBase) {
+				EntityLivingBase livingTarget = (EntityLivingBase)target;
+				if(!(livingTarget.isActiveItemStackBlocking() && livingTarget.getActiveItemStack().getItem().isShield(livingTarget.getActiveItemStack(), livingTarget))) {
+					// Element Effects:
+					if (this.creatureStats.getAmplifier() >= 0) {
+						this.applyDebuffs(livingTarget, 1, 1);
+					}
+				}
+			}
+
+			this.triggerAttackCooldown();
+			this.playAttackSound();
+			return true;
+		}
+
+		return false;
+	}
+
     // ========== Ranged ==========
     /** Used to make this entity fire a ranged attack at the target entity, range is also passed which can be used. **/
     public void attackRanged(Entity target, float range) {

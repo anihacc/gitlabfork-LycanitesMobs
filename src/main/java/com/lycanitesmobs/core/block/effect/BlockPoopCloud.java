@@ -78,7 +78,7 @@ public class BlockPoopCloud extends BlockBase {
 	// ==================================================
     @Override
     public Item getItemDropped(IBlockState blockState, Random random, int fortune) {
-        return ObjectManager.getItem("poopcharge");
+		return null;
     }
 
     @Override

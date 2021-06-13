@@ -92,7 +92,7 @@ public class EntityAsmodeus extends BaseCreatureEntity implements IMob, IGroupHe
         
         // Setup:
         this.attribute = EnumCreatureAttribute.UNDEFINED;
-        this.hasAttackSound = false;
+        this.hasAttackSound = true;
         this.setAttackCooldownMax(30);
         this.hasJumpSound = true;
         this.solidCollision = true;
@@ -209,11 +209,17 @@ public class EntityAsmodeus extends BaseCreatureEntity implements IMob, IGroupHe
             this.dataManager.set(ANIMATION_STATES, animationState);
         }
 
-        // Client Attack Cooldown Particles:
-        if(this.getEntityWorld().isRemote && (this.dataManager.get(ANIMATION_STATES) & ANIMATION_STATES_ID.COOLDOWN.id) > 0) {
-            BlockPos particlePos = this.getFacingPosition(this, 13, this.getRotationYawHead() - this.rotationYaw);
-            for(int i = 0; i < 4; ++i) {
-                this.getEntityWorld().spawnParticle(EnumParticleTypes.SMOKE_LARGE, particlePos.getX() + (this.rand.nextDouble() - 0.5D) * 2, particlePos.getY() + (this.height * 0.2D) + this.rand.nextDouble() * 2, particlePos.getZ() + (this.rand.nextDouble() - 0.5D) * 2, 0.0D, 0.0D, 0.0D);
+        // Client Attack and Cooldown Particles:
+        if(this.getEntityWorld().isRemote) {
+            if ((this.dataManager.get(ANIMATION_STATES) & ANIMATION_STATES_ID.COOLDOWN.id) > 0) {
+                BlockPos particlePos = this.getFacingPosition(this, 13, this.getRotationYawHead() - this.rotationYaw);
+                for (int i = 0; i < 4; ++i) {
+                    this.getEntityWorld().spawnParticle(EnumParticleTypes.SMOKE_LARGE,
+                            particlePos.getX() + (this.rand.nextDouble() - 0.5D) * 2,
+                            particlePos.getY() + (this.height * 0.2D) + this.rand.nextDouble() * 2,
+                            particlePos.getZ() + (this.rand.nextDouble() - 0.5D) * 2,
+                            0.0D, 0.0D, 0.0D);
+                }
             }
         }
     }
@@ -411,8 +417,8 @@ public class EntityAsmodeus extends BaseCreatureEntity implements IMob, IGroupHe
     // ========== Ranged Attack ==========
     @Override
     public void attackRanged(Entity target, float range) {
-        this.fireProjectile(EntityDevilGatling.class, target, range, 0, new Vec3d(0, 8, 0), 1.2f, 6f, 0F);
-        super.attackRanged(target, range);
+        this.fireProjectile(EntityDevilGatling.class, target, range, 0, new Vec3d(0, -24, 0), 1.2f, 2f, 4F);
+        this.attackHitscan(target, target instanceof EntityPlayer ? 1 : 10);
     }
 
     // ========== Devilstars ==========

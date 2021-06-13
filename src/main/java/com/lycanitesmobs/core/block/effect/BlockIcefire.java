@@ -55,7 +55,7 @@ public class BlockIcefire extends BlockFireBase {
     // ==================================================
     @Override
     public Item getItemDropped(IBlockState state, Random random, int zero) {
-        return ObjectManager.getItem("icefirecharge");
+        return null;
     }
 
 

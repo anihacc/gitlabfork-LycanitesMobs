@@ -50,7 +50,7 @@ public class BlockScorchfire extends BlockFireBase {
     // ==================================================
     @Override
     public Item getItemDropped(IBlockState state, Random random, int zero) {
-        return ObjectManager.getItem("scorchfirecharge");
+		return null;
     }
     
     

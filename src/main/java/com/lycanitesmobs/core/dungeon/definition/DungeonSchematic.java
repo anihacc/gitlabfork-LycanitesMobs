@@ -71,7 +71,7 @@ public class DungeonSchematic {
 	/** A list of MobSpawns to use. Optional. **/
 	public List<MobSpawn> mobSpawns = new ArrayList<>();
 
-	/** The loot tables to random use for each level in addition to the specific loot added to this dungeon. If blank, only the specific loot is used. Ex: "minecraft:chests/simple_dungeon". Default: Empty. **/
+	/** The loot tables to randomly use for each level in addition to the specific loot added to this dungeon. If blank, only the specific loot is used. Ex: "minecraft:chests/simple_dungeon". Default: Empty. **/
 	public Map<Integer, List<String>> lootTables = new HashMap<>();
 
 	/** A list of item drops to add to loot chests. **/

@@ -296,7 +296,7 @@ public class ProjectileInfo {
 	 * @return Creature language key.
 	 */
 	public String getLocalisationKey() {
-		return this.modInfo.modid + "." + this.getName();
+		return this.getName();
 	}
 
 	/**
