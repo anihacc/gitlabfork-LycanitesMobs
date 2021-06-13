@@ -99,11 +99,10 @@ public class CreatureRelationships {
 	 */
 	public void save(CompoundNBT nbt) {
 		ListNBT relationshipNbtList = new ListNBT();
-		int i = 0;
 		for (CreatureRelationshipEntry creatureRelationshipEntry : this.relationships.values()) {
 			CompoundNBT relationshipNbt = new CompoundNBT();
 			creatureRelationshipEntry.save(relationshipNbt);
-			relationshipNbtList.add(i++, relationshipNbt);
+			relationshipNbtList.add(relationshipNbt);
 		}
 		nbt.put("CreatureRelationships", relationshipNbtList);
 	}

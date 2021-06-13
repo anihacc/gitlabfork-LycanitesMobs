@@ -698,10 +698,10 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	 * Ignored when called client side, safe to call for convenience.
 	 */
 	public void doSync() {
+		this.syncQueued = false;
     	if (this.getCommandSenderWorld().isClientSide()) {
     		return;
 		}
-		this.syncQueued = false;
 
     	// Relationships:
 		for (PlayerEntity player : this.relationships.getPlayers()) {
