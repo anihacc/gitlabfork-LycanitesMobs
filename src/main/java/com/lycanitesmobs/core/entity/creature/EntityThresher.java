@@ -229,7 +229,7 @@ public class EntityThresher extends RideableCreatureEntity implements IMob, IGro
 
     @Override
     public int getStaminaRecoveryWarmup() {
-        return 0;
+        return 2 * 20;
     }
 
     @Override

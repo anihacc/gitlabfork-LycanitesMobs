@@ -236,12 +236,12 @@ public class EntityRoa extends RideableCreatureEntity implements IMob {
 
     @Override
     public float getStaminaCost() {
-        return 1;
+        return 2;
     }
 
     @Override
     public int getStaminaRecoveryWarmup() {
-        return 0;
+        return 4 * 20;
     }
 
     @Override
