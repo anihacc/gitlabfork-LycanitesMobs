@@ -29,7 +29,23 @@
 			"id": "minecraft:chests/simple_dungeon"
 		},
 		{
-			"id": "minecraft:chests/village_blacksmith",
+			"id": "minecraft:chests/village_armorer",
+			"level": 2
+		},
+		{
+			"id": "minecraft:chests/village_toolsmith",
+			"level": 2
+		},
+		{
+			"id": "minecraft:chests/village_weaponsmith",
+			"level": 2
+		},
+		{
+			"id": "minecraft:chests/village_temple",
+			"level": 2
+		},
+		{
+			"id": "minecraft:chests/village_cartographer",
 			"level": 2
 		},
 		{
@@ -41,7 +57,15 @@
 			"level": 4
 		},
 		{
+			"id": "minecraft:chests/end_city_treasure",
+			"level": 4
+		},
+		{
 			"id": "minecraft:chests/stronghold_corridor",
+			"level": 5
+		},
+		{
+			"id": "minecraft:chests/stronghold_library",
 			"level": 5
 		},
 		{

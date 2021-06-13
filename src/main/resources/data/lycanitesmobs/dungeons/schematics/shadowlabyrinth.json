@@ -27,15 +27,39 @@
 			"id": "minecraft:chests/simple_dungeon"
 		},
 		{
-			"id": "minecraft:chests/village_blacksmith",
+			"id": "minecraft:chests/village_armorer",
 			"level": 2
 		},
 		{
-			"id": "minecraft:chests/nether_bridge",
+			"id": "minecraft:chests/village_toolsmith",
+			"level": 2
+		},
+		{
+			"id": "minecraft:chests/village_weaponsmith",
+			"level": 2
+		},
+		{
+			"id": "minecraft:chests/village_mason",
+			"level": 2
+		},
+		{
+			"id": "minecraft:chests/village_tannery",
+			"level": 2
+		},
+		{
+			"id": "minecraft:chests/bastion_bridge",
 			"level": 3
 		},
 		{
-			"id": "minecraft:chests/abandoned_mineshaft",
+			"id": "minecraft:chests/pillager_outpost",
+			"level": 3
+		},
+		{
+			"id": "minecraft:chests/bastion_other",
+			"level": 4
+		},
+		{
+			"id": "minecraft:chests/woodland_mansion",
 			"level": 4
 		},
 		{

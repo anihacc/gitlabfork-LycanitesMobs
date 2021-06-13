@@ -113,11 +113,12 @@ public class ItemManager extends JSONLoader {
 	public void loadItems() {
 		ModInfo modInfo = LycanitesMobs.modInfo;
 		Item.Properties itemProperties = new Item.Properties().tab(this.itemsGroup);
+		Item.Properties itemPropertiesNoStack = new Item.Properties().tab(this.itemsGroup).stacksTo(1);
 
-		ObjectManager.addItem("soulgazer", new ItemSoulgazer(new Item.Properties().stacksTo(1).tab(this.itemsGroup)));
+		ObjectManager.addItem("soulgazer", new ItemSoulgazer(itemPropertiesNoStack));
 		ObjectManager.addItem("mobtoken", new ItemMobToken(new Item.Properties(), modInfo));
 		ObjectManager.addItem("soulstone", new ItemSoulstone(itemProperties, null));
-		ObjectManager.addItem("soul_contract", new ItemSoulContract(itemProperties.stacksTo(1)));
+		ObjectManager.addItem("soul_contract", new ItemSoulContract(itemPropertiesNoStack));
 
 		// Equipment Pieces:
 		Item.Properties equipmentProperties = new Item.Properties().stacksTo(1).setNoRepair().setISTER(() -> com.lycanitesmobs.client.renderer.EquipmentRenderer::new);

@@ -27,15 +27,39 @@
 			"id": "minecraft:chests/simple_dungeon"
 		},
 		{
-			"id": "minecraft:chests/village_blacksmith",
+			"id": "minecraft:chests/village_armorer",
 			"level": 2
+		},
+		{
+			"id": "minecraft:chests/village_toolsmith",
+			"level": 2
+		},
+		{
+			"id": "minecraft:chests/village_weaponsmith",
+			"level": 2
+		},
+		{
+			"id": "minecraft:chests/village_fletcher",
+			"level": 2
+		},
+		{
+			"id": "minecraft:chests/village_tannery",
+			"level": 2
+		},
+		{
+			"id": "minecraft:chests/desert_pyramid",
+			"level": 2
+		},
+		{
+			"id": "minecraft:chests/jungle_temple",
+			"level": 3
 		},
 		{
 			"id": "minecraft:chests/nether_bridge",
 			"level": 3
 		},
 		{
-			"id": "minecraft:chests/abandoned_mineshaft",
+			"id": "minecraft:chests/woodland_mansion",
 			"level": 4
 		},
 		{
