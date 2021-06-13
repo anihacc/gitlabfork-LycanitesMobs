@@ -19,8 +19,8 @@
 	"triggers": [
 		{
 			"type": "world",
-			"chance": 0.075,
-			"tickRate": 80
+			"chance": 0.5,
+			"tickRate": 800
 		}
 	],
 	"locations": [
