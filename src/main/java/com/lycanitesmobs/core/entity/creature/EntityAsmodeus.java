@@ -89,7 +89,7 @@ public class EntityAsmodeus extends BaseCreatureEntity implements IMob, IGroupHe
         
         // Setup:
         this.attribute = CreatureAttribute.UNDEFINED;
-        this.hasAttackSound = false;
+        this.hasAttackSound = true;
         this.setAttackCooldownMax(30);
         this.hasJumpSound = true;
         this.solidCollision = true;
@@ -206,11 +206,17 @@ public class EntityAsmodeus extends BaseCreatureEntity implements IMob, IGroupHe
             this.entityData.set(ANIMATION_STATES, animationState);
         }
 
-        // Client Attack Cooldown Particles:
-        if(this.getCommandSenderWorld().isClientSide && (this.entityData.get(ANIMATION_STATES) & ANIMATION_STATES_ID.COOLDOWN.id) > 0) {
-            BlockPos particlePos = this.getFacingPosition(this, 13, this.getYHeadRot() - this.yRot);
-            for(int i = 0; i < 4; ++i) {
-                this.getCommandSenderWorld().addParticle(ParticleTypes.LARGE_SMOKE, particlePos.getX() + (this.random.nextDouble() - 0.5D) * 2, particlePos.getY() + (this.getDimensions(Pose.STANDING).height * 0.2D) + this.random.nextDouble() * 2, particlePos.getZ() + (this.random.nextDouble() - 0.5D) * 2, 0.0D, 0.0D, 0.0D);
+        // Client Attack and Cooldown Particles:
+        if(this.getCommandSenderWorld().isClientSide) {
+            if ((this.entityData.get(ANIMATION_STATES) & ANIMATION_STATES_ID.COOLDOWN.id) > 0) {
+                BlockPos particlePos = this.getFacingPosition(this, 13, this.getYHeadRot() - this.yRot);
+                for (int i = 0; i < 4; ++i) {
+                    this.getCommandSenderWorld().addParticle(ParticleTypes.LARGE_SMOKE,
+                            particlePos.getX() + (this.random.nextDouble() - 0.5D) * 2,
+                            particlePos.getY() + (this.getDimensions(Pose.STANDING).height * 0.2D) + this.random.nextDouble() * 2,
+                            particlePos.getZ() + (this.random.nextDouble() - 0.5D) * 2,
+                            0.0D, 0.0D, 0.0D);
+                }
             }
         }
     }
@@ -412,8 +418,8 @@ public class EntityAsmodeus extends BaseCreatureEntity implements IMob, IGroupHe
     // ========== Ranged Attack ==========
     @Override
     public void attackRanged(Entity target, float range) {
-        this.fireProjectile(EntityDevilGatling.class, target, range, 0, new Vector3d(0, -8, 0), 1.2f, 6f, 0F);
-        super.attackRanged(target, range);
+        this.fireProjectile(EntityDevilGatling.class, target, range, 0, new Vector3d(0, -24, 0), 1.2f, 2f, 4F);
+        this.attackHitscan(target, target instanceof PlayerEntity ? 1 : 10);
     }
 
     // ========== Devilstars ==========
@@ -424,7 +430,6 @@ public class EntityAsmodeus extends BaseCreatureEntity implements IMob, IGroupHe
             return;
         }
         BaseProjectileEntity projectile = projectileInfo.createProjectile(this.getCommandSenderWorld(), this);
-        projectile.setProjectileScale(4f);
 
         // Y Offset:
         BlockPos offset = this.getFacingPosition(this, 8, angle);
@@ -443,6 +448,7 @@ public class EntityAsmodeus extends BaseCreatureEntity implements IMob, IGroupHe
         float f1 = MathHelper.sqrt(d0 * d0 + d2 * d2) * 0.1F;
         float velocity = 1.2F;
         projectile.shoot(d0, d1 + (double) f1, d2, velocity, 0.0F);
+        projectile.setProjectileScale(3f);
 
         // Launch:
         this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));

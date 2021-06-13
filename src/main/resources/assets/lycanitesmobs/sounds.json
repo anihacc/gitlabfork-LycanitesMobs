@@ -624,6 +624,10 @@
         "category": "hostile",
         "sounds": [{"name": "lycanitesmobs:entity/asmodeus/death", "stream": false}]
     },
+    "entity.asmodeus.attack": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/asmodeus/attack", "stream": false}]
+    },
     "entity.asmodeus.step": {
         "category": "hostile",
         "sounds": [{"name": "lycanitesmobs:entity/asmodeus/step", "stream": false}]

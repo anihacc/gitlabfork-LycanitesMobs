@@ -2752,6 +2752,37 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     	return false;
     }
 
+	// ========== Hitscan ==========
+	/** Used to make this entity perform a hitscan attack on the target entity with the given damage scale. **/
+	public boolean attackHitscan(Entity target, double damageScale) {
+		if(this.isBlocking() && !this.canAttackWhileBlocking()) {
+			return false;
+		}
+		if (target == null || !this.canSee(target)) {
+			return false;
+		}
+
+		if(this.attackEntityAsMob(target, damageScale)) {
+
+			// Apply Damage Effects If Not Blocked:
+			if(target instanceof LivingEntity) {
+				LivingEntity livingTarget = (LivingEntity)target;
+				if(!(livingTarget.isBlocking() && livingTarget.getUseItem().isShield(livingTarget))) {
+					// Element Effects:
+					if (this.creatureStats.getAmplifier() >= 0) {
+						this.applyDebuffs(livingTarget, 1, 1);
+					}
+				}
+			}
+
+			this.triggerAttackCooldown();
+			this.playAttackSound();
+			return true;
+		}
+
+		return false;
+	}
+
     // ========== Ranged ==========
     /** Used to make this entity fire a ranged attack at the target entity, range is also passed which can be used. **/
     public void attackRanged(Entity target, float range) {
@@ -2775,7 +2806,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		double pierceDamage = this.creatureStats.getPierce();
 		if (target instanceof LivingEntity) {
 			LivingEntity targetLiving = (LivingEntity)target;
-			if (targetLiving.isBlocking() || !targetLiving.getUseItem().isShield(targetLiving)) {
+			if ((targetLiving.isBlocking() || !targetLiving.getUseItem().isShield(targetLiving)) && !this.isBoss()) {
 				pierceDamage = 0;
 			}
 		}
