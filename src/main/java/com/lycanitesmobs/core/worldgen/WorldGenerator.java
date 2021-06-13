@@ -17,7 +17,7 @@ public class WorldGenerator {
 				() -> manager.chunkSpawnFeature.configured(IFeatureConfig.NONE).decorated(manager.alwaysPlacement.configured(NoPlacementConfig.INSTANCE)));
 
 		// Dungeons:
-		event.getGeneration().addFeature(GenerationStage.Decoration.STRONGHOLDS.ordinal(),
+		event.getGeneration().addFeature(GenerationStage.Decoration.TOP_LAYER_MODIFICATION.ordinal(),
 				() -> manager.dungeonFeature.configured(IFeatureConfig.NONE).decorated(manager.alwaysPlacement.configured(NoPlacementConfig.INSTANCE)));
 
 		// Lakes:
