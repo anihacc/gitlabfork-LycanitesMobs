@@ -46,6 +46,11 @@ public class EntityUmibas extends TameableCreatureEntity implements IGroupHeavy 
         this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackRangedGoal(this).setSpeed(1.0D).setRange(16.0F).setMinChaseDistance(8.0F));
     }
 
+    @Override
+    public boolean rollWanderChance() {
+        return this.getRandom().nextDouble() <= 0.001D;
+    }
+
 
     // ==================================================
     //                      Movement

@@ -1,5 +1,6 @@
 package com.lycanitesmobs.core.entity.goals.actions.abilities;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.entity.ai.goal.Goal;
 
@@ -57,18 +58,15 @@ public class StealthGoal extends Goal {
 		this.unstealth = false;
 		if(this.host.isLeashed()) this.unstealth = true;
 		
-		if(!this.stealthMove) {
-			if(!this.host.useDirectNavigator() && !this.host.getNavigation().isDone())
-				this.unstealth = true;
-			if(this.host.useDirectNavigator() && !this.host.directNavigator.atTargetPosition())
-				this.unstealth = true;
+		if(!this.stealthMove && this.host.isMoving()) {
+ 			this.unstealth = true;
 		}
 		
 		if(!this.stealthAttack && this.host.getTarget() != null)
 			this.unstealth = true;
 		if(!this.host.canStealth())
 			this.unstealth = true;
-		
+
 		return !this.unstealth;
 	}
 
@@ -127,7 +125,8 @@ public class StealthGoal extends Goal {
     // ==================================================
  	//                  Update Task
  	// ==================================================
-	public void updateTask() {
+	@Override
+	public void tick() {
 		float nextStealth = (float)this.stealthTime / (float)this.stealthTimeMax;
 		this.host.setStealth(nextStealth);
 		
@@ -135,7 +134,6 @@ public class StealthGoal extends Goal {
 			this.stealthTime++;
 		else if(this.unstealth && this.stealthTime > 0)
 			this.stealthTime -= this.unstealthRate;
-		//this.stealthTime = Math.min(this.stealthTime, 1);
-		//this.stealthTime = Math.max(this.stealthTime, 0);
+		this.stealthTime = Math.min(Math.max(this.stealthTime, 0), this.stealthTimeMax);
 	}
 }

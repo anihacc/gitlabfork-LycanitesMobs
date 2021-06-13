@@ -163,7 +163,12 @@ public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, CreatureMo
 		ResourceLocation texture = this.getEntityTexture(entity, layer);
 		RenderType rendertype;
 		if (invisible && !allyInvisible) {
-			rendertype = CustomRenderStates.getObjOutlineRenderType(texture);
+			if (entity.isGlowing()) {
+				rendertype = CustomRenderStates.getObjOutlineRenderType(texture);
+			}
+			else {
+				return;
+			}
 		}
 		else {
 			rendertype = CustomRenderStates.getObjRenderType(texture, this.getMainModel().getBlending(entity, layer), this.getMainModel().getGlow(entity, layer));

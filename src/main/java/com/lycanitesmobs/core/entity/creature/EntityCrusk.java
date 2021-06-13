@@ -1,5 +1,6 @@
 package com.lycanitesmobs.core.entity.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.api.IGroupHeavy;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
@@ -38,6 +39,11 @@ public class EntityCrusk extends TameableCreatureEntity implements IGroupHeavy {
         this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setTargetClass(PlayerEntity.class).setLongMemory(false));
         this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this));
     }
+
+    @Override
+	public boolean rollWanderChance() {
+		return this.getRandom().nextDouble() <= 0.001D;
+	}
     
     
     // ==================================================
@@ -48,7 +54,7 @@ public class EntityCrusk extends TameableCreatureEntity implements IGroupHeavy {
     	if(this.isTamed() && this.isSitting())
     		return false;
         BlockState blockState = this.getCommandSenderWorld().getBlockState(this.blockPosition().offset(0, -1, 0));
-        if(blockState.getBlock() != Blocks.AIR) {
+		if(blockState.getBlock() != Blocks.AIR) {
         	if(blockState.getMaterial() == Material.DIRT) return true;
         	if(blockState.getMaterial() == Material.GRASS) return true;
         	if(blockState.getMaterial() == Material.LEAVES) return true;

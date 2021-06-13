@@ -49,6 +49,11 @@ public class EntitySerpix extends TameableCreatureEntity implements IGroupHeavy 
         this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackRangedGoal(this).setSpeed(0.5D).setStaminaTime(100).setRange(12.0F).setMinChaseDistance(8.0F));
     }
 
+    @Override
+    public boolean rollWanderChance() {
+        return this.getRandom().nextDouble() <= 0.001D;
+    }
+
 
     // ==================================================
     //                      Movement

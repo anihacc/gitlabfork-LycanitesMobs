@@ -70,7 +70,10 @@
             ]
         }
     ],
-    "element": "water",
+    "elements": [
+        "water",
+        "earth"
+    ],
     "diets": [
         "carnivore",
         "piscivore",
