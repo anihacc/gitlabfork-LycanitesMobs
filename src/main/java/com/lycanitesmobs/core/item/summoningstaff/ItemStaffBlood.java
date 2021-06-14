@@ -4,6 +4,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.util.DamageSource;
 
 public class ItemStaffBlood extends ItemStaffSummoning {
 	
@@ -46,7 +47,7 @@ public class ItemStaffBlood extends ItemStaffSummoning {
     public boolean getAdditionalCosts(PlayerEntity player) {
     	if(player.getHealth() <= 7)
     		return false;
-    	player.setHealth(player.getHealth() - 6);
+		player.hurt(DamageSource.MAGIC, 6);
     	return true;
     }
     

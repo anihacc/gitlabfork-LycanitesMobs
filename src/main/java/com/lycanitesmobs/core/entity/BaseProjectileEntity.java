@@ -218,13 +218,13 @@ public class BaseProjectileEntity extends ThrowableEntity {
     	return (float)this.weight * 0.03F;
     }
 
-//    @Override
-//	public void spawnRunningParticles() {} TODO See what this was changed to...
-
-//	@Override
-//	public boolean handleWaterMovement() {
-//		return this.inWater;
-//	}
+	@Override
+	public boolean isPushedByFluid() {
+		if (this.waterProof || this.lavaProof) {
+			return false;
+		}
+		return super.isPushedByFluid();
+	}
     
     
     // ==================================================

@@ -162,6 +162,11 @@ public class EntityConcapedeHead extends AgeableCreatureEntity {
     public boolean canBeLeashed(PlayerEntity player) {
         return true;
     }
+
+	@Override
+	public boolean isPushable() {
+		return false;
+	}
 	
 	
 	// ==================================================

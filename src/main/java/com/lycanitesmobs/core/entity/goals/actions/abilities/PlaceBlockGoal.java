@@ -17,8 +17,8 @@ public class PlaceBlockGoal extends Goal {
     
     // Properties:
     private double speed = 1.0D;
-    private double range = 2.0D;
-    private double maxDistance = 64.0D;
+    private double range = 8.0D;
+    private double maxDistance = 128.0D;
     private boolean replaceSolid = false;
     private boolean replaceLiquid = true;
     
@@ -79,11 +79,13 @@ public class PlaceBlockGoal extends Goal {
         if(this.blockState == null)
             return false;
         
-    	if(!this.canPlaceBlock(this.pos)) {
+    	if(this.repathTime-- <= 0 && !this.canPlaceBlock(this.pos)) {
             this.blockState = null;
+			this.repathTime = 20;
     		return false;
     	}
-    	
+
+		this.repathTime = 0;
         return true;
     }
     
@@ -127,7 +129,7 @@ public class PlaceBlockGoal extends Goal {
         this.host.getLookControl().setLookAt(this.pos.getX(), this.pos.getY(), this.pos.getZ(), 30.0F, 30.0F);
         
         // Place Block:
-        if(this.host.distanceToSqr(new Vector3d(this.pos.getX(), this.pos.getY(), this.pos.getZ())) <= this.range * this.range) {
+        if(Math.sqrt(this.host.distanceToSqr(new Vector3d(this.pos.getX(), this.pos.getY(), this.pos.getZ()))) <= this.range) {
         	this.host.getCommandSenderWorld().setBlock(this.pos, this.blockState, 3);
             this.blockState = null;
             this.host.clearMovement();

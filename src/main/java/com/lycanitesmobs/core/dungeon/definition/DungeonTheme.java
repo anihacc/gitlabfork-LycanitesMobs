@@ -206,7 +206,7 @@ public class DungeonTheme {
 
 	/**
 	 * Returns a block state for the provided pattern character from the provided block list.
-	 * @param sectorInstance The sector instance to get the block state for.
+	 * @param sectorInstance The sector instance to get the block state for. If null a completely random block is returned.
 	 * @param patternChar The block character to convert to a block state.
 	 * @param random The instance of random, used for characters that are random.
 	 * @param blockList The list of Theme Blocks to select from.

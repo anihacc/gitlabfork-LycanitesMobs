@@ -229,6 +229,11 @@ public class EntityConcapedeSegment extends AgeableCreatureEntity {
 	public boolean useDirectNavigator() {
     	return this.hasParent();
 	}
+
+	@Override
+	public boolean isPushable() {
+		return false;
+	}
     
     
     // ==================================================

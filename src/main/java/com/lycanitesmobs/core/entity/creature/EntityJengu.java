@@ -75,10 +75,10 @@ public class EntityJengu extends TameableCreatureEntity implements IMob, IFusabl
     @Override
     public float getAISpeedModifier() {
         if(this.isInWater()) // Checks specifically just for water.
-            return 2F;
+            return 1F;
         if(this.waterContact()) // Checks for water, rain, etc.
-            return 1.5F;
-        return super.getAISpeedModifier();
+            return 0.75F;
+        return 0.5F;
     }
 
     @Override

@@ -2102,14 +2102,11 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	@Override
 	public void move(MoverType type, Vector3d pos) {
 		this.toggleMovementBoundingBox(true);
-		super.move(type, pos);
+		double x = Math.max(Math.min(pos.x(), 10), -10);
+		double y = Math.max(Math.min(pos.y(), 10), -10);
+		double z = Math.max(Math.min(pos.z(), 10), -10);
+		super.move(type, new Vector3d(x, y, z));
 		this.toggleMovementBoundingBox(false);
-
-		// Cap Movement to 10 Blocks:
-//		double x = Math.max(Math.min(pos.x(), 10), -10);
-//		double y = Math.max(Math.min(pos.y(), 10), -10);
-//		double z = Math.max(Math.min(pos.z(), 10), -10);
-//		super.move(type, new Vector3d(x, y, z));
 	}
 
 	/**
@@ -2547,7 +2544,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
     /** Returns the distance that the entity's position is from the home position. **/
     public double getDistanceFromHome() {
-    	return this.homePosition.distSqr(this.blockPosition());
+    	return Math.sqrt(this.homePosition.distSqr(this.blockPosition()));
     }
 
     // ========== Arena Center ==========
