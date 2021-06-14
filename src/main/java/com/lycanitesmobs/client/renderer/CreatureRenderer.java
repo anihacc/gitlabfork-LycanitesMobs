@@ -43,14 +43,13 @@ public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, CreatureMo
 		try {
 			this.layers.clear();
 			this.model = ModelManager.getInstance().getCreatureModel(entity.creatureInfo, entity.subspecies);
+			if(this.model == null) {
+				return;
+			}
 			this.model.addCustomLayers(this);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
-		}
-
-		if(this.model == null) {
-			return;
 		}
 
 		// Get Entity States:

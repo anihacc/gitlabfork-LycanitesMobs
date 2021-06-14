@@ -187,7 +187,7 @@ public class StayByWaterGoal extends Goal {
 	@Override
     public void tick() {
         if(this.updateRate-- <= 0) {
-            this.updateRate = 20;
+            this.updateRate = 60;
 	    	if(!host.useDirectNavigator()) {
 	    		this.host.getNavigation().moveTo(this.waterPos.getX() + 0.5D, this.waterPos.getY(), this.waterPos.getZ() + 0.5D, this.speed);
 	    	}
