@@ -2095,7 +2095,20 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
 	@Override
 	public void move(MoverType type, Vector3d pos) {
+		// Cap the bounding box for movement performance.
+//    	AxisAlignedBB fullBB = this.getBoundingBox();
+    	float width = this.getBbWidth();
+		double excess = this.getBbWidth() - 3;
+		if (width > 3) {
+			this.setBoundingBox(this.getBoundingBox().inflate(-excess, 0, -excess));
+		}
+
 		super.move(type, pos);
+
+		if (width > 3) {
+			this.setBoundingBox(this.getBoundingBox().inflate(excess, 0, excess));
+		}
+
 //		double x = Math.max(Math.min(pos.x(), 10), -10);
 //		double y = Math.max(Math.min(pos.y(), 10), -10);
 //		double z = Math.max(Math.min(pos.z(), 10), -10);
@@ -2202,6 +2215,9 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	public boolean rollWanderChance() {
 		/*if(this.canBreatheAir() && !this.isStrongSwimmer() && !this.isFlying() && this.isInWater())
 			return true;*/
+		if (this.getBbWidth() >= 3) {
+			return this.getRandom().nextDouble() <= 0.0005D;
+		}
 		return this.getRandom().nextDouble() <= 0.05D;
 	}
     

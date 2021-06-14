@@ -108,7 +108,7 @@ public class CreatureNodeProcessor extends WalkNodeProcessor implements ICreatur
         if(this.swimming()) {
             return PathNodeType.WATER;
         }
-        return super.getBlockPathType(world, x, y, z, mobEntity, Math.min(3, xSize), Math.min(3, ySize), Math.min(3, zSize), canBreakDoorsIn, canEnterDoorsIn);
+        return super.getBlockPathType(world, x, y, z, mobEntity, Math.min(3, xSize), Math.min(2, ySize), Math.min(3, zSize), canBreakDoorsIn, canEnterDoorsIn);
     }
 
 

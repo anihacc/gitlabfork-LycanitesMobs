@@ -239,7 +239,7 @@ public class EntityThresher extends RideableCreatureEntity implements IMob, IGro
     @Override
     public void onDismounted(Entity entity) {
         super.onDismounted(entity);
-        if(entity != null && entity instanceof LivingEntity) {
+        if(entity instanceof LivingEntity) {
             ((LivingEntity)entity).addEffect(new EffectInstance(Effects.WATER_BREATHING, 5 * 20, 1));
         }
     }
