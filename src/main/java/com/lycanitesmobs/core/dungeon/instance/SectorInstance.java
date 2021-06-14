@@ -24,6 +24,7 @@ import net.minecraft.world.World;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 public class SectorInstance {
@@ -619,7 +620,7 @@ public class SectorInstance {
 				ChestTileEntity chest = (ChestTileEntity)tileEntity;
 				ResourceLocation lootTable = this.layout.dungeonInstance.schematic.getRandomLootTable(this.parentConnector.level, random);
 				if(lootTable != null) {
-					chest.setLootTable(lootTable, random.nextLong());
+					chest.setLootTable(lootTable, Objects.hash(blockPos.hashCode(), random));
 				}
 
 				// Add Specific Items:
