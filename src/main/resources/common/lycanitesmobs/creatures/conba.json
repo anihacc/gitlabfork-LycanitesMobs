@@ -2,7 +2,7 @@
     "name": "conba",
     "creatureType": "beast",
     "groups": [
-        "monster"
+        "animal"
     ],
     "entityClass": "com.lycanitesmobs.core.entity.creature.EntityConba",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelConba",

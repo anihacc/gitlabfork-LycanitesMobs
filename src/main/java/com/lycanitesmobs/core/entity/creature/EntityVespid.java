@@ -4,8 +4,10 @@ import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import com.lycanitesmobs.core.entity.CreatureBuildTask;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import com.lycanitesmobs.core.entity.goals.actions.abilities.PlaceBlockGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.FindAttackTargetGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.FindMasterGoal;
 import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.monster.IMob;
@@ -80,7 +82,7 @@ public class EntityVespid extends AgeableCreatureEntity implements IMob {
     public boolean canAttack(LivingEntity targetEntity) {
     	if(targetEntity == this.getMasterTarget())
     		return false;
-    	if(targetEntity instanceof EntityConba)
+		if(targetEntity instanceof EntityConba)
         	return false;
     	if(targetEntity instanceof EntityVespid) {
     		if(!((EntityVespid)targetEntity).hasMaster() || ((EntityVespid)targetEntity).getMasterTarget() == this.getMasterTarget())
@@ -114,4 +116,12 @@ public class EntityVespid extends AgeableCreatureEntity implements IMob {
     	if(type.equals("inWall")) return false;
     	return super.isVulnerableTo(type, source, damage);
     }
+
+    @Override
+	public boolean canSee(Entity entity) {
+    	if (entity instanceof EntityVespidQueen) {
+    		return true;
+		}
+    	return super.canSee(entity);
+	}
 }
