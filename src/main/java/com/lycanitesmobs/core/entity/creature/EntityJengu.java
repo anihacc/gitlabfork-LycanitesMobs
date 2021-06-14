@@ -71,11 +71,26 @@ public class EntityJengu extends TameableCreatureEntity implements IMob, IFusabl
     // ==================================================
   	//                     Abilities
   	// ==================================================
+
+    @Override
+    public float getAISpeedModifier() {
+        if(this.isInWater()) // Checks specifically just for water.
+            return 2F;
+        if(this.waterContact()) // Checks for water, rain, etc.
+            return 1.5F;
+        return super.getAISpeedModifier();
+    }
+
     @Override
     public boolean isFlying() { return true; }
 
     @Override
     public boolean isStrongSwimmer() { return true; }
+
+    @Override
+    public boolean isPushedByFluid() {
+        return false;
+    }
 
 
     // ==================================================
