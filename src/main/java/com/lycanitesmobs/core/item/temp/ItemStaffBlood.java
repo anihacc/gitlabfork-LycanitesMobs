@@ -4,6 +4,7 @@ import com.lycanitesmobs.core.entity.PortalEntity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.DamageSource;
 
 public class ItemStaffBlood extends ItemStaffSummoning {
 	public PortalEntity portalEntity;
@@ -53,7 +54,7 @@ public class ItemStaffBlood extends ItemStaffSummoning {
     public boolean getAdditionalCosts(EntityPlayer player) {
     	if(player.getHealth() <= 7)
     		return false;
-    	player.setHealth(player.getHealth() - 6);
+    	player.attackEntityFrom(DamageSource.MAGIC, 6);
     	return true;
     }
     

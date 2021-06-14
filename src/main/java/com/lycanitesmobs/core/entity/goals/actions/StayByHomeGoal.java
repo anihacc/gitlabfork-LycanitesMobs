@@ -48,11 +48,9 @@ public class StayByHomeGoal extends EntityAIBase {
     public boolean shouldExecute() {
     	if(!this.enabled)
     		return false;
-    	if(!this.host.hasHome())
+		if(!this.host.hasHome() || this.host.getDistanceFromHome() <= 1.0F)
     		return false;
         if(this.host.isInWater() && !this.host.canBreatheUnderwater())
-            return false;
-        if(!this.host.onGround && !this.host.useDirectNavigator())
             return false;
         
         return true;
@@ -65,15 +63,13 @@ public class StayByHomeGoal extends EntityAIBase {
 	@Override
     public void startExecuting() {
         this.host.clearMovement();
-        if(this.host.hasHome() && this.host.getDistanceFromHome() > 1.0F) {
-            BlockPos homePos = this.host.getHomePosition();
-        	double speed = this.speed;
-        	if(this.host.getDistanceFromHome() > this.host.getHomeDistanceMax())
-        		speed = this.farSpeed;
-	    	if(!host.useDirectNavigator())
-	    		this.host.getNavigator().tryMoveToXYZ(homePos.getX(), homePos.getY(), homePos.getZ(), this.speed);
-	    	else
-	    		host.directNavigator.setTargetPosition(new BlockPos((int)homePos.getX(), (int)homePos.getY(), (int)homePos.getZ()), speed);
-        }
+		BlockPos homePos = this.host.getHomePosition();
+		double speed = this.speed;
+		if(this.host.getDistanceFromHome() > this.host.getHomeDistanceMax())
+			speed = this.farSpeed;
+		if(!host.useDirectNavigator())
+			this.host.getNavigator().tryMoveToXYZ(homePos.getX(), homePos.getY(), homePos.getZ(), this.speed);
+		else
+			host.directNavigator.setTargetPosition(new BlockPos((int)homePos.getX(), (int)homePos.getY(), (int)homePos.getZ()), speed);
     }
 }

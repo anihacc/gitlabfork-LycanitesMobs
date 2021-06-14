@@ -1,5 +1,6 @@
 package com.lycanitesmobs.core.entity.goals.actions.abilities;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -12,7 +13,7 @@ public class PlaceBlockGoal extends EntityAIBase {
     
     // Properties:
     private double speed = 1.0D;
-    private double range = 2.0D;
+    private double range = 8.0D;
     private double maxDistance = 64.0D;
     private boolean replaceSolid = false;
     private boolean replaceLiquid = true;
@@ -74,11 +75,13 @@ public class PlaceBlockGoal extends EntityAIBase {
         if(this.blockState == null)
             return false;
         
-    	if(!this.canPlaceBlock(this.pos)) {
+    	if(this.repathTime-- <= 0 && !this.canPlaceBlock(this.pos)) {
             this.blockState = null;
-    		return false;
-    	}
-    	
+			this.repathTime = 20;
+			return false;
+		}
+
+		this.repathTime = 0;
         return true;
     }
     
@@ -122,7 +125,7 @@ public class PlaceBlockGoal extends EntityAIBase {
         this.host.getLookHelper().setLookPosition(this.pos.getX(), this.pos.getY(), this.pos.getZ(), 30.0F, 30.0F);
         
         // Place Block:
-        if(this.host.getDistanceSq(new BlockPos(this.pos)) <= this.range * this.range) {
+        if(Math.sqrt(this.host.getDistanceSq(this.pos)) <= this.range) {
         	this.host.getEntityWorld().setBlockState(this.pos, this.blockState, 3);
             this.blockState = null;
             this.host.clearMovement();

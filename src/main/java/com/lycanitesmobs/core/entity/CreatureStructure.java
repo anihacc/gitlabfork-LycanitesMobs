@@ -3,11 +3,10 @@ package com.lycanitesmobs.core.entity;
 import com.lycanitesmobs.core.dungeon.definition.DungeonTheme;
 import com.lycanitesmobs.core.dungeon.definition.ThemeBlock;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 
 import javax.annotation.Nullable;
@@ -25,7 +24,10 @@ public class CreatureStructure {
 	public CreatureStructure(BaseCreatureEntity creatureEntity, DungeonTheme dungeonTheme) {
 		this.owner = creatureEntity;
 		this.dungeonTheme = dungeonTheme;
-		this.origin = creatureEntity.blockPosition();
+		this.origin = creatureEntity.getPosition();
+		if (this.dungeonTheme == null) {
+			throw new RuntimeException("Unable to find the vespid_hive dungeon theme!");
+		}
 	}
 
 	/**
@@ -42,7 +44,7 @@ public class CreatureStructure {
 	 */
 	public void setOrigin(BlockPos blockPos) {
 		this.origin = blockPos;
-		this.startPos = blockPos.offset(0, 8, 0);
+		this.startPos = blockPos.add(0, 8, 0);
 	}
 
 	/**
@@ -54,7 +56,7 @@ public class CreatureStructure {
 		// Check if started:
 		if (!this.isStarted()) {
 			this.buildTasks.add(new CreatureBuildTask(
-					this.dungeonTheme.getCeiling(null, '1', this.owner.getRandom()),
+					this.dungeonTheme.getCeiling(null, '1', this.owner.getRNG()),
 					this.startPos
 				)
 			);
@@ -82,7 +84,7 @@ public class CreatureStructure {
 						continue;
 					}
 
-					BlockPos blockPos = this.origin.offset(x, y, z);
+					BlockPos blockPos = this.origin.add(x, y, z);
 
 					// Check Placement:
 					if (!this.shouldBuildAt(blockPos)) {
@@ -90,15 +92,15 @@ public class CreatureStructure {
 					}
 
 					// Get Build Block State:
-					BlockState blockState;
+					IBlockState blockState;
 					if (y == radius) {
-						blockState = this.dungeonTheme.getCeiling(null, '1', this.owner.getRandom());
+						blockState = this.dungeonTheme.getCeiling(null, '1', this.owner.getRNG());
 					}
 					else if (y == -radius) {
-						blockState = this.dungeonTheme.getFloor(null, '1', this.owner.getRandom());
+						blockState = this.dungeonTheme.getFloor(null, '1', this.owner.getRNG());
 					}
 					else {
-						blockState = this.dungeonTheme.getWall(null, '1', this.owner.getRandom());
+						blockState = this.dungeonTheme.getWall(null, '1', this.owner.getRNG());
 					}
 
 					this.buildTasks.add(new CreatureBuildTask(blockState, blockPos));
@@ -113,7 +115,7 @@ public class CreatureStructure {
 	 * @return True if a Build Task should be created for the position, false if not.
 	 */
 	protected boolean shouldBuildAt(BlockPos pos) {
-		BlockState targetState = this.owner.getCommandSenderWorld().getBlockState(pos);
+		IBlockState targetState = this.owner.getEntityWorld().getBlockState(pos);
 		Block targetBlock = targetState.getBlock();
 		if (targetBlock == Blocks.AIR) {
 			return true;
@@ -121,7 +123,7 @@ public class CreatureStructure {
 		if (targetState.getMaterial() == Material.WATER || targetState.getMaterial() == Material.LAVA) {
 			return true;
 		}
-		if (targetState.getMaterial() == Material.PLANT || targetState.getMaterial() == Material.LEAVES) {
+		if (targetState.getMaterial() == Material.VINE || targetState.getMaterial() == Material.LEAVES) {
 			return true;
 		}
 		return false;
@@ -133,23 +135,23 @@ public class CreatureStructure {
 	 * @return True if the block is part of this structure's theme.
 	 */
 	protected boolean isStructureBlock(BlockPos blockPos) {
-		BlockState targetState = this.owner.getCommandSenderWorld().getBlockState(blockPos);
+		IBlockState targetState = this.owner.getEntityWorld().getBlockState(blockPos);
 		Block targetBlock = targetState.getBlock();
 		if (targetBlock == Blocks.AIR) {
 			return false;
 		}
 		for (ThemeBlock themeBlock : this.dungeonTheme.ceilingBlocks) {
-			if (targetBlock == themeBlock.getBlock()) {
+			if (targetBlock == themeBlock.getBlockState().getBlock()) {
 				return true;
 			}
 		}
 		for (ThemeBlock themeBlock : this.dungeonTheme.floorBlocks) {
-			if (targetBlock == themeBlock.getBlock()) {
+			if (targetBlock == themeBlock.getBlockState().getBlock()) {
 				return true;
 			}
 		}
 		for (ThemeBlock themeBlock : this.dungeonTheme.wallBlocks) {
-			if (targetBlock == themeBlock.getBlock()) {
+			if (targetBlock == themeBlock.getBlockState().getBlock()) {
 				return true;
 			}
 		}
@@ -157,14 +159,16 @@ public class CreatureStructure {
 	}
 
 	@Nullable
-	public CreatureBuildTask getRandomBuildTask(LivingEntity builder) {
+	public CreatureBuildTask getRandomBuildTask(EntityLivingBase builder) {
 		if (this.buildTasks.isEmpty()) {
 			return null;
 		}
 		if (buildTasks.size() == 1) {
 			return buildTasks.get(0);
 		}
-		return buildTasks.get(builder.getRandom().nextInt(buildTasks.size()));
+		CreatureBuildTask buildTask = this.buildTasks.get(builder.getRNG().nextInt(buildTasks.size()));
+		this.buildTasks.remove(buildTask);
+		return buildTask;
 	}
 
 	/**
