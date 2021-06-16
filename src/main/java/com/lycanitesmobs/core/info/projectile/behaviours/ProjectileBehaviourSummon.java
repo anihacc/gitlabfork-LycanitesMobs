@@ -1,17 +1,19 @@
 package com.lycanitesmobs.core.info.projectile.behaviours;
 
 import com.google.gson.JsonObject;
-import com.lycanitesmobs.client.ClientManager;
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
+import com.lycanitesmobs.core.network.MessageGUIRequest;
 import com.lycanitesmobs.core.pets.SummonSet;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -83,7 +85,10 @@ public class ProjectileBehaviourSummon extends ProjectileBehaviour {
 			}
 			summonSet = extendedPlayer.getSelectedSummonSet();
 			if(summonSet == null || summonSet.getCreatureType() == null) {
-				ClientManager.getInstance().displayGuiScreen("beastiary", player);
+				if (player instanceof ServerPlayerEntity) {
+					MessageGUIRequest messageGUIRequest = new MessageGUIRequest(MessageGUIRequest.GuiRequest.SUMMONING);
+					LycanitesMobs.packetHandler.sendToPlayer(messageGUIRequest, (ServerPlayerEntity) player);
+				}
 				return;
 			}
 			entityType = summonSet.getCreatureType();
