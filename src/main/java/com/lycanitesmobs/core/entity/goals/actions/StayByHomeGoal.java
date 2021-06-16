@@ -6,25 +6,18 @@ import net.minecraft.util.math.BlockPos;
 
 public class StayByHomeGoal extends EntityAIBase {
 	// Targets:
-    private BaseCreatureEntity host;
+    protected BaseCreatureEntity host;
     
     // Properties:
-    private boolean enabled = true;
-    private double speed = 1.0D;
-    private double farSpeed = 1.5D;
-	
-	// ==================================================
- 	//                    Constructor
- 	// ==================================================
+	protected boolean enabled = true;
+	protected double speed = 1.0D;
+	protected double farSpeed = 1.5D;
+
     public StayByHomeGoal(BaseCreatureEntity setHost) {
         this.host = setHost;
 		this.setMutexBits(1);
     }
-    
-    
-	// ==================================================
- 	//                  Set Properties
- 	// ==================================================
+
     public StayByHomeGoal setEnabled(boolean flag) {
         this.enabled = flag;
         return this;
@@ -39,30 +32,32 @@ public class StayByHomeGoal extends EntityAIBase {
     	this.farSpeed = setSpeed;
     	return this;
     }
-    
-    
-    // ==================================================
-  	//                   Should Execute
-  	// ==================================================
+
 	@Override
     public boolean shouldExecute() {
     	if(!this.enabled)
     		return false;
 		if(!this.host.hasHome() || this.host.getDistanceFromHome() <= 1.0F)
     		return false;
-        if(this.host.isInWater() && !this.host.canBreatheUnderwater())
+        if(!this.host.canBreatheUnderwater() && this.host.isInWater())
             return false;
         
         return true;
     }
-    
-    
-	// ==================================================
- 	//                      Start
- 	// ==================================================
+
+	@Override
+	public boolean shouldContinueExecuting() {
+		if (!this.shouldExecute()) {
+			return false;
+		}
+		if (!this.host.useDirectNavigator() && this.host.getNavigator().noPath()) {
+			return false;
+		}
+		return true;
+	}
+
 	@Override
     public void startExecuting() {
-        this.host.clearMovement();
 		BlockPos homePos = this.host.getHomePosition();
 		double speed = this.speed;
 		if(this.host.getDistanceFromHome() > this.host.getHomeDistanceMax())
@@ -72,4 +67,12 @@ public class StayByHomeGoal extends EntityAIBase {
 		else
 			host.directNavigator.setTargetPosition(new BlockPos((int)homePos.getX(), (int)homePos.getY(), (int)homePos.getZ()), speed);
     }
+
+	@Override
+	public void resetTask() {
+		if(!this.host.useDirectNavigator())
+			this.host.getNavigator().clearPath();
+		else
+			this.host.directNavigator.clearTargetPosition(this.speed);
+	}
 }
