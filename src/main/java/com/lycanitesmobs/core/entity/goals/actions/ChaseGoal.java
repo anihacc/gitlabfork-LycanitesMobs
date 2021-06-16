@@ -11,28 +11,21 @@ import net.minecraft.entity.ai.goal.Goal.Flag;
 
 public class ChaseGoal extends Goal {
 	// Targets:
-    private BaseCreatureEntity host;
-    private LivingEntity target;
+    protected BaseCreatureEntity host;
+	protected LivingEntity target;
     
     // Properties:
-    private double speed = 1.0D;
-	private float maxTargetDistance = 8.0F;
-	private float minTargetDistance = 0F;
-    
-    private BlockPos movePos;
-	
-	// ==================================================
- 	//                    Constructor
- 	// ==================================================
+	protected double speed = 1.0D;
+	protected float maxTargetDistance = 8.0F;
+	protected float minTargetDistance = 0F;
+
+	protected BlockPos movePos;
+
     public ChaseGoal(BaseCreatureEntity setHost) {
         this.host = setHost;
 		this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
     }
-    
-    
-    // ==================================================
-  	//                  Set Properties
-  	// ==================================================
+
     public ChaseGoal setSpeed(double setSpeed) {
     	this.speed = setSpeed;
     	return this;
@@ -45,11 +38,7 @@ public class ChaseGoal extends Goal {
 		this.minTargetDistance = setDist;
 		return this;
 	}
-	
-    
-	// ==================================================
- 	//                   Should Execute
- 	// ==================================================
+
 	@Override
     public boolean canUse() {
 		this.target = this.host.getTarget();
@@ -68,11 +57,7 @@ public class ChaseGoal extends Goal {
 
         return true;
     }
-	
-    
-	// ==================================================
- 	//                 Continue Executing
- 	// ==================================================
+
 	@Override
     public boolean canContinueToUse() {
 		if (!this.canUse()) {
@@ -84,10 +69,6 @@ public class ChaseGoal extends Goal {
     	return true;
     }
 
-
-	// ==================================================
-	//                      Start
-	// ==================================================
 	@Override
 	public void start() {
 		if(!this.host.useDirectNavigator())
@@ -96,10 +77,6 @@ public class ChaseGoal extends Goal {
 			this.host.directNavigator.setTargetPosition(this.movePos, this.speed);
 	}
 
-
-	// ==================================================
-	//                       Reset
-	// ==================================================
 	@Override
 	public void stop() {
 		this.target = null;

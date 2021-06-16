@@ -1,5 +1,6 @@
 package com.lycanitesmobs.core.entity.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.dungeon.DungeonManager;
 import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
@@ -67,6 +68,9 @@ public class EntityVespidQueen extends AgeableCreatureEntity implements IMob {
 	@Override
     public void aiStep() {
         super.aiStep();
+        if (this.getCommandSenderWorld().isClientSide()) {
+        	return;
+		}
 
 		if (this.updateTick % 20 == 0) {
 
@@ -79,7 +83,7 @@ public class EntityVespidQueen extends AgeableCreatureEntity implements IMob {
 				this.creatureStructure.refreshBuildTasks();
 			}
 			if (structureStarted && !this.hasHome()) {
-				this.setHome(this.creatureStructure.getOrigin().getX(), this.creatureStructure.getOrigin().getY(), this.creatureStructure.getOrigin().getZ(), 1F);
+				this.setHome(this.creatureStructure.getOrigin().getX(), this.creatureStructure.getOrigin().getY(), this.creatureStructure.getOrigin().getZ(), 8F);
 			}
 
 			// Spawn Babies:
@@ -89,7 +93,7 @@ public class EntityVespidQueen extends AgeableCreatureEntity implements IMob {
 		}
         
         // Don't Keep Infected Conbas Targeted:
-        if(!this.getCommandSenderWorld().isClientSide && this.getTarget() instanceof EntityConba) {
+        if(this.getTarget() instanceof EntityConba) {
         	if(((EntityConba)this.getTarget()).vespidInfection) {
         		this.setTarget(null);
         	}
@@ -167,7 +171,7 @@ public class EntityVespidQueen extends AgeableCreatureEntity implements IMob {
     		if(!((EntityVespid)targetEntity).hasMaster() || ((EntityVespid)targetEntity).getMasterTarget() == this)
     			return false;
     	}
-    	return super.canAttack(targetEntity);
+		return super.canAttack(targetEntity);
     }
 
     @Override

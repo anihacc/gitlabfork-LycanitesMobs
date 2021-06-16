@@ -2512,6 +2512,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     public void setHomeDistanceMax(float newDist) { this.homeDistanceMax = newDist; }
 
     /** Returns the home position in BlockPos. **/
+    @Override
     public BlockPos getRestrictCenter() { return this.homePosition; }
 
     /** Gets the distance this mob is allowed to stray from it's home. -1 is used to unlimited distance. **/
@@ -2533,13 +2534,13 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     /** Returns whether or not the given XYZ position is near this entity's home position, returns true if no home is set. **/
     public boolean positionNearHome(int x, int y, int z) {
         if(!hasHome()) return true;
-        return this.getDistanceFromHome(x, y, z) < this.getHomeDistanceMax() * this.getHomeDistanceMax();
+        return this.getDistanceFromHome(x, y, z) < this.getHomeDistanceMax();
     }
 
     /** Returns the distance that the specified XYZ position is from the home position. **/
     public double getDistanceFromHome(int x, int y, int z) {
     	if(!hasHome()) return 0;
-    	return this.homePosition.distSqr(new Vector3i(x, y, z));
+    	return Math.sqrt(this.homePosition.distSqr(new Vector3i(x, y, z)));
     }
 
     /** Returns the distance that the entity's position is from the home position. **/

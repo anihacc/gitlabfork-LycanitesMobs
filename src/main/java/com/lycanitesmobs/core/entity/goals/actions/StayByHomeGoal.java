@@ -1,6 +1,8 @@
 package com.lycanitesmobs.core.entity.goals.actions;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.creature.EntityVespidQueen;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.math.BlockPos;
 
@@ -19,7 +21,7 @@ public class StayByHomeGoal extends Goal {
 
     public StayByHomeGoal(BaseCreatureEntity setHost) {
         this.host = setHost;
-		this.setFlags(EnumSet.of(Flag.MOVE));
+		this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
     }
 
     public StayByHomeGoal setEnabled(boolean flag) {
@@ -43,15 +45,25 @@ public class StayByHomeGoal extends Goal {
     		return false;
     	if(!this.host.hasHome() || this.host.getDistanceFromHome() <= 1.0F)
     		return false;
-        if(this.host.isInWater() && !this.host.canBreatheUnderwater())
+        if(!this.host.canBreatheUnderwater() && this.host.isInWater())
             return false;
         
         return true;
     }
 
 	@Override
+	public boolean canContinueToUse() {
+		if (!this.canUse()) {
+			return false;
+		}
+		if (!this.host.useDirectNavigator() && this.host.getNavigation().isDone()) {
+			return false;
+		}
+		return true;
+	}
+
+	@Override
     public void start() {
-        this.host.clearMovement();
 		BlockPos homePos = this.host.getRestrictCenter();
 		double speed = this.speed;
 		if(this.host.getDistanceFromHome() > this.host.getHomeDistanceMax())
@@ -61,4 +73,12 @@ public class StayByHomeGoal extends Goal {
 		else
 			host.directNavigator.setTargetPosition(new BlockPos(homePos.getX(), homePos.getY(), homePos.getZ()), speed);
     }
+
+	@Override
+	public void stop() {
+		if(!this.host.useDirectNavigator())
+			this.host.getNavigation().stop();
+		else
+			this.host.directNavigator.clearTargetPosition(this.speed);
+	}
 }

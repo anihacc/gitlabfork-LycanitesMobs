@@ -93,9 +93,13 @@ public class FindAttackTargetGoal extends TargetingGoal {
  	//                    Host Target
  	// ==================================================
     @Override
-    protected LivingEntity getTarget() { return this.host.getTarget(); }
+    protected LivingEntity getTarget() {
+    	return this.host.getTarget();
+    }
     @Override
-    protected void setTarget(LivingEntity newTarget) { this.host.setTarget(newTarget); }
+    protected void setTarget(LivingEntity newTarget) {
+    	this.host.setTarget(newTarget);
+    }
     
     
     // ==================================================

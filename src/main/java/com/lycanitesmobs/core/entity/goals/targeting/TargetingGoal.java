@@ -3,6 +3,7 @@ package com.lycanitesmobs.core.entity.goals.targeting;
 import com.google.common.base.Predicate;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.creature.EntityVespidQueen;
 import com.lycanitesmobs.core.entity.goals.TargetSorterNearest;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -149,6 +150,7 @@ public abstract class TargetingGoal extends Goal {
 
             if (possibleTargets.isEmpty())
                 return null;
+
             Collections.sort(possibleTargets, this.nearestSorter);
             newTarget = possibleTargets.get(0);
         }
