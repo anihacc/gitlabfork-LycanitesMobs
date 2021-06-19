@@ -28,11 +28,11 @@ public class ModelTemplateInsect extends ModelCreatureObj {
         float rotZ = 0F;
 
         // Idle:
-        if(partName.equals("mouthleft")) {
+        if(partName.equals("mouthleft") || partName.equals("antennaleft") || partName.equals("antennaleftfront") || partName.equals("antennarightback")) {
             rotX += this.mouthScaleX * -Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.1F - 0.05F);
             rotY += this.mouthScaleY * -Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.1F - 0.05F);
         }
-        if(partName.equals("mouthright")) {
+        if(partName.equals("mouthright") || partName.equals("antennaright") || partName.equals("antennarightfront") || partName.equals("antennaleftback")) {
             rotX += this.mouthScaleX * -Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.1F - 0.05F);
             rotY -= this.mouthScaleY * -Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.1F - 0.05F);
         }
@@ -40,12 +40,12 @@ public class ModelTemplateInsect extends ModelCreatureObj {
             rotX = (float)-Math.toDegrees(MathHelper.cos(loop * 0.1F) * 0.05F - 0.05F);
             rotY = (float)-Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F - 0.05F);
         }
-        if(partName.equals("wingleft")) {
+        if(partName.equals("wingleft") || partName.equals("winglefttop") || partName.equals("wingleftbottom") || partName.equals("wingrightmiddle")) {
             rotX = 20;
             rotX -= Math.toDegrees(MathHelper.sin(loop * 3.2F) * 0.6F);
             rotZ -= Math.toDegrees(MathHelper.sin(loop * 3.2F) * 0.6F);
         }
-        if(partName.equals("wingright")) {
+        if(partName.equals("wingright") || partName.equals("wingrighttop") || partName.equals("wingrightbottom") || partName.equals("wingleftmiddle")) {
             rotX = 20;
             rotX -= Math.toDegrees(MathHelper.sin(loop * 3.2F) * 0.6F);
             rotZ -= Math.toDegrees(MathHelper.sin(loop * 3.2F + (float)Math.PI) * 0.6F);
@@ -66,7 +66,7 @@ public class ModelTemplateInsect extends ModelCreatureObj {
         if(entity != null && !entity.onGround && !entity.isInWater()) {
             if(entity instanceof BaseCreatureEntity) {
                 BaseCreatureEntity entityCreature = (BaseCreatureEntity)entity;
-                if(entityCreature.isFlying()) {
+                if(entityCreature.isFlying() && partName.equals("body")) {
                     float bob = -MathHelper.sin(loop * 0.2F) * 0.3F;
                     if(bob < 0)
                         bob = -bob;

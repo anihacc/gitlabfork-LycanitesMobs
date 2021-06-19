@@ -51,36 +51,14 @@ public class CreatureStructure {
 	 * Updates structure maintenance, checking for any parts that need to be build, etc.
 	 */
 	public void refreshBuildTasks() {
-		this.buildTasks.clear();
-
-		// Check if started:
-		if (!this.isStarted()) {
-			this.buildTasks.add(new CreatureBuildTask(
-					this.dungeonTheme.getCeiling(null, '1', this.owner.getRNG()),
-					this.startPos
-				)
-			);
-			return;
-		}
-
 		// A simple box for now. TODO Try to use Dungeon Sector?
 		int radius = 8;
 		for (int x = -radius; x <= radius; x++) {
 			for (int y = -radius; y <= radius; y++) {
 				for (int z = -radius; z <= radius; z++) {
 
-					// Inside Air:
-					if (Math.abs(x) < radius && Math.abs(y) < radius && Math.abs(z) < radius) {
-						continue;
-					}
-
-					// No Corners:
+					// Skip Corners:
 					if (Math.abs(x) == radius && Math.abs(z) == radius) {
-						continue;
-					}
-
-					// Entrance Spaces:
-					if (Math.abs(y) <= 1 && (Math.abs(x) <= 1 || Math.abs(z) <= 1)) {
 						continue;
 					}
 
@@ -91,19 +69,63 @@ public class CreatureStructure {
 						continue;
 					}
 
-					// Get Build Block State:
-					IBlockState blockState;
-					if (y == radius) {
+					IBlockState blockState = Blocks.AIR.getDefaultState();
+
+					// Entrance Spaces:
+					if (Math.abs(y) <= 1 && (Math.abs(x) <= 1 || Math.abs(z) <= 1)) {
+						blockState = Blocks.AIR.getDefaultState();
+					}
+
+					// Inside Air:
+					else if (Math.abs(x) < radius && Math.abs(y) < radius && Math.abs(z) < radius) {
+						if (this.owner.getEntityWorld().getBlockState(blockPos).getBlock() != Blocks.AIR) {
+							blockState = Blocks.AIR.getDefaultState();
+						}
+					}
+
+					// Ceiling:
+					else if (y == radius) {
 						blockState = this.dungeonTheme.getCeiling(null, '1', this.owner.getRNG());
 					}
+
+					// Floor:
 					else if (y == -radius) {
 						blockState = this.dungeonTheme.getFloor(null, '1', this.owner.getRNG());
 					}
+
+					// Wall:
 					else {
 						blockState = this.dungeonTheme.getWall(null, '1', this.owner.getRNG());
 					}
 
-					this.buildTasks.add(new CreatureBuildTask(blockState, blockPos));
+					// Create Build Task If Different:
+					if (this.owner.getEntityWorld().getBlockState(blockPos).getBlock() != blockState.getBlock()) {
+						this.buildTasks.add(new CreatureBuildTask(blockState, blockPos));
+					}
+				}
+			}
+		}
+
+		// Pit Blocks:
+		if (this.getBuildTaskSize() <= 10) {
+			for (int x = -radius; x <= radius; x++) {
+				for (int y = -radius; y <= radius; y++) {
+					for (int z = -radius; z <= radius; z++) {
+						for (int pitLayer = 1; pitLayer <= (radius / 2); pitLayer++) {
+							if (y == radius - pitLayer && Math.abs(x) < (radius - pitLayer) && Math.abs(z) < (radius - pitLayer)) {
+								BlockPos blockPos = this.origin.add(x, y, z);
+								IBlockState blockState = this.dungeonTheme.getPit('1', this.owner.getRNG());
+								this.buildTasks.add(new CreatureBuildTask(blockState, blockPos));
+							}
+						}
+						for (int pitLayer = 1; pitLayer <= (radius / 2); pitLayer++) {
+							if (y == -radius + pitLayer && Math.abs(x) < (radius - pitLayer) && Math.abs(z) < (radius - pitLayer)) {
+								BlockPos blockPos = this.origin.add(x, y, z);
+								IBlockState blockState = this.dungeonTheme.getPit('1', this.owner.getRNG());
+								this.buildTasks.add(new CreatureBuildTask(blockState, blockPos));
+							}
+						}
+					}
 				}
 			}
 		}
@@ -123,7 +145,12 @@ public class CreatureStructure {
 		if (targetState.getMaterial() == Material.WATER || targetState.getMaterial() == Material.LAVA) {
 			return true;
 		}
-		if (targetState.getMaterial() == Material.VINE || targetState.getMaterial() == Material.LEAVES) {
+		if (targetState.getMaterial() == Material.PLANTS
+				|| targetState.getMaterial() == Material.GROUND
+				|| targetState.getMaterial() == Material.GRASS
+				|| targetState.getMaterial() == Material.LEAVES
+				|| targetState.getMaterial() == Material.WOOD
+		) {
 			return true;
 		}
 		return false;
