@@ -26,6 +26,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
+import net.minecraftforge.event.entity.EntityLeaveWorldEvent;
 import net.minecraftforge.event.entity.EntityMountEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
@@ -106,6 +107,21 @@ public class GameEventListener {
                 }
             }
         }
+	}
+
+
+	// ==================================================
+	//                Entity Leave World
+	// ==================================================
+	@SubscribeEvent
+	public void onEntityLeaveWorld(EntityLeaveWorldEvent event) {
+		if (!(event.getEntity() instanceof LivingEntity)) {
+			return;
+		}
+		ExtendedEntity extendedEntity = ExtendedEntity.getForEntity((LivingEntity)event.getEntity());
+		if (extendedEntity != null) {
+			extendedEntity.onEntityRemoved();
+		}
 	}
 
 

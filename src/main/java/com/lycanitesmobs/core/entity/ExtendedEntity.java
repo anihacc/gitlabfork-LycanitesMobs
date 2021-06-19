@@ -13,6 +13,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.Effect;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.World;
 
 import java.util.HashMap;
 import java.util.List;
@@ -120,9 +121,6 @@ public class ExtendedEntity implements IExtendedEntity {
 	public void onUpdate() {
         if(this.entity == null)
             return;
-		if(entity.getCommandSenderWorld().isClientSide() && entity.isDeadOrDying()) {
-			clientExtendedEntities.remove(entity);
-		}
 
         // Projectiles:
 		for(String cooldownName : this.projectileCooldownsPrimary.keySet()) {
@@ -408,6 +406,14 @@ public class ExtendedEntity implements IExtendedEntity {
 			this.projectileCooldownsPrimary.put(projectileName, cooldown);
 		}
 		this.projectileCooldownsSecondary.put(projectileName, cooldown);
+	}
+
+
+	// ==================================================
+	//                       Remove
+	// ==================================================
+	public void onEntityRemoved() {
+		clientExtendedEntities.remove(this.entity);
 	}
 
 
