@@ -415,6 +415,14 @@ public class ExtendedEntity implements IExtendedEntity {
 	}
 
 
+	// ==================================================
+	//                       Remove
+	// ==================================================
+	public void onEntityRemoved() {
+		clientExtendedEntities.remove(this.entity);
+	}
+
+
     // ==================================================
     //                        NBT
     // ==================================================

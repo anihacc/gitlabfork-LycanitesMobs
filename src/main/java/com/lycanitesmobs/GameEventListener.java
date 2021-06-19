@@ -51,11 +51,14 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 
 public class GameEventListener {
+		WorldEventListener worldEventListener;
 
     // ==================================================
     //                     Constructor
     // ==================================================
-	public GameEventListener() {}
+	public GameEventListener() {
+		this.worldEventListener = new WorldEventListener(this);
+	}
 
 
     // ==================================================
@@ -98,6 +101,7 @@ public class GameEventListener {
 
 		// ========== Extended World ==========
 		ExtendedWorld.getForWorld(event.getWorld());
+		event.getWorld().addEventListener(this.worldEventListener);
 	}
 
 
@@ -191,6 +195,21 @@ public class GameEventListener {
                 }
             }
         }
+	}
+
+
+	// ==================================================
+	//                Entity Leave World
+	//           Uses 1.12.2 WorldEventListener
+	// ==================================================
+	public void onEntityLeaveWorld(Entity entity) {
+		if (!(entity instanceof EntityLivingBase)) {
+			return;
+		}
+		ExtendedEntity extendedEntity = ExtendedEntity.getForEntity((EntityLivingBase)entity);
+		if (extendedEntity != null) {
+			extendedEntity.onEntityRemoved();
+		}
 	}
 
 
