@@ -60,7 +60,7 @@ public class BegGoal extends Goal {
  	// ==================================================
 	@Override
     public void start() {
-        this.host.setSitting(true);
+        this.host.clearMovement();
         this.begTime = 40 + this.host.getRandom().nextInt(40);
     }
 	
@@ -70,7 +70,6 @@ public class BegGoal extends Goal {
  	// ==================================================
 	@Override
     public void stop() {
-        this.host.setSitting(false);
         this.player = null;
     }
 	

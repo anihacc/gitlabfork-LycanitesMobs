@@ -5,21 +5,24 @@ import com.lycanitesmobs.core.dungeon.DungeonManager;
 import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.CreatureStructure;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import com.lycanitesmobs.core.entity.goals.actions.StayByHomeGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.FindAttackTargetGoal;
 import com.lycanitesmobs.core.info.CreatureManager;
+import com.lycanitesmobs.core.item.consumable.ItemTreat;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.monster.IMob;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.World;
 
-public class EntityVespidQueen extends AgeableCreatureEntity implements IMob {
+public class EntityVespidQueen extends TameableCreatureEntity implements IMob {
 	public final CreatureStructure creatureStructure;
 	protected int swarmLimit = 10;
 
@@ -173,6 +176,27 @@ public class EntityVespidQueen extends AgeableCreatureEntity implements IMob {
     	}
 		return super.canAttack(targetEntity);
     }
+
+    @Override
+	public boolean canBeTempted() {
+    	return true;
+	}
+
+    @Override
+	public boolean isTamingItem(ItemStack itemStack) {
+		if(itemStack.isEmpty() || this.creatureInfo.creatureType == null) {
+			return false;
+		}
+
+		if(itemStack.getItem() instanceof ItemTreat) {
+			ItemTreat itemTreat = (ItemTreat)itemStack.getItem();
+			if(itemTreat.getCreatureType() == this.creatureInfo.creatureType) {
+				return true;
+			}
+		}
+
+		return super.isTamingItem(itemStack);
+	}
 
     @Override
     public boolean isFlying() { return true; }

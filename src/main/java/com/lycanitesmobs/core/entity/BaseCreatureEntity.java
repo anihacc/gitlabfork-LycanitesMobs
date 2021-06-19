@@ -557,8 +557,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		this.goalSelector.addGoal(this.nextPriorityGoalIndex++, new PaddleGoal(this));
 		this.goalSelector.addGoal(this.nextPriorityGoalIndex++, new StayByWaterGoal(this));
 		this.goalSelector.addGoal(this.nextPriorityGoalIndex++, new AvoidGoal(this).setNearSpeed(1.3D).setFarSpeed(1.2D).setNearDistance(5.0D).setFarDistance(20.0D));
-		if(this.creatureInfo.isTameable())
-			this.goalSelector.addGoal(this.nextDistractionGoalIndex++, new TemptGoal(this).setTemptDistanceMin(4.0D));
+		this.goalSelector.addGoal(this.nextDistractionGoalIndex++, new TemptGoal(this).setTemptDistanceMin(4.0D));
 		if(this instanceof IFusable)
 			this.goalSelector.addGoal(this.nextDistractionGoalIndex++, new FollowFuseGoal(this).setLostDistance(16));
 

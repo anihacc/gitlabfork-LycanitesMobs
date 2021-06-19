@@ -1,8 +1,10 @@
 package com.lycanitesmobs.core.entity.goals.actions;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
+import com.lycanitesmobs.core.entity.creature.EntityVespidQueen;
 import com.lycanitesmobs.core.entity.navigate.CreaturePathNavigator;
 import com.lycanitesmobs.core.info.ObjectLists;
 import com.lycanitesmobs.core.item.consumable.ItemTreat;
@@ -116,7 +118,7 @@ public class TemptGoal extends Goal {
             return false;
         }
         
-        if(this.host instanceof TameableCreatureEntity && this.host.isTamed()) {
+        if(this.host.isTamed()) {
             return false;
         }
 
@@ -140,7 +142,6 @@ public class TemptGoal extends Goal {
             return false;
         }
 
-        this.host.setStealth(0.0F);
         return true;
     }
 
@@ -150,11 +151,8 @@ public class TemptGoal extends Goal {
         }
 
         // Creature Type Treats for Tameables:
-        if(this.includeTreats && this.host.creatureInfo.isTameable() && this.host.creatureInfo.creatureType != null && itemStack.getItem() instanceof ItemTreat) {
-            ItemTreat itemTreat = (ItemTreat)itemStack.getItem();
-            if(this.host.creatureInfo.creatureType == itemTreat.getCreatureType()) {
-                return true;
-            }
+        if(this.includeTreats && this.host.canBeTempted() && this.host instanceof TameableCreatureEntity && ((TameableCreatureEntity) this.host).isTamingItem(itemStack)) {
+            return true;
         }
 
         // Creature Diet:
@@ -210,6 +208,7 @@ public class TemptGoal extends Goal {
   	// ==================================================
 	@Override
     public void start() {
+        this.host.setStealth(0.0F);
         this.targetX = this.player.position().x();
         this.targetY = this.player.position().y();
         this.targetZ = this.player.position().z();

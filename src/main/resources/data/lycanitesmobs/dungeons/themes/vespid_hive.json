@@ -30,5 +30,10 @@
 	],
 	"torchBlocks": [],
 	"stairBlocks": [],
-	"pitBlocks": []
+	"pitBlocks": [
+		{
+			"blockId": "minecraft:honey_block",
+			"weight": 8
+		}
+	]
 }

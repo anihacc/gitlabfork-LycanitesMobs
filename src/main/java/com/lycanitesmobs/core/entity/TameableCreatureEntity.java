@@ -777,64 +777,58 @@ public abstract class TameableCreatureEntity extends AgeableCreatureEntity {
 	 * @return True if the entity is tamed, false on failure.
 	 */
     public boolean tame(PlayerEntity player) {
-    	if(!this.getCommandSenderWorld().isClientSide && !this.isRareVariant() && !this.isBoss()) {
-			ExtendedPlayer extendedPlayer = ExtendedPlayer.getForPlayer(player);
-			if(extendedPlayer == null) {
-				return this.isTamed();
-			}
-
-			extendedPlayer.studyCreature(this, this.scaleKnowledgeExperience(CreatureManager.getInstance().config.creatureTreatKnowledge));
-
-			// Already Tamed:
-			if (this.isTamed()) {
-				return true;
-			}
-
-			// Require Knowledge Rank 2:
-			CreatureKnowledge creatureKnowledge = extendedPlayer.getBeastiary().getCreatureKnowledge(this.creatureInfo.getName());
-			if (creatureKnowledge == null || creatureKnowledge.rank < 2) {
-				ITextComponent tameMessage = new TranslationTextComponent("message.pet.tamefail.knowledge.prefix")
-						.append(" ")
-						.append(this.getSpeciesName())
-						.append(" ")
-						.append(new TranslationTextComponent("message.pet.tamefail.knowledge.suffix"));
-				player.sendMessage(tameMessage, Util.NIL_UUID);
-				return this.isTamed();
-			}
-
-			// Increase Reputation:
-			CreatureRelationshipEntry relationshipEntry = this.relationships.getOrCreateEntry(player);
-			int reputationAmount = 50 + this.getRandom().nextInt(50);
-			relationshipEntry.increaseReputation(reputationAmount);
-
-			// Apply Tame:
-			if (relationshipEntry.getReputation() >= this.creatureInfo.getTamingReputation()) {
-				this.setPlayerOwner(player);
-				this.onTamedByPlayer();
-				this.unsetTemporary();
-				ITextComponent tameMessage = new TranslationTextComponent("message.pet.tamed.prefix")
-						.append(" ")
-						.append(this.getSpeciesName())
-						.append(" ")
-						.append(new TranslationTextComponent("message.pet.tamed.suffix"));
-				player.sendMessage(tameMessage, Util.NIL_UUID);
-				this.playTameEffect(this.isTamed());
-				//player.addStat(ObjectManager.getStat(this.creatureInfo.getName() + ".tame"), 1); TODO Player Stats
-				if (this.portalTime > this.getDimensionChangingDelay()) {
-					this.portalTime = this.getDimensionChangingDelay();
-				}
-			}
-			else {
-//				ITextComponent tameMessage = new TranslationTextComponent("message.pet.tamefail.prefix")
-//						.append(" ")
-//						.append(this.getSpeciesName())
-//						.append(" ")
-//						.append(new TranslationTextComponent("message.pet.tamefail.suffix"));
-//				player.sendMessage(tameMessage, Util.NIL_UUID);
-			}
-
-			this.playTameEffect(this.isTamed());
+    	if(this.getCommandSenderWorld().isClientSide || this.isRareVariant() || this.isBoss()) {
+			return super.isTamed();
 		}
+
+		ExtendedPlayer extendedPlayer = ExtendedPlayer.getForPlayer(player);
+		if(extendedPlayer == null) {
+			return this.isTamed();
+		}
+
+		extendedPlayer.studyCreature(this, this.scaleKnowledgeExperience(CreatureManager.getInstance().config.creatureTreatKnowledge));
+
+		// Already Tamed:
+		if (this.isTamed()) {
+			return true;
+		}
+
+		// Require Knowledge Rank 2:
+		CreatureKnowledge creatureKnowledge = extendedPlayer.getBeastiary().getCreatureKnowledge(this.creatureInfo.getName());
+		if (creatureKnowledge == null || creatureKnowledge.rank < 2) {
+			ITextComponent tameMessage = new TranslationTextComponent("message.pet.tamefail.knowledge.prefix")
+					.append(" ")
+					.append(this.getSpeciesName())
+					.append(" ")
+					.append(new TranslationTextComponent("message.pet.tamefail.knowledge.suffix"));
+			player.sendMessage(tameMessage, Util.NIL_UUID);
+			return this.isTamed();
+		}
+
+		// Increase Reputation:
+		CreatureRelationshipEntry relationshipEntry = this.relationships.getOrCreateEntry(player);
+		int reputationAmount = 50 + this.getRandom().nextInt(50);
+		relationshipEntry.increaseReputation(reputationAmount);
+
+		// Apply Tame:
+		if (this.creatureInfo.isTameable() && relationshipEntry.getReputation() >= this.creatureInfo.getTamingReputation()) {
+			this.setPlayerOwner(player);
+			this.onTamedByPlayer();
+			this.unsetTemporary();
+			ITextComponent tameMessage = new TranslationTextComponent("message.pet.tamed.prefix")
+					.append(" ")
+					.append(this.getSpeciesName())
+					.append(" ")
+					.append(new TranslationTextComponent("message.pet.tamed.suffix"));
+			player.sendMessage(tameMessage, Util.NIL_UUID);
+			this.playTameEffect(this.isTamed());
+			//player.addStat(ObjectManager.getStat(this.creatureInfo.getName() + ".tame"), 1); TODO Player Stats
+			if (this.portalTime > this.getDimensionChangingDelay()) {
+				this.portalTime = this.getDimensionChangingDelay();
+			}
+		}
+
+		this.playTameEffect(this.isTamed());
     	return this.isTamed();
     }
 

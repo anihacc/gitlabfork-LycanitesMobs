@@ -2,6 +2,7 @@ package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import com.lycanitesmobs.core.entity.CreatureBuildTask;
+import com.lycanitesmobs.core.entity.CreatureRelationshipEntry;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import com.lycanitesmobs.core.entity.goals.actions.abilities.PlaceBlockGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.FindAttackTargetGoal;
@@ -92,6 +93,13 @@ public class EntityVespid extends AgeableCreatureEntity implements IMob {
     		if(!this.hasMaster() || this.getMasterTarget() == targetEntity)
     			return false;
     	}
+    	if (this.hasMaster() && this.getMasterTarget() instanceof EntityVespidQueen) {
+			EntityVespidQueen entityVespidQueen = (EntityVespidQueen)this.getMasterTarget();
+			CreatureRelationshipEntry creatureRelationshipEntry = entityVespidQueen.relationships.getEntry(targetEntity);
+			if (creatureRelationshipEntry != null && !creatureRelationshipEntry.canAttack()) {
+				return false;
+			}
+		}
     	return super.canAttack(targetEntity);
     }
 

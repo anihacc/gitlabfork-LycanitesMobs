@@ -120,6 +120,9 @@ public class ExtendedEntity implements IExtendedEntity {
 	public void onUpdate() {
         if(this.entity == null)
             return;
+		if(entity.getCommandSenderWorld().isClientSide() && entity.isDeadOrDying()) {
+			clientExtendedEntities.remove(entity);
+		}
 
         // Projectiles:
 		for(String cooldownName : this.projectileCooldownsPrimary.keySet()) {

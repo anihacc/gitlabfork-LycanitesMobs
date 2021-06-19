@@ -1,12 +1,12 @@
 package com.lycanitesmobs.core.entity;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.dungeon.definition.DungeonTheme;
 import com.lycanitesmobs.core.dungeon.definition.ThemeBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.BlockPos;
 
@@ -67,18 +67,8 @@ public class CreatureStructure {
 			for (int y = -radius; y <= radius; y++) {
 				for (int z = -radius; z <= radius; z++) {
 
-					// Inside Air:
-					if (Math.abs(x) < radius && Math.abs(y) < radius && Math.abs(z) < radius) {
-						continue;
-					}
-
-					// No Corners:
+					// Skip Corners:
 					if (Math.abs(x) == radius && Math.abs(z) == radius) {
-						continue;
-					}
-
-					// Entrance Spaces:
-					if (Math.abs(y) <= 1 && (Math.abs(x) <= 1 || Math.abs(z) <= 1)) {
 						continue;
 					}
 
@@ -89,19 +79,63 @@ public class CreatureStructure {
 						continue;
 					}
 
-					// Get Build Block State:
-					BlockState blockState;
-					if (y == radius) {
+					BlockState blockState = Blocks.AIR.defaultBlockState();
+
+					// Entrance Spaces:
+					if (Math.abs(y) <= 1 && (Math.abs(x) <= 1 || Math.abs(z) <= 1)) {
+						blockState = Blocks.AIR.defaultBlockState();
+					}
+
+					// Inside Air:
+					else if (Math.abs(x) < radius && Math.abs(y) < radius && Math.abs(z) < radius) {
+						if (this.owner.getCommandSenderWorld().getBlockState(blockPos).getBlock() != Blocks.AIR) {
+							blockState = Blocks.AIR.defaultBlockState();
+						}
+					}
+
+					// Ceiling:
+					else if (y == radius) {
 						blockState = this.dungeonTheme.getCeiling(null, '1', this.owner.getRandom());
 					}
+
+					// Floor:
 					else if (y == -radius) {
 						blockState = this.dungeonTheme.getFloor(null, '1', this.owner.getRandom());
 					}
+
+					// Wall:
 					else {
 						blockState = this.dungeonTheme.getWall(null, '1', this.owner.getRandom());
 					}
 
-					this.buildTasks.add(new CreatureBuildTask(blockState, blockPos));
+					// Create Build Task If Different:
+					if (this.owner.getCommandSenderWorld().getBlockState(blockPos).getBlock() != blockState.getBlock()) {
+						this.buildTasks.add(new CreatureBuildTask(blockState, blockPos));
+					}
+				}
+			}
+		}
+
+		// Pit Blocks:
+		if (this.getBuildTaskSize() <= 10) {
+			for (int x = -radius; x <= radius; x++) {
+				for (int y = -radius; y <= radius; y++) {
+					for (int z = -radius; z <= radius; z++) {
+						for (int pitLayer = 1; pitLayer <= (radius / 2); pitLayer++) {
+							if (y == radius - pitLayer && Math.abs(x) < (radius - pitLayer) && Math.abs(z) < (radius - pitLayer)) {
+								BlockPos blockPos = this.origin.offset(x, y, z);
+								BlockState blockState = this.dungeonTheme.getPit('1', this.owner.getRandom());
+								this.buildTasks.add(new CreatureBuildTask(blockState, blockPos));
+							}
+						}
+						for (int pitLayer = 1; pitLayer <= (radius / 2); pitLayer++) {
+							if (y == -radius + pitLayer && Math.abs(x) < (radius - pitLayer) && Math.abs(z) < (radius - pitLayer)) {
+								BlockPos blockPos = this.origin.offset(x, y, z);
+								BlockState blockState = this.dungeonTheme.getPit('1', this.owner.getRandom());
+								this.buildTasks.add(new CreatureBuildTask(blockState, blockPos));
+							}
+						}
+					}
 				}
 			}
 		}
@@ -121,7 +155,14 @@ public class CreatureStructure {
 		if (targetState.getMaterial() == Material.WATER || targetState.getMaterial() == Material.LAVA) {
 			return true;
 		}
-		if (targetState.getMaterial() == Material.PLANT || targetState.getMaterial() == Material.LEAVES) {
+		if (targetState.getMaterial() == Material.PLANT
+				|| targetState.getMaterial() == Material.DIRT
+				|| targetState.getMaterial() == Material.GRASS
+				|| targetState.getMaterial() == Material.LEAVES
+				|| targetState.getMaterial() == Material.VEGETABLE
+				|| targetState.getMaterial() == Material.REPLACEABLE_PLANT
+				|| targetState.getMaterial() == Material.WOOD
+		) {
 			return true;
 		}
 		return false;
