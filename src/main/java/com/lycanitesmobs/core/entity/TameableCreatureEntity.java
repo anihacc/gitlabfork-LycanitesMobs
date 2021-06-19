@@ -102,7 +102,7 @@ public class TameableCreatureEntity extends AgeableCreatureEntity implements IEn
 		this.targetTasks.addTask(this.nextSpecialTargetIndex++, new DefendOwnerGoal(this));
 
 		// Lesser Actions:
-		this.tasks.addTask(this.nextTravelGoalIndex++, new FollowOwnerGoal(this).setStrayDistance(CreatureManager.getInstance().config.petFollowDistance).setLostDistance(32).setSpeed(1.5D));
+		this.tasks.addTask(this.nextTravelGoalIndex++, new FollowOwnerGoal(this).setStrayDistance(CreatureManager.getInstance().config.petFollowDistance).setLostDistance(32).setSpeed(1D));
 		this.tasks.addTask(this.nextIdleGoalIndex++, new BegGoal(this));
 	}
     
