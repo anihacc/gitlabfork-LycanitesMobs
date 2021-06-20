@@ -18,8 +18,8 @@
 		{
 			"type": "random",
 			"rangeMin": [24, 0, 24],
-			"rangeMax": [32, 64, 32],
-			"yMin": 160,
+			"rangeMax": [32, 56, 32],
+			"yMin": 200,
 			"sorting": "random",
 			"limit": 32,
 			"underground": true,
