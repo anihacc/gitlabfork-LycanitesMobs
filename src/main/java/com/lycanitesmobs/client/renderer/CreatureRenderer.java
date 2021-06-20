@@ -139,6 +139,15 @@ public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, CreatureMo
 		}
 		this.getMainModel().clearAnimationFrames();
 		matrixStack.popPose();
+
+		// Render Name Tag
+		if (!invisible) {
+			net.minecraftforge.client.event.RenderNameplateEvent renderNameplateEvent = new net.minecraftforge.client.event.RenderNameplateEvent(entity, entity.getDisplayName(), this, matrixStack, renderTypeBuffer, fade, time);
+			net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(renderNameplateEvent);
+			if (renderNameplateEvent.getResult() != net.minecraftforge.eventbus.api.Event.Result.DENY && (renderNameplateEvent.getResult() == net.minecraftforge.eventbus.api.Event.Result.ALLOW || this.shouldShowName(entity))) {
+				this.renderNameTag(entity, entity.getCustomName(), matrixStack, renderTypeBuffer, brightness);
+			}
+		}
     }
 
 	/**
@@ -172,6 +181,8 @@ public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, CreatureMo
 		else {
 			rendertype = CustomRenderStates.getObjRenderType(texture, this.getMainModel().getBlending(entity, layer), this.getMainModel().getGlow(entity, layer));
 		}
+
+		// Render Model
 		// TODO allyInvisible lower color alpha
 		this.getMainModel().render(entity, matrixStack, renderTypeBuffer.getBuffer(rendertype), layer, time, distance, loop, lookY, lookX, 1, brightness, fade);
     }
@@ -206,18 +217,24 @@ public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, CreatureMo
     /** If true, display the name of the entity above it. **/
     @Override
     protected boolean shouldShowName(BaseCreatureEntity entity) {
-        if(!Minecraft.renderNames()) return false;
-    	//if(entity == this.renderManager.pointedEntity) return false; // This was renderViewEntity not pointedEntity, perhaps for hiding name in inventory/beastiary view?
-    	if(entity.isInvisibleTo(Minecraft.getInstance().player)) return false;
-    	if(entity.getControllingPassenger() != null) return false;
+        if(!Minecraft.renderNames()) {
+        	return false;
+		}
+    	if (!entity.hasCustomName()) {
+    		return false;
+		}
+    	if(entity.isInvisibleTo(Minecraft.getInstance().player)) {
+    		return false;
+		}
+    	if(entity.getControllingPassenger() != null || entity.hasPerchTarget()) {
+    		return false;
+		}
     	
-    	if(entity.shouldShowName()) {
-			if(entity.isTamed())
-				return entity == this.entityRenderDispatcher.crosshairPickEntity;
-    		return true;
+    	if(entity.shouldShowName() && !entity.isTamed()) {
+			return true;
     	}
     	
-    	return entity.hasCustomName() && entity == this.entityRenderDispatcher.crosshairPickEntity;
+    	return entity == this.entityRenderDispatcher.crosshairPickEntity;
     }
 
     /**
