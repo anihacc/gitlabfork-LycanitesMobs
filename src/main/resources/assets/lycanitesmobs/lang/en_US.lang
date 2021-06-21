@@ -1985,6 +1985,9 @@ item.bucketvesspoison.name=Vesspoison Bucket
 item.bucketvesspoison.description=Just as foul as regular poison but no mobs spawn in this and can be renewed like water.
 #
 #
+item.bucketveshoney.name=Veshoney Bucket
+item.bucketveshoney.description=A tasty, sticky and healthy fluid formed and found in Vespid hives, causes slowness.
+#
 # ========== Seasonal ==========
 item.halloweentreat.name=Halloween Treat
 item.halloweentreat.description=Trick or treat?!

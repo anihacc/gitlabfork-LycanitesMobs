@@ -23,6 +23,9 @@
 		"poison": [
 			{ "custom": { "fluid": "poison" } }
 		],
+		"veshoney": [
+			{ "custom": { "fluid": "veshoney" } }
+		],
 		"vesspoison": [
 			{ "custom": { "fluid": "vesspoison" } }
 		]
