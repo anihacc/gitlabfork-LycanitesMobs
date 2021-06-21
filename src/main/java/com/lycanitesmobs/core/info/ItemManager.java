@@ -223,6 +223,7 @@ public class ItemManager extends JSONLoader {
 		this.addFluid("sharacid", 0x8BB35A, 1000, 10, 40, 10, true, AcidFluidBlock.class, waterBrightBlockProperties, "acid", false);
 		this.addFluid("poison", 0x9C27B0, 1000, 8, 20, 0, false, PoisonFluidBlock.class, waterBlockProperties, "poison", true);
 		this.addFluid("vesspoison", 0xAC27A0, 1000, 8, 20, 0, true, PoisonFluidBlock.class, waterBlockProperties, "poison", false);
+		this.addFluid("veshoney", 0xCEBC39, 4000, 4000, 0, 0, false, VeshoneyFluidBlock.class, waterBlockProperties, "fae", false);
 		ObjectManager.addDamageSource("ooze", new DamageSource("ooze"));
 		ObjectManager.addDamageSource("acid", new DamageSource("acid"));
 	}
