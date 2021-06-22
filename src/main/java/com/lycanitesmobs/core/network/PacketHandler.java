@@ -44,7 +44,7 @@ public class PacketHandler {
 		HANDLER.registerMessage(messageID++, MessageSummoningPedestalStats.class, MessageSummoningPedestalStats::encode, MessageSummoningPedestalStats::decode, MessageSummoningPedestalStats::handle);
 		HANDLER.registerMessage(messageID++, MessageEntityVelocity.class, MessageEntityVelocity::encode, MessageEntityVelocity::decode, MessageEntityVelocity::handle);
 		HANDLER.registerMessage(messageID++, MessageEntityGUICommand.class, MessageEntityGUICommand::encode, MessageEntityGUICommand::decode, MessageEntityGUICommand::handle);
-		HANDLER.registerMessage(messageID++, MessageGUIRequest.class, MessageGUIRequest::encode, MessageGUIRequest::decode, MessageGUIRequest::handle);
+		HANDLER.registerMessage(messageID++, MessageScreenRequest.class, MessageScreenRequest::encode, MessageScreenRequest::decode, MessageScreenRequest::handle);
 		HANDLER.registerMessage(messageID++, MessagePlayerControl.class, MessagePlayerControl::encode, MessagePlayerControl::decode, MessagePlayerControl::handle);
 		HANDLER.registerMessage(messageID++, MessagePlayerLeftClick.class, MessagePlayerLeftClick::encode, MessagePlayerLeftClick::decode, MessagePlayerLeftClick::handle);
 		HANDLER.registerMessage(messageID++, MessagePlayerAttack.class, MessagePlayerAttack::encode, MessagePlayerAttack::decode, MessagePlayerAttack::handle);

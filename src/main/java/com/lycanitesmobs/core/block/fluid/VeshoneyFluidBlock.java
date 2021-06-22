@@ -49,7 +49,7 @@ public class VeshoneyFluidBlock extends BaseFluidBlock {
             entity.clearFire();
 
         // Effects:
-        if(entity instanceof LivingEntity & !(entity instanceof EntityVespid) & !(entity instanceof EntityVespidQueen)) {
+        if(entity instanceof LivingEntity && !(entity instanceof EntityVespid) && !(entity instanceof EntityVespidQueen)) {
             entity.makeStuckInBlock(blockState, new Vector3d(0.3D, 0.6D, 0.3D));
             entity.setDeltaMovement(0,-0.02,0);
         }

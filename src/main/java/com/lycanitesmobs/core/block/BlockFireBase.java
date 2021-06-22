@@ -4,10 +4,7 @@ package com.lycanitesmobs.core.block;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.info.ItemManager;
 import com.lycanitesmobs.core.info.ModInfo;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.SixWayBlock;
-import net.minecraft.block.TNTBlock;
+import net.minecraft.block.*;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.state.BooleanProperty;
@@ -141,6 +138,11 @@ public class BlockFireBase extends BlockBase {
         }
 
         BlockState blockStateBelow = world.getBlockState(pos.below());
+        if (blockStateBelow.getBlock() == Blocks.AIR) {
+            world.removeBlock(pos, false);
+            return;
+        }
+
         boolean isOnFireSource = permanent || this.isBlockFireSource(blockStateBelow, world, pos.below(), Direction.UP);
         int age = blockState.getValue(AGE);
 

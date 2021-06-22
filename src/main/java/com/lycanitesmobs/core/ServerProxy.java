@@ -24,4 +24,7 @@ public class ServerProxy implements IProxy {
 	public PlayerEntity getClientPlayer() {
 		return null;
 	}
+
+	@Override
+	public void openScreen(int screenId, PlayerEntity player) {}
 }

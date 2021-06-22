@@ -12,4 +12,6 @@ public interface IProxy {
 	void addEntityToWorld(int entityId, Entity entity);
 
 	public PlayerEntity getClientPlayer();
+
+	public void openScreen(int screenId, PlayerEntity player);
 }
