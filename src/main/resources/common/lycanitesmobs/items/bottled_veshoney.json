@@ -1,0 +1,33 @@
+{
+	"name": "bottled_veshoney",
+	"loadDefault": true,
+	"group": "items",
+	"maxStackSize": 16,
+	"food": {
+		"hunger": 6,
+		"saturation": 0.2,
+		"alwaysEdible": true,
+		"fast": false,
+		"meat": true,
+		"effects": [
+			{
+				"effectId": "lycanitesmobs:immunization",
+				"duration": 20,
+				"amplifier": 0,
+				"chance": 1.0
+			},
+			{
+				"effectId": "minecraft:regeneration",
+				"duration": 10,
+				"amplifier": 0,
+				"chance": 1.0
+			},
+			{
+				"effectId": "lycanitesmobs:aphagia",
+				"duration": 10,
+				"amplifier": 0,
+				"chance": 1.0
+			}
+		]
+	}
+}
