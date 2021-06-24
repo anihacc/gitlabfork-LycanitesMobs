@@ -84,8 +84,7 @@
     "dungeonLevel": 0,
     "drops": [
         {
-            "item": "minecraft:dye",
-            "metadata": 4,
+            "item": "minecraft:lapis_lazuli",
             "minAmount": 1,
             "maxAmount": 3,
             "chance": 1

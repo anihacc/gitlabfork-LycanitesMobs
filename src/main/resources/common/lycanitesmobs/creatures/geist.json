@@ -88,8 +88,7 @@
             "chance": 0.25
         },
         {
-            "item": "minecraft:skull",
-            "metadata": 1,
+            "item": "minecraft:wither_skeleton_skull",
             "minAmount": 1,
             "maxAmount": 1,
             "chance": 0.05

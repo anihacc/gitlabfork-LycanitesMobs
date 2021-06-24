@@ -81,8 +81,7 @@
     "dungeonLevel": 0,
     "drops": [
         {
-            "item": "minecraft:dye",
-            "metadata": 3,
+            "item": "minecraft:cocoa_beans",
             "minAmount": 1,
             "maxAmount": 5,
             "chance": 1

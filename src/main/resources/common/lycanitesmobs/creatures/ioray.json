@@ -86,17 +86,15 @@
     "dungeonLevel": 2,
     "drops": [
         {
-            "item": "minecraft:fish",
-            "burningItem": "minecraft:cooked_fish",
+            "item": "minecraft:cod",
+            "burningItem": "minecraft:cooked_cod",
             "minAmount": 1,
             "maxAmount": 5,
             "chance": 1
         },
         {
-            "item": "minecraft:fish",
-            "metadata": 1,
-            "burningItem": "minecraft:cooked_fish",
-            "burningMetadata": 1,
+            "item": "minecraft:salmon",
+            "burningItem": "minecraft:cooked_salmon",
             "minAmount": 1,
             "maxAmount": 3,
             "chance": 0.5
@@ -114,8 +112,7 @@
             "chance": 0.5
         },
         {
-            "item": "minecraft:dye",
-            "metadata": 4,
+            "item": "minecraft:lapis_lazuli",
             "minAmount": 1,
             "maxAmount": 3,
             "chance": 1

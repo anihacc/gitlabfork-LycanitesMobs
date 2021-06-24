@@ -87,31 +87,27 @@
     "dungeonLevel": 0,
     "drops": [
         {
-            "item": "minecraft:fish",
-            "burningItem": "minecraft:cooked_fish",
+            "item": "minecraft:cod",
+            "burningItem": "minecraft:cooked_cod",
             "minAmount": 1,
             "maxAmount": 3,
             "chance": 1
         },
         {
-            "item": "minecraft:fish",
-            "metadata": 1,
-            "burningItem": "minecraft:cooked_fish",
-            "burningMetadata": 1,
+            "item": "minecraft:salmon",
+            "burningItem": "minecraft:cooked_salmon",
             "minAmount": 1,
             "maxAmount": 3,
             "chance": 0.5
         },
         {
-            "item": "minecraft:fish",
-            "metadata": 2,
+            "item": "minecraft:tropical_fish",
             "minAmount": 1,
             "maxAmount": 2,
             "chance": 0.1
         },
         {
-            "item": "minecraft:fish",
-            "metadata": 3,
+            "item": "minecraft:pufferfish",
             "minAmount": 1,
             "maxAmount": 2,
             "chance": 0.25

@@ -100,8 +100,7 @@
             "chance": 1
         },
         {
-            "item": "minecraft:dye",
-            "metadata": 4,
+            "item": "minecraft:lapis_lazuli",
             "minAmount": 4,
             "maxAmount": 8,
             "chance": 1

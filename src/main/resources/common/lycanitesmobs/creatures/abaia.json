@@ -88,8 +88,8 @@
     "dungeonLevel": 1,
     "drops": [
         {
-            "item": "minecraft:fish",
-            "burningItem": "minecraft:cooked_fish",
+            "item": "minecraft:cod",
+            "burningItem": "minecraft:cooked_cod",
             "minAmount": 1,
             "maxAmount": 5,
             "chance": 1

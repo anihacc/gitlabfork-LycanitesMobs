@@ -85,7 +85,7 @@
     "dungeonLevel": 0,
     "drops": [
         {
-            "item": "minecraft:dye",
+            "item": "minecraft:bone_meal",
             "minAmount": 1,
             "maxAmount": 5,
             "chance": 1

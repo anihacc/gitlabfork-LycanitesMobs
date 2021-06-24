@@ -84,9 +84,8 @@
     "dungeonLevel": 2,
     "drops": [
         {
-            "item": "minecraft:fish",
-            "metadata": 1,
-            "burningItem": "minecraft:cooked_fish",
+            "item": "minecraft:salmon",
+            "burningItem": "minecraft:cooked_salmon",
             "burningMetadata": 1,
             "minAmount": 3,
             "maxAmount": 6,

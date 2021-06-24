@@ -83,7 +83,7 @@
     "dungeonLevel": 3,
     "drops": [
         {
-            "item": "minecraft:log",
+            "item": "minecraft:oak_log",
             "minAmount": 16,
             "maxAmount": 32,
             "chance": 1
