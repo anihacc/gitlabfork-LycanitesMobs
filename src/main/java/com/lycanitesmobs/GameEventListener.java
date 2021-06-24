@@ -6,15 +6,18 @@ import com.lycanitesmobs.core.capabilities.CapabilityProviderPlayer;
 import com.lycanitesmobs.core.config.ConfigExtra;
 import com.lycanitesmobs.core.entity.*;
 import com.lycanitesmobs.core.info.ItemConfig;
+import com.lycanitesmobs.core.info.ItemManager;
 import com.lycanitesmobs.core.item.equipment.ItemEquipment;
 import com.lycanitesmobs.core.network.MessagePlayerLeftClick;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.ResourceLocation;
@@ -172,7 +175,7 @@ public class GameEventListener {
 
 
 	// ==================================================
-	//                 Player Left Click
+	//                    Player Click
 	// ==================================================
 	@SubscribeEvent
 	public void onPlayerLeftClickEmpty(PlayerInteractEvent.LeftClickEmpty event) {
@@ -191,7 +194,7 @@ public class GameEventListener {
 	@SubscribeEvent
 	public void onPlayerLeftClickBlock(PlayerInteractEvent.LeftClickBlock event) {
 		PlayerEntity player = event.getPlayer();
-		if(player == null || event.getSide().isClient())
+		if (player == null || event.getSide().isClient())
 			return;
 
 		ItemStack itemStack = player.getItemInHand(event.getHand());

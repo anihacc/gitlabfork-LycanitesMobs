@@ -34,6 +34,10 @@
 		{
 			"blockId": "minecraft:honey_block",
 			"weight": 8
+		},
+		{
+			"blockId": "lycanitesmobs:veshoney",
+			"weight": 8
 		}
 	]
 }

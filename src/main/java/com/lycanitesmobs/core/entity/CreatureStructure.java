@@ -1,13 +1,14 @@
 package com.lycanitesmobs.core.entity;
 
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.dungeon.definition.DungeonTheme;
 import com.lycanitesmobs.core.dungeon.definition.ThemeBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.util.math.BlockPos;
 
 import javax.annotation.Nullable;
@@ -88,6 +89,9 @@ public class CreatureStructure {
 
 					// Inside Air:
 					else if (Math.abs(x) < radius && Math.abs(y) < radius && Math.abs(z) < radius) {
+						if (Math.abs(x) < (radius / 4) + 1 && y < -(radius / 2) + 1 && Math.abs(z) < (radius / 4) + 1) {
+							continue;
+						}
 						if (this.owner.getCommandSenderWorld().getBlockState(blockPos).getBlock() != Blocks.AIR) {
 							blockState = Blocks.AIR.defaultBlockState();
 						}
@@ -116,22 +120,46 @@ public class CreatureStructure {
 			}
 		}
 
-		// Pit Blocks:
+		// First Pit Blocks:
 		if (this.getBuildTaskSize() <= 10) {
 			for (int x = -radius; x <= radius; x++) {
 				for (int y = -radius; y <= radius; y++) {
 					for (int z = -radius; z <= radius; z++) {
+						if (Math.abs(x) < (radius / 4) + 1 && Math.abs(z) < (radius / 4) + 1) {
+							continue;
+						}
 						for (int pitLayer = 1; pitLayer <= (radius / 2); pitLayer++) {
 							if (y == radius - pitLayer && Math.abs(x) < (radius - pitLayer) && Math.abs(z) < (radius - pitLayer)) {
 								BlockPos blockPos = this.origin.offset(x, y, z);
 								BlockState blockState = this.dungeonTheme.getPit('1', this.owner.getRandom());
-								this.buildTasks.add(new CreatureBuildTask(blockState, blockPos));
+								if (this.owner.getCommandSenderWorld().getBlockState(blockPos).getBlock() != blockState.getBlock()) {
+									this.buildTasks.add(new CreatureBuildTask(blockState, blockPos));
+								}
 							}
 						}
 						for (int pitLayer = 1; pitLayer <= (radius / 2); pitLayer++) {
 							if (y == -radius + pitLayer && Math.abs(x) < (radius - pitLayer) && Math.abs(z) < (radius - pitLayer)) {
 								BlockPos blockPos = this.origin.offset(x, y, z);
 								BlockState blockState = this.dungeonTheme.getPit('1', this.owner.getRandom());
+								if (this.owner.getCommandSenderWorld().getBlockState(blockPos).getBlock() != blockState.getBlock()) {
+									this.buildTasks.add(new CreatureBuildTask(blockState, blockPos));
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		// Second Pit Blocks:
+		if (this.getBuildTaskSize() <= 10) {
+			for (int x = -radius; x <= radius; x++) {
+				for (int y = -radius; y <= radius; y++) {
+					for (int z = -radius; z <= radius; z++) {
+						if (Math.abs(x) < (radius / 4) + 1 && y <= -(radius / 2) && y > -radius && Math.abs(z) < (radius / 4) + 1) {
+							BlockPos blockPos = this.origin.offset(x, y, z);
+							BlockState blockState = this.dungeonTheme.getPit('2', this.owner.getRandom());
+							if (this.owner.getCommandSenderWorld().getBlockState(blockPos).getBlock() != blockState.getBlock()) {
 								this.buildTasks.add(new CreatureBuildTask(blockState, blockPos));
 							}
 						}
