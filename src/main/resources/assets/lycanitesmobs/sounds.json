@@ -836,33 +836,33 @@
         "category": "hostile",
         "sounds": [{"name": "lycanitesmobs:entity/gorgomite/attack", "stream": false}]
     },
-    "entity.manticore.say": {
+    "entity.balayang.say": {
         "category": "hostile",
-        "sounds": [{"name": "lycanitesmobs:entity/manticore/say", "stream": false}]
+        "sounds": [{"name": "lycanitesmobs:entity/balayang/say", "stream": false}]
     },
-    "entity.manticore.hurt": {
+    "entity.balayang.hurt": {
         "category": "hostile",
-        "sounds": [{"name": "lycanitesmobs:entity/manticore/hurt", "stream": false}]
+        "sounds": [{"name": "lycanitesmobs:entity/balayang/hurt", "stream": false}]
     },
-    "entity.manticore.death": {
+    "entity.balayang.death": {
         "category": "hostile",
-        "sounds": [{"name": "lycanitesmobs:entity/manticore/death", "stream": false}]
+        "sounds": [{"name": "lycanitesmobs:entity/balayang/death", "stream": false}]
     },
-    "entity.manticore.fly": {
+    "entity.balayang.fly": {
         "category": "hostile",
-        "sounds": [{"name": "lycanitesmobs:entity/manticore/fly", "stream": false}]
+        "sounds": [{"name": "lycanitesmobs:entity/balayang/fly", "stream": false}]
     },
-    "entity.manticore.attack": {
+    "entity.balayang.attack": {
         "category": "hostile",
-        "sounds": [{"name": "lycanitesmobs:entity/manticore/attack", "stream": false}]
+        "sounds": [{"name": "lycanitesmobs:entity/balayang/attack", "stream": false}]
     },
-    "entity.manticore.beg": {
+    "entity.balayang.beg": {
         "category": "hostile",
-        "sounds": [{"name": "lycanitesmobs:entity/manticore/beg", "stream": false}]
+        "sounds": [{"name": "lycanitesmobs:entity/balayang/beg", "stream": false}]
     },
-    "entity.manticore.tame": {
+    "entity.balayang.tame": {
         "category": "hostile",
-        "sounds": [{"name": "lycanitesmobs:entity/manticore/tame", "stream": false}]
+        "sounds": [{"name": "lycanitesmobs:entity/balayang/tame", "stream": false}]
     },
     "entity.cinder.say": {
         "category": "hostile",
