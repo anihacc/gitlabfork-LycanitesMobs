@@ -858,6 +858,11 @@ entity.astaroth.description=Demonic brain-like beings mounted on a mechanical pl
 entity.astaroth.habitat=These demons are said to originate from the endless Hell plane of flesh called Purgatory and that they were once mere Trites, they can often be found stalking the Nether.
 entity.astaroth.combat=Astaroth use powerful rapid weapons that extract their demonic energizes into powerful projectiles called Devil Stars, on impact these can cause wither. Should an Astaroth fall, a small force of Trites will come out of their corpse and proceed to attack!
 # ========================================================================
+entity.balayang.name=Balayang
+entity.balayang.description=Vicious cyclopsian bats with deadly fangs. They like to hunt down Gorgomites and other small prey, including you!
+entity.balayang.habitat=Balayangs fly around the desert and mesa skies at night.
+entity.balayang.combat=A Balayang's bite will leave you bleeding with poor eye sight!
+# ========================================================================
 entity.banshee.name=Banshee
 entity.banshee.description=Banshees are terrifying Phase Elementals that can phase through reality itself, they can often be heard 'singing'. It is said that the elemental is actually the pair of eyes and not the corpse that it 're-purposed'. Geonach and Zephyr elementals can also fuse into a powerful Banshee.
 entity.banshee.habitat=These elementals haunt eerie and abandoned places where they are usually found around abandoned mineshafts as well as dark forests and other locations that embody unease.
