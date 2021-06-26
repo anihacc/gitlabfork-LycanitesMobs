@@ -1,7 +1,6 @@
-# Blender MTL File: 'balayang.blend'
-# Material Count: 3
-
-newmtl balayang
+# Blender v2.92.0 OBJ File: 'balayang.blend'
+# www.blender.org
+mtllib balayang.mtl
 o Body
 v 0.270270 0.963391 -0.088303
 v 0.278563 0.098549 -0.152862

@@ -12,6 +12,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class ModelBalayang extends ModelTemplateBiped {
 
+	public ModelBalayang() {
+		this(1.0F);
+	}
+
 	public ModelBalayang(float shadowSize) {
 		this.initModel("balayang", LycanitesMobs.modInfo, "entity/balayang");
 		this.trophyScale = 1.2F;
