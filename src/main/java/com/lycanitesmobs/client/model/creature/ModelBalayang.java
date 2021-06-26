@@ -29,7 +29,7 @@ public class ModelBalayang extends ModelTemplateBiped {
 			creatureEntity = (BaseCreatureEntity)entity;
 
 		// Wings:
-		if(entity != null && !entity.onGround() && !entity.isInWater() && (creatureEntity == null || !creatureEntity.hasPerchTarget())) {
+		if(entity != null && !entity.onGround && !entity.isInWater() && (creatureEntity == null || !creatureEntity.hasPerchTarget())) {
 		if (partName.equals("wingleft01")) {
 			float rotX = -40;
 			float rotY = 20.5F;
