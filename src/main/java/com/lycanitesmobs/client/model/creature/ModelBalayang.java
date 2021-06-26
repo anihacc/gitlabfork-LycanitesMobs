@@ -33,24 +33,24 @@ public class ModelBalayang extends ModelTemplateBiped {
 			if (partName.equals("wingleft01")) {
 				float rotX = -40;
 				float rotY = 20.5F;
-				float rotZ = (float)Math.toDegrees(MathHelper.sin(loop * 0.4F * this.wingScale) * 0.6F);
+				float rotZ = (float) Math.toDegrees(MathHelper.sin(loop * 0.4F * this.wingScale) * 0.6F);
 				this.rotate(rotX, rotY, rotZ);
 				return;
 			}
 			if (partName.equals("wingright01")) {
 				float rotX = -40;
 				float rotY = -20.5F;
-				float rotZ = (float)Math.toDegrees(MathHelper.sin(loop * 0.4F * this.wingScale + (float) Math.PI) * 0.6F);
+				float rotZ = (float) Math.toDegrees(MathHelper.sin(loop * 0.4F * this.wingScale + (float) Math.PI) * 0.6F);
 				this.rotate(rotX, rotY, rotZ);
 				return;
 			}
 			if (partName.equals("wingleft02")) {
-				float rotZ = (float)Math.toDegrees(MathHelper.sin(loop * 0.4F * this.wingScale) * 0.15F);
+				float rotZ = (float) Math.toDegrees(MathHelper.sin(loop * 0.4F * this.wingScale) * 0.15F);
 				this.rotate(0, 0, rotZ);
 				return;
 			}
 			if (partName.equals("wingright02")) {
-				float rotZ = (float)Math.toDegrees(MathHelper.sin(loop * 0.4F * this.wingScale + (float) Math.PI) * 0.15F);
+				float rotZ = (float) Math.toDegrees(MathHelper.sin(loop * 0.4F * this.wingScale + (float) Math.PI) * 0.15F);
 				this.rotate(0, 0, rotZ);
 				return;
 			}
