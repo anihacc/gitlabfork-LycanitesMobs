@@ -28,6 +28,7 @@ public class ModelBalayang extends ModelTemplateBiped {
 		if(entity instanceof BaseCreatureEntity)
 			creatureEntity = (BaseCreatureEntity)entity;
 
+		// Wings:
 		if(entity != null && !entity.isOnGround() && !entity.isInWater() && (creatureEntity == null || !creatureEntity.hasPerchTarget())) {
 			if (partName.equals("wingleft01")) {
 				float rotX = -40;
@@ -54,6 +55,19 @@ public class ModelBalayang extends ModelTemplateBiped {
 				return;
 			}
 		}
+
+		// Looking:
+		float rotX = 0;
+		float rotY = 0;
+		if(partName.toLowerCase().equals("body")) {
+			rotX += (Math.toDegrees(lookX / (180F / (float)Math.PI)) * 0.75F);
+			rotY += (Math.toDegrees(lookY / (180F / (float)Math.PI))) * 0.75F;
+		}
+		if(partName.equals("eye")) {
+			rotX += (Math.toDegrees(lookX / (180F / (float)Math.PI)) * 0.25F);
+			rotY += (Math.toDegrees(lookY / (180F / (float)Math.PI))) * 0.25F;
+		}
+		this.rotate(rotX, rotY, 0);
 
 		super.animatePart(partName, entity, time, distance, loop, lookY, lookX, scale);
 	}
