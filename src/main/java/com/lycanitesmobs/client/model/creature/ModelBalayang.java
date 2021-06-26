@@ -29,26 +29,24 @@ public class ModelBalayang extends ModelTemplateBiped {
 			creatureEntity = (BaseCreatureEntity)entity;
 
 		if(entity != null && !entity.isOnGround() && !entity.isInWater() && (creatureEntity == null || !creatureEntity.hasPerchTarget())) {
-			// Looking:
-			float rotX = 0;
-			float rotY = 0;
-			
+
+			}
 			if (partName.equals("wingleft01")) {
-				rotX = -40;
-				rotY = 20.5F;
-				float rotZ = (float)Math.toDegrees(MathHelper.sin(loop * 0.4F * this.wingScale) * 0.6F);
+				float rotX = -40;
+				float rotY = 20.5F;
+				float rotZ = (float) Math.toDegrees(MathHelper.sin(loop * 0.4F * this.wingScale) * 0.6F);
 				this.rotate(rotX, rotY, rotZ);
 				return;
 			}
 			if (partName.equals("wingright01")) {
-				rotX = -40;
-				rotY = -20.5F;
-				float rotZ = (float)Math.toDegrees(MathHelper.sin(loop * 0.4F * this.wingScale + (float) Math.PI) * 0.6F);
+				float rotX = -40;
+				float rotY = -20.5F;
+				float rotZ = (float) Math.toDegrees(MathHelper.sin(loop * 0.4F * this.wingScale + (float) Math.PI) * 0.6F);
 				this.rotate(rotX, rotY, rotZ);
 				return;
 			}
 			if (partName.equals("wingleft02")) {
-				float rotZ = (float)Math.toDegrees(MathHelper.sin(loop * 0.4F * this.wingScale) * 0.15F);
+				float rotZ = (float) Math.toDegrees(MathHelper.sin(loop * 0.4F * this.wingScale) * 0.15F);
 				this.rotate(0, 0, rotZ);
 				return;
 			}
@@ -57,12 +55,6 @@ public class ModelBalayang extends ModelTemplateBiped {
 				this.rotate(0, 0, rotZ);
 				return;
 			}
-			if(partName.equals("eye")) {
-				rotX += (Math.toDegrees(lookX / (180F / (float)Math.PI)) * 0.25F);
-				rotY += (Math.toDegrees(lookY / (180F / (float)Math.PI))) * 0.25F;
-			}
-		}
-
 		super.animatePart(partName, entity, time, distance, loop, lookY, lookX, scale);
 	}
 }
