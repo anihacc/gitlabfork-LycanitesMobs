@@ -23,7 +23,7 @@ public class ModelTemplateQuadruped extends CreatureObjModel {
         if(partName.equals("mouth")) {
             this.rotate((float)-Math.toDegrees(MathHelper.cos(loop * 0.1F) * 0.1F - 0.1F), 0.0F, 0.0F);
         }
-        if(partName.equals("neck")) {
+        if(partName.contains("neck")) {
             this.rotate((float) -Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F - 0.05F), 0.0F, 0.0F);
         }
         if(partName.contains("armleft")) {
@@ -34,7 +34,7 @@ public class ModelTemplateQuadruped extends CreatureObjModel {
             rotZ += Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F + 0.05F);
             rotX += Math.toDegrees(MathHelper.sin(loop * 0.067F) * 0.05F);
         }
-        if(partName.equals("tail")) {
+        if(partName.contains("tail")) {
             rotX = (float)-Math.toDegrees(MathHelper.cos(loop * 0.1F) * 0.05F - 0.05F);
             rotY = (float)-Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F - 0.05F);
         }
