@@ -275,11 +275,11 @@ public class CreatureObjModel extends CreatureModel {
 		float rotZ = 0F;
 
 		// Looking:
-		if(partName.toLowerCase().equals("head")) {
+		if(partName.equals("head")) {
 			rotX += (Math.toDegrees(lookX / (180F / (float)Math.PI)) * this.lookHeadScaleX);
 			rotY += (Math.toDegrees(lookY / (180F / (float)Math.PI))) * this.lookHeadScaleY;
 		}
-		if(partName.equals("neck")) {
+		if(partName.contains("neck")) {
 			rotX += (Math.toDegrees(lookX / (180F / (float)Math.PI)) * this.lookNeckScaleX);
 			rotY += (Math.toDegrees(lookY / (180F / (float)Math.PI))) * this.lookNeckScaleY;
 		}

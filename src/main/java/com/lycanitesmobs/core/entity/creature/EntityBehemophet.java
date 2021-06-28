@@ -117,6 +117,7 @@ public class EntityBehemophet extends TameableCreatureEntity implements IMob {
     public int getBagSize() { return this.creatureInfo.bagSize; }
 
     /** Returns this creature's main texture. Also checks for for subspecies. **/
+    @Override
     public ResourceLocation getTexture() {
         if(!this.hasCustomName() || !"Krampus".equals(this.getCustomName().getString()))
             return super.getTexture();
