@@ -1,11 +1,7 @@
 package com.lycanitesmobs.client.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.client.model.ModelObjOld;
-
 import com.lycanitesmobs.client.model.template.ModelTemplateQuadruped;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -17,7 +13,7 @@ public class ModelMaka extends ModelTemplateQuadruped {
 	}
 
 	public ModelMaka(float shadowSize) {
-		this.initModel("Maka", LycanitesMobs.modInfo, "entity/maka");
+		this.initModel("maka", LycanitesMobs.modInfo, "entity/maka");
 
 		this.trophyScale = 0.6F;
 		this.trophyOffset = new float[] {0.0F, 0.0F, -0.4F};

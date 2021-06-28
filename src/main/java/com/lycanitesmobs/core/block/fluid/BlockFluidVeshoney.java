@@ -28,12 +28,12 @@ import javax.vecmath.Vector3d;
 import java.util.List;
 import java.util.Random;
 
-public class BlockFluidVesHoney extends BlockFluidBase {
+public class BlockFluidVeshoney extends BlockFluidBase {
 
     // ==================================================
     //                   Constructor
     // ==================================================
-    public BlockFluidVesHoney(Fluid fluid, String name) {
+    public BlockFluidVeshoney(Fluid fluid, String name) {
         super(fluid, Material.WATER, LycanitesMobs.modInfo, name);
 
         this.setLightOpacity(0);

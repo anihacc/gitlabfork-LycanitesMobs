@@ -2371,6 +2371,34 @@
         "category": "hostile",
         "sounds": [{"name": "lycanitesmobs:entity/barghest/mount", "stream": false}]
     },
+    "entity.balayang.say": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/balayang/say", "stream": false}]
+    },
+    "entity.balayang.hurt": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/balayang/hurt", "stream": false}]
+    },
+    "entity.balayang.death": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/balayang/death", "stream": false}]
+    },
+    "entity.balayang.fly": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/balayang/fly", "stream": false}]
+    },
+    "entity.balayang.attack": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/balayang/attack", "stream": false}]
+    },
+    "entity.balayang.beg": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/balayang/beg", "stream": false}]
+    },
+    "entity.balayang.tame": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/balayang/tame", "stream": false}]
+    },
     "entity.wildkin.say": {
         "category": "hostile",
         "sounds": [{"name": "lycanitesmobs:entity/wildkin/say", "stream": false}]

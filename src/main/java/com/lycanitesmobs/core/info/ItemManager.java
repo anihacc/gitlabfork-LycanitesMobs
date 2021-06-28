@@ -163,7 +163,7 @@ public class ItemManager extends JSONLoader {
 		this.addFluid("vesspoison", fluid, new BlockFluidVesspoison(fluid, "vesspoison"), 0, 1000, 8, 20, false, true);
 
 		fluid = ObjectManager.addFluid("veshoney");
-		this.addFluid("veshoney", fluid, new BlockFluidVesspoison(fluid, "veshoney"), 0, 1000, 8, 20, false, true);
+		this.addFluid("veshoney", fluid, new BlockFluidVeshoney(fluid, "veshoney"), 0, 1000, 8, 20, false, true);
 
 
 
