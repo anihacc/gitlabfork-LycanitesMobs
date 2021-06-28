@@ -985,7 +985,7 @@ entity.epion.habitat=These bats come out at night during a full moon.
 entity.epion.combat=Epions spit Bloodleeches at their victims, draining health on hit.
 # ========================================================================
 entity.erepede.name=Erepede
-entity.erepede.description=Wild rock covered insects that like to hunt Jousts and will attack Crusks on sight too.
+entity.erepede.description=Wild rock covered insects that like to hunt Joustes and will attack Crusks on sight too.
 entity.erepede.habitat=These insects can be found roaming hot, dry terrains like deserts and mesas.
 entity.erepede.combat=Erepedes spit out a dangerous mud shots that weakens the target.
 # ========================================================================
@@ -1099,15 +1099,15 @@ entity.jengu.description=Water Elementals known as the protectors of pure water,
 entity.jengu.habitat=Being Water Elementals, Jengu manifest from large bodies of water in the dark.
 entity.jengu.combat=Jengu attack be throwing large blasts of water, on impact these create a temporary pool of water.
 # ========================================================================
-entity.joust.name=Joust
+entity.joust.name=Jouste
 entity.joust.description=Fierce arthropod creatures, they can be farmed and love cactus green!
 entity.joust.habitat=These creatures can be found in deserts and mesas.
-entity.joust.combat=Jousts are usually peaceful but will bite back if hit and will follow the command of aggressive Alpha Jousts.
+entity.joust.combat=Joustes are usually peaceful but will bite back if hit and will follow the command of aggressive Alpha Joustes.
 # ========================================================================
-entity.joustalpha.name=Joust Alpha
-entity.joustalpha.description=Larger Jousts and leaders, they will attack other Joust Alphas on sight and will also command all none alphas, they are very hostile.
+entity.joustalpha.name=Jouste Alpha
+entity.joustalpha.description=Larger Joustes and leaders, they will attack other Jouste Alphas on sight and will also command all none alphas, they are very hostile.
 entity.joustalpha.habitat=These creatures can be found in deserts and mesas.
-entity.joustalpha.combat=Jousts are fast and attack rapidly, they will also rally other none alpha Jousts to attack with them.
+entity.joustalpha.combat=Joustes are fast and attack rapidly, they will also rally other none alpha Joustes to attack with them.
 # ========================================================================
 entity.khalk.name=Khalk
 entity.khalk.description=Large magma beasts known for their incredible defense and deadly offense. On death, their bodies break down into lava!
@@ -1264,10 +1264,10 @@ entity.spriggan.description=Mystical Arbour Elementals, Spriggans protect nature
 entity.spriggan.habitat=Being Arbour Elementals, Spriggans can be found occasionally wandering forests and rapidly manifest in the defense of plant life so take care when harvesting plants.
 entity.spriggan.combat=Spriggans fire powerful lasers that are poisonous and drain life healing the Spriggan.
 # ========================================================================
-entity.strider.name=Deioneus
+entity.strider.name=Stryder
 entity.strider.description=These giant amphibious creatures somewhat resemble a shrimp, they are feared for their dreadful tentacle claws from which they ensnare and consume their victims.
 entity.strider.habitat=These creatures are usually found in large lakes or rivers.
-entity.strider.combat=Deioneus will pickup their victims and slowly drain the life out of them, they are also fast when in the water or if it raining.
+entity.strider.combat=Stryder will pickup their victims and slowly drain the life out of them, they are also fast when in the water or if it raining.
 # ========================================================================
 entity.sutiramu.name=Sutiramu
 entity.sutiramu.description=Aggressive giant scorpions.
@@ -1811,7 +1811,7 @@ item.reaperclaw.name=Reaper Claw
 item.serpixmandible.name=Serpix Mandible
 item.wildkinarm.name=Wildkin Arm
 item.cherufecore.name=Cherufe Core
-item.deioneusheart.name=Deioneus Heart
+item.deioneusheart.name=Stryder Heart
 item.afritlung.name=Afrit Lung
 item.arixbrain.name=Arix Brain
 item.erepededrill.name=Erepede Drill
@@ -1820,7 +1820,7 @@ item.ettinclub.name=Ettin Club
 item.raw_arisaur_meat.name=Raw Arisaur Meat
 item.raw_arisaur_meat.description=A beef-like meat. 'Stunningly good' to eat raw!
 #
-item.cooked_joust_meat.name=Cooked Joust Meat
+item.cooked_joust_meat.name=Cooked Jouste Meat
 item.cooked_joust_meat.description=A chicken-like meat. Spicy! Tastes like peri peri chicken!
 #
 item.amber_cake.name=Amber Cake
@@ -1913,7 +1913,7 @@ item.cooked_concapede_meat.description=A rabbit-like meat. Tastes like rabbit! D
 item.cooked_arisaur_meat.name=Cooked Arisaur Meat
 item.cooked_arisaur_meat.description=A beef-like meat. Imbued with the gift of nature with impurities cooked out, increases all healing received.
 #
-item.raw_joust_meat.name=Raw Joust Meat
+item.raw_joust_meat.name=Raw Jouste Meat
 item.raw_joust_meat.description=A chicken-like meat. Looks chewy and smells like feet, applies movement slowdown, best cook it.
 #
 item.pale_soup.name=Pale Soup
