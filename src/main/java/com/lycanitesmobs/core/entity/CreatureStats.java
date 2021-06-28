@@ -7,7 +7,7 @@ import net.minecraft.world.EnumDifficulty;
 /** Manages the stats of an EntityCreature. This applies difficulty multipliers, subspecies, levels, etc also. **/
 public class CreatureStats {
 	/** The base amount of experience needed to level up, this is increased by the creature's level scaled. **/
-	public static int BASE_LEVELUP_EXPERIENCE = 1000;
+	public static int BASE_LEVELUP_EXPERIENCE = 100;
 
 	/** A static array of all stat names used by configs, etc. **/
 	public static String[] STAT_NAMES = new String[] {"health", "defense", "armor", "speed", "damage", "attackSpeed", "rangedSpeed", "effect", "amplifier", "pierce", "sight"};

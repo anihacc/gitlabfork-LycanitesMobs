@@ -35,7 +35,7 @@ import java.util.*;
 
 public class ItemEquipmentPart extends ItemBase {
 	/** The base amount of experience needed to level up, this is increased by the part's level scaled. **/
-	public static int BASE_LEVELUP_EXPERIENCE = 1000;
+	public static int BASE_LEVELUP_EXPERIENCE = 500;
 
 	/** I am sorry, I couldn't find another way. Set in getMetadata(ItemStack) as it's called just before rendering. **/
 	public static ItemStack ITEMSTACK_TO_RENDER;
