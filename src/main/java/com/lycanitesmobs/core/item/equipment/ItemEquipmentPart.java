@@ -30,7 +30,7 @@ import java.util.*;
 
 public class ItemEquipmentPart extends BaseItem {
 	/** The base amount of experience needed to level up, this is increased by the part's level scaled. **/
-	public static int BASE_LEVELUP_EXPERIENCE = 1000;
+	public static int BASE_LEVELUP_EXPERIENCE = 500;
 
 	/** A map of mob classes and parts that they drop. **/
 	public static Map<String, List<ItemEquipmentPart>> MOB_PART_DROPS = new HashMap<>();
