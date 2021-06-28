@@ -9,18 +9,18 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class ModelDeioneus extends CreatureObjModel {
+public class ModelStryder extends CreatureObjModel {
 
 	// ==================================================
   	//                    Constructors
   	// ==================================================
-    public ModelDeioneus() {
+    public ModelStryder() {
         this(1.0F);
     }
 
-    public ModelDeioneus(float shadowSize) {
+    public ModelStryder(float shadowSize) {
     	// Load Model:
-    	this.initModel("deioneus", LycanitesMobs.modInfo, "entity/deioneus");
+    	this.initModel("stryder", LycanitesMobs.modInfo, "entity/stryder");
 
 		// Scaling:
 		this.lookHeadScaleX = 0;

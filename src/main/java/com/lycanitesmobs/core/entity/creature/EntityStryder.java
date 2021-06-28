@@ -22,10 +22,10 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class EntityDeioneus extends RideableCreatureEntity implements IGroupHeavy {
+public class EntityStryder extends RideableCreatureEntity implements IGroupHeavy {
     protected int pickupCooldown = 100;
 
-    public EntityDeioneus(EntityType<? extends EntityDeioneus> entityType, World world) {
+    public EntityStryder(EntityType<? extends EntityStryder> entityType, World world) {
         super(entityType, world);
         
         // Setup:

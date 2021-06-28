@@ -1,8 +1,8 @@
 {
-  "itemName": "deioneusheart",
+  "itemName": "stryderheart",
   "loadDefault": true,
   "slotType": "jewel",
-  "dropMobId": "lycanitesmobs:deioneus",
+  "dropMobId": "lycanitesmobs:stryder",
   "dropChance": 0.05,
   "levelMin": 1,
   "levelMax": 3,

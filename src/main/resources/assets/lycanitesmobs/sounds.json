@@ -1583,41 +1583,41 @@
         "category": "hostile",
         "sounds": [{"name": "lycanitesmobs:entity/calpod/attack", "stream": false}]
     },
-    "entity.deioneus.say": {
+    "entity.stryder.say": {
         "category": "hostile",
-        "sounds": [{"name": "lycanitesmobs:entity/deioneus/say", "stream": false}]
+        "sounds": [{"name": "lycanitesmobs:entity/stryder/say", "stream": false}]
     },
-    "entity.deioneus.hurt": {
+    "entity.stryder.hurt": {
         "category": "hostile",
-        "sounds": [{"name": "lycanitesmobs:entity/deioneus/hurt", "stream": false}]
+        "sounds": [{"name": "lycanitesmobs:entity/stryder/hurt", "stream": false}]
     },
-    "entity.deioneus.death": {
+    "entity.stryder.death": {
         "category": "hostile",
-        "sounds": [{"name": "lycanitesmobs:entity/deioneus/death", "stream": false}]
+        "sounds": [{"name": "lycanitesmobs:entity/stryder/death", "stream": false}]
     },
-    "entity.deioneus.step": {
+    "entity.stryder.step": {
         "category": "hostile",
-        "sounds": [{"name": "lycanitesmobs:entity/deioneus/step", "stream": false}]
+        "sounds": [{"name": "lycanitesmobs:entity/stryder/step", "stream": false}]
     },
-    "entity.deioneus.attack": {
+    "entity.stryder.attack": {
         "category": "hostile",
-        "sounds": [{"name": "lycanitesmobs:entity/deioneus/attack", "stream": false}]
+        "sounds": [{"name": "lycanitesmobs:entity/stryder/attack", "stream": false}]
     },
-    "entity.deioneus.beg": {
+    "entity.stryder.beg": {
         "category": "hostile",
-        "sounds": [{"name": "lycanitesmobs:entity/deioneus/beg", "stream": false}]
+        "sounds": [{"name": "lycanitesmobs:entity/stryder/beg", "stream": false}]
     },
-    "entity.deioneus.tame": {
+    "entity.stryder.tame": {
         "category": "hostile",
-        "sounds": [{"name": "lycanitesmobs:entity/deioneus/tame", "stream": false}]
+        "sounds": [{"name": "lycanitesmobs:entity/stryder/tame", "stream": false}]
     },
-    "entity.deioneus.eat": {
+    "entity.stryder.eat": {
         "category": "hostile",
-        "sounds": [{"name": "lycanitesmobs:entity/deioneus/eat", "stream": false}]
+        "sounds": [{"name": "lycanitesmobs:entity/stryder/eat", "stream": false}]
     },
-    "entity.deioneus.jump": {
+    "entity.stryder.jump": {
         "category": "hostile",
-        "sounds": [{"name": "lycanitesmobs:entity/deioneus/jump", "stream": false}]
+        "sounds": [{"name": "lycanitesmobs:entity/stryder/jump", "stream": false}]
     },
     "entity.silex.say": {
         "category": "hostile",

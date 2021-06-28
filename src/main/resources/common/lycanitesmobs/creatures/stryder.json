@@ -1,11 +1,11 @@
 {
-    "name": "deioneus",
+    "name": "stryder",
     "creatureType": "aquatic",
     "groups": [
         "predator"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityDeioneus",
-    "modelClass": "com.lycanitesmobs.client.model.creature.ModelDeioneus",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityStryder",
+    "modelClass": "com.lycanitesmobs.client.model.creature.ModelStryder",
     "loadDefault": true,
     "enabled": true,
     "spawning": {
