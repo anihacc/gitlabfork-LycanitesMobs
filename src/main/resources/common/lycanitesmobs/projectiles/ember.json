@@ -1,9 +1,9 @@
 {
 	"name": "ember",
 	"loadDefault": true,
-	"width": 0.5,
-	"height": 0.5,
-	"scale": 0.5,
+	"width": 0.75,
+	"height": 0.75,
+	"scale": 1.5,
 	"damage": 1,
 	"pierce": 1,
 	"knockbackChance": 0,

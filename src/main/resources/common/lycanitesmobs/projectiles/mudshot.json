@@ -1,9 +1,9 @@
 {
 	"name": "mudshot",
 	"loadDefault": true,
-	"width": 1.0,
-	"height": 1.0,
-	"scale": 1,
+	"width": 1.25,
+	"height": 1.25,
+	"scale": 2.5,
 	"damage": 4,
 	"pierce": 1,
 	"knockbackChance": 0.5,
