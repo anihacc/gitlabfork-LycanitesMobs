@@ -4,9 +4,9 @@
     "count": 4
   },
   "pattern": [
-    " MM",
+    " FM",
     "BBM",
-    " MM"
+    " FM"
   ],
   "type": "minecraft:crafting_shaped",
   "key": {
@@ -14,7 +14,10 @@
       "item": "minecraft:bone"
     },
     "M": {
-      "tag": "lycanitesmobs:cooked_rabbit"
+      "tag": "lycanitesmobs:diet_carnivore"
+    },
+    "F": {
+      "tag": "lycanitesmobs:diet_frugivore"
     }
   }
 }
