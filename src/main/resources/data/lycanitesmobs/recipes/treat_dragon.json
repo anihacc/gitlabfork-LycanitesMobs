@@ -4,9 +4,9 @@
     "count": 4
   },
   "pattern": [
-    " GD",
+    " MM",
     "BBM",
-    " GD"
+    " MM"
   ],
   "type": "minecraft:crafting_shaped",
   "key": {
@@ -15,12 +15,6 @@
     },
     "M": {
       "item": "minecraft:emerald"
-    },
-    "D": {
-      "item": "minecraft:diamond"
-    },
-    "G": {
-      "item": "minecraft:gold_ingot"
     }
   }
 }

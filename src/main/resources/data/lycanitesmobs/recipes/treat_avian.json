@@ -4,9 +4,9 @@
     "count": 4
   },
   "pattern": [
-    " MP",
-    "BBP",
-    " MP"
+    " MM",
+    "BBM",
+    " MM"
   ],
   "type": "minecraft:crafting_shaped",
   "key": {
@@ -15,9 +15,6 @@
     },
     "M": {
       "tag": "lycanitesmobs:cooked_chicken"
-    },
-    "P": {
-      "tag": "lycanitesmobs:diet_piscivore"
     }
   }
 }

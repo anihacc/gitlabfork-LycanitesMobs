@@ -14,7 +14,10 @@
       "item": "minecraft:bone"
     },
     "M": {
-      "tag": "lycanitesmobs:cooked_rabbit"
+      "tag": "lycanitesmobs:cooked_beef"
+    },
+    "P": {
+      "tag": "lycanitesmobs:cooked_pork"
     }
   }
 }
