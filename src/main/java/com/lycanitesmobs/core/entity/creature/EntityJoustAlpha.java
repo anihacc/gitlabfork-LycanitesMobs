@@ -107,6 +107,6 @@ public class EntityJoustAlpha extends AgeableCreatureEntity {
     // ========== Create Child ==========
 	@Override
 	public AgeableCreatureEntity createChild(AgeableCreatureEntity partner) {
-		return (AgeableCreatureEntity) CreatureManager.getInstance().getCreature("joust").createEntity(this.getCommandSenderWorld());
+		return (AgeableCreatureEntity) CreatureManager.getInstance().getCreature("jouste").createEntity(this.getCommandSenderWorld());
 	}
 }

@@ -19,12 +19,8 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class EntityJoust extends AgeableCreatureEntity {
-	
-	// ==================================================
- 	//                    Constructor
- 	// ==================================================
-    public EntityJoust(EntityType<? extends EntityJoust> entityType, World world) {
+public class EntityJouste extends AgeableCreatureEntity {
+    public EntityJouste(EntityType<? extends EntityJouste> entityType, World world) {
         super(entityType, world);
         
         // Setup:
@@ -36,7 +32,6 @@ public class EntityJoust extends AgeableCreatureEntity {
         this.setupMob();
     }
 
-    // ========== Init AI ==========
     @Override
     protected void registerGoals() {
         super.registerGoals();
@@ -47,19 +42,14 @@ public class EntityJoust extends AgeableCreatureEntity {
 		this.targetSelector.addGoal(this.nextFindTargetIndex++, new CopyMasterAttackTargetGoal(this));
     }
 
-
-    // ==================================================
-    //                      Spawn
-    // ==================================================
-    // ========== On Spawn ==========
     @Override
     public void onFirstSpawn() {
         // Random Alpha:
-        CreatureInfo alphaInfo = CreatureManager.getInstance().getCreature("joustalpha");
+        CreatureInfo alphaInfo = CreatureManager.getInstance().getCreature("joustealpha");
         if(alphaInfo != null) {
             float alphaChance = (float)alphaInfo.creatureSpawn.spawnWeight / Math.max(this.creatureInfo.creatureSpawn.spawnWeight, 1);
             if (this.getRandom().nextFloat() <= alphaChance) {
-                EntityJoustAlpha alpha = (EntityJoustAlpha)CreatureManager.getInstance().getCreature("joustalpha").createEntity(this.getCommandSenderWorld());
+                EntityJoustAlpha alpha = (EntityJoustAlpha)CreatureManager.getInstance().getCreature("joustealpha").createEntity(this.getCommandSenderWorld());
                 alpha.copyPosition(this);
                 this.getCommandSenderWorld().addFreshEntity(alpha);
                 this.remove();
@@ -67,12 +57,7 @@ public class EntityJoust extends AgeableCreatureEntity {
         }
         super.onFirstSpawn();
     }
-	
-    
-	// ==================================================
-   	//                      Movement
-   	// ==================================================
-	// ========== Pathing Weight ==========
+
 	@Override
 	public float getBlockPathWeight(int x, int y, int z) {
         BlockState blockState = this.getCommandSenderWorld().getBlockState(new BlockPos(x, y - 1, z));
@@ -86,19 +71,14 @@ public class EntityJoust extends AgeableCreatureEntity {
 		}
         return super.getBlockPathWeight(x, y, z);
     }
-    
-	// ========== Can leash ==========
+
     @Override
     public boolean canBeLeashed(PlayerEntity player) {
 	    if(!this.hasAttackTarget() && !this.hasMaster())
 	        return true;
 	    return super.canBeLeashed(player);
     }
-	
-	
-	// ==================================================
-   	//                      Attacks
-   	// ==================================================
+
 	@Override
 	public boolean canAttack(LivingEntity target) {
 		if(target instanceof EntityJoustAlpha)
@@ -108,37 +88,33 @@ public class EntityJoust extends AgeableCreatureEntity {
 
 	@Override
 	public boolean isProtective(Entity entity) {
-		if(entity instanceof EntityJoust) {
+		if(entity instanceof EntityJouste) {
 			return true;
 		}
 		return super.isProtective(entity);
 	}
 
-    // ==================================================
-    //                     Equipment
-    // ==================================================
     @Override
-    public int getNoBagSize() { return 0; }
+    public int getNoBagSize() {
+    	return 0;
+    }
+
     @Override
-    public int getBagSize() { return this.creatureInfo.bagSize; }
-    // ==================================================
-   	//                     Immunities
-   	// ==================================================
+    public int getBagSize() {
+    	return this.creatureInfo.bagSize;
+    }
+
     @Override
     public boolean isVulnerableTo(String type, DamageSource source, float damage) {
     	if(type.equals("cactus")) return false;
     	return super.isVulnerableTo(type, source, damage);
     }
-    
-    
-    // ==================================================
-    //                     Growing
-    // ==================================================
+
 	@Override
 	public void setGrowingAge(int age) {
 		if(age == 0 && this.getAge() < 0)
 			if(this.getRandom().nextFloat() >= 0.9F) {
-				EntityJoustAlpha alpha = (EntityJoustAlpha)CreatureManager.getInstance().getCreature("joustalpha").createEntity(this.getCommandSenderWorld());
+				EntityJoustAlpha alpha = (EntityJoustAlpha)CreatureManager.getInstance().getCreature("joustealpha").createEntity(this.getCommandSenderWorld());
 				alpha.copyPosition(this);
 				this.getCommandSenderWorld().addFreshEntity(alpha);
 				this.remove();

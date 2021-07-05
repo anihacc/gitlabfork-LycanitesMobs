@@ -1,9 +1,9 @@
 {
 	"type": "minecraft:smelting",
 	"ingredient": {
-		"item": "lycanitesmobs:raw_joust_meat"
+		"item": "lycanitesmobs:raw_jouste_meat"
 	},
-	"result": "lycanitesmobs:cooked_joust_meat",
+	"result": "lycanitesmobs:cooked_jouste_meat",
 	"experience": 0.35,
 	"cookingtime": 200
 }
