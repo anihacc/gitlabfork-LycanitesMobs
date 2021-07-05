@@ -1,9 +1,9 @@
 {
 	"name": "venomshot",
 	"loadDefault": true,
-	"width": 1.0,
-	"height": 1.0,
-	"scale": 1,
+	"width": 0.75,
+	"height": 0.75,
+	"scale": 1.5,
 	"damage": 3,
 	"pierce": 1,
 	"knockbackChance": 0.5,

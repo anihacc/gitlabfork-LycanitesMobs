@@ -1,9 +1,9 @@
 {
 	"name": "quill",
 	"loadDefault": true,
-	"width": 1.0,
-	"height": 1.0,
-	"scale": 1.0,
+	"width": 0.75,
+	"height": 0.75,
+	"scale": 1.5,
 	"damage": 2,
 	"pierce": 1,
 	"knockbackChance": 0.5,
