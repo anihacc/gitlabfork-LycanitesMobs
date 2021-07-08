@@ -1,12 +1,12 @@
 {
-    "name": "joust",
+    "name": "jouste",
     "creatureType": "insect",
     "groups": [
         "animal",
         "hardy"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityJoust",
-    "modelClass": "com.lycanitesmobs.client.model.creature.ModelJoust",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityJouste",
+    "modelClass": "com.lycanitesmobs.client.model.creature.ModelJouste",
     "loadDefault": true,
     "enabled": true,
     "spawning": {
@@ -87,8 +87,8 @@
     "dungeonLevel": 1,
     "drops": [
         {
-            "item": "lycanitesmobs:raw_joust_meat",
-            "burningItem": "lycanitesmobs:cooked_joust_meat",
+            "item": "lycanitesmobs:raw_jouste_meat",
+            "burningItem": "lycanitesmobs:cooked_jouste_meat",
             "minAmount": 1,
             "maxAmount": 2,
             "chance": 1

@@ -740,45 +740,45 @@
         "category": "hostile",
         "sounds": [{"name": "lycanitesmobs:entity/crusk/eat", "stream": false}]
     },
-    "entity.joust.say": {
+    "entity.jouste.say": {
         "category": "neutral",
-        "sounds": [{"name": "lycanitesmobs:entity/joust/say", "stream": false}]
+        "sounds": [{"name": "lycanitesmobs:entity/jouste/say", "stream": false}]
     },
-    "entity.joust.hurt": {
+    "entity.jouste.hurt": {
         "category": "neutral",
-        "sounds": [{"name": "lycanitesmobs:entity/joust/hurt", "stream": false}]
+        "sounds": [{"name": "lycanitesmobs:entity/jouste/hurt", "stream": false}]
     },
-    "entity.joust.death": {
+    "entity.jouste.death": {
         "category": "neutral",
-        "sounds": [{"name": "lycanitesmobs:entity/joust/death", "stream": false}]
+        "sounds": [{"name": "lycanitesmobs:entity/jouste/death", "stream": false}]
     },
-    "entity.joust.step": {
+    "entity.jouste.step": {
         "category": "neutral",
-        "sounds": [{"name": "lycanitesmobs:entity/joust/step", "stream": false}]
+        "sounds": [{"name": "lycanitesmobs:entity/jouste/step", "stream": false}]
     },
-    "entity.joust.attack": {
+    "entity.jouste.attack": {
         "category": "hostile",
-        "sounds": [{"name": "lycanitesmobs:entity/joust/attack", "stream": false}]
+        "sounds": [{"name": "lycanitesmobs:entity/jouste/attack", "stream": false}]
     },
-    "entity.joustalpha.say": {
+    "entity.joustealpha.say": {
         "category": "hostile",
-        "sounds": [{"name": "lycanitesmobs:entity/joust/say", "stream": false}]
+        "sounds": [{"name": "lycanitesmobs:entity/jouste/say", "stream": false}]
     },
-    "entity.joustalpha.hurt": {
+    "entity.joustealpha.hurt": {
         "category": "hostile",
-        "sounds": [{"name": "lycanitesmobs:entity/joust/hurt", "stream": false}]
+        "sounds": [{"name": "lycanitesmobs:entity/jouste/hurt", "stream": false}]
     },
-    "entity.joustalpha.death": {
+    "entity.joustealpha.death": {
         "category": "hostile",
-        "sounds": [{"name": "lycanitesmobs:entity/joust/death", "stream": false}]
+        "sounds": [{"name": "lycanitesmobs:entity/jouste/death", "stream": false}]
     },
-    "entity.joustalpha.step": {
+    "entity.joustealpha.step": {
         "category": "hostile",
-        "sounds": [{"name": "lycanitesmobs:entity/joust/step", "stream": false}]
+        "sounds": [{"name": "lycanitesmobs:entity/jouste/step", "stream": false}]
     },
-    "entity.joustalpha.attack": {
+    "entity.joustealpha.attack": {
         "category": "hostile",
-        "sounds": [{"name": "lycanitesmobs:entity/joust/attack", "stream": false}]
+        "sounds": [{"name": "lycanitesmobs:entity/jouste/attack", "stream": false}]
     },
     "entity.erepede.say": {
         "category": "hostile",

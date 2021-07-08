@@ -1,9 +1,9 @@
 {
 	"name": "scorchfireball",
 	"loadDefault": true,
-	"width": 1.0,
-	"height": 1.0,
-	"scale": 1.0,
+	"width": 1,
+	"height": 1,
+	"scale": 2,
 	"damage": 3,
 	"pierce": 1,
 	"knockbackChance": 0.5,

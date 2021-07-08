@@ -1,9 +1,9 @@
 {
 	"name": "throwingscythe",
 	"loadDefault": true,
-	"width": 0.5,
-	"height": 0.5,
-	"scale": 0.75,
+	"width": 0.75,
+	"height": 0.75,
+	"scale": 1.5,
 	"damage": 3,
 	"pierce": 2,
 	"knockbackChance": 0.5,

@@ -5,7 +5,7 @@
 	"loadDefault": true,
 	"width": 0.75,
 	"height": 0.75,
-	"scale": 1.0,
+	"scale": 1.5,
 	"damage": 4,
 	"pierce": 1,
 	"knockbackChance": 1,

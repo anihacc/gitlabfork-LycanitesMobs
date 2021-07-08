@@ -3,7 +3,7 @@
 	"loadDefault": true,
 	"width": 0.5,
 	"height": 0.5,
-	"scale": 0.5,
+	"scale": 1,
 	"damage": 1,
 	"pierce": 1,
 	"knockbackChance": 0,
@@ -19,7 +19,7 @@
 		{
 			"type": "laser",
 			"speed": 1,
-			"width": 1,
+			"width": 2,
 			"range": 16
 		},
 		{
