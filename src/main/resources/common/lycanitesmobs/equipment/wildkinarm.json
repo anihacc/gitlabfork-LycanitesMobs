@@ -11,6 +11,10 @@
 	],
 	"features": [
 		{
+			"featureType": "slot",
+			"slotType": "blade"
+		},
+		{
 			"featureType": "projectile",
 			"levelMax": 1,
 			"projectileName": "boulderblast",
