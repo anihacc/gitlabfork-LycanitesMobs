@@ -78,8 +78,8 @@
         },
         {
             "item": "minecraft:brown_mushroom",
-            "minAmount": 1,
-            "maxAmount": 1,
+            "minAmount": 2,
+            "maxAmount": 3,
             "chance": 1
         },
         {

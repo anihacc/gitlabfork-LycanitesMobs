@@ -115,7 +115,7 @@
         {
             "item": "lycanitesmobs:poisonraycharge",
             "minAmount": 3,
-            "maxAmount": 5,
+            "maxAmount": 4,
             "chance": 1
         }
     ],

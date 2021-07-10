@@ -86,13 +86,13 @@
             "item": "minecraft:diamond",
             "minAmount": 1,
             "maxAmount": 1,
-            "chance": 0.05
+            "chance": 0.1
         },
         {
             "item": "minecraft:emerald",
             "minAmount": 1,
             "maxAmount": 1,
-            "chance": 0.05
+            "chance": 0.1
         },
         {
             "item": "minecraft:lapis_lazuli",

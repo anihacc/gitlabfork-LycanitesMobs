@@ -94,7 +94,7 @@
         {
             "item": "lycanitesmobs:throwingscythecharge",
             "minAmount": 2,
-            "maxAmount": 7,
+            "maxAmount": 6,
             "chance": 1
         }
     ],

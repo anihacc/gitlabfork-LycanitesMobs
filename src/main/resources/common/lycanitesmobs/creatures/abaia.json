@@ -91,7 +91,7 @@
             "item": "minecraft:cod",
             "burningItem": "minecraft:cooked_cod",
             "minAmount": 1,
-            "maxAmount": 5,
+            "maxAmount": 4,
             "chance": 1
         },
         {

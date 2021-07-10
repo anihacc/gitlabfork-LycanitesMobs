@@ -88,8 +88,8 @@
         {
             "item": "lycanitesmobs:raw_arisaur_meat",
             "burningItem": "lycanitesmobs:cooked_arisaur_meat",
-            "minAmount": 1,
-            "maxAmount": 3,
+            "minAmount": 3,
+            "maxAmount": 8,
             "chance": 1
         }
     ],

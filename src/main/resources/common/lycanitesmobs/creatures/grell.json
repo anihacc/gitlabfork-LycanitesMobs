@@ -90,6 +90,12 @@
             "chance": 1
         },
         {
+            "item": "minecraft:leather",
+            "minAmount": 1,
+            "maxAmount": 3,
+            "chance": 1
+        },
+        {
             "item": "lycanitesmobs:acidglobcharge",
             "minAmount": 3,
             "maxAmount": 6,

@@ -78,7 +78,7 @@
         {
             "item": "minecraft:soul_sand",
             "minAmount": 1,
-            "maxAmount": 6,
+            "maxAmount": 4,
             "chance": 1
         },
         {

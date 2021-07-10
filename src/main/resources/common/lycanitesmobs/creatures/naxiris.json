@@ -115,7 +115,7 @@
         {
             "item": "lycanitesmobs:arcanelaserstormcharge",
             "minAmount": 2,
-            "maxAmount": 3,
+            "maxAmount": 4,
             "chance": 1
         }
     ],

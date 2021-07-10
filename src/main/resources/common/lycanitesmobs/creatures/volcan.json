@@ -111,10 +111,10 @@
             "chance": 0.1
         },
         {
-            "item": "lycanitesmobs:embercharge",
+            "item": "lycanitesmobs:magmacharge",
             "minAmount": 1,
-            "maxAmount": 1,
-            "chance": 0.25
+            "maxAmount": 2,
+            "chance": 0.5
         }
     ],
     "sizeScale": 1,

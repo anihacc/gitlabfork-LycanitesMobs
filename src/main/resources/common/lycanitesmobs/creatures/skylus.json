@@ -85,7 +85,7 @@
     "dungeonLevel": 0,
     "drops": [
         {
-            "item": "minecraft:bone_meal",
+            "item": "minecraft:ink_sac",
             "minAmount": 1,
             "maxAmount": 5,
             "chance": 1
