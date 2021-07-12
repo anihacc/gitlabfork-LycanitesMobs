@@ -77,114 +77,114 @@
             "item": "minecraft:dandelion",
             "minAmount": 1,
             "maxAmount": 3,
-            "chance": 0.5
+            "chance": 0.08
         },
         {
             "item": "minecraft:poppy",
             "minAmount": 1,
             "maxAmount": 3,
-            "chance": 0.5
+            "chance": 0.08
         },
         {
             "item": "minecraft:blue_orchid",
             "minAmount": 1,
             "maxAmount": 3,
-            "chance": 0.5
+            "chance": 0.08
         },
         {
             "item": "minecraft:allium",
             "minAmount": 1,
             "maxAmount": 3,
-            "chance": 0.5
+            "chance": 0.08
         },
         {
             "item": "minecraft:azure_bluet",
             "minAmount": 1,
             "maxAmount": 3,
-            "chance": 0.5
+            "chance": 0.08
         },
         {
             "item": "minecraft:orange_tulip",
             "minAmount": 1,
             "maxAmount": 3,
-            "chance": 0.5
+            "chance": 0.08
         },
         {
             "item": "minecraft:white_tulip",
             "minAmount": 1,
             "maxAmount": 3,
-            "chance": 0.5
+            "chance": 0.08
         },
         {
             "item": "minecraft:pink_tulip",
             "minAmount": 1,
             "maxAmount": 3,
-            "chance": 0.5
+            "chance": 0.08
         },
         {
             "item": "minecraft:oxeye_daisy",
             "minAmount": 1,
             "maxAmount": 3,
-            "chance": 0.5
+            "chance": 0.08
         },
         {
             "item": "minecraft:cornflower",
             "minAmount": 1,
             "maxAmount": 3,
-            "chance": 0.5
+            "chance": 0.08
         },
         {
             "item": "minecraft:lily_of_the_valley",
             "minAmount": 1,
             "maxAmount": 3,
-            "chance": 0.5
+            "chance": 0.08
         },
         {
             "item": "minecraft:sunflower",
             "minAmount": 1,
             "maxAmount": 3,
-            "chance": 0.5
+            "chance": 0.08
         },
         {
             "item": "minecraft:lilac",
             "minAmount": 1,
             "maxAmount": 3,
-            "chance": 0.5
+            "chance": 0.08
         },
         {
             "item": "minecraft:rose_bush",
             "minAmount": 1,
             "maxAmount": 3,
-            "chance": 0.5
+            "chance": 0.08
         },
         {
             "item": "minecraft:peony",
             "minAmount": 1,
             "maxAmount": 3,
-            "chance": 0.5
+            "chance": 0.08
         },
         {
             "item": "minecraft:wheat_seeds",
             "minAmount": 1,
             "maxAmount": 3,
-            "chance": 0.1
+            "chance": 0.08
         },
         {
             "item": "minecraft:pumpkin_seeds",
             "minAmount": 1,
             "maxAmount": 3,
-            "chance": 0.1
+            "chance": 0.08
         },
         {
             "item": "minecraft:melon_seeds",
             "minAmount": 1,
             "maxAmount": 3,
-            "chance": 0.1
+            "chance": 0.08
         },
         {
             "item": "lycanitesmobs:faeboltcharge",
             "minAmount": 1,
-            "maxAmount": 3,
+            "maxAmount": 4,
             "chance": 1
         },
         {

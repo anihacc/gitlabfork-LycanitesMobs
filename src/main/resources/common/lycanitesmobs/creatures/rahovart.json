@@ -93,9 +93,21 @@
             "chance": 1
         },
         {
+            "item": "minecraft:gold_ingot",
+            "minAmount": 16,
+            "maxAmount": 32,
+            "chance": 1
+        },
+        {
             "item": "minecraft:diamond",
             "minAmount": 10,
-            "maxAmount": 20,
+            "maxAmount": 50,
+            "chance": 1
+        },
+        {
+            "item": "minecraft:netherite_scrap",
+            "minAmount": 16,
+            "maxAmount": 32,
             "chance": 1
         },
         {

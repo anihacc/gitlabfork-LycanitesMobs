@@ -92,20 +92,26 @@
         },
         {
             "item": "minecraft:ender_pearl",
-            "minAmount": 5,
-            "maxAmount": 10,
+            "minAmount": 8,
+            "maxAmount": 16,
             "chance": 1
         },
         {
             "item": "minecraft:gold_ingot",
-            "minAmount": 10,
-            "maxAmount": 20,
+            "minAmount": 16,
+            "maxAmount": 32,
             "chance": 1
         },
         {
             "item": "minecraft:diamond",
-            "minAmount": 10,
-            "maxAmount": 20,
+            "minAmount": 25,
+            "maxAmount": 50,
+            "chance": 1
+        },
+        {
+            "item": "minecraft:netherite_scrap",
+            "minAmount": 16,
+            "maxAmount": 32,
             "chance": 1
         },
         {
@@ -117,13 +123,13 @@
         {
             "item": "lycanitesmobs:spectralboltcharge",
             "minAmount": 10,
-            "maxAmount": 20,
+            "maxAmount": 50,
             "chance": 1
         },
         {
             "item": "lycanitesmobs:lobdarklingscharge",
             "minAmount": 10,
-            "maxAmount": 20,
+            "maxAmount": 50,
             "chance": 1
         },
         {

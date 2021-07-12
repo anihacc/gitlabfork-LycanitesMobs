@@ -98,19 +98,19 @@
             "item": "minecraft:wheat_seeds",
             "minAmount": 1,
             "maxAmount": 3,
-            "chance": 0.1
+            "chance": 0.33
         },
         {
             "item": "minecraft:pumpkin_seeds",
             "minAmount": 1,
             "maxAmount": 3,
-            "chance": 0.1
+            "chance": 0.33
         },
         {
             "item": "minecraft:melon_seeds",
             "minAmount": 1,
             "maxAmount": 3,
-            "chance": 0.1
+            "chance": 0.33
         },
         {
             "item": "minecraft:apple",

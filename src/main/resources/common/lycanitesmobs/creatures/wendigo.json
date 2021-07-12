@@ -93,6 +93,18 @@
             "chance": 0.5
         },
         {
+            "item": "minecraft:rotten_flesh",
+            "minAmount": 1,
+            "maxAmount": 3,
+            "chance": 0.5
+        },
+        {
+            "item": "minecraft:bone",
+            "minAmount": 1,
+            "maxAmount": 3,
+            "chance": 0.5
+        },
+        {
             "item": "minecraft:packed_ice",
             "minAmount": 1,
             "maxAmount": 8,

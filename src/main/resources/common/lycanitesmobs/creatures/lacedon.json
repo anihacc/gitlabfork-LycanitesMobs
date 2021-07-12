@@ -111,6 +111,12 @@
             "minAmount": 1,
             "maxAmount": 2,
             "chance": 0.25
+        },
+        {
+            "item": "minecraft:bone",
+            "minAmount": 1,
+            "maxAmount": 2,
+            "chance": 0.5
         }
     ],
     "sizeScale": 1,

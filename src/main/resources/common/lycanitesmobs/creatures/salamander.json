@@ -99,6 +99,12 @@
             "minAmount": 1,
             "maxAmount": 2,
             "chance": 0.5
+        },
+        {
+            "item": "minecraft:magma_block",
+            "minAmount": 1,
+            "maxAmount": 2,
+            "chance": 0.1
         }
     ],
     "sizeScale": 1,

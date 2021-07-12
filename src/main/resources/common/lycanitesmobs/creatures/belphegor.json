@@ -93,7 +93,7 @@
         {
             "item": "lycanitesmobs:doomfireballcharge",
             "minAmount": 1,
-            "maxAmount": 3,
+            "maxAmount": 4,
             "chance": 1
         }
     ],
