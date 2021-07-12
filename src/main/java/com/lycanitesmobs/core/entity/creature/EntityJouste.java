@@ -38,7 +38,7 @@ public class EntityJouste extends AgeableCreatureEntity {
 		this.goalSelector.addGoal(this.nextDistractionGoalIndex++, new TemptGoal(this).setIncludeDiet(true));
         this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(false));
 
-        this.targetSelector.addGoal(this.nextFindTargetIndex++, new FindMasterGoal(this).setTargetClass(EntityJoustAlpha.class).setSightCheck(false));
+        this.targetSelector.addGoal(this.nextFindTargetIndex++, new FindMasterGoal(this).setTargetClass(EntityJousteAlpha.class).setSightCheck(false));
 		this.targetSelector.addGoal(this.nextFindTargetIndex++, new CopyMasterAttackTargetGoal(this));
     }
 
@@ -49,7 +49,7 @@ public class EntityJouste extends AgeableCreatureEntity {
         if(alphaInfo != null) {
             float alphaChance = (float)alphaInfo.creatureSpawn.spawnWeight / Math.max(this.creatureInfo.creatureSpawn.spawnWeight, 1);
             if (this.getRandom().nextFloat() <= alphaChance) {
-                EntityJoustAlpha alpha = (EntityJoustAlpha)CreatureManager.getInstance().getCreature("joustealpha").createEntity(this.getCommandSenderWorld());
+                EntityJousteAlpha alpha = (EntityJousteAlpha)CreatureManager.getInstance().getCreature("joustealpha").createEntity(this.getCommandSenderWorld());
                 alpha.copyPosition(this);
                 this.getCommandSenderWorld().addFreshEntity(alpha);
                 this.remove();
@@ -81,7 +81,7 @@ public class EntityJouste extends AgeableCreatureEntity {
 
 	@Override
 	public boolean canAttack(LivingEntity target) {
-		if(target instanceof EntityJoustAlpha)
+		if(target instanceof EntityJousteAlpha)
 			return false;
 		return super.canAttack(target);
 	}
@@ -114,7 +114,7 @@ public class EntityJouste extends AgeableCreatureEntity {
 	public void setGrowingAge(int age) {
 		if(age == 0 && this.getAge() < 0)
 			if(this.getRandom().nextFloat() >= 0.9F) {
-				EntityJoustAlpha alpha = (EntityJoustAlpha)CreatureManager.getInstance().getCreature("joustealpha").createEntity(this.getCommandSenderWorld());
+				EntityJousteAlpha alpha = (EntityJousteAlpha)CreatureManager.getInstance().getCreature("joustealpha").createEntity(this.getCommandSenderWorld());
 				alpha.copyPosition(this);
 				this.getCommandSenderWorld().addFreshEntity(alpha);
 				this.remove();

@@ -17,12 +17,12 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class EntityJoustAlpha extends AgeableCreatureEntity {
+public class EntityJousteAlpha extends AgeableCreatureEntity {
 	
 	// ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityJoustAlpha(EntityType<? extends EntityJoustAlpha> entityType, World world) {
+    public EntityJousteAlpha(EntityType<? extends EntityJousteAlpha> entityType, World world) {
         super(entityType, world);
         
         // Setup:
@@ -76,7 +76,7 @@ public class EntityJoustAlpha extends AgeableCreatureEntity {
 	// ========== Set Attack Target ==========
     @Override
     public void setTarget(LivingEntity entity) {
-    	if(entity == null && this.getTarget() instanceof EntityJoustAlpha && this.getHealth() < this.getMaxHealth()) {
+    	if(entity == null && this.getTarget() instanceof EntityJousteAlpha && this.getHealth() < this.getMaxHealth()) {
     		this.heal((this.getMaxHealth() - this.getHealth()) / 2);
     		this.addEffect(new EffectInstance(Effects.REGENERATION, 10 * 20, 2, false, true));
     	}

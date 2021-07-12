@@ -1044,7 +1044,7 @@
     "entity.lycanitesmobs.jengu.habitat": "Se manifiestan en grandes zonas con agua en la oscuridad.",
     "entity.lycanitesmobs.jengu.combat": "Lanzan pulsos de agua que dan fatiga minera y crean agua al impactar en bloques.",
     "_comment": "#############################",
-    "entity.lycanitesmobs.jouste": "Joust",
+    "entity.lycanitesmobs.jouste": "Jouste",
     "entity.lycanitesmobs.jouste.description": "Insectos algo feroces del desierto. Aman el cactus al horno, se pueden criar con eso.",
     "entity.lycanitesmobs.jouste.habitat": "Se encuentran en desiertos y mecetas.",
     "entity.lycanitesmobs.jouste.combat": "Son neutrales y reaccionarán al ser atacados, pero si un jouste alpha está presente, todos se volverán agresivos.",
