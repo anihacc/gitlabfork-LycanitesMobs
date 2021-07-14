@@ -123,7 +123,9 @@ public class ProjectileBehaviourLaser extends ProjectileBehaviour {
 			targetZ = rayTraceResult.getLocation().z;
 			if(rayTraceResult instanceof EntityRayTraceResult) {
 				Entity entityHit = ((EntityRayTraceResult)rayTraceResult).getEntity();
-				targetY += entityHit.getDimensions(entityHit.getPose()).height / 2;
+				if (entityHit != null) {
+					targetY += entityHit.getDimensions(entityHit.getPose()).height / 2;
+				}
 			}
 		}
 
