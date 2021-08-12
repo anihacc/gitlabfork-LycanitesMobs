@@ -13,27 +13,27 @@
 		{
 			"featureType": "effect",
 			"levelMax": 1,
-			"effectType": "minecraft:weight",
+			"effectType": "lycanitesmobs:weight",
 			"effectTarget": "target",
-			"effectDuration": 80,
+			"effectDuration": 40,
 			"effectStrength": 1
 		},
 		{
 			"featureType": "effect",
 			"levelMin": 2,
 			"levelMax": 2,
-			"effectType": "minecraft:weight",
+			"effectType": "lycanitesmobs:weight",
 			"effectTarget": "target",
 			"effectDuration": 80,
-			"effectStrength": 2
+			"effectStrength": 1
 		},
 		{
 			"featureType": "effect",
 			"levelMin": 3,
-			"effectType": "minecraft:weight",
+			"effectType": "lycanitesmobs:weight",
 			"effectTarget": "target",
-			"effectDuration": 80,
-			"effectStrength": 3
+			"effectDuration": 120,
+			"effectStrength": 1
 		}
 	]
 }

@@ -59,7 +59,7 @@
       "projectileTrigger": "secondary",
       "projectilePattern": "spread",
       "cooldown": 8,
-      "count": 10,
+      "count": 8,
       "spreadX": 25,
       "spreadY": 25
     }

@@ -18,7 +18,7 @@
       "projectilePattern": "simple",
       "cooldown": 30,
       "count": 1,
-      "bonusDamage": 2
+      "bonusDamage": 1
     },
     {
       "featureType": "projectile",
@@ -29,7 +29,7 @@
       "projectilePattern": "simple",
       "cooldown": 20,
       "count": 1,
-      "bonusDamage": 5
+      "bonusDamage": 1
     },
     {
       "featureType": "projectile",
@@ -38,9 +38,9 @@
       "projectileTrigger": "secondary",
       "projectilePattern": "spread",
       "cooldown": 40,
-      "count": 1,
-      "spreadX": 5,
-      "spreadY": 5
+      "count": 5,
+      "spreadX": 10,
+      "spreadY": 1
     }
   ]
 }
