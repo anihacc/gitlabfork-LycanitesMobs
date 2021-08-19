@@ -13,7 +13,6 @@
 		},
 		{
 			"type": "player",
-			"position": [0, 70, 0],
 			"positionDistanceMin": 500
 		}
 	],

@@ -27,23 +27,23 @@
 			"id": "minecraft:chests/simple_dungeon"
 		},
 		{
-			"id": "minecraft:chests/village_armorer",
+			"id": "minecraft:chests/village/village_armorer",
 			"level": 2
 		},
 		{
-			"id": "minecraft:chests/village_toolsmith",
+			"id": "minecraft:chests/village/village_toolsmith",
 			"level": 2
 		},
 		{
-			"id": "minecraft:chests/village_weaponsmith",
+			"id": "minecraft:chests/village/village_weaponsmith",
 			"level": 2
 		},
 		{
-			"id": "minecraft:chests/village_desert_house",
+			"id": "minecraft:chests/village/village_desert_house",
 			"level": 2
 		},
 		{
-			"id": "minecraft:chests/village_temple",
+			"id": "minecraft:chests/village/village_temple",
 			"level": 2
 		},
 		{
