@@ -3,7 +3,7 @@
   "loadDefault": true,
   "slotType": "jewel",
   "dropMobId": "lycanitesmobs:stryder",
-  "dropChance": 0.05,
+  "dropChance": 0.25,
   "levelMin": 1,
   "levelMax": 3,
   "elements": [

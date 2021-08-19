@@ -1,45 +1,42 @@
 {
-	"itemName": "ettinclub",
-	"loadDefault": false,
-	"slotType": "pike",
-	"dropMobId": "lycanitesmobs:ettin",
-	"dropChance": 0.05,
-	"levelMin": 1,
-	"levelMax": 3,
-	"elements": [
-		"quake"
-	],
-	"features": [
-		{
-			"featureType": "projectile",
-			"levelMax": 1,
-			"projectileName": "boulderblast",
-			"projectileTrigger": "secondary",
-			"projectilePattern": "simple",
-			"cooldown": 30,
-			"count": 1,
-			"bonusDamage": 2
-		},
-		{
-			"featureType": "projectile",
-			"levelMin": 2,
-			"levelMax": 2,
-			"projectileName": "boulderblast",
-			"projectileTrigger": "secondary",
-			"projectilePattern": "simple",
-			"cooldown": 20,
-			"count": 1,
-			"bonusDamage": 5
-		},
-		{
-			"featureType": "projectile",
-			"levelMin": 3,
-			"projectileName": "boulderblast",
-			"projectileTrigger": "secondary",
-			"projectilePattern": "simple",
-			"cooldown": 10,
-			"count": 1,
-			"bonusDamage": 12
-		}
-	]
+  "itemName": "ettinclub",
+  "loadDefault": true,
+  "slotType": "pike",
+  "dropMobId": "lycanitesmobs:ettin",
+  "dropChance": 0.2,
+  "levelMin": 1,
+  "levelMax": 3,
+  "elements": [
+    "quake"
+  ],
+  "features": [
+    {
+      "featureType": "damage",
+      "levelMax": 1,
+      "damageAmount": 9,
+      "damageKnockback": 1.8,
+      "damageCooldown": 3,
+      "damageRange": 2,
+      "damageSweep": 0
+    },
+    {
+      "featureType": "damage",
+      "levelMax": 2,
+      "levelMin": 2,
+      "damageAmount": 10,
+      "damageKnockback": 1.9,
+      "damageCooldown": 2.7,
+      "damageRange": 2,
+      "damageSweep": 0
+    },
+    {
+      "featureType": "damage",
+      "levelMin": 3,
+      "damageAmount": 11,
+      "damageKnockback": 2,
+      "damageCooldown": 2.5,
+      "damageRange": 2,
+      "damageSweep": 0
+    }
+  ]
 }

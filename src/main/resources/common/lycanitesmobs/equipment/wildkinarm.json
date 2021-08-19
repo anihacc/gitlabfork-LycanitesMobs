@@ -3,7 +3,7 @@
 	"loadDefault": true,
 	"slotType": "head",
 	"dropMobId": "lycanitesmobs:wildkin",
-	"dropChance": 0.5,
+	"dropChance": 0.2,
 	"levelMin": 1,
 	"levelMax": 3,
 	"elements": [
@@ -15,64 +15,30 @@
 			"slotType": "blade"
 		},
 		{
-			"featureType": "projectile",
+			"featureType": "effect",
+			"levelMin": 1,
 			"levelMax": 1,
-			"projectileName": "boulderblast",
-			"projectileTrigger": "primary",
-			"projectilePattern": "simple",
-			"cooldown": 40,
-			"count": 5
+			"effectType": "minecraft:resistance",
+			"effectTarget": "self",
+			"effectDuration": 10,
+			"effectStrength": 1
 		},
 		{
-			"featureType": "projectile",
+			"featureType": "effect",
 			"levelMin": 2,
 			"levelMax": 2,
-			"projectileName": "boulderblast",
-			"projectileTrigger": "primary",
-			"projectilePattern": "simple",
-			"cooldown": 30,
-			"count": 9,
-			"bonusDamage": 1
+			"effectType": "minecraft:resistance",
+			"effectTarget": "self",
+			"effectDuration": 20,
+			"effectStrength": 1
 		},
 		{
-			"featureType": "projectile",
+			"featureType": "effect",
 			"levelMin": 3,
-			"projectileName": "boulderblast",
-			"projectileTrigger": "primary",
-			"projectilePattern": "simple",
-			"cooldown": 20,
-			"count": 16,
-			"bonusDamage": 2
-		},
-		{
-			"featureType": "projectile",
-			"levelMax": 1,
-			"projectileName": "boulderblast",
-			"projectileTrigger": "secondary",
-			"projectilePattern": "simple",
-			"cooldown": 20,
-			"count": 1
-		},
-		{
-			"featureType": "projectile",
-			"levelMin": 2,
-			"levelMax": 2,
-			"projectileName": "boulderblast",
-			"projectileTrigger": "secondary",
-			"projectilePattern": "simple",
-			"cooldown": 16,
-			"count": 1,
-			"bonusDamage": 1
-		},
-		{
-			"featureType": "projectile",
-			"levelMin": 3,
-			"projectileName": "boulderblast",
-			"projectileTrigger": "secondary",
-			"projectilePattern": "simple",
-			"cooldown": 8,
-			"count": 1,
-			"bonusDamage": 2
+			"effectType": "minecraft:resistance",
+			"effectTarget": "self",
+			"effectDuration": 40,
+			"effectStrength": 1
 		}
 	]
 }

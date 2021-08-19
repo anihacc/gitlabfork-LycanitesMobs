@@ -240,9 +240,6 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 
 		// Patterns:
 		if("spread".equals(this.projectilePattern)) {
-			this.count = 10;
-			this.spreadX = 45;
-			this.spreadY = 10;
 			for(int i = 0; i < this.count; i++) {
 				double yaw = shooter.yRot + (this.spreadX * shooter.getRandom().nextDouble()) - (this.spreadX / 2);
 				double pitch = shooter.xRot + (this.spreadY * shooter.getRandom().nextDouble()) - (this.spreadY / 2);

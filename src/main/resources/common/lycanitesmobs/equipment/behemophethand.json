@@ -1,9 +1,9 @@
 {
   "itemName": "behemophethand",
-  "loadDefault": false,
+  "loadDefault": true,
   "slotType": "head",
   "dropMobId": "lycanitesmobs:behemophet",
-  "dropChance": 0.05,
+  "dropChance": 0.1,
   "levelMin": 1,
   "levelMax": 3,
   "elements": [
@@ -20,7 +20,7 @@
       "projectileName": "hellfireball",
       "projectileTrigger": "primary",
       "projectilePattern": "simple",
-      "cooldown": 30,
+      "cooldown": 40,
       "count": 1,
       "bonusDamage": 2
     },
@@ -31,9 +31,9 @@
       "projectileName": "hellfireball",
       "projectileTrigger": "primary",
       "projectilePattern": "simple",
-      "cooldown": 20,
+      "cooldown": 30,
       "count": 1,
-      "bonusDamage": 5
+      "bonusDamage": 4
     },
     {
       "featureType": "projectile",
@@ -41,9 +41,9 @@
       "projectileName": "hellfireball",
       "projectileTrigger": "primary",
       "projectilePattern": "simple",
-      "cooldown": 10,
+      "cooldown": 20,
       "count": 1,
-      "bonusDamage": 12
+      "bonusDamage": 6
     }
   ]
 }
