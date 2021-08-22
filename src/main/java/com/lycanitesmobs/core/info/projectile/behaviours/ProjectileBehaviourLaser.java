@@ -145,7 +145,7 @@ public class ProjectileBehaviourLaser extends ProjectileBehaviour {
 			}
 		}
 
-		if (projectile.projectileLife % 20 == 0) {
+		if (((CustomProjectileEntity)projectile).getParent() == null && projectile.projectileLife % 20 == 0) {
 			projectile.playSound(projectile.getBeamSound(), 1.0F, 1.0F / (projectile.getCommandSenderWorld().getRandom().nextFloat() * 0.4F + 0.8F));
 		}
 	}
