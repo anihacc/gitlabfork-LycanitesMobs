@@ -104,16 +104,17 @@ public class BlockFluidVeshoney extends BlockFluidBase {
     // ==================================================
     @Override
     public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
-        if(entity != null) {
-            // Extinguish:
-            if(entity.isBurning())
-                entity.extinguish();
-            // Effects:
-            if(entity instanceof Entity & !(entity instanceof EntityVespid) & !(entity instanceof EntityVespidQueen)) {
-                entity.setInWeb ();
-                entity.setVelocity(0,-0.02,0);
-            }
+        // Extinguish:
+        if(entity.isBurning()) {
+            entity.extinguish();
         }
+
+        // Effects:
+        if(!(entity instanceof EntityVespid) & !(entity instanceof EntityVespidQueen)) {
+            entity.setInWeb ();
+            entity.addVelocity(0,-0.02,0);
+        }
+
         super.onEntityCollidedWithBlock(world, pos, state, entity);
     }
 
