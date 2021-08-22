@@ -1951,6 +1951,9 @@ item.lycanitesmobs.soul_contract.released= The bound creature has been released,
 item.mobtoken.name=Mob Token
 item.mobtoken.description=A cosmetic item used to display creature models as achievement icons, etc.
 #
+item.wraithsigil.name=Wraith Sigil
+item.wraithsigil.description=A preserved Wraith in stasis flowing with Nether magic, by wielding this, one can unleash the fury of this Nether Elemental!
+#
 #
 # ========== Consumables ==========
 item.immunizer.name=Immunizer
