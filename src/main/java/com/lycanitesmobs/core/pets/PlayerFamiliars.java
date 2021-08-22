@@ -90,6 +90,7 @@ public class PlayerFamiliars {
 					String familiar_species = familiarJson.get("familiar_species").getAsString();
 					CreatureInfo creatureInfo = CreatureManager.getInstance().getCreature(familiar_species);
 					int familiar_subspecies = familiarJson.get("familiar_subspecies").getAsInt();
+					familiar_species = this.handleLegacySpecies(familiar_species);
 					int familiar_variant = familiarJson.get("familiar_variant").getAsInt();
 					Variant creatureVariant = creatureInfo != null ? creatureInfo.getSubspecies(familiar_subspecies).getVariant(familiar_variant) : null;
 					String familiar_name = familiarJson.get("familiar_name").getAsString();
@@ -165,5 +166,56 @@ public class PlayerFamiliars {
 
 	public void updatePlayerFamiliarLoadedTime(EntityPlayer player) {
 		this.playerFamiliarLoadedTimes.put(player.getUniqueID(), System.currentTimeMillis() / 1000);
+	}
+
+	/**
+	 * Converts newer 1.16.5+ version species names into old ones for 1.12.2
+	 * @param species The species name to convert from newer versions down to 1.12.2 equivalents.
+	 * @return The 1.12.2 species name to use.
+	 */
+	public String handleLegacySpecies(String species) {
+		if (species.equalsIgnoreCase("apollyon")) {
+			return "archvile";
+		}
+		if (species.equalsIgnoreCase("belphegor")) {
+			return "belph";
+		}
+		if (species.equalsIgnoreCase("behemophet")) {
+			return "behemoth";
+		}
+		if (species.equalsIgnoreCase("malwrath")) {
+			return "cacodemon";
+		}
+		if (species.equalsIgnoreCase("naxiris")) {
+			return "beholder";
+		}
+		if (species.equalsIgnoreCase("zephyr")) {
+			return "djinn";
+		}
+		if (species.equalsIgnoreCase("raidra")) {
+			return "zephyr";
+		}
+		if (species.equalsIgnoreCase("ningen")) {
+			return "dweller";
+		}
+		if (species.equalsIgnoreCase("cherufe")) {
+			return "lobber";
+		}
+		if (species.equalsIgnoreCase("ostimien")) {
+			return "lurker";
+		}
+		if (species.equalsIgnoreCase("kathoga")) {
+			return "pinky";
+		}
+		if (species.equalsIgnoreCase("brucha")) {
+			return "quillbeast";
+		}
+		if (species.equalsIgnoreCase("stryder")) {
+			return "strider";
+		}
+		if (species.equalsIgnoreCase("lycosa")) {
+			return "tarantula";
+		}
+		return species;
 	}
 }
