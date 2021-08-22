@@ -91,8 +91,8 @@ public class PetManager {
             // Create New Entries For Non-Loaded Entries From The NBT Map:
             for (CompoundNBT nbtEntry : this.entryNBTs.values()) {
                 if (this.host instanceof PlayerEntity && nbtEntry.getString("Type").equalsIgnoreCase("familiar")) { // Only load active familiars.
-                    if (!DonationFamiliars.instance.playerFamiliars.containsKey(this.host.getUUID()) ||
-                            !DonationFamiliars.instance.playerFamiliars.get(this.host.getUUID()).containsKey(nbtEntry.getUUID("UUID"))) {
+                    if (!PlayerFamiliars.INSTANCE.playerFamiliars.containsKey(this.host.getUUID()) ||
+                            !PlayerFamiliars.INSTANCE.playerFamiliars.get(this.host.getUUID()).containsKey(nbtEntry.getUUID("UUID"))) {
                         continue;
                     }
                 }

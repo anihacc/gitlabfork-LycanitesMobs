@@ -4,11 +4,10 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.VersionChecker;
 import com.lycanitesmobs.core.capabilities.IExtendedPlayer;
 import com.lycanitesmobs.core.config.ConfigExtra;
-import com.lycanitesmobs.core.config.ConfigGeneral;
 import com.lycanitesmobs.core.info.*;
 import com.lycanitesmobs.core.item.summoningstaff.ItemStaffSummoning;
 import com.lycanitesmobs.core.network.*;
-import com.lycanitesmobs.core.pets.DonationFamiliars;
+import com.lycanitesmobs.core.pets.PlayerFamiliars;
 import com.lycanitesmobs.core.pets.PetEntry;
 import com.lycanitesmobs.core.pets.PetManager;
 import com.lycanitesmobs.core.pets.SummonSet;
@@ -255,9 +254,9 @@ public class ExtendedPlayer implements IExtendedPlayer {
 
 			// Mod Version Check:
 			if (this.player.getCommandSenderWorld().isClientSide) {
-				VersionChecker.VersionInfo latestVersion = VersionChecker.getLatestVersion(true);
-				VersionChecker.enabled = ConfigExtra.INSTANCE.versionCheckerEnabled.get();
-				if (latestVersion != null && latestVersion.isNewer && VersionChecker.enabled) {
+				VersionChecker.VersionInfo latestVersion = VersionChecker.INSTANCE.getLatestVersion();
+				VersionChecker.INSTANCE.enabled = ConfigExtra.INSTANCE.versionCheckerEnabled.get();
+				if (latestVersion != null && latestVersion.isNewer && VersionChecker.INSTANCE.enabled) {
 					String versionText = new TranslationTextComponent("lyc.version.newer").getString().replace("{current}", LycanitesMobs.versionNumber).replace("{latest}", latestVersion.versionNumber);
 					this.player.sendMessage(new StringTextComponent(versionText), Util.NIL_UUID);
 				}
@@ -341,7 +340,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
 
 
 	public void loadFamiliars() {
-		Map<UUID, PetEntry> playerFamiliars = DonationFamiliars.instance.getFamiliarsForPlayer(this.player);
+		Map<UUID, PetEntry> playerFamiliars = PlayerFamiliars.INSTANCE.getFamiliarsForPlayer(this.player);
 		if (!playerFamiliars.isEmpty()) {
 			for (PetEntry petEntry : playerFamiliars.values()) {
 				if (this.petManager.hasEntry(petEntry)) {

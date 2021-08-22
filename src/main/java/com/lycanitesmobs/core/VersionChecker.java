@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core;
 
-import com.google.gson.JsonElement;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.lycanitesmobs.LycanitesMobs;
@@ -14,10 +14,12 @@ import java.net.URLConnection;
 import java.nio.charset.Charset;
 
 public class VersionChecker {
-	public static boolean enabled = true;
+	public static VersionChecker INSTANCE = new VersionChecker();
+	public boolean enabled = true;
 
-	static VersionInfo currentVersion = new VersionInfo(LycanitesMobs.versionNumber, LycanitesMobs.versionMC);
-	static VersionInfo latestVersion = null;
+	VersionInfo currentVersion = new VersionInfo(LycanitesMobs.versionNumber, LycanitesMobs.versionMC);
+	VersionInfo latestVersion = null;
+	long lastChecked = -1;
 
 	public static class VersionInfo {
 		public String versionNumber;
@@ -92,45 +94,58 @@ public class VersionChecker {
 		}
 	}
 
-	public static VersionInfo getLatestVersion(boolean refresh) {
-		if(!refresh && latestVersion != null) {
-			return latestVersion;
+	public VersionInfo getLatestVersion() {
+		if (this.latestVersion != null) {
+			return this.latestVersion;
 		}
 
-		try {
-			URL url = new URL(LycanitesMobs.websiteAPI + "/latest/" + LycanitesMobs.versionMC);
-			URLConnection urlConnection = url.openConnection();
-			urlConnection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.89 Safari/537.36");
-			InputStream inputStream = urlConnection.getInputStream();
-			String jsonString = null;
+		long currentTime = System.currentTimeMillis() / 1000;
+		if (this.lastChecked < 0 || currentTime - this.lastChecked > 60 * 60) {
+			this.lastChecked = currentTime;
+			VersionChecker.VersionLoader versionLoader = new VersionChecker.VersionLoader();
+			Thread thread = new Thread(versionLoader);
+			thread.start();
+		}
+
+		return this.latestVersion != null ? this.latestVersion : this.currentVersion;
+	}
+
+	public static class VersionLoader implements Runnable {
+		@Override
+		public void run() {
+			VersionChecker.INSTANCE.lastChecked = System.currentTimeMillis() / 1000;
+
 			try {
-				jsonString = IOUtils.toString(inputStream, (Charset)null);
-				jsonString = jsonString.replace("\\r", "");
-			} catch (Exception e) {
-				throw e;
-			} finally {
-				inputStream.close();
-			}
+				URL url = new URL(LycanitesMobs.serviceAPI + "/versions?limit=1&sort_by=created_at:desc&mcversion=" + LycanitesMobs.versionMC);
+				URLConnection urlConnection = url.openConnection();
+				String osName = System.getProperty("os.name");
+				urlConnection.setRequestProperty("Authorization", "Bearer 7ed1f44cbc1aff693e604075f23d56402983a4a0"); // This is a public api so the key is safe to be exposed like this. :)
+				urlConnection.setRequestProperty("User-Agent", "Minecraft " + LycanitesMobs.versionMC + " (" + osName + ") LycanitesMobs " + LycanitesMobs.versionNumber);
+				InputStream inputStream = urlConnection.getInputStream();
+				String jsonString;
+				try {
+					jsonString = IOUtils.toString(inputStream, (Charset) null);
+					jsonString = jsonString.replace("\\r", "");
+				} finally {
+					inputStream.close();
+				}
 
-			JsonParser jsonParser = new JsonParser();
-			JsonElement jsonElement = jsonParser.parse(jsonString);
-			JsonObject versionJson = jsonElement.getAsJsonObject();
-			if(!versionJson.has("version") && !versionJson.has("mcversion")) {
-				return currentVersion;
-			}
-			String versionNumber = versionJson.get("version").getAsString();
-			String mcVersion = versionJson.get("mcversion").getAsString();
-			latestVersion = new VersionInfo(versionNumber, mcVersion);
-			latestVersion.loadFromJSON(versionJson);
-			latestVersion.checkIfNewer(currentVersion);
-		}
-		catch(Throwable e) {
-			e.printStackTrace();
-		}
+				JsonParser jsonParser = new JsonParser();
+				JsonObject json = jsonParser.parse(jsonString).getAsJsonObject();
+				JsonArray jsonArray = json.getAsJsonArray("data");
+				JsonObject versionJson = jsonArray.get(0).getAsJsonObject();
+				if (!versionJson.has("version") && !versionJson.has("mcversion")) {
+					return;
+				}
 
-		if(latestVersion == null) {
-			return currentVersion;
+				String versionNumber = versionJson.get("version").getAsString();
+				String mcVersion = versionJson.get("mcversion").getAsString();
+				VersionChecker.INSTANCE.latestVersion = new VersionInfo(versionNumber, mcVersion);
+				VersionChecker.INSTANCE.latestVersion.loadFromJSON(versionJson);
+				VersionChecker.INSTANCE.latestVersion.checkIfNewer(VersionChecker.INSTANCE.currentVersion);
+			} catch (Throwable e) {
+				e.printStackTrace();
+			}
 		}
-		return latestVersion;
 	}
 }

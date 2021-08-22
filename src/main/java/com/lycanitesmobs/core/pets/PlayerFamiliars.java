@@ -18,37 +18,37 @@ import java.net.URLConnection;
 import java.nio.charset.Charset;
 import java.util.*;
 
-public class DonationFamiliars {
-	public static DonationFamiliars instance = new DonationFamiliars();
+public class PlayerFamiliars {
+	public static PlayerFamiliars INSTANCE = new PlayerFamiliars();
 	public Map<UUID, Map<UUID, PetEntry>> playerFamiliars = new HashMap<>();
-	public long jsonLoadedTime = -1;
+	public Map<UUID, Long> playerFamiliarLoadedTimes = new HashMap<>();
 	public List<String> familiarBlacklist = new ArrayList<>();
 
-	public class DonationLoader implements Runnable {
+	public static class FamiliarLoader implements Runnable {
 		PlayerEntity player;
 
-		public DonationLoader(PlayerEntity player) {
+		public FamiliarLoader(PlayerEntity player) {
 			this.player = player;
 		}
 
 		@Override
 		public void run() {
-			this.readFromJSON();
-			if (this.player != null) {
-				ExtendedPlayer extendedPlayer = ExtendedPlayer.getForPlayer(this.player);
-				if (extendedPlayer != null) {
-					extendedPlayer.loadFamiliars();
-				}
+			this.getForPlayerUUID(player.getUUID());
+			ExtendedPlayer extendedPlayer = ExtendedPlayer.getForPlayer(this.player);
+			if (extendedPlayer != null) {
+				extendedPlayer.loadFamiliars();
 			}
+			PlayerFamiliars.INSTANCE.updatePlayerFamiliarLoadedTime(this.player);
 		}
 
-		private void readFromJSON() {
-			// Load JSON File:
-			String jsonString = null;
+		private void getForPlayerUUID(UUID uuid) {
+			String jsonString;
 			try {
-				URL familiarURL = new URL(LycanitesMobs.websiteAPI + "/familiar");
-				URLConnection urlConnection = familiarURL.openConnection();
-				urlConnection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.89 Safari/537.36");
+				URL familiarsURL = new URL(LycanitesMobs.serviceAPI + "/familiars?minecraft_uuid=" + uuid.toString());
+				URLConnection urlConnection = familiarsURL.openConnection();
+				String osName = System.getProperty("os.name");
+				urlConnection.setRequestProperty("Authorization", "Bearer 7ed1f44cbc1aff693e604075f23d56402983a4a0"); // This is a public api so the key is safe to be exposed like this. :)
+				urlConnection.setRequestProperty("User-Agent", "Minecraft " + LycanitesMobs.versionMC + " (" + osName + ") LycanitesMobs " + LycanitesMobs.versionNumber);
 				InputStream inputStream = urlConnection.getInputStream();
 				try {
 					jsonString = IOUtils.toString(inputStream, (Charset) null);
@@ -57,64 +57,68 @@ public class DonationFamiliars {
 				} finally {
 					inputStream.close();
 				}
-				LycanitesMobs.logInfo("", "Online donations file read successfully.");
+				LycanitesMobs.logInfo("", "Online familiars loaded successfully for " + uuid + ".");
 			} catch (Throwable e) {
-				LycanitesMobs.logInfo("", "Unable to access the online donations file.");
+				LycanitesMobs.logInfo("", "Unable to access the online familiars service.");
 				e.printStackTrace();
 				return;
 			}
 
 			// Parse JSON File:
-			DonationFamiliars.instance.parseFamiliarJSON(jsonString);
+			PlayerFamiliars.INSTANCE.parseFamiliarJSON(jsonString);
 		}
 	}
 
 	// Parses JSON to Familiars, returns false if the JSON is invalid.
-	public boolean parseFamiliarJSON(String jsonString) {
+	public void parseFamiliarJSON(String jsonString) {
 		try {
 			JsonParser jsonParser = new JsonParser();
-			JsonElement jsonElement = jsonParser.parse(jsonString);
-			JsonArray jsonArray = jsonElement.getAsJsonArray();
+			JsonObject json = jsonParser.parse(jsonString).getAsJsonObject();
+			JsonArray jsonArray = json.getAsJsonArray("data");
 			Iterator<JsonElement> jsonIterator = jsonArray.iterator();
 			while (jsonIterator.hasNext()) {
 				try {
+					// Familiar UUIDs:
 					JsonObject familiarJson = jsonIterator.next().getAsJsonObject();
 					UUID minecraft_uuid = UUID.fromString(familiarJson.get("minecraft_uuid").getAsString());
-					String minecraft_username = familiarJson.get("minecraft_username").getAsString();
-					if (this.familiarBlacklist.contains(minecraft_username)) {
+					if (this.familiarBlacklist.contains(minecraft_uuid.toString())) {
 						continue;
 					}
 					UUID familiar_uuid = UUID.fromString(familiarJson.get("familiar_uuid").getAsString());
 
+					// Familiar Properties:
 					String familiar_species = familiarJson.get("familiar_species").getAsString();
 					CreatureInfo creatureInfo = CreatureManager.getInstance().getCreature(familiar_species);
-					int familiar_subspecies = familiarJson.get("familiar_subspecies_index").getAsInt();
-					int familiar_variant = familiarJson.get("familiar_variant_index").getAsInt();
+					int familiar_subspecies = familiarJson.get("familiar_subspecies").getAsInt();
+					int familiar_variant = familiarJson.get("familiar_variant").getAsInt();
 					Variant creatureVariant = creatureInfo != null ? creatureInfo.getSubspecies(familiar_subspecies).getVariant(familiar_variant) : null;
 					String familiar_name = familiarJson.get("familiar_name").getAsString();
 					String familiar_color = familiarJson.get("familiar_color").getAsString();
 					double familiar_size = familiarJson.get("familiar_size").getAsDouble();
-					if(familiar_size <= 0) {
+					if(familiar_size <= 0) { // Default Reduced Size:
 						familiar_size = 0.5D;
 						if(creatureVariant != null && creatureVariant.scale != 1) {
 							familiar_size *= 1 / creatureVariant.scale;
 						}
 					}
 
+					// Create Familiar Pet Entry:
 					PetEntryFamiliar familiarEntry = new PetEntryFamiliar(familiar_uuid, null, familiar_species.toLowerCase());
 					familiarEntry.setEntitySubspecies(familiar_subspecies);
 					familiarEntry.setEntityVariant(familiar_variant);
 					familiarEntry.setEntitySize(familiar_size);
-
-					if (!"".equals(familiar_name))
+					if (!"".equals(familiar_name)) {
 						familiarEntry.setEntityName(familiar_name);
+					}
 					familiarEntry.setColor(familiar_color);
 
 					// Add Pet Entries or Update Existing Entries:
-					if (!this.playerFamiliars.containsKey(minecraft_uuid))
+					if (!this.playerFamiliars.containsKey(minecraft_uuid)) {
 						this.playerFamiliars.put(minecraft_uuid, new HashMap<>());
-					if (!this.playerFamiliars.get(minecraft_uuid).containsKey(familiar_uuid))
+					}
+					if (!this.playerFamiliars.get(minecraft_uuid).containsKey(familiar_uuid)) {
 						this.playerFamiliars.get(minecraft_uuid).put(familiar_uuid, familiarEntry);
+					}
 					else {
 						PetEntry existingEntry = this.playerFamiliars.get(minecraft_uuid).get(familiar_uuid);
 						existingEntry.copy(familiarEntry);
@@ -126,23 +130,21 @@ public class DonationFamiliars {
 		catch(Exception e) {
             /*LycanitesMobs.logWarning("", "A problem occurred when loading online player familiars:");
             e.printStackTrace();*/
-			return false;
 		}
-
-		return true;
 	}
 
 	public Map<UUID, PetEntry> getFamiliarsForPlayer(PlayerEntity player) {
 		long currentTime = System.currentTimeMillis() / 1000;
-		if(this.jsonLoadedTime < 0 || currentTime - this.jsonLoadedTime > 60 * 60) {
-			this.jsonLoadedTime = System.currentTimeMillis() / 1000;
-			DonationLoader donationLoader = new DonationLoader(player);
-			Thread thread = new Thread(donationLoader);
+		long loadedTime = this.getPlayerFamiliarLoadedTime(player);
+		if (loadedTime < 0 || currentTime - loadedTime > 30 * 60) {
+			this.updatePlayerFamiliarLoadedTime(player);
+			FamiliarLoader familiarLoader = new FamiliarLoader(player);
+			Thread thread = new Thread(familiarLoader);
 			thread.start();
 		}
 
 		Map<UUID, PetEntry> playerFamiliarEntries = new HashMap<>();
-		if(this.playerFamiliars.containsKey(player.getUUID())) {
+		if (this.playerFamiliars.containsKey(player.getUUID())) {
 			playerFamiliarEntries = this.playerFamiliars.get(player.getUUID());
 			for(PetEntry familiarEntry : playerFamiliarEntries.values()) {
 				if(familiarEntry.host == null) {
@@ -151,5 +153,17 @@ public class DonationFamiliars {
 			}
 		}
 		return playerFamiliarEntries;
+	}
+
+	public long getPlayerFamiliarLoadedTime(PlayerEntity player) {
+		UUID uuid = player.getUUID();
+		if (!this.playerFamiliarLoadedTimes.containsKey(uuid)) {
+			return -1;
+		}
+		return this.playerFamiliarLoadedTimes.get(uuid);
+	}
+
+	public void updatePlayerFamiliarLoadedTime(PlayerEntity player) {
+		this.playerFamiliarLoadedTimes.put(player.getUUID(), System.currentTimeMillis() / 1000);
 	}
 }

@@ -18,7 +18,7 @@ public class IndexBeastiaryScreen extends BeastiaryScreen {
 
 	public IndexBeastiaryScreen(PlayerEntity player) {
 		super(player);
-		this.versionInfo = VersionChecker.getLatestVersion(false);
+		this.versionInfo = VersionChecker.INSTANCE.getLatestVersion();
 	}
 
 	@Override
