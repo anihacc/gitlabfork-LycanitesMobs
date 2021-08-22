@@ -91,7 +91,7 @@ public class IndexBeastiaryScreen extends BeastiaryScreen {
 		yOffset += this.getFontRenderer().getWordWrappedHeight(info, this.colRightWidth);
 
 		// Get Latest Version:
-		VersionChecker.VersionInfo latestVersion = VersionChecker.getLatestVersion(false);
+		VersionChecker.VersionInfo latestVersion = VersionChecker.INSTANCE.getLatestVersion();
 		if(latestVersion == null) {
 			return;
 		}
