@@ -131,7 +131,9 @@ public class ProjectileBehaviourFireProjectiles extends ProjectileBehaviour {
 				0
 		);
 
-		projectile.playSound(childProjectile.getLaunchSound(), 1.0F, 1.0F / (projectile.getCommandSenderWorld().getRandom().nextFloat() * 0.4F + 0.8F));
+		if (projectile.projectileLife % 20 == 0) {
+			projectile.playSound(childProjectile.getLaunchSound(), 1.0F, 1.0F / (projectile.getCommandSenderWorld().getRandom().nextFloat() * 0.4F + 0.8F));
+		}
 		projectile.getCommandSenderWorld().addFreshEntity(childProjectile);
 
 		return childProjectile;
