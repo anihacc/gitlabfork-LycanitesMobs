@@ -1,6 +1,5 @@
 package com.lycanitesmobs.client.model.creature;
 
-
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.template.ModelTemplateQuadruped;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;

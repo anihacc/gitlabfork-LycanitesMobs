@@ -52,7 +52,10 @@ public class ProjectileBehaviourLaser extends ProjectileBehaviour {
 				entityToFollow = ((CustomProjectileEntity)projectile).getParent();
 			}
 			double xPos = entityToFollow.position().x();
-			double yPos = entityToFollow.position().y() + entityToFollow.getDimensions(entityToFollow.getPose()).height * 0.5D;
+			double yPos = entityToFollow.position().y();
+			if (!(entityToFollow instanceof BaseProjectileEntity)) {
+				yPos += entityToFollow.getDimensions(entityToFollow.getPose()).height * 0.5D;
+			}
 			double zPos = entityToFollow.position().z();
 			/*if(entityToFollow instanceof BaseCreatureEntity) {
 				BaseCreatureEntity creatureToFollow = (BaseCreatureEntity)entityToFollow;
