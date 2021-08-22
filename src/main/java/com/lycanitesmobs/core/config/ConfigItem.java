@@ -11,6 +11,8 @@ public class ConfigItem {
 	public final ForgeConfigSpec.ConfigValue<Double> seasonalDropChance;
 	public final ForgeConfigSpec.ConfigValue<Boolean> removeOnNoFireTick;
 
+	public final ForgeConfigSpec.ConfigValue<Boolean> chargesToXPBottles;
+
 	public final ForgeConfigSpec.ConfigValue<Integer> lowEquipmentRepairAmount;
 	public final ForgeConfigSpec.ConfigValue<Integer> mediumEquipmentRepairAmount;
 	public final ForgeConfigSpec.ConfigValue<Integer> highEquipmentRepairAmount;
@@ -38,6 +40,11 @@ public class ConfigItem {
 				.comment("If set to false, when the doFireTick gamerule is set to false, instead of removing all custom fire such as Hellfire, the fire simply stops spreading instead, this is useful for decorative fire on adventure maps and servers.")
 				.translation(CoreConfig.CONFIG_PREFIX + "item.removeOnNoFireTick")
 				.define("removeOnNoFireTick", true);
+
+		this.chargesToXPBottles = builder
+				.comment("If true, Charge items can be placed into the Infuser with an Empty Bottle to make XP Bottles.")
+				.translation(CoreConfig.CONFIG_PREFIX + "item.chargesToXPBottles")
+				.define("chargesToXPBottles", true);
 
 		// Repair Amounts
 		this.lowEquipmentRepairAmount = builder

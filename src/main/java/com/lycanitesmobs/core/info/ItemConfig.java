@@ -9,6 +9,8 @@ public class ItemConfig {
     public static double seasonalItemDropChance = 0.1D;
     public static boolean removeOnNoFireTick = true;
 
+    public static boolean chargesToXPBottles = true;
+
     public static int lowEquipmentRepairAmount = 50;
     public static int mediumEquipmentRepairAmount = 100;
     public static int highEquipmentRepairAmount = 500;
@@ -27,6 +29,8 @@ public class ItemConfig {
         seasonalItemDropChance = ConfigItem.INSTANCE.seasonalDropChance.get();
         removeOnNoFireTick = ConfigItem.INSTANCE.removeOnNoFireTick.get();
 
+        chargesToXPBottles = ConfigItem.INSTANCE.chargesToXPBottles.get();
+
         lowEquipmentRepairAmount = ConfigItem.INSTANCE.lowEquipmentRepairAmount.get();
         mediumEquipmentRepairAmount = ConfigItem.INSTANCE.mediumEquipmentRepairAmount.get();
         highEquipmentRepairAmount = ConfigItem.INSTANCE.highEquipmentRepairAmount.get();
@@ -40,6 +44,5 @@ public class ItemConfig {
         mediumEquipmentManaItems = ConfigItem.INSTANCE.mediumEquipmentManaItems.get();
         highEquipmentManaItems = ConfigItem.INSTANCE.highEquipmentManaItems.get();
         maxEquipmentManaItems = ConfigItem.INSTANCE.maxEquipmentManaItems.get();
-
     }
 }
