@@ -2466,9 +2466,10 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 
 	/** Can be overridden to add a random chance of wandering around. **/
 	public boolean rollWanderChance() {
-		/*if(this.canBreatheAir() && !this.isStrongSwimmer() && !this.isFlying() && this.isInWater())
-			return true;*/
-		return this.getRNG().nextDouble() <= 0.05D;
+		if (this.width >= 3) {
+			return this.getRNG().nextDouble() <= 0.0005D;
+		}
+		return this.getRNG().nextDouble() <= 0.008D;
 	}
     
     // ========== Leash ==========

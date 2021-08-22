@@ -1,5 +1,7 @@
 package com.lycanitesmobs.core.container;
 
+import com.lycanitesmobs.core.info.ItemConfig;
+import com.lycanitesmobs.core.info.ItemManager;
 import com.lycanitesmobs.core.item.ChargeItem;
 import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
 import com.lycanitesmobs.core.tileentity.EquipmentInfuserTileEntity;
@@ -92,7 +94,7 @@ public class EquipmentInfuserContainer extends BaseContainer {
 		}
 
 		// Experience Bottle:
-		if (this.partSlot.getStack().getItem() == Items.GLASS_BOTTLE) {
+		if (ItemConfig.chargesToXPBottles && this.partSlot.getStack().getItem() == Items.GLASS_BOTTLE) {
 			if (this.chargeSlot.getStack().getItem() instanceof ChargeItem) {
 				this.partSlot.putStack(new ItemStack(Items.EXPERIENCE_BOTTLE));
 				this.chargeSlot.decrStackSize(1);

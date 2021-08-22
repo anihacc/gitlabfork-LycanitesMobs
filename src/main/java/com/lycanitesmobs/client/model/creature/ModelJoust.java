@@ -15,7 +15,7 @@ public class ModelJoust extends ModelTemplateQuadruped {
 	}
 
 	public ModelJoust(float shadowSize) {
-		this.initModel("joust", LycanitesMobs.modInfo, "entity/jouste");
+		this.initModel("joust", LycanitesMobs.modInfo, "entity/joust");
 		this.trophyScale = 1.0F;
 		this.trophyOffset = new float[] {0.0F, 0.0F, -0.4F};
 

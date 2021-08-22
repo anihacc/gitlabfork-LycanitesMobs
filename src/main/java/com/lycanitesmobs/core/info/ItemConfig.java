@@ -11,6 +11,8 @@ public class ItemConfig {
     public static double seasonalItemDropChance = 0.1F;
     public static boolean removeOnNoFireTick = true;
 
+    public static boolean chargesToXPBottles = true;
+
     public static int lowEquipmentRepairAmount = 50;
     public static int mediumEquipmentRepairAmount = 100;
     public static int highEquipmentRepairAmount = 500;
@@ -31,6 +33,9 @@ public class ItemConfig {
 
         config.setCategoryComment("Fire", "Special settings for fire blocks, etc.");
         removeOnNoFireTick = config.getBool("Fire", "Remove On No Fire Tick", removeOnNoFireTick, "If set to false, when the doFireTick gamerule is set to false, instead of removing all custom fire such as Hellfire, the fire simply stops spreading instead, this is useful for decorative fire on adventure maps and servers.");
+
+        config.setCategoryComment("Charge", "Settings for Charges");
+        chargesToXPBottles = config.getBool("Charge", "Enable Charge to XP Bottle Infusion", chargesToXPBottles, "If true, Charge items can be placed into the Infuser with an Empty Bottle to make XP Bottles.");
 
         config.setCategoryComment("Equipment", "Settings for Crafted Equipment");
         lowEquipmentRepairAmount = config.getInt("Equipment", "Equipment Repair Amount Low", lowEquipmentRepairAmount, "The amount of Sharpness or Mana Low tier Equipment repair items give.");

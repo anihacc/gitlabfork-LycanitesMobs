@@ -30,7 +30,7 @@ public class AttackMeleeGoal extends EntityAIBase {
 
     // Pathing:
 	private int failedPathFindingPenalty;
-	private int failedPathFindingPenaltyMax = 0;
+	private int failedPathFindingPenaltyMax = 40;
     private int repathTime;
 	
 	// ==================================================
