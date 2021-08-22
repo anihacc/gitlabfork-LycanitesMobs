@@ -5,6 +5,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.MathHelper;
 
 public class ModelTemplateQuadruped extends ModelCreatureObj {
+    protected float legAnimationScale = 1;
 
     // ==================================================
     //                 Animate Part
@@ -44,19 +45,21 @@ public class ModelTemplateQuadruped extends ModelCreatureObj {
         }
 
         // Walking:
-        float walkSwing = 0.6F;
-        if(partName.contains("armleft") || partName.equals("wingright")) {
-            rotX += Math.toDegrees(MathHelper.cos(time * walkSwing) * 1.0F * distance * 0.5F);
-            rotZ -= Math.toDegrees(MathHelper.cos(time * walkSwing) * 0.5F * distance * 0.5F);
+        if (this.legAnimationScale != 0) {
+            float walkSwing = 0.6F * this.legAnimationScale;
+            if (partName.contains("armleft") || partName.equals("wingright")) {
+                rotX += Math.toDegrees(MathHelper.cos(time * walkSwing) * 1.0F * distance * 0.5F);
+                rotZ -= Math.toDegrees(MathHelper.cos(time * walkSwing) * 0.5F * distance * 0.5F);
+            }
+            if (partName.contains("armright") || partName.equals("wingleft")) {
+                rotX += Math.toDegrees(MathHelper.cos(time * walkSwing + (float) Math.PI) * 1.0F * distance * 0.5F);
+                rotZ += Math.toDegrees(MathHelper.cos(time * walkSwing + (float) Math.PI) * 0.5F * distance * 0.5F);
+            }
+            if (partName.equals("legrightfront") || partName.equals("legleftback") || partName.equals("wingright"))
+                rotX += Math.toDegrees(MathHelper.cos(time * 0.6662F + (float) Math.PI) * walkSwing * distance);
+            if (partName.equals("legleftfront") || partName.equals("legrightback") || partName.equals("wingleft"))
+                rotX += Math.toDegrees(MathHelper.cos(time * 0.6662F) * walkSwing * distance);
         }
-        if(partName.contains("armright") || partName.equals("wingleft")) {
-            rotX += Math.toDegrees(MathHelper.cos(time * walkSwing + (float)Math.PI) * 1.0F * distance * 0.5F);
-            rotZ += Math.toDegrees(MathHelper.cos(time * walkSwing + (float)Math.PI) * 0.5F * distance * 0.5F);
-        }
-        if(partName.equals("legrightfront") || partName.equals("legleftback") || partName.equals("wingright"))
-            rotX += Math.toDegrees(MathHelper.cos(time * 0.6662F + (float)Math.PI) * walkSwing * distance);
-        if(partName.equals("legleftfront") || partName.equals("legrightback") || partName.equals("wingleft"))
-            rotX += Math.toDegrees(MathHelper.cos(time * 0.6662F) * walkSwing * distance);
 
         // Jumping/Flying:
         if(entity != null && !entity.onGround && !entity.isInWater()) {
