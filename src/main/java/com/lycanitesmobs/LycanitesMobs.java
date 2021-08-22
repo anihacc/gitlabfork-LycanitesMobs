@@ -23,7 +23,7 @@ import com.lycanitesmobs.core.mobevent.MobEventListener;
 import com.lycanitesmobs.core.mobevent.MobEventManager;
 import com.lycanitesmobs.core.mods.DLDungeons;
 import com.lycanitesmobs.core.network.PacketHandler;
-import com.lycanitesmobs.core.pets.DonationFamiliars;
+import com.lycanitesmobs.core.pets.PlayerFamiliars;
 import com.lycanitesmobs.core.spawner.SpawnerEventListener;
 import com.lycanitesmobs.core.spawner.SpawnerManager;
 import com.lycanitesmobs.core.tileentity.EquipmentInfuserTileEntity;
@@ -70,6 +70,7 @@ public class LycanitesMobs {
 	public static final String version = versionNumber + " - MC " + versionMC;
 	public static final String website = "https://lycanitesmobs.com";
 	public static final String websiteAPI = "https://api.lycanitesmobs.com";
+	public static final String serviceAPI = "https://service.lycanitesmobs.com/api/v1";
 	public static final String twitter = "https://twitter.com/Lycanite05";
 	public static final String patreon = "https://www.patreon.com/lycanite";
 	public static final String discord = "https://discord.gg/bFpV3z4";
@@ -141,12 +142,12 @@ public class LycanitesMobs {
 		MinecraftForge.EVENT_BUS.register(ProjectileManager.getInstance());
 
 		// Familiars:
-		DonationFamiliars.instance.familiarBlacklist = new ArrayList<>();
+		PlayerFamiliars.INSTANCE.familiarBlacklist = new ArrayList<>();
 		String[] familiarBlacklist = config.getStringList("Extras", "Familiar Username Blacklist", new String[] {}, "Donation Familiars help support the development of this mod but can be turned of for individual players be adding their username to this list.");
-		DonationFamiliars.instance.familiarBlacklist.addAll(Arrays.asList(familiarBlacklist));
+		PlayerFamiliars.INSTANCE.familiarBlacklist.addAll(Arrays.asList(familiarBlacklist));
 
 		// Version Checker:
-		VersionChecker.enabled = config.getBool("Extras", "Version Checker", VersionChecker.enabled, "Set to false to disable the version checker.");
+		VersionChecker.INSTANCE.enabled = config.getBool("Extras", "Version Checker", VersionChecker.INSTANCE.enabled, "Set to false to disable the version checker.");
 
 		// Network:
 		packetHandler.init();

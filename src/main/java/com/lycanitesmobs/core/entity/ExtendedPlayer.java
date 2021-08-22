@@ -8,7 +8,7 @@ import com.lycanitesmobs.core.info.*;
 import com.lycanitesmobs.core.item.equipment.ItemEquipment;
 import com.lycanitesmobs.core.item.temp.ItemStaffSummoning;
 import com.lycanitesmobs.core.network.*;
-import com.lycanitesmobs.core.pets.DonationFamiliars;
+import com.lycanitesmobs.core.pets.PlayerFamiliars;
 import com.lycanitesmobs.core.pets.PetEntry;
 import com.lycanitesmobs.core.pets.PetManager;
 import com.lycanitesmobs.core.pets.SummonSet;
@@ -252,8 +252,8 @@ public class ExtendedPlayer implements IExtendedPlayer {
 
 			// Mod Version Check:
 			if (this.player.getEntityWorld().isRemote) {
-				VersionChecker.VersionInfo latestVersion = VersionChecker.getLatestVersion(true);
-				if (latestVersion != null && latestVersion.isNewer && VersionChecker.enabled) {
+				VersionChecker.VersionInfo latestVersion = VersionChecker.INSTANCE.getLatestVersion();
+				if (latestVersion != null && latestVersion.isNewer && VersionChecker.INSTANCE.enabled) {
 					this.player.sendMessage(new TextComponentString(LanguageManager.translate("lyc.version.newer").replace("{current}", LycanitesMobs.versionNumber).replace("{latest}", latestVersion.versionNumber)));
 				}
 			}
@@ -343,7 +343,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
 
 
 	public void loadFamiliars() {
-		Map<UUID, PetEntry> playerFamiliars = DonationFamiliars.instance.getFamiliarsForPlayer(this.player);
+		Map<UUID, PetEntry> playerFamiliars = PlayerFamiliars.INSTANCE.getFamiliarsForPlayer(this.player);
 		if (!playerFamiliars.isEmpty()) {
 			for (PetEntry petEntry : playerFamiliars.values()) {
 				if (this.petManager.hasEntry(petEntry)) {
