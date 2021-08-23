@@ -1,12 +1,17 @@
 package com.lycanitesmobs.core.entity.goals.actions.abilities;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.entity.goals.BaseGoal;
+import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
+import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 
 public class FireProjectilesGoal extends BaseGoal {
 	protected String projectileName;
@@ -20,6 +25,7 @@ public class FireProjectilesGoal extends BaseGoal {
 	private boolean allPlayers = false;
 	private int randomCount = 0;
 	protected int phase = -1;
+	protected boolean overhead = false;
 
 	private int abilityTime = 60;
 	private Entity attackTarget;
@@ -124,6 +130,16 @@ public class FireProjectilesGoal extends BaseGoal {
 	}
 
 	/**
+	 * Sets overhead projectile summoning where instead the projectile is spawned above the target.
+	 * @param overhead Whether to enable overhead or not.
+	 * @return This goal for chaining.
+	 */
+	public FireProjectilesGoal setOverhead(boolean overhead) {
+		this.overhead = overhead;
+		return this;
+	}
+
+	/**
 	 * Sets if projectiles should be fired at all players.
 	 * @param allPlayers True to target all players (requires FindNearbyPlayers goal) otherwise the current attack target is used.
 	 * @return This goal for chaining.
@@ -192,7 +208,7 @@ public class FireProjectilesGoal extends BaseGoal {
 				if(this.projectileName != null) {
 					this.host.fireProjectile(this.projectileName, null, this.host.getRNG().nextFloat() * 10, this.host.getRNG().nextFloat() * this.angle, this.offset, this.velocity, this.scale, this.inaccuracy);
 				}
-				if(this.projectileClass != null) {
+				else if(this.projectileClass != null) {
 					this.host.fireProjectile(this.projectileClass, null, this.host.getRNG().nextFloat() * 10, this.host.getRNG().nextFloat() * this.angle, this.offset, this.velocity, this.scale, this.inaccuracy);
 				}
 			}
@@ -204,15 +220,53 @@ public class FireProjectilesGoal extends BaseGoal {
     }
 
 	/**
-	 * Calls the hosts fire projectile from this goal.
+	 * Fires a projectile towards a target.
 	 * @param target The target to fire at.
 	 */
-	public void fireProjectile(Entity target) {
-		if(this.projectileName != null) {
-			this.host.fireProjectile(this.projectileName, target, this.host.getDistance(target), this.angle, this.offset, this.velocity, this.scale, this.inaccuracy);
+	public BaseProjectileEntity fireProjectile(Entity target) {
+		BaseProjectileEntity projectile = this.createProjectile();
+		if (this.overhead) {
+			this.fireProjectileOverhead(projectile);
 		}
-		if(this.projectileClass != null) {
-			this.host.fireProjectile(this.projectileClass, target, this.host.getDistance(target), this.angle, this.offset, this.velocity, this.scale, this.inaccuracy);
+		else {
+			this.host.fireProjectile(projectile, target, this.host.getDistance(target), this.angle, this.offset, this.velocity, this.scale, this.inaccuracy);
 		}
+		return projectile;
+	}
+
+	public BaseProjectileEntity createProjectile() {
+		BaseProjectileEntity projectile = null;
+		if (this.projectileName != null) {
+			ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile(this.projectileName);
+			if (projectileInfo == null) {
+				return projectile;
+			}
+			projectile = projectileInfo.createProjectile(this.host.getEntityWorld(), this.host);
+		}
+		else if (this.projectileClass != null) {
+			try {
+				projectile = this.projectileClass.getConstructor(World.class, EntityLivingBase.class).newInstance(this.host.getEntityWorld(), this.host);
+			}
+			catch (Exception e) {
+				LycanitesMobs.logWarning("", "Unable to create a projectile from the class: " + this.projectileClass);
+			}
+		}
+
+		if (projectile != null) {
+			projectile.setProjectileScale(this.scale);
+		}
+		return projectile;
+	}
+
+	/**
+	 * Moves the provided projectile so that it is above the target and will drop down on them.
+	 * If there is no target, the host entity will drop a projectile onto themselves instead.
+	 * @param projectile The newly fired projectile.
+	 */
+	public void fireProjectileOverhead(BaseProjectileEntity projectile) {
+		Entity target = this.attackTarget != null ? this.attackTarget : this.host;
+		projectile.shoot(0, -1, 0, 0.5F, this.inaccuracy);
+		projectile.setPosition(target.getPosition().getX(), target.getPosition().getY() + this.offset.y + this.host.getRNG().nextDouble() * 3, target.getPosition().getZ());
+		this.host.getEntityWorld().spawnEntity(projectile);
 	}
 }

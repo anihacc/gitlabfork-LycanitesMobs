@@ -67,8 +67,8 @@ public class EntityAmalgalich extends BaseCreatureEntity implements IMob, IGroup
         this.tasks.addTask(this.nextIdleGoalIndex, new FaceTargetGoal(this));
         this.tasks.addTask(this.nextIdleGoalIndex, new HealWhenNoPlayersGoal(this));
         this.tasks.addTask(this.nextIdleGoalIndex, new SummonMinionsGoal(this).setMinionInfo("banshee").setAntiFlight(true));
-        this.tasks.addTask(this.nextIdleGoalIndex, new FireProjectilesGoal(this).setProjectile("spectralbolt").setFireRate(40).setVelocity(1.0F).setScale(8F).setAllPlayers(true));
-        this.tasks.addTask(this.nextIdleGoalIndex, new FireProjectilesGoal(this).setProjectile("spectralbolt").setFireRate(60).setVelocity(1.0F).setScale(8F));
+        this.tasks.addTask(this.nextIdleGoalIndex, new FireProjectilesGoal(this).setProjectile("spectralbolt").setFireRate(40).setVelocity(1.0F).setScale(8F).setAllPlayers(true).setOverhead(true).setOffset(new Vec3d(0, 6, 0)));
+        this.tasks.addTask(this.nextIdleGoalIndex, new FireProjectilesGoal(this).setProjectile("spectralbolt").setFireRate(60).setVelocity(1.0F).setScale(8F).setOverhead(true).setOffset(new Vec3d(0, 8, 0)));
         this.tasks.addTask(this.nextIdleGoalIndex, new EffectAuraGoal(this).setEffect("decay").setAmplifier(0).setEffectSeconds(5).setRange(52).setCheckSight(false));
 
         // Phase 1:
