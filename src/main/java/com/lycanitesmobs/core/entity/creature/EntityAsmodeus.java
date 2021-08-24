@@ -8,7 +8,6 @@ import com.lycanitesmobs.core.entity.goals.GoalConditions;
 import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
 import com.lycanitesmobs.core.entity.goals.actions.FindNearbyPlayersGoal;
 import com.lycanitesmobs.core.entity.goals.actions.abilities.FaceTargetGoal;
-import com.lycanitesmobs.core.entity.goals.actions.abilities.FireProjectilesGoal;
 import com.lycanitesmobs.core.entity.goals.actions.abilities.HealWhenNoPlayersGoal;
 import com.lycanitesmobs.core.entity.goals.actions.abilities.SummonMinionsGoal;
 import com.lycanitesmobs.core.entity.navigate.ArenaNode;
@@ -59,7 +58,7 @@ public class EntityAsmodeus extends BaseCreatureEntity implements IMob, IGroupHe
 
     public boolean firstPlayerTargetCheck = false;
     public List<EntityAstaroth> astarothMinions = new ArrayList<>();
-    public List<EntityCacodemon> cacodemonMinions = new ArrayList<>();
+    public List<EntityGrell> grellMinions = new ArrayList<>();
 
     // First Phase:
     public int devilstarStreamTime = 0;
@@ -193,10 +192,10 @@ public class EntityAsmodeus extends BaseCreatureEntity implements IMob, IGroupHe
                         this.astarothMinions.remove(minion);
                 }
             }
-            if(!this.cacodemonMinions.isEmpty()) {
-                for (EntityCacodemon minion : this.cacodemonMinions.toArray(new EntityCacodemon[this.cacodemonMinions.size()])) {
+            if(!this.grellMinions.isEmpty()) {
+                for (EntityGrell minion : this.grellMinions.toArray(new EntityGrell[this.grellMinions.size()])) {
                     if(minion == null || !minion.isEntityAlive() || minion.getMasterTarget() != this)
-                        this.cacodemonMinions.remove(minion);
+                        this.grellMinions.remove(minion);
                 }
             }
         }
@@ -365,13 +364,13 @@ public class EntityAsmodeus extends BaseCreatureEntity implements IMob, IGroupHe
                 }
             }
 
-            // Summon Cacodemon:
-            if(this.cacodemonMinions.size() < playerCount * 6 && this.updateTick % 10 * 20 == 0) {
+            // Summon Grell:
+            if(this.grellMinions.size() < playerCount * 6 && this.updateTick % 10 * 20 == 0) {
                 for (int i = 0; i < 5 * playerCount; i++) {
-                    EntityCacodemon minion = (EntityCacodemon)CreatureManager.getInstance().getCreature("cacodemon").createEntity(this.getEntityWorld());
+                    EntityGrell minion = (EntityGrell)CreatureManager.getInstance().getCreature("grell").createEntity(this.getEntityWorld());
                     this.summonMinion(minion, this.getRNG().nextDouble() * 360, 10);
                     minion.posY += 10 + this.getRNG().nextInt(20);
-                    this.cacodemonMinions.add(minion);
+                    this.grellMinions.add(minion);
                 }
             }
 
@@ -409,7 +408,7 @@ public class EntityAsmodeus extends BaseCreatureEntity implements IMob, IGroupHe
     // ========== Set Attack Target ==========
     @Override
     public boolean canAttackEntity(EntityLivingBase target) {
-    	if(target instanceof EntityTrite || target instanceof EntityCacodemon ||  target instanceof EntityAstaroth)
+    	if(target instanceof EntityTrite || target instanceof EntityGrell ||  target instanceof EntityAstaroth)
     		return false;
         return super.canAttackEntity(target);
     }
@@ -483,8 +482,8 @@ public class EntityAsmodeus extends BaseCreatureEntity implements IMob, IGroupHe
         if(minion instanceof EntityAstaroth && this.astarothMinions.contains(minion)) {
             this.astarothMinions.remove(minion);
         }
-        if(minion instanceof EntityCacodemon && this.cacodemonMinions.contains(minion)) {
-            this.cacodemonMinions.remove(minion);
+        if(minion instanceof EntityGrell && this.grellMinions.contains(minion)) {
+            this.grellMinions.remove(minion);
         }
         super.onMinionDeath(minion, damageSource);
     }
