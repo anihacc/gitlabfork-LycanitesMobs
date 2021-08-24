@@ -19,10 +19,7 @@ import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class CreatureManager extends JSONLoader {
 	public static CreatureManager INSTANCE;
@@ -184,13 +181,13 @@ public class CreatureManager extends JSONLoader {
 		this.difficultyMultipliers = new HashMap<>();
 		for(String difficultyName : DIFFICULTY_NAMES) {
 			for(String statName : CreatureStats.STAT_NAMES) {
-				this.difficultyMultipliers.put((difficultyName + "-" + statName).toUpperCase(), ConfigCreatures.INSTANCE.difficultyMultipliers.get(difficultyName).get(statName).get());
+				this.difficultyMultipliers.put((difficultyName + "-" + statName).toUpperCase(Locale.ENGLISH), ConfigCreatures.INSTANCE.difficultyMultipliers.get(difficultyName).get(statName).get());
 			}
 		}
 
 		// Level:
 		for(String statName : CreatureStats.STAT_NAMES) {
-			this.levelMultipliers.put(statName.toUpperCase(), ConfigCreatures.INSTANCE.levelMultipliers.get(statName).get());
+			this.levelMultipliers.put(statName.toUpperCase(Locale.ENGLISH), ConfigCreatures.INSTANCE.levelMultipliers.get(statName).get());
 		}
 	}
 
@@ -329,7 +326,7 @@ public class CreatureManager extends JSONLoader {
 	 * @return The multiplier.
 	 */
 	public double getDifficultyMultiplier(String difficultyName, String statName) {
-		String key = difficultyName.toUpperCase() + "-" + statName.toUpperCase();
+		String key = difficultyName.toUpperCase(Locale.ENGLISH) + "-" + statName.toUpperCase(Locale.ENGLISH);
 		if(!this.difficultyMultipliers.containsKey(key)) {
 			return 1;
 		}
@@ -342,9 +339,9 @@ public class CreatureManager extends JSONLoader {
 	 * @return The multiplier.
 	 */
 	public double getLevelMultiplier(String statName) {
-		if(!this.levelMultipliers.containsKey(statName.toUpperCase())) {
+		if(!this.levelMultipliers.containsKey(statName.toUpperCase(Locale.ENGLISH))) {
 			return 1;
 		}
-		return this.levelMultipliers.get(statName.toUpperCase());
+		return this.levelMultipliers.get(statName.toUpperCase(Locale.ENGLISH));
 	}
 }

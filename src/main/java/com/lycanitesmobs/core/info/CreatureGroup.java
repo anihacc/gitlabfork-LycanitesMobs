@@ -15,6 +15,7 @@ import net.minecraft.util.ResourceLocation;
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class CreatureGroup {
 	/** A list of all creatures in this group. **/
@@ -106,7 +107,7 @@ public class CreatureGroup {
 
 		// Interactions:
 		if(json.has("default")) {
-			this.defaultInteraction = Interaction.valueOf(json.get("default").getAsString().toUpperCase());
+			this.defaultInteraction = Interaction.valueOf(json.get("default").getAsString().toUpperCase(Locale.ENGLISH));
 		}
 
 		// Special Entities:

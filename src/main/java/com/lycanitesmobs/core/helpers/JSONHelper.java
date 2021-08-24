@@ -16,10 +16,7 @@ import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class JSONHelper {
 
@@ -201,7 +198,7 @@ public class JSONHelper {
 			else if (!"NONE".equalsIgnoreCase(biomeEntry)) {
 				BiomeDictionary.Type biomeType = null;
 				try {
-					biomeType = BiomeDictionary.Type.getType(biomeEntry.toUpperCase());
+					biomeType = BiomeDictionary.Type.getType(biomeEntry.toUpperCase(Locale.ENGLISH));
 				} catch (Exception e) {
 					LycanitesMobs.logWarning("", "[Spawning] Unknown biome type " + biomeEntry + " this will be ignored and treated as NONE.");
 				}
