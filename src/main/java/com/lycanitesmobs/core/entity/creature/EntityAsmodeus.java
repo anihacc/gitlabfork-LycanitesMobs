@@ -110,7 +110,7 @@ public class EntityAsmodeus extends BaseCreatureEntity implements IMob, IGroupHe
         // All Phases:
         this.goalSelector.addGoal(this.nextIdleGoalIndex, new FaceTargetGoal(this));
         this.goalSelector.addGoal(this.nextIdleGoalIndex, new HealWhenNoPlayersGoal(this));
-        this.goalSelector.addGoal(this.nextIdleGoalIndex, new SummonMinionsGoal(this).setMinionInfo("spectre").setAntiFlight(true));
+        this.goalSelector.addGoal(this.nextIdleGoalIndex, new SummonMinionsGoal(this).setMinionInfo("grigori").setAntiFlight(true));
 
         this.aiRangedAttack = new AttackRangedGoal(this).setSpeed(1.0D).setStaminaTime(200).setStaminaDrainRate(3).setRange(90.0F).setChaseTime(0).setCheckSight(false);
         this.goalSelector.addGoal(this.nextCombatGoalIndex++, this.aiRangedAttack);
