@@ -13,6 +13,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class AltarInfo {
@@ -54,7 +55,7 @@ public class AltarInfo {
                 defaultValue = 10D;
             if("Speed".equalsIgnoreCase(statName))
                 defaultValue = 1.5D;
-            rareSubspeciesMutlipliers.put(statName.toUpperCase(), config.getDouble("Altars", statName + " Altar Stat Multiplier", defaultValue));
+            rareSubspeciesMutlipliers.put(statName.toUpperCase(Locale.ENGLISH), config.getDouble("Altars", statName + " Altar Stat Multiplier", defaultValue));
         }
     }
 

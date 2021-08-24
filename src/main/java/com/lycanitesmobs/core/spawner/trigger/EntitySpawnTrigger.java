@@ -12,6 +12,7 @@ import net.minecraft.util.ResourceLocation;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 
 public abstract class EntitySpawnTrigger extends SpawnTrigger {
 
@@ -40,7 +41,7 @@ public abstract class EntitySpawnTrigger extends SpawnTrigger {
 			JsonArray jsonArray = json.get("entityTypes").getAsJsonArray();
 			Iterator<JsonElement> jsonIterator = jsonArray.iterator();
 			while (jsonIterator.hasNext()) {
-				EnumCreatureAttribute entityType = EnumCreatureAttribute.valueOf(jsonIterator.next().getAsString().toUpperCase());
+				EnumCreatureAttribute entityType = EnumCreatureAttribute.valueOf(jsonIterator.next().getAsString().toUpperCase(Locale.ENGLISH));
 				if(entityType != null) {
 					entityTypes.add(entityType);
 				}

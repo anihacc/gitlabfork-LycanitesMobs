@@ -4,6 +4,8 @@ import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.Variant;
 import net.minecraft.world.EnumDifficulty;
 
+import java.util.Locale;
+
 /** Manages the stats of an EntityCreature. This applies difficulty multipliers, subspecies, levels, etc also. **/
 public class CreatureStats {
 	/** The base amount of experience needed to level up, this is increased by the creature's level scaled. **/
@@ -298,7 +300,7 @@ public class CreatureStats {
 			difficultyName = "Hard";
 		else if(difficulty == EnumDifficulty.NORMAL)
 			difficultyName = "Normal";
-		return CreatureManager.getInstance().getDifficultyMultiplier(difficultyName.toUpperCase(), stat.toUpperCase());
+		return CreatureManager.getInstance().getDifficultyMultiplier(difficultyName.toUpperCase(Locale.ENGLISH), stat.toUpperCase(Locale.ENGLISH));
 	}
 
 
@@ -308,8 +310,8 @@ public class CreatureStats {
 	 * @return The stat multiplier.
 	 */
 	protected double getVariantMultiplier(String stat) {
-		if(this.entity.getVariant() != null && Variant.STAT_MULTIPLIERS.containsKey(this.entity.getVariant().rarity.toUpperCase() + "-" + stat.toUpperCase())) {
-			return Variant.STAT_MULTIPLIERS.get(this.entity.getVariant().rarity.toUpperCase() + "-" + stat.toUpperCase());
+		if(this.entity.getVariant() != null && Variant.STAT_MULTIPLIERS.containsKey(this.entity.getVariant().rarity.toUpperCase(Locale.ENGLISH) + "-" + stat.toUpperCase(Locale.ENGLISH))) {
+			return Variant.STAT_MULTIPLIERS.get(this.entity.getVariant().rarity.toUpperCase(Locale.ENGLISH) + "-" + stat.toUpperCase(Locale.ENGLISH));
 		}
 		return 1;
 	}
@@ -322,7 +324,7 @@ public class CreatureStats {
 	 */
 	protected double getLevelMultiplier(String stat) {
 		double statLevel = Math.max(0, this.entity.getLevel() - 1);
-		return 1 + (statLevel * CreatureManager.getInstance().getLevelMultiplier(stat.toUpperCase()));
+		return 1 + (statLevel * CreatureManager.getInstance().getLevelMultiplier(stat.toUpperCase(Locale.ENGLISH)));
 	}
 
 	/**

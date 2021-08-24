@@ -9,6 +9,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.world.World;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class Variant {
@@ -107,7 +108,7 @@ public class Variant {
                 if(foundOldStatsCategory) {
 					defaultValue = config.getDouble("Subspecies Multipliers", subspeciesName + " " + statName, defaultValue);
 				}
-                STAT_MULTIPLIERS.put((subspeciesName + "-" + statName).toUpperCase(), config.getDouble("Variant Multipliers", subspeciesName + " " + statName, defaultValue));
+                STAT_MULTIPLIERS.put((subspeciesName + "-" + statName).toUpperCase(Locale.ENGLISH), config.getDouble("Variant Multipliers", subspeciesName + " " + statName, defaultValue));
             }
         }
 
