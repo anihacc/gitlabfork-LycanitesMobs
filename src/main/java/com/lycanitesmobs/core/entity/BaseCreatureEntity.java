@@ -129,10 +129,6 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     /** A scale relative to this entity's height for melee and ranged hit collision. **/
     public float hitAreaHeightScale = 1;
 
-    // Collision Optimisation:
-	double movementBbExcess = 0;
-	double movementBbOriginalWidth = 0;
-
 	// Stats:
 	/** The level of this mob, higher levels increase the stat multipliers by a small amount. **/
 	protected int mobLevel = 1;
@@ -2097,61 +2093,6 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
         }
         return this.isStrongSwimmer();
     }
-
-	@Override
-	public void move(MoverType type, Vector3d pos) {
-		this.toggleMovementBoundingBox(true);
-		double x = Math.max(Math.min(pos.x(), 10), -10);
-		double y = Math.max(Math.min(pos.y(), 10), -10);
-		double z = Math.max(Math.min(pos.z(), 10), -10);
-		super.move(type, new Vector3d(x, y, z));
-		this.toggleMovementBoundingBox(false);
-	}
-
-	/**
-	 * Overridden to take into account movement collision optimisations.
-	 * Only applies to larger mobs.
-	 * @return True if considered in a wall (for suffocation damage, etc).
-	 */
-	@Override
-	public boolean isInWall() {
-		if (this.getBbWidth() <= 2) {
-			return super.isInWall();
-		}
-		if (this.noPhysics || this.isSleeping()) {
-			return false;
-		}
-
-		float testWidth = Math.min(this.getBbWidth(), 2F) * 0.8F;
-		AxisAlignedBB axisalignedbb = AxisAlignedBB.ofSize(testWidth, 0.1F, testWidth).move(this.getX(), this.getEyeY(), this.getZ());
-		this.toggleMovementBoundingBox(true);
-		boolean inWall = this.level.getBlockCollisions(this, axisalignedbb, (blockState, blockPos) -> blockState.isSuffocating(this.level, blockPos)).findAny().isPresent();
-		this.toggleMovementBoundingBox(false);
-		return inWall;
-	}
-
-	/**
-	 * Inflates or deflates the bounding box of this creature for movement and suffocation checks for performance.
-	 * Only applies to creatures above a certain threshold.
-	 * @param deflate If true, the bounding box is deflated, if false, it is restored.
-	 */
-	protected void toggleMovementBoundingBox(boolean deflate) {
-		double widthCap = 2;
-
-		if (deflate) {
-			this.movementBbOriginalWidth = this.getBbWidth();
-			if (this.movementBbOriginalWidth <= widthCap) {
-				return;
-			}
-			this.movementBbExcess = this.movementBbOriginalWidth - widthCap;
-			this.setBoundingBox(this.getBoundingBox().inflate(-this.movementBbExcess, 0, -this.movementBbExcess));
-			return;
-		}
-
-		if (this.movementBbOriginalWidth > widthCap) {
-			this.setBoundingBox(this.getBoundingBox().inflate(this.movementBbExcess, 0, this.movementBbExcess));
-		}
-	}
 
     // ========== Move with Heading ==========
     /** Moves the entity, redirects to the direct navigator if this mob should use that instead. **/
