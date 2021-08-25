@@ -1,7 +1,5 @@
 package com.lycanitesmobs.core.entity;
 
-import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.block.BlockFluidBase;
 import com.lycanitesmobs.core.dungeon.definition.DungeonTheme;
 import com.lycanitesmobs.core.dungeon.definition.ThemeBlock;
 import net.minecraft.block.Block;
@@ -14,12 +12,14 @@ import net.minecraftforge.fluids.IFluidBlock;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CreatureStructure {
 	protected BaseCreatureEntity owner;
 	protected DungeonTheme dungeonTheme;
-	protected List<CreatureBuildTask> buildTasks = new ArrayList<>();
+	protected Map<Integer, List<CreatureBuildTask>> buildTasks = new HashMap<>();
 	protected BlockPos origin;
 
 	protected BlockPos startPos;
@@ -55,18 +55,19 @@ public class CreatureStructure {
 	 */
 	public void refreshBuildTasks() {
 		this.buildTasks.clear();
+		int radius = 8;
 
 		// Check if started:
-		if (!this.isStarted()) {
+		if (!this.isPhaseComplete(0)) {
 			this.createBuildTask(
 				this.dungeonTheme.getCeiling(null, '1', this.owner.getRNG()),
-				this.startPos
+				this.startPos,
+				0
 			);
 			return;
 		}
 
 		// A simple box for now. TODO Try to use Dungeon Sector?
-		int radius = 8;
 		for (int x = -radius; x <= radius; x++) {
 			for (int y = -radius; y <= radius; y++) {
 				for (int z = -radius; z <= radius; z++) {
@@ -118,7 +119,7 @@ public class CreatureStructure {
 
 					// Create Build Task If Different:
 					if (blockState != null && this.owner.getEntityWorld().getBlockState(blockPos).getBlock() != blockState.getBlock()) {
-						this.createBuildTask(blockState, blockPos);
+						this.createBuildTask(blockState, blockPos, 1);
 					}
 				}
 			}
@@ -131,21 +132,27 @@ public class CreatureStructure {
 					if (Math.abs(x) < (radius / 4) + 1 && Math.abs(z) < (radius / 4) + 1) {
 						continue;
 					}
+
+					BlockPos blockPos = this.origin.add(x, y, z);
+
+					// Check Placement:
+					if (!this.shouldBuildAt(blockPos)) {
+						continue;
+					}
+
 					for (int pitLayer = 1; pitLayer <= (radius / 2); pitLayer++) {
 						if (y == radius - pitLayer && Math.abs(x) < (radius - pitLayer) && Math.abs(z) < (radius - pitLayer)) {
-							BlockPos blockPos = this.origin.add(x, y, z);
 							IBlockState blockState = this.dungeonTheme.getPit('1', this.owner.getRNG());
 							if (this.owner.getEntityWorld().getBlockState(blockPos).getBlock() != blockState.getBlock()) {
-								this.createBuildTask(blockState, blockPos);
+								this.createBuildTask(blockState, blockPos, 2);
 							}
 						}
 					}
 					for (int pitLayer = 1; pitLayer <= (radius / 2); pitLayer++) {
 						if (y == -radius + pitLayer && Math.abs(x) < (radius - pitLayer) && Math.abs(z) < (radius - pitLayer)) {
-							BlockPos blockPos = this.origin.add(x, y, z);
 							IBlockState blockState = this.dungeonTheme.getPit('1', this.owner.getRNG());
 							if (this.owner.getEntityWorld().getBlockState(blockPos).getBlock() != blockState.getBlock()) {
-								this.createBuildTask(blockState, blockPos);
+								this.createBuildTask(blockState, blockPos, 2);
 							}
 						}
 					}
@@ -159,9 +166,15 @@ public class CreatureStructure {
 				for (int z = -radius; z <= radius; z++) {
 					if (Math.abs(x) < (radius / 4) + 1 && y <= -(radius / 2) && y > -radius && Math.abs(z) < (radius / 4) + 1) {
 						BlockPos blockPos = this.origin.add(x, y, z);
+
+						// Check Placement:
+						if (!this.shouldBuildAt(blockPos)) {
+							continue;
+						}
+
 						IBlockState blockState = this.dungeonTheme.getPit('2', this.owner.getRNG());
 						if (this.owner.getEntityWorld().getBlockState(blockPos).getBlock() != blockState.getBlock()) {
-							this.createBuildTask(blockState, blockPos);
+							this.createBuildTask(blockState, blockPos, 3);
 						}
 					}
 				}
@@ -176,18 +189,28 @@ public class CreatureStructure {
 	 * @param blockState The block state to place.
 	 * @param blockPos The position to place at.
 	 */
-	public void createBuildTask(IBlockState blockState, BlockPos blockPos) {
-		// Removing Existing Tasks In Same Position:
-		List<CreatureBuildTask> removeTasks = new ArrayList<>();
-		for (CreatureBuildTask creatureBuildTask : this.buildTasks) {
-			if (creatureBuildTask.pos.equals(blockPos)) {
-				removeTasks.add(creatureBuildTask);
+	public void createBuildTask(IBlockState blockState, BlockPos blockPos, int phase) {
+		if (!this.buildTasks.containsKey(phase)) {
+			this.buildTasks.put(phase, new ArrayList<>());
+		}
+
+		// Remove Existing Tasks Using Same Block Position:
+		for (int checkPhase = 0; checkPhase < this.buildTasks.size(); checkPhase++) {
+			if (!this.buildTasks.containsKey(checkPhase)) {
+				continue;
+			}
+			List<CreatureBuildTask> removeTasks = new ArrayList<>();
+			for (CreatureBuildTask creatureBuildTask : this.buildTasks.get(checkPhase)) {
+				if (creatureBuildTask.pos.equals(blockPos)) {
+					removeTasks.add(creatureBuildTask);
+				}
+			}
+			for (CreatureBuildTask creatureBuildTask : removeTasks) {
+				this.buildTasks.get(checkPhase).remove(creatureBuildTask);
 			}
 		}
-		for (CreatureBuildTask creatureBuildTask : removeTasks) {
-			this.buildTasks.remove(creatureBuildTask);
-		}
-		this.buildTasks.add(new CreatureBuildTask(blockState, blockPos));
+
+		this.buildTasks.get(phase).add(new CreatureBuildTask(blockState, blockPos, phase));
 	}
 
 	/**
@@ -213,6 +236,69 @@ public class CreatureStructure {
 			return true;
 		}
 		return false;
+	}
+
+	@Nullable
+	public CreatureBuildTask takeBuildTask(EntityLivingBase builder) {
+		if (this.buildTasks.isEmpty()) {
+			return null;
+		}
+		for (int phase = 0; phase < this.buildTasks.size(); phase++) {
+			if (!this.buildTasks.containsKey(phase) || this.buildTasks.get(phase).isEmpty()) {
+				continue;
+			}
+			CreatureBuildTask buildTask = null;
+			if (buildTasks.get(phase).size() == 1) {
+				buildTask = buildTasks.get(phase).get(0);
+			}
+			else {
+				buildTask = this.buildTasks.get(phase).get(builder.getRNG().nextInt(buildTasks.get(phase).size()));
+			}
+			return buildTask;
+		}
+		return null;
+	}
+
+	/**
+	 * Completes the provided build task, removing it from the build tasks list.
+	 * @param buildTask The build task to complete.
+	 */
+	public void completeBuildTask(CreatureBuildTask buildTask) {
+		for (int phase = 0; phase < this.buildTasks.size(); phase++) {
+			if (!this.buildTasks.containsKey(phase) || this.buildTasks.get(phase).isEmpty()) {
+				continue;
+			}
+			this.buildTasks.get(phase).remove(buildTask);
+		}
+	}
+
+	/**
+	 * Performs a check to see if the provided structure build phase is complete.
+	 * @param phase The phase to check.
+	 * @return True if in a hive, false if not.
+	 */
+	public boolean isPhaseComplete(int phase) {
+		return this.getBuildTaskSize(phase) == 0;
+	}
+
+	/**
+	 * Returns how many Build Tasks that are left to finish building the structure.
+	 * @param phase The build task phase.
+	 * @return How many tasks are left.
+	 */
+	public int getBuildTaskSize(int phase) {
+		if (!this.buildTasks.containsKey(phase)) {
+			return 0;
+		}
+		return this.buildTasks.get(phase).size();
+	}
+
+	/**
+	 * Returns how many Build Tasks that are left to finish building the structure for the final phase.
+	 * @return How many tasks are left.
+	 */
+	public int getFinalPhaseBuildTaskSize() {
+		return this.getBuildTaskSize(this.buildTasks.size() -1);
 	}
 
 	/**
@@ -242,37 +328,5 @@ public class CreatureStructure {
 			}
 		}
 		return false;
-	}
-
-	@Nullable
-	public CreatureBuildTask getRandomBuildTask(EntityLivingBase builder) {
-		if (this.buildTasks.isEmpty()) {
-			return null;
-		}
-		if (buildTasks.size() == 1) {
-			return buildTasks.get(0);
-		}
-		CreatureBuildTask buildTask = this.buildTasks.get(builder.getRNG().nextInt(buildTasks.size()));
-		this.buildTasks.remove(buildTask);
-		return buildTask;
-	}
-
-	/**
-	 * Performs a cheap check for initial Hive blocks.
-	 * @return True if in a hive, false if not.
-	 */
-	public boolean isStarted() {
-		if (this.isStructureBlock(this.startPos)) {
-			return true;
-		}
-		return false;
-	}
-
-	/**
-	 * Returns how many Build Tasks that are left to finish building the structure..
-	 * @return A percentage from 0.0 - 1.0 of how complete th
-	 */
-	public int getBuildTaskSize() {
-		return this.buildTasks.size();
 	}
 }

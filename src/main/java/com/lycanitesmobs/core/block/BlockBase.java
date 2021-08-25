@@ -100,7 +100,7 @@ public class BlockBase extends Block {
     }
 
     public String getDescription(ItemStack itemStack,  World world) {
-        return LanguageManager.translate("tile." + this.blockName + ".description");
+        return "\u00a7a" + LanguageManager.translate("tile." + this.blockName + ".description");
     }
 	
 	

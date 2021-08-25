@@ -127,8 +127,9 @@ public class PlaceBlockGoal extends EntityAIBase {
         // Place Block:
         if(Math.sqrt(this.host.getDistanceSq(this.pos)) <= this.range) {
         	this.host.getEntityWorld().setBlockState(this.pos, this.blockState, 3);
-            this.blockState = null;
-            this.host.clearMovement();
+			this.host.onBlockPlaced(this.pos, this.blockState);
+			this.blockState = null;
+			this.host.clearMovement();
         }
         
         // Cancel If Too Far:

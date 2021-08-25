@@ -202,6 +202,15 @@ public class EntityDarkling extends TameableCreatureEntity implements IMob {
         return true;
     }
 
+    /** Returns true if this entity can see the provided entity. **/
+    @Override
+    public boolean canEntityBeSeen(Entity target) {
+        if (target == this.getLatchTarget()) {
+            return true;
+        }
+        return super.canEntityBeSeen(target);
+    }
+
 
     // ==================================================
     //                     Abilities

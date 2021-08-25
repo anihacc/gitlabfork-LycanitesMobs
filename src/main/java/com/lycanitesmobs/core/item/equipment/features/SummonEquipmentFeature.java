@@ -63,7 +63,7 @@ public class SummonEquipmentFeature extends EquipmentFeature {
 			return null;
 		}
 		String description = LanguageManager.translate("equipment.feature." + this.featureType)
-				+ " " + LanguageManager.translate("entity." + this.summonMobId + ".name");
+				+ " " + LanguageManager.translate("entity." + this.summonMobId.replace("lycanitesmobs.", "") + ".name");
 
 		if(this.summonCountMin != this.summonCountMax) {
 			description += " x" + this.summonCountMin + " - " + this.summonCountMax;
@@ -86,7 +86,7 @@ public class SummonEquipmentFeature extends EquipmentFeature {
 		if(!this.isActive(itemStack, level)) {
 			return null;
 		}
-		return LanguageManager.translate("entity." + this.summonMobId + ".name");
+		return LanguageManager.translate("entity." + this.summonMobId.replace("lycanitesmobs.", "") + ".name");
 	}
 
 	/**

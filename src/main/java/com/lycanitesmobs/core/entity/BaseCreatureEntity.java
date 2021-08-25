@@ -4033,6 +4033,14 @@ public abstract class BaseCreatureEntity extends EntityLiving {
             return false;
         if(entity instanceof IGroupBoss)
         	return false;
+		if(entity instanceof EntityPlayer) {
+			if (((EntityPlayer)entity).isCreative()) {
+				return false;
+			}
+			if(((EntityPlayer)entity).isSpectator()) {
+				return false;
+			}
+		}
 		if(CreatureManager.getInstance().creatureGroups.containsKey("boss") && CreatureManager.getInstance().creatureGroups.get("boss").hasEntity(entity))
 			return false;
         boolean heavyTarget = entity instanceof IGroupHeavy || entity.height >= 4 || entity.width >= 4;
@@ -4579,6 +4587,15 @@ public abstract class BaseCreatureEntity extends EntityLiving {
     			entityItem.setDead();
     	}
     }
+
+	/**
+	 * Called (by ai goals) when this mob places a block.
+	 * @param blockPos The position the block was placed at.
+	 * @param blockState The block state that was placed.
+	 */
+	public void onBlockPlaced(BlockPos blockPos, IBlockState blockState) {
+
+	}
     
     
     // ==================================================

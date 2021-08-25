@@ -216,6 +216,9 @@ public class PlayerFamiliars {
 		if (species.equalsIgnoreCase("lycosa")) {
 			return "tarantula";
 		}
+		if (species.equalsIgnoreCase("jouste")) {
+			return "joust";
+		}
 		return species;
 	}
 }

@@ -1,6 +1,5 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.dungeon.DungeonManager;
 import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
@@ -9,22 +8,14 @@ import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import com.lycanitesmobs.core.entity.goals.actions.StayByHomeGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.FindAttackTargetGoal;
 import com.lycanitesmobs.core.info.CreatureManager;
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class EntityVespidQueen extends AgeableCreatureEntity implements IMob {
 	public final CreatureStructure creatureStructure;
@@ -91,7 +82,7 @@ public class EntityVespidQueen extends AgeableCreatureEntity implements IMob {
 			if (!this.hasHome()) {
 				this.creatureStructure.setOrigin(this.getPosition());
 			}
-			boolean structureStarted = this.creatureStructure.isStarted();
+			boolean structureStarted = this.creatureStructure.isPhaseComplete(0);
 			if (!structureStarted || this.updateTick % 200 == 0) {
 				this.creatureStructure.refreshBuildTasks();
 			}
@@ -100,7 +91,7 @@ public class EntityVespidQueen extends AgeableCreatureEntity implements IMob {
 			}
 
 			// Spawn Babies:
-			if(structureStarted && this.creatureStructure.getBuildTaskSize() <= 10 && this.updateTick % 60 == 0) {
+			if(structureStarted && this.creatureStructure.getFinalPhaseBuildTaskSize() <= 10 && this.updateTick % 60 == 0) {
 				this.allyUpdate();
 			}
 		}

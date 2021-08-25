@@ -39,6 +39,6 @@ public class BlockFenceCustom extends BlockFence {
 	}
 
 	public String getDescription(ItemStack itemStack,  World world) {
-		return LanguageManager.translate(this.getUnlocalizedName() + ".description");
+		return "\u00a7a" + LanguageManager.translate(this.getUnlocalizedName() + ".description");
 	}
 }

@@ -11,6 +11,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
@@ -111,8 +112,10 @@ public class BlockFluidVeshoney extends BlockFluidBase {
 
         // Effects:
         if(!(entity instanceof EntityVespid) & !(entity instanceof EntityVespidQueen)) {
-            entity.setInWeb ();
-            entity.addVelocity(0,-0.02,0);
+            if (!(entity instanceof EntityPlayer) || !((EntityPlayer)entity).isCreative() || !((EntityPlayer)entity).isSpectator()) {
+                entity.setInWeb();
+                entity.addVelocity(0, -0.02, 0);
+            }
         }
 
         super.onEntityCollidedWithBlock(world, pos, state, entity);

@@ -1,29 +1,23 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import com.lycanitesmobs.core.entity.CreatureBuildTask;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import com.lycanitesmobs.core.entity.goals.actions.abilities.PlaceBlockGoal;
-import com.lycanitesmobs.core.entity.goals.targeting.FindAttackTargetGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.FindMasterGoal;
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
-import net.minecraft.entity.monster.EntityPigZombie;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class EntityVespid extends AgeableCreatureEntity implements IMob {
     public PlaceBlockGoal aiPlaceBlock;
+	public CreatureBuildTask creatureBuildTask;
 
 	private boolean hiveBuilding = true;
 
@@ -46,7 +40,7 @@ public class EntityVespid extends AgeableCreatureEntity implements IMob {
     protected void initEntityAI() {
         super.initEntityAI();
 		this.tasks.addTask(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(true));
-		this.aiPlaceBlock = new PlaceBlockGoal(this).setMaxDistance(128D).setSpeed(3D);
+		this.aiPlaceBlock = new PlaceBlockGoal(this).setMaxDistance(128D).setSpeed(3D).setReplaceLiquid(true).setReplaceSolid(true);
 		this.tasks.addTask(this.nextIdleGoalIndex++, this.aiPlaceBlock);
 
 		this.targetTasks.addTask(this.nextFindTargetIndex++, new FindMasterGoal(this).setTargetClass(EntityVespidQueen.class).setRange(64.0D));
@@ -71,9 +65,9 @@ public class EntityVespid extends AgeableCreatureEntity implements IMob {
 		// Building AI:
 		if(!this.getEntityWorld().isRemote && this.hiveBuilding && this.getMasterTarget() instanceof EntityVespidQueen && this.aiPlaceBlock.blockState == null) {
 			EntityVespidQueen queen = (EntityVespidQueen)this.getMasterTarget();
-			CreatureBuildTask creatureBuildTask = queen.creatureStructure.getRandomBuildTask(this);
-			if (creatureBuildTask != null) {
-				this.aiPlaceBlock.setBlockPlacement(creatureBuildTask.blockState, creatureBuildTask.pos);
+			this.creatureBuildTask = queen.creatureStructure.takeBuildTask(this);
+			if (this.creatureBuildTask != null) {
+				this.aiPlaceBlock.setBlockPlacement(this.creatureBuildTask.blockState, this.creatureBuildTask.pos);
 			}
 		}
         
@@ -84,6 +78,17 @@ public class EntityVespid extends AgeableCreatureEntity implements IMob {
         	}
         }
     }
+
+	@Override
+	public void onBlockPlaced(BlockPos blockPos, IBlockState blockState) {
+		if (this.getMasterTarget() instanceof EntityVespidQueen) {
+			EntityVespidQueen queen = (EntityVespidQueen)this.getMasterTarget();
+			if (this.creatureBuildTask != null) {
+				queen.creatureStructure.completeBuildTask(this.creatureBuildTask);
+				this.creatureBuildTask = null;
+			}
+		}
+	}
 
     @Override
     public boolean canAttackEntity(EntityLivingBase targetEntity) {
