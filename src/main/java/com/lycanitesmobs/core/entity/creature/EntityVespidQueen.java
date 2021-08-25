@@ -1,6 +1,5 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.dungeon.DungeonManager;
 import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
@@ -81,7 +80,7 @@ public class EntityVespidQueen extends TameableCreatureEntity implements IMob {
 			if (!this.hasHome()) {
 				this.creatureStructure.setOrigin(this.blockPosition());
 			}
-			boolean structureStarted = this.creatureStructure.isStarted();
+			boolean structureStarted = this.creatureStructure.isPhaseComplete(0);
 			if (!structureStarted || this.updateTick % 200 == 0) {
 				this.creatureStructure.refreshBuildTasks();
 			}
@@ -90,7 +89,7 @@ public class EntityVespidQueen extends TameableCreatureEntity implements IMob {
 			}
 
 			// Spawn Babies:
-			if(structureStarted && this.creatureStructure.getBuildTaskSize() <= 10 && this.updateTick % 60 == 0) {
+			if(structureStarted && this.creatureStructure.getFinalPhaseBuildTaskSize() <= 10 && this.updateTick % 60 == 0) {
 				this.allyUpdate();
 			}
 		}

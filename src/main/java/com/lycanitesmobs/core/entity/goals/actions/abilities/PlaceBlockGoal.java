@@ -131,8 +131,9 @@ public class PlaceBlockGoal extends Goal {
         // Place Block:
         if(Math.sqrt(this.host.distanceToSqr(new Vector3d(this.pos.getX(), this.pos.getY(), this.pos.getZ()))) <= this.range) {
         	this.host.getCommandSenderWorld().setBlock(this.pos, this.blockState, 3);
-            this.blockState = null;
-            this.host.clearMovement();
+			this.host.onBlockPlaced(this.pos, this.blockState);
+			this.blockState = null;
+			this.host.clearMovement();
         }
         
         // Cancel If Too Far:

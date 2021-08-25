@@ -8,6 +8,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.FlowingFluid;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.math.BlockPos;
@@ -50,8 +51,10 @@ public class VeshoneyFluidBlock extends BaseFluidBlock {
 
         // Effects:
         if(entity instanceof LivingEntity && !(entity instanceof EntityVespid) && !(entity instanceof EntityVespidQueen)) {
-            entity.makeStuckInBlock(blockState, new Vector3d(0.3D, 0.6D, 0.3D));
-            entity.setDeltaMovement(0,-0.02,0);
+            if (!(entity instanceof PlayerEntity) || !((PlayerEntity)entity).isCreative() || !entity.isSpectator()) {
+                entity.makeStuckInBlock(blockState, new Vector3d(0.3D, 0.6D, 0.3D));
+                entity.setDeltaMovement(0, -0.02, 0);
+            }
         }
 
         super.entityInside(blockState, world, pos, entity);
