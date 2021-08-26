@@ -3,7 +3,7 @@
 	"loadDefault": true,
 	"slotType": "axe",
 	"dropMobId": "lycanitesmobs:reaper",
-	"dropChance": 0.5,
+	"dropChance": 0.05,
 	"levelMin": 1,
 	"levelMax": 3,
 	"elements": [
