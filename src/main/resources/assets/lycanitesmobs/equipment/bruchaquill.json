@@ -3,7 +3,7 @@
 	"loadDefault": true,
 	"slotType": "pike",
 	"dropMobId": "lycanitesmobs:quillbeast",
-	"dropChance": 0.5,
+	"dropChance": 0.2,
 	"levelMin": 1,
 	"levelMax": 3,
 	"elements": [
