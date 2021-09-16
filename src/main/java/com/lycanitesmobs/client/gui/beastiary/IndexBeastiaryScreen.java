@@ -27,7 +27,7 @@ public class IndexBeastiaryScreen extends BeastiaryScreen {
 
 		int menuWidth = this.colRightWidth;
 
-		int buttonCount = 5;
+		int buttonCount = 6;
 		int buttonPadding = 2;
 		int buttonWidth = Math.round((float)(menuWidth / buttonCount)) - buttonPadding;
 		int buttonWidthPadded = buttonWidth + buttonPadding;
@@ -43,9 +43,11 @@ public class IndexBeastiaryScreen extends BeastiaryScreen {
 		this.addButton(button);
 		button = new ButtonBase(102, buttonX + (buttonWidthPadded * 2), buttonY, buttonWidth, buttonHeight, new TranslationTextComponent("Patreon"), this);
 		this.addButton(button);
-		button = new ButtonBase(103, buttonX + (buttonWidthPadded * 3), buttonY, buttonWidth, buttonHeight, new TranslationTextComponent("Discord"), this);
+		button = new ButtonBase(103, buttonX + (buttonWidthPadded * 3), buttonY, buttonWidth, buttonHeight, new TranslationTextComponent("Guilded"), this);
 		this.addButton(button);
-		button = new ButtonBase(104, buttonX + (buttonWidthPadded * 4), buttonY, buttonWidth, buttonHeight, new TranslationTextComponent("Card Game"), this);
+		button = new ButtonBase(104, buttonX + (buttonWidthPadded * 4), buttonY, buttonWidth, buttonHeight, new TranslationTextComponent("Discord"), this);
+		this.addButton(button);
+		button = new ButtonBase(105, buttonX + (buttonWidthPadded * 5), buttonY, buttonWidth, buttonHeight, new TranslationTextComponent("Shard"), this);
 		this.addButton(button);
 
 		// Lists:
@@ -110,10 +112,15 @@ public class IndexBeastiaryScreen extends BeastiaryScreen {
 		}
 		if(buttonId == 103) {
 			try {
-				this.openURI(new URI(LycanitesMobs.discord));
+				this.openURI(new URI(LycanitesMobs.guilded));
 			} catch (URISyntaxException e) {}
 		}
 		if(buttonId == 104) {
+			try {
+				this.openURI(new URI(LycanitesMobs.discord));
+			} catch (URISyntaxException e) {}
+		}
+		if(buttonId == 105) {
 			try {
 				this.openURI(new URI("https://shardtcg.com"));
 			} catch (URISyntaxException e) {}

@@ -2,6 +2,7 @@ package com.lycanitesmobs.core.item.special;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.ExtendedPlayer;
+import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.item.BaseItem;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
@@ -37,7 +38,7 @@ public class ItemSoulgazer extends BaseItem {
 			return ActionResultType.FAIL;
 		}
 
-    	extendedPlayer.studyCreature(entity, 25);
+    	extendedPlayer.studyCreature(entity, CreatureManager.getInstance().config.creatureStudyKnowledge);
 		if (!player.getCommandSenderWorld().isClientSide) {
 			player.sendMessage(new TranslationTextComponent("message.beastiary.study"), Util.NIL_UUID);
 		}
