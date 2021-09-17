@@ -12,7 +12,7 @@
     "spawning": {
         "enabled": true,
         "spawners": [
-            "underground"
+            "land_underground"
         ],
         "disableSubspecies": false,
         "dimensionIds": [

@@ -11,7 +11,7 @@
     "spawning": {
         "enabled": true,
         "spawners": [
-            "underground",
+            "land_underground",
             "land_deadly"
         ],
         "disableSubspecies": false,

@@ -29,7 +29,8 @@
 			"sorting": "random",
 			"limit": 32,
 			"surface": false,
-			"solidGround": true
+			"solidGround": true,
+			"underground": true
 		}
 	]
 }
