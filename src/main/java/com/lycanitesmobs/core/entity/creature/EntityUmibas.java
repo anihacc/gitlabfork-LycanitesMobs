@@ -36,6 +36,9 @@ public class EntityUmibas extends TameableCreatureEntity implements IGroupHeavy 
         this.growthTime = -120000;
         this.setupMob();
         this.hitAreaWidthScale = 1.5F;
+
+        // Stats:
+        this.maxUpStep = 1.0F;
     }
 
     // ========== Init AI ==========
