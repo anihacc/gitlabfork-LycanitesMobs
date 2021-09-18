@@ -31,7 +31,8 @@
 			"yMax": 120,
 			"sorting": "random",
 			"limit": 32,
-			"solidGround": true
+			"solidGround": true,
+			"underground": false
 		}
 	]
 }
