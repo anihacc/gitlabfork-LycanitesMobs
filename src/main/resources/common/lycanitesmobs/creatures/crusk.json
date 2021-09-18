@@ -27,7 +27,7 @@
             "-cold",
             "-snowy"
         ],
-        "spawnWeight": 2,
+        "spawnWeight": 3,
         "dungeonWeight": 200,
         "spawnAreaLimit": 3,
         "spawnGroupMin": 1,
