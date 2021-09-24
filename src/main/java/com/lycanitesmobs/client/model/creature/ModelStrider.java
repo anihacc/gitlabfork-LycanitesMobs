@@ -20,7 +20,7 @@ public class ModelStrider extends ModelCreatureObj {
 
     public ModelStrider(float shadowSize) {
     	// Load Model:
-    	this.initModel("stryder", LycanitesMobs.modInfo, "entity/stryder");
+    	this.initModel("strider", LycanitesMobs.modInfo, "entity/strider");
 
     	// Scaling:
         this.lookHeadScaleX = 0;
