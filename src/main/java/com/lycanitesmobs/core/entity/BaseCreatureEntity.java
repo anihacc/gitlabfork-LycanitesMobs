@@ -4181,7 +4181,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
     // ========== Drop Items ==========
     /** Cycles through all of this entity's DropRates and drops random loot, usually called on death. If this mob is a minion, this method is cancelled. **/
     @Override
-    protected void dropFewItems(boolean playerKill, int lootLevel) {
+    protected void dropFewItems(boolean playerKill, int lootingModifier) {
     	if(this.getEntityWorld().isRemote || this.isMinion() || this.isBoundPet())
     		return;
     	int variantScale = 1;
@@ -4201,7 +4201,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 			if(this.extraMobBehaviour != null && this.extraMobBehaviour.itemDropMultiplierOverride != 1) {
 				multiplier = Math.round((float) multiplier * (float) this.extraMobBehaviour.itemDropMultiplierOverride);
 			}
-			int quantity = itemDrop.getQuantity(this.rand, 0, multiplier);
+			int quantity = itemDrop.getQuantity(this.rand, lootingModifier, multiplier);
 			if(quantity <= 0) {
 				continue;
 			}
