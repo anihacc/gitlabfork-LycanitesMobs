@@ -4022,6 +4022,11 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		else if(this.getVariant() != null && "uncommon".equals(this.getVariant().rarity))
 			variantScale = Variant.UNCOMMON_DROP_SCALE;
 
+		int lootingLevel = 0;
+		if (damageSource.getEntity() != null) {
+			lootingLevel = net.minecraftforge.common.ForgeHooks.getLootingLevel(this, damageSource.getEntity(), damageSource);
+		}
+
 		for(ItemDrop itemDrop : this.drops) {
 			if(!this.canDropItem(itemDrop)) {
 				continue;
@@ -4033,7 +4038,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 			if(this.extraMobBehaviour != null && this.extraMobBehaviour.itemDropMultiplierOverride != 1) {
 				multiplier = Math.round((float) multiplier * (float) this.extraMobBehaviour.itemDropMultiplierOverride);
 			}
-    		int quantity = itemDrop.getQuantity(this.random, 0, multiplier);
+    		int quantity = itemDrop.getQuantity(this.random, lootingLevel, multiplier);
     		if(quantity <= 0) {
 				continue;
 			}

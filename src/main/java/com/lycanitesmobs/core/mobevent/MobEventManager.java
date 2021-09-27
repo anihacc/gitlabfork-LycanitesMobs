@@ -81,7 +81,7 @@ public class MobEventManager extends JSONLoader {
 		JsonObject defaultGlobalJson;
 		if(FileLoader.SERVER.ready) {
 			Path defaultGlobalPath = FileLoader.SERVER.getPath("globalmobevent.json");
-			LycanitesMobs.logDebug("", "Global Spawner JSON Path:" + defaultGlobalPath);
+			LycanitesMobs.logDebug("", "Global Mob Event JSON Path:" + defaultGlobalPath);
 			defaultGlobalJson = this.loadJsonObject(gson, defaultGlobalPath);
 		}
 		else {
