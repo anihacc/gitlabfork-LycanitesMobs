@@ -5,6 +5,7 @@ import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.creature.EntityVespidQueen;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.util.Hand;
@@ -35,6 +36,7 @@ public class AttackMeleeGoal extends Goal {
     // Pathing:
 	private int failedPathFindingPenalty;
 	private int failedPathFindingPenaltyMax = 40;
+	private int failedPathFindingPenaltyPlayerMax = 0;
     private int repathTime;
 	
 	// ==================================================
@@ -225,11 +227,11 @@ public class AttackMeleeGoal extends Goal {
 						this.failedPathFindingPenalty = 0;
 					}
 	                else {
-						this.failedPathFindingPenalty += this.failedPathFindingPenaltyMax;
+						this.failedPathFindingPenalty += this.getFailedPathFindingPenalty();
 					}
 	            }
 	            else {
-					this.failedPathFindingPenalty += this.failedPathFindingPenaltyMax;
+					this.failedPathFindingPenalty += this.getFailedPathFindingPenalty();
 				}
         	}
 			else if(this.host.useDirectNavigator()) {
@@ -257,4 +259,16 @@ public class AttackMeleeGoal extends Goal {
             this.host.yRot = this.host.yRot + f;
         }
     }
+
+	/**
+	 * Gets the time in ticks to calculate a new melee chase path to the target.
+	 * This can be expensive for servers but can making chasing bad if too high so a different value is used for players vs other mobs.
+	 * @return The time in ticks to wait before calculating a new chase path.
+	 */
+	public int getFailedPathFindingPenalty() {
+		if (this.attackTarget instanceof PlayerEntity) {
+			return this.failedPathFindingPenaltyPlayerMax;
+		}
+		return this.failedPathFindingPenalty;
+	}
 }
