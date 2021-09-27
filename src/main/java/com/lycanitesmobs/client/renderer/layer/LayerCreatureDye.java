@@ -40,7 +40,7 @@ public class LayerCreatureDye extends LayerCreatureBase {
 
     @Override
     public boolean canRenderPart(String partName, BaseCreatureEntity entity, boolean trophy) {
-        return this.textureSuffix.equals(partName);
+        return this.name.equals(partName);
     }
 
     @Override
