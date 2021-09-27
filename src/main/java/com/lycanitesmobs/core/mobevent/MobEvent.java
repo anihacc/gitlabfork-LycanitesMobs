@@ -175,6 +175,18 @@ public class MobEvent {
 			return false;
 		}
 
+		// Global Conditions:
+		if(!MobEventManager.getInstance().globalEventConditions.isEmpty()) {
+			LycanitesMobs.logDebug("MobEvents", "Global Conditions Required: " + MobEventManager.getInstance().globalEventConditions.size());
+			for(SpawnCondition condition : MobEventManager.getInstance().globalEventConditions) {
+				if(!condition.isMet(world, player, player != null ? player.getPosition() : BlockPos.ORIGIN)) {
+					LycanitesMobs.logDebug("MobEvents", "Global Condition: " + condition + "Failed");
+					return false;
+				}
+			}
+		}
+
+		// Conditions:
 		if(this.conditions.isEmpty()) {
 			LycanitesMobs.logDebug("MobEvents", "No Conditions");
 			return true;

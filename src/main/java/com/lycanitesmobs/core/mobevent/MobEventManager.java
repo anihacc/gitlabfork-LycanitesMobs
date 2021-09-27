@@ -8,10 +8,13 @@ import com.lycanitesmobs.Utilities;
 import com.lycanitesmobs.core.JSONLoader;
 import com.lycanitesmobs.core.config.ConfigSpawning;
 import com.lycanitesmobs.core.info.ModInfo;
+import com.lycanitesmobs.core.spawner.condition.SpawnCondition;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -25,6 +28,7 @@ public class MobEventManager extends JSONLoader {
     // Mob Events:
     public Map<String, MobEvent> mobEvents = new HashMap<>();
 	public List<MobEventSchedule> mobEventSchedules = new ArrayList<>();
+	public List<SpawnCondition> globalEventConditions = new ArrayList<>();
 
     // Properties:
     public boolean mobEventsEnabled = true;
@@ -131,6 +135,32 @@ public class MobEventManager extends JSONLoader {
 		}
 		if(this.mobEventSchedules.size() > 0) {
 			LycanitesMobs.logDebug("MobEvents", "Loaded " + this.mobEventSchedules.size() + " Mob Event Schedules.");
+		}
+
+
+		// Load Global Spawn Conditions:
+		this.globalEventConditions.clear();
+		Path defaultGlobalPath = Utilities.getAssetPath(this.getClass(), LycanitesMobs.modInfo.modid, "globalmobevent.json");
+		JsonObject defaultGlobalJson = this.loadJsonObject(gson, defaultGlobalPath);
+
+		File customGlobalFile = new File(configPath + "globalmobevent.json");
+		JsonObject customGlobalJson = null;
+		if(customGlobalFile.exists()) {
+			customGlobalJson = this.loadJsonObject(gson, customGlobalFile.toPath());
+		}
+
+		JsonObject globalJson = this.writeDefaultJSONObject(gson, "globalmobevent", defaultGlobalJson, customGlobalJson);
+		if(globalJson.has("conditions")) {
+			JsonArray jsonArray = globalJson.get("conditions").getAsJsonArray();
+			Iterator<JsonElement> jsonIterator = jsonArray.iterator();
+			while (jsonIterator.hasNext()) {
+				JsonObject spawnConditionJson = jsonIterator.next().getAsJsonObject();
+				SpawnCondition spawnCondition = SpawnCondition.createFromJSON(spawnConditionJson);
+				this.globalEventConditions.add(spawnCondition);
+			}
+		}
+		if(this.globalEventConditions.size() > 0) {
+			LycanitesMobs.logDebug("JSONSpawner", "Loaded " + this.globalEventConditions.size() + " Global Mob Event Conditions.");
 		}
 	}
 
