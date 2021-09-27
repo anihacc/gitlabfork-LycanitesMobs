@@ -14,10 +14,6 @@ public class LayerCreatureEffect extends LayerCreatureBase {
 	public boolean subspecies = true;
 	public Vector2f scrollSpeed;
 
-
-    // ==================================================
-    //                   Constructor
-    // ==================================================
     public LayerCreatureEffect(CreatureRenderer renderer, String textureSuffix) {
         super(renderer);
         this.name = textureSuffix;

@@ -1,9 +1,9 @@
 package com.lycanitesmobs.client.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.client.model.CreatureObjModelOld;
+import com.lycanitesmobs.client.model.CreatureObjModel;
 import com.lycanitesmobs.client.renderer.CreatureRenderer;
-import com.lycanitesmobs.client.renderer.layer.specific.LayerYaleWool;
+import com.lycanitesmobs.client.renderer.layer.LayerCreatureDye;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -12,49 +12,24 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class ModelYale extends CreatureObjModelOld {
-	
-	// ==================================================
-  	//                    Constructors
-  	// ==================================================
+public class ModelYale extends CreatureObjModel {
+
     public ModelYale() {
         this(1.0F);
     }
     
     public ModelYale(float shadowSize) {
-    	// Load Model:
     	this.initModel("yale", LycanitesMobs.modInfo, "entity/yale");
 
-    	// Set Rotation Centers:
-    	setPartCenter("head", 0F, 0.85F, 1.0F);
-    	setPartCenter("body", 0F, 1.0F, 0F);
-    	setPartCenter("fur", 0F, 1.0F, 0F);
-    	setPartCenter("armleft", 0.25F, 0.55F, 0.8F);
-    	setPartCenter("armright", -0.25F, 0.55F, 0.8F);
-    	setPartCenter("legleftfront", 0.2F, 1.2F, 0.85F);
-    	setPartCenter("legrightfront", -0.2F, 1.2F, 0.85F);
-    	setPartCenter("legleftback", 0.3F, 0.4F, -0.7F);
-    	setPartCenter("legrightback", -0.3F, 0.4F, -0.7F);
-    	
-    	// Trophy:
-        this.trophyScale = 1.0F;
-        this.trophyOffset = new float[] {0.0F, -0.15F, -0.4F};
+    	this.bigChildHead = true;
     }
 
-
-    // ==================================================
-    //             Add Custom Render Layers
-    // ==================================================
     @Override
     public void addCustomLayers(CreatureRenderer renderer) {
         super.addCustomLayers(renderer);
-        renderer.addLayer(new LayerYaleWool(renderer));
+        renderer.addLayer(new LayerCreatureDye(renderer, "fur", false));
     }
-    
-    
-    // ==================================================
-   	//                 Animate Part
-   	// ==================================================
+
     float maxLeg = 0F;
     @Override
     public void animatePart(String partName, LivingEntity entity, float time, float distance, float loop, float lookY, float lookX, float scale) {
@@ -72,6 +47,9 @@ public class ModelYale extends CreatureObjModelOld {
     	float rotZ = 0F;
     	
     	// Idle:
+		if(partName.equals("mouth")) {
+			this.rotate((float)-Math.toDegrees(MathHelper.cos(loop * 0.1F) * 0.1F - 0.1F), 0.0F, 0.0F);
+		}
     	if(partName.equals("armleft")) {
 	        rotZ -= Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F + 0.05F);
 	        rotX -= Math.toDegrees(MathHelper.sin(loop * 0.067F) * 0.2F);
@@ -121,9 +99,9 @@ public class ModelYale extends CreatureObjModelOld {
 		}
     	
     	// Apply Animations:
-		this.doAngle(rotation, angleX, angleY, angleZ);
-    	this.doRotate(rotX, rotY, rotZ);
-    	this.doTranslate(posX, posY, posZ);
+		this.angle(rotation, angleX, angleY, angleZ);
+    	this.rotate(rotX, rotY, rotZ);
+    	this.translate(posX, posY, posZ);
     }
 
     @Override

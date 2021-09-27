@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.google.common.collect.Maps;
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
@@ -66,10 +67,8 @@ public class EntityYale extends AgeableCreatureEntity implements IForgeShearable
 	}, EntityYale::createSheepColor)));
 
     protected ItemDrop woolDrop;
-    
-    // ==================================================
- 	//                    Constructor
- 	// ==================================================
+
+
     public EntityYale(EntityType<? extends EntityYale> entityType, World world) {
         super(entityType, world);
         
@@ -86,27 +85,20 @@ public class EntityYale extends AgeableCreatureEntity implements IForgeShearable
 		this.woolDrop = new ItemDrop(Blocks.WHITE_WOOL.getRegistryName().toString(), 1).setMinAmount(1).setMaxAmount(3);
     }
 
-    // ========== Init AI ==========
     @Override
     protected void registerGoals() {
-		this.goalSelector.addGoal(this.nextIdleGoalIndex++, new EatBlockGoal(this).setBlocks(Blocks.GRASS).setReplaceBlock(Blocks.DIRT));
+		this.goalSelector.addGoal(this.nextIdleGoalIndex++, new EatBlockGoal(this).setBlocks(Blocks.GRASS_BLOCK).setReplaceBlock(Blocks.DIRT));
 		super.registerGoals();
 		this.goalSelector.addGoal(this.nextDistractionGoalIndex++, new TemptGoal(this).setIncludeDiet(true));
 		this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(false));
     }
-	
-	// ========== Init ==========
+
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(FUR, (byte) 1);
     }
-	
-	
-    // ==================================================
-    //                      Spawn
-    // ==================================================
-	// ========== On Spawn ==========
+
 	@Override
 	public void onFirstSpawn() {
 		if(!this.isBaby())
@@ -114,11 +106,6 @@ public class EntityYale extends AgeableCreatureEntity implements IForgeShearable
 		super.onFirstSpawn();
 	}
 
-
-    // ==================================================
-    //                      Abilities
-    // ==================================================
-	// ========== IShearable ==========
 	@Override
 	public boolean isShearable(@Nonnull ItemStack item, World world, BlockPos pos) {
 		return this.hasFur() && !this.isBaby();
@@ -136,13 +123,14 @@ public class EntityYale extends AgeableCreatureEntity implements IForgeShearable
 
 		int quantity = this.woolDrop.getQuantity(this.getRandom(), fortune, 1);
 		ItemStack dropStack = this.woolDrop.getEntityDropItemStack(this, quantity);
-		this.dropItem(dropStack);
+		if(dropStack != null && dropStack.getItem() instanceof BlockItem && ((BlockItem)dropStack.getItem()).getBlock().getRegistryName().toString().contains("_wool")) {
+			dropStack = new ItemStack(WOOL_BY_COLOR.get(this.getColor()), dropStack.getCount());
+		}
 		dropStacks.add(dropStack);
 		
 		return dropStacks;
 	}
-	
-	// ========== Fur ==========
+
 	public boolean hasFur() {
 		if(this.entityData == null) return true;
 		return this.entityData.get(FUR) > 0;
@@ -192,7 +180,7 @@ public class EntityYale extends AgeableCreatureEntity implements IForgeShearable
 	}
 	
 	/**
-	 * Attempts to mix both parent sheep to come up with a mixed dye color.
+	 * Attempts to mix both parents to come up with a mixed dye color.
 	 */
 	private DyeColor getMixedFurColor(BaseCreatureEntity father, BaseCreatureEntity mother) {
 		DyeColor dyeA = father.getColor();
@@ -223,12 +211,7 @@ public class EntityYale extends AgeableCreatureEntity implements IForgeShearable
 			return new float[]{afloat[0] * 0.75F, afloat[1] * 0.75F, afloat[2] * 0.75F};
 		}
 	}
-	
-	
-	// ==================================================
-   	//                      Movement
-   	// ==================================================
-    // ========== Pathing Weight ==========
+
     @Override
     public float getBlockPathWeight(int x, int y, int z) {
         BlockState blockState = this.getCommandSenderWorld().getBlockState(new BlockPos(x, y - 1, z));
@@ -242,31 +225,22 @@ public class EntityYale extends AgeableCreatureEntity implements IForgeShearable
         return super.getBlockPathWeight(x, y, z);
     }
 
-    // ========== Can leash ==========
     @Override
     public boolean canBeLeashed(PlayerEntity player) {
         return true;
     }
 
-	// ==================================================
-	//                     Equipment
-	// ==================================================
 	@Override
 	public int getNoBagSize() { return 0; }
+
 	@Override
 	public int getBagSize() { return this.creatureInfo.bagSize; }
-    // ==================================================
-   	//                     Immunities
-   	// ==================================================
+
     @Override
     public float getFallResistance() {
     	return 50;
     }
-    
-    
-    // ==================================================
-   	//                      Drops
-   	// ==================================================
+
 	@Override
 	public boolean canDropItem(ItemDrop itemDrop) {
 		if(!super.canDropItem(itemDrop)) {
@@ -281,16 +255,11 @@ public class EntityYale extends AgeableCreatureEntity implements IForgeShearable
 	@Override
 	public void dropItem(ItemStack itemStack) {
 		if(this.woolDrop != null && itemStack.getItem() instanceof BlockItem && ((BlockItem)itemStack.getItem()).getBlock().getRegistryName().toString().contains("_wool")) {
-			itemStack = new ItemStack(this.woolDrop.getItemStack().getItem(), itemStack.getCount());
+			itemStack = new ItemStack(WOOL_BY_COLOR.get(this.getColor()), itemStack.getCount());
 		}
 		super.dropItem(itemStack);
 	}
-    
-    
-    // ==================================================
-    //                     Breeding
-    // ==================================================
-    // ========== Create Child ==========
+
 	@Override
 	public AgeableCreatureEntity createChild(AgeableCreatureEntity partner) {
 		AgeableCreatureEntity baby = super.createChild(partner);
@@ -298,13 +267,7 @@ public class EntityYale extends AgeableCreatureEntity implements IForgeShearable
         baby.setColor(color);
 		return baby;
 	}
-    
-	
-    // ==================================================
-    //                        NBT
-    // ==================================================
-   	// ========== Read ===========
-    /** Used when loading this mob from a saved chunk. **/
+
     @Override
     public void readAdditionalSaveData(CompoundNBT nbt) {
     	super.readAdditionalSaveData(nbt);
@@ -312,9 +275,7 @@ public class EntityYale extends AgeableCreatureEntity implements IForgeShearable
     		this.setFur(nbt.getBoolean("HasFur"));
     	}
     }
-    
-    // ========== Write ==========
-    /** Used when saving this mob to a chunk. **/
+
     @Override
     public void addAdditionalSaveData(CompoundNBT nbt) {
     	super.addAdditionalSaveData(nbt);

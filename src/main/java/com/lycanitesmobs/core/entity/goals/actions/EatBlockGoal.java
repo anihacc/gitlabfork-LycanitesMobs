@@ -1,5 +1,6 @@
 package com.lycanitesmobs.core.entity.goals.actions;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -23,19 +24,13 @@ public class EatBlockGoal extends Goal {
     private Block replaceBlock = Blocks.AIR;
     private int eatTime = 40;
     private int eatTimeMax = 40;
-	
-	// ==================================================
- 	//                    Constructor
- 	// ==================================================
+
+
     public EatBlockGoal(BaseCreatureEntity setHost) {
         this.host = setHost;
 		this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
     }
-    
-    
-    // ==================================================
-   	//                  Set Properties
-   	// ==================================================
+
      public EatBlockGoal setBlocks(Block... setBlocks) {
     	this.blocks = setBlocks;
      	return this;
@@ -55,11 +50,7 @@ public class EatBlockGoal extends Goal {
     	this.eatTimeMax = setTime;
      	return this;
      }
- 	
-     
- 	// ==================================================
-  	//                   Should Execute
-  	// ==================================================
+
  	@Override
     public boolean canUse() {
     	 if(this.host.getRandom().nextInt(this.host.isBaby() ? 50 : 1000) != 0)
@@ -72,11 +63,7 @@ public class EatBlockGoal extends Goal {
          BlockState blockState = this.host.getCommandSenderWorld().getBlockState(new BlockPos(i, j - 1, k));
          return this.isValidBlock(blockState);
      }
-  	
-     
-  	// ==================================================
-   	//                 Valid Block Check
-   	// ==================================================
+
      public boolean isValidBlock(BlockState blockState) {
          for(Block edibleBlock : this.blocks) {
         	 if(edibleBlock == blockState.getBlock())
@@ -91,39 +78,23 @@ public class EatBlockGoal extends Goal {
          
          return false;
      }
- 	
-     
- 	// ==================================================
-  	//                      Start
-  	// ==================================================
+
  	@Override
     public void start() {
     	 this.eatTime = this.eatTimeMax;
          this.host.clearMovement();
      }
- 	
-     
- 	// ==================================================
-  	//                       Reset
-  	// ==================================================
+
  	@Override
     public void stop() {
     	 this.eatTime = this.eatTimeMax;
      }
-  	
-     
-  	// ==================================================
-   	//                      Continue
-   	// ==================================================
+
   	@Override
     public boolean canContinueToUse() {
     	  return this.eatTime > 0;
       }
- 	
-     
- 	// ==================================================
-  	//                      Update
-  	// ==================================================
+
  	@Override
     public void tick() {
          if(--this.eatTime != 0) return;
