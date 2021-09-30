@@ -3,10 +3,7 @@ package com.lycanitesmobs.core.entity;
 import com.lycanitesmobs.core.entity.goals.actions.FollowParentGoal;
 import com.lycanitesmobs.core.entity.goals.actions.MateGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.FindParentGoal;
-import com.lycanitesmobs.core.info.CreatureInfo;
-import com.lycanitesmobs.core.info.ItemDrop;
-import com.lycanitesmobs.core.info.Subspecies;
-import com.lycanitesmobs.core.info.Variant;
+import com.lycanitesmobs.core.info.*;
 import com.lycanitesmobs.core.item.ItemCustomSpawnEgg;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -399,6 +396,13 @@ public abstract class AgeableCreatureEntity extends BaseCreatureEntity {
             this.onCreateBaby(partner, baby);
 
             this.getEntityWorld().spawnEntity(baby);
+
+			for(EntityPlayer player : this.getEntityWorld().getPlayers(EntityPlayer.class, player -> player != null && this.getDistance(player) <= 5)) {
+				ExtendedPlayer extendedPlayer = ExtendedPlayer.getForPlayer(player);
+				if(extendedPlayer != null) {
+					extendedPlayer.getBeastiary().addCreatureKnowledge(this, this.scaleKnowledgeExperience(CreatureManager.getInstance().config.creatureBreedKnowledge));
+				}
+			}
         }
     }
 

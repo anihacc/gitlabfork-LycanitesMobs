@@ -1849,13 +1849,13 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 			this.bossInfo.setPercent(this.getHealth() / this.getMaxHealth());
 		}
 
-		// Beastiary Discovery:
+		// Beastiary Proximity Discovery:
 		if(!this.getEntityWorld().isRemote && this.updateTick % 40 == 0) {
         	for(EntityPlayer player : this.getEntityWorld().getPlayers(EntityPlayer.class, player -> player != null && this.getDistance(player) <= 5)) {
 				ExtendedPlayer extendedPlayer = ExtendedPlayer.getForPlayer(player);
 				if(extendedPlayer != null) {
 					CreatureKnowledge creatureKnowledge = extendedPlayer.getBeastiary().getCreatureKnowledge(this.creatureInfo.getName());
-					if (creatureKnowledge == null || creatureKnowledge.rank < 2) {
+					if (creatureKnowledge == null || creatureKnowledge.rank < 1) {
 						extendedPlayer.getBeastiary().addCreatureKnowledge(this, this.scaleKnowledgeExperience(CreatureManager.getInstance().config.creatureProximityKnowledge));
 					}
 				}

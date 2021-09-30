@@ -87,6 +87,9 @@ public class CreatureConfig {
 	/** How much knowledge experience killing a creature gives. **/
 	public int creatureKillKnowledge = 50;
 
+	/** How much knowledge experience breeding a creature gives. **/
+	public int creatureBreedKnowledge = 400;
+
 	/** How much knowledge experience feeding a treat to a creature gives. **/
 	public int creatureTreatKnowledge = 100;
 
@@ -220,6 +223,7 @@ public class CreatureConfig {
 		this.beastiaryKnowledgeMessages = config.getBool("Beastiary", "Beastiary Knowledge Messages", this.beastiaryKnowledgeMessages, "If true, a chat message will be displayed when gaining Beastiary Knowledge.");
 		this.creatureProximityKnowledge = config.getInt("Beastiary", "Creature Proximity Knowledge", this.creatureProximityKnowledge, "How much knowledge experience standing near a creature gives per second.");
 		this.creatureKillKnowledge = config.getInt("Beastiary", "Creature Kill Knowledge", this.creatureKillKnowledge, "How much knowledge experience killing a creature gives.");
+		this.creatureBreedKnowledge = config.getInt("Beastiary", "Creature Breed Knowledge", this.creatureBreedKnowledge, "How much knowledge experience breeding a creature gives.");
 		this.creatureTreatKnowledge = config.getInt("Beastiary", "Creature Treat Knowledge", this.creatureTreatKnowledge, "How much knowledge experience feeding a treat to a creature gives.");
 		this.creatureStudyKnowledge = config.getInt("Beastiary", "Creature Study Knowledge", this.creatureStudyKnowledge, "How much knowledge experience studying (using a Soulgazer on) a creature gives.");
 		this.creatureStudyCooldown = config.getInt("Beastiary", "Creature Study Cooldown", this.creatureStudyCooldown, "The time in ticks it takes to be able to use a Soulgazer for knowledge again. Default is 200 (10 seconds).");
