@@ -215,7 +215,7 @@ public class CreatureInventory implements IInventory {
 	@Override
 	public ItemStack getItem(int slotID) {
 		if(slotID >= this.getContainerSize() || slotID < 0)
-			return null;
+			return ItemStack.EMPTY;
 		else
 			return this.inventoryContents.get(slotID);
 	}
@@ -447,8 +447,9 @@ public class CreatureInventory implements IInventory {
 		}
 		
 		// Saddle:
-		if(itemStack.getItem() instanceof SaddleItem && this.creature instanceof RideableCreatureEntity)
+		if(this.creature instanceof RideableCreatureEntity && itemStack.getItem() == this.creature.creatureInfo.creatureType.saddle) {
 			return "saddle";
+		}
 		
 		// Bag:
 		if(itemStack.getItem() == Item.byBlock(Blocks.CHEST))

@@ -25,7 +25,7 @@
 	"glow": true,
 	"rollSpeed": 4,
 	"particleCount": 5,
-	"particleId": "minecraft:witch",
+	"particleId": "minecraft:happy_villager",
 	"waterParticleId": "minecraft:bubble",
-	"animationFrames": 4
+	"animationFrames": 8
 }

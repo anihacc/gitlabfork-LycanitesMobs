@@ -31,5 +31,8 @@
 	"ripper": false,
 	"pierceBlocks": false,
 	"glow": true,
-	"rollSpeed": 2
+	"rollSpeed": 0,
+	"particleId": "minecraft:flame",
+	"waterParticleId": "minecraft:bubble",
+	"animationFrames": 8
 }

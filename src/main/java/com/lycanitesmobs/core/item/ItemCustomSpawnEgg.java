@@ -31,27 +31,15 @@ import net.minecraft.world.spawner.AbstractSpawner;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemCustomSpawnEgg extends BaseItem {
-	public CreatureType creatureType;
-    
-	// ==================================================
-	//                    Constructor
-	// ==================================================
-    public ItemCustomSpawnEgg(Item.Properties properties, String name, CreatureType creatureType) {
-        super(properties);
+public class ItemCustomSpawnEgg extends CreatureTypeItem {
 
-        this.itemName = name;
-        this.creatureType = creatureType;
+    public ItemCustomSpawnEgg(Item.Properties properties, CreatureType creatureType) {
+        super(properties, creatureType.getSpawnEggName(), creatureType);
         this.setRegistryName(this.modInfo.modid, this.itemName);
-
         DispenserBlock.registerBehavior(this, new SpawnEggDispenseBehaviour());
-
 		LycanitesMobs.logDebug("Creature Type", "Created Creature Type Spawn Egg: " + this.itemName);
     }
-    
-	// ==================================================
-	//                  Get Display Name
-	// ==================================================
+
     @Override
     public ITextComponent getName(ItemStack itemStack) {
 		TextComponent displayName = (TextComponent)new TranslationTextComponent("creaturetype.spawn")
@@ -65,11 +53,7 @@ public class ItemCustomSpawnEgg extends BaseItem {
 			displayName.append("Missing Creature NBT");
         return displayName;
     }
-    
-    
-    // ==================================================
-	//                      Info
-	// ==================================================
+
     @Override
 	public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flag) {
 		ITextComponent description = this.getDescription(stack, worldIn, tooltip, flag);
@@ -89,10 +73,6 @@ public class ItemCustomSpawnEgg extends BaseItem {
 		return creatureInfo.getDescription().plainCopy().withStyle(TextFormatting.GREEN);
     }
 
-
-	// ==================================================
-	//                    Item Group
-	// ==================================================
 	@Override
 	public void fillItemCategory(ItemGroup tab, NonNullList<ItemStack> items) {
 		if(!this.allowdedIn(tab)) {
@@ -118,11 +98,7 @@ public class ItemCustomSpawnEgg extends BaseItem {
 		itemStackNBT.put("CreatureInfoSpawnEgg", spawnEggNBT);
 		itemStack.setTag(itemStackNBT);
 	}
-    
-    
-	// ==================================================
-	//                     Item Use
-	// ==================================================
+
     @Override
 	public ActionResultType useOn(ItemUseContext context) {
 		World world = context.getLevel();
@@ -173,11 +149,7 @@ public class ItemCustomSpawnEgg extends BaseItem {
 
         return ActionResultType.SUCCESS;
     }
-    
-    
-	// ==================================================
-	//                   On Right Click
-	// ==================================================
+
     @Override
     public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
         ItemStack itemStack = player.getItemInHand(hand);
@@ -215,10 +187,6 @@ public class ItemCustomSpawnEgg extends BaseItem {
         }
     }
 
-
-	// ==================================================
-	//                     Spawning
-	// ==================================================
 	/**
 	 * Get Creature Info
 	 * @param itemStack The spawn egg item stack to get the creature from.

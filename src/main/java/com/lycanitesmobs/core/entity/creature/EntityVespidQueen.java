@@ -9,7 +9,7 @@ import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import com.lycanitesmobs.core.entity.goals.actions.StayByHomeGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.FindAttackTargetGoal;
 import com.lycanitesmobs.core.info.CreatureManager;
-import com.lycanitesmobs.core.item.consumable.ItemTreat;
+import com.lycanitesmobs.core.item.consumable.CreatureTreatItem;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -187,8 +187,8 @@ public class EntityVespidQueen extends TameableCreatureEntity implements IMob {
 			return false;
 		}
 
-		if(itemStack.getItem() instanceof ItemTreat) {
-			ItemTreat itemTreat = (ItemTreat)itemStack.getItem();
+		if(itemStack.getItem() instanceof CreatureTreatItem) {
+			CreatureTreatItem itemTreat = (CreatureTreatItem)itemStack.getItem();
 			if(itemTreat.getCreatureType() == this.creatureInfo.creatureType) {
 				return true;
 			}

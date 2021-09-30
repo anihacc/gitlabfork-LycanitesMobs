@@ -97,6 +97,12 @@
             "chance": 0.25
         },
         {
+            "item": "minecraft:scute",
+            "minAmount": 1,
+            "maxAmount": 2,
+            "chance": 0.005
+        },
+        {
             "item": "minecraft:turtle_shell",
             "minAmount": 1,
             "maxAmount": 1,

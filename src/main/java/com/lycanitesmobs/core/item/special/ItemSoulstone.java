@@ -6,6 +6,7 @@ import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureType;
 import com.lycanitesmobs.core.item.BaseItem;
+import com.lycanitesmobs.core.item.CreatureTypeItem;
 import com.lycanitesmobs.core.pets.PetEntry;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -22,14 +23,9 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public class ItemSoulstone extends BaseItem {
-	public CreatureType creatureType;
-
+public class ItemSoulstone extends CreatureTypeItem {
     public ItemSoulstone(Item.Properties properties, @Nullable CreatureType creatureType) {
-		super(properties);
-		this.modInfo = LycanitesMobs.modInfo;
-		this.creatureType = creatureType;
-        this.itemName = "soulstone";
+		super(properties, "soulstone", creatureType);
         if(creatureType != null) {
         	this.itemName += creatureType.getName();
 		}

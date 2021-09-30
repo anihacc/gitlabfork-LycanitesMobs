@@ -66,7 +66,7 @@ public class ItemEquipmentPart extends BaseItem {
 		this.modInfo = groupInfo;
 	}
 
-	/** Loads this feature from a JSON object. **/
+	/** Loads this part from a JSON object. **/
 	public void loadFromJSON(JsonObject json) {
 		this.itemName = "equipmentpart_" + json.get("itemName").getAsString();
 

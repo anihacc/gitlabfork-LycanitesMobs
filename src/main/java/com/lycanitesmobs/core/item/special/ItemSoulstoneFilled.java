@@ -14,11 +14,8 @@ import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 
 public class ItemSoulstoneFilled extends ItemSoulstone {
-    public CreatureType creatureType;
-
 	public ItemSoulstoneFilled(Item.Properties properties, CreatureType creatureType) {
         super(properties, creatureType);
-        this.creatureType = creatureType;
         this.itemName = creatureType.getSoulstoneName();
         this.setRegistryName(this.modInfo.modid, this.itemName);
     }

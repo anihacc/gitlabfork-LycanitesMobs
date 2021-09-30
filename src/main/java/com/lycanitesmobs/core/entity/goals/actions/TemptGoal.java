@@ -1,13 +1,10 @@
 package com.lycanitesmobs.core.entity.goals.actions;
 
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
-import com.lycanitesmobs.core.entity.creature.EntityVespidQueen;
 import com.lycanitesmobs.core.entity.navigate.CreaturePathNavigator;
 import com.lycanitesmobs.core.info.ObjectLists;
-import com.lycanitesmobs.core.item.consumable.ItemTreat;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -16,8 +13,6 @@ import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.util.math.BlockPos;
 
 import java.util.EnumSet;
-
-import net.minecraft.entity.ai.goal.Goal.Flag;
 
 public class TemptGoal extends Goal {
     // Targets:

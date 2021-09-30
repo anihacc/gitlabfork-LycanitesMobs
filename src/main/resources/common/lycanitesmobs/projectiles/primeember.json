@@ -35,5 +35,5 @@
 	"particleCount": 1,
 	"particleId": "minecraft:flame",
 	"waterParticleId": "minecraft:bubble",
-	"animationFrames": 3
+	"animationFrames": 8
 }

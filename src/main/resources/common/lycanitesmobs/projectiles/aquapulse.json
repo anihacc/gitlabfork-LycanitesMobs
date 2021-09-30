@@ -34,5 +34,5 @@
 	"particleCount": 10,
 	"particleId": "minecraft:dripping_water",
 	"waterParticleId": "minecraft:bubble",
-	"animationFrames": 5
+	"animationFrames": 8
 }
