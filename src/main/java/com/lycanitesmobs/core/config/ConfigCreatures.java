@@ -42,6 +42,7 @@ public class ConfigCreatures {
 	public final ForgeConfigSpec.ConfigValue<Boolean> beastiaryKnowledgeMessages;
 	public final ForgeConfigSpec.ConfigValue<Integer> creatureProximityKnowledge;
 	public final ForgeConfigSpec.ConfigValue<Integer> creatureKillKnowledge;
+	public final ForgeConfigSpec.ConfigValue<Integer> creatureBreedKnowledge;
 	public final ForgeConfigSpec.ConfigValue<Integer> creatureTreatKnowledge;
 	public final ForgeConfigSpec.ConfigValue<Integer> creatureStudyKnowledge;
 	public final ForgeConfigSpec.ConfigValue<Integer> creatureStudyCooldown;
@@ -146,6 +147,9 @@ public class ConfigCreatures {
 		creatureKillKnowledge = builder.comment("How much knowledge experience killing a creature gives.")
 				.translation(CoreConfig.CONFIG_PREFIX + "creatures.creatureKillKnowledge")
 				.define("creatureKillKnowledge", 50);
+		creatureBreedKnowledge = builder.comment("How much knowledge experience breeding a creature gives.")
+				.translation(CoreConfig.CONFIG_PREFIX + "creatures.creatureBreedKnowledge")
+				.define("creatureBreedKnowledge", 400);
 		creatureTreatKnowledge = builder.comment("How much knowledge experience feeding a treat to a creature gives.")
 				.translation(CoreConfig.CONFIG_PREFIX + "creatures.creatureTreatKnowledge")
 				.define("creatureTreatKnowledge", 100);

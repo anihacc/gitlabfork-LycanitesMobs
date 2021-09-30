@@ -87,6 +87,9 @@ public class CreatureConfig {
 	/** How much knowledge experience killing a creature gives. **/
 	public int creatureKillKnowledge = 50;
 
+	/** How much knowledge experience breeding a creature gives. **/
+	public int creatureBreedKnowledge = 400;
+
 	/** How much knowledge experience feeding a treat to a creature gives. **/
 	public int creatureTreatKnowledge = 100;
 
@@ -190,6 +193,7 @@ public class CreatureConfig {
 		this.beastiaryKnowledgeMessages = ConfigCreatures.INSTANCE.beastiaryKnowledgeMessages.get();
 		this.creatureProximityKnowledge = ConfigCreatures.INSTANCE.creatureProximityKnowledge.get();
 		this.creatureKillKnowledge = ConfigCreatures.INSTANCE.creatureKillKnowledge.get();
+		this.creatureBreedKnowledge = ConfigCreatures.INSTANCE.creatureBreedKnowledge.get();
 		this.creatureTreatKnowledge = ConfigCreatures.INSTANCE.creatureTreatKnowledge.get();
 		this.creatureStudyKnowledge = ConfigCreatures.INSTANCE.creatureStudyKnowledge.get();
 		this.creatureStudyCooldown = ConfigCreatures.INSTANCE.creatureStudyCooldown.get();

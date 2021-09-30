@@ -3,9 +3,7 @@ package com.lycanitesmobs.core.entity;
 import com.lycanitesmobs.core.entity.goals.actions.FollowParentGoal;
 import com.lycanitesmobs.core.entity.goals.actions.MateGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.FindParentGoal;
-import com.lycanitesmobs.core.info.CreatureInfo;
-import com.lycanitesmobs.core.info.ItemDrop;
-import com.lycanitesmobs.core.info.Variant;
+import com.lycanitesmobs.core.info.*;
 import com.lycanitesmobs.core.item.ItemCustomSpawnEgg;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Pose;
@@ -390,6 +388,15 @@ public abstract class AgeableCreatureEntity extends BaseCreatureEntity {
             this.onCreateBaby(partner, baby);
 
             this.getCommandSenderWorld().addFreshEntity(baby);
+
+			for(PlayerEntity player : this.getCommandSenderWorld().players()) {
+				if(this.distanceTo(player) <= 10) {
+					ExtendedPlayer extendedPlayer = ExtendedPlayer.getForPlayer(player);
+					if(extendedPlayer != null) {
+						extendedPlayer.getBeastiary().addCreatureKnowledge(this, this.scaleKnowledgeExperience(CreatureManager.getInstance().config.creatureBreedKnowledge));
+					}
+				}
+			}
         }
     }
 
