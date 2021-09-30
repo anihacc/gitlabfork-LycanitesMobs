@@ -40,20 +40,12 @@ public class CreatureSpawnConfig {
 		this.controlVanillaSpawns = ConfigCreatureSpawning.INSTANCE.controlVanillaSpawns.get();
 
 		// Master Dimension List:
-		String dimensionListValue = ConfigCreatureSpawning.INSTANCE.globalDimensionList.get();
-		List<String> dimensionEntries = new ArrayList<>();
-		for(String dimensionEntry : dimensionListValue.replace(" ", "").split(",")) {
-			if(NumberUtils.isCreatable(dimensionEntry)) {
-				dimensionEntries.add(dimensionEntry);
-			}
-		}
-		this.dimensionList = dimensionEntries.toArray(new String[dimensionEntries.size()]);
+		this.dimensionList = ConfigCreatureSpawning.INSTANCE.globalDimensionList.get().replace(" ", "").split(",");
 		this.dimensionListWhitelist = ConfigCreatureSpawning.INSTANCE.globalDimensionWhitelist.get();
 
 		this.disableDungeonSpawners = ConfigCreatureSpawning.INSTANCE.disableDungeonSpawners.get();
 		this.dungeonSpawnerWeightScale = ConfigCreatureSpawning.INSTANCE.dungeonSpawnerWeightScale.get();
 	}
-
 
 	public boolean isAllowedGlobal(World world) {
 		if(this.disableAllSpawning) {

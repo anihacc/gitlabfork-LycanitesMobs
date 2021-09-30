@@ -5,6 +5,7 @@ import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.entity.PortalEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
+import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import com.lycanitesmobs.core.item.BaseItem;
 import com.lycanitesmobs.core.pets.SummonSet;
@@ -67,6 +68,10 @@ public class ItemStaffSummoning extends BaseItem {
 	// ========== Start ==========
 	@Override
 	public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
+		if (!CreatureManager.getInstance().config.isSummoningAllowed(world)) {
+			return new ActionResult(ActionResultType.FAIL, player.getItemInHand(hand));
+		}
+
 		ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
 		if(playerExt != null) {
 			// Summon Selected Mob:

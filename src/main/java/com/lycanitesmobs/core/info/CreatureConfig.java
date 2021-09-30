@@ -1,7 +1,9 @@
 package com.lycanitesmobs.core.info;
 
+import com.lycanitesmobs.core.config.ConfigCreatureSpawning;
 import com.lycanitesmobs.core.config.ConfigCreatures;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 import java.util.ArrayList;
@@ -61,6 +63,18 @@ public class CreatureConfig {
 
 	/** How far in blocks pets stray from their owner when set to follow. **/
 	public int petFollowDistance = 8;
+
+	/** A global list of dimension ids for restricting where soulbound pets and mounts are allowed. **/
+	public String[] soulboundDimensionList;
+
+	/** If set to true the soulbound dimension list acts as a whitelist, otherwise it is a blacklist. **/
+	public boolean soulboundDimensionListWhitelist = false;
+
+	/** A global list of dimension ids for restricting where minion summoning is allowed. **/
+	public String[] summonDimensionList;
+
+	/** If set to true the summon dimension list acts as a whitelist, otherwise it is a blacklist. **/
+	public boolean summonDimensionListWhitelist = false;
 
 
 	// Beastiary:
@@ -167,6 +181,10 @@ public class CreatureConfig {
 		this.friendlyFire = ConfigCreatures.INSTANCE.friendlyFire.get();
 		this.petRespawnTime = ConfigCreatures.INSTANCE.petRespawnTime.get();
 		this.petFollowDistance = ConfigCreatures.INSTANCE.petFollowDistance.get();
+		this.soulboundDimensionList = ConfigCreatures.INSTANCE.soulboundDimensionList.get().replace(" ", "").split(",");
+		this.soulboundDimensionListWhitelist = ConfigCreatures.INSTANCE.soulboundDimensionWhitelist.get();
+		this.summonDimensionList = ConfigCreatures.INSTANCE.summonDimensionList.get().replace(" ", "").split(",");
+		this.summonDimensionListWhitelist = ConfigCreatures.INSTANCE.summonDimensionWhitelist.get();
 
 		// Beastiary:
 		this.beastiaryKnowledgeMessages = ConfigCreatures.INSTANCE.beastiaryKnowledgeMessages.get();
@@ -222,5 +240,45 @@ public class CreatureConfig {
 			}
 		}
 		return this.globalDrops;
+	}
+
+	public boolean isSoulboundAllowed(World world) {
+		if(this.soulboundDimensionList.length > 0) {
+			boolean inDimensionList = false;
+			for (String dimensionId : this.soulboundDimensionList) {
+				if (dimensionId.equals(world.dimension().location().toString())) {
+					inDimensionList = true;
+					break;
+				}
+			}
+			if (inDimensionList && !this.soulboundDimensionListWhitelist) {
+				return false;
+			}
+			if (!inDimensionList && this.soulboundDimensionListWhitelist) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	public boolean isSummoningAllowed(World world) {
+		if(this.summonDimensionList.length > 0) {
+			boolean inDimensionList = false;
+			for (String dimensionId : this.summonDimensionList) {
+				if (dimensionId.equals(world.dimension().location().toString())) {
+					inDimensionList = true;
+					break;
+				}
+			}
+			if (inDimensionList && !this.summonDimensionListWhitelist) {
+				return false;
+			}
+			if (!inDimensionList && this.summonDimensionListWhitelist) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 }

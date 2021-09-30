@@ -70,6 +70,9 @@ public class ProjectileBehaviourSummon extends ProjectileBehaviour {
 		if(projectile == null || projectile.getCommandSenderWorld().isClientSide) {
 			return;
 		}
+		if (!CreatureManager.getInstance().config.isSummoningAllowed(world)) {
+			return;
+		}
 		EntityType entityType = null;
 
 		// Summon Minion:

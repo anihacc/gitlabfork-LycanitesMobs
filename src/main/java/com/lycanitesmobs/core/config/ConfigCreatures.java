@@ -33,6 +33,12 @@ public class ConfigCreatures {
 	public final ForgeConfigSpec.ConfigValue<Integer> petRespawnTime;
 	public final ForgeConfigSpec.ConfigValue<Integer> petFollowDistance;
 
+	public final ForgeConfigSpec.ConfigValue<String> soulboundDimensionList;
+	public final ForgeConfigSpec.ConfigValue<Boolean> soulboundDimensionWhitelist;
+
+	public final ForgeConfigSpec.ConfigValue<String> summonDimensionList;
+	public final ForgeConfigSpec.ConfigValue<Boolean> summonDimensionWhitelist;
+
 	public final ForgeConfigSpec.ConfigValue<Boolean> beastiaryKnowledgeMessages;
 	public final ForgeConfigSpec.ConfigValue<Integer> creatureProximityKnowledge;
 	public final ForgeConfigSpec.ConfigValue<Integer> creatureKillKnowledge;
@@ -116,6 +122,20 @@ public class ConfigCreatures {
 		petFollowDistance = builder.comment("How far in blocks pets stray from their owner when set to follow.")
 				.translation(CoreConfig.CONFIG_PREFIX + "creatures.petFollowDistance")
 				.define("petFollowDistance", 8);
+
+		soulboundDimensionList = builder.comment("A global list of dimension ids for restricting where soulbound pets and mounts are allowed.")
+				.translation(CoreConfig.CONFIG_PREFIX + "creatures.soulboundDimensionList")
+				.define("soulboundDimensionList", "");
+		soulboundDimensionWhitelist = builder.comment("If set to true the soulbound dimension list acts as a whitelist, otherwise it is a blacklist.")
+				.translation(CoreConfig.CONFIG_PREFIX + "creatures.soulboundDimensionWhitelist")
+				.define("soulboundDimensionWhitelist", false);
+
+		summonDimensionList = builder.comment("A global list of dimension ids for restricting where minion summoning is allowed.")
+				.translation(CoreConfig.CONFIG_PREFIX + "creatures.summonDimensionList")
+				.define("summonDimensionList", "");
+		summonDimensionWhitelist = builder.comment("If set to true the summon dimension list acts as a whitelist, otherwise it is a blacklist.")
+				.translation(CoreConfig.CONFIG_PREFIX + "creatures.summonDimensionWhitelist")
+				.define("summonDimensionWhitelist", false);
 
 		beastiaryKnowledgeMessages = builder.comment("If true, a chat message will be displayed when gaining Beastiary Knowledge.")
 				.translation(CoreConfig.CONFIG_PREFIX + "creatures.beastiaryKnowledgeMessages")
