@@ -2196,6 +2196,63 @@ item.golemtreat.description=Made from the finest machine parts, those golem crea
 item.slimetreat.name=Slime Treat
 item.slimetreat.description=Made from very bouncy slime, those slime creatures seem to like that.
 # ========================================================================
+item.saddle_aberration.name=Aberration Saddle
+item.saddle_aberration.description=A specially adapted saddle for the most obscure of creatures.
+#
+item.saddle_angel.name=Angel Saddle
+item.saddle_angel.description=There are currently no Angel creatures added yet.
+#
+item.saddle_aquatic.name=Aquatic Saddle
+item.saddle_aquatic.description=An aquadynamic saddle built for deep dives.
+#
+item.saddle_amphibian.name=Amphibian Saddle
+item.saddle_amphibian.description=This saddle is especially fitted for slippery creatures and exposure to various fluids.
+#
+item.saddle_arachnid.name=Arachnid Saddle
+item.saddle_arachnid.description=A saddle built to fit all manner of 8 or so legged creatures.
+#	
+item.saddle_insect.name=Insect Saddle
+item.saddle_insect.description=A lightweight saddle with modular fitting mechanisms.
+#	
+item.saddle_avian.name=Avian Saddle
+item.saddle_avian.description=An aerodynamic saddle built especially for flight and glide adapted creatures, also feather friendly.
+#
+item.saddle_beast.name=Beast Saddle
+item.saddle_beast.description=A sturdy saddle with tight yet comfortable strapping.
+#
+item.saddle_reptile.name=Reptile Saddle
+item.saddle_reptile.description=A saddle with specialised thermal padding and cushioned fittings.
+#	
+item.saddle_anthronian.name=Anthronian Saddle
+item.saddle_anthronian.description=A saddle that looks more like a backpack or papoose, ideal for more bipedal mounts!
+#
+item.saddle_demon.name=Demon Saddle
+item.saddle_demon.description=A saddle with wicked enchantments, tempered for the most demonic of beings.
+#
+item.saddle_dragon.name=Dragon Saddle
+item.saddle_dragon.description=A jeweled saddle with special enchantments woven within each precious gem, worthy of a mighty dragon!
+#
+item.saddle_elemental.name=Elemental Saddle
+item.saddle_elemental.description=Creative only, no elementals can be mounted currently.
+#
+item.saddle_imp.name=Imp Saddle
+item.saddle_imp.description=A strange backpack shaped saddle with several small straps.
+#
+item.saddle_plant.name=Plant Saddle
+item.saddle_plant.description=A specialised saddle made from materials that are plant friendly.
+#
+item.saddle_undead.name=Undead Saddle
+item.saddle_undead.description=A saddle with enchantments designed to suppress and control spirits.
+#
+item.saddle_worm.name=Worm Saddle
+item.saddle_worm.description=A long saddle with wide fittings, suitable for the longest and squirmiest of mounts!
+#
+item.saddle_golem.name=Golem Saddle
+item.saddle_golem.description=Made from the finest machine parts, those golem creatures seem to like that.
+#
+item.saddle_slime.name=Slime Saddle
+item.saddle_slime.description=A saddle with special pads that can be filled and drained of chemicals which act as temporary adhesives to slime creatures.
+# ========================================================================
 # %event% will be replaced with the name of the event, don't translate this!
 event.started=%event% has begun!
 event.extended=%event% has been extended!

@@ -15,7 +15,7 @@ import com.lycanitesmobs.core.info.CreatureKnowledge;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ElementInfo;
 import com.lycanitesmobs.core.item.ChargeItem;
-import com.lycanitesmobs.core.item.consumable.ItemTreat;
+import com.lycanitesmobs.core.item.consumable.CreatureTreatItem;
 import com.lycanitesmobs.core.item.special.ItemSoulstone;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -33,7 +33,6 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.util.*;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -768,8 +767,8 @@ public class TameableCreatureEntity extends AgeableCreatureEntity implements IEn
 			return false;
 		}
 
-		if(itemstack.getItem() instanceof ItemTreat) {
-			ItemTreat itemTreat = (ItemTreat)itemstack.getItem();
+		if(itemstack.getItem() instanceof CreatureTreatItem) {
+			CreatureTreatItem itemTreat = (CreatureTreatItem)itemstack.getItem();
 			if(itemTreat.getCreatureType() == this.creatureInfo.creatureType) {
 				return this.creatureInfo.isTameable();
 			}

@@ -35,5 +35,5 @@
 	"particleCount": 1,
 	"particleType": "flame",
 	"waterParticleType": "bubble",
-	"animationFrames": 3
+	"animationFrames": 8
 }

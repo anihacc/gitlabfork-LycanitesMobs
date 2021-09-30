@@ -27,5 +27,5 @@
 	"particleCount": 1,
 	"particleType": "spit",
 	"waterParticleType": "cloud",
-	"animationFrames": 4
+	"animationFrames": 8
 }

@@ -15,5 +15,5 @@
       "item": "minecraft:gold_ingot"
     }
   },
-  "type": "minecraft:crafting_shaped"
+  "type": "forge:ore_shaped"
 }

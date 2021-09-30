@@ -25,7 +25,7 @@
 	"glow": true,
 	"rollSpeed": 4,
 	"particleCount": 5,
-	"particleType": "witchMagic",
+	"particleType": "happyVillager",
 	"waterParticleType": "bubble",
-	"animationFrames": 4
+	"animationFrames": 8
 }

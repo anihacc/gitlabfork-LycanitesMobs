@@ -4,8 +4,9 @@ import com.google.gson.JsonObject;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.item.ItemCustomSpawnEgg;
-import com.lycanitesmobs.core.item.consumable.ItemTreat;
+import com.lycanitesmobs.core.item.consumable.CreatureTreatItem;
 import com.lycanitesmobs.client.localisation.LanguageManager;
+import com.lycanitesmobs.core.item.equipment.CreatureSaddleItem;
 import com.lycanitesmobs.core.item.special.ItemSoulstone;
 import com.lycanitesmobs.core.item.special.ItemSoulstoneFilled;
 import net.minecraft.item.Item;
@@ -33,6 +34,9 @@ public class CreatureType {
 	/** The treat item this type uses. **/
 	protected Item treat;
 
+	/** The saddle item this type uses. **/
+	public Item saddle;
+
 	/** The soulstone item this type uses. **/
 	protected ItemSoulstone soulstone;
 
@@ -51,7 +55,6 @@ public class CreatureType {
 		this.modInfo = group;
 	}
 
-
 	/** Loads this creature type from a JSON object. **/
 	public void loadFromJSON(JsonObject json) {
 		this.name = json.get("name").getAsString();
@@ -69,7 +72,6 @@ public class CreatureType {
 		LycanitesMobs.logDebug("Creature Type", "Loaded Creature Type: " + this.getTitle());
 	}
 
-
 	/**
 	 * Returns the name of this creature type. Ex: beast
 	 * @return The name of this creature type.
@@ -77,7 +79,6 @@ public class CreatureType {
 	public String getName() {
 		return this.name;
 	}
-
 
 	/**
 	 * Returns a translated title for this creature type. Ex: Beast
@@ -87,7 +88,6 @@ public class CreatureType {
 		return LanguageManager.translate("creaturetype." + this.getName() + ".name");
 	}
 
-
 	/**
 	 * Generates a treat item name from this type. Ex: beasttreat
 	 * @return The treat item name for this creature type.
@@ -95,7 +95,6 @@ public class CreatureType {
 	public String getTreatName() {
 		return this.getName() + "treat";
 	}
-
 
 	/**
 	 * Gets this creature type's treat item.
@@ -105,6 +104,21 @@ public class CreatureType {
 		return this.treat;
 	}
 
+	/**
+	 * Generates a saddle item name from this type. Ex: saddle_avian
+	 * @return The saddle item name for this creature type.
+	 */
+	public String getSaddleName() {
+		return "saddle_" + this.getName();
+	}
+
+	/**
+	 * Gets this creature type's saddle item.
+	 * @return The saddle item for this creature type.
+	 */
+	public Item getSaddleItem() {
+		return this.saddle;
+	}
 
 	/**
 	 * Generates a soulstone item name from this type. Ex: imp_soulstone
@@ -113,7 +127,6 @@ public class CreatureType {
 	public String getSoulstoneName() {
 		return "soulstone_" + this.getName();
 	}
-
 
 	/**
 	 * Gets this creature type's soulstone item.
@@ -132,7 +145,6 @@ public class CreatureType {
 		return this.getName() + "spawn";
 	}
 
-
 	/**
 	 * Adds a creature to this Creature Type.
 	 * @param creatureInfo The creature to add.
@@ -148,7 +160,6 @@ public class CreatureType {
 		}
 	}
 
-
 	/**
 	 * Returns the the spawn egg this creature type uses.
 	 * @return Spawn egg item.
@@ -156,7 +167,6 @@ public class CreatureType {
 	public Item getSpawnEgg() {
 		return this.spawnEgg;
 	}
-
 
 	/**
 	 * Creates items for this creature type such as the spawn egg item or treat item, must be called after creatures are loaded so that an egg for each creature can be added.
@@ -177,8 +187,16 @@ public class CreatureType {
 		if(this.treat != null) {
 			return;
 		}
-		this.treat = new ItemTreat(this);
+		this.treat = new CreatureTreatItem(this);
 		ObjectManager.addItem(this.getTreatName(), this.treat);
+
+		// Saddle:
+		this.saddle = ObjectManager.getItem(this.getSaddleName());
+		if(this.saddle != null) {
+			return;
+		}
+		this.saddle = new CreatureSaddleItem(this);
+		ObjectManager.addItem(this.getSaddleName(), this.saddle);
 
 		// Soulstone:
 		this.soulstone = (ItemSoulstone)ObjectManager.getItem(this.getSoulstoneName());

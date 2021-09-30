@@ -1,11 +1,10 @@
 package com.lycanitesmobs.core.entity.goals.actions;
 
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.info.ObjectLists;
-import com.lycanitesmobs.core.item.consumable.ItemTreat;
+import com.lycanitesmobs.core.item.consumable.CreatureTreatItem;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -145,8 +144,8 @@ public class TemptGoal extends EntityAIBase {
         }
 
         // Creature Type Treats for Tameables:
-        if(this.includeTreats && this.host.creatureInfo.isTameable() && this.host.creatureInfo.creatureType != null && itemStack.getItem() instanceof ItemTreat) {
-            ItemTreat itemTreat = (ItemTreat)itemStack.getItem();
+        if(this.includeTreats && this.host.creatureInfo.isTameable() && this.host.creatureInfo.creatureType != null && itemStack.getItem() instanceof CreatureTreatItem) {
+            CreatureTreatItem itemTreat = (CreatureTreatItem)itemStack.getItem();
             if(this.host.creatureInfo.creatureType == itemTreat.getCreatureType()) {
                 return true;
             }

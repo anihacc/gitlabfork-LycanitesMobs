@@ -11,7 +11,6 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
-import net.minecraft.item.ItemSaddle;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
@@ -19,7 +18,6 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
-import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -241,7 +239,7 @@ public class InventoryCreature implements IInventory {
 	@Override
 	public ItemStack getStackInSlot(int slotID) {
 		if(slotID >= this.getSizeInventory() || slotID < 0)
-			return null;
+			return ItemStack.EMPTY;
 		else
 			return this.inventoryContents.get(slotID);
 	}
@@ -280,7 +278,7 @@ public class InventoryCreature implements IInventory {
 
     @Override
     public ItemStack removeStackFromSlot(int index) {
-        return null;
+        return ItemStack.EMPTY;
     }
 
     public ItemStack[] decrStackSize(ItemStack itemStack, int amount) {
@@ -471,8 +469,9 @@ public class InventoryCreature implements IInventory {
 		}
 		
 		// Saddle:
-		if(itemStack.getItem() instanceof ItemSaddle && this.creature instanceof RideableCreatureEntity)
+		if(this.creature instanceof RideableCreatureEntity && itemStack.getItem() == this.creature.creatureInfo.creatureType.saddle) {
 			return "saddle";
+		}
 		
 		// Bag:
 		if(itemStack.getItem() == Item.getItemFromBlock(Blocks.CHEST))
