@@ -470,6 +470,9 @@ public class ExtendedPlayer implements IExtendedPlayer {
 		if(extTagCompound.hasKey("Spirit"))
 			this.spirit = extTagCompound.getInteger("Spirit");
 
+		if(extTagCompound.hasKey("CreatureStudyCooldown"))
+			this.creatureStudyCooldown = extTagCompound.getInteger("CreatureStudyCooldown");
+
 		if(extTagCompound.hasKey("SelectedSummonSet"))
 			this.selectedSummonSet = extTagCompound.getInteger("SelectedSummonSet");
 
@@ -497,6 +500,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
 
 		extTagCompound.setInteger("SummonFocus", this.summonFocus);
 		extTagCompound.setInteger("Spirit", this.spirit);
+		extTagCompound.setInteger("CreatureStudyCooldown", this.creatureStudyCooldown);
 		extTagCompound.setInteger("SelectedSummonSet", this.selectedSummonSet);
 		extTagCompound.setLong("TimePlayed", this.timePlayed);
 
