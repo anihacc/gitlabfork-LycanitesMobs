@@ -14,10 +14,13 @@ import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class EntityEpion extends RideableCreatureEntity implements IMob {
     
@@ -194,5 +197,12 @@ public class EntityEpion extends RideableCreatureEntity implements IMob {
 		if(TextureManager.getTexture(textureName) == null)
 			TextureManager.addTexture(textureName, this.creatureInfo.modInfo, "textures/entity/" + textureName.toLowerCase() + ".png");
 		return TextureManager.getTexture(textureName);
+	}
+
+	// ========== Rendering Distance ==========
+	/** Returns a larger bounding box for rendering this large entity. **/
+	@OnlyIn(Dist.CLIENT)
+	public AxisAlignedBB getBoundingBoxForCulling() {
+		return this.getBoundingBox().inflate(10, 10, 10).move(0, -5, 0);
 	}
 }
