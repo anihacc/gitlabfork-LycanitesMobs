@@ -360,8 +360,9 @@ public class ExtendedPlayer implements IExtendedPlayer {
 	}
 
 	public void studyCreature(Entity entity, int experience) {
-		this.beastiary.addCreatureKnowledge(entity, experience);
-		this.creatureStudyCooldown = this.creatureStudyCooldownMax;
+		if (this.beastiary.addCreatureKnowledge(entity, experience)) {
+			this.creatureStudyCooldown = this.creatureStudyCooldownMax;
+		}
 	}
 	
 	
