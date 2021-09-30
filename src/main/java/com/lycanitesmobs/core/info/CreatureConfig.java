@@ -203,7 +203,7 @@ public class CreatureConfig {
 			}
 		}
 		this.soulboundDimensionList = ArrayUtils.toPrimitive(dimensionEntries.toArray(new Integer[dimensionEntries.size()]));
-		this.soulboundDimensionListWhitelist = config.getBool("Pets", "Master Spawn Dimensions Whitelist", this.soulboundDimensionListWhitelist, "If set to true the soulbound dimension list acts as a whitelist, otherwise it is a blacklist.");
+		this.soulboundDimensionListWhitelist = config.getBool("Pets", "Soulbound Dimensions Whitelist", this.soulboundDimensionListWhitelist, "If set to true the soulbound dimension list acts as a whitelist, otherwise it is a blacklist.");
 
 		dimensionListValue = config.getString("Pets", "Summoning Dimensions", "", "A global list of dimension ids for restricting where summoning minions is allowed.");
 		dimensionEntries = new ArrayList<>();
@@ -213,7 +213,7 @@ public class CreatureConfig {
 			}
 		}
 		this.summonDimensionList = ArrayUtils.toPrimitive(dimensionEntries.toArray(new Integer[dimensionEntries.size()]));
-		this.summonDimensionListWhitelist = config.getBool("Pets", "Master Spawn Dimensions Whitelist", this.summonDimensionListWhitelist, "If set to true the summon dimension list acts as a whitelist, otherwise it is a blacklist.");
+		this.summonDimensionListWhitelist = config.getBool("Pets", "Summoning Dimensions Whitelist", this.summonDimensionListWhitelist, "If set to true the summon dimension list acts as a whitelist, otherwise it is a blacklist.");
 
 		// Beastiary:
 		config.setCategoryComment("Beastiary", "Here you can control all settings related to the player's Beastiary.");
