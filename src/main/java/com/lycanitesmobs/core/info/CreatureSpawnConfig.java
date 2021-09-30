@@ -57,7 +57,6 @@ public class CreatureSpawnConfig {
 		this.dungeonSpawnerWeightScale = config.getDouble("Dungeon Features", "Dungeon Spawner Weight Scale", this.dungeonSpawnerWeightScale, "Scales the weight of dungeons using spawners from this mod. For example, you can half the chances all dungeons having spawners with mobs from this mod in them by setting this to 0.5.");
 	}
 
-
 	public boolean isAllowedGlobal(World world) {
 		if(this.disableAllSpawning) {
 			return false;

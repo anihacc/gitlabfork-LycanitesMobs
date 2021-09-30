@@ -5,6 +5,7 @@ import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.PortalEntity;
 import com.lycanitesmobs.client.gui.beastiary.SummoningBeastiaryScreen;
+import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.pets.SummonSet;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -12,6 +13,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -127,6 +129,10 @@ public class ItemStaffSummoning extends ItemScepter {
     // ========== Start ==========
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+		if (!CreatureManager.getInstance().config.isSummoningAllowed(world)) {
+			return new ActionResult(EnumActionResult.FAIL, player.getHeldItem(hand));
+		}
+
 		ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
 		if(playerExt != null) {
 			// Summon Selected Mob:

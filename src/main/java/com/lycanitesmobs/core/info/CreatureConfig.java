@@ -2,6 +2,9 @@ package com.lycanitesmobs.core.info;
 
 import com.lycanitesmobs.core.config.ConfigBase;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import net.minecraft.world.World;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,6 +63,18 @@ public class CreatureConfig {
 
 	/** How far in blocks pets stray from their owner when set to follow. **/
 	public int petFollowDistance = 8;
+
+	/** A global list of dimension ids for restricting where soulbound pets and mounts are allowed. **/
+	public int[] soulboundDimensionList;
+
+	/** If set to true the soulbound dimension list acts as a whitelist, otherwise it is a blacklist. **/
+	public boolean soulboundDimensionListWhitelist = false;
+
+	/** A global list of dimension ids for restricting where minion summoning is allowed. **/
+	public int[] summonDimensionList;
+
+	/** If set to true the summon dimension list acts as a whitelist, otherwise it is a blacklist. **/
+	public boolean summonDimensionListWhitelist = false;
 
 
 	// Beastiary:
@@ -180,6 +195,26 @@ public class CreatureConfig {
 		this.petRespawnTime = config.getInt("Pets", "Respawn Time", this.petRespawnTime, "The time in tics that it takes for a pet to respawn.");
 		this.petFollowDistance = config.getInt("Pets", "Follow Distance", this.petFollowDistance, "How far in blocks pets stray from their owner when set to follow.");
 
+		String dimensionListValue = config.getString("Pets", "Soulbound Dimensions", "", "A global list of dimension ids for restricting where soulbound pets and mounts are allowed.");
+		List<Integer> dimensionEntries = new ArrayList<>();
+		for(String dimensionEntry : dimensionListValue.replace(" ", "").split(",")) {
+			if(NumberUtils.isCreatable(dimensionEntry)) {
+				dimensionEntries.add(Integer.parseInt(dimensionEntry));
+			}
+		}
+		this.soulboundDimensionList = ArrayUtils.toPrimitive(dimensionEntries.toArray(new Integer[dimensionEntries.size()]));
+		this.soulboundDimensionListWhitelist = config.getBool("Pets", "Master Spawn Dimensions Whitelist", this.soulboundDimensionListWhitelist, "If set to true the soulbound dimension list acts as a whitelist, otherwise it is a blacklist.");
+
+		dimensionListValue = config.getString("Pets", "Summoning Dimensions", "", "A global list of dimension ids for restricting where summoning minions is allowed.");
+		dimensionEntries = new ArrayList<>();
+		for(String dimensionEntry : dimensionListValue.replace(" ", "").split(",")) {
+			if(NumberUtils.isCreatable(dimensionEntry)) {
+				dimensionEntries.add(Integer.parseInt(dimensionEntry));
+			}
+		}
+		this.summonDimensionList = ArrayUtils.toPrimitive(dimensionEntries.toArray(new Integer[dimensionEntries.size()]));
+		this.summonDimensionListWhitelist = config.getBool("Pets", "Master Spawn Dimensions Whitelist", this.summonDimensionListWhitelist, "If set to true the summon dimension list acts as a whitelist, otherwise it is a blacklist.");
+
 		// Beastiary:
 		config.setCategoryComment("Beastiary", "Here you can control all settings related to the player's Beastiary.");
 		this.beastiaryKnowledgeMessages = config.getBool("Beastiary", "Beastiary Knowledge Messages", this.beastiaryKnowledgeMessages, "If true, a chat message will be displayed when gaining Beastiary Knowledge.");
@@ -223,7 +258,6 @@ public class CreatureConfig {
 		this.globalDropsString = config.getString("Default Item Drops", "Global Drops", this.globalDropsString, "");
 	}
 
-
 	/**
 	 * Returns a list of item drops to be drops by all mobs.
 	 * @return Global item drops list.
@@ -241,5 +275,45 @@ public class CreatureConfig {
 			}
 		}
 		return this.globalDrops;
+	}
+
+	public boolean isSoulboundAllowed(World world) {
+		if(this.soulboundDimensionList.length > 0) {
+			boolean inDimensionList = false;
+			for (int dimensionId : this.soulboundDimensionList) {
+				if (dimensionId == world.provider.getDimension()) {
+					inDimensionList = true;
+					break;
+				}
+			}
+			if (inDimensionList && !this.soulboundDimensionListWhitelist) {
+				return false;
+			}
+			if (!inDimensionList && this.soulboundDimensionListWhitelist) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	public boolean isSummoningAllowed(World world) {
+		if(this.summonDimensionList.length > 0) {
+			boolean inDimensionList = false;
+			for (int dimensionId : this.summonDimensionList) {
+				if (dimensionId == world.provider.getDimension()) {
+					inDimensionList = true;
+					break;
+				}
+			}
+			if (inDimensionList && !this.summonDimensionListWhitelist) {
+				return false;
+			}
+			if (!inDimensionList && this.summonDimensionListWhitelist) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 }

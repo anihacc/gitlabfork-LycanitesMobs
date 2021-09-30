@@ -87,7 +87,7 @@ public class PetEntry {
     public static PetEntry createFromEntity(EntityPlayer player, BaseCreatureEntity entity, String petType) {
         CreatureInfo creatureInfo = entity.creatureInfo;
         PetEntry petEntry = new PetEntry(UUID.randomUUID(), petType, player, creatureInfo.getName());
-        if(entity.hasCustomName()) {
+        if (entity.hasCustomName()) {
 			petEntry.setEntityName(entity.getCustomNameTag());
 		}
         petEntry.setEntitySubspecies(entity.getSubspeciesIndex());
@@ -107,14 +107,14 @@ public class PetEntry {
         this.host = host;
 
         ExtendedPlayer playerExt = null;
-        if(host instanceof EntityPlayer)
+        if (host instanceof EntityPlayer)
             playerExt = ExtendedPlayer.getForPlayer((EntityPlayer)host);
         this.summonSet = new SummonSet(playerExt);
         this.summonSet.summonableOnly = false;
         this.summonSet.setSummonType(summonType);
 
         this.respawnTimeMax = CreatureManager.getInstance().config.petRespawnTime;
-        if("minion".equalsIgnoreCase(this.type))
+        if ("minion".equalsIgnoreCase(this.type))
             this.temporary = true;
 	}
 
@@ -145,7 +145,7 @@ public class PetEntry {
 
     public PetEntry setOwner(EntityLivingBase owner) {
         this.host = owner;
-        if(host != null && host instanceof EntityPlayer) {
+        if (host != null && host instanceof EntityPlayer) {
             ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer((EntityPlayer) host);
             this.summonSet.playerExt = playerExt;
         }
@@ -154,13 +154,18 @@ public class PetEntry {
 
     /** Used to set whether this PetEntry spawns mobs, this will also take a Spirit cost if Spirit is used (server side). use a direct spawningActive = true/false to avoid the Spirit cost. **/
     public PetEntry setSpawningActive(boolean spawningActive) {
-        if(this.spawningActive == spawningActive)
+        if (this.spawningActive == spawningActive) {
             return this;
-        if(!this.host.getEntityWorld().isRemote) {
-            if(!spawningActive)
+        }
+        if (!this.host.getEntityWorld().isRemote) {
+            if (!CreatureManager.getInstance().config.isSoulboundAllowed(this.host.getEntityWorld())) {
+                spawningActive = false;
+            }
+            if (!spawningActive) {
                 this.despawnEntity();
-            else if(this.usesSpirit() && this.summonSet.playerExt != null) {
-                if(this.summonSet.playerExt.spirit < this.getSpiritCost()) {
+            }
+            else if (this.usesSpirit() && this.summonSet.playerExt != null) {
+                if (this.summonSet.playerExt.spirit < this.getSpiritCost()) {
                     this.spawningActive = false;
                     return this;
                 }
@@ -173,25 +178,25 @@ public class PetEntry {
     }
 
     public void setLevel(int level) {
-        if(this.entity != null && this.entity instanceof BaseCreatureEntity)
+        if (this.entity != null && this.entity instanceof BaseCreatureEntity)
             ((BaseCreatureEntity)this.entity).setLevel(level);
         this.entityLevel = level;
     }
 
     public int getLevel() {
-        if(this.entity != null && this.entity instanceof BaseCreatureEntity)
+        if (this.entity != null && this.entity instanceof BaseCreatureEntity)
             this.entityLevel = ((BaseCreatureEntity)this.entity).getLevel();
         return this.entityLevel;
     }
 
     public int getExperience() {
-        if(this.entity != null && this.entity instanceof BaseCreatureEntity)
+        if (this.entity != null && this.entity instanceof BaseCreatureEntity)
             this.entityExperience = ((BaseCreatureEntity)this.entity).getExperience();
         return this.entityExperience;
     }
 
     public void setExperience(int experience) {
-        if(this.entity != null && this.entity instanceof BaseCreatureEntity)
+        if (this.entity != null && this.entity instanceof BaseCreatureEntity)
             ((BaseCreatureEntity)this.entity).setExperience(experience);
         this.entityExperience = experience;
     }
@@ -201,19 +206,19 @@ public class PetEntry {
     }
 
     public CreatureInfo getCreatureInfo() {
-        if(this.summonSet == null || "".equals(this.summonSet.summonType))
+        if (this.summonSet == null || "".equals(this.summonSet.summonType))
             return null;
         return CreatureManager.getInstance().getCreature(this.summonSet.summonType);
     }
 
     public float getHealth() {
-        if(this.entity != null && this.entity instanceof EntityLivingBase)
+        if (this.entity != null && this.entity instanceof EntityLivingBase)
             this.entityHealth = ((EntityLivingBase)this.entity).getHealth();
         return this.entityHealth;
     }
 
     public float getMaxHealth() {
-        if(this.entity != null && this.entity instanceof EntityLivingBase)
+        if (this.entity != null && this.entity instanceof EntityLivingBase)
             this.entityMaxHealth = ((EntityLivingBase)this.entity).getMaxHealth();
         return this.entityMaxHealth;
     }
@@ -229,7 +234,7 @@ public class PetEntry {
         this.setEntityVariant(copyEntry.variantIndex);
         this.setEntitySize(copyEntry.entitySize);
         this.setColor(copyEntry.color);
-        if(copyEntry.summonSet != null)
+        if (copyEntry.summonSet != null)
             this.summonSet.setSummonType(copyEntry.summonSet.summonType);
     }
 
@@ -239,7 +244,7 @@ public class PetEntry {
     // ==================================================
     public String getDisplayName() {
         String displayName = this.summonSet.getCreatureInfo().getTitle();
-        if(this.entityName != null && !"".equals(this.entityName)) {
+        if (this.entityName != null && !"".equals(this.entityName)) {
 			displayName = this.entityName + " (" + displayName + ")";
 		}
         return displayName;
@@ -271,48 +276,51 @@ public class PetEntry {
 	/** Called by the PetManager, runs any logic for this entry. This is normally called from an entity update. **/
 	public void onUpdate(World world) {
         // Client Side Update:
-        if(world.isRemote) {
-            if(this.isRespawning && this.respawnTime > 0) {
+        if (world.isRemote) {
+            if (this.isRespawning && this.respawnTime > 0) {
                 this.respawnTime--;
             }
             return;
         }
 
         // Active Checks:
-		if(!this.active)
+		if (!this.active)
             return;
-        if(!this.isActive()) {
+        if (!this.isActive()) {
             this.remove();
             return;
         }
+        if (!CreatureManager.getInstance().config.isSoulboundAllowed(this.host.getEntityWorld())) {
+            this.setSpawningActive(false);
+        }
 
         // Active Spawning:
-        if(this.spawningActive) {
+        if (this.spawningActive) {
             // Dead Check:
-            if(this.entity != null && !this.entity.isEntityAlive()) {
+            if (this.entity != null && !this.entity.isEntityAlive()) {
                 this.saveEntityNBT();
                 this.entity = null;
                 this.isRespawning = true;
                 this.respawnTime = this.respawnTimeMax;
-                if(this.summonSet.playerExt != null)
+                if (this.summonSet.playerExt != null)
                     this.summonSet.playerExt.sendPetEntryToPlayer(this);
             }
 
             // No Entity:
-            if(this.entity == null) {
+            if (this.entity == null) {
                 // Respawn:
-                if(!this.isRespawning)
+                if (!this.isRespawning)
                     this.respawnTime = 0;
-                if(this.respawnTime > this.respawnTimeMax)
+                if (this.respawnTime > this.respawnTimeMax)
                     this.respawnTime = this.respawnTimeMax;
-                if(this.respawnTime-- <= 0) {
+                if (this.respawnTime-- <= 0) {
                     this.spawnEntity();
                     this.isRespawning = false;
                 }
             }
 
             // Entity Update:
-            if(this.entity != null) {
+            if (this.entity != null) {
                 this.entityTick++;
 
                 // Teleport Entity:
@@ -327,17 +335,17 @@ public class PetEntry {
                     LycanitesMobs.logDebug("Pet", "Unable to teleport a pet.");
                 }
 
-                if(this.entity instanceof EntityLivingBase) {
+                if (this.entity instanceof EntityLivingBase) {
                     // Passive Healing:
                     EntityLivingBase entityLiving = (EntityLivingBase)this.entity;
-                    if(this.entityTick % 60 == 0 && entityLiving.getHealth() < entityLiving.getMaxHealth()) {
+                    if (this.entityTick % 60 == 0 && entityLiving.getHealth() < entityLiving.getMaxHealth()) {
                         entityLiving.setHealth(Math.min(entityLiving.getHealth() + 1, entityLiving.getMaxHealth()));
                     }
                     this.entityHealth = entityLiving.getHealth();
                     this.entityMaxHealth = entityLiving.getMaxHealth();
                 }
 
-                if(entity.hasCustomName()) {
+                if (entity.hasCustomName()) {
                 	this.entityName = this.entity.getCustomNameTag();
 				}
             }
@@ -346,14 +354,14 @@ public class PetEntry {
         // Inactive Spawning:
         else {
             // Remove Entity If Spawned:
-            if(this.entity != null) {
+            if (this.entity != null) {
                 this.saveEntityNBT();
                 this.entity.setDead();
                 this.entity = null;
             }
 
             // Count Down Respawn Timer If Active:
-            if(this.respawnTime > 0)
+            if (this.respawnTime > 0)
                 this.respawnTime--;
         }
 
@@ -366,7 +374,7 @@ public class PetEntry {
     // ==================================================
     /** Called when this entry's entity behaviour has been changed by the client. **/
     public void onBehaviourUpdate() {
-        if(this.entity != null && this.entity instanceof TameableCreatureEntity)
+        if (this.entity != null && this.entity instanceof TameableCreatureEntity)
             this.summonSet.applyBehaviour((TameableCreatureEntity)this.entity);
     }
 
@@ -376,7 +384,7 @@ public class PetEntry {
     // ==================================================
     /** Called every update, if this returns false this entry will call onRemove(). **/
     public boolean isActive() {
-        if(this.entity == null && this.temporary && this.spawnCount > 0)
+        if (this.entity == null && this.temporary && this.spawnCount > 0)
             return false;
         return true;
     }
@@ -387,7 +395,7 @@ public class PetEntry {
     // ==================================================
     /** Spawns and sets this entry's entity if it isn't active already. **/
     public void spawnEntity() {
-        if(this.entity != null || this.host == null)
+        if (this.entity != null || this.host == null)
             return;
         try {
             this.entity = (Entity)this.summonSet.getCreatureClass().getConstructor(new Class[] {World.class}).newInstance(new Object[] {this.host.getEntityWorld()});
@@ -397,7 +405,7 @@ public class PetEntry {
             //e.printStackTrace();
         }
 
-        if(this.entity == null)
+        if (this.entity == null)
             return;
 
         // Load NBT Data:
@@ -406,37 +414,37 @@ public class PetEntry {
         // Spawn Location:
         this.entity.setLocationAndAngles(this.host.posX, this.host.posY, this.host.posZ, this.host.rotationYaw, 0.0F);
 
-        if(this.entity instanceof BaseCreatureEntity) {
+        if (this.entity instanceof BaseCreatureEntity) {
             BaseCreatureEntity entityCreature = (BaseCreatureEntity)this.entity;
             entityCreature.applyLevel(this.entityLevel);
             entityCreature.setExperience(this.entityExperience);
             entityCreature.setMinion(true);
             entityCreature.setPetEntry(this);
 
-            if(entityCreature instanceof TameableCreatureEntity) {
+            if (entityCreature instanceof TameableCreatureEntity) {
                 TameableCreatureEntity entityTameable = (TameableCreatureEntity)entityCreature;
                 this.summonSet.applyBehaviour(entityTameable);
             }
 
             // Better Spawn Location and Angle:
             float randomAngle = 45F + (45F * this.host.getRNG().nextFloat());
-            if(this.host.getRNG().nextBoolean())
+            if (this.host.getRNG().nextBoolean())
                 randomAngle = -randomAngle;
             BlockPos spawnPos = entityCreature.getFacingPosition(this.host, -1, randomAngle);
-            if(!this.entity.getEntityWorld().isSideSolid(spawnPos, EnumFacing.UP))
+            if (!this.entity.getEntityWorld().isSideSolid(spawnPos, EnumFacing.UP))
                 this.entity.setLocationAndAngles(spawnPos.getX(), spawnPos.getY(), spawnPos.getZ(), this.host.rotationYaw, 0.0F);
             else {
                 spawnPos = entityCreature.getFacingPosition(this.host, -1, -randomAngle);
-                if(this.entity.getEntityWorld().isSideSolid(spawnPos, EnumFacing.UP))
+                if (this.entity.getEntityWorld().isSideSolid(spawnPos, EnumFacing.UP))
                     this.entity.setLocationAndAngles(spawnPos.getX(), spawnPos.getY(), spawnPos.getZ(), this.host.rotationYaw, 0.0F);
             }
 
             // Temporary:
-            if(this.temporary)
+            if (this.temporary)
                 entityCreature.setTemporary(this.temporaryDuration);
 
             // Entity Name and Appearance:
-            if(this.entityName != null && !"".equals(this.entityName)) {
+            if (this.entityName != null && !"".equals(this.entityName)) {
 				entityCreature.setCustomNameTag(this.entityName);
 			}
             entityCreature.setSizeScale(this.entitySize);
@@ -444,7 +452,7 @@ public class PetEntry {
             entityCreature.applyVariant(this.variantIndex);
 
             // Tamed Behaviour:
-            if(entityCreature instanceof TameableCreatureEntity && this.host instanceof EntityPlayer) {
+            if (entityCreature instanceof TameableCreatureEntity && this.host instanceof EntityPlayer) {
                 TameableCreatureEntity entityTameable = (TameableCreatureEntity)entityCreature;
                 entityTameable.setPlayerOwner((EntityPlayer)this.host);
                 this.summonSet.applyBehaviour(entityTameable);
@@ -454,14 +462,14 @@ public class PetEntry {
         this.spawnCount++;
 
         // Respawn with half health:
-        if(this.entity instanceof EntityLivingBase && this.isRespawning) {
+        if (this.entity instanceof EntityLivingBase && this.isRespawning) {
             EntityLivingBase entityLiving = (EntityLivingBase)this.entity;
             entityLiving.setHealth(entityLiving.getMaxHealth() / 2);
         }
 
         this.onSpawnEntity(this.entity);
         this.host.getEntityWorld().spawnEntity(this.entity);
-        if(this.summonSet.playerExt != null)
+        if (this.summonSet.playerExt != null)
             this.summonSet.playerExt.sendPetEntryToPlayer(this);
     }
 
@@ -476,7 +484,7 @@ public class PetEntry {
     // ==================================================
     /** Despawns this entry's entity if it isn't already. This entry will still be active even if the entity is despawned so that it may be spawned again in the future. **/
     public void despawnEntity() {
-        if(this.entity == null)
+        if (this.entity == null)
             return;
         this.onDespawnEntity(this.entity);
         this.saveEntityNBT();
@@ -495,25 +503,25 @@ public class PetEntry {
     // ==================================================
     /** Connects this PetEntry to the provided entity. If there is already an entity attached then the attached entity will be despawned. **/
     public void assignEntity(Entity entity) {
-        if(this.entity != null)
+        if (this.entity != null)
             this.despawnEntity();
         this.setSpawningActive(true);
         this.entity = entity;
 
-        if(this.entity instanceof BaseCreatureEntity) {
+        if (this.entity instanceof BaseCreatureEntity) {
             BaseCreatureEntity entityCreature = (BaseCreatureEntity) this.entity;
             entityCreature.setMinion(true);
             entityCreature.setPetEntry(this);
 
-            if(entityCreature instanceof TameableCreatureEntity) {
+            if (entityCreature instanceof TameableCreatureEntity) {
                 TameableCreatureEntity entityTameable = (TameableCreatureEntity)entityCreature;
                 this.summonSet.updateBehaviour(entityTameable);
             }
 
-            if(this.temporary)
+            if (this.temporary)
                 entityCreature.setTemporary(this.temporaryDuration);
 
-            if(this.entityName != null && !"".equals(this.entityName))
+            if (this.entityName != null && !"".equals(this.entityName))
                 entityCreature.setCustomNameTag(this.entityName);
             entityCreature.setSizeScale(this.entitySize);
             entityCreature.setSubspecies(this.subspeciesIndex);
@@ -545,7 +553,7 @@ public class PetEntry {
 
     /** Returns the spirit cost of this entity. **/
     public int getSpiritCost() {
-        if(this.summonSet.playerExt == null)
+        if (this.summonSet.playerExt == null)
             return 0;
         return this.summonSet.playerExt.spiritCharge * this.getCreatureInfo().summonCost;
     }
@@ -557,26 +565,26 @@ public class PetEntry {
     // ========== Read ===========
     /** Reads pet entry from NBTTag. Should be called by PetManagers or other classes that store PetEntries and NBT Data for them. **/
     public void readFromNBT(NBTTagCompound nbtTagCompound) {
-        if(nbtTagCompound.hasUniqueId("UUID"))
+        if (nbtTagCompound.hasUniqueId("UUID"))
             this.petEntryID = nbtTagCompound.getUniqueId("UUID");
-        if(nbtTagCompound.hasKey("Type"))
+        if (nbtTagCompound.hasKey("Type"))
             this.type = nbtTagCompound.getString("Type");
 
-        if(nbtTagCompound.hasKey("Active"))
+        if (nbtTagCompound.hasKey("Active"))
             this.active = nbtTagCompound.getBoolean("Active");
-        if(nbtTagCompound.hasKey("RespawnTime"))
+        if (nbtTagCompound.hasKey("RespawnTime"))
             this.respawnTime = nbtTagCompound.getInteger("RespawnTime");
-        if(nbtTagCompound.hasKey("Respawning"))
+        if (nbtTagCompound.hasKey("Respawning"))
             this.isRespawning = nbtTagCompound.getBoolean("Respawning");
-        if(nbtTagCompound.hasKey("SpawningActive"))
+        if (nbtTagCompound.hasKey("SpawningActive"))
             this.spawningActive = nbtTagCompound.getBoolean("SpawningActive");
 
         this.summonSet.readFromNBT(nbtTagCompound);
 
         // Load Entity:
-        if(nbtTagCompound.hasKey("EntityName"))
+        if (nbtTagCompound.hasKey("EntityName"))
             this.setEntityName(nbtTagCompound.getString("EntityName"));
-        if(!"familiar".equals(this.getType())) {
+        if (!"familiar".equals(this.getType())) {
             if (nbtTagCompound.hasKey("SubspeciesID")) {
                 this.setEntitySubspecies(Subspecies.getIndexFromOld(nbtTagCompound.getInteger("SubspeciesID")));
                 this.setEntityVariant(Variant.getIndexFromOld(nbtTagCompound.getInteger("SubspeciesID")));
@@ -590,7 +598,7 @@ public class PetEntry {
             if (nbtTagCompound.hasKey("Color"))
                 this.setColor(nbtTagCompound.getString("Color"));
         }
-        if(nbtTagCompound.hasKey("EntityNBT"))
+        if (nbtTagCompound.hasKey("EntityNBT"))
             this.entityNBT = nbtTagCompound.getCompoundTag("EntityNBT");
         this.loadEntityNBT();
     }
@@ -623,7 +631,7 @@ public class PetEntry {
     // ========== Save Entity NBT ==========
     /** If this PetEntry currently has an active entity, this will save that entity's NBT data to this PetEntry's record of it. **/
     public void saveEntityNBT() {
-        if(this.entityNBT == null) {
+        if (this.entityNBT == null) {
             this.entityNBT = new NBTTagCompound();
         }
 
@@ -631,7 +639,7 @@ public class PetEntry {
         this.entityNBT.setInteger("Experience", this.getExperience());
 
 		// Creature Base:
-        if(this.entity instanceof BaseCreatureEntity) {
+        if (this.entity instanceof BaseCreatureEntity) {
             BaseCreatureEntity baseCreatureEntity = (BaseCreatureEntity)this.entity;
             baseCreatureEntity.inventory.writeToNBT(this.entityNBT);
 
@@ -639,13 +647,13 @@ public class PetEntry {
             baseCreatureEntity.extraMobBehaviour.writeToNBT(extTagCompound);
             this.entityNBT.setTag("ExtraBehaviour", extTagCompound);
 
-            if(this.entity instanceof AgeableCreatureEntity) {
+            if (this.entity instanceof AgeableCreatureEntity) {
                 AgeableCreatureEntity ageableCreatureEntity = (AgeableCreatureEntity)this.entity;
                 this.entityNBT.setInteger("Age", ageableCreatureEntity.getGrowingAge());
             }
 
             // Update Pet Name:
-            if(this.entity.hasCustomName()) {
+            if (this.entity.hasCustomName()) {
                 this.entityName = this.entity.getCustomNameTag();
             }
 
@@ -656,22 +664,22 @@ public class PetEntry {
     // ========== Load Entity NBT ==========
     /** If this PetEntry is spawning a new entity, this will load any saved entity NBT data onto it. **/
     public void loadEntityNBT() {
-        if(this.entityNBT == null)
+        if (this.entityNBT == null)
             return;
 
-        if(this.entityNBT.hasKey("MobLevel")) {
+        if (this.entityNBT.hasKey("MobLevel")) {
             this.setLevel(this.entityNBT.getInteger("MobLevel"));
         }
-        if(this.entityNBT.hasKey("Experience")) {
+        if (this.entityNBT.hasKey("Experience")) {
             this.setExperience(this.entityNBT.getInteger("Experience"));
         }
 
-        if(this.entity instanceof BaseCreatureEntity) {
+        if (this.entity instanceof BaseCreatureEntity) {
             BaseCreatureEntity baseCreatureEntity = (BaseCreatureEntity)this.entity;
             baseCreatureEntity.inventory.readFromNBT(this.entityNBT);
-            if(this.entity instanceof AgeableCreatureEntity) {
+            if (this.entity instanceof AgeableCreatureEntity) {
                 AgeableCreatureEntity ageableCreatureEntity = (AgeableCreatureEntity)this.entity;
-                if(this.entityNBT.hasKey("Age"))
+                if (this.entityNBT.hasKey("Age"))
                     ageableCreatureEntity.setGrowingAge(this.entityNBT.getInteger("Age"));
                 else
                     ageableCreatureEntity.setGrowingAge(0);
