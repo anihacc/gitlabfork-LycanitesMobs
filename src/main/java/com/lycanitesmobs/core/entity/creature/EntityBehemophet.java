@@ -1,8 +1,10 @@
 package com.lycanitesmobs.core.entity.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
+import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
 import com.lycanitesmobs.core.entity.projectile.EntityHellfireOrb;
 import net.minecraft.block.Block;
@@ -11,6 +13,7 @@ import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.monster.CreeperEntity;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -42,7 +45,8 @@ public class EntityBehemophet extends TameableCreatureEntity implements IMob {
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackRangedGoal(this).setSpeed(1.0D).setRange(16.0F).setMinChaseDistance(8.0F).setChaseTime(-1));
+        this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(false).setRange(1D).setMaxChaseDistance(8.0F));
+        this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackRangedGoal(this).setSpeed(1.0D).setRange(16.0F).setMinChaseDistance(0F).setChaseTime(-1));
     }
 
     /** Initiates the entity setting all the values to be watched by the datawatcher. **/
@@ -101,9 +105,40 @@ public class EntityBehemophet extends TameableCreatureEntity implements IMob {
     }
 
     @Override
+    public boolean canAttackWithPickup() {
+        return true;
+    }
+
+    @Override
+    public boolean attackMelee(Entity target, double damageScale) {
+        if (!super.attackMelee(target, damageScale))
+            return false;
+
+        // Pickup and Throw:
+        if (target instanceof LivingEntity) {
+            LivingEntity entityLivingBase = (LivingEntity)target;
+            if (this.canPickupEntity(entityLivingBase)) {
+                this.pickupEntity(entityLivingBase);
+            }
+            else if (this.getPickupEntity() == target && this.getRandom().nextBoolean()) {
+                this.dropPickupEntity();
+                target.setDeltaMovement(this.getFacingPositionDouble(0, 1D, 0, 2D, this.yBodyRot));
+            }
+        }
+
+        return true;
+    }
+
+    @Override
     public void attackRanged(Entity target, float range) {
         this.fireProjectile("hellfireball", target, range, 0, new Vector3d(0, 0, 0), 1.2f, 2f, 1F);
         super.attackRanged(target, range);
+    }
+
+    @Override
+    public double[] getPickupOffset(Entity entity) {
+        Vector3d offset = this.getFacingPositionDouble(0, 2, 0, 1.5D, this.yBodyRot);
+        return new double[]{offset.x, offset.y, offset.z};
     }
 
     @Override

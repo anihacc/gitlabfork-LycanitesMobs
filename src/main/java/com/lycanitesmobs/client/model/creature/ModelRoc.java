@@ -10,27 +10,17 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class ModelRoc extends CreatureObjModel {
-	
-	// ==================================================
-  	//                    Constructors
-  	// ==================================================
     public ModelRoc() {
         this(1.0F);
     }
     
     public ModelRoc(float shadowSize) {
-    	// Load Model:
     	this.initModel("roc", LycanitesMobs.modInfo, "entity/roc");
-    	
-    	// Trophy:
+
         this.trophyScale = 1.0F;
         this.trophyOffset = new float[] {0.0F, 0.0F, -0.4F};
     }
-    
-    
-    // ==================================================
-   	//                 Animate Part
-   	// ==================================================
+
     @Override
     public void animatePart(String partName, LivingEntity entity, float time, float distance, float loop, float lookY, float lookX, float scale) {
     	super.animatePart(partName, entity, time, distance, loop, lookY, lookX, scale);
