@@ -60,16 +60,16 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 
 		this.harvestType = json.get("harvestType").getAsString();
 
-		if(json.has("harvestType"))
+		if (json.has("harvestType"))
 			this.harvestType = json.get("harvestType").getAsString();
 
-		if(json.has("harvestSpeed"))
+		if (json.has("harvestSpeed"))
 			this.harvestSpeed = json.get("harvestSpeed").getAsFloat();
 
-		if(json.has("harvestLevel"))
+		if (json.has("harvestLevel"))
 			this.harvestLevel = json.get("harvestLevel").getAsInt();
 
-		if(json.has("harvestShape"))
+		if (json.has("harvestShape"))
 			this.harvestShape = json.get("harvestShape").getAsString();
 
 		this.harvestRange = JSONHelper.getVector3i(json, "harvestRange");
@@ -77,7 +77,7 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 
 	@Override
 	public ITextComponent getDescription(ItemStack itemStack, int level) {
-		if(!this.isActive(itemStack, level)) {
+		if (!this.isActive(itemStack, level)) {
 			return null;
 		}
 		return new TranslationTextComponent("equipment.feature." + this.featureType).append(" ")
@@ -86,11 +86,11 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 
 	@Override
 	public ITextComponent getSummary(ItemStack itemStack, int level) {
-		if(!this.isActive(itemStack, level)) {
+		if (!this.isActive(itemStack, level)) {
 			return null;
 		}
 		StringTextComponent summary = new StringTextComponent(this.harvestType);
-		if(this.harvestRange.distSqr(0, 0, 0, false) > 0) {
+		if (this.harvestRange.distSqr(0, 0, 0, false) > 0) {
 			summary.append(" (" + this.harvestShape);
 			summary.append(" " + this.getHarvestRangeString(level));
 			summary.append(")");
@@ -121,45 +121,45 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 
 	/**
 	 * Returns if this feature can harvest the provided block or not.
-	 * @param blockState
-	 * @return
+	 * @param blockState The blockstate to check.
+	 * @return True if the block can be destroyed by this feature.
 	 */
 	public boolean canHarvestBlock(BlockState blockState) {
 		Block block = blockState.getBlock();
 		Material material = blockState.getMaterial();
 
 		// Stone:
-		if(material == Material.METAL || material == Material.HEAVY_METAL || material == Material.STONE || PICKAXE_HARVEST.contains(block)) {
+		if (material == Material.METAL || material == Material.HEAVY_METAL || material == Material.STONE || PICKAXE_HARVEST.contains(block)) {
 			return this.harvestType.equalsIgnoreCase("pickaxe");
 		}
 
 		// Wood:
-		if(material == Material.WOOD || AXE_HARVEST.contains(block)) {
+		if (material == Material.WOOD || AXE_HARVEST.contains(block)) {
 			return this.harvestType.equalsIgnoreCase("axe");
 		}
 
 		// Plants:
-		if(material == Material.PLANT || material == Material.REPLACEABLE_PLANT) {
+		if (material == Material.PLANT || material == Material.REPLACEABLE_PLANT) {
 			return this.harvestType.equalsIgnoreCase("axe") || this.harvestType.equalsIgnoreCase("sword") || this.harvestType.equalsIgnoreCase("shears");
 		}
 
 		// Web and Leaves:
-		if(material == Material.WEB || material == Material.LEAVES || material == Material.REPLACEABLE_WATER_PLANT) {
+		if (material == Material.WEB || material == Material.LEAVES || material == Material.REPLACEABLE_WATER_PLANT) {
 			return this.harvestType.equalsIgnoreCase("sword") || this.harvestType.equalsIgnoreCase("shears");
 		}
 
 		// Dirt:
-		if(material == Material.DIRT || material == Material.CLAY || material == Material.SAND || material == Material.GRASS || SPADE_HARVEST.contains(block)) {
+		if (material == Material.DIRT || material == Material.CLAY || material == Material.SAND || material == Material.GRASS || SPADE_HARVEST.contains(block)) {
 			return this.harvestType.equalsIgnoreCase("shovel");
 		}
 
 		// Growth:
-		if(material == Material.CORAL || material == Material.VEGETABLE) {
+		if (material == Material.CORAL || material == Material.VEGETABLE) {
 			return this.harvestType.equalsIgnoreCase("sword");
 		}
 
 		// Wire:
-		if(block == Blocks.TRIPWIRE) {
+		if (block == Blocks.TRIPWIRE) {
 			return this.harvestType.equalsIgnoreCase("shears");
 		}
 
@@ -173,7 +173,7 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 	 * @return The harvest speed to add (all harvest features have their speed added together).
 	 */
 	public float getHarvestSpeed(BlockState blockState) {
-		if(!this.canHarvestBlock(blockState)) {
+		if (!this.canHarvestBlock(blockState)) {
 			return 0;
 		}
 
@@ -190,12 +190,12 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 		Material material = blockState.getMaterial();
 
 		// Web:
-		if(material == Material.WEB) {
+		if (material == Material.WEB) {
 			return 10;
 		}
 
 		// Shears:
-		if((material == Material.LEAVES || material == Material.REPLACEABLE_PLANT) && this.harvestType.equalsIgnoreCase("shears")) {
+		if ((material == Material.LEAVES || material == Material.REPLACEABLE_PLANT) && this.harvestType.equalsIgnoreCase("shears")) {
 			return 10;
 		}
 
@@ -211,7 +211,7 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 	 * @param livingEntity The entity that destroyed the block.
 	 */
 	public void onBlockDestroyed(World world, BlockState harvestedBlockState, BlockPos harvestedPos, LivingEntity livingEntity) {
-		if(livingEntity == null || livingEntity.isShiftKeyDown()) {
+		if (livingEntity == null || livingEntity.isShiftKeyDown()) {
 			return;
 		}
 
@@ -219,10 +219,10 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 		Direction facingH = livingEntity.getDirection();
 		Direction facingLat = facingH.getClockWise();
 		Direction facing = facingH;
-		if(livingEntity.xRot > 45) {
+		if (livingEntity.xRot > 45) {
 			facing = Direction.DOWN;
 		}
-		else if(livingEntity.xRot < -45) {
+		else if (livingEntity.xRot < -45) {
 			facing = Direction.UP;
 		}
 		Vector3i[][] selectionRanges = new Vector3i[3][2];
@@ -257,7 +257,7 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 		);
 
 		// Get Vertical (Y):
-		if(facing != Direction.DOWN && facing != Direction.UP) {
+		if (facing != Direction.DOWN && facing != Direction.UP) {
 			int vertOffset = this.harvestRange.getY() != 0 ? -1 : 0;
 			selectionRanges[vert][min] = new Vector3i(0, vertOffset, 0);
 			selectionRanges[vert][max] = new Vector3i(0, this.harvestRange.getY() + vertOffset, 0);
@@ -276,7 +276,7 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 		}
 
 		// Block and Random Area Harvesting:
-		if(this.harvestShape.equalsIgnoreCase("block") || this.harvestShape.equalsIgnoreCase("random")) {
+		if (this.harvestShape.equalsIgnoreCase("block") || this.harvestShape.equalsIgnoreCase("random")) {
 			boolean random = this.harvestShape.equalsIgnoreCase("random");
 
 			// Longitude:
@@ -315,7 +315,7 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 		}
 
 		// Cross Area Harvesting:
-		if(this.harvestShape.equalsIgnoreCase("cross")) {
+		if (this.harvestShape.equalsIgnoreCase("cross")) {
 
 			// Longitude:
 			for (int longX = selectionRanges[lon][min].getX(); longX <= selectionRanges[lon][max].getX(); longX++) {
@@ -361,13 +361,19 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 	 * @return True if the block should be area harvested.
 	 */
 	public boolean shouldHarvestBlock(World world, BlockState harvestedBlockState, BlockPos harvestedPos, BlockPos targetPos) {
-		if(harvestedPos.equals(targetPos)) {
+		if (harvestedPos.equals(targetPos)) {
 			return false;
 		}
 		BlockState targetBlockState = world.getBlockState(targetPos);
-		if(targetBlockState.getBlock() != harvestedBlockState.getBlock()) {
+		if (targetBlockState.getBlock() != harvestedBlockState.getBlock()) {
 			return false;
 		}
+
+		// Don't area harvest Block Entities.
+		if (world.getBlockEntity(targetPos) != null) {
+			return false;
+		}
+
 		return this.canHarvestBlock(world.getBlockState(targetPos));
 	}
 
@@ -376,7 +382,7 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 	 * @param context The item use context.
 	 */
 	public boolean onBlockUsed(ItemUseContext context) {
-		if(!"hoe".equals(this.harvestType)) {
+		if (!"hoe".equals(this.harvestType)) {
 			return false;
 		}
 
@@ -406,7 +412,7 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 	 * @param itemStack The equipment itemstack.
 	 */
 	public boolean onEntityInteraction(PlayerEntity player, LivingEntity entity, ItemStack itemStack) {
-		if(!"shears".equals(this.harvestType) || player.getCommandSenderWorld().isClientSide) {
+		if (!"shears".equals(this.harvestType) || player.getCommandSenderWorld().isClientSide) {
 			return false;
 		}
 

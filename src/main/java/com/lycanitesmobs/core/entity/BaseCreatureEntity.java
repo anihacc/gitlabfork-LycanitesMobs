@@ -3949,6 +3949,9 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 				for (int h = 0; h <= Math.ceil(this.getDimensions(Pose.STANDING).height); h++) {
 					BlockPos breakPos = new BlockPos(x + w, y + h, z + d);
 					BlockState blockState = this.getCommandSenderWorld().getBlockState(breakPos);
+					if (this.getCommandSenderWorld().getBlockEntity(breakPos) != null) {
+						continue;
+					}
 					float hardness = blockState.getDestroySpeed(this.getCommandSenderWorld(), breakPos);
 					Material material = blockState.getMaterial();
 					if (hardness >= 0 && strength >= hardness && strength >= blockState.getBlock().getExplosionResistance() && material != Material.WATER && material != Material.LAVA) {
@@ -3966,9 +3969,13 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		for(int w = -((int)Math.ceil(this.getDimensions(Pose.STANDING).width) + range); w <= (Math.ceil(this.getDimensions(Pose.STANDING).width) + range); w++)
 			for(int d = -((int)Math.ceil(this.getDimensions(Pose.STANDING).width) + range); d <= (Math.ceil(this.getDimensions(Pose.STANDING).width) + range); d++)
 				for(int h = 0; h <= Math.ceil(this.getDimensions(Pose.STANDING).height); h++) {
-					BlockState blockState = this.getCommandSenderWorld().getBlockState(new BlockPos(x + w, y + h, z + d));
+					BlockPos breakPos = new BlockPos(x + w, y + h, z + d);
+					if (this.getCommandSenderWorld().getBlockEntity(breakPos) != null) {
+						continue;
+					}
+					BlockState blockState = this.getCommandSenderWorld().getBlockState(breakPos);
 					if(blockClass.isInstance(blockState.getBlock())) {
-						this.getCommandSenderWorld().destroyBlock(new BlockPos(x + w, y + h, z + d), drop);
+						this.getCommandSenderWorld().destroyBlock(breakPos, drop);
 					}
 				}
 	}

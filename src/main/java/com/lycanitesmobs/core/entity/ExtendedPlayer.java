@@ -358,7 +358,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
 	}
 
 	public boolean studyCreature(LivingEntity entity, int experience) {
-		if(this.creatureStudyCooldown > 0 || !(entity instanceof BaseCreatureEntity)) {
+		if(!(entity instanceof BaseCreatureEntity)) {
 			return false;
 		}
 		BaseCreatureEntity creature = (BaseCreatureEntity)entity;
