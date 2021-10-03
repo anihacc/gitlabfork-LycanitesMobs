@@ -3,6 +3,7 @@ package com.lycanitesmobs.core.entity.creature;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.client.AssetManager;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
+import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
 import com.lycanitesmobs.core.entity.projectile.EntityHellfireOrb;
 import net.minecraft.block.Block;
@@ -45,7 +46,8 @@ public class EntityBehemoth extends TameableCreatureEntity implements IMob {
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(this.nextCombatGoalIndex++, new AttackRangedGoal(this).setSpeed(1.0D).setRange(16.0F).setMinChaseDistance(8.0F).setChaseTime(-1));
+        this.tasks.addTask(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(false).setRange(1D).setMaxChaseDistance(8.0F));
+        this.tasks.addTask(this.nextCombatGoalIndex++, new AttackRangedGoal(this).setSpeed(1.0D).setRange(16.0F).setMinChaseDistance(0F).setChaseTime(-1));
     }
 
     // ========== Init ==========
@@ -106,19 +108,51 @@ public class EntityBehemoth extends TameableCreatureEntity implements IMob {
 	// ==================================================
     //                      Attacks
     // ==================================================
-    // ========== Set Attack Target ==========
     @Override
     public boolean canAttackEntity(EntityLivingBase target) {
         if(target instanceof EntityBelph)
             return false;
         return super.canAttackEntity(target);
     }
-    
-    // ========== Ranged Attack ==========
+
+    @Override
+    public boolean canAttackWithPickup() {
+        return true;
+    }
+
+    @Override
+    public boolean attackMelee(Entity target, double damageScale) {
+        if (!super.attackMelee(target, damageScale))
+            return false;
+
+        // Pickup and Throw:
+        if (target instanceof EntityLivingBase) {
+            EntityLivingBase entityLivingBase = (EntityLivingBase)target;
+            if (this.canPickupEntity(entityLivingBase)) {
+                this.pickupEntity(entityLivingBase);
+            }
+            else if (this.getPickupEntity() == target && this.getRNG().nextBoolean()) {
+                this.dropPickupEntity();
+                Vec3d throwVelocity = this.getFacingPositionDouble(0, 1D, 0, 2D, this.rotationYaw);
+                target.motionX = throwVelocity.x;
+                target.motionY = throwVelocity.y;
+                target.motionZ = throwVelocity.z;
+            }
+        }
+
+        return true;
+    }
+
     @Override
     public void attackRanged(Entity target, float range) {
         this.fireProjectile("hellfireball", target, range, 0, new Vec3d(0, 0, 0), 1.2f, 2f, 1F);
         super.attackRanged(target, range);
+    }
+
+    @Override
+    public double[] getPickupOffset(Entity entity) {
+        Vec3d offset = this.getFacingPositionDouble(0, 2, 0, 1.5D, this.rotationYaw);
+        return new double[]{offset.x, offset.y, offset.z};
     }
 
     // ==================================================
