@@ -36,7 +36,7 @@ public class AcidFluidBlock extends BaseFluidBlock {
 
         // Water Gravel:
         if (neighborBlockState.getMaterial() == Material.WATER) {
-            world.setBlock(neighborBlockPos, Blocks.GRAVEL.defaultBlockState(), 4);
+            world.setBlock(neighborBlockPos, Blocks.DIORITE.defaultBlockState(), 4);
             return false;
         }
 

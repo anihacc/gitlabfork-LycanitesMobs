@@ -34,13 +34,13 @@ public class PoisonFluidBlock extends BaseFluidBlock {
 
         // Freeze Water:
         if (neighborBlockState.getMaterial() == Material.WATER) {
-            world.setBlock(neighborBlockPos, Blocks.PACKED_ICE.defaultBlockState(), 4);
+            world.setBlock(neighborBlockPos, Blocks.ANDESITE.defaultBlockState(), 4);
             return false;
         }
 
         // Freeze Lava:
         if (neighborBlockState.getMaterial() == Material.LAVA) {
-            world.setBlock(neighborBlockPos, Blocks.OBSIDIAN.defaultBlockState(), 4);
+            world.setBlock(neighborBlockPos, Blocks.GRANITE.defaultBlockState(), 4);
             return false;
         }
 
