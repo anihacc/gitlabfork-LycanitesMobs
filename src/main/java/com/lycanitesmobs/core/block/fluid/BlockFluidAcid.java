@@ -4,6 +4,7 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.client.localisation.LanguageManager;
 import com.lycanitesmobs.core.block.BlockFluidBase;
+import net.minecraft.block.BlockStone;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
@@ -71,7 +72,7 @@ public class BlockFluidAcid extends BlockFluidBase {
         // Gravel Water:
         if(blockState.getMaterial() == Material.WATER) {
             if(world instanceof World) {
-                ((World)world).setBlockState(pos, Blocks.GRAVEL.getDefaultState());
+                ((World)world).setBlockState(pos, Blocks.STONE.getDefaultState().withProperty(BlockStone.VARIANT, BlockStone.EnumType.DIORITE));
             }
             return false;
         }
@@ -79,7 +80,7 @@ public class BlockFluidAcid extends BlockFluidBase {
         // Obsidian Lava:
         if(blockState.getMaterial() == Material.LAVA) {
             if(world instanceof World) {
-                ((World)world).setBlockState(pos, Blocks.OBSIDIAN.getDefaultState());
+                ((World)world).setBlockState(pos, Blocks.STONE.getDefaultState().withProperty(BlockStone.VARIANT, BlockStone.EnumType.GRANITE));
             }
             return false;
         }
