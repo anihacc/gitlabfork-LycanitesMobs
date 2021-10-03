@@ -15,6 +15,10 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.ArrowEntity;
+import net.minecraft.entity.projectile.ProjectileEntity;
+import net.minecraft.entity.projectile.ProjectileItemEntity;
+import net.minecraft.entity.projectile.SnowballEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -23,6 +27,7 @@ import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -31,6 +36,7 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
 import net.minecraftforge.event.entity.EntityLeaveWorldEvent;
 import net.minecraftforge.event.entity.EntityMountEvent;
+import net.minecraftforge.event.entity.ProjectileImpactEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.player.FillBucketEvent;
@@ -477,6 +483,37 @@ public class GameEventListener {
 				return;
 			}
 			event.setCanceled(event.getEntityMounting().isShiftKeyDown() && !extendedPlayer.isControlActive(ExtendedPlayer.CONTROL_ID.MOUNT_DISMOUNT));
+		}
+	}
+
+
+	// ==================================================
+	//                 Projectile Impact
+	// ==================================================
+	@SubscribeEvent
+	public void onProjectileImpact(ProjectileImpactEvent event) {
+		Entity shooter = null;
+		if (!(event.getRayTraceResult() instanceof EntityRayTraceResult)) {
+			return;
+		}
+		EntityRayTraceResult entityRayTraceResult = (EntityRayTraceResult)event.getRayTraceResult();
+		Entity target = entityRayTraceResult.getEntity();
+		if (!(target instanceof BaseCreatureEntity)) {
+			return;
+		}
+		BaseCreatureEntity targetCreature = (BaseCreatureEntity)target;
+
+		if (event.getEntity() instanceof ProjectileEntity) {
+			ProjectileEntity projectileEntity = (ProjectileEntity)event.getEntity();
+			shooter = projectileEntity.getOwner();
+		}
+		if (event.getEntity() instanceof ProjectileItemEntity) {
+			ProjectileItemEntity projectileItemEntity = (ProjectileItemEntity)event.getEntity();
+			shooter = projectileItemEntity.getOwner();
+		}
+
+		if (shooter != null && !targetCreature.isVulnerableTo(shooter)) {
+			event.setCanceled(true);
 		}
 	}
 }

@@ -658,6 +658,19 @@ public abstract class TameableCreatureEntity extends AgeableCreatureEntity {
 		return super.isVulnerableTo(type, source, damage);
 	}
 
+	@Override
+	public boolean isVulnerableTo(Entity entity) {
+		if(this.isTamed()) {
+			if(entity instanceof PlayerEntity && this.getCommandSenderWorld().getServer() != null && !this.getCommandSenderWorld().getServer().isPvpAllowed()) {
+				return false;
+			}
+			if(entity == this.getPlayerOwner()) {
+				return false;
+			}
+		}
+    	return super.isVulnerableTo(entity);
+	}
+
 
 	// ==================================================
 	//                       Owner
