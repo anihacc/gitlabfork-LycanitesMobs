@@ -380,13 +380,18 @@ public class ItemEquipment extends ItemBase {
 	 */
 	public boolean addSharpness(ItemStack equipmentStack, int sharpness) {
 		boolean sharpnessIncreased = false;
-		for(ItemStack equipmentPartStack : this.getEquipmentPartStacks(equipmentStack)) {
+		NonNullList<ItemStack> itemStacks = this.getEquipmentPartStacks(equipmentStack);
+		for(ItemStack equipmentPartStack : itemStacks) {
 			ItemEquipmentPart equipmentPart = this.getEquipmentPart(equipmentPartStack);
 			if(equipmentPart == null) {
 				continue;
 			}
 			sharpnessIncreased = equipmentPart.addSharpness(equipmentPartStack, sharpness) || sharpnessIncreased;
 		}
+
+		NBTTagCompound nbt = this.getTagCompound(equipmentStack);
+		ItemStackHelper.saveAllItems(nbt, itemStacks);
+		equipmentStack.setTagCompound(nbt);
 		return sharpnessIncreased;
 	}
 
@@ -397,13 +402,18 @@ public class ItemEquipment extends ItemBase {
 	 */
 	public boolean removeSharpness(ItemStack equipmentStack, int sharpness) {
 		boolean sharpnessDecreased = false;
-		for(ItemStack equipmentPartStack : this.getEquipmentPartStacks(equipmentStack)) {
+		NonNullList<ItemStack> itemStacks = this.getEquipmentPartStacks(equipmentStack);
+		for(ItemStack equipmentPartStack : itemStacks) {
 			ItemEquipmentPart equipmentPart = this.getEquipmentPart(equipmentPartStack);
 			if(equipmentPart == null) {
 				continue;
 			}
 			sharpnessDecreased = equipmentPart.removeSharpness(equipmentPartStack, sharpness) || sharpnessDecreased;
 		}
+
+		NBTTagCompound nbt = this.getTagCompound(equipmentStack);
+		ItemStackHelper.saveAllItems(nbt, itemStacks);
+		equipmentStack.setTagCompound(nbt);
 		return sharpnessDecreased;
 	}
 
@@ -434,13 +444,18 @@ public class ItemEquipment extends ItemBase {
 	 */
 	public boolean addMana(ItemStack equipmentStack, int mana) {
 		boolean manaIncreased = false;
-		for(ItemStack equipmentPartStack : this.getEquipmentPartStacks(equipmentStack)) {
+		NonNullList<ItemStack> itemStacks = this.getEquipmentPartStacks(equipmentStack);
+		for(ItemStack equipmentPartStack : itemStacks) {
 			ItemEquipmentPart equipmentPart = this.getEquipmentPart(equipmentPartStack);
 			if(equipmentPart == null) {
 				continue;
 			}
 			manaIncreased = equipmentPart.addMana(equipmentPartStack, mana) || manaIncreased;
 		}
+
+		NBTTagCompound nbt = this.getTagCompound(equipmentStack);
+		ItemStackHelper.saveAllItems(nbt, itemStacks);
+		equipmentStack.setTagCompound(nbt);
 		return manaIncreased;
 	}
 
@@ -451,13 +466,18 @@ public class ItemEquipment extends ItemBase {
 	 */
 	public boolean removeMana(ItemStack equipmentStack, int mana) {
 		boolean manaDecreased = false;
-		for(ItemStack equipmentPartStack : this.getEquipmentPartStacks(equipmentStack)) {
+		NonNullList<ItemStack> itemStacks = this.getEquipmentPartStacks(equipmentStack);
+		for(ItemStack equipmentPartStack : itemStacks) {
 			ItemEquipmentPart equipmentPart = this.getEquipmentPart(equipmentPartStack);
 			if(equipmentPart == null) {
 				continue;
 			}
 			manaDecreased = equipmentPart.removeMana(equipmentPartStack, mana) || manaDecreased;
 		}
+
+		NBTTagCompound nbt = this.getTagCompound(equipmentStack);
+		ItemStackHelper.saveAllItems(nbt, itemStacks);
+		equipmentStack.setTagCompound(nbt);
 		return manaDecreased;
 	}
 

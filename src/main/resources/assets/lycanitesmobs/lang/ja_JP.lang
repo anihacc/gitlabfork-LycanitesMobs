@@ -1175,10 +1175,10 @@ entity.yale.description=奇妙でふわふわした、ラムのような獣で�
 entity.yale.habitat=獣は山を歩くことができます。
 entity.yale.combat=エールは通常受動的です。
 #============================================================================
-entity.yeti.name=イェティ
-entity.yeti.description=雪と氷に覆われた植物を食べることを好む大型哺乳類。それらは野菜で再現できますが、霜の雲に注意してください。イェティミルクは美味しい料理です！
-entity.yeti.habitat=これらの動物は、針葉樹林などの寒く雪の多い地域を頻繁に歩き回ります。
-entity.yeti.combat=イェティは通常受動的です。
+entity.bobeko.name=イェティ
+entity.bobeko.description=雪と氷に覆われた植物を食べることを好む大型哺乳類。それらは野菜で再現できますが、霜の雲に注意してください。イェティミルクは美味しい料理です！
+entity.bobeko.habitat=これらの動物は、針葉樹林などの寒く雪の多い地域を頻繁に歩き回ります。
+entity.bobeko.combat=イェティは通常受動的です。
 #============================================================================
 entity.zephyr.name=ゼフィー
 entity.zephyr.description=周囲に強力な電界を持つ凶暴な雷の元素。火と幻の元素を融合させて、強力な微風の精神を作り出すことができます。
@@ -1602,8 +1602,8 @@ item.mosspie.description=緑のおいしいパイ！食べ者に生命回復効�
 item.aspidmeatcooked.name=調理されたアスピド肉
 item.aspidmeatcooked.description=口の中でそれを引き裂いてください、おいしい！かがり火の牛肉に少し似ています...
 #
-item.yetimeatcooked.name=フライドイェティ肉
-item.yetimeatcooked.description=豚肉に少し似ています。
+item.bobekomeatcooked.name=フライドイェティ肉
+item.bobekomeatcooked.description=豚肉に少し似ています。
 #
 item.chupacabrameatraw.name=生のチュパカブラ肉
 item.chupacabrameatraw.description=血色の肉、生で食べると幻覚を引き起こす可能性があります！
@@ -1617,8 +1617,8 @@ item.aspidmeatraw.description=古い牛肉とクミンの匂いがし、有毒�
 item.silexmeatcooked.name=調理されたシレックス肉
 item.silexmeatcooked.description=とても爽やかです！
 #
-item.yetimeatraw.name=生イェティ肉
-item.yetimeatraw.description=触るととても寒い...
+item.bobekomeatraw.name=生イェティ肉
+item.bobekomeatraw.description=触るととても寒い...
 #
 item.concapedemeatcooked.name=調理されたコンカベド肉
 item.concapedemeatcooked.description=鶏肉のように見えますが、食べた目は違います！

@@ -164,21 +164,21 @@
         "category": "hostile",
         "sounds": [{"name": "lycanitesmobs:entity/frostweaver/eat", "stream": false}]
     },
-    "entity.yeti.say": {
+    "entity.bobeko.say": {
         "category": "neutral",
-        "sounds": [{"name": "lycanitesmobs:entity/yeti/say", "stream": false}]
+        "sounds": [{"name": "lycanitesmobs:entity/bobeko/say", "stream": false}]
     },
-    "entity.yeti.hurt": {
+    "entity.bobeko.hurt": {
         "category": "neutral",
-        "sounds": [{"name": "lycanitesmobs:entity/yeti/hurt", "stream": false}]
+        "sounds": [{"name": "lycanitesmobs:entity/bobeko/hurt", "stream": false}]
     },
-    "entity.yeti.death": {
+    "entity.bobeko.death": {
         "category": "neutral",
-        "sounds": [{"name": "lycanitesmobs:entity/yeti/death", "stream": false}]
+        "sounds": [{"name": "lycanitesmobs:entity/bobeko/death", "stream": false}]
     },
-    "entity.yeti.step": {
+    "entity.bobeko.step": {
         "category": "neutral",
-        "sounds": [{"name": "lycanitesmobs:entity/yeti/step", "stream": false}]
+        "sounds": [{"name": "lycanitesmobs:entity/bobeko/step", "stream": false}]
     },
     "entity.wendigo.say": {
         "category": "hostile",

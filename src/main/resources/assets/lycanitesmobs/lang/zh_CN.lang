@@ -1170,10 +1170,10 @@ entity.yale.description=奇怪的、毛绒绒的、像公羊一样的野兽，�
 entity.yale.habitat=这些野兽可以在山上漫步。
 entity.yale.combat=耶鲁通常是被动的。
 # ========================================================================
-entity.yeti.name=雪怪
-entity.yeti.description=一种大型哺乳动物，喜好是吃冰雪覆盖下的植被。它们可以用蔬菜繁殖，但要注意它们的霜云。雪怪奶是一种美味的佳肴！
-entity.yeti.habitat=这些动物经常在寒冷和下雪的地区漫步，如针叶林。
-entity.yeti.combat=雪怪通常是被动的。
+entity.bobeko.name=雪怪
+entity.bobeko.description=一种大型哺乳动物，喜好是吃冰雪覆盖下的植被。它们可以用蔬菜繁殖，但要注意它们的霜云。雪怪奶是一种美味的佳肴！
+entity.bobeko.habitat=这些动物经常在寒冷和下雪的地区漫步，如针叶林。
+entity.bobeko.combat=雪怪通常是被动的。
 # ========================================================================
 entity.zephyr.name=微风之灵
 entity.zephyr.description=凶猛的闪电元素，周围有强大的电场。火元素和幻灵元素可以融合，创造出强大的微风之灵。
@@ -1597,8 +1597,8 @@ item.mosspie.description=一个绿色、美味的馅饼！给予食用者生命�
 item.aspidmeatcooked.name=熟阿斯匹德肉
 item.aspidmeatcooked.description=撕一点放嘴里，美味！有点像文火牛肉…
 #
-item.yetimeatcooked.name=熟雪怪肉
-item.yetimeatcooked.description=味道有些像猪肉。
+item.bobekomeatcooked.name=熟雪怪肉
+item.bobekomeatcooked.description=味道有些像猪肉。
 #
 item.chupacabrameatraw.name=生卓帕卡布拉肉
 item.chupacabrameatraw.description=渗出血的附着着鳞的肉，生吃它可能会出现幻觉！
@@ -1612,8 +1612,8 @@ item.aspidmeatraw.description=闻起来像加了孜然的老牛肉，看起来�
 item.silexmeatcooked.name=熟青金鱼肉
 item.silexmeatcooked.description=十分提神！
 #
-item.yetimeatraw.name=生雪怪肉
-item.yetimeatraw.description=它摸起来给人的感觉十分冰冷…
+item.bobekomeatraw.name=生雪怪肉
+item.bobekomeatraw.description=它摸起来给人的感觉十分冰冷…
 #
 item.concapedemeatcooked.name=熟贝状百足虫肉
 item.concapedemeatcooked.description=吃起来像鸡肉，虽然它看起来不像！

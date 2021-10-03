@@ -265,6 +265,6 @@ public class AttackMeleeGoal extends EntityAIBase {
 		if (this.attackTarget instanceof EntityPlayer) {
 			return this.failedPathFindingPenaltyPlayerMax;
 		}
-		return this.failedPathFindingPenalty;
+		return this.failedPathFindingPenaltyMax;
 	}
 }
