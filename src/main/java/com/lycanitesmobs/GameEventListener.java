@@ -16,6 +16,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.projectile.EntityArrow;
+import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -35,6 +37,7 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
 import net.minecraftforge.event.entity.EntityMountEvent;
+import net.minecraftforge.event.entity.ProjectileImpactEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
@@ -539,5 +542,32 @@ public class GameEventListener {
 			return;
 		}
 		event.setCanceled(event.getEntityMounting().isSneaking() && !extendedPlayer.isControlActive(ExtendedPlayer.CONTROL_ID.MOUNT_DISMOUNT));
+	}
+
+
+	// ==================================================
+	//                 Projectile Impact
+	// ==================================================
+	@SubscribeEvent
+	public void onProjectileImpact(ProjectileImpactEvent event) {
+		Entity shooter = null;
+		Entity target = event.getRayTraceResult().entityHit;
+		if (!(target instanceof BaseCreatureEntity)) {
+			return;
+		}
+		BaseCreatureEntity targetCreature = (BaseCreatureEntity)target;
+
+		if (event.getEntity() instanceof EntityArrow) {
+			EntityArrow arrow = (EntityArrow)event.getEntity();
+			shooter = arrow.shootingEntity;
+		}
+		if (event.getEntity() instanceof EntityThrowable) {
+			EntityThrowable throwable = (EntityThrowable)event.getEntity();
+			shooter = throwable.getThrower();
+		}
+
+		if (shooter != null && !targetCreature.isDamageEntityApplicable(shooter)) {
+			event.setCanceled(true);
+		}
 	}
 }

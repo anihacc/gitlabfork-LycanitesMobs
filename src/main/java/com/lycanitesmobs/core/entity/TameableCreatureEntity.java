@@ -650,7 +650,7 @@ public class TameableCreatureEntity extends AgeableCreatureEntity implements IEn
 	@Override
 	public boolean isDamageEntityApplicable(Entity entity) {
 		if(this.isTamed()) {
-			if(entity instanceof EntityPlayer && !this.getEntityWorld().getMinecraftServer().isPVPEnabled()) {
+			if(entity instanceof EntityPlayer && this.getEntityWorld().getMinecraftServer() != null && !this.getEntityWorld().getMinecraftServer().isPVPEnabled()) {
 				return false;
 			}
 			if(entity == this.getPlayerOwner()) {
