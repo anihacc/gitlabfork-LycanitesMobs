@@ -269,6 +269,6 @@ public class AttackMeleeGoal extends Goal {
 		if (this.attackTarget instanceof PlayerEntity) {
 			return this.failedPathFindingPenaltyPlayerMax;
 		}
-		return this.failedPathFindingPenalty;
+		return this.failedPathFindingPenaltyMax;
 	}
 }

@@ -9,10 +9,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class ModelEpion extends CreatureObjModel {
-	
-	// ==================================================
-  	//                    Constructors
-  	// ==================================================
     public ModelEpion() {
         this(1.0F);
     }
@@ -25,11 +21,7 @@ public class ModelEpion extends CreatureObjModel {
         this.trophyScale = 1.0F;
         this.trophyOffset = new float[] {0.0F, 0.0F, -0.2F};
     }
-    
-    
-    // ==================================================
-   	//                 Animate Part
-   	// ==================================================
+
     float maxLeg = 0F;
     @Override
     public void animatePart(String partName, LivingEntity entity, float time, float distance, float loop, float lookY, float lookX, float scale) {

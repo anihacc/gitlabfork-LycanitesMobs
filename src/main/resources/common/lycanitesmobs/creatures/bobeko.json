@@ -1,11 +1,11 @@
 {
-    "name": "yeti",
-    "creatureType": "anthronian",
+    "name": "bobeko",
+    "creatureType": "beast",
     "groups": [
         "animal"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityYeti",
-    "modelClass": "com.lycanitesmobs.client.model.creature.ModelYeti",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityBobeko",
+    "modelClass": "com.lycanitesmobs.client.model.creature.ModelBobeko",
     "loadDefault": true,
     "enabled": true,
     "spawning": {
@@ -98,8 +98,8 @@
             "chance": 0.25
         },
         {
-            "item": "lycanitesmobs:raw_yeti_meat",
-            "burningItem": "lycanitesmobs:cooked_yeti_meat",
+            "item": "lycanitesmobs:raw_bobeko_meat",
+            "burningItem": "lycanitesmobs:cooked_bobeko_meat",
             "minAmount": 2,
             "maxAmount": 5,
             "chance": 1
@@ -108,7 +108,7 @@
             "item": "lycanitesmobs:frostyfur",
             "minAmount": 1,
             "maxAmount": 2,
-            "chance": 0.25
+            "chance": 1
         }
     ],
     "sizeScale": 1,

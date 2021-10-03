@@ -23,12 +23,8 @@ import net.minecraft.world.World;
 
 import java.util.HashMap;
 
-public class EntityYeti extends AgeableCreatureEntity {
-	
-	// ==================================================
- 	//                    Constructor
- 	// ==================================================
-    public EntityYeti(EntityType<? extends EntityYeti> entityType, World world) {
+public class EntityBobeko extends AgeableCreatureEntity {
+    public EntityBobeko(EntityType<? extends EntityBobeko> entityType, World world) {
         super(entityType, world);
         
         // Setup:
@@ -39,19 +35,13 @@ public class EntityYeti extends AgeableCreatureEntity {
         this.setupMob();
     }
 
-    // ========== Init AI ==========
     @Override
     protected void registerGoals() {
         super.registerGoals();
 		this.goalSelector.addGoal(this.nextDistractionGoalIndex++, new TemptGoal(this).setIncludeDiet(true));
 		this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(false));
     }
-	
-	
-    // ==================================================
-    //                      Updates
-    // ==================================================
-	// ========== Living Update ==========
+
 	@Override
     public void aiStep() {
         super.aiStep();
@@ -74,12 +64,7 @@ public class EntityYeti extends AgeableCreatureEntity {
 	            this.getCommandSenderWorld().addParticle(ParticleTypes.ITEM_SNOWBALL, this.position().x() + (this.random.nextDouble() - 0.5D) * (double)this.getDimensions(Pose.STANDING).width, this.position().y() + this.random.nextDouble() * (double)this.getDimensions(Pose.STANDING).height, this.position().z() + (this.random.nextDouble() - 0.5D) * (double)this.getDimensions(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
 	        }
     }
-	
-	
-	// ==================================================
-   	//                      Movement
-   	// ==================================================
-	// ========== Pathing Weight ==========
+
 	@Override
 	public float getBlockPathWeight(int x, int y, int z) {
         BlockState blockState = this.getCommandSenderWorld().getBlockState(new BlockPos(x, y - 1, z));
@@ -92,23 +77,18 @@ public class EntityYeti extends AgeableCreatureEntity {
         }
         return super.getBlockPathWeight(x, y, z);
     }
-    
-	// ========== Can leash ==========
+
     @Override
     public boolean canBeLeashed(PlayerEntity player) {
 	    return true;
     }
 
-    // ==================================================
-    //                     Equipment
-    // ==================================================
     @Override
     public int getNoBagSize() { return 0; }
+
     @Override
     public int getBagSize() { return this.creatureInfo.bagSize; }
-    // ==================================================
-   	//                     Immunities
-   	// ==================================================
+
     @Override
     public boolean isVulnerableTo(String type, DamageSource source, float damage) {
         if(type.equals("ooze")) return false;
@@ -121,12 +101,7 @@ public class EntityYeti extends AgeableCreatureEntity {
         if(potionEffect.getEffect() == Effects.HUNGER) return false;
         return super.canBeAffected(potionEffect);
     }
-	
-    
-	// ==================================================
-  	//                     Interact
-  	// ==================================================
-    // ========== Get Interact Commands ==========
+
     @Override
     public HashMap<Integer, String> getInteractCommands(PlayerEntity player, ItemStack itemStack) {
     	HashMap<Integer, String> commands = new HashMap<Integer, String>();
@@ -140,8 +115,7 @@ public class EntityYeti extends AgeableCreatureEntity {
     	
     	return commands;
     }
-    
-    // ========== Perform Command ==========
+
     @Override
     public boolean performCommand(String command, PlayerEntity player, ItemStack itemStack) {
     	
