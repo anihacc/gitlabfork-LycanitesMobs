@@ -12,11 +12,13 @@ import java.util.function.Supplier;
 public class MessagePlayerStats {
 	public int spirit;
 	public int summonFocus;
+	public int creatureStudyCooldown;
 	
 	public MessagePlayerStats() {}
 	public MessagePlayerStats(ExtendedPlayer playerExt) {
 		this.spirit = playerExt.spirit;
 		this.summonFocus = playerExt.summonFocus;
+		this.creatureStudyCooldown = playerExt.creatureStudyCooldown;
 	}
 	
 	/**
@@ -34,6 +36,7 @@ public class MessagePlayerStats {
 
 		playerExt.spirit = message.spirit;
 		playerExt.summonFocus = message.summonFocus;
+		playerExt.creatureStudyCooldown = message.creatureStudyCooldown;
 	}
 	
 	/**
@@ -43,6 +46,7 @@ public class MessagePlayerStats {
 		MessagePlayerStats message = new MessagePlayerStats();
 		message.spirit = packet.readInt();
 		message.summonFocus = packet.readInt();
+		message.creatureStudyCooldown = packet.readInt();
 		return message;
 	}
 	
@@ -52,6 +56,7 @@ public class MessagePlayerStats {
 	public static void encode(MessagePlayerStats message, PacketBuffer packet) {
 		packet.writeInt(message.spirit);
 		packet.writeInt(message.summonFocus);
+		packet.writeInt(message.creatureStudyCooldown);
 	}
 	
 }

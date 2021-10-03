@@ -234,6 +234,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
 		// Creature Study Cooldown Update:
 		if (this.creatureStudyCooldown > 0) {
 			this.creatureStudyCooldown--;
+			sync = true;
 		}
 
 		// Sync Stats To Client:
@@ -356,10 +357,16 @@ public class ExtendedPlayer implements IExtendedPlayer {
 		}
 	}
 
-	public void studyCreature(LivingEntity entity, int experience) {
-		if (this.beastiary.addCreatureKnowledge(entity, experience)) {
-			this.creatureStudyCooldown = this.creatureStudyCooldownMax;
+	public boolean studyCreature(LivingEntity entity, int experience) {
+		if(this.creatureStudyCooldown > 0 || !(entity instanceof BaseCreatureEntity)) {
+			return false;
 		}
+		BaseCreatureEntity creature = (BaseCreatureEntity)entity;
+		if (this.beastiary.addCreatureKnowledge(creature, creature.scaleKnowledgeExperience(experience))) {
+			this.creatureStudyCooldown = this.creatureStudyCooldownMax;
+			return true;
+		}
+		return false;
 	}
 	
 	
