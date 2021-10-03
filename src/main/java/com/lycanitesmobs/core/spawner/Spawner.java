@@ -769,7 +769,8 @@ public class Spawner {
 			entityCreature.forceNoDespawn = this.forceNoDespawn;
 			entityCreature.spawnedRare = level > 0;
 			if (this.blockBreakRadius > -1 && chain == 0) {
-				entityCreature.destroyArea((int) entityLiving.position().x(), (int) entityLiving.position().y(), (int) entityLiving.position().z() - 1, 100, true, this.blockBreakRadius, this.chainSpawning ? player : null, chain + 1);
+				BlockPos creaturePos = entityLiving.blockPosition();
+				entityCreature.destroyArea(creaturePos.getX(), creaturePos.getY() - 1, creaturePos.getZ(), 100, true, this.blockBreakRadius, this.chainSpawning ? player : null, chain + 1);
 			}
 
 			// Apply Mob Event:
