@@ -44,7 +44,12 @@ public class ItemSoulgazer extends ItemBase {
 			return false;
 		}
 
-		playerExt.studyCreature(entity, CreatureManager.getInstance().config.creatureStudyKnowledge);
+		if (!playerExt.studyCreature(entity, CreatureManager.getInstance().config.creatureStudyKnowledge)) {
+			if (!player.getEntityWorld().isRemote) {
+				player.sendMessage(new TextComponentString(LanguageManager.translate("message.beastiary.unknown")));
+			}
+			return false;
+		}
 		if (!player.getEntityWorld().isRemote) {
 			player.sendMessage(new TextComponentString(LanguageManager.translate("message.beastiary.study")));
 		}

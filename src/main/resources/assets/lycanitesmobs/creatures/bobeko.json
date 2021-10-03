@@ -80,7 +80,7 @@
     ],
     "peaceful": true,
     "farmable": true,
-    "summonable": true,
+    "summonable": false,
     "tameable": false,
     "mountable": false,
     "summonCost": 2,

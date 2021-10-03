@@ -13,7 +13,8 @@ import net.minecraftforge.fml.relauncher.Side;
 public class MessagePlayerStats implements IMessage, IMessageHandler<MessagePlayerStats, IMessage> {
 	public int spirit;
 	public int summonFocus;
-	
+	public int creatureStudyCooldown;
+
 	// ==================================================
 	//                    Constructors
 	// ==================================================
@@ -21,6 +22,7 @@ public class MessagePlayerStats implements IMessage, IMessageHandler<MessagePlay
 	public MessagePlayerStats(ExtendedPlayer playerExt) {
 		this.spirit = playerExt.spirit;
 		this.summonFocus = playerExt.summonFocus;
+		this.creatureStudyCooldown = playerExt.creatureStudyCooldown;
 	}
 	
 	
@@ -39,6 +41,7 @@ public class MessagePlayerStats implements IMessage, IMessageHandler<MessagePlay
 
 		playerExt.spirit = message.spirit;
 		playerExt.summonFocus = message.summonFocus;
+		playerExt.creatureStudyCooldown = message.creatureStudyCooldown;
 		return null;
 	}
 	
@@ -54,6 +57,7 @@ public class MessagePlayerStats implements IMessage, IMessageHandler<MessagePlay
 		PacketBuffer packet = new PacketBuffer(buf);
 		this.spirit = packet.readInt();
 		this.summonFocus = packet.readInt();
+		this.creatureStudyCooldown = packet.readInt();
 	}
 	
 	
@@ -68,6 +72,7 @@ public class MessagePlayerStats implements IMessage, IMessageHandler<MessagePlay
 		PacketBuffer packet = new PacketBuffer(buf);
 		packet.writeInt(this.spirit);
 		packet.writeInt(this.summonFocus);
+		packet.writeInt(this.creatureStudyCooldown);
 	}
 	
 }
