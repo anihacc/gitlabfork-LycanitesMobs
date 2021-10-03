@@ -4107,6 +4107,9 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 			for (int d = -((int) Math.ceil(this.width) - range); d <= (Math.ceil(this.width) + range); d++) {
 				for (int h = 0; h <= Math.ceil(this.height); h++) {
 					BlockPos breakPos = new BlockPos(x + w, y + h, z + d);
+					if (this.getEntityWorld().getTileEntity(breakPos) != null) {
+						continue;
+					}
 					IBlockState blockState = this.getEntityWorld().getBlockState(breakPos);
 					float hardness = blockState.getBlockHardness(this.getEntityWorld(), breakPos);
 					Material material = blockState.getMaterial();
@@ -4125,9 +4128,13 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 		for(int w = -((int)Math.ceil(this.width) + range); w <= (Math.ceil(this.width) + range); w++)
 			for(int d = -((int)Math.ceil(this.width) + range); d <= (Math.ceil(this.width) + range); d++)
 				for(int h = 0; h <= Math.ceil(this.height); h++) {
-					IBlockState blockState = this.getEntityWorld().getBlockState(new BlockPos(x + w, y + h, z + d));
+					BlockPos breakPos = new BlockPos(x + w, y + h, z + d);
+					if (this.getEntityWorld().getTileEntity(breakPos) != null) {
+						continue;
+					}
+					IBlockState blockState = this.getEntityWorld().getBlockState(breakPos);
 					if(blockClass.isInstance(blockState.getBlock())) {
-						this.getEntityWorld().destroyBlock(new BlockPos(x + w, y + h, z + d), drop);
+						this.getEntityWorld().destroyBlock(breakPos, drop);
 					}
 				}
 	}

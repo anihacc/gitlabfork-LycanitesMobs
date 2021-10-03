@@ -112,8 +112,8 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 
 	/**
 	 * Returns if this feature can harvest the provided block or not.
-	 * @param blockState
-	 * @return
+	 * @param blockState The blockstate to check.
+	 * @return True if the block can be destroyed by this feature.
 	 */
 	public boolean canHarvestBlock(IBlockState blockState) {
 		Block block = blockState.getBlock();
@@ -364,6 +364,12 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 		if(targetBlockState.getBlock() != harvestedBlockState.getBlock()) {
 			return false;
 		}
+
+		// Don't area harvest Tile Entities.
+		if (world.getTileEntity(targetPos) != null) {
+			return false;
+		}
+
 		return this.canHarvestBlock(world.getBlockState(targetPos));
 	}
 
