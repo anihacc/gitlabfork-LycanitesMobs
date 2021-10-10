@@ -27,7 +27,7 @@ public class ItemSoulgazer extends BaseItem {
 			return ActionResultType.FAIL;
 		}
 
-    	int amount = CreatureManager.getInstance().config.creatureStudyKnowledge + 1000;
+    	int amount = CreatureManager.getInstance().config.creatureStudyKnowledge;
     	if (!extendedPlayer.studyCreature(entity, amount, true)) {
     		return ActionResultType.FAIL;
 		}
