@@ -389,7 +389,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
 			}
 			if (!this.player.getCommandSenderWorld().isClientSide()) {
 				if (newKnowledge.getMaxExperience() == 0) {
-					player.sendMessage(new TranslationTextComponent("message.beastiary.full").append(" ").append(creature.creatureInfo.getTitle()), Util.NIL_UUID);
+					player.sendMessage(new TranslationTextComponent("message.beastiary.study.full").append(" ").append(creature.creatureInfo.getTitle()), Util.NIL_UUID);
 				}
 				else {
 					player.sendMessage(new TranslationTextComponent("message.beastiary.study").append(" ")
@@ -400,7 +400,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
 		}
 
 		if (useCooldown && !this.player.getCommandSenderWorld().isClientSide()) {
-			player.sendMessage(new TranslationTextComponent("message.beastiary.full").append(" ").append(creature.creatureInfo.getTitle()), Util.NIL_UUID);
+			player.sendMessage(new TranslationTextComponent("message.beastiary.study.full").append(" ").append(creature.creatureInfo.getTitle()), Util.NIL_UUID);
 		}
 		return false;
 	}

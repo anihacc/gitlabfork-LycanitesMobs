@@ -65,7 +65,7 @@ public class BlockFireBase extends BlockBase {
 
     @Override
     protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
-        builder.add(AGE, PERMANENT, NORTH, EAST, SOUTH, WEST, UP);
+        builder.add(AGE, PERMANENT, STATIC, NORTH, EAST, SOUTH, WEST, UP);
     }
 
     @Override
