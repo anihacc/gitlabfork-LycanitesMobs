@@ -28,21 +28,28 @@ public class CreatureKnowledge {
 		return CreatureManager.getInstance().getCreature(this.creatureName);
 	}
 
-	public void addExperience(int experience) {
+	/**
+	 * Adds experience to this creature knowledge.
+	 * @param experience The amount of experience to add.
+	 * @return The amount of experience required for the next rank up. 0 is returned when at max rank.
+	 */
+	public int addExperience(int experience) {
 		int maxExperience = this.getMaxExperience();
 		if (maxExperience <= 0) {
-			return;
+			return 0;
 		}
 		this.experience += experience;
+		int remainingExperience = this.experience - maxExperience;
 
 		// Rank Up:
-		if (this.experience >= maxExperience) {
+		if (remainingExperience >= 0) {
 			this.rank++;
-			int remainingExperience = this.experience - maxExperience;
 			this.experience = 0;
 			this.addExperience(remainingExperience);
 			this.beastiary.sendAddedMessage(this);
 		}
+
+		return remainingExperience;
 	}
 
 	public int getMaxExperience() {

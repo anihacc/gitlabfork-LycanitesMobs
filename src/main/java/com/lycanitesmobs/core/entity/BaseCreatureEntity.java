@@ -68,7 +68,6 @@ import net.minecraft.world.*;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-
 import java.util.*;
 
 public abstract class BaseCreatureEntity extends EntityLiving {
@@ -1856,7 +1855,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 				if(extendedPlayer != null) {
 					CreatureKnowledge creatureKnowledge = extendedPlayer.getBeastiary().getCreatureKnowledge(this.creatureInfo.getName());
 					if (creatureKnowledge == null || creatureKnowledge.rank < 1) {
-						extendedPlayer.getBeastiary().addCreatureKnowledge(this, this.scaleKnowledgeExperience(CreatureManager.getInstance().config.creatureProximityKnowledge));
+						extendedPlayer.studyCreature(this, CreatureManager.getInstance().config.creatureProximityKnowledge, false);
 					}
 				}
 			}
@@ -3541,7 +3540,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
                         player.addStat(ObjectManager.getStat(this.creatureInfo.getName() + ".kill"), 1);
 						ExtendedPlayer extendedPlayer = ExtendedPlayer.getForPlayer(player);
 						if (extendedPlayer != null) {
-							extendedPlayer.getBeastiary().addCreatureKnowledge(this, this.scaleKnowledgeExperience(CreatureManager.getInstance().config.creatureKillKnowledge));
+							extendedPlayer.studyCreature(this, CreatureManager.getInstance().config.creatureKillKnowledge, false);
 						}
                     }
                     catch(Exception e) {}

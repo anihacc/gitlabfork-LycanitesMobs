@@ -5,19 +5,12 @@ import com.lycanitesmobs.client.localisation.LanguageManager;
 import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.item.ItemBase;
-import net.minecraft.client.particle.IParticleFactory;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.Util;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
-
-import javax.annotation.Nullable;
-import java.util.List;
 
 public class ItemSoulgazer extends ItemBase {
 
@@ -37,21 +30,13 @@ public class ItemSoulgazer extends ItemBase {
 	@Override
     public boolean onItemRightClickOnEntity(EntityPlayer player, Entity entity, ItemStack itemStack) {
 		ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
-		if(playerExt == null || playerExt.creatureStudyCooldown > 0) {
-			if (!player.getEntityWorld().isRemote) {
-				player.sendMessage(new TextComponentString(LanguageManager.translate("message.beastiary.study.recharging")));
-			}
+		if(playerExt == null) {
 			return false;
 		}
 
-		if (!playerExt.studyCreature(entity, CreatureManager.getInstance().config.creatureStudyKnowledge)) {
-			if (!player.getEntityWorld().isRemote) {
-				player.sendMessage(new TextComponentString(LanguageManager.translate("message.beastiary.unknown")));
-			}
+		int amount = CreatureManager.getInstance().config.creatureStudyKnowledge;
+		if (!playerExt.studyCreature(entity, amount, true)) {
 			return false;
-		}
-		if (!player.getEntityWorld().isRemote) {
-			player.sendMessage(new TextComponentString(LanguageManager.translate("message.beastiary.study")));
 		}
 
 		if(player.getEntityWorld().isRemote) {

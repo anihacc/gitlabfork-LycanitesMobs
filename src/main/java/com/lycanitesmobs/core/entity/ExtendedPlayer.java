@@ -360,14 +360,49 @@ public class ExtendedPlayer implements IExtendedPlayer {
 		}
 	}
 
-	public boolean studyCreature(Entity entity, int experience) {
-		if(!(entity instanceof BaseCreatureEntity)) {
+	/**
+	 * Studies the provided entity for the provided amount of knowledge.
+	 * @param entity The entity to study, this is checked to see if it is a valid target.
+	 * @param experience The amount of knowledge experience to gain.
+	 * @param useCooldown If true, the creature study cooldown will be checked and reset on studying.
+	 * @return True if new knowledge was gained for the entity.
+	 */
+	public boolean studyCreature(Entity entity, int experience, boolean useCooldown) {
+		if (!(entity instanceof BaseCreatureEntity)) {
+			if (useCooldown && !this.player.getEntityWorld().isRemote) {
+				this.player.sendMessage(new TextComponentString(LanguageManager.translate("message.beastiary.unknown")));
+			}
 			return false;
 		}
+
+		if (useCooldown && this.creatureStudyCooldown > 0) {
+			if (!this.player.getEntityWorld().isRemote) {
+				this.player.sendMessage(new TextComponentString(LanguageManager.translate("message.beastiary.study.recharging")));
+			}
+			return false;
+		}
+
 		BaseCreatureEntity creature = (BaseCreatureEntity)entity;
-		if (this.beastiary.addCreatureKnowledge(creature, creature.scaleKnowledgeExperience(experience))) {
-			this.creatureStudyCooldown = this.creatureStudyCooldownMax;
+		experience = creature.scaleKnowledgeExperience(experience);
+		CreatureKnowledge newKnowledge = this.beastiary.addCreatureKnowledge(creature, experience);
+		if (newKnowledge != null) {
+			if (useCooldown) {
+				this.creatureStudyCooldown = this.creatureStudyCooldownMax;
+			}
+			if (!player.getEntityWorld().isRemote) {
+				if (newKnowledge.getMaxExperience() == 0) {
+					player.sendMessage(new TextComponentString(LanguageManager.translate("message.beastiary.full") + " " + creature.creatureInfo.getTitle()));
+				}
+				else {
+					player.sendMessage(new TextComponentString(LanguageManager.translate("message.beastiary.study") + " " + newKnowledge.getCreatureInfo().getTitle()
+							+ " " + newKnowledge.experience + "/" + newKnowledge.getMaxExperience() + " (+ " + experience + ")"));
+				}
+			}
 			return true;
+		}
+
+		if (useCooldown && !player.getEntityWorld().isRemote) {
+			player.sendMessage(new TextComponentString(LanguageManager.translate("message.beastiary.full") + " " + creature.creatureInfo.getTitle()));
 		}
 		return false;
 	}

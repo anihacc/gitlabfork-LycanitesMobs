@@ -1,9 +1,9 @@
 package com.lycanitesmobs.core.info;
 
-import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.ObjectManager;
+import com.lycanitesmobs.client.localisation.LanguageManager;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.entity.FearEntity;
 import com.lycanitesmobs.core.network.MessageBeastiary;
 import com.lycanitesmobs.core.network.MessageCreatureKnowledge;
@@ -12,12 +12,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.Util;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
-import com.lycanitesmobs.client.localisation.LanguageManager;
-
 
 import java.util.HashMap;
 import java.util.Map;
@@ -69,41 +64,34 @@ public class Beastiary {
 		return true;
 	}
 
-
 	/**
 	 * Attempt to add Creature Knowledge to this Beastiary based on the provided entity and sends feedback to the player.
 	 * @param entity The entity being discovered.
 	 * @param experience The Knowledge experience being gained.
-	 * @return True if new knowledge is gained and false if not.
+	 * @return The newly added or updated knowledge or false if unchanged or invalid.
 	 */
-	public boolean addCreatureKnowledge(Entity entity, int experience) {
+	public CreatureKnowledge addCreatureKnowledge(Entity entity, int experience) {
 		// Invalid Entity:
-		if(!(entity instanceof BaseCreatureEntity)) {
-			if (!this.extendedPlayer.player.getEntityWorld().isRemote) {
-				this.extendedPlayer.player.sendMessage(new TextComponentString(LanguageManager.translate("message.beastiary.unknown")));
-			}
-			return false;
-		}
-		if(entity instanceof FearEntity) {
-			return false;
+		if(!(entity instanceof BaseCreatureEntity) || entity instanceof FearEntity) {
+			return null;
 		}
 
 		CreatureInfo creatureInfo = ((BaseCreatureEntity)entity).creatureInfo;
 		CreatureKnowledge newKnowledge = this.getCreatureKnowledge(creatureInfo.getName());
 		if (newKnowledge == null) {
 			newKnowledge = new CreatureKnowledge(this.extendedPlayer.getBeastiary(), creatureInfo.getName(), 1, experience);
+			newKnowledge.getMaxExperience();
 		}
 		else {
 			if (newKnowledge.getMaxExperience() <= 0) {
-				return false;
+				return null;
 			}
 			newKnowledge.addExperience(experience);
 		}
 		this.addCreatureKnowledge(newKnowledge, true);
 
-		return true;
+		return newKnowledge;
 	}
-
 
 	/**
 	 * Sends a message to the player on gaining Creature Knowledge.

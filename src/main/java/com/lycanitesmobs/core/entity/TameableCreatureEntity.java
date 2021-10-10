@@ -793,7 +793,7 @@ public class TameableCreatureEntity extends AgeableCreatureEntity implements IEn
 			return this.isTamed();
 		}
 
-		extendedPlayer.studyCreature(this, this.scaleKnowledgeExperience(CreatureManager.getInstance().config.creatureTreatKnowledge));
+		extendedPlayer.studyCreature(this, CreatureManager.getInstance().config.creatureTreatKnowledge, false);
 
 		// Already Tamed:
 		if (this.isTamed()) {

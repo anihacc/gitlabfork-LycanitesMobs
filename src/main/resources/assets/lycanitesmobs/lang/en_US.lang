@@ -195,9 +195,10 @@ message.beastiary.summonable.colors=You can now summon variations of the %creatu
 message.beastiary.summonable.skins=You can now summon subspecies of the %creature%!
 message.beastiary.known=You have already have Knowledge Rank %rank% of the %creature%.
 message.beastiary.unknown=There is nothing to be learnt about this creature.
-message.beastiary.study=You gain knowledge by studying this creature.
+message.beastiary.study=Creature Knowledge Gained:
 message.beastiary.study.recharging=You must wait a moment before you are able to study a creature again.
 message.beastiary.study.cooldown=Study Cooldown:
+message.beastiary.study.full=Creature Knowledge Full:
 #
 # Soulstone:
 message.soulstone.untamed=The Soulstone can only bind to a tamed creature.
