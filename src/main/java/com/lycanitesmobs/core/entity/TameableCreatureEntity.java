@@ -784,55 +784,52 @@ public class TameableCreatureEntity extends AgeableCreatureEntity implements IEn
 	 * @return True if the entity is tamed, false on failure.
 	 */
     public boolean tame(EntityPlayer player) {
-    	if(!this.getEntityWorld().isRemote && !this.isRareVariant() && !this.isBoss()) {
-			ExtendedPlayer extendedPlayer = ExtendedPlayer.getForPlayer(player);
-			if(extendedPlayer == null) {
-				return this.isTamed();
-			}
-
-			extendedPlayer.studyCreature(this, this.scaleKnowledgeExperience(CreatureManager.getInstance().config.creatureTreatKnowledge));
-
-			// Already Tamed:
-			if (this.isTamed()) {
-				return true;
-			}
-
-			// Require Knowledge Rank 2:
-			CreatureKnowledge creatureKnowledge = extendedPlayer.getBeastiary().getCreatureKnowledge(this.creatureInfo.getName());
-			if (creatureKnowledge == null || creatureKnowledge.rank < 2) {
-				String tameMessage = LanguageManager.translate("message.pet.tamefail.knowledge");
-				tameMessage = tameMessage.replace("%creature%", this.getSpeciesName());
-				player.sendMessage(new TextComponentString(tameMessage));
-				return this.isTamed();
-			}
-
-			// Increase Reputation:
-			CreatureRelationshipEntry relationshipEntry = this.relationships.getOrCreateEntry(player);
-			int reputationAmount = 50 + this.getRNG().nextInt(50);
-			relationshipEntry.increaseReputation(reputationAmount);
-
-			// Apply Tame:
-			if (relationshipEntry.getReputation() >= this.creatureInfo.getTamingReputation()) {
-				this.setPlayerOwner(player);
-				this.onTamedByPlayer();
-				this.unsetTemporary();
-				String tameMessage = LanguageManager.translate("message.pet.tamed");
-				tameMessage = tameMessage.replace("%creature%", this.getSpeciesName());
-				player.sendMessage(new TextComponentString(tameMessage));
-				this.playTameEffect(this.isTamed());
-				player.addStat(ObjectManager.getStat(this.creatureInfo.getName() + ".tame"), 1);
-				if (this.timeUntilPortal > this.getPortalCooldown()) {
-					this.timeUntilPortal = this.getPortalCooldown();
-				}
-			}
-			else {
-//				String tameFailedMessage = LanguageManager.translate("message.pet.tamefail");
-//				tameFailedMessage = tameFailedMessage.replace("%creature%", this.getSpeciesName());
-//				player.sendMessage(new TextComponentString(tameFailedMessage));
-			}
-
-			this.playTameEffect(this.isTamed());
+		if(this.getEntityWorld().isRemote || this.isRareVariant() || this.isBoss()) {
+			return super.isTamed();
 		}
+
+		ExtendedPlayer extendedPlayer = ExtendedPlayer.getForPlayer(player);
+		if(extendedPlayer == null) {
+			return this.isTamed();
+		}
+
+		extendedPlayer.studyCreature(this, this.scaleKnowledgeExperience(CreatureManager.getInstance().config.creatureTreatKnowledge));
+
+		// Already Tamed:
+		if (this.isTamed()) {
+			return true;
+		}
+
+		// Require Knowledge Rank 2:
+		CreatureKnowledge creatureKnowledge = extendedPlayer.getBeastiary().getCreatureKnowledge(this.creatureInfo.getName());
+		if (creatureKnowledge == null || creatureKnowledge.rank < 2) {
+			String tameMessage = LanguageManager.translate("message.pet.tamefail.knowledge");
+			tameMessage = tameMessage.replace("%creature%", this.getSpeciesName());
+			player.sendMessage(new TextComponentString(tameMessage));
+			return this.isTamed();
+		}
+
+		// Increase Reputation:
+		CreatureRelationshipEntry relationshipEntry = this.relationships.getOrCreateEntry(player);
+		int reputationAmount = 50 + this.getRNG().nextInt(50);
+		relationshipEntry.increaseReputation(reputationAmount);
+
+		// Apply Tame:
+		if (this.creatureInfo.isTameable() && relationshipEntry.getReputation() >= this.creatureInfo.getTamingReputation()) {
+			this.setPlayerOwner(player);
+			this.onTamedByPlayer();
+			this.unsetTemporary();
+			String tameMessage = LanguageManager.translate("message.pet.tamed");
+			tameMessage = tameMessage.replace("%creature%", this.getSpeciesName());
+			player.sendMessage(new TextComponentString(tameMessage));
+			this.playTameEffect(this.isTamed());
+			player.addStat(ObjectManager.getStat(this.creatureInfo.getName() + ".tame"), 1);
+			if (this.timeUntilPortal > this.getPortalCooldown()) {
+				this.timeUntilPortal = this.getPortalCooldown();
+			}
+		}
+
+		this.playTameEffect(this.isTamed());
     	return this.isTamed();
     }
 
