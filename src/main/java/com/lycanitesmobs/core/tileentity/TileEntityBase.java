@@ -1,6 +1,9 @@
 package com.lycanitesmobs.core.tileentity;
 
+import com.lycanitesmobs.LycanitesMobs;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
@@ -10,7 +13,7 @@ import net.minecraft.tileentity.TileEntityType;
 
 import javax.annotation.Nullable;
 
-public abstract class TileEntityBase extends TileEntity implements ITickableTileEntity {
+public abstract class TileEntityBase extends TileEntity implements ITickableTileEntity, IInventory {
     /**
      * Constructor
      */
@@ -31,6 +34,11 @@ public abstract class TileEntityBase extends TileEntity implements ITickableTile
      */
     @Override
     public void tick() {}
+
+    @Override
+    public boolean stillValid(PlayerEntity player) {
+        return this.getBlockPos().distSqr(player.blockPosition()) < 16F;
+    }
 
     /**
      * Removes this Tile Entity.

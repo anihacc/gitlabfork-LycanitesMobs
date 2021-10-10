@@ -49,7 +49,7 @@ public class SummoningPedestalContainer extends BaseContainer {
 
     @Override
     public boolean stillValid(PlayerEntity player) {
-        if(this.summoningPedestal == null)
+        if(this.summoningPedestal == null || !this.summoningPedestal.stillValid(player))
             return false;
         return player == this.summoningPedestal.getPlayer();
     }

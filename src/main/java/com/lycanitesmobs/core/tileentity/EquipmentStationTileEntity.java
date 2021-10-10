@@ -14,7 +14,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
-public class EquipmentStationTileEntity extends TileEntityBase implements IInventory {
+public class EquipmentStationTileEntity extends TileEntityBase {
 	/** A list of item stacks in the station. **/
 	protected NonNullList<ItemStack> itemStacks = NonNullList.withSize(2, ItemStack.EMPTY);
 
@@ -94,11 +94,6 @@ public class EquipmentStationTileEntity extends TileEntityBase implements IInven
 	@Override
 	public int getMaxStackSize() {
 		return 64;
-	}
-
-	@Override
-	public boolean stillValid(PlayerEntity player) {
-		return false;
 	}
 
 	@Override

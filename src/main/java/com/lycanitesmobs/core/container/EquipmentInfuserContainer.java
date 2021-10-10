@@ -57,7 +57,7 @@ public class EquipmentInfuserContainer extends BaseContainer {
 
 	@Override
 	public boolean stillValid(PlayerEntity player) {
-		if(this.equipmentInfuser == null) {
+		if(this.equipmentInfuser == null || !this.equipmentInfuser.stillValid(player)) {
 			return false;
 		}
 		return true;

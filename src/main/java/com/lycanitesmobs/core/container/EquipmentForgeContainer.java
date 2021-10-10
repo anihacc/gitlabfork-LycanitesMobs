@@ -86,7 +86,7 @@ public class EquipmentForgeContainer extends BaseContainer {
 
 	@Override
 	public boolean stillValid(PlayerEntity player) {
-		if(this.equipmentForge == null) {
+		if(this.equipmentForge == null || !this.equipmentForge.stillValid(player)) {
 			return false;
 		}
 		return true;

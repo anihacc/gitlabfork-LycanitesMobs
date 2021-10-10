@@ -57,7 +57,7 @@ public class EquipmentStationContainer extends BaseContainer {
 
 	@Override
 	public boolean stillValid(PlayerEntity player) {
-		if(this.equipmentStation == null) {
+		if(this.equipmentStation == null || !this.equipmentStation.stillValid(player)) {
 			return false;
 		}
 		return true;

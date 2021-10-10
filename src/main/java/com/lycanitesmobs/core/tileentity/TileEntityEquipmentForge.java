@@ -17,7 +17,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
-public class TileEntityEquipmentForge extends TileEntityBase implements IInventory {
+public class TileEntityEquipmentForge extends TileEntityBase {
 	/** A list of item stacks in the forge. **/
 	protected NonNullList<ItemStack> itemStacks = NonNullList.withSize(ItemEquipment.PART_LIMIT + 1, ItemStack.EMPTY);
 
@@ -101,11 +101,6 @@ public class TileEntityEquipmentForge extends TileEntityBase implements IInvento
 	@Override
 	public int getMaxStackSize() {
 		return 64;
-	}
-
-	@Override
-	public boolean stillValid(PlayerEntity player) {
-		return false;
 	}
 
 	@Override

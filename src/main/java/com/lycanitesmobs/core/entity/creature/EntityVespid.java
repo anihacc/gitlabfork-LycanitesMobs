@@ -126,12 +126,6 @@ public class EntityVespid extends AgeableCreatureEntity implements IMob {
     	return super.getDamageModifier(damageSrc);
     }
 
-	@Override
-	public int getNoBagSize() { return 0; }
-
-	@Override
-	public int getBagSize() { return this.creatureInfo.bagSize; }
-
     @Override
     public boolean isVulnerableTo(String type, DamageSource source, float damage) {
     	if(type.equals("inWall")) return false;
