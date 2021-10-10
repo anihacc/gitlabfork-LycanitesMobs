@@ -217,7 +217,7 @@ public class BaseProjectileEntity extends EntityThrowable {
 			if(doDamage) {
  				if(rayTraceResult.entityHit instanceof EntityLivingBase) {
  					EntityLivingBase target = (EntityLivingBase)rayTraceResult.entityHit;
- 					boolean attackSuccess;
+					boolean attackSuccess;
 					float damage = this.getDamage(target);
 
 					if(damage != 0) {
@@ -228,11 +228,9 @@ public class BaseProjectileEntity extends EntityThrowable {
 						boolean stopKnockback = false;
 						if (this.knockbackChance < 1) {
 							if (this.knockbackChance <= 0 || this.rand.nextDouble() <= this.knockbackChance) {
-								if (target instanceof EntityLivingBase) {
-									targetKnockbackResistance = target.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).getAttributeValue();
-									target.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1);
-									stopKnockback = true;
-								}
+								targetKnockbackResistance = target.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).getAttributeValue();
+								target.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1);
+								stopKnockback = true;
 							}
 						}
 
@@ -523,15 +521,6 @@ public class BaseProjectileEntity extends EntityThrowable {
 			// 20% Extra Damage From Players vs Entities
 			if((this.getThrower() instanceof EntityPlayer  || this.getThrower().getControllingPassenger() instanceof EntityPlayer) && !(entity instanceof EntityPlayer))
 				damage *= 1.2f;
-		}
-
-		// Player Shielding:
-		if (entity instanceof EntityPlayer) {
-			EntityPlayer targetPlayer = (EntityPlayer)entity;
-			ItemStack playerActiveItemStack = targetPlayer.isHandActive() ? targetPlayer.getActiveItemStack() : ItemStack.EMPTY;
-			if(!playerActiveItemStack.isEmpty() && playerActiveItemStack.getItem().isShield(playerActiveItemStack, targetPlayer)) {
-				return 0;
-			}
 		}
 
 		return damage;
