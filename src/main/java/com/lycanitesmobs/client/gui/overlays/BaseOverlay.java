@@ -169,8 +169,8 @@ public class BaseOverlay extends BaseGui {
 					if (relationshipEntry != null && relationshipEntry.getReputation() > 0 && !creatureEntity.isTamed()) {
 						float barWidth = 100;
 						float barHeight = 11;
-						float barX = ((float)this.scaledResolution.getScaledWidth() / 2) - (barWidth / 2);
-						float barY = (float)this.scaledResolution.getScaledHeight() * 0.75F;
+						float barX = ((float)sWidth / 2) - (barWidth / 2);
+						float barY = (float)sHeight * 0.75F;
 						float barCenter = barX + (barWidth / 2);
 
 						this.drawHelper.drawTexture(AssetManager.getTexture("GUIPetBarEmpty"), barX, barY, 0, 1, 1, barWidth, barHeight);
