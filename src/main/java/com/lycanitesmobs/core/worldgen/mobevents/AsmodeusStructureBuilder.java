@@ -2,6 +2,7 @@ package com.lycanitesmobs.core.worldgen.mobevents;
 
 import com.lycanitesmobs.ExtendedWorld;
 import com.lycanitesmobs.ObjectManager;
+import com.lycanitesmobs.core.block.BlockFireBase;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.entity.projectile.EntityHellfireWall;
@@ -146,7 +147,7 @@ public class AsmodeusStructureBuilder extends StructureBuilder {
 		BlockState trimming = ObjectManager.getBlock("aberrantstonechiseled").defaultBlockState();
 		BlockState top = ObjectManager.getBlock("aberrantstonepolished").defaultBlockState();
 		BlockState fireBase = Blocks.OBSIDIAN.defaultBlockState();
-		BlockState fire = ObjectManager.getBlock("hellfire").defaultBlockState();
+		BlockState fire = ObjectManager.getBlock("hellfire").defaultBlockState().setValue(BlockFireBase.STATIC, true);
 
 		for (int x = minX; x <= maxX; x++) {
 			for (int z = minZ; z <= maxZ; z++) {
@@ -203,7 +204,7 @@ public class AsmodeusStructureBuilder extends StructureBuilder {
 		BlockState trimming = ObjectManager.getBlock("aberrantstonechiseled").defaultBlockState();
 		BlockState top = ObjectManager.getBlock("aberrantstonepolished").defaultBlockState();
 		BlockState fireBase = Blocks.OBSIDIAN.defaultBlockState();
-		BlockState fire = ObjectManager.getBlock("hellfire").defaultBlockState();
+		BlockState fire = ObjectManager.getBlock("hellfire").defaultBlockState().setValue(BlockFireBase.STATIC, true);
 
 		for(int x = minX; x <= maxX; x++) {
 			for(int z = minZ; z <= maxZ; z++) {

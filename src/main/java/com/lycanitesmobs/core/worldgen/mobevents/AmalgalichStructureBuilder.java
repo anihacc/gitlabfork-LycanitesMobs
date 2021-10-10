@@ -2,6 +2,7 @@ package com.lycanitesmobs.core.worldgen.mobevents;
 
 import com.lycanitesmobs.ExtendedWorld;
 import com.lycanitesmobs.ObjectManager;
+import com.lycanitesmobs.core.block.BlockFireBase;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.entity.projectile.EntityShadowfireBarrier;
@@ -168,7 +169,7 @@ public class AmalgalichStructureBuilder extends StructureBuilder {
 
 				for(int z = originZ - stripRadius; z <= originZ + stripRadius; z++) {
 					if(lowerRadius || y == originY + height)
-						world.setBlock(new BlockPos(x, y, z), hazardBlock.defaultBlockState(), 2);
+						world.setBlock(new BlockPos(x, y, z), hazardBlock.defaultBlockState().setValue(BlockFireBase.STATIC, true), 2);
 					else if(radiusHeight - 1 <= 0 || y == originY + height - 1)
 						world.setBlock(new BlockPos(x, y, z), capBlock.defaultBlockState(), 2);
 					else if(world.random.nextDouble() > secondaryChance)
@@ -196,14 +197,14 @@ public class AmalgalichStructureBuilder extends StructureBuilder {
 		Block hazardBlock = ObjectManager.getBlock("shadowfire");
 		world.setBlock(new BlockPos(originX, originY + 1, originZ), primaryBlock.defaultBlockState(), 2);
 		world.setBlock(new BlockPos(originX, originY + 2, originZ), primaryBlock.defaultBlockState(), 2);
-		world.setBlock(new BlockPos(originX, originY + 3, originZ), hazardBlock.defaultBlockState(), 2);
+		world.setBlock(new BlockPos(originX, originY + 3, originZ), hazardBlock.defaultBlockState().setValue(BlockFireBase.STATIC, true), 2);
 		world.setBlock(new BlockPos(originX + 1, originY + 1, originZ), primaryBlock.defaultBlockState(), 2);
-		world.setBlock(new BlockPos(originX + 1, originY + 2, originZ), hazardBlock.defaultBlockState(), 2);
+		world.setBlock(new BlockPos(originX + 1, originY + 2, originZ), hazardBlock.defaultBlockState().setValue(BlockFireBase.STATIC, true), 2);
 		world.setBlock(new BlockPos(originX - 1, originY + 1, originZ), primaryBlock.defaultBlockState(), 2);
-		world.setBlock(new BlockPos(originX - 1, originY + 2, originZ), hazardBlock.defaultBlockState(), 2);
+		world.setBlock(new BlockPos(originX - 1, originY + 2, originZ), hazardBlock.defaultBlockState().setValue(BlockFireBase.STATIC, true), 2);
 		world.setBlock(new BlockPos(originX, originY + 1, originZ + 1), primaryBlock.defaultBlockState(), 2);
-		world.setBlock(new BlockPos(originX, originY + 2, originZ + 1), hazardBlock.defaultBlockState(), 2);
+		world.setBlock(new BlockPos(originX, originY + 2, originZ + 1), hazardBlock.defaultBlockState().setValue(BlockFireBase.STATIC, true), 2);
 		world.setBlock(new BlockPos(originX, originY + 1, originZ - 1), primaryBlock.defaultBlockState(), 2);
-		world.setBlock(new BlockPos(originX, originY + 2, originZ - 1), hazardBlock.defaultBlockState(), 2);
+		world.setBlock(new BlockPos(originX, originY + 2, originZ - 1), hazardBlock.defaultBlockState().setValue(BlockFireBase.STATIC, true), 2);
 	}
 }

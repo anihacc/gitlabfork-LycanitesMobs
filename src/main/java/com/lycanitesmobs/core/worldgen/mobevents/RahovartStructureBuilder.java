@@ -2,6 +2,7 @@ package com.lycanitesmobs.core.worldgen.mobevents;
 
 import com.lycanitesmobs.ExtendedWorld;
 import com.lycanitesmobs.ObjectManager;
+import com.lycanitesmobs.core.block.BlockFireBase;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.entity.projectile.EntityHellfireWall;
@@ -202,14 +203,14 @@ public class RahovartStructureBuilder extends StructureBuilder {
 		Block hazardBlock = ObjectManager.getBlock("hellfire");
 		world.setBlock(new BlockPos(originX, originY + 1, originZ), primaryBlock.defaultBlockState(), 2);
 		world.setBlock(new BlockPos(originX, originY + 2, originZ), primaryBlock.defaultBlockState(), 2);
-		world.setBlock(new BlockPos(originX, originY + 3, originZ), hazardBlock.defaultBlockState(), 2);
+		world.setBlock(new BlockPos(originX, originY + 3, originZ), hazardBlock.defaultBlockState().setValue(BlockFireBase.STATIC, true), 2);
 		world.setBlock(new BlockPos(originX + 1, originY + 1, originZ), primaryBlock.defaultBlockState(), 2);
-		world.setBlock(new BlockPos(originX + 1, originY + 2, originZ), hazardBlock.defaultBlockState(), 2);
+		world.setBlock(new BlockPos(originX + 1, originY + 2, originZ), hazardBlock.defaultBlockState().setValue(BlockFireBase.STATIC, true), 2);
 		world.setBlock(new BlockPos(originX - 1, originY + 1, originZ), primaryBlock.defaultBlockState(), 2);
-		world.setBlock(new BlockPos(originX - 1, originY + 2, originZ), hazardBlock.defaultBlockState(), 2);
+		world.setBlock(new BlockPos(originX - 1, originY + 2, originZ), hazardBlock.defaultBlockState().setValue(BlockFireBase.STATIC, true), 2);
 		world.setBlock(new BlockPos(originX, originY + 1, originZ + 1), primaryBlock.defaultBlockState(), 2);
-		world.setBlock(new BlockPos(originX, originY + 2, originZ + 1), hazardBlock.defaultBlockState(), 2);
+		world.setBlock(new BlockPos(originX, originY + 2, originZ + 1), hazardBlock.defaultBlockState().setValue(BlockFireBase.STATIC, true), 2);
 		world.setBlock(new BlockPos(originX, originY + 1, originZ - 1), primaryBlock.defaultBlockState(), 2);
-		world.setBlock(new BlockPos(originX, originY + 2, originZ - 1), hazardBlock.defaultBlockState(), 2);
+		world.setBlock(new BlockPos(originX, originY + 2, originZ - 1), hazardBlock.defaultBlockState().setValue(BlockFireBase.STATIC, true), 2);
 	}
 }

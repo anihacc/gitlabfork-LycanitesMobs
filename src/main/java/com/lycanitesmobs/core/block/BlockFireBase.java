@@ -24,6 +24,7 @@ import java.util.Random;
 
 public class BlockFireBase extends BlockBase {
     public static final BooleanProperty PERMANENT = BooleanProperty.create("permanent");
+    public static final BooleanProperty STATIC = BooleanProperty.create("static");
     public static final BooleanProperty NORTH = SixWayBlock.NORTH;
     public static final BooleanProperty EAST = SixWayBlock.EAST;
     public static final BooleanProperty SOUTH = SixWayBlock.SOUTH;
@@ -52,6 +53,7 @@ public class BlockFireBase extends BlockBase {
         this.registerDefaultState(this.getStateDefinition().any()
                 .setValue(AGE, 0)
                 .setValue(PERMANENT, false)
+                .setValue(STATIC, false)
                 .setValue(NORTH, false)
                 .setValue(EAST, false)
                 .setValue(SOUTH, false)
@@ -120,11 +122,12 @@ public class BlockFireBase extends BlockBase {
 
     @Override
     public void tick(BlockState blockState, ServerWorld world, BlockPos pos, Random rand) {
-        if (!world.isAreaLoaded(pos, 2)) {
+        if (blockState.getValue(STATIC) || !world.isAreaLoaded(pos, 2)) {
             return;
         }
 
         boolean permanent = blockState.getValue(PERMANENT);
+
 
         if (!world.getGameRules().getBoolean(GameRules.RULE_DOFIRETICK)) {
             if(this.removeOnNoFireTick && !permanent)
