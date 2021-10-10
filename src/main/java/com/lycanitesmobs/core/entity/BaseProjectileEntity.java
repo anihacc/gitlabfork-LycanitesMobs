@@ -357,7 +357,7 @@ public class BaseProjectileEntity extends EntityThrowable {
 
 	/**
 	 * Determines if the provided entity is blocking this projectile, takes into account where players are looking also.
-	 * Note: This may be completely redundant.
+	 * Note: This may be completely redundant and is currently not used.
 	 * @param targetEntity The entity to check.
 	 * @return True if this projectile is being blocked by the entity.
 	 */
