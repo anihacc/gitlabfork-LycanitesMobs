@@ -391,7 +391,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
 			}
 			if (!player.getEntityWorld().isRemote) {
 				if (newKnowledge.getMaxExperience() == 0) {
-					player.sendMessage(new TextComponentString(LanguageManager.translate("message.beastiary.full") + " " + creature.creatureInfo.getTitle()));
+					player.sendMessage(new TextComponentString(LanguageManager.translate("message.beastiary.study.full") + " " + creature.creatureInfo.getTitle()));
 				}
 				else {
 					player.sendMessage(new TextComponentString(LanguageManager.translate("message.beastiary.study") + " " + newKnowledge.getCreatureInfo().getTitle()
@@ -402,7 +402,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
 		}
 
 		if (useCooldown && !player.getEntityWorld().isRemote) {
-			player.sendMessage(new TextComponentString(LanguageManager.translate("message.beastiary.full") + " " + creature.creatureInfo.getTitle()));
+			player.sendMessage(new TextComponentString(LanguageManager.translate("message.beastiary.study.full") + " " + creature.creatureInfo.getTitle()));
 		}
 		return false;
 	}
