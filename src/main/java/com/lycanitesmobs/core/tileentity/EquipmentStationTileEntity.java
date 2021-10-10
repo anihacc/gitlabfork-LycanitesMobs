@@ -10,7 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 
-public class EquipmentStationTileEntity extends TileEntityBase implements IInventory {
+public class EquipmentStationTileEntity extends TileEntityBase {
 	/** A list of item stacks in the station. **/
 	protected NonNullList<ItemStack> itemStacks = NonNullList.withSize(2, ItemStack.EMPTY);
 
@@ -101,11 +101,6 @@ public class EquipmentStationTileEntity extends TileEntityBase implements IInven
 	@Override
 	public int getInventoryStackLimit() {
 		return 64;
-	}
-
-	@Override
-	public boolean isUsableByPlayer(EntityPlayer player) {
-		return false;
 	}
 
 	@Override

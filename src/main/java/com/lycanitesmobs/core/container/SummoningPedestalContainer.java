@@ -34,7 +34,7 @@ public class SummoningPedestalContainer extends BaseContainer {
     // ========================================
     @Override
     public boolean canInteractWith(EntityPlayer player) {
-        if(this.summoningPedestal == null)
+        if(this.summoningPedestal == null || !this.summoningPedestal.isUsableByPlayer(player))
             return false;
         return player == this.summoningPedestal.getPlayer();
     }

@@ -32,7 +32,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
-public class TileEntitySummoningPedestal extends TileEntityBase implements IInventory {
+public class TileEntitySummoningPedestal extends TileEntityBase {
 
 	public long updateTick = 0;
 
@@ -329,11 +329,6 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
 	@Override
 	public int getInventoryStackLimit() {
 		return 64;
-	}
-
-	@Override
-	public boolean isUsableByPlayer(EntityPlayer player) {
-		return false;
 	}
 
 	@Override

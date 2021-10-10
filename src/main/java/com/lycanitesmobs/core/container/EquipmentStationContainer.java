@@ -41,7 +41,7 @@ public class EquipmentStationContainer extends BaseContainer {
 
 	@Override
 	public boolean canInteractWith(EntityPlayer player) {
-		if(this.equipmentStation == null) {
+		if(this.equipmentStation == null || !this.equipmentStation.isUsableByPlayer(player)) {
 			return false;
 		}
 		return true;

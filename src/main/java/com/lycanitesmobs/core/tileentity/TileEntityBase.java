@@ -1,52 +1,34 @@
 package com.lycanitesmobs.core.tileentity;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 
-public abstract class TileEntityBase extends TileEntity implements ITickable {
+public abstract class TileEntityBase extends TileEntity implements ITickable, IInventory {
 
-    // ========================================
-    //                  Remove
-    // ========================================
     /** Can be called by a block when broken to alert this TileEntity that it is being removed. **/
     public void onRemove() {}
 
-
-    // ========================================
-    //                  Update
-    // ========================================
     /** The main update called every tick. **/
     @Override
     public void update() {
 
     }
 
-
-    // ========================================
-    //              Client Events
-    // ========================================
     @Override
     public boolean receiveClientEvent(int eventID, int eventArg) {
         return false;
     }
 
-
-    // ========================================
-    //             Network Packets
-    // ========================================
     @Override
     public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {}
 
     public void onGuiButton(byte buttonId) {}
 
-
-    // ========================================
-    //                 NBT Data
-    // ========================================
     /** Reads from saved NBT data. **/
     @Override
     public void readFromNBT(NBTTagCompound nbtTagCompound) {
@@ -59,12 +41,13 @@ public abstract class TileEntityBase extends TileEntity implements ITickable {
         return super.writeToNBT(nbtTagCompound);
     }
 
-
-    // ========================================
-    //                Open GUI
-    // ========================================
     /** Called by the GUI Handler when opening a GUI. **/
     public Object getGUI(EntityPlayer player) {
         return null;
+    }
+
+    @Override
+    public boolean isUsableByPlayer(EntityPlayer player) {
+        return this.getPos().distanceSq(player.getPosition()) < 16F;
     }
 }

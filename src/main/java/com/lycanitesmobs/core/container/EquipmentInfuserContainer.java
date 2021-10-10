@@ -45,7 +45,7 @@ public class EquipmentInfuserContainer extends BaseContainer {
 
 	@Override
 	public boolean canInteractWith(EntityPlayer player) {
-		if(this.equipmentInfuser == null) {
+		if(this.equipmentInfuser == null || !this.equipmentInfuser.isUsableByPlayer(player)) {
 			return false;
 		}
 		return true;

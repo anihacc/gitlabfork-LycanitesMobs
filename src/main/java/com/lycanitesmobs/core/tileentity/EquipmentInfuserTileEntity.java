@@ -11,7 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 
-public class EquipmentInfuserTileEntity extends TileEntityBase implements IInventory {
+public class EquipmentInfuserTileEntity extends TileEntityBase {
 	/** A list of item stacks in the infuser. **/
 	protected NonNullList<ItemStack> itemStacks = NonNullList.withSize(2, ItemStack.EMPTY);
 
@@ -102,11 +102,6 @@ public class EquipmentInfuserTileEntity extends TileEntityBase implements IInven
 	@Override
 	public int getInventoryStackLimit() {
 		return 64;
-	}
-
-	@Override
-	public boolean isUsableByPlayer(EntityPlayer player) {
-		return false;
 	}
 
 	@Override

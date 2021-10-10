@@ -16,7 +16,7 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.NonNullList;
 import com.lycanitesmobs.client.localisation.LanguageManager;
 
-public class TileEntityEquipmentForge extends TileEntityBase implements IInventory {
+public class TileEntityEquipmentForge extends TileEntityBase {
 	/** A list of item stacks in the forge. **/
 	protected NonNullList<ItemStack> itemStacks = NonNullList.withSize(ItemEquipment.PART_LIMIT + 1, ItemStack.EMPTY);
 
@@ -92,11 +92,6 @@ public class TileEntityEquipmentForge extends TileEntityBase implements IInvento
 	@Override
 	public int getInventoryStackLimit() {
 		return 64;
-	}
-
-	@Override
-	public boolean isUsableByPlayer(EntityPlayer player) {
-		return false;
 	}
 
 	@Override

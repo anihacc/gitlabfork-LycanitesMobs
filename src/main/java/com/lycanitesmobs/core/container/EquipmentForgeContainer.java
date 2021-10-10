@@ -70,7 +70,7 @@ public class EquipmentForgeContainer extends BaseContainer {
 
 	@Override
 	public boolean canInteractWith(EntityPlayer player) {
-		if(this.equipmentForge == null) {
+		if(this.equipmentForge == null || !this.equipmentForge.isUsableByPlayer(player)) {
 			return false;
 		}
 		return true;
