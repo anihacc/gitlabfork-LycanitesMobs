@@ -155,7 +155,7 @@ public class ConfigCreatures {
 				.define("creatureTreatKnowledge", 100);
 		creatureStudyKnowledge = builder.comment("How much knowledge experience studying (using a Soulgazer on) a creature gives.")
 				.translation(CoreConfig.CONFIG_PREFIX + "creatures.creatureStudyKnowledge")
-				.define("creatureStudyKnowledge", 25);
+				.define("creatureStudyKnowledge", 100);
 		creatureStudyCooldown = builder.comment("The time in ticks it takes to be able to use a Soulgazer for knowledge again. Default is 200 (10 seconds).")
 				.translation(CoreConfig.CONFIG_PREFIX + "creatures.creatureStudyCooldown")
 				.define("creatureStudyCooldown", 200);

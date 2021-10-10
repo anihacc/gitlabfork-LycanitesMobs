@@ -799,7 +799,7 @@ public abstract class TameableCreatureEntity extends AgeableCreatureEntity {
 			return this.isTamed();
 		}
 
-		extendedPlayer.studyCreature(this, this.scaleKnowledgeExperience(CreatureManager.getInstance().config.creatureTreatKnowledge));
+		extendedPlayer.studyCreature(this, CreatureManager.getInstance().config.creatureTreatKnowledge, true);
 
 		// Already Tamed:
 		if (this.isTamed()) {

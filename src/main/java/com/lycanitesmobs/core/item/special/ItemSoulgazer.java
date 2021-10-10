@@ -4,7 +4,6 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.item.BaseItem;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -12,13 +11,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
-import net.minecraft.util.Util;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
-
-import javax.annotation.Nullable;
-import java.util.List;
 
 public class ItemSoulgazer extends BaseItem {
 
@@ -31,21 +23,13 @@ public class ItemSoulgazer extends BaseItem {
 	@Override
 	public ActionResultType interactLivingEntity(ItemStack stack, PlayerEntity player, LivingEntity entity, Hand hand) {
     	ExtendedPlayer extendedPlayer = ExtendedPlayer.getForPlayer(player);
-    	if(extendedPlayer == null || extendedPlayer.creatureStudyCooldown > 0) {
-			if (!player.getCommandSenderWorld().isClientSide) {
-				player.sendMessage(new TranslationTextComponent("message.beastiary.study.recharging"), Util.NIL_UUID);
-			}
+    	if(extendedPlayer == null) {
 			return ActionResultType.FAIL;
 		}
 
-    	if (!extendedPlayer.studyCreature(entity, CreatureManager.getInstance().config.creatureStudyKnowledge)) {
-			if (!player.getCommandSenderWorld().isClientSide) {
-				player.sendMessage(new TranslationTextComponent("message.beastiary.unknown"), Util.NIL_UUID);
-			}
+    	int amount = CreatureManager.getInstance().config.creatureStudyKnowledge;
+    	if (!extendedPlayer.studyCreature(entity, amount, true)) {
     		return ActionResultType.FAIL;
-		}
-		if (!player.getCommandSenderWorld().isClientSide) {
-			player.sendMessage(new TranslationTextComponent("message.beastiary.study"), Util.NIL_UUID);
 		}
 
 		if(player.getCommandSenderWorld().isClientSide) {

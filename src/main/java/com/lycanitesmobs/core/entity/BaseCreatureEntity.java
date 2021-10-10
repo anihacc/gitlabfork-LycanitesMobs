@@ -1702,7 +1702,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 					if(extendedPlayer != null) {
 						CreatureKnowledge creatureKnowledge = extendedPlayer.getBeastiary().getCreatureKnowledge(this.creatureInfo.getName());
 						if (creatureKnowledge == null || creatureKnowledge.rank < 1) {
-							extendedPlayer.getBeastiary().addCreatureKnowledge(this, this.scaleKnowledgeExperience(CreatureManager.getInstance().config.creatureProximityKnowledge));
+							extendedPlayer.studyCreature(this, CreatureManager.getInstance().config.creatureProximityKnowledge, false);
 						}
 					}
 				}
@@ -3212,7 +3212,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
                         //player.addStat(ObjectManager.getStat(this.creatureInfo.getName() + ".kill"), 1); TODO Player Stats
 						ExtendedPlayer extendedPlayer = ExtendedPlayer.getForPlayer(player);
 						if (extendedPlayer != null) {
-							extendedPlayer.getBeastiary().addCreatureKnowledge(this, this.scaleKnowledgeExperience(CreatureManager.getInstance().config.creatureKillKnowledge));
+							extendedPlayer.studyCreature(this, CreatureManager.getInstance().config.creatureKillKnowledge, false);
 						}
                     }
                     catch(Exception e) {}

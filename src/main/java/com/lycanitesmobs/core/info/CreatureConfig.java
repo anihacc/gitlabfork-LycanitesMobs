@@ -94,7 +94,7 @@ public class CreatureConfig {
 	public int creatureTreatKnowledge = 100;
 
 	/** How much knowledge experience studying (using a Soulgazer on) a creature gives. **/
-	public int creatureStudyKnowledge = 25;
+	public int creatureStudyKnowledge = 100;
 
 	/** The time in ticks it takes to be able to use a Soulgazer for knowledge again. Default is 200 (10 seconds). **/
 	public int creatureStudyCooldown = 200;

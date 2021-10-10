@@ -393,7 +393,7 @@ public abstract class AgeableCreatureEntity extends BaseCreatureEntity {
 				if(this.distanceTo(player) <= 10) {
 					ExtendedPlayer extendedPlayer = ExtendedPlayer.getForPlayer(player);
 					if(extendedPlayer != null) {
-						extendedPlayer.getBeastiary().addCreatureKnowledge(this, this.scaleKnowledgeExperience(CreatureManager.getInstance().config.creatureBreedKnowledge));
+						extendedPlayer.studyCreature(this, CreatureManager.getInstance().config.creatureBreedKnowledge, false);
 					}
 				}
 			}

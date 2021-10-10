@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.entity;
 
 import com.lycanitesmobs.LycanitesMobs;
+import com.lycanitesmobs.client.localisation.LanguageManager;
 import com.lycanitesmobs.core.VersionChecker;
 import com.lycanitesmobs.core.capabilities.IExtendedPlayer;
 import com.lycanitesmobs.core.config.ConfigExtra;
@@ -357,14 +358,49 @@ public class ExtendedPlayer implements IExtendedPlayer {
 		}
 	}
 
-	public boolean studyCreature(LivingEntity entity, int experience) {
-		if(!(entity instanceof BaseCreatureEntity)) {
+	/**
+	 * Studies the provided entity for the provided amount of knowledge.
+	 * @param entity The entity to study, this is checked to see if it is a valid target.
+	 * @param experience The amount of knowledge experience to gain.
+	 * @param useCooldown If true, the creature study cooldown will be checked and reset on studying.
+	 * @return True if new knowledge was gained for the entity.
+	 */
+	public boolean studyCreature(LivingEntity entity, int experience, boolean useCooldown) {
+		if (!(entity instanceof BaseCreatureEntity)) {
+			if (useCooldown && !this.player.getCommandSenderWorld().isClientSide()) {
+				player.sendMessage(new TranslationTextComponent("message.beastiary.unknown"), Util.NIL_UUID);
+			}
 			return false;
 		}
+
+		if (useCooldown && this.creatureStudyCooldown > 0) {
+			if (!this.player.getCommandSenderWorld().isClientSide()) {
+				player.sendMessage(new TranslationTextComponent("message.beastiary.study.recharging"), Util.NIL_UUID);
+			}
+			return false;
+		}
+
 		BaseCreatureEntity creature = (BaseCreatureEntity)entity;
-		if (this.beastiary.addCreatureKnowledge(creature, creature.scaleKnowledgeExperience(experience))) {
-			this.creatureStudyCooldown = this.creatureStudyCooldownMax;
+		experience = creature.scaleKnowledgeExperience(experience);
+		CreatureKnowledge newKnowledge = this.beastiary.addCreatureKnowledge(creature, experience);
+		if (newKnowledge != null) {
+			if (useCooldown) {
+				this.creatureStudyCooldown = this.creatureStudyCooldownMax;
+			}
+			if (!this.player.getCommandSenderWorld().isClientSide()) {
+				if (newKnowledge.getMaxExperience() == 0) {
+					player.sendMessage(new TranslationTextComponent("message.beastiary.full").append(" ").append(creature.creatureInfo.getTitle()), Util.NIL_UUID);
+				}
+				else {
+					player.sendMessage(new TranslationTextComponent("message.beastiary.study").append(" ")
+							.append(newKnowledge.getCreatureInfo().getTitle()).append(" " + newKnowledge.experience + "/" + newKnowledge.getMaxExperience() + " (+ " + experience + ")"), Util.NIL_UUID);
+				}
+			}
 			return true;
+		}
+
+		if (useCooldown && !this.player.getCommandSenderWorld().isClientSide()) {
+			player.sendMessage(new TranslationTextComponent("message.beastiary.full").append(" ").append(creature.creatureInfo.getTitle()), Util.NIL_UUID);
 		}
 		return false;
 	}
