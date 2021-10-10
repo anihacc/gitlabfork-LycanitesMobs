@@ -27,6 +27,7 @@ import java.util.Random;
 
 public class BlockFireBase extends BlockBase {
     public static final PropertyBool PERMANENT = PropertyBool.create("permanent");
+    public static final PropertyBool STATIC = PropertyBool.create("static");
     public static final PropertyBool NORTH = PropertyBool.create("north");
     public static final PropertyBool EAST = PropertyBool.create("east");
     public static final PropertyBool SOUTH = PropertyBool.create("south");
@@ -50,6 +51,7 @@ public class BlockFireBase extends BlockBase {
         this.setDefaultState(this.blockState.getBaseState()
                 .withProperty(AGE, 0)
                 .withProperty(PERMANENT, false)
+                .withProperty(STATIC, false)
                 .withProperty(NORTH, false)
                 .withProperty(EAST, false)
                 .withProperty(SOUTH, false)
@@ -73,7 +75,7 @@ public class BlockFireBase extends BlockBase {
 
     @Override
     public BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, AGE, PERMANENT, NORTH, EAST, SOUTH, WEST, UPPER);
+        return new BlockStateContainer(this, AGE, PERMANENT, STATIC, NORTH, EAST, SOUTH, WEST, UPPER);
     }
 
 
@@ -106,7 +108,8 @@ public class BlockFireBase extends BlockBase {
                     .withProperty(SOUTH, this.canCatchFire(worldIn, pos.south(), EnumFacing.NORTH))
                     .withProperty(WEST,  this.canCatchFire(worldIn, pos.west(), EnumFacing.EAST))
                     .withProperty(UPPER, this.canCatchFire(worldIn, pos.up(), EnumFacing.DOWN))
-                    .withProperty(PERMANENT, false);
+                    .withProperty(PERMANENT, false)
+                    .withProperty(STATIC, false);
         }
         return this.getDefaultState();
     }
@@ -135,6 +138,10 @@ public class BlockFireBase extends BlockBase {
     // ========== Tick Update ==========
     @Override
     public void updateTick(World world, BlockPos pos, IBlockState blockState, Random rand) {
+        if (blockState.getValue(STATIC) || !world.isAreaLoaded(pos, 2)) {
+            return;
+        }
+
         boolean permanent = blockState.getValue(PERMANENT);
 
         if (!world.getGameRules().getBoolean("doFireTick")) {
