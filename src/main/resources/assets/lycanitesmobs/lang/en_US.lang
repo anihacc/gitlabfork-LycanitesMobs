@@ -1101,7 +1101,7 @@ entity.jengu.habitat=Being Water Elementals, Jengu manifest from large bodies of
 entity.jengu.combat=Jengu attack be throwing large blasts of water, on impact these create a temporary pool of water.
 # ========================================================================
 entity.joust.name=Jouste
-entity.joust.description=Fierce arthropod creatures, they can be farmed and love cactus green!
+entity.joust.description=Fierce large insects that stomp across the sandy dunes, despite their appearance, Joustes can be farmed for their meat by feeding them cactus green and similar plant extracts!
 entity.joust.habitat=These creatures can be found in deserts and mesas.
 entity.joust.combat=Joustes are usually peaceful but will bite back if hit and will follow the command of aggressive Alpha Joustes.
 # ========================================================================
