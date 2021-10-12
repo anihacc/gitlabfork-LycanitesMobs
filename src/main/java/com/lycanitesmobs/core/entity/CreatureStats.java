@@ -283,9 +283,6 @@ public class CreatureStats {
 	 * Returns the Bag Size this entity should use.
 	 * @return Base Bag Size.
 	 */
-	public int BagSize() {
-		return this.entity.creatureInfo.bagSize;
-	}
 
 
 	/**

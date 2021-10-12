@@ -8,6 +8,10 @@ import net.minecraft.util.text.TranslationTextComponent;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
@@ -17,9 +21,34 @@ public class VersionChecker {
 	public static VersionChecker INSTANCE = new VersionChecker();
 	public boolean enabled = true;
 
-	VersionInfo currentVersion = new VersionInfo(LycanitesMobs.versionNumber, LycanitesMobs.versionMC);
-	VersionInfo latestVersion = null;
-	long lastChecked = -1;
+	protected VersionInfo currentVersion = new VersionInfo(LycanitesMobs.versionNumber, LycanitesMobs.versionMC);
+	protected VersionInfo latestVersion = null;
+	protected long lastChecked = -1;
+
+	public SSLContext sslContext;
+
+	public VersionChecker() {
+		// Trust Self Signed SSL Certificates:
+		TrustManager[] trustAllCerts = new TrustManager[]{
+				new X509TrustManager() {
+					public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+						return null;
+					}
+					public void checkClientTrusted(
+							java.security.cert.X509Certificate[] certs, String authType) {
+					}
+					public void checkServerTrusted(
+							java.security.cert.X509Certificate[] certs, String authType) {
+					}
+				}
+		};
+		try {
+			this.sslContext = SSLContext.getInstance("SSL");
+			this.sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 	public static class VersionInfo {
 		public String versionNumber;
@@ -117,9 +146,10 @@ public class VersionChecker {
 
 			try {
 				URL url = new URL(LycanitesMobs.serviceAPI + "/versions?limit=1&sort_by=created_at:desc&mcversion=" + LycanitesMobs.versionMC);
-				URLConnection urlConnection = url.openConnection();
-				String osName = System.getProperty("os.name");
+				HttpsURLConnection urlConnection = (HttpsURLConnection)url.openConnection();
+				urlConnection.setSSLSocketFactory(VersionChecker.INSTANCE.sslContext.getSocketFactory());
 				urlConnection.setRequestProperty("Authorization", "Bearer 7ed1f44cbc1aff693e604075f23d56402983a4a0"); // This is a public api so the key is safe to be exposed like this. :)
+				String osName = System.getProperty("os.name");
 				urlConnection.setRequestProperty("User-Agent", "Minecraft " + LycanitesMobs.versionMC + " (" + osName + ") LycanitesMobs " + LycanitesMobs.versionNumber);
 				InputStream inputStream = urlConnection.getInputStream();
 				String jsonString;

@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.lycanitesmobs.LycanitesMobs;
+import com.lycanitesmobs.core.VersionChecker;
 import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
@@ -12,6 +13,10 @@ import com.lycanitesmobs.core.info.Variant;
 import net.minecraft.entity.player.PlayerEntity;
 import org.apache.commons.io.IOUtils;
 
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
@@ -23,6 +28,30 @@ public class PlayerFamiliars {
 	public Map<UUID, Map<UUID, PetEntry>> playerFamiliars = new HashMap<>();
 	public Map<UUID, Long> playerFamiliarLoadedTimes = new HashMap<>();
 	public List<String> familiarBlacklist = new ArrayList<>();
+	public SSLContext sslContext;
+
+	public PlayerFamiliars() {
+		// Trust Self Signed SSL Certificates:
+		TrustManager[] trustAllCerts = new TrustManager[]{
+				new X509TrustManager() {
+					public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+						return null;
+					}
+					public void checkClientTrusted(
+							java.security.cert.X509Certificate[] certs, String authType) {
+					}
+					public void checkServerTrusted(
+							java.security.cert.X509Certificate[] certs, String authType) {
+					}
+				}
+		};
+		try {
+			this.sslContext = SSLContext.getInstance("SSL");
+			this.sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 	public static class FamiliarLoader implements Runnable {
 		PlayerEntity player;
@@ -44,10 +73,11 @@ public class PlayerFamiliars {
 		private void getForPlayerUUID(UUID uuid) {
 			String jsonString;
 			try {
-				URL familiarsURL = new URL(LycanitesMobs.serviceAPI + "/familiars?minecraft_uuid=" + uuid.toString());
-				URLConnection urlConnection = familiarsURL.openConnection();
-				String osName = System.getProperty("os.name");
+				URL url = new URL(LycanitesMobs.serviceAPI + "/familiars?minecraft_uuid=" + uuid.toString());
+				HttpsURLConnection urlConnection = (HttpsURLConnection)url.openConnection();
+				urlConnection.setSSLSocketFactory(PlayerFamiliars.INSTANCE.sslContext.getSocketFactory());
 				urlConnection.setRequestProperty("Authorization", "Bearer 7ed1f44cbc1aff693e604075f23d56402983a4a0"); // This is a public api so the key is safe to be exposed like this. :)
+				String osName = System.getProperty("os.name");
 				urlConnection.setRequestProperty("User-Agent", "Minecraft " + LycanitesMobs.versionMC + " (" + osName + ") LycanitesMobs " + LycanitesMobs.versionNumber);
 				InputStream inputStream = urlConnection.getInputStream();
 				try {

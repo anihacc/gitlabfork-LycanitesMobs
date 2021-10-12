@@ -40,7 +40,9 @@ public class EntityRoc extends RideableCreatureEntity implements IMob {
 
     @Override
     protected void registerGoals() {
-        this.targetSelector.addGoal(this.nextFindTargetIndex++, new FindAttackTargetGoal(this).addTargets(EntityType.CREEPER));
+        if (this.creeperDropping) {
+            this.targetSelector.addGoal(this.nextFindTargetIndex++, new FindAttackTargetGoal(this).addTargets(EntityType.CREEPER));
+        }
 
         super.registerGoals();
 

@@ -888,7 +888,7 @@ public class CreatureInfo {
 	}
 
 	/**
-	 * Returns a double flag that this creature has rounded into an integer.
+	 * Returns an int flag that this creature has rounded into an integer.
 	 * @param flagName The name of the flag to get.
 	 * @param defaultValue The value to return if the flag is missing.
 	 * @return The flag value.

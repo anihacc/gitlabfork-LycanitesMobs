@@ -15,11 +15,6 @@ import net.minecraft.world.World;
 
 public class EntityTremor extends TameableCreatureEntity implements IMob {
 
-	public int explosionStrength = 1;
-
-    // ==================================================
- 	//                    Constructor
- 	// ==================================================
     public EntityTremor(EntityType<? extends EntityTremor> entityType, World world) {
         super(entityType, world);
         
@@ -38,16 +33,6 @@ public class EntityTremor extends TameableCreatureEntity implements IMob {
         this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(true));
     }
 
-	@Override
-	public void loadCreatureFlags() {
-		this.explosionStrength = this.creatureInfo.getFlag("explosionStrength", this.explosionStrength);
-	}
-
-
-    // ==================================================
-    //                      Updates
-    // ==================================================
-	// ========== Living Update ==========
 	@Override
     public void aiStep() {
         super.aiStep();
@@ -71,52 +56,28 @@ public class EntityTremor extends TameableCreatureEntity implements IMob {
 			}
     }
 
-
-    // ==================================================
-    //                      Attacks
-    // ==================================================
-    // ========== Melee Attack ==========
     @Override
     public boolean attackMelee(Entity target, double damageScale) {
     	if(!super.attackMelee(target, damageScale))
     		return false;
     	
     	// Explosion:
-		int explosionStrength = Math.max(1, this.explosionStrength);
-		Explosion.Mode damageTerrain = this.explosionStrength > 0 && this.getCommandSenderWorld().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING) ? Explosion.Mode.BREAK : Explosion.Mode.NONE;
+		int explosionStrength = Math.max(0, this.creatureInfo.getFlag("explosionStrength", 1));
+		Explosion.Mode explosionMode = explosionStrength > 0 && this.getCommandSenderWorld().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING) ? Explosion.Mode.BREAK : Explosion.Mode.NONE;
 		if(this.isPetType("familiar")) {
 			explosionStrength = 1;
-			damageTerrain = Explosion.Mode.NONE;
+			explosionMode = Explosion.Mode.NONE;
 		}
-		this.getCommandSenderWorld().explode(this, this.position().x(), this.position().y(), this.position().z(), explosionStrength, damageTerrain);
+		this.getCommandSenderWorld().explode(this, this.position().x(), this.position().y(), this.position().z(), explosionStrength, explosionMode);
 
         return true;
     }
-    
-    
-    // ==================================================
-  	//                     Abilities
-  	// ==================================================
-    @Override
-    public boolean isFlying() { return true; }
-    
-    
-    // ==================================================
-    //                     Pet Control
-    // ==================================================
-    public boolean petControlsEnabled() { return true; }
 
-	// ==================================================
-	//                     Equipment
-	// ==================================================
-	@Override
-	public int getNoBagSize() { return 0; }
-	@Override
-	public int getBagSize() { return this.creatureInfo.bagSize; }
-    // ==================================================
-   	//                     Immunities
-   	// ==================================================
-	// ========== Damage ==========
+    @Override
+    public boolean isFlying() {
+    	return true;
+    }
+
     @Override
     public boolean isVulnerableTo(String type, DamageSource source, float damage) {
 		if(source.isExplosion()) {
