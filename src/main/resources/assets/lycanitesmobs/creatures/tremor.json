@@ -100,7 +100,7 @@
     "flags": [
         {
             "name": "explosionStrength",
-            "value": 1
+            "value": 0
         }
     ]
 }

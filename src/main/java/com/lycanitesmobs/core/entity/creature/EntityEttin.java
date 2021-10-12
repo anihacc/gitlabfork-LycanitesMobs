@@ -58,7 +58,7 @@ public class EntityEttin extends AgeableCreatureEntity implements IMob {
     public void onLivingUpdate() {
     	// Destroy Blocks:
 		if(!this.getEntityWorld().isRemote)
-	        if(this.getAttackTarget() != null && this.getEntityWorld().getGameRules().getBoolean("mobGriefing") && this.griefing) {
+	        if(this.getAttackTarget() != null && this.getEntityWorld().getGameRules().getBoolean("mobGriefing") && !this.griefing) {
 		    	float distance = this.getAttackTarget().getDistance(this);
 		    		if(distance <= this.width + 4.0F)
 		    			this.destroyArea((int)this.posX, (int)this.posY, (int)this.posZ, 0.5F, true);

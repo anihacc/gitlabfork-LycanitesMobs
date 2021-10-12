@@ -1,5 +1,6 @@
 package com.lycanitesmobs.core.entity.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import net.minecraft.entity.Entity;
@@ -14,8 +15,6 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 
 public class EntityTremor extends TameableCreatureEntity implements IMob {
-
-	public int explosionStrength = 1;
 
     // ==================================================
  	//                    Constructor
@@ -37,11 +36,6 @@ public class EntityTremor extends TameableCreatureEntity implements IMob {
         super.initEntityAI();
         this.tasks.addTask(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(true));
     }
-
-	@Override
-	public void loadCreatureFlags() {
-		this.explosionStrength = this.creatureInfo.getFlag("explosionStrength", this.explosionStrength);
-	}
 	
 	
     // ==================================================
@@ -82,8 +76,8 @@ public class EntityTremor extends TameableCreatureEntity implements IMob {
     		return false;
     	
     	// Explosion:
-		int explosionStrength = Math.max(1, this.explosionStrength);
-		boolean damageTerrain = this.explosionStrength > 0 && this.getEntityWorld().getGameRules().getBoolean("mobGriefing");
+		int explosionStrength = Math.max(0, this.creatureInfo.getFlag("explosionStrength", 1));
+		boolean damageTerrain = explosionStrength > 0 && this.getEntityWorld().getGameRules().getBoolean("mobGriefing");
 		if(this.isPetType("familiar")) {
 			explosionStrength = 1;
 			damageTerrain = false;

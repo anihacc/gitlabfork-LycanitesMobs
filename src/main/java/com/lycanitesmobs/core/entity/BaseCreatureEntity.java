@@ -4505,7 +4505,12 @@ public abstract class BaseCreatureEntity extends EntityLiving {
     	return 0;
     }
     /** Returns the size that this mob's inventory increases by when it is provided with a bag item. (Look at this as the size of the bag item, not the new total creature inventory size.) **/
-    public int getBagSize() { return 5; }
+    public int getBagSize() {
+    	if (this.creatureInfo != null) {
+    		return this.creatureInfo.bagSize;
+		}
+    	return 5;
+    }
     
     /** Returns true if this mob is able to pick items up off the ground. **/
     public boolean canPickupItems() {
