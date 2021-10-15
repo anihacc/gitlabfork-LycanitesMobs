@@ -32,7 +32,7 @@ public class AttackMeleeGoal extends Goal {
 
     // Pathing:
 	private int failedPathFindingPenalty;
-	private int failedPathFindingPenaltyMax = 20;
+	private int failedPathFindingPenaltyMax = 5;
 	private int failedPathFindingPenaltyPlayerMax = 0;
     private int repathTime;
 	

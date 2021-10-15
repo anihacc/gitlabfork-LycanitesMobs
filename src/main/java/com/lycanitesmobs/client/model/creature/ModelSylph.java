@@ -20,9 +20,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public class ModelSylph extends ModelTemplateElemental {
 
-	// ==================================================
-  	//                    Constructors
-  	// ==================================================
     public ModelSylph() {
         this(1.0F);
     }
@@ -37,10 +34,6 @@ public class ModelSylph extends ModelTemplateElemental {
 		this.trophyOffset = new float[] {0.0F, 0.0F, -0.4F};
     }
 
-
-	// ==================================================
-	//             Add Custom Render Layers
-	// ==================================================
 	@Override
 	public void addCustomLayers(CreatureRenderer renderer) {
 		super.addCustomLayers(renderer);
@@ -61,10 +54,6 @@ public class ModelSylph extends ModelTemplateElemental {
 		return true;
 	}
 
-
-	// ==================================================
-	//                 Animate Part
-	// ==================================================
 	@Override
 	public void animatePart(String partName, LivingEntity entity, float time, float distance, float loop, float lookY, float lookX, float scale) {
 		super.animatePart(partName, entity, time, distance, loop, lookY, lookX, scale);
@@ -113,10 +102,6 @@ public class ModelSylph extends ModelTemplateElemental {
 		}
 	}
 
-
-	// ==================================================
-	//                Can Render Part
-	// ==================================================
 	@Override
 	public boolean canRenderPart(String partName, Entity entity, LayerCreatureBase layer, boolean trophy) {
 		if (partName.contains("hood")) {
@@ -128,11 +113,6 @@ public class ModelSylph extends ModelTemplateElemental {
 		return layer == null;
 	}
 
-
-	// ==================================================
-	//                Get Part Color
-	// ==================================================
-	/** Returns the coloring to be used for this part and layer. **/
 	@Override
 	public Vector4f getPartColor(String partName, Entity entity, LayerCreatureBase layer, boolean trophy, float loop) {
 		if(layer == null) {

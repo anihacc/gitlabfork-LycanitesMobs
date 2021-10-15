@@ -3348,6 +3348,34 @@
         "category": "hostile",
         "sounds": [{"name": "lycanitesmobs:entity/triffid/beg", "stream": false}]
     },
+    "entity.tpumpkyn.say": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/tpumpkyn/say", "stream": false}]
+    },
+    "entity.tpumpkyn.hurt": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/tpumpkyn/hurt", "stream": false}]
+    },
+    "entity.tpumpkyn.death": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/tpumpkyn/death", "stream": false}]
+    },
+    "entity.tpumpkyn.step": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/tpumpkyn/step", "stream": false}]
+    },
+    "entity.tpumpkyn.attack": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/tpumpkyn/attack", "stream": false}]
+    },
+    "entity.tpumpkyn.tame": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/tpumpkyn/tame", "stream": false}]
+    },
+    "entity.tpumpkyn.beg": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/tpumpkyn/beg", "stream": false}]
+    },
     "entity.amalgalich.say": {
         "category": "hostile",
         "sounds": [{"name": "lycanitesmobs:entity/amalgalich/say", "stream": false}]

@@ -11,7 +11,8 @@
     "spawning": {
         "enabled": true,
         "spawners": [
-            "sky"
+            "sky",
+            "sky_deadly"
         ],
         "disableSubspecies": false,
         "dimensionIds": [],

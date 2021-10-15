@@ -1,5 +1,5 @@
 {
-	"name": "lunar",
+	"name": "pumpkin",
 	"type": "spawner",
 	"enabled": true,
 	"loadDefault": true,
@@ -26,17 +26,24 @@
 	],
 	"locations": [
 		{
-			"type": "random",
-			"rangeMin": [24, 0, 24],
-			"rangeMax": [32, 48, 32],
+			"type": "block",
+			"rangeMin": [16, 0, 16],
+			"rangeMax": [32, 32, 32],
+			"surface": true,
+			"underground": true,
 			"sorting": "random",
-			"limit": 32,
-			"solidGround": false
+			"blocks": [
+				"minecraft:pumpkin",
+				"minecraft:carved_pumpkin",
+				"minecraft:jack_o_lantern"
+			],
+			"blockCost": 4,
+			"listType": "whitelist"
 		}
 	],
 	"mobSpawns": [
 		{
-			"mobId": "lycanitesmobs:epion"
+			"mobId": "lycanitesmobs:tpumpkyn"
 		}
 	]
 }

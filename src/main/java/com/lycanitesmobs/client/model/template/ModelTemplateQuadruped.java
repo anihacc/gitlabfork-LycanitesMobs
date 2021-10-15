@@ -51,9 +51,9 @@ public class ModelTemplateQuadruped extends CreatureObjModel {
                 rotX += Math.toDegrees(MathHelper.cos(time * walkSwing + (float) Math.PI) * 1.0F * distance * 0.5F);
                 rotZ += Math.toDegrees(MathHelper.cos(time * walkSwing + (float) Math.PI) * 0.5F * distance * 0.5F);
             }
-            if (partName.equals("legrightfront") || partName.equals("legleftback") || partName.equals("wingright"))
+            if (partName.contains("legrightfront") || partName.contains("legleftback") || partName.contains("wingright"))
                 rotX += Math.toDegrees(MathHelper.cos(time * 0.6662F + (float) Math.PI) * walkSwing * distance);
-            if (partName.equals("legleftfront") || partName.equals("legrightback") || partName.equals("wingleft"))
+            if (partName.contains("legleftfront") || partName.contains("legrightback") || partName.contains("wingleft"))
                 rotX += Math.toDegrees(MathHelper.cos(time * 0.6662F) * walkSwing * distance);
         }
 
@@ -69,9 +69,9 @@ public class ModelTemplateQuadruped extends CreatureObjModel {
                 rotX -= Math.toDegrees(MathHelper.sin(loop * 0.4F) * 0.6F);
                 rotZ -= Math.toDegrees(MathHelper.sin(loop * 0.4F + (float)Math.PI) * 0.6F);
             }
-            if(partName.equals("legleftback") || partName.equals("legrightback"))
+            if(partName.contains("legleftback") || partName.contains("legrightback"))
                 rotX += 25;
-            if(partName.equals("legleftfront") || partName.equals("legrightfront"))
+            if(partName.contains("legleftfront") || partName.contains("legrightfront"))
                 rotX -= 25;
         }
 
