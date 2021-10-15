@@ -393,7 +393,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
 				if (newKnowledge.getMaxExperience() == 0) {
 					player.sendStatusMessage(new TextComponentString(LanguageManager.translate("message.beastiary.study.full") + " " + creature.creatureInfo.getTitle()), true);
 				}
-				else {
+				else if (experience > 0) {
 					player.sendStatusMessage(new TextComponentString(LanguageManager.translate("message.beastiary.study") + " " + newKnowledge.getCreatureInfo().getTitle()
 							+ " " + newKnowledge.experience + "/" + newKnowledge.getMaxExperience() + " (+ " + experience + ")"), true);
 				}

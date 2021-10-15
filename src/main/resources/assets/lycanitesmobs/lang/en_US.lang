@@ -100,7 +100,7 @@ gui.beastiary.index.changes.minor=Minor
 gui.beastiary.creatures=Creatures
 gui.beastiary.creatures.empty.title=No Creatures
 gui.beastiary.creatures.empty.info=You currently do not have any creatures added to your Beastiary. To discover new creatures you must craft a Soulgazer and then use it on any creatures that you find or kill many of them.
-gui.beastiary.creatures.descovered=Creatures Descovered
+gui.beastiary.creatures.discovered=Creatures Descovered
 gui.beastiary.creatures.select=Select a group and then select a creature.
 gui.beastiary.website=View On Website
 gui.beastiary.diet=Diet
@@ -188,7 +188,8 @@ diet.geovore=Geovore
 #
 # ========== Messages ==========
 # Beastiary:
-message.beastiary.new=You have gained Knowledge Rank %rank% of the %creature%! Check your Beastiary!
+message.beastiary.new=You discover the %creature% and began to add notes to your Beastiary!
+message.beastiary.rank=You learn more of the %creature% unlocking Knowledge Rank %rank%!
 message.beastiary.tameable=You are now able to tame the %creature%.
 message.beastiary.summonable=You are now able to summon the %creature% as a temporary minion! You will need a Summoning Item to summon it.
 message.beastiary.summonable.colors=You can now summon variations of the %creature%!

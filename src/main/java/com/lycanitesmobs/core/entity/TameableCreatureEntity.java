@@ -803,9 +803,9 @@ public class TameableCreatureEntity extends AgeableCreatureEntity implements IEn
 		// Require Knowledge Rank 2:
 		CreatureKnowledge creatureKnowledge = extendedPlayer.getBeastiary().getCreatureKnowledge(this.creatureInfo.getName());
 		if (creatureKnowledge == null || creatureKnowledge.rank < 2) {
-			String tameMessage = LanguageManager.translate("message.pet.tamefail.knowledge");
-			tameMessage = tameMessage.replace("%creature%", this.getSpeciesName());
-			player.sendMessage(new TextComponentString(tameMessage));
+//			String tameMessage = LanguageManager.translate("message.pet.tamefail.knowledge");
+//			tameMessage = tameMessage.replace("%creature%", this.getSpeciesName());
+//			player.sendMessage(new TextComponentString(tameMessage));
 			return this.isTamed();
 		}
 

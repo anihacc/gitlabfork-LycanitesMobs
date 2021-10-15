@@ -102,19 +102,16 @@ public class Beastiary {
 			return;
 		}
 		CreatureInfo creatureInfo = creatureKnowledge.getCreatureInfo();
-		String message = LanguageManager.translate("message.beastiary.new");
+		String message = LanguageManager.translate("message.beastiary.rank");
+		if (creatureKnowledge.rank == 1) {
+			message = LanguageManager.translate("message.beastiary.new");
+		}
 		message = message.replace("%creature%", creatureInfo.getTitle());
 		message = message.replace("%rank%", "" + creatureKnowledge.rank);
 		this.extendedPlayer.player.sendMessage(new TextComponentString(message));
 
-		if(creatureInfo.isSummonable() && creatureKnowledge.rank >= 2) {
+		if(creatureInfo.isSummonable() && creatureKnowledge.rank == 2) {
 			String summonMessage = LanguageManager.translate("message.beastiary.summonable");
-//			if(creatureKnowledge.rank >= 3) {
-//				summonMessage = LanguageManager.translate("message.beastiary.summonable.skins");
-//			}
-//			else if(creatureKnowledge.rank == 2) {
-//				summonMessage = LanguageManager.translate("message.beastiary.summonable.colors");
-//			}
 			summonMessage = summonMessage.replace("%creature%", creatureInfo.getTitle());
 			this.extendedPlayer.player.sendMessage(new TextComponentString(summonMessage));
 		}
@@ -174,7 +171,7 @@ public class Beastiary {
 
 	
 	/**
-	 * Returns how many creatures of the specified creature type the player has descovered.
+	 * Returns how many creatures of the specified creature type the player has discovered.
 	 * @param creatureType Creature Type to check with.
 	 * @return True if the player has at least one creature form the specific creature type.
 	 */

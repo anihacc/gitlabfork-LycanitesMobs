@@ -172,7 +172,7 @@ public class CreaturesBeastiaryScreen extends BeastiaryScreen {
 		else if(this.playerExt.selectedCreatureType != null) {
 			// Descovered:
 			nextY += 20;
-			String text = LanguageManager.translate("gui.beastiary.creatures.descovered") + ": ";
+			String text = LanguageManager.translate("gui.beastiary.creatures.discovered") + ": ";
 			text += this.playerExt.getBeastiary().getCreaturesDiscovered(this.playerExt.selectedCreatureType);
 			text += "/" + this.playerExt.selectedCreatureType.creatures.size();
 			this.getFontRenderer().drawString(text, nextX, nextY, 0xFFFFFF, true);
