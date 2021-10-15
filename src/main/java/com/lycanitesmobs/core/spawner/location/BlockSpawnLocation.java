@@ -7,6 +7,7 @@ import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.IFluidBlock;
 import scala.Int;
@@ -35,6 +36,9 @@ public class BlockSpawnLocation extends SpawnLocation {
 	/** If set (above 0), the amount of each block in the blocks list must be found. Default: 0 (disabled) **/
 	public int requiredBlockTypes = 0;
 
+	/** An offset relative to the spawn block to apply. **/
+	public Vec3i offset = new Vec3i(0, 0, 0);
+
 
 	@Override
 	public void loadFromJSON(JsonObject json) {
@@ -55,6 +59,8 @@ public class BlockSpawnLocation extends SpawnLocation {
 
 		if(json.has("requiredBlockTypes"))
 			this.requiredBlockTypes = json.get("requiredBlockTypes").getAsInt();
+
+		this.offset = JSONHelper.getVec3i(json, "offset");
 
 		super.loadFromJSON(json);
 	}
@@ -102,7 +108,7 @@ public class BlockSpawnLocation extends SpawnLocation {
 
 					// Check Block:
 					if(this.isValidBlock(world, spawnPos)) {
-						spawnPositions.add(spawnPos);
+						spawnPositions.add(spawnPos.add(this.offset));
 
 						// Require All:
 						if(this.requiredBlockTypes > 0) {
