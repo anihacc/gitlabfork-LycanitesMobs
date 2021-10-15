@@ -142,8 +142,7 @@ public class BlockSpawnLocation extends SpawnLocation {
 
 	/** Returns if the provided block position is valid. **/
 	public boolean isValidBlock(World world, BlockPos blockPos) {
-		Block block = world.getBlockState(blockPos).getBlock();
-		if(!this.surface || !this.underground) {
+		if (!this.surface || !this.underground) {
 			if(world.canSeeSkyFromBelowWater(blockPos)) {
 				if(!this.surface) {
 					return false;
@@ -156,7 +155,11 @@ public class BlockSpawnLocation extends SpawnLocation {
 			}
 		}
 
-		if("blacklist".equalsIgnoreCase(this.listType)) {
+		if (this.blockIds.isEmpty()) {
+			return true;
+		}
+		Block block = world.getBlockState(blockPos).getBlock();
+		if ("blacklist".equalsIgnoreCase(this.listType)) {
 			return !this.blockIds.contains(block.getRegistryName().toString());
 		}
 		else {
