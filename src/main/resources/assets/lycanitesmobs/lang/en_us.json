@@ -152,7 +152,7 @@
     "gui.equipmentforge.error": "You must name your new Equipment!",
     "_comment": "========== Messages ==========",
     "_comment": "Beastiary:",
-    "message.beastiary.new": "You discover the %creature% and began to add notes to your Beastiary!",
+    "message.beastiary.new": "You discover the %creature% and begin to add notes to your Beastiary!",
     "message.beastiary.rank": "You learn more of the %creature% unlocking Knowledge Rank %rank%!",
     "message.beastiary.tameable.prefix": "You are now able to tame the",
     "message.beastiary.tameable.suffix": "!",
