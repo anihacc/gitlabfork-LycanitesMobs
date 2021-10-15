@@ -19,7 +19,8 @@
         "ignoreBiome": false,
         "biomeTags": [
             "spooky",
-            "end"
+            "end",
+            "sky_deadly"
         ],
         "spawnWeight": 4,
         "dungeonWeight": 200,

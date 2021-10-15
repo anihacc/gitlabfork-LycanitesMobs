@@ -370,14 +370,14 @@ public class ExtendedPlayer implements IExtendedPlayer {
 	public boolean studyCreature(Entity entity, int experience, boolean useCooldown) {
 		if (!(entity instanceof BaseCreatureEntity)) {
 			if (useCooldown && !this.player.getEntityWorld().isRemote) {
-				this.player.sendMessage(new TextComponentString(LanguageManager.translate("message.beastiary.unknown")));
+				this.player.sendStatusMessage(new TextComponentString(LanguageManager.translate("message.beastiary.unknown")), true);
 			}
 			return false;
 		}
 
 		if (useCooldown && this.creatureStudyCooldown > 0) {
 			if (!this.player.getEntityWorld().isRemote) {
-				this.player.sendMessage(new TextComponentString(LanguageManager.translate("message.beastiary.study.recharging")));
+				this.player.sendStatusMessage(new TextComponentString(LanguageManager.translate("message.beastiary.study.recharging")), true);
 			}
 			return false;
 		}
@@ -391,18 +391,18 @@ public class ExtendedPlayer implements IExtendedPlayer {
 			}
 			if (!player.getEntityWorld().isRemote) {
 				if (newKnowledge.getMaxExperience() == 0) {
-					player.sendMessage(new TextComponentString(LanguageManager.translate("message.beastiary.study.full") + " " + creature.creatureInfo.getTitle()));
+					player.sendStatusMessage(new TextComponentString(LanguageManager.translate("message.beastiary.study.full") + " " + creature.creatureInfo.getTitle()), true);
 				}
 				else {
-					player.sendMessage(new TextComponentString(LanguageManager.translate("message.beastiary.study") + " " + newKnowledge.getCreatureInfo().getTitle()
-							+ " " + newKnowledge.experience + "/" + newKnowledge.getMaxExperience() + " (+ " + experience + ")"));
+					player.sendStatusMessage(new TextComponentString(LanguageManager.translate("message.beastiary.study") + " " + newKnowledge.getCreatureInfo().getTitle()
+							+ " " + newKnowledge.experience + "/" + newKnowledge.getMaxExperience() + " (+ " + experience + ")"), true);
 				}
 			}
 			return true;
 		}
 
 		if (useCooldown && !player.getEntityWorld().isRemote) {
-			player.sendMessage(new TextComponentString(LanguageManager.translate("message.beastiary.study.full") + " " + creature.creatureInfo.getTitle()));
+			player.sendStatusMessage(new TextComponentString(LanguageManager.translate("message.beastiary.study.full") + " " + creature.creatureInfo.getTitle()), true);
 		}
 		return false;
 	}
