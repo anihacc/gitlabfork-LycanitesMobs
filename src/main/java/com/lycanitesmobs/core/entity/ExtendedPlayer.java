@@ -22,6 +22,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.Util;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
 import java.util.HashMap;
@@ -392,8 +393,9 @@ public class ExtendedPlayer implements IExtendedPlayer {
 					this.sendOverlayMessage(new TranslationTextComponent("message.beastiary.study.full").append(" ").append(creature.creatureInfo.getTitle()));
 				}
 				else if (experience > 0) {
-					this.sendOverlayMessage(new TranslationTextComponent("message.beastiary.study").append(" ")
-							.append(newKnowledge.getCreatureInfo().getTitle()).append(" " + newKnowledge.experience + "/" + newKnowledge.getMaxExperience() + " (+ " + experience + ")"));
+					this.sendOverlayMessage(((TextComponent)newKnowledge.getCreatureInfo().getTitle()).append(" ")
+							.append(new TranslationTextComponent("message.beastiary.study"))
+							.append(" " + newKnowledge.experience + "/" + newKnowledge.getMaxExperience() + " (+ " + experience + ")"));
 				}
 			}
 			return true;

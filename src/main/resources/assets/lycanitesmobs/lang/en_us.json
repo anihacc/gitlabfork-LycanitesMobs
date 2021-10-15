@@ -166,7 +166,7 @@
     "message.beastiary.known.of": "of",
     "message.beastiary.known.suffix": ".",
     "message.beastiary.unknown": "There is nothing to be learnt about this creature.",
-    "message.beastiary.study": "Creature Knowledge Gained:",
+    "message.beastiary.study": "Knowledge:",
     "message.beastiary.study.recharging": "You must wait a moment before you are able to study a creature again.",
     "message.beastiary.study.cooldown": "Study Cooldown:",
     "message.beastiary.study.full": "Creature Knowledge Full:",
