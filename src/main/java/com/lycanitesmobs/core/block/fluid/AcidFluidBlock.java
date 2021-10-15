@@ -26,8 +26,8 @@ import java.util.function.Supplier;
 import net.minecraft.block.AbstractBlock.Properties;
 
 public class AcidFluidBlock extends BaseFluidBlock {
-	public AcidFluidBlock(Supplier<? extends FlowingFluid> fluidSupplier, Properties properties, String name, ElementInfo element) {
-        super(fluidSupplier, properties, name, element);
+	public AcidFluidBlock(Supplier<? extends FlowingFluid> fluidSupplier, Properties properties, String name, ElementInfo element, boolean destroyItems) {
+        super(fluidSupplier, properties, name, element, destroyItems);
 	}
 
     @Override

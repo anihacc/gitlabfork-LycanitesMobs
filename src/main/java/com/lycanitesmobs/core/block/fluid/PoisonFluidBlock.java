@@ -25,8 +25,8 @@ import java.util.function.Supplier;
 import net.minecraft.block.AbstractBlock.Properties;
 
 public class PoisonFluidBlock extends BaseFluidBlock {
-	public PoisonFluidBlock(Supplier<? extends FlowingFluid> fluidSupplier, Properties properties, String name, ElementInfo element) {
-        super(fluidSupplier, properties, name, element);
+	public PoisonFluidBlock(Supplier<? extends FlowingFluid> fluidSupplier, Properties properties, String name, ElementInfo element, boolean destroyItems) {
+        super(fluidSupplier, properties, name, element, destroyItems);
 	}
 
     public boolean shouldSpreadLiquid(World world, BlockPos neighborBlockPos, BlockState blockState) {

@@ -21,8 +21,8 @@ import java.util.Random;
 import java.util.function.Supplier;
 
 public class VeshoneyFluidBlock extends BaseFluidBlock {
-    public VeshoneyFluidBlock(Supplier<? extends FlowingFluid> fluidSupplier, Properties properties, String name, ElementInfo element) {
-        super(fluidSupplier, properties, name, element);
+    public VeshoneyFluidBlock(Supplier<? extends FlowingFluid> fluidSupplier, Properties properties, String name, ElementInfo element, boolean destroyItems) {
+        super(fluidSupplier, properties, name, element, destroyItems);
     }
 
     public boolean shouldSpreadLiquid(World world, BlockPos neighborBlockPos, BlockState blockState) {

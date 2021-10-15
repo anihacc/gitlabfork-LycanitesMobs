@@ -22,8 +22,8 @@ import java.util.Random;
 import java.util.function.Supplier;
 
 public class OozeFluidBlock extends BaseFluidBlock {
-	public OozeFluidBlock(Supplier<? extends FlowingFluid> fluidSupplier, Block.Properties properties, String name, ElementInfo element) {
-        super(fluidSupplier, properties, name, element);
+	public OozeFluidBlock(Supplier<? extends FlowingFluid> fluidSupplier, Block.Properties properties, String name, ElementInfo element, boolean destroyItems) {
+        super(fluidSupplier, properties, name, element, destroyItems);
 	}
 
     @Override

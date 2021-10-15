@@ -22,8 +22,8 @@ import java.util.Random;
 import java.util.function.Supplier;
 
 public class MoglavaFluidBlock extends BaseFluidBlock {
-	public MoglavaFluidBlock(Supplier<? extends FlowingFluid> fluidSupplier, Block.Properties properties, String name, ElementInfo element) {
-		super(fluidSupplier, properties, name, element);
+	public MoglavaFluidBlock(Supplier<? extends FlowingFluid> fluidSupplier, Block.Properties properties, String name, ElementInfo element, boolean destroyItems) {
+		super(fluidSupplier, properties, name, element, destroyItems);
 	}
 
 	@Override
