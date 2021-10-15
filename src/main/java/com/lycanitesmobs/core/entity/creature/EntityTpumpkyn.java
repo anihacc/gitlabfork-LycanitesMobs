@@ -26,4 +26,14 @@ public class EntityTpumpkyn extends TameableCreatureEntity {
         super.registerGoals();
         this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setSpeed(1.5D));
     }
+
+    @Override
+    public boolean rollLookChance() {
+        return false;
+    }
+
+    @Override
+    public boolean rollWanderChance() {
+        return this.getRandom().nextDouble() <= 0.0005D;
+    }
 }

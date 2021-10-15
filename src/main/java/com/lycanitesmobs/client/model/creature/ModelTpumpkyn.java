@@ -38,27 +38,31 @@ public class ModelTpumpkyn extends ModelTemplateQuadruped {
 
     @Override
     public void animatePart(String partName, LivingEntity entity, float time, float distance, float loop, float lookY, float lookX, float scale) {
-		if (partName.contains("hair")) {
-			float rotZ = (float)Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F + 0.05F);
-			float rotX = (float)Math.toDegrees(MathHelper.sin(loop * 0.067F) * 0.05F);
-			this.rotate(rotX, 0, rotZ);
-		}
 
     	// Standing:
 		if (distance < 0.1F && !((BaseCreatureEntity)entity).hasAttackTarget()) {
 			if (partName.contains("body")) {
-				this.translate(0, -0.2F, 0);
+				this.translate(0, -0.25F, 0);
 			}
 			if (partName.contains("leg")) {
 				this.scale(distance, distance, distance);
 			}
-			if (partName.equals("eyes")) {
+			if (partName.equals("eyes") || partName.equals("effect")) {
 				this.scale(0, 0, 0);
+			}
+			if (partName.equals("mouth")) {
+				this.translate(0, 0.1F, 0);
 			}
 			return;
 		}
 
     	super.animatePart(partName, entity, time, distance, loop, lookY, lookX, scale);
+
+		if (partName.contains("hair")) {
+			float rotZ = (float)Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F + 0.05F);
+			float rotX = (float)Math.toDegrees(MathHelper.sin(loop * 0.067F) * 0.05F);
+			this.rotate(rotX, 0, rotZ);
+		}
     }
 
 	@Override
