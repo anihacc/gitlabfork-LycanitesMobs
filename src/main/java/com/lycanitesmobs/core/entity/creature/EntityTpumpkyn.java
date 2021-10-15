@@ -1,5 +1,6 @@
 package com.lycanitesmobs.core.entity.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import net.minecraft.entity.EnumCreatureAttribute;
@@ -20,5 +21,15 @@ public class EntityTpumpkyn extends TameableCreatureEntity {
     protected void initEntityAI() {
         super.initEntityAI();
         this.tasks.addTask(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setSpeed(1.5D));
+    }
+
+    @Override
+    public boolean rollLookChance() {
+        return false;
+    }
+
+    @Override
+    public boolean rollWanderChance() {
+       return this.getRNG().nextDouble() <= 0.0005D;
     }
 }
