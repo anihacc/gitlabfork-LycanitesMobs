@@ -82,7 +82,7 @@ public class CreatureConfig {
 	public boolean beastiaryKnowledgeMessages = true;
 
 	/** How much knowledge experience standing near a creature gives per second. **/
-	public int creatureProximityKnowledge = 1;
+	public int creatureProximityKnowledge = 0;
 
 	/** How much knowledge experience killing a creature gives. **/
 	public int creatureKillKnowledge = 50;

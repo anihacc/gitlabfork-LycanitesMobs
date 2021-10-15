@@ -1,16 +1,15 @@
 package com.lycanitesmobs.core.entity;
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.client.localisation.LanguageManager;
 import com.lycanitesmobs.core.VersionChecker;
 import com.lycanitesmobs.core.capabilities.IExtendedPlayer;
 import com.lycanitesmobs.core.config.ConfigExtra;
 import com.lycanitesmobs.core.info.*;
 import com.lycanitesmobs.core.item.summoningstaff.ItemStaffSummoning;
 import com.lycanitesmobs.core.network.*;
-import com.lycanitesmobs.core.pets.PlayerFamiliars;
 import com.lycanitesmobs.core.pets.PetEntry;
 import com.lycanitesmobs.core.pets.PetManager;
+import com.lycanitesmobs.core.pets.PlayerFamiliars;
 import com.lycanitesmobs.core.pets.SummonSet;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
@@ -21,6 +20,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Util;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
@@ -368,14 +368,14 @@ public class ExtendedPlayer implements IExtendedPlayer {
 	public boolean studyCreature(LivingEntity entity, int experience, boolean useCooldown) {
 		if (!(entity instanceof BaseCreatureEntity)) {
 			if (useCooldown && !this.player.getCommandSenderWorld().isClientSide()) {
-				player.sendMessage(new TranslationTextComponent("message.beastiary.unknown"), Util.NIL_UUID);
+				this.sendOverlayMessage(new TranslationTextComponent("message.beastiary.unknown"));
 			}
 			return false;
 		}
 
 		if (useCooldown && this.creatureStudyCooldown > 0) {
 			if (!this.player.getCommandSenderWorld().isClientSide()) {
-				player.sendMessage(new TranslationTextComponent("message.beastiary.study.recharging"), Util.NIL_UUID);
+				this.sendOverlayMessage(new TranslationTextComponent("message.beastiary.study.recharging"));
 			}
 			return false;
 		}
@@ -389,18 +389,18 @@ public class ExtendedPlayer implements IExtendedPlayer {
 			}
 			if (!this.player.getCommandSenderWorld().isClientSide()) {
 				if (newKnowledge.getMaxExperience() == 0) {
-					player.sendMessage(new TranslationTextComponent("message.beastiary.study.full").append(" ").append(creature.creatureInfo.getTitle()), Util.NIL_UUID);
+					this.sendOverlayMessage(new TranslationTextComponent("message.beastiary.study.full").append(" ").append(creature.creatureInfo.getTitle()));
 				}
-				else {
-					player.sendMessage(new TranslationTextComponent("message.beastiary.study").append(" ")
-							.append(newKnowledge.getCreatureInfo().getTitle()).append(" " + newKnowledge.experience + "/" + newKnowledge.getMaxExperience() + " (+ " + experience + ")"), Util.NIL_UUID);
+				else if (experience > 0) {
+					this.sendOverlayMessage(new TranslationTextComponent("message.beastiary.study").append(" ")
+							.append(newKnowledge.getCreatureInfo().getTitle()).append(" " + newKnowledge.experience + "/" + newKnowledge.getMaxExperience() + " (+ " + experience + ")"));
 				}
 			}
 			return true;
 		}
 
 		if (useCooldown && !this.player.getCommandSenderWorld().isClientSide()) {
-			player.sendMessage(new TranslationTextComponent("message.beastiary.study.full").append(" ").append(creature.creatureInfo.getTitle()), Util.NIL_UUID);
+			this.sendOverlayMessage(new TranslationTextComponent("message.beastiary.study.full").append(" ").append(creature.creatureInfo.getTitle()));
 		}
 		return false;
 	}
@@ -477,15 +477,15 @@ public class ExtendedPlayer implements IExtendedPlayer {
 	public boolean isControlActive(CONTROL_ID controlID) {
 		return (this.controlStates & controlID.id) > 0;
 	}
-	
-	
+
+
 	// ==================================================
-    //                 Request GUI Data
+    //                      Utility
     // ==================================================
-	public void onOpenBeastiary() {
-		this.sendPetEntriesToPlayer("pet");
-		this.sendPetEntriesToPlayer("mount");
-        this.sendPetEntriesToPlayer("familiar");
+	public void sendOverlayMessage(ITextComponent messageComponent) {
+		if(this.player.getCommandSenderWorld().isClientSide) return;
+		MessageOverlayMessage message = new MessageOverlayMessage(messageComponent);
+		LycanitesMobs.packetHandler.sendToServer(message);
 	}
 
 

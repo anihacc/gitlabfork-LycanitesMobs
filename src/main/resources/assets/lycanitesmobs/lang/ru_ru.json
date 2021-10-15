@@ -72,7 +72,7 @@
   "gui.beastiary.creatures": "Существа",
   "gui.beastiary.creatures.empty.title": "Нет сведений о тварях",
   "gui.beastiary.creatures.empty.info": "В настоящее время у вас нет ни одного существа, добавленного в ваш Зверинец. Чтобы открыть новых существ, вы должны создать наблюдателя душ, а затем использовать его на всех существах, которых вы найдете, или убить многих из них.",
-  "gui.beastiary.creatures.descovered": "Обнаруженные существа",
+  "gui.beastiary.creatures.discovered": "Обнаруженные существа",
   "gui.beastiary.creatures.select": "Выберите раздел и затем существо.",
   "gui.beastiary.website": "Посмотреть на сайте",
   "gui.beastiary.summary": "Всего",

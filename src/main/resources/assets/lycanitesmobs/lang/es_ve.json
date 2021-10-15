@@ -84,7 +84,7 @@
     "gui.beastiary.creatures": "Criaturas",
     "gui.beastiary.creatures.empty.title": "Sin criaturas",
     "gui.beastiary.creatures.empty.info": "Actualmente no conociste ninguna criatura. Para conocer criaturas debes matar muchas de ellas, estar cerca o usar un mirador de almas.",
-    "gui.beastiary.creatures.descovered": "Criaturas descubiertas",
+    "gui.beastiary.creatures.discovered": "Criaturas descubiertas",
     "gui.beastiary.creatures.select": "Selecciona un grupo y luego selecciona una criatura.",
     "gui.beastiary.website": "Ver en el sitio web",
     "gui.beastiary.summary": "Resumen",

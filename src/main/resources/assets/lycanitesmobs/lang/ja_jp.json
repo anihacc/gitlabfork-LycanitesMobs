@@ -87,7 +87,7 @@
     "gui.beastiary.creatures": "伝記",
     "gui.beastiary.creatures.empty.title": "クリーチャーなし",
     "gui.beastiary.creatures.empty.info": "伝記帳にクリーチャーを追加していません。新しいクリーチャーを発見するには、ソウルゲーザーを見つけたクリーチャーでそれを使用しなければなりません。",
-    "gui.beastiary.creatures.descovered": "クリーチャー",
+    "gui.beastiary.creatures.discovered": "クリーチャー",
     "gui.beastiary.creatures.select": "最初に対応するグループを選択してから、クリーチャーをさらに見てください。",
     "gui.beastiary.website": "Webサイトにアクセス",
     "gui.beastiary.summary": "サマリー",

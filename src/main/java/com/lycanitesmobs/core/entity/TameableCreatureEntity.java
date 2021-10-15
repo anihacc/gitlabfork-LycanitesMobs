@@ -809,12 +809,12 @@ public abstract class TameableCreatureEntity extends AgeableCreatureEntity {
 		// Require Knowledge Rank 2:
 		CreatureKnowledge creatureKnowledge = extendedPlayer.getBeastiary().getCreatureKnowledge(this.creatureInfo.getName());
 		if (creatureKnowledge == null || creatureKnowledge.rank < 2) {
-			ITextComponent tameMessage = new TranslationTextComponent("message.pet.tamefail.knowledge.prefix")
-					.append(" ")
-					.append(this.getSpeciesName())
-					.append(" ")
-					.append(new TranslationTextComponent("message.pet.tamefail.knowledge.suffix"));
-			player.sendMessage(tameMessage, Util.NIL_UUID);
+//			ITextComponent tameMessage = new TranslationTextComponent("message.pet.tamefail.knowledge.prefix")
+//					.append(" ")
+//					.append(this.getSpeciesName())
+//					.append(" ")
+//					.append(new TranslationTextComponent("message.pet.tamefail.knowledge.suffix"));
+//			player.sendMessage(tameMessage, Util.NIL_UUID);
 			return this.isTamed();
 		}
 

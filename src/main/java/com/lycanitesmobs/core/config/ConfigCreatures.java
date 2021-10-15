@@ -143,7 +143,7 @@ public class ConfigCreatures {
 				.define("beastiaryKnowledgeMessages", true);
 		creatureProximityKnowledge = builder.comment("How much knowledge experience standing near a creature gives per second.")
 				.translation(CoreConfig.CONFIG_PREFIX + "creatures.creatureProximityKnowledge")
-				.define("creatureProximityKnowledge", 1);
+				.define("creatureProximityKnowledge", 0);
 		creatureKillKnowledge = builder.comment("How much knowledge experience killing a creature gives.")
 				.translation(CoreConfig.CONFIG_PREFIX + "creatures.creatureKillKnowledge")
 				.define("creatureKillKnowledge", 50);

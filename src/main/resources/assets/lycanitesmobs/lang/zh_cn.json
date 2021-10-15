@@ -69,7 +69,7 @@
     "gui.beastiary.creatures": "生物图鉴",
     "gui.beastiary.creatures.empty.title": "没有生物",
     "gui.beastiary.creatures.empty.info": "你当前没有添加任何生物到你的生物图鉴里。想发现新的生物你就必须制作灵魂凝视者然后在你找到的任何生物上使用它。",
-    "gui.beastiary.creatures.descovered": "生物介绍",
+    "gui.beastiary.creatures.discovered": "生物介绍",
     "gui.beastiary.creatures.select": "请先选择一个对应的群系然后再进一步查看生物。",
     "gui.beastiary.website": "访问网站",
     "gui.beastiary.summary": "摘要",

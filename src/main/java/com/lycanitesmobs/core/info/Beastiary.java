@@ -13,6 +13,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.Util;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
 import javax.annotation.Nullable;
@@ -107,35 +108,22 @@ public class Beastiary {
 			return;
 		}
 		CreatureInfo creatureInfo = creatureKnowledge.getCreatureInfo();
-		ITextComponent message = new TranslationTextComponent("message.beastiary.new.prefix")
-				.append(" " + creatureKnowledge.rank + " ")
-				.append(new TranslationTextComponent("message.beastiary.new.of"))
-				.append(" ")
-				.append(creatureInfo.getTitle())
-				.append(" ")
-				.append(new TranslationTextComponent("message.beastiary.new.suffix"));
+		String messageKey = "message.beastiary.rank";
+		if (creatureKnowledge.rank == 1) {
+			messageKey = "message.beastiary.new";
+		}
+		String messageText = new TranslationTextComponent(messageKey).getString();
+		messageText = messageText.replaceAll("%creature%", "" + creatureInfo.getTitle().getString());
+		messageText = messageText.replaceAll("%rank%", "" + creatureKnowledge.rank);
+		ITextComponent message = new StringTextComponent(messageText);
 		this.extendedPlayer.player.sendMessage(message, Util.NIL_UUID);
 
-		if(creatureInfo.isSummonable() && creatureKnowledge.rank >= 2) {
+		if(creatureInfo.isSummonable() && creatureKnowledge.rank == 2) {
 			ITextComponent summonMessage = new TranslationTextComponent("message.beastiary.summonable.prefix")
 					.append(" ")
 					.append(creatureInfo.getTitle())
 					.append(" ")
 					.append(new TranslationTextComponent("message.beastiary.summonable.suffix"));
-//			if(creatureKnowledge.rank >= 3) {
-//				summonMessage = new TranslationTextComponent("message.beastiary.summonable.skins.prefix")
-//						.append(" ")
-//						.append(creatureInfo.getTitle())
-//						.append(" ")
-//						.append(new TranslationTextComponent("message.beastiary.summonable.skins.suffix"));
-//			}
-//			else if(creatureKnowledge.rank == 2) {
-//				summonMessage = new TranslationTextComponent("message.beastiary.summonable.colors.prefix")
-//						.append(" ")
-//						.append(creatureInfo.getTitle())
-//						.append(" ")
-//						.append(new TranslationTextComponent("message.beastiary.summonable.colors.suffix"));
-//			}
 			this.extendedPlayer.player.sendMessage(summonMessage, Util.NIL_UUID);
 		}
 
@@ -201,7 +189,7 @@ public class Beastiary {
 
 	
 	/**
-	 * Returns how many creatures of the specified creature type the player has descovered.
+	 * Returns how many creatures of the specified creature type the player has discovered.
 	 * @param creatureType Creature Type to check with.
 	 * @return True if the player has at least one creature form the specific creature type.
 	 */
