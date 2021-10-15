@@ -188,7 +188,7 @@ diet.geovore=Geovore
 #
 # ========== Messages ==========
 # Beastiary:
-message.beastiary.new=You discover the %creature% and began to add notes to your Beastiary!
+message.beastiary.new=You discover the %creature% and begin to add notes to your Beastiary!
 message.beastiary.rank=You learn more of the %creature% unlocking Knowledge Rank %rank%!
 message.beastiary.tameable=You are now able to tame the %creature%.
 message.beastiary.summonable=You are now able to summon the %creature% as a temporary minion! You will need a Summoning Item to summon it.
@@ -1305,6 +1305,11 @@ entity.triffid.name=Triffid
 entity.triffid.description=Large carnivorous plants, slow but incredibly poisonous and deadly!
 entity.triffid.habitat=These plant creatures often lurk in swamps due to it being moist, not too cold and full of prey for them to devour.
 entity.triffid.combat=These creatures are very slow but should be handled with care as their attacks are incredibly strong and spread plague. Axes are very effective, but take heed for they will heal in water!
+# ========================================================================
+entity.tpumpkyn.name=Tpumpkyn
+entity.tpumpkyn.description=It is like a pumpkin...
+entity.tpumpkyn.habitat=Tpumpkyn like to be around other Tpumpkyn...
+entity.tpumpkyn.combat=Your soul, is tasty for Tpumpkyn...
 # ========================================================================
 entity.trite.name=Trite
 entity.trite.description=Small and fast demonic creatures that appear to be a brain with spider-like legs.
