@@ -172,7 +172,7 @@ public class ProjectileBehaviourLaser extends ProjectileBehaviour {
 		// Deal Damage:
 		if(projectile.getThrower() instanceof BaseCreatureEntity) {
 			BaseCreatureEntity creatureThrower = (BaseCreatureEntity)projectile.getThrower();
-			attackSuccess = creatureThrower.doRangedDamage(target, projectile, damage);
+			attackSuccess = creatureThrower.doRangedDamage(target, projectile, damage, projectile.isBlockedByEntity(target));
 		}
 		else {
 			double pierceDamage = 1;

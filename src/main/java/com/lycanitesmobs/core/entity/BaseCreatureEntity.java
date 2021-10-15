@@ -3164,17 +3164,12 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 	 * @param target The target entity to damage.
 	 * @param projectile The projectile that caused the damage.
 	 * @param damage The amount of damage the projectile deals. This will be scaled by this creature's damage stat.
+	 * @param noPierce If true, this creature's piercing stat will be ignored, used for when blocked by a shield, etc.
 	 * @return True if damage is dealt.
 	 */
-	public boolean doRangedDamage(Entity target, EntityThrowable projectile, float damage) {
+	public boolean doRangedDamage(Entity target, EntityThrowable projectile, float damage, boolean noPierce) {
 		damage *= this.creatureStats.getDamage() / 2;
-		double pierceDamage = this.creatureStats.getPierce();
-		if (target instanceof EntityLivingBase) {
-			EntityLivingBase targetLiving = (EntityLivingBase)target;
-			if (targetLiving.isActiveItemStackBlocking() || targetLiving.getActiveItemStack().getItem().isShield(targetLiving.getActiveItemStack(), targetLiving)) {
-				pierceDamage = 0;
-			}
-		}
+		double pierceDamage = noPierce ? 0 : this.creatureStats.getPierce();
 
 		boolean success;
 		if(damage <= pierceDamage) {

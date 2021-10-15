@@ -237,7 +237,7 @@ public class BaseProjectileEntity extends EntityThrowable {
 						// Deal Damage:
 						if (this.getThrower() instanceof BaseCreatureEntity) {
 							BaseCreatureEntity creatureThrower = (BaseCreatureEntity) this.getThrower();
-							attackSuccess = creatureThrower.doRangedDamage(target, this, damage);
+							attackSuccess = creatureThrower.doRangedDamage(target, this, damage, this.isBlockedByEntity(target));
 						}
 						else {
 							double pierceDamage = this.pierce;
@@ -355,26 +355,29 @@ public class BaseProjectileEntity extends EntityThrowable {
 
 	/**
 	 * Determines if the provided entity is blocking this projectile, takes into account where players are looking also.
-	 * Note: This may be completely redundant and is currently not used.
 	 * @param targetEntity The entity to check.
 	 * @return True if this projectile is being blocked by the entity.
 	 */
-	public boolean isBlockedByEntity(EntityLivingBase targetEntity) {
-		if (targetEntity == null || !targetEntity.isActiveItemStackBlocking() || !targetEntity.getActiveItemStack().getItem().isShield(targetEntity.getActiveItemStack(), targetEntity)) {
+	public boolean isBlockedByEntity(Entity targetEntity) {
+		if (!(targetEntity instanceof EntityLivingBase)) {
+			return false;
+		}
+		EntityLivingBase targetLiving = (EntityLivingBase)targetEntity;
+		if (!targetLiving.isActiveItemStackBlocking() || !targetLiving.getActiveItemStack().getItem().isShield(targetLiving.getActiveItemStack(), targetLiving)) {
 			return false;
 		}
 
 		// Check Player Blocking Angle:
-		if (targetEntity instanceof EntityPlayer) {
-			LycanitesMobs.logDebug("", "Checking if player is blocking: " + targetEntity);
-			Vec3d targetViewVector = targetEntity.getLook(1.0F).normalize();
-			Vec3d distance = new Vec3d(this.posX - targetEntity.posX, (this.posY + this.getEyeHeight()) - (targetEntity.posY + targetEntity.getEyeHeight()), this.posZ - targetEntity.posZ);
+		if (targetLiving instanceof EntityPlayer) {
+			LycanitesMobs.logDebug("", "Checking if player is blocking: " + targetLiving);
+			Vec3d targetViewVector = targetLiving.getLook(1.0F).normalize();
+			Vec3d distance = new Vec3d(this.posX - targetLiving.posX, (this.posY + this.getEyeHeight()) - (targetLiving.posY + targetLiving.getEyeHeight()), this.posZ - targetLiving.posZ);
 			double distanceStraight = distance.lengthVector();
 			distance = distance.normalize();
 			double lookDistance = targetViewVector.dotProduct(distance);
 			double lookRange = 1.5D;
 			double comparison = 1.0D - (lookRange / distanceStraight);
-			return lookDistance > comparison && targetEntity.canEntityBeSeen(this);
+			return lookDistance > comparison && targetLiving.canEntityBeSeen(this);
 		}
 
 		return true;
