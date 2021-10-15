@@ -284,7 +284,7 @@ public class BaseProjectileEntity extends ThrowableEntity {
 						// Deal Damage:
 						if (this.getOwner() instanceof BaseCreatureEntity) {
 							BaseCreatureEntity creatureThrower = (BaseCreatureEntity) this.getOwner();
-							attackSuccess = creatureThrower.doRangedDamage(target, this, damage);
+							attackSuccess = creatureThrower.doRangedDamage(target, this, damage, this.isBlockedByEntity(target));
 						}
 						else {
 							double pierceDamage = this.pierce;
@@ -396,25 +396,28 @@ public class BaseProjectileEntity extends ThrowableEntity {
 
 	/**
 	 * Determines if the provided entity is blocking this projectile, takes into account where players are looking also.
-	 * Note: This may be completely redundant.
 	 * @param targetEntity The entity to check.
 	 * @return True if this projectile is being blocked by the entity.
 	 */
-	public boolean isBlockedByEntity(LivingEntity targetEntity) {
-		if (targetEntity == null || !targetEntity.isBlocking() || !targetEntity.getUseItem().isShield(targetEntity)) {
+	public boolean isBlockedByEntity(Entity targetEntity) {
+		if (!(targetEntity instanceof LivingEntity)) {
+			return false;
+		}
+		LivingEntity targetLiving = (LivingEntity)targetEntity;
+		if (!targetLiving.isBlocking() || !targetLiving.getUseItem().isShield(targetLiving)) {
 			return false;
 		}
 
 		// Check Player Blocking Angle:
-		if (targetEntity instanceof PlayerEntity) {
-			Vector3d targetViewVector = targetEntity.getViewVector(1.0F).normalize();
-			Vector3d distance = new Vector3d(this.getX() - targetEntity.getX(), this.getEyeY() - targetEntity.getEyeY(), this.getZ() - targetEntity.getZ());
+		if (targetLiving instanceof PlayerEntity) {
+			Vector3d targetViewVector = targetLiving.getViewVector(1.0F).normalize();
+			Vector3d distance = new Vector3d(this.getX() - targetLiving.getX(), this.getEyeY() - targetLiving.getEyeY(), this.getZ() - targetLiving.getZ());
 			double distanceStraight = distance.length();
 			distance = distance.normalize();
 			double lookDistance = targetViewVector.dot(distance);
 			double lookRange = 1.5D;
 			double comparison = 1.0D - (lookRange / distanceStraight);
-			return lookDistance > comparison && targetEntity.canSee(this);
+			return lookDistance > comparison && targetLiving.canSee(this);
 		}
 
 		return true;
