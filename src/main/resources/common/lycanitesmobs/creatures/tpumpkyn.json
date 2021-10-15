@@ -59,19 +59,13 @@
             "variants": [
                 {
                     "index": 1,
-                    "name": "violet",
+                    "name": "scarlet",
                     "type": "uncommon"
                 },
                 {
                     "index": 2,
                     "name": "verdant",
                     "type": "uncommon"
-                },
-                {
-                    "index": 3,
-                    "name": "phosphorescent",
-                    "type": "rare",
-                    "scale": 2
                 }
             ]
         }
