@@ -16,6 +16,7 @@ public class BlockFluidSharacid extends BlockFluidAcid {
 	// ==================================================
 	public BlockFluidSharacid(Fluid fluid, String name) {
         super(fluid, name);
+		this.destroyItems = false;
 	}
 
 

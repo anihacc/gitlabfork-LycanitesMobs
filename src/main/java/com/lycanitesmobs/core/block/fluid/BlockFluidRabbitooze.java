@@ -36,6 +36,7 @@ public class BlockFluidRabbitooze extends BlockFluidOoze {
 	// ==================================================
 	public BlockFluidRabbitooze(Fluid fluid, String name) {
         super(fluid, name);
+        this.destroyItems = false;
 	}
 
 

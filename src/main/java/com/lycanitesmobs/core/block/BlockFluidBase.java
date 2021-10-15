@@ -6,6 +6,8 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
@@ -21,6 +23,7 @@ import java.util.List;
 public class BlockFluidBase extends BlockFluidClassic {
     public String blockName;
     public ModInfo group;
+    protected boolean destroyItems = true;
 
     // ==================================================
     //                   Constructor
@@ -59,6 +62,9 @@ public class BlockFluidBase extends BlockFluidClassic {
     // ==================================================
     @Override
     public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
+        if (this.destroyItems && (entity instanceof EntityItem || entity instanceof EntityXPOrb)) {
+            entity.setDead();
+        }
         super.onEntityCollidedWithBlock(world, pos, state, entity);
     }
 

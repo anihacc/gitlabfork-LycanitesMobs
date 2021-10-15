@@ -33,6 +33,7 @@ public class BlockFluidVesspoison extends BlockFluidPoison {
 	// ==================================================
 	public BlockFluidVesspoison(Fluid fluid, String name) {
         super(fluid, name);
+        this.destroyItems = false;
 	}
 
 

@@ -36,6 +36,7 @@ public class BlockFluidMoglava extends BlockFluidBase {
 
         this.setLightOpacity(1);
         this.setLightLevel(1.0F);
+        this.destroyItems = false;
 	}
 
 
