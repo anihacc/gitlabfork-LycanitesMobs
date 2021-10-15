@@ -6,6 +6,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.IFluidBlock;
 
@@ -33,6 +34,9 @@ public class BlockSpawnLocation extends SpawnLocation {
 	/** If set (above 0), the amount of each block in the blocks list must be found. Default: 0 (disabled) **/
 	public int requiredBlockTypes = 0;
 
+	/** An offset relative to the spawn block to apply. **/
+	public Vector3i offset = new Vector3i(0, 0, 0);
+
 
 	@Override
 	public void loadFromJSON(JsonObject json) {
@@ -53,6 +57,8 @@ public class BlockSpawnLocation extends SpawnLocation {
 
 		if(json.has("requiredBlockTypes"))
 			this.requiredBlockTypes = json.get("requiredBlockTypes").getAsInt();
+
+		this.offset = JSONHelper.getVector3i(json, "offset");
 
 		super.loadFromJSON(json);
 	}
@@ -95,7 +101,7 @@ public class BlockSpawnLocation extends SpawnLocation {
 
 					// Check Block:
 					if(this.isValidBlock(world, spawnPos)) {
-						spawnPositions.add(spawnPos);
+						spawnPositions.add(spawnPos.offset(this.offset));
 
 						// Require All:
 						if(this.requiredBlockTypes > 0) {
