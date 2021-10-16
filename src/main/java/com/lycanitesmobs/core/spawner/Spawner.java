@@ -113,6 +113,9 @@ public class Spawner {
 	/** If set, when a mob is spawned, blocks in the radius around the spawned mob will be destroyed. **/
 	public int blockBreakRadius = -1;
 
+	/** If true, spawned mobs will not drop any items until a player has damaged them in some way. **/
+	protected boolean dropsRequirePlayerDamage = false;
+
 
 	/** Stores how many times each player has triggered any of this spawners Spawn Triggers, the count is reset when a wave is spawned. **/
 	protected Map<EntityPlayer, Integer> triggerCounts = new HashMap<>();
@@ -198,6 +201,9 @@ public class Spawner {
 
 		if(json.has("blockBreakRadius"))
 			this.blockBreakRadius = json.get("blockBreakRadius").getAsInt();
+
+		if(json.has("dropsRequirePlayerDamage"))
+			this.dropsRequirePlayerDamage = json.get("dropsRequirePlayerDamage").getAsBoolean();
 
 		// Conditions:
 		if(json.has("conditions")) {
@@ -759,6 +765,7 @@ public class Spawner {
 				BlockPos creaturePos = entityLiving.getPosition();
 				entityCreature.destroyArea(creaturePos.getX(), creaturePos.getY() - 1, creaturePos.getZ(), 100, true, this.blockBreakRadius, this.chainSpawning ? player : null, chain + 1);
 			}
+			entityCreature.setDropsRequirePlayerDamage(this.dropsRequirePlayerDamage);
 
 			// Apply Mob Event:
 			if (!"".equals(this.eventName) && worldExt != null) {
