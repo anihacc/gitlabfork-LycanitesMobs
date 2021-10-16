@@ -254,13 +254,14 @@ public class ItemManager extends JSONLoader {
 		ObjectManager.addItem(fluidName + "_bucket", new BucketItem(stillFluidSupplier, bucketProperties).setRegistryName(LycanitesMobs.MODID, fluidName + "_bucket"));
 
 		try {
-			Constructor<? extends BaseFluidBlock> blockConstructor = blockClass.getDeclaredConstructor(Supplier.class, AbstractBlock.Properties.class, String.class, ElementInfo.class, Boolean.class);
+			Constructor<? extends BaseFluidBlock> blockConstructor = blockClass.getDeclaredConstructor(Supplier.class, AbstractBlock.Properties.class, String.class, ElementInfo.class, boolean.class);
 			BaseFluidBlock fluidBlock = blockConstructor.newInstance(stillFluidSupplier, blockProperties, fluidName, element, destroyItems);
 			ObjectManager.addBlock(fluidName, fluidBlock);
 			if (worldgen) {
 				this.worldgenFluidBlocks.put(fluidName, fluidBlock);
 			}
 		} catch (NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
+			LycanitesMobs.logError("Error loading fluid: " + fluidName);
 			throw new RuntimeException(e);
 		}
 	}
