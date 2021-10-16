@@ -393,8 +393,10 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     public List<ItemDrop> drops = new ArrayList<>();
 	/** A collection of drops to be stored in NBT data. **/
 	public List<ItemDrop> savedDrops = new ArrayList<>();
+	/** If true, this creature will not drop any items until a player has damaged it in some way, saved to NBT data. **/
+	protected boolean dropsRequirePlayerDamage = false;
 	/** A forced fix to prevent mobs from endlessly dropping loot when they are unable to die correctly due to their health being altered. **/
-	public boolean hasDropped = false;
+	protected boolean hasDropped = false;
 
     // Override AI:
     public FindAttackTargetGoal aiTargetPlayer = null;
@@ -3132,6 +3134,11 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
         
         if(super.hurt(damageSrc, damageAmount)) {
         	this.onDamage(damageSrc, damageAmount);
+
+        	if (this.dropsRequirePlayerDamage && damageSrc.getEntity() instanceof PlayerEntity) {
+        		this.dropsRequirePlayerDamage = false;
+			}
+
             Entity entity = damageSrc.getDirectEntity();
             if(entity instanceof ThrowableEntity) {
 				entity = ((ThrowableEntity) entity).getOwner();
@@ -4014,7 +4021,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     /** Cycles through all of this entity's DropRates and drops random loot, usually called on death. If this mob is a minion, this method is cancelled. **/
     @Override
     protected void dropAllDeathLoot(DamageSource damageSource) {
-    	if(this.getCommandSenderWorld().isClientSide || this.isMinion() || this.isBoundPet() || this.hasDropped)
+    	if(this.getCommandSenderWorld().isClientSide || this.isMinion() || this.isBoundPet() || this.dropsRequirePlayerDamage || this.hasDropped)
     		return;
 		this.hasDropped = true;
 
@@ -4089,6 +4096,14 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     // ========== Apply Drop Effects ==========
     /** Used to add effects or alter the dropped entity item. **/
     public void applyDropEffects(CustomItemEntity entityItem) {}
+
+	/**
+	 * Sets if this creature should no longer drop items until it takes damage from a source belonging to a player.
+	 * @param requiresPlayerDamage True if this creature should no longer drop items until damaged by a player, false if they should drop items regardless.
+	 */
+	public void setDropsRequirePlayerDamage(boolean requiresPlayerDamage) {
+		this.dropsRequirePlayerDamage = requiresPlayerDamage;
+	}
 
 
 	// ==================================================
@@ -4912,6 +4927,10 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 				this.addSavedItemDrop(drop);
 			}
 		}
+
+		if(nbt.contains("DropsRequirePlayerDamage")) {
+			this.dropsRequirePlayerDamage = nbt.getBoolean("DropsRequirePlayerDamage");
+		}
         
         if(nbt.contains("ExtraBehaviour")) {
         	this.extraMobBehaviour.read(nbt.getCompound("ExtraBehaviour"));
@@ -5010,6 +5029,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 			}
 		}
 		nbt.put("Drops", nbtDropList);
+		nbt.putBoolean("DropsRequirePlayerDamage", this.dropsRequirePlayerDamage);
         
         CompoundNBT extTagCompound = new CompoundNBT();
         this.extraMobBehaviour.write(extTagCompound);
