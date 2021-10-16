@@ -79,7 +79,8 @@ public class EntityWildkin extends TameableCreatureEntity implements IMob {
     //                       Visuals
     // ==================================================
     /** Returns this creature's main texture. Also checks for for subspecies. **/
-    public ResourceLocation getTsaexture() {
+    @Override
+    public ResourceLocation getTexture() {
         if(!this.hasCustomName() || !"Gooderness".equals(this.getCustomName().getString()))
             return super.getTexture();
 
