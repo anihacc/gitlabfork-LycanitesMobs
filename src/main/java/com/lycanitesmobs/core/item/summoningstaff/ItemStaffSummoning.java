@@ -46,7 +46,7 @@ public class ItemStaffSummoning extends BaseItem {
 			playerExt = ExtendedPlayer.getForPlayer((PlayerEntity)entity);
 		}
     	if(playerExt != null && playerExt.staffPortal != null) {
-            this.damage_item(itemStack, playerExt.staffPortal.summonAmount, (ServerPlayerEntity)entity);
+            this.damageStaff(itemStack, playerExt.staffPortal.summonAmount, (ServerPlayerEntity)entity);
     	}
     }
 
@@ -78,7 +78,7 @@ public class ItemStaffSummoning extends BaseItem {
 			SummonSet summonSet = playerExt.getSelectedSummonSet();
 			if(summonSet.isUseable()) {
 				if(!player.getCommandSenderWorld().isClientSide) {
-					playerExt.staffPortal = new PortalEntity((EntityType<? extends PortalEntity>)ProjectileManager.getInstance().oldProjectileTypes.get(PortalEntity.class), world, player, summonSet.getCreatureType(), this);
+					playerExt.staffPortal = new PortalEntity((EntityType<? extends PortalEntity>)ProjectileManager.getInstance().oldProjectileTypes.get(PortalEntity.class), world, player, summonSet, this);
 					playerExt.staffPortal.moveTo(player.position().x(), player.position().y(), player.position().z(), world.random.nextFloat() * 360.0F, 0.0F);
 					world.addFreshEntity(playerExt.staffPortal);
 				}
@@ -209,7 +209,7 @@ public class ItemStaffSummoning extends BaseItem {
     	return false;
     }
 
-    protected void damage_item(ItemStack itemStack, int amountToDamage, ServerPlayerEntity entity) {
+    protected void damageStaff(ItemStack itemStack, int amountToDamage, ServerPlayerEntity entity) {
         itemStack.hurt(amountToDamage, entity.getRandom(), entity);
         if (itemStack.getCount() == 0) {
             if (entity.getItemInHand(Hand.MAIN_HAND).equals(itemStack)) {
@@ -228,7 +228,7 @@ public class ItemStaffSummoning extends BaseItem {
 		}
     	if(playerExt != null && playerExt.staffPortal != null) {
 			int successCount = playerExt.staffPortal.summonCreatures();
-            this.damage_item(itemStack, successCount, (ServerPlayerEntity)entity);
+            this.damageStaff(itemStack, successCount, (ServerPlayerEntity)entity);
 			return successCount > 0;
 		}
 		return false;

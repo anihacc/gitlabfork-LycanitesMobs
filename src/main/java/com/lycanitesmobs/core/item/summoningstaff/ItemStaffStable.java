@@ -38,9 +38,9 @@ public class ItemStaffStable extends ItemStaffSummoning {
     }
 
     @Override
-	protected void damage_item(ItemStack itemStack, int amountToDamage, ServerPlayerEntity entity) {
+	protected void damageStaff(ItemStack itemStack, int amountToDamage, ServerPlayerEntity entity) {
 		amountToDamage = Math.max(1, (int)Math.floor((double)amountToDamage / 2));
-		super.damage_item(itemStack, amountToDamage, entity);
+		super.damageStaff(itemStack, amountToDamage, entity);
 	}
     
 	

@@ -6,6 +6,7 @@ import com.lycanitesmobs.Utilities;
 import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.item.summoningstaff.ItemStaffSummoning;
+import com.lycanitesmobs.core.pets.SummonSet;
 import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -53,10 +54,11 @@ public class PortalEntity extends BaseProjectileEntity {
         this.setStats();
     }
 
-    public PortalEntity(EntityType<? extends PortalEntity> entityType, World world, PlayerEntity shooter, EntityType summonType, ItemStaffSummoning portalItem) {
+    public PortalEntity(EntityType<? extends PortalEntity> entityType, World world, PlayerEntity shooter, SummonSet summonSet, ItemStaffSummoning portalItem) {
         super(entityType, world, shooter);
         this.shootingEntity = shooter;
-        this.summonType = summonType;
+        this.summonType = summonSet.getCreatureType();
+		this.creatureInfo = summonSet.getCreatureInfo();
         this.portalItem = portalItem;
         this.setStats();
     }
