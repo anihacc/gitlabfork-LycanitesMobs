@@ -110,6 +110,11 @@ public class EntityReaper extends TameableCreatureEntity implements IMob {
 
     /** Returns true if this mob should be damaged by the sun. **/
     public boolean daylightBurns() { return super.daylightBurns(); }
+
+    @Override
+    public boolean canBurn() {
+        return true;
+    }
     
     
     // ==================================================

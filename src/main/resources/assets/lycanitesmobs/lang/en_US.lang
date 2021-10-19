@@ -885,6 +885,11 @@ entity.beholder.description=Large hostile masses of eyes and tentacles with an e
 entity.beholder.habitat=Naxiris can be found in the mountains as they like high up places and dwell in large caves and ruins and come out at night.
 entity.beholder.combat=These Aberrations create powerful Arcane Storms that they blast from their mouths, these attacks then release deadly lasers in all directions and can be explosive on impact.
 # ========================================================================
+entity.necrovore.name=Necrovore
+entity.necrovore.description=Terrible undead hounds that crave rotten flesh but wont hesitate to consume yours as well.
+entity.necrovore.habitat=Necrovore tend to rise during the darkest night of a New Moon as well as dwell within cursed lands.
+entity.necrovore.combat=These Undead hounds are fast and relentless with a wicked bite.
+# ========================================================================
 entity.belph.name=Belphegor
 entity.belph.description=Small but dangerous demons with a one track mind bent on killing and eating.
 entity.belph.habitat=These demons can be found in the Nether and will invade through portals.

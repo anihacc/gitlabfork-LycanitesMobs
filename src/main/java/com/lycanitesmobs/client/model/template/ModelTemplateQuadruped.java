@@ -43,6 +43,14 @@ public class ModelTemplateQuadruped extends ModelCreatureObj {
             rotX = (float)-Math.toDegrees(MathHelper.cos(loop * 0.1F) * 0.05F - 0.05F);
             rotY = (float)-Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F - 0.05F);
         }
+        if(partName.equals("earleft")) {
+            rotZ -= Math.toDegrees(MathHelper.cos(loop * 0.18F) * 0.05F + 0.05F);
+            rotX -= Math.toDegrees(MathHelper.sin(loop * 0.067F) * 0.05F);
+        }
+        if(partName.equals("earright")) {
+            rotZ += Math.toDegrees(MathHelper.cos(loop * 0.18F) * 0.05F + 0.05F);
+            rotX += Math.toDegrees(MathHelper.sin(loop * 0.067F) * 0.05F);
+        }
 
         // Walking:
         if (this.legAnimationScale != 0) {
