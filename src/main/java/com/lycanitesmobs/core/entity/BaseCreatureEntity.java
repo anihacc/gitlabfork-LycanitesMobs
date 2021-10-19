@@ -1821,7 +1821,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
             if(brightness > 0.5F && this.random.nextFloat() * 30.0F < (brightness - 0.4F) * 2.0F && this.getCommandSenderWorld().canSeeSkyFromBelowWater(this.blockPosition())) {
                 boolean shouldBurn = true;
                 ItemStack helmet = this.inventory.getEquipmentStack("head");
-                if(helmet != null) {
+                if(!helmet.isEmpty()) {
                     if(helmet.isDamageableItem()) {
                     	helmet.setDamageValue(helmet.getDamageValue() + this.random.nextInt(2));
                         if(helmet.getDamageValue() >= helmet.getMaxDamage()) {

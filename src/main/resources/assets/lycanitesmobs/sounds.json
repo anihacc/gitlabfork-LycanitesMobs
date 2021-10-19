@@ -2331,6 +2331,30 @@
         "category": "hostile",
         "sounds": [{"name": "lycanitesmobs:entity/naxiris/mount", "stream": false}]
     },
+    "entity.necrovore.say": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/necrovore/say", "stream": false}]
+    },
+    "entity.necrovore.hurt": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/necrovore/hurt", "stream": false}]
+    },
+    "entity.necrovore.death": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/necrovore/death", "stream": false}]
+    },
+    "entity.necrovore.beg": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/necrovore/beg", "stream": false}]
+    },
+    "entity.necrovore.tame": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/necrovore/tame", "stream": false}]
+    },
+    "entity.necrovore.eat": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/necrovore/eat", "stream": false}]
+    },
     "entity.barghest.say": {
         "category": "hostile",
         "sounds": [{"name": "lycanitesmobs:entity/barghest/say", "stream": false}]

@@ -26,10 +26,13 @@ public class ElementManager extends JSONLoader {
 	}
 
 
-	/** Loads all JSON Elements. Should only be done on pre-init and before Creature Info is loaded. **/
-	public void loadAllFromJson(ModInfo groupInfo) {
+	/**
+	 * Loads all JSON Elements. Should only be done on pre-init and before Creature Info is loaded.
+	 * @param modInfo A mod info object that the json is loaded for.
+	 */
+	public void loadAllFromJson(ModInfo modInfo) {
 		this.elements.clear();
-		this.loadAllJson(groupInfo, "Element", "elements", "name", false, null, FileLoader.COMMON, StreamLoader.COMMON);
+		this.loadAllJson(modInfo, "Element", "elements", "name", false, null, FileLoader.COMMON, StreamLoader.COMMON);
 		for(ElementInfo elementInfo : this.elements.values()) {
 			elementInfo.init();
 		}

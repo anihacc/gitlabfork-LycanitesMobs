@@ -27,9 +27,6 @@ public class EntityGeist extends AgeableCreatureEntity implements IMob {
 
     public boolean shadowfireDeath = true;
 
-    // ==================================================
- 	//                    Constructor
- 	// ==================================================
     public EntityGeist(EntityType<? extends EntityGeist> entityType, World world) {
         super(entityType, world);
         
@@ -65,12 +62,7 @@ public class EntityGeist extends AgeableCreatureEntity implements IMob {
     public void loadCreatureFlags() {
         this.shadowfireDeath = this.creatureInfo.getFlag("shadowfireDeath", this.shadowfireDeath);
     }
-    
-    
-    // ==================================================
-    //                      Attacks
-    // ==================================================
-    // ========== On Kill ==========
+
     @Override
     public void onKillEntity(LivingEntity entityLivingBase) {
         super.onKillEntity(entityLivingBase);
@@ -99,10 +91,6 @@ public class EntityGeist extends AgeableCreatureEntity implements IMob {
         }
     }
 
-
-    // ==================================================
-    //                      Death
-    // ==================================================
     @Override
     public void die(DamageSource damageSource) {
         try {
@@ -135,16 +123,6 @@ public class EntityGeist extends AgeableCreatureEntity implements IMob {
         super.die(damageSource);
     }
 
-    // ==================================================
-    //                     Equipment
-    // ==================================================
-    @Override
-    public int getNoBagSize() { return 0; }
-    @Override
-    public int getBagSize() { return this.creatureInfo.bagSize; }
-    // ==================================================
-   	//                     Immunities
-   	// ==================================================
     @Override
     public boolean daylightBurns() {
         return !this.isBaby() && !this.isMinion();

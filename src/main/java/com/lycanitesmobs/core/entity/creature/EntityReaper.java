@@ -6,6 +6,7 @@ import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.FindAttackTargetGoal;
+import com.lycanitesmobs.core.info.ElementInfo;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -45,12 +46,7 @@ public class EntityReaper extends TameableCreatureEntity implements IMob {
 
         this.targetSelector.addGoal(this.nextFindTargetIndex++, new FindAttackTargetGoal(this).addTargets(EntityType.PHANTOM));
     }
-	
-	
-    // ==================================================
-    //                      Updates
-    // ==================================================
-	// ========== Living Update ==========
+
 	@Override
     public void aiStep() {
         super.aiStep();
@@ -61,22 +57,13 @@ public class EntityReaper extends TameableCreatureEntity implements IMob {
 	            this.getCommandSenderWorld().addParticle(ParticleTypes.WITCH, this.position().x() + (this.random.nextDouble() - 0.5D) * (double)this.getDimensions(Pose.STANDING).width, this.position().y() + this.random.nextDouble() * (double)this.getDimensions(Pose.STANDING).height, this.position().z() + (this.random.nextDouble() - 0.5D) * (double)this.getDimensions(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
 	        }
     }
-    
-    
-    // ==================================================
-    //                      Attacks
-    // ==================================================
-    // ========== Ranged Attack ==========
+
     @Override
     public void attackRanged(Entity target, float range) {
         this.fireProjectile("spectralbolt", target, range, 0, new Vector3d(0, 0, 0), 1.2f, 2f, 1F);
         super.attackRanged(target, range);
     }
-    
-    
-    // ==================================================
-  	//                     Abilities
-  	// ==================================================
+
     @Override
     public boolean isFlying() { return true; }
 
@@ -89,23 +76,7 @@ public class EntityReaper extends TameableCreatureEntity implements IMob {
     public boolean canSee(Entity target) {
         return true;
     }
-    
-    
-    // ==================================================
-    //                     Pet Control
-    // ==================================================
-    public boolean petControlsEnabled() { return true; }
 
-    // ==================================================
-    //                     Equipment
-    // ==================================================
-    @Override
-    public int getNoBagSize() { return 0; }
-    @Override
-    public int getBagSize() { return this.creatureInfo.bagSize; }
-    // ==================================================
-   	//                     Immunities
-   	// ==================================================
     @Override
     public boolean isVulnerableTo(String type, DamageSource source, float damage) {
     	if(type.equals("inWall")) return false;
@@ -114,13 +85,12 @@ public class EntityReaper extends TameableCreatureEntity implements IMob {
 
     /** Returns true if this mob should be damaged by the sun. **/
     public boolean daylightBurns() { return super.daylightBurns(); }
-    
-    
-    // ==================================================
-   	//                       Sounds
-   	// ==================================================
-    // ========== Idle ==========
-    /** Returns the sound to play when this creature is making a random ambient roar, grunt, etc. **/
+
+    @Override
+    public boolean canBurn() {
+        return true;
+    }
+
     @Override
     protected SoundEvent getAmbientSound() {
     	if(this.hasAttackTarget()) {
@@ -135,11 +105,6 @@ public class EntityReaper extends TameableCreatureEntity implements IMob {
     	return super.getAmbientSound();
     }
 
-
-    // ==================================================
-    //                       Visuals
-    // ==================================================
-    /** Returns this creature's main texture. Also checks for for subspecies. **/
     @Override
     public ResourceLocation getTexture(String suffix) {
         if(!this.hasCustomName() || !"Satan Claws".equals(this.getCustomName().getString()))

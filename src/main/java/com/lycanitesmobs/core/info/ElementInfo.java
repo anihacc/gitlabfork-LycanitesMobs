@@ -50,7 +50,10 @@ public class ElementInfo {
 	public boolean canFreeze = true;
 
 
-	/** Loads this element from a JSON object. **/
+	/**
+	 * Loads this element from a JSON object.
+	 * @param json The json to load from.
+	 */
 	public void loadFromJSON(JsonObject json) {
 		if(json.has("name"))
 			this.name = json.get("name").getAsString();

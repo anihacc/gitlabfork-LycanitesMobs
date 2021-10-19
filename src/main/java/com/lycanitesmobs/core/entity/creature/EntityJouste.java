@@ -95,16 +95,6 @@ public class EntityJouste extends AgeableCreatureEntity {
 	}
 
     @Override
-    public int getNoBagSize() {
-    	return 0;
-    }
-
-    @Override
-    public int getBagSize() {
-    	return this.creatureInfo.bagSize;
-    }
-
-    @Override
     public boolean isVulnerableTo(String type, DamageSource source, float damage) {
     	if(type.equals("cactus")) return false;
     	return super.isVulnerableTo(type, source, damage);
