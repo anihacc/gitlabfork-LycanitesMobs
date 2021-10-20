@@ -2,11 +2,13 @@ package com.lycanitesmobs.client.model.template;
 
 import com.lycanitesmobs.client.model.CreatureObjModel;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.creature.EntityAspid;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
 
 public class ModelTemplateBiped extends CreatureObjModel {
     protected float walkSwing = 0.6F;
+    protected float legScaleX = 1F;
     protected float tailScaleX = 1F;
     protected float tailScaleY = 1F;
     protected float flightBobScale = 1F;
@@ -108,36 +110,36 @@ public class ModelTemplateBiped extends CreatureObjModel {
         // Walking:
         if(entity == null || entity.isOnGround() || entity.isInWater()) {
             if(partName.contains("armleft") || partName.equals("wingright")) {
-                rotX += Math.toDegrees(MathHelper.cos(time * this.walkSwing) * 1.0F * distance * 0.5F);
+                rotX += Math.toDegrees(MathHelper.cos(time * this.walkSwing) * 1.0F * distance * 0.5F * this.legScaleX);
                 if(!partName.contains("lower")) {
-                    rotZ -= Math.toDegrees(MathHelper.cos(time * this.walkSwing) * 0.5F * distance * 0.5F);
+                    rotZ -= Math.toDegrees(MathHelper.cos(time * this.walkSwing) * 0.5F * distance * 0.5F * this.legScaleX);
                 }
             }
             if(partName.contains("armright") || partName.equals("wingleft")) {
-                rotX += Math.toDegrees(MathHelper.cos(time * this.walkSwing + (float)Math.PI) * 1.0F * distance * 0.5F);
+                rotX += Math.toDegrees(MathHelper.cos(time * this.walkSwing + (float)Math.PI) * 1.0F * distance * 0.5F * this.legScaleX);
                 if(!partName.contains("lower")) {
-                    rotZ += Math.toDegrees(MathHelper.cos(time * this.walkSwing + (float) Math.PI) * 0.5F * distance * 0.5F);
+                    rotZ += Math.toDegrees(MathHelper.cos(time * this.walkSwing + (float) Math.PI) * 0.5F * distance * 0.5F * this.legScaleX);
                 }
             }
 
             if(partName.equals("legleft"))
-                rotX += Math.toDegrees(MathHelper.cos(time * this.walkSwing + (float)Math.PI) * 1.4F * distance);
+                rotX += Math.toDegrees(MathHelper.cos(time * this.walkSwing + (float)Math.PI) * 1.4F * distance * this.legScaleX);
             if(partName.equals("legright"))
-                rotX += Math.toDegrees(MathHelper.cos(time * this.walkSwing) * 1.4F * distance);
+                rotX += Math.toDegrees(MathHelper.cos(time * this.walkSwing) * 1.4F * distance * this.legScaleX);
 
             if(partName.equals("legleftupper"))
-                rotX += Math.toDegrees(MathHelper.cos(time * this.walkSwing + (float)Math.PI) * 1.4F * (distance * 0.5F));
+                rotX += Math.toDegrees(MathHelper.cos(time * this.walkSwing + (float)Math.PI) * 1.4F * (distance * 0.5F) * this.legScaleX);
             if(partName.equals("legleftlower"))
-                rotX += Math.toDegrees(MathHelper.cos(time * this.walkSwing + (float)Math.PI) * 1.4F * (distance * 0.5F));
+                rotX += Math.toDegrees(MathHelper.cos(time * this.walkSwing + (float)Math.PI) * 1.4F * (distance * 0.5F) * this.legScaleX);
             if(partName.equals("legrightupper"))
-                rotX += Math.toDegrees(MathHelper.cos(time * this.walkSwing) * 1.4F * (distance * 0.5F));
+                rotX += Math.toDegrees(MathHelper.cos(time * this.walkSwing) * 1.4F * (distance * 0.5F) * this.legScaleX);
             if(partName.equals("legrightlower"))
-                rotX += Math.toDegrees(MathHelper.cos(time * this.walkSwing) * 1.4F * (distance * 0.5F));
+                rotX += Math.toDegrees(MathHelper.cos(time * this.walkSwing) * 1.4F * (distance * 0.5F) * this.legScaleX);
 
             if(partName.contains("legleft0"))
-                rotX += Math.toDegrees(MathHelper.cos(time * this.walkSwing + (float)Math.PI) * 0.6F * distance);
+                rotX += Math.toDegrees(MathHelper.cos(time * this.walkSwing + (float)Math.PI) * 0.6F * distance * this.legScaleX);
             if(partName.contains("legright0"))
-                rotX += Math.toDegrees(MathHelper.cos(time * this.walkSwing) * 0.6F * distance);
+                rotX += Math.toDegrees(MathHelper.cos(time * this.walkSwing) * 0.6F * distance * this.legScaleX);
         }
 
         // Jumping/Flying:

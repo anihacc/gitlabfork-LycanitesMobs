@@ -13,16 +13,11 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class ModelShade extends ModelTemplateBiped {
-
-	// ==================================================
-  	//                    Constructors
-  	// ==================================================
     public ModelShade() {
         this(1.0F);
     }
 
     public ModelShade(float shadowSize) {
-    	// Load Model:
     	this.initModel("shade", LycanitesMobs.modInfo, "entity/shade");
 
     	// Looking:
@@ -36,20 +31,12 @@ public class ModelShade extends ModelTemplateBiped {
         this.trophyOffset = new float[] {0.0F, -0.2F, 0.0F};
     }
 
-
-	// ==================================================
-	//             Add Custom Render Layers
-	// ==================================================
 	@Override
 	public void addCustomLayers(CreatureRenderer renderer) {
 		super.addCustomLayers(renderer);
 		renderer.addLayer(new LayerCreatureEffect(renderer, "eyes", true, CustomRenderStates.BLEND.ADD.id, true));
 	}
-    
-    
-    // ==================================================
-   	//                    Animate Part
-   	// ==================================================
+
     @Override
     public void animatePart(String partName, LivingEntity entity, float time, float distance, float loop, float lookY, float lookX, float scale) {
     	if(entity instanceof BaseCreatureEntity && entity.getControllingPassenger() != null) {
