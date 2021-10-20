@@ -370,7 +370,7 @@ public class Spawner {
 		if(currentCount != lastCount) {
 			if(this.triggerCountMessages.containsKey(currentCount)) {
 				String message = LanguageManager.translate(this.triggerCountMessages.get(currentCount));
-				player.sendMessage(new TextComponentString(message));
+				player.sendStatusMessage(new TextComponentString(message), true);
 			}
 		}
 
