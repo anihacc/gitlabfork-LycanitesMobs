@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 import com.lycanitesmobs.ExtendedWorld;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.mobevent.MobEvent;
 import com.lycanitesmobs.core.mobevent.MobEventPlayerServer;
@@ -376,7 +377,10 @@ public class Spawner {
 		if(currentCount != lastCount) {
 			if(this.triggerCountMessages.containsKey(currentCount)) {
 				ITextComponent message = new TranslationTextComponent(this.triggerCountMessages.get(currentCount));
-				player.sendMessage(message, Util.NIL_UUID);
+				ExtendedPlayer extendedPlayer = ExtendedPlayer.getForPlayer(player);
+				if (extendedPlayer != null) {
+					extendedPlayer.sendOverlayMessage(message);
+				}
 			}
 		}
 
