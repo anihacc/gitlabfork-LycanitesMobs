@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.spawner.trigger;
 
 import com.google.gson.JsonObject;
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.spawner.Spawner;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -60,33 +61,43 @@ public class OreBlockSpawnTrigger extends BlockSpawnTrigger {
 		String[] blockNameParts = blockName.split("\\.");
 		for(String blockNamePart : blockNameParts) {
 			int blockNamePartLength = blockNamePart.length();
-			if(blockNamePartLength >= 3) {
-				// Check if start or end of block name part is "ore".
-				if(
-						blockNamePart.substring(0, 3).equalsIgnoreCase("ore")
-						|| blockNamePart.substring(blockNamePartLength - 3, blockNamePartLength).equalsIgnoreCase("ore")
-						|| blockNamePart.substring(0, 3).equalsIgnoreCase("crystal")
-						|| blockNamePart.substring(blockNamePartLength - 3, blockNamePartLength).equalsIgnoreCase("crystal")
-				) {
-					if(this.ores && this.gems) {
-						return true;
-					}
 
-					if(world instanceof ServerWorld) {
-						List<ItemStack> drops;
-						if(entity == null) {
-							drops = block.getDrops(blockState, (ServerWorld)world, blockPos, null);
+			// Check if start or end of block name part is "ore" or "crystal".
+			boolean nameMatch = false;
+			if (blockNamePartLength >= 3) {
+				if (blockNamePart.substring(0, 3).equalsIgnoreCase("ore") || blockNamePart.substring(blockNamePartLength - 3, blockNamePartLength).equalsIgnoreCase("ore")) {
+					nameMatch = true;
+				}
+			}
+			if (!nameMatch && blockNamePartLength >= 7) {
+				if ( blockNamePart.substring(0, 7).equalsIgnoreCase("crystal") || blockNamePart.substring(blockNamePartLength - 7, blockNamePartLength).equalsIgnoreCase("crystal")) {
+					nameMatch = true;
+				}
+			}
+
+			if(nameMatch) {
+				if(this.ores && this.gems) {
+					return true;
+				}
+
+				if (blockName.contains("coal")) {
+					return this.ores;
+				}
+
+				if(world instanceof ServerWorld) {
+					List<ItemStack> drops;
+					if(entity == null) {
+						drops = block.getDrops(blockState, (ServerWorld)world, blockPos, null);
+					}
+					else {
+						drops = block.getDrops(blockState, (ServerWorld)world, blockPos, null, entity, entity.getUseItem());
+					}
+					for(ItemStack dropStack : drops) {
+						if(dropStack.getItem() instanceof BlockItem) {
+							return this.ores;
 						}
 						else {
-							drops = block.getDrops(blockState, (ServerWorld)world, blockPos, null, entity, entity.getUseItem());
-						}
-						for(ItemStack dropStack : drops) {
-							if(dropStack.getItem() instanceof BlockItem) {
-								return this.ores;
-							}
-							else {
-								return this.gems;
-							}
+							return this.gems;
 						}
 					}
 				}
