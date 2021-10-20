@@ -38,6 +38,7 @@ public class BlockFluidOoze extends BlockFluidBase {
 
         this.setLightOpacity(0);
         this.setLightLevel(0.25F);
+        this.destroyItems = false;
 	}
 
 
