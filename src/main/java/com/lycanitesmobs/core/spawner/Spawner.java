@@ -14,17 +14,16 @@ import com.lycanitesmobs.core.spawner.condition.SpawnCondition;
 import com.lycanitesmobs.core.spawner.location.SpawnLocation;
 import com.lycanitesmobs.core.spawner.trigger.ChunkSpawnTrigger;
 import com.lycanitesmobs.core.spawner.trigger.SpawnTrigger;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.util.Util;
-import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.level.GameRules;
-import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.eventbus.api.Event;
@@ -54,10 +53,10 @@ public class Spawner {
 	public String sharedName;
 
 	/** If set to true and this spawner is a default spawner, it will reset when loading. This must be set to false or removed from the json if it is a customised spawner. **/
-	public boolean loadDefault = false;
+	public boolean loadDefault = true;
 
     /** Can be set to false to completely disable this Spawner. **/
-    public boolean enabled = true;
+    public boolean enabled = false;
 
     /** Determines how many Conditions must be met. If 0 or less all are required. **/
     public int conditionsRequired = 0;
