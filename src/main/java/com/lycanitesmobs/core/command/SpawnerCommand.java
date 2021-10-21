@@ -52,12 +52,8 @@ public class SpawnerCommand {
 		if(context.getSource().getEntity() == null) {
 			return 0;
 		}
-		float brightness = context.getSource().getEntity().getBrightness();
-		int level = 3;
-		if(brightness == 0) level = 0;
-		else if(brightness < 0.25F) level = 1;
-		else if(brightness < 1) level = 2;
-		String results = " Level: " + level + " Brightness: " + brightness;
+		int level = context.getSource().getLevel().getMaxLocalRawBrightness(context.getSource().getEntity().blockPosition());
+		String results = " Level: " + level;
 		if(level <= 1) {
 			context.getSource().sendSuccess(new TranslationTextComponent("lyc.command.spawner.lighttest.dark").append(results), true);
 		}

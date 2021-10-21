@@ -54,7 +54,7 @@ public class Spawner {
 	public String sharedName;
 
 	/** If set to true and this spawner is a default spawner, it will reset when loading. This must be set to false or removed from the json if it is a customised spawner. **/
-	public boolean loadDefault = false;
+	public boolean loadDefault = true;
 
     /** Can be set to false to completely disable this Spawner. **/
     public boolean enabled = true;
