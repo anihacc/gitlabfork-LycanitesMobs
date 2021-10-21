@@ -27,80 +27,67 @@ import com.lycanitesmobs.core.network.MessageCreature;
 import com.lycanitesmobs.core.pets.PetEntry;
 import com.lycanitesmobs.core.spawner.SpawnerEventListener;
 import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.properties.WoodType;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.entity.*;
+import com.mojang.math.Vector3f;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Vec3i;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.network.chat.BaseComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerBossEvent;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.stats.Stats;
+import net.minecraft.util.Mth;
+import net.minecraft.world.*;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.EntityDamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.attributes.RangedAttribute;
 import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.entity.vehicle.Boat;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.vehicle.Minecart;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.projectile.ThrowableProjectile;
+import net.minecraft.world.entity.vehicle.Boat;
+import net.minecraft.world.entity.vehicle.Minecart;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.world.entity.ai.navigation.PathNavigation;
-import net.minecraft.world.level.pathfinder.BlockPathTypes;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
-import net.minecraft.stats.Stats;
-import net.minecraft.util.*;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.core.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.phys.Vec3;
-import com.mojang.math.Vector3f;
-import net.minecraft.core.Vec3i;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.BaseComponent;
-import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.world.*;
-import net.minecraft.server.level.ServerBossEvent;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.network.NetworkHooks;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.*;
-
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.EntityDamageSource;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityDimensions;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.MobType;
-import net.minecraft.world.entity.MoverType;
-import net.minecraft.world.entity.PathfinderMob;
-import net.minecraft.world.entity.Pose;
-import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.WoodType;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fmllegacy.network.NetworkHooks;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.*;
 
 public abstract class BaseCreatureEntity extends PathfinderMob {
 	public static final Attribute DEFENSE = (new RangedAttribute("generic.defense", 4.0D, 0.0D, 1024.0D)).setRegistryName(LycanitesMobs.MODID, "defense").setSyncable(true);
@@ -1403,11 +1390,6 @@ public abstract class BaseCreatureEntity extends PathfinderMob {
 		return (float)this.sizeScale * (float)this.creatureInfo.sizeScale;
 	}
 
-	@Override
-	public AABB getBoundingBox() {
-		return super.getBoundingBox();
-	}
-
 	/** Returns the level of this mob, higher levels have higher stats. **/
 	public int getMobLevel() {
 		if(this.getCommandSenderWorld().isClientSide) {
@@ -1671,7 +1653,7 @@ public abstract class BaseCreatureEntity extends PathfinderMob {
         if(this.despawnCheck()) {
             if(!this.isBoundPet() || this.isTemporary)
         	    this.inventory.dropInventory();
-        	this.remove();
+        	this.discard();
         }
 
         // Fire Immunity Override:
@@ -1702,7 +1684,7 @@ public abstract class BaseCreatureEntity extends PathfinderMob {
 				Vec3 perchPosition = perchEntityExt.getPerchPosition();
 				this.setPos(perchPosition.x, perchPosition.y, perchPosition.z);
 				this.setDeltaMovement(perchTarget.getDeltaMovement());
-				this.yRot = perchTarget.yRot;
+				this.setYRot(perchTarget.getYRot());
 			}
 			if(perchTarget instanceof Player) {
 				ExtendedPlayer perchPlayerExt = ExtendedPlayer.getForPlayer((Player) perchTarget);
@@ -1714,7 +1696,7 @@ public abstract class BaseCreatureEntity extends PathfinderMob {
 
 		// Boss Health Update:
 		if(this.bossInfo != null) {
-			this.bossInfo.setPercent(this.getHealth() / this.getMaxHealth());
+			this.bossInfo.setProgress(this.getHealth() / this.getMaxHealth());
 		}
 
 		// Beastiary Proximity Discovery:
@@ -1820,7 +1802,7 @@ public abstract class BaseCreatureEntity extends PathfinderMob {
         if(this.hasAttackTarget()) {
             if(this.getTarget() instanceof Player) {
                 Player targetPlayer = (Player)this.getTarget();
-                if(targetPlayer.abilities.invulnerable)
+                if(targetPlayer.getAbilities().invulnerable)
                     this.setTarget(null);
             }
         }
@@ -2108,7 +2090,7 @@ public abstract class BaseCreatureEntity extends PathfinderMob {
                 targetInWater = this.getMasterTarget().isInWater();
             if(!targetInWater) {
                 BlockState blockState = this.getCommandSenderWorld().getBlockState(this.blockPosition().above());
-                if (blockState.getBlock().isAir(blockState, this.getCommandSenderWorld(), this.blockPosition().above())) {
+                if (blockState.isAir()) {
                     return false;
                 }
             }
@@ -2142,7 +2124,7 @@ public abstract class BaseCreatureEntity extends PathfinderMob {
     	double flightDampening = 0.91F;
 		if (this.onGround) {
 			BlockState groundState = this.getCommandSenderWorld().getBlockState(this.blockPosition().below());
-			flightDampening = groundState.getSlipperiness(this.getCommandSenderWorld(), this.blockPosition().below(), this) * 0.91F;
+			flightDampening = groundState.getFriction(this.getCommandSenderWorld(), this.blockPosition().below(), this) * 0.91F;
 		}
 		this.move(MoverType.SELF, this.getDeltaMovement());
 		this.setDeltaMovement(this.getDeltaMovement().multiply(flightDampening, flightDampening, flightDampening));
@@ -2164,8 +2146,8 @@ public abstract class BaseCreatureEntity extends PathfinderMob {
     /** Updates limb swing animation, used when flying or swimming as their movements don't update it like the standard walking movement. **/
     public void updateLimbSwing() {
         this.animationSpeedOld = this.animationSpeed;
-        double distanceX = this.position().x() - this.xo;
-        double distanceZ = this.position().z() - this.zo;
+        float distanceX = (float) (this.position().x() - this.xo);
+		float distanceZ = (float) (this.position().z() - this.zo);
         float distance = Mth.sqrt(distanceX * distanceX + distanceZ * distanceZ) * 4.0F;
         if (distance > 1.0F) {
             distance = 1.0F;
@@ -2336,8 +2318,8 @@ public abstract class BaseCreatureEntity extends PathfinderMob {
     	if(!this.isFlying()) {
     		this.playJumpSound();
 		}
-    	double yaw = this.yRot;
-		double pitch = this.xRot;
+    	double yaw = this.getYRot();
+		double pitch = this.getXRot();
     	double angle = Math.toRadians(yaw);
         double xAmount = -Math.sin(angle);
         double yAmount = leapHeight;
@@ -2382,13 +2364,13 @@ public abstract class BaseCreatureEntity extends PathfinderMob {
 		}
 		double distance = targetPos.distSqr(this.blockPosition());
 		if(distance > 2.0F * 2.0F && distance <= range * range) {
-			double xDist = targetPos.getX() - this.blockPosition().getX();
-			double zDist = targetPos.getZ() - this.blockPosition().getZ();
+			float xDist = targetPos.getX() - this.blockPosition().getX();
+			float zDist = targetPos.getZ() - this.blockPosition().getZ();
 			if(xDist == 0) {
-				xDist = 0.05D;
+				xDist = 0.05F;
 			}
 			if(zDist == 0) {
-				zDist = 0.05D;
+				zDist = 0.05F;
 			}
 			double xzDist = Mth.sqrt(xDist * xDist + zDist * zDist);
             /*this.motionX = xDist / xzDist * 0.5D * 0.8D + this.motionX * 0.2D;
@@ -2416,8 +2398,8 @@ public abstract class BaseCreatureEntity extends PathfinderMob {
 			distance = -distance;
 			opposite = true;
 		}
-		float yaw = this.yRot + (opposite ? -90F : 90F);
-		float pitch = this.xRot;
+		float yaw = this.getYRot() + (opposite ? -90F : 90F);
+		float pitch = this.getXRot();
 		double angle = Math.toRadians(yaw);
 		double xAmount = -Math.sin(angle);
 		double yAmount = leapHeight;
@@ -2449,7 +2431,7 @@ public abstract class BaseCreatureEntity extends PathfinderMob {
 		double lookRange = 1.5D;
 		double comparison = 1.0D - (lookRange / distanceStraight);
 		if (targetEntity instanceof Player) {
-			return lookDistance > comparison && ((Player) targetEntity).canSee(this);
+			return lookDistance > comparison && ((Player) targetEntity).hasLineOfSight(this);
 		}
 		return lookDistance > comparison;
 	}
@@ -2550,10 +2532,10 @@ public abstract class BaseCreatureEntity extends PathfinderMob {
         if(y <= 0)
             return 0;
         BlockState startBlock = this.getCommandSenderWorld().getBlockState(pos);
-        if(startBlock.getBlock().isAir(startBlock, this.getCommandSenderWorld(), pos)) {
+        if(startBlock.isAir()) {
             for(int possibleGroundY = Math.max(0, y - 1); possibleGroundY >= 0; possibleGroundY--) {
                 BlockState possibleGroundBlock = this.getCommandSenderWorld().getBlockState(new BlockPos(pos.getX(), possibleGroundY, pos.getZ()));
-                if(possibleGroundBlock.getBlock().isAir(possibleGroundBlock, this.getCommandSenderWorld(), new BlockPos(pos.getX(), possibleGroundY, pos.getZ())))
+                if(possibleGroundBlock.isAir())
                     y = possibleGroundY;
                 else
                     break;
@@ -2573,10 +2555,10 @@ public abstract class BaseCreatureEntity extends PathfinderMob {
             return yMax;
 
         BlockState startBlock = this.getCommandSenderWorld().getBlockState(pos);
-        if(startBlock.getBlock().isAir(startBlock, this.getCommandSenderWorld(), pos)) {
+        if(startBlock.isAir()) {
             for(int possibleAirY = Math.min(yMax, y + 1); possibleAirY <= yMax; possibleAirY++) {
                 BlockState possibleGroundBlock = this.getCommandSenderWorld().getBlockState(new BlockPos(pos.getX(), possibleAirY, pos.getZ()));
-                if(possibleGroundBlock.getBlock().isAir(possibleGroundBlock, this.getCommandSenderWorld(), new BlockPos(pos.getX(), possibleAirY, pos.getZ())))
+                if(possibleGroundBlock.isAir())
                     y = possibleAirY;
                 else
                     break;
@@ -2603,7 +2585,7 @@ public abstract class BaseCreatureEntity extends PathfinderMob {
             int possibleSurfaceY = y;
             for(possibleSurfaceY += 1; possibleSurfaceY <= yMax; possibleSurfaceY++) {
                 BlockState possibleSurfaceBlock = this.getCommandSenderWorld().getBlockState(new BlockPos(pos.getX(), possibleSurfaceY, pos.getZ()));
-                if(possibleSurfaceBlock.getBlock().isAir(possibleSurfaceBlock, this.getCommandSenderWorld(), new BlockPos(pos.getX(), possibleSurfaceY, pos.getZ())))
+                if(possibleSurfaceBlock.isAir())
                     return possibleSurfaceY;
                 else if(possibleSurfaceBlock.getMaterial() != Material.WATER)
                     return possibleSurfaceY - 1;
@@ -2639,7 +2621,7 @@ public abstract class BaseCreatureEntity extends PathfinderMob {
 		// Players:
         if(targetEntity instanceof Player) {
             Player targetPlayer = (Player)targetEntity;
-            if(targetPlayer.abilities.invulnerable) {
+            if(targetPlayer.getAbilities().invulnerable) {
 				return false;
 			}
         }
@@ -2826,7 +2808,7 @@ public abstract class BaseCreatureEntity extends PathfinderMob {
 		if(this.isBlocking() && !this.canAttackWhileBlocking()) {
 			return false;
 		}
-		if (target == null || !this.canSee(target)) {
+		if (target == null || !this.hasLineOfSight(target)) {
 			return false;
 		}
 
@@ -2958,10 +2940,10 @@ public abstract class BaseCreatureEntity extends PathfinderMob {
 		projectile.setProjectileScale(scale);
 
 		Vec3 facing = this.getFacingPositionDouble(this.position().x(), this.position().y(), this.position().z(), range, angle);
-		double distanceX = facing.x - this.position().x();
-		double distanceZ = facing.z - this.position().z();
-		double distanceXZ = Mth.sqrt(distanceX * distanceX + distanceZ * distanceZ) * 0.1D;
-		double distanceY = distanceXZ;
+		float distanceX = (float) (facing.x - this.position().x());
+		float distanceZ = (float) (facing.z - this.position().z());
+		float distanceXZ = Mth.sqrt(distanceX * distanceX + distanceZ * distanceZ) * 0.1F;
+		float distanceY = distanceXZ;
 		if(target != null) {
 			double targetX = target.position().x() - this.position().x();
 			double targetZ = target.position().z() - this.position().z();
@@ -2970,9 +2952,9 @@ public abstract class BaseCreatureEntity extends PathfinderMob {
 			targetX = newX + this.position().x();
 			targetZ = newY + this.position().z();
 
-			distanceX = targetX - this.position().x();
-			distanceY = target.getBoundingBox().minY + (target.getDimensions(Pose.STANDING).height * 0.5D) - projectile.position().y() + offset.y;
-			distanceZ = targetZ - this.position().z();
+			distanceX = (float) (targetX - this.position().x());
+			distanceY = (float) (target.getBoundingBox().minY + (target.getDimensions(Pose.STANDING).height * 0.F) - projectile.position().y() + offset.y);
+			distanceZ = (float) (targetZ - this.position().z());
 		}
 
 		projectile.shoot(distanceX, distanceY, distanceZ, velocity, inaccuracy);
@@ -3006,16 +2988,16 @@ public abstract class BaseCreatureEntity extends PathfinderMob {
             return false;
         if(target == null)
             return false;
-        if(!this.canSee(target))
+        if(!this.hasLineOfSight(target))
             return false;
 
         float damage = this.getAttackDamage(damageScale);
-        int i = 0;
+        int knockbackModifier = 0;
 
 		// TODO Enchanted Weapon Damage and Knockback
         //if(target instanceof LivingEntity) {
         	//damage += EnchantmentHelper.getModifierForCreature(this.getHeldItemMainhand(), this.getAttribute(Attributes.ATTACK_DAMAGE));
-            //i += EnchantmentHelper.getKnockbackModifier(this, (LivingEntity)target);
+            //knockbackModifier += EnchantmentHelper.getKnockbackModifier(this, (LivingEntity)target);
         //}
 
 		// Player Shielding:
@@ -3046,8 +3028,8 @@ public abstract class BaseCreatureEntity extends PathfinderMob {
 
         // After Successful Attack:
         if(attackSuccess) {
-            if(i > 0) {
-            	target.push((double)(-Mth.sin(this.yRot * (float)Math.PI / 180.0F) * (float)i * 0.5F), 0.1D, (double)(Mth.cos(this.yRot * (float)Math.PI / 180.0F) * (float)i * 0.5F));
+            if(knockbackModifier > 0) {
+            	target.push((double)(-Mth.sin(this.getYRot() * (float)Math.PI / 180.0F) * (float)knockbackModifier * 0.5F), 0.1D, (double)(Mth.cos(this.getYRot() * (float)Math.PI / 180.0F) * (float)knockbackModifier * 0.5F));
                 this.setDeltaMovement(this.getDeltaMovement().multiply(0.6D, 1, 0.6D));
             }
 
@@ -3381,8 +3363,8 @@ public abstract class BaseCreatureEntity extends PathfinderMob {
 
 	/** Returns true if this entity can see the provided entity. **/
 	@Override
-	public boolean canSee(Entity target) {
-		return super.canSee(target);
+	public boolean hasLineOfSight(Entity target) {
+		return super.hasLineOfSight(target);
 	}
 
     /** Returns this entity's Owner Target. **/
@@ -3470,7 +3452,7 @@ public abstract class BaseCreatureEntity extends PathfinderMob {
 
     /** Returns the BlockPos in front or behind the provided entity with the given distance and angle offset (in degrees), use a negative distance for behind. **/
     public BlockPos getFacingPosition(Entity entity, double distance, double angleOffset) {
-        return this.getFacingPosition(entity.position().x(), entity.position().y(), entity.position().z(), distance, entity.yRot + angleOffset);
+        return this.getFacingPosition(entity.position().x(), entity.position().y(), entity.position().z(), distance, entity.getYRot() + angleOffset);
     }
 
     /** Returns the BlockPos in front or behind the provided XYZ coords with the given distance and angle (in degrees), use a negative distance for behind. **/
@@ -3652,13 +3634,13 @@ public abstract class BaseCreatureEntity extends PathfinderMob {
 		}
 
 		// Transformed Entity:
-		transformedEntity.moveTo(this.position().x(), this.position().y(), this.position().z(), this.yRot, this.xRot);
+		transformedEntity.moveTo(this.position().x(), this.position().y(), this.position().z(), this.getYRot(), this.getXRot());
 		this.getCommandSenderWorld().addFreshEntity(transformedEntity);
 
 		// Remove Parts:
-		this.remove();
+		this.discard();
 		if(partner != null && destroyPartner) {
-			partner.remove();
+			partner.discard();
 		}
 
 		return transformedEntity;
@@ -3854,13 +3836,13 @@ public abstract class BaseCreatureEntity extends PathfinderMob {
      * getFallResistance() is used to reduce falling damage, if it is at or above 100 no falling damage is taken at all.
      * **/
     @Override
-    public boolean causeFallDamage(float fallDistance, float damageMultiplier) {
+    public boolean causeFallDamage(float fallDistance, float damageMultiplier, DamageSource damageSource) {
         if(this.isFlying())
     		return false;
     	fallDistance -= this.getFallResistance();
     	if(this.getFallResistance() >= 100)
     		fallDistance = 0;
-    	return super.causeFallDamage(fallDistance, damageMultiplier);
+    	return super.causeFallDamage(fallDistance, damageMultiplier, damageSource);
     }
     
     /** Called when this mob is falling, y is how far the mob has fell so far and onGround is true when it has hit the ground. **/
@@ -4323,10 +4305,10 @@ public abstract class BaseCreatureEntity extends PathfinderMob {
     }
     /** Consumes the specified amount from the item stack currently held by the specified player. **/
     public void consumePlayersItem(Player player, ItemStack itemStack, int amount) {
-    	if(!player.abilities.invulnerable)
+    	if(!player.getAbilities().invulnerable)
             itemStack.setCount(Math.max(0, itemStack.getCount() - amount));
         if(itemStack.getCount() <= 0)
-        	player.inventory.setItem(player.inventory.selected, ItemStack.EMPTY);
+        	player.getInventory().setItem(player.getInventory().selected, ItemStack.EMPTY);
     }
 
     // ========== Replace Player's Item ==========
@@ -4336,13 +4318,13 @@ public abstract class BaseCreatureEntity extends PathfinderMob {
     }
     /** Replaces the specified itemstack and amount with a new itemstack. **/
     public void replacePlayersItem(Player player, ItemStack itemStack, int amount, ItemStack newStack) {
-    	if(!player.abilities.invulnerable)
+    	if(!player.getAbilities().invulnerable)
             itemStack.setCount(Math.max(0, itemStack.getCount() - amount));
     	
         if(itemStack.getCount() <= 0)
-    		 player.inventory.setItem(player.inventory.selected, newStack);
+    		 player.getInventory().setItem(player.getInventory().selected, newStack);
          
-    	 else if(!player.inventory.add(newStack))
+    	 else if(!player.getInventory().add(newStack))
         	 player.drop(newStack, false);
     	
     }
@@ -4470,7 +4452,7 @@ public abstract class BaseCreatureEntity extends PathfinderMob {
     		if(leftoverStack != null)
     			entityItem.setItem(leftoverStack);
     		else
-    			entityItem.remove();
+    			entityItem.discard();
     	}
     }
 
@@ -4553,7 +4535,7 @@ public abstract class BaseCreatureEntity extends PathfinderMob {
     }
 
 	@Override
-	protected void lavaHurt() {
+	public void lavaHurt() {
 		if(!this.canBurn())
 			return;
 		super.lavaHurt();
@@ -4795,7 +4777,7 @@ public abstract class BaseCreatureEntity extends PathfinderMob {
 
     /** Get entities that are near this entity. **/
     public <T extends Entity> List<T> getNearbyEntities(Class <? extends T > clazz, Predicate<Entity> predicate, double range) {
-        return this.getCommandSenderWorld().getEntitiesOfClass(clazz, this.getBoundingBox().inflate(range, range, range), predicate);
+        return (List<T>) this.getCommandSenderWorld().getEntitiesOfClass(clazz, this.getBoundingBox().inflate(range, range, range), predicate);
     }
 
 	/** Returns how many entities of the specified Entity Type are within the specified range, used mostly for spawning, mobs that summon other mobs and group behaviours. **/
@@ -4883,7 +4865,7 @@ public abstract class BaseCreatureEntity extends PathfinderMob {
         if(nbt.contains("IsBoundPet")) {
             if(nbt.getBoolean("IsBoundPet")) {
                 if(!this.hasPetEntry())
-                    this.remove();
+                    this.discard();
             }
         }
     	

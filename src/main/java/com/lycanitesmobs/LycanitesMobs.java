@@ -5,8 +5,6 @@ import com.lycanitesmobs.client.ClientProxy;
 import com.lycanitesmobs.client.ModelManager;
 import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.core.*;
-import com.lycanitesmobs.core.capabilities.ExtendedEntityStorage;
-import com.lycanitesmobs.core.capabilities.ExtendedPlayerStorage;
 import com.lycanitesmobs.core.capabilities.IExtendedEntity;
 import com.lycanitesmobs.core.capabilities.IExtendedPlayer;
 import com.lycanitesmobs.core.command.CommandManager;
@@ -14,8 +12,6 @@ import com.lycanitesmobs.core.compatibility.DLDungeons;
 import com.lycanitesmobs.core.config.ConfigDebug;
 import com.lycanitesmobs.core.config.CoreConfig;
 import com.lycanitesmobs.core.dungeon.DungeonManager;
-import com.lycanitesmobs.core.entity.ExtendedEntity;
-import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.helpers.LMReflectionHelper;
 import com.lycanitesmobs.core.info.*;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
@@ -31,8 +27,6 @@ import com.lycanitesmobs.core.worldgen.WorldGenManager;
 import com.lycanitesmobs.core.worldgen.WorldGenerator;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
-import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
@@ -43,7 +37,6 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
-import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -76,10 +69,7 @@ public class LycanitesMobs {
 	public static IProxy PROXY = DistExecutor.runForDist(() -> ClientProxy::new, () -> ServerProxy::new);
 
 	// Capabilities:
-	@CapabilityInject(IExtendedEntity.class)
 	public static final Capability<IExtendedEntity> EXTENDED_ENTITY = null;
-
-	@CapabilityInject(IExtendedPlayer.class)
 	public static final Capability<IExtendedPlayer> EXTENDED_PLAYER = null;
 
 	// Potion Effects:
@@ -174,10 +164,6 @@ public class LycanitesMobs {
 		ObjectManager.setCurrentModInfo(modInfo);
 		this.loadConfigs();
 
-		// Capabilities:
-		CapabilityManager.INSTANCE.register(IExtendedPlayer.class, new ExtendedPlayerStorage(), ExtendedPlayer::new);
-		CapabilityManager.INSTANCE.register(IExtendedEntity.class, new ExtendedEntityStorage(), ExtendedEntity::new);
-
 		// Fix Health Limit:
 		LMReflectionHelper.fixMaxHealth();
 
@@ -193,11 +179,6 @@ public class LycanitesMobs {
 		TextureManager.getInstance().createTextures(modInfo);
 		ModelManager.getInstance().createModels();
 		ClientManager.getInstance().initRenderRegister();
-	}
-
-	@SubscribeEvent
-	public void serverStarting(final FMLServerStartingEvent event) {
-
 	}
 
 	public void loadConfigs() {

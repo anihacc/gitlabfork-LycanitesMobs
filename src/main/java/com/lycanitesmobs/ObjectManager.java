@@ -1,6 +1,8 @@
 package com.lycanitesmobs;
 
 import com.lycanitesmobs.core.EffectBase;
+import com.lycanitesmobs.core.capabilities.IExtendedEntity;
+import com.lycanitesmobs.core.capabilities.IExtendedPlayer;
 import com.lycanitesmobs.core.container.*;
 import com.lycanitesmobs.core.entity.EntityFactory;
 import com.lycanitesmobs.core.info.ItemManager;
@@ -10,30 +12,28 @@ import com.lycanitesmobs.core.tileentity.EquipmentInfuserTileEntity;
 import com.lycanitesmobs.core.tileentity.EquipmentStationTileEntity;
 import com.lycanitesmobs.core.tileentity.TileEntityEquipmentForge;
 import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
-import net.minecraft.world.level.block.Block;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.fluid.FlowingFluid;
-import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
-import net.minecraftforge.fml.RegistryObject;
 
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Supplier;
 
 public class ObjectManager {
 	public static ObjectManager INSTANCE;
@@ -172,12 +172,18 @@ public class ObjectManager {
 		return fluids.get(name);
 	}
 
-    // ========== Tile Entity ==========
-    public static Class getTileEntity(String name) {
+    // ========== Block Entity ==========
+    public static Class getBlockEntityClass(String name) {
         name = name.toLowerCase();
         if(!tileEntities.containsKey(name)) return null;
         return tileEntities.get(name);
     }
+
+	// ========== Block Entity Type ==========
+	public static BlockEntityType<? extends BlockEntity> getBlockEntityType(Class blockEntityClass) {
+		if(!tileEntityTypes.containsKey(blockEntityClass)) return null;
+		return tileEntityTypes.get(blockEntityClass);
+	}
 	
 	// ========== Potion Effect ==========
 	public static EffectBase getEffect(String name) {
@@ -274,6 +280,13 @@ public class ObjectManager {
 		}
 	}
 
+	// ========== Capabilities ==========
+	@SubscribeEvent
+	public void registerContainers(RegisterCapabilitiesEvent event) {
+		event.register(IExtendedPlayer.class);
+		event.register(IExtendedEntity.class);
+	}
+
 	// ========== Sounds ==========
 	@SubscribeEvent
 	public void registerSounds(RegistryEvent.Register<SoundEvent> event) {
@@ -298,14 +311,12 @@ public class ObjectManager {
 	// ========== Tile Entities ==========
 	@SubscribeEvent
 	public void registerTileEntities(RegistryEvent.Register<BlockEntityType<?>> event) {
-		BlockEntityType<BlockEntity> summoningPedestalType = BlockEntityType.Builder.of((Supplier<BlockEntity>) TileEntitySummoningPedestal::new,
-				getBlock("summoningpedestal")
-		).build(null);
+		BlockEntityType<BlockEntity> summoningPedestalType = BlockEntityType.Builder.of(TileEntitySummoningPedestal::new, getBlock("summoningpedestal")).build(null);
 		summoningPedestalType.setRegistryName(LycanitesMobs.MODID, "summoningpedestal");
 		event.getRegistry().register(summoningPedestalType);
 		tileEntityTypes.put(TileEntitySummoningPedestal.class, summoningPedestalType);
 
-		BlockEntityType<BlockEntity> equipmentForgeType = BlockEntityType.Builder.of((Supplier<BlockEntity>) TileEntityEquipmentForge::new,
+		BlockEntityType<BlockEntity> equipmentForgeType = BlockEntityType.Builder.of((BlockEntityType.BlockEntitySupplier<BlockEntity>) TileEntityEquipmentForge::new,
 				getBlock("equipmentforge_lesser"),
 				getBlock("equipmentforge_greater"),
 				getBlock("equipmentforge_master")
@@ -314,14 +325,14 @@ public class ObjectManager {
 		event.getRegistry().register(equipmentForgeType);
 		tileEntityTypes.put(TileEntityEquipmentForge.class, equipmentForgeType);
 
-		BlockEntityType<BlockEntity> equipmentInfuserType = BlockEntityType.Builder.of((Supplier<BlockEntity>) EquipmentInfuserTileEntity::new,
+		BlockEntityType<BlockEntity> equipmentInfuserType = BlockEntityType.Builder.of((BlockEntityType.BlockEntitySupplier<BlockEntity>) EquipmentInfuserTileEntity::new,
 				getBlock("equipment_infuser")
 		).build(null);
 		equipmentInfuserType.setRegistryName(LycanitesMobs.MODID, "equipment_infuser");
 		event.getRegistry().register(equipmentInfuserType);
 		tileEntityTypes.put(EquipmentInfuserTileEntity.class, equipmentInfuserType);
 
-		BlockEntityType<BlockEntity> equipmentStationType = BlockEntityType.Builder.of((Supplier<BlockEntity>) EquipmentStationTileEntity::new,
+		BlockEntityType<BlockEntity> equipmentStationType = BlockEntityType.Builder.of((BlockEntityType.BlockEntitySupplier<BlockEntity>) EquipmentStationTileEntity::new,
 				getBlock("equipment_station")
 		).build(null);
 		equipmentStationType.setRegistryName(LycanitesMobs.MODID, "equipment_station");

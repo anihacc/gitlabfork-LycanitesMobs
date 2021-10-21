@@ -85,7 +85,7 @@ public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, CreatureMo
 
 		// Looking Pitch:
 		matrixStack.pushPose();
-		float lookPitch = Mth.lerp(yaw, entity.xRotO, entity.xRot);
+		float lookPitch = Mth.lerp(yaw, entity.xRotO, entity.getXRot());
 		if(entity.getPose() == Pose.SLEEPING) {
 			Direction direction = entity.getBedOrientation();
 			if (direction != null) {
@@ -171,7 +171,7 @@ public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, CreatureMo
 		ResourceLocation texture = this.getEntityTexture(entity, layer);
 		RenderType rendertype;
 		if (invisible && !allyInvisible) {
-			if (entity.isGlowing()) {
+			if (entity.isCurrentlyGlowing()) {
 				rendertype = CustomRenderStates.getObjOutlineRenderType(texture);
 			}
 			else {

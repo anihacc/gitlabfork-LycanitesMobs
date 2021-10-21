@@ -22,10 +22,8 @@ public abstract class BaseScreen extends Screen implements Button.OnPress {
     }
 
     @Override
-	public void init(Minecraft minecraft, int width, int height) {
-		this.drawHelper = new DrawHelper(minecraft, minecraft.font);
-    	this.minecraft = minecraft;
-    	super.init(minecraft, width, height);
+	public void init() {
+		this.drawHelper = new DrawHelper(minecraft, this.minecraft.font);
 		this.initWidgets();
 	}
 

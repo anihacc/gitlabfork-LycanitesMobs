@@ -5,22 +5,18 @@ import com.lycanitesmobs.core.EffectBase;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import com.lycanitesmobs.core.entity.goals.actions.abilities.StealthGoal;
-import net.minecraft.world.entity.MobType;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class EntityOstimien extends TameableCreatureEntity {
-    
-    // ==================================================
- 	//                    Constructor
- 	// ==================================================
     public EntityOstimien(EntityType<? extends EntityOstimien> entityType, Level world) {
         super(entityType, world);
         
@@ -30,19 +26,13 @@ public class EntityOstimien extends TameableCreatureEntity {
         this.setupMob();
     }
 
-    // ========== Init AI ==========
     @Override
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(this.nextPriorityGoalIndex++, new StealthGoal(this).setStealthTime(20).setStealthAttack(true).setStealthMove(true));
         this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(false));
     }
-	
-	
-    // ==================================================
-    //                      Updates
-    // ==================================================
-	// ========== Living Update ==========
+
 	@Override
     public void aiStep() {
         super.aiStep();
@@ -66,11 +56,7 @@ public class EntityOstimien extends TameableCreatureEntity {
         		this.leap(4.0F, 0.4D);
         }
     }
-    
-    
-    // ==================================================
-   	//                     Stealth
-   	// ==================================================
+
     @Override
     public boolean canStealth() {
     	if(this.getCommandSenderWorld().isClientSide) return false;
@@ -78,7 +64,7 @@ public class EntityOstimien extends TameableCreatureEntity {
 	    	if(this.hasAttackTarget()) {
 	    		if(this.getTarget() instanceof Player) {
 	    			Player playerTarget = (Player)this.getTarget();
-	    			ItemStack itemstack = playerTarget.inventory.getSelected();
+	    			ItemStack itemstack = playerTarget.getInventory().getSelected();
 	    			if(this.isTamingItem(itemstack))
 	    				return false;
 	    		}
@@ -110,33 +96,18 @@ public class EntityOstimien extends TameableCreatureEntity {
         }
     	super.startStealth();
     }
-    
-    
-    // ==================================================
-  	//                     Abilities
-  	// ==================================================
+
     @Override
     public boolean canClimb() { return true; }
-    
-    
-    // ==================================================
-    //                     Pet Control
-    // ==================================================
+
     public boolean petControlsEnabled() { return true; }
 
-
-    // ==================================================
-    //                     Equipment
-    // ==================================================
     @Override
     public int getNoBagSize() { return 0; }
+
     @Override
     public int getBagSize() { return this.creatureInfo.bagSize; }
-    
-    
-    // ==================================================
-    //                       Visuals
-    // ==================================================
+
     @OnlyIn(Dist.CLIENT)
     @Override
     public boolean isInvisibleTo(Player player) {

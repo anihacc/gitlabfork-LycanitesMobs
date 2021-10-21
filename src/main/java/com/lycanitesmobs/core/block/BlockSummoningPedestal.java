@@ -1,27 +1,33 @@
 package com.lycanitesmobs.core.block;
 
+import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.container.SummoningPedestalContainerProvider;
 import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.state.properties.IntegerProperty;
-import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class BlockSummoningPedestal extends BlockBase {
+import javax.annotation.Nullable;
+
+public class BlockSummoningPedestal extends BlockBase implements EntityBlock {
     public enum EnumSummoningPedestal {
         NONE(0),
         CLIENT(1),
@@ -39,10 +45,6 @@ public class BlockSummoningPedestal extends BlockBase {
 
     public static final IntegerProperty PROPERTY_OWNER = IntegerProperty.create("owner", 0, 2);
 
-
-	// ==================================================
-	//                   Constructor
-	// ==================================================
 	public BlockSummoningPedestal(Block.Properties properties, ModInfo group) {
 		super(properties);
 
@@ -50,6 +52,18 @@ public class BlockSummoningPedestal extends BlockBase {
         this.blockName = "summoningpedestal";
         this.setRegistryName(this.group.modid, this.blockName.toLowerCase());
         this.registerDefaultState(this.getStateDefinition().any().setValue(PROPERTY_OWNER, EnumSummoningPedestal.NONE.ownerId));
+    }
+
+    @Nullable
+    @Override
+    public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
+        return new TileEntitySummoningPedestal((BlockEntityType<? extends TileEntitySummoningPedestal>)ObjectManager.getBlockEntityType(TileEntitySummoningPedestal.class), blockPos, blockState);
+    }
+
+    @Override
+    @Nullable
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState blockState, BlockEntityType<T> blockEntityType) {
+        return blockEntityType == ObjectManager.getBlockEntityType(TileEntitySummoningPedestal.class) ? TileEntitySummoningPedestal::tick : null;
     }
 
     @Override
@@ -73,16 +87,6 @@ public class BlockSummoningPedestal extends BlockBase {
         }
     }
 
-    @Override
-    public boolean hasTileEntity(BlockState blockState) {
-	    return true;
-    }
-
-    @Override
-    public BlockEntity createTileEntity(BlockState blockState, BlockGetter world) {
-        return new TileEntitySummoningPedestal();
-    }
-
     public static void setState(EnumSummoningPedestal owner, Level worldIn, BlockPos pos) {
         BlockState blockState = worldIn.getBlockState(pos);
         BlockEntity tileentity = worldIn.getBlockEntity(pos);
@@ -90,11 +94,11 @@ public class BlockSummoningPedestal extends BlockBase {
 
         if (tileentity != null) {
             tileentity.clearRemoved();
-            worldIn.setBlockEntity(pos, tileentity);
+            worldIn.setBlockEntity(tileentity);
         }
     }
 
-    @Override //onBlockActivated()
+    @Override
     public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
         if(!world.isClientSide() && player instanceof ServerPlayer) {
             BlockEntity tileEntity = world.getBlockEntity(pos);

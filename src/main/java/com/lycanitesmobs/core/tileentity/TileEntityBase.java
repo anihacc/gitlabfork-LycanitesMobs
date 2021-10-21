@@ -1,39 +1,24 @@
 package com.lycanitesmobs.core.tileentity;
 
-import com.lycanitesmobs.LycanitesMobs;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.Container;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.world.level.block.entity.TickableBlockEntity;
+import net.minecraft.world.Container;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
 
-public abstract class TileEntityBase extends BlockEntity implements TickableBlockEntity, Container {
+public abstract class TileEntityBase extends BlockEntity implements Container {
     /**
      * Constructor
      */
-    public TileEntityBase() {
-        super(BlockEntityType.CHEST);
+    public TileEntityBase(BlockEntityType<? extends TileEntityBase> blockEntityType, BlockPos blockPos, BlockState blockState) {
+        super(blockEntityType, blockPos, blockState);
     }
-
-    /**
-     * Gets the Tile Entity Type used by this Tile Entity. Should be overridden.
-     * @return The Tile Entity Type.
-     */
-    public BlockEntityType<?> getType() {
-        return super.getType();
-    }
-
-    /**
-     * The main update called every tick.
-     */
-    @Override
-    public void tick() {}
 
     @Override
     public boolean stillValid(Player player) {
@@ -90,8 +75,8 @@ public abstract class TileEntityBase extends BlockEntity implements TickableBloc
      * @param nbtTagCompound The NBT to read from.
      */
     @Override
-    public void load(BlockState blockState, CompoundTag nbtTagCompound) {
-        super.load(blockState, nbtTagCompound);
+    public void load(CompoundTag nbtTagCompound) {
+        super.load(nbtTagCompound);
     }
 
     /**

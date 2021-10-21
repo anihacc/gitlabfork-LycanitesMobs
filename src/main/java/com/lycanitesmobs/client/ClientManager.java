@@ -63,10 +63,6 @@ public class ClientManager {
 		MinecraftForge.EVENT_BUS.register(new KeyHandler(Minecraft.getInstance()));
 		MinecraftForge.EVENT_BUS.register(new BaseOverlay(Minecraft.getInstance()));
 		MinecraftForge.EVENT_BUS.register(new ClientEventListener());
-		ResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
-		if(resourceManager instanceof ReloadableResourceManager) {
-			((ReloadableResourceManager)resourceManager).registerReloadListener(LanguageLoader.getInstance());
-		}
 	}
 
 	/**

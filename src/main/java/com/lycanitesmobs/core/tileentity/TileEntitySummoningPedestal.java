@@ -12,27 +12,30 @@ import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import com.lycanitesmobs.core.network.MessageSummoningPedestalStats;
 import com.lycanitesmobs.core.network.MessageSummoningPedestalSummonSet;
 import com.lycanitesmobs.core.pets.SummonSet;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.world.ContainerHelper;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.Connection;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.core.NonNullList;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -72,8 +75,8 @@ public class TileEntitySummoningPedestal extends TileEntityBase {
     protected boolean blockStateSet = false;
 
     /** Constructor **/
-    public TileEntitySummoningPedestal() {
-        super();
+    public TileEntitySummoningPedestal(BlockEntityType<? extends TileEntitySummoningPedestal> blockEntityType, BlockPos blockPos, BlockState blockState) {
+        super(blockEntityType, blockPos, blockState);
         this.summoningFuelMax = ConfigExtra.INSTANCE.summoningPedestalRedstoneTime.get();
     }
 
@@ -86,123 +89,127 @@ public class TileEntitySummoningPedestal extends TileEntityBase {
     @Override
     public void setRemoved() {
         if(this.summoningPortal != null && this.summoningPortal.isAlive()) {
-            this.summoningPortal.remove();
+            this.summoningPortal.remove(Entity.RemovalReason.KILLED);
         }
         super.setRemoved();
     }
 
     /** The main update called every tick. **/
-    @Override
-    public void tick() {
+    public static <T extends BlockEntity> void tick(Level level, BlockPos blockPos, BlockState blockState, T blockEntity) {
+        if (!(blockEntity instanceof TileEntitySummoningPedestal)) {
+            return;
+        }
+        TileEntitySummoningPedestal summoningPedestalBlockEntity = (TileEntitySummoningPedestal)blockEntity;
+
         // Client Side Only:
-        if(this.getLevel().isClientSide) {
+        if(summoningPedestalBlockEntity.getLevel().isClientSide) {
 
             // Summoning Progress Animation:
-            if(this.summoningFuel > 0) {
-                if (this.summonProgress >= this.summonProgressMax)
-                    this.summonProgress = 0;
-                else if (this.summonProgress > 0)
-                    this.summonProgress++;
+            if(summoningPedestalBlockEntity.summoningFuel > 0) {
+                if (summoningPedestalBlockEntity.summonProgress >= summoningPedestalBlockEntity.summonProgressMax)
+                    summoningPedestalBlockEntity.summonProgress = 0;
+                else if (summoningPedestalBlockEntity.summonProgress > 0)
+                    summoningPedestalBlockEntity.summonProgress++;
             }
 
             return;
         }
 
         // Load Minion IDs:
-        if(this.loadMinionIDs != null) {
+        if(summoningPedestalBlockEntity.loadMinionIDs != null) {
             int range = 20;
-            List nearbyEntities = this.getLevel().getEntitiesOfClass(BaseCreatureEntity.class,
-                    new AABB(this.getBlockPos().getX() - range, this.getBlockPos().getY() - range, this.getBlockPos().getZ() - range,
-                            this.getBlockPos().getX() + range, this.getBlockPos().getY() + range, this.getBlockPos().getZ() + range));
+            List nearbyEntities = summoningPedestalBlockEntity.getLevel().getEntitiesOfClass(BaseCreatureEntity.class,
+                    new AABB(summoningPedestalBlockEntity.getBlockPos().getX() - range, summoningPedestalBlockEntity.getBlockPos().getY() - range, summoningPedestalBlockEntity.getBlockPos().getZ() - range,
+                            summoningPedestalBlockEntity.getBlockPos().getX() + range, summoningPedestalBlockEntity.getBlockPos().getY() + range, summoningPedestalBlockEntity.getBlockPos().getZ() + range));
             Iterator possibleEntities = nearbyEntities.iterator();
             while(possibleEntities.hasNext()) {
                 BaseCreatureEntity possibleEntity = (BaseCreatureEntity)possibleEntities.next();
-                for(String loadMinionID : this.loadMinionIDs) {
+                for(String loadMinionID : summoningPedestalBlockEntity.loadMinionIDs) {
                     UUID uuid = null;
                     try { uuid = UUID.fromString(loadMinionID); } catch (Exception e) {}
                     if(possibleEntity.getUUID().equals(uuid)) {
-                        this.minions.add(possibleEntity);
+                        summoningPedestalBlockEntity.minions.add(possibleEntity);
                         break;
                     }
                 }
             }
-            this.loadMinionIDs = null;
+            summoningPedestalBlockEntity.loadMinionIDs = null;
         }
 
         // Summoning:
-        if(this.summonSet != null && this.summonSet.getCreatureInfo() != null) {
-			if (this.summonSet.getFollowing()) {
-				this.summonSet.following = false;
+        if(summoningPedestalBlockEntity.summonSet != null && summoningPedestalBlockEntity.summonSet.getCreatureInfo() != null) {
+			if (summoningPedestalBlockEntity.summonSet.getFollowing()) {
+				summoningPedestalBlockEntity.summonSet.following = false;
 			}
 
 			// Summoning Portal:
-			if (this.summoningPortal == null || !this.summoningPortal.isAlive()) {
-				this.summoningPortal = new PortalEntity((EntityType<? extends PortalEntity>) ProjectileManager.getInstance().oldProjectileTypes.get(PortalEntity.class), this.getLevel(), this);
-				this.summoningPortal.setProjectileScale(4);
-				this.getLevel().addFreshEntity(this.summoningPortal);
+			if (summoningPedestalBlockEntity.summoningPortal == null || !summoningPedestalBlockEntity.summoningPortal.isAlive()) {
+				summoningPedestalBlockEntity.summoningPortal = new PortalEntity((EntityType<? extends PortalEntity>) ProjectileManager.getInstance().oldProjectileTypes.get(PortalEntity.class), summoningPedestalBlockEntity.getLevel(), summoningPedestalBlockEntity);
+				summoningPedestalBlockEntity.summoningPortal.setProjectileScale(4);
+				summoningPedestalBlockEntity.getLevel().addFreshEntity(summoningPedestalBlockEntity.summoningPortal);
 			}
 
 			// Update Minions:
-			if (this.updateTick % 100 == 0) {
-				this.capacity = 0;
-				for (BaseCreatureEntity minion : this.minions.toArray(new BaseCreatureEntity[this.minions.size()])) {
+			if (summoningPedestalBlockEntity.updateTick % 100 == 0) {
+				summoningPedestalBlockEntity.capacity = 0;
+				for (BaseCreatureEntity minion : summoningPedestalBlockEntity.minions.toArray(new BaseCreatureEntity[summoningPedestalBlockEntity.minions.size()])) {
 					if (minion == null || !minion.isAlive())
-						this.minions.remove(minion);
+						summoningPedestalBlockEntity.minions.remove(minion);
 					else {
-						this.capacity += (minion.creatureInfo.summonCost * this.capacityCharge);
+						summoningPedestalBlockEntity.capacity += (minion.creatureInfo.summonCost * summoningPedestalBlockEntity.capacityCharge);
 					}
 				}
 			}
 
 			// Check Capacity:
-			if (this.capacity + this.summonSet.getCreatureInfo().summonCost > this.capacityMax) {
-				this.summonProgress = 0;
+			if (summoningPedestalBlockEntity.capacity + summoningPedestalBlockEntity.summonSet.getCreatureInfo().summonCost > summoningPedestalBlockEntity.capacityMax) {
+				summoningPedestalBlockEntity.summonProgress = 0;
 			}
 
 			// Try To Summon:
 			else {
-			    if(this.summoningFuel <= 0) {
-			        ItemStack fuelStack = this.getItem(0);
+			    if(summoningPedestalBlockEntity.summoningFuel <= 0) {
+			        ItemStack fuelStack = summoningPedestalBlockEntity.getItem(0);
 			        if(!fuelStack.isEmpty()) {
-			            int refuel = this.summoningFuelAmount;
+			            int refuel = summoningPedestalBlockEntity.summoningFuelAmount;
                         if(fuelStack.getItem() == Item.byBlock(Blocks.REDSTONE_BLOCK)) {
-							refuel = this.summoningFuelAmount * 9;
+							refuel = summoningPedestalBlockEntity.summoningFuelAmount * 9;
                         }
 			            fuelStack.split(1);
-                        this.summoningFuel = refuel;
-                        this.summoningFuelMax = refuel;
+                        summoningPedestalBlockEntity.summoningFuel = refuel;
+                        summoningPedestalBlockEntity.summoningFuelMax = refuel;
                     }
                 }
 
-                if (this.summoningFuel > 0) {
-                    this.summoningFuel--;
+                if (summoningPedestalBlockEntity.summoningFuel > 0) {
+                    summoningPedestalBlockEntity.summoningFuel--;
 
                     // Summon Minions:
-                    if (this.summonProgress++ >= this.summonProgressMax) {
-                        this.summoningPortal.summonCreatures();
-                        this.summonProgress = 0;
-                        this.capacity = Math.min(this.capacity + (this.capacityCharge * this.summonSet.getCreatureInfo().summonCost), this.capacityMax);
+                    if (summoningPedestalBlockEntity.summonProgress++ >= summoningPedestalBlockEntity.summonProgressMax) {
+                        summoningPedestalBlockEntity.summoningPortal.summonCreatures();
+                        summoningPedestalBlockEntity.summonProgress = 0;
+                        summoningPedestalBlockEntity.capacity = Math.min(summoningPedestalBlockEntity.capacity + (summoningPedestalBlockEntity.capacityCharge * summoningPedestalBlockEntity.summonSet.getCreatureInfo().summonCost), summoningPedestalBlockEntity.capacityMax);
                     }
                 }
             }
 		}
 
 		// Block State:
-		if (!this.blockStateSet) {
-			if (!"".equals(this.getOwnerName()))
-				BlockSummoningPedestal.setState(BlockSummoningPedestal.EnumSummoningPedestal.PLAYER, this.getLevel(), this.getBlockPos());
+		if (!summoningPedestalBlockEntity.blockStateSet) {
+			if (!"".equals(summoningPedestalBlockEntity.getOwnerName()))
+				BlockSummoningPedestal.setState(BlockSummoningPedestal.EnumSummoningPedestal.PLAYER, summoningPedestalBlockEntity.getLevel(), summoningPedestalBlockEntity.getBlockPos());
 			else
-				BlockSummoningPedestal.setState(BlockSummoningPedestal.EnumSummoningPedestal.NONE, this.getLevel(), this.getBlockPos());
-			this.blockStateSet = true;
+				BlockSummoningPedestal.setState(BlockSummoningPedestal.EnumSummoningPedestal.NONE, summoningPedestalBlockEntity.getLevel(), summoningPedestalBlockEntity.getBlockPos());
+			summoningPedestalBlockEntity.blockStateSet = true;
 		}
 
         // Sync To Client:
-        if(this.updateTick % 20 == 0) {
-            MessageSummoningPedestalStats message = new MessageSummoningPedestalStats(this.capacity, this.summonProgress, this.summoningFuel, this.summoningFuelMax, this.getBlockPos().getX(), this.getBlockPos().getY(), this.getBlockPos().getZ());
-            LycanitesMobs.packetHandler.sendToAllAround(message, this.getLevel(), Vec3.atLowerCornerOf(this.getBlockPos()), 5);
+        if(summoningPedestalBlockEntity.updateTick % 20 == 0) {
+            MessageSummoningPedestalStats message = new MessageSummoningPedestalStats(summoningPedestalBlockEntity.capacity, summoningPedestalBlockEntity.summonProgress, summoningPedestalBlockEntity.summoningFuel, summoningPedestalBlockEntity.summoningFuelMax, summoningPedestalBlockEntity.getBlockPos().getX(), summoningPedestalBlockEntity.getBlockPos().getY(), summoningPedestalBlockEntity.getBlockPos().getZ());
+            LycanitesMobs.packetHandler.sendToAllAround(message, summoningPedestalBlockEntity.getLevel(), Vec3.atLowerCornerOf(summoningPedestalBlockEntity.getBlockPos()), 5);
         }
 
-        this.updateTick++;
+        summoningPedestalBlockEntity.updateTick++;
     }
 
 
@@ -447,9 +454,7 @@ public class TileEntitySummoningPedestal extends TileEntityBase {
     // ========================================
     /** Reads from saved NBT data. **/
     @Override
-    public void load(BlockState blockState, CompoundTag nbtTagCompound) {
-        super.load(blockState, nbtTagCompound);
-
+    public void load(CompoundTag nbtTagCompound) {
         if(nbtTagCompound.contains("OwnerUUID")) {
             String uuidString = nbtTagCompound.getString("OwnerUUID");
             if(!"".equals(uuidString))
@@ -505,7 +510,7 @@ public class TileEntitySummoningPedestal extends TileEntityBase {
 			}
 		}
 
-		super.load(blockState, nbtTagCompound);
+		super.load(nbtTagCompound);
     }
 
     /** Writes to NBT data. **/
