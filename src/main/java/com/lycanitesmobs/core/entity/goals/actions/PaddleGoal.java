@@ -2,9 +2,9 @@ package com.lycanitesmobs.core.entity.goals.actions;
 
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.navigate.CreaturePathNavigator;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.pathfinding.GroundPathNavigator;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 
 public class PaddleGoal extends Goal {
 	// Targets:
@@ -18,7 +18,7 @@ public class PaddleGoal extends Goal {
    	// ==================================================
     public PaddleGoal(BaseCreatureEntity setEntity) {
         this.host = setEntity;
-        if(setEntity.getNavigation() instanceof GroundPathNavigator || setEntity.getNavigation() instanceof CreaturePathNavigator)
+        if(setEntity.getNavigation() instanceof GroundPathNavigation || setEntity.getNavigation() instanceof CreaturePathNavigator)
             setEntity.getNavigation().setCanFloat(true);
 		this.sink = this.host.canBreatheUnderwater() || (this.host.canBreatheUnderlava() && this.host.isLavaCreature);
     }
@@ -40,7 +40,7 @@ public class PaddleGoal extends Goal {
     public boolean canUse() {
     	if(this.host.isStrongSwimmer())
     		return false;
-        if(this.host.getControllingPassenger() != null && this.host.getControllingPassenger() instanceof PlayerEntity && this.host.canBeControlledByRider())
+        if(this.host.getControllingPassenger() != null && this.host.getControllingPassenger() instanceof Player && this.host.canBeControlledByRider())
             return false;
         return this.host.isInWater() || this.host.isInLava();
     }

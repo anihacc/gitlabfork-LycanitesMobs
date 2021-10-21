@@ -3,12 +3,14 @@ package com.lycanitesmobs.core.entity.goals.targeting;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.CreatureRelationshipEntry;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 
 import java.util.*;
+
+import net.minecraft.world.entity.ai.goal.Goal.Flag;
 
 public class FindAttackTargetGoal extends TargetingGoal {
 	// Targets:
@@ -51,7 +53,7 @@ public class FindAttackTargetGoal extends TargetingGoal {
 		this.targetClasses.addAll(Arrays.asList(targets));
 		for(Class<? extends Entity> targetType : targets) {
 			this.host.setHostileTo(targetType);
-			if(targetType.isAssignableFrom(PlayerEntity.class))
+			if(targetType.isAssignableFrom(Player.class))
 				this.targetPlayers = true;
 		}
 		return this;
@@ -207,10 +209,10 @@ public class FindAttackTargetGoal extends TargetingGoal {
 		if(this.targetPlayers) {
 			LivingEntity newTarget = null;
 			try {
-				List<? extends PlayerEntity> players = this.host.getCommandSenderWorld().players();
+				List<? extends Player> players = this.host.getCommandSenderWorld().players();
 				if(!players.isEmpty()) {
-					List<PlayerEntity> possibleTargets = new ArrayList<>();
-					for (PlayerEntity player : players) {
+					List<Player> possibleTargets = new ArrayList<>();
+					for (Player player : players) {
 						if (this.targetSelector.test(player)) {
 							possibleTargets.add(player);
 						}

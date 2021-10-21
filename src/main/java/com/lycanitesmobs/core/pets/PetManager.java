@@ -2,11 +2,11 @@ package com.lycanitesmobs.core.pets;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.ExtendedPlayer;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.world.level.Level;
 
 import java.util.*;
 
@@ -19,7 +19,7 @@ public class PetManager {
     /** PetEntries that need to be removed. **/
     public List<PetEntry> removedEntries = new ArrayList<>();
     /** A map containing NBT Tag Compounds mapped to Pet Entry UUIDs. **/
-    public Map<UUID, CompoundNBT> entryNBTs = new HashMap<>();
+    public Map<UUID, CompoundTag> entryNBTs = new HashMap<>();
 
 
 	public PetManager(LivingEntity host) {
@@ -77,7 +77,7 @@ public class PetManager {
     }
 
 	/** Called by the host's entity update, runs any logic to manage pet entries. **/
-	public void onUpdate(World world) {
+	public void onUpdate(Level world) {
         // Load NBT Entries:
         if(!this.entryNBTs.isEmpty()) {
             // Have Currently Loaded Entries Read From The NBT Map:
@@ -89,8 +89,8 @@ public class PetManager {
             }
 
             // Create New Entries For Non-Loaded Entries From The NBT Map:
-            for (CompoundNBT nbtEntry : this.entryNBTs.values()) {
-                if (this.host instanceof PlayerEntity && nbtEntry.getString("Type").equalsIgnoreCase("familiar")) { // Only load active familiars.
+            for (CompoundTag nbtEntry : this.entryNBTs.values()) {
+                if (this.host instanceof Player && nbtEntry.getString("Type").equalsIgnoreCase("familiar")) { // Only load active familiars.
                     if (!PlayerFamiliars.INSTANCE.playerFamiliars.containsKey(this.host.getUUID()) ||
                             !PlayerFamiliars.INSTANCE.playerFamiliars.get(this.host.getUUID()).containsKey(nbtEntry.getUUID("UUID"))) {
                         continue;
@@ -107,9 +107,9 @@ public class PetManager {
 
         // New Entries:
         if(this.newEntries.size() > 0) {
-            if (!world.isClientSide && this.host instanceof PlayerEntity) {
+            if (!world.isClientSide && this.host instanceof Player) {
                 for (PetEntry petEntry : this.newEntries) {
-                    ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer((PlayerEntity) this.host);
+                    ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer((Player) this.host);
                     if (playerExt != null)
                         playerExt.sendPetEntryToPlayer(petEntry);
                 }
@@ -126,8 +126,8 @@ public class PetManager {
                 petEntry.setOwner(this.host);
 
             // Pet and Mount Spirit Check:
-            if(this.host instanceof PlayerEntity) {
-                ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer((PlayerEntity)this.host);
+            if(this.host instanceof Player) {
+                ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer((Player)this.host);
                 if(playerExt != null && petEntry.usesSpirit()) {
                     int spiritCost = petEntry.getSpiritCost();
                     if(petEntry.spawningActive && petEntry.active) {
@@ -155,8 +155,8 @@ public class PetManager {
         }
 
         // Spirit Reserved:
-        if(this.host instanceof PlayerEntity) {
-            ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer((PlayerEntity)this.host);
+        if(this.host instanceof Player) {
+            ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer((Player)this.host);
             if(playerExt != null)
                 playerExt.spiritReserved = newSpiritReserved;
         }
@@ -168,14 +168,14 @@ public class PetManager {
     // ==================================================
     // ========== Read ===========
     /** Reads a list of Pet Entries from a player's NBTTag. **/
-    public void readFromNBT(CompoundNBT nbtTagCompound) {
+    public void readFromNBT(CompoundTag nbtTagCompound) {
         if(!nbtTagCompound.contains("PetManager"))
             return;
 
         // Load All NBT Data Into The NBT Map:
-        ListNBT entryList = nbtTagCompound.getList("PetManager", 10);
+        ListTag entryList = nbtTagCompound.getList("PetManager", 10);
         for(int i = 0; i < entryList.size(); ++i) {
-            CompoundNBT nbtEntry = (CompoundNBT)entryList.get(i);
+            CompoundTag nbtEntry = (CompoundTag)entryList.get(i);
             if(!nbtEntry.hasUUID("UUID") && nbtEntry.contains("EntryName")) { // Convert Pet Entries from older mod versions.
                 LycanitesMobs.logInfo("", "[Pets] Converting Pet Entry from older mod version: " + nbtEntry.getString("EntryName") + "...");
                 nbtEntry.putUUID("UUID", UUID.randomUUID());
@@ -191,10 +191,10 @@ public class PetManager {
 
     // ========== Write ==========
     /** Writes a list of Creature Knowledge to a player's NBTTag. **/
-    public void writeToNBT(CompoundNBT nbtTagCompound) {
-        ListNBT entryList = new ListNBT();
+    public void writeToNBT(CompoundTag nbtTagCompound) {
+        ListTag entryList = new ListTag();
         for(PetEntry petEntry : this.entries.values()) {
-            CompoundNBT nbtEntry = new CompoundNBT();
+            CompoundTag nbtEntry = new CompoundTag();
             petEntry.writeToNBT(nbtEntry);
             entryList.add(nbtEntry);
         }

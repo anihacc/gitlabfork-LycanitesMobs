@@ -4,8 +4,8 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.gui.InventorySnooperScreen;
 import com.lycanitesmobs.core.config.ConfigClient;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.inventory.InventoryScreen;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;

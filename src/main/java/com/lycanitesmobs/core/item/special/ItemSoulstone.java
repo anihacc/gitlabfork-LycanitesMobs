@@ -8,18 +8,18 @@ import com.lycanitesmobs.core.info.CreatureType;
 import com.lycanitesmobs.core.item.BaseItem;
 import com.lycanitesmobs.core.item.CreatureTypeItem;
 import com.lycanitesmobs.core.pets.PetEntry;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.Util;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.Util;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 
@@ -33,12 +33,12 @@ public class ItemSoulstone extends CreatureTypeItem {
     }
 
 	@Override
-	public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
+	public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
     	return super.use(world, player, hand);
 	}
 
 	@Override
-	public ActionResultType interactLivingEntity(ItemStack stack, PlayerEntity player, LivingEntity entity, Hand hand) {
+	public InteractionResult interactLivingEntity(ItemStack stack, Player player, LivingEntity entity, InteractionHand hand) {
     	if(this.applySoulstoneToEntity(player, entity)) {
 			// Consume Soulstone:
 			if (!player.abilities.instabuild)
@@ -46,7 +46,7 @@ public class ItemSoulstone extends CreatureTypeItem {
 			if (stack.getCount() <= 0)
 				player.inventory.setItem(player.inventory.selected, ItemStack.EMPTY);
 
-			return ActionResultType.SUCCESS;
+			return InteractionResult.SUCCESS;
 		}
 
     	return super.interactLivingEntity(stack, player, entity, hand);
@@ -58,13 +58,13 @@ public class ItemSoulstone extends CreatureTypeItem {
 	 * @param entity The entity targeted by the Soulstone.
 	 * @return True on success.
 	 */
-	public boolean applySoulstoneToEntity(PlayerEntity player, LivingEntity entity) {
+	public boolean applySoulstoneToEntity(Player player, LivingEntity entity) {
 		ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
 		if(playerExt == null)
 			return false;
 		if(!(entity instanceof TameableCreatureEntity)) {
 			if(!player.getCommandSenderWorld().isClientSide)
-				player.sendMessage(new TranslationTextComponent("message.soulstone.invalid"), Util.NIL_UUID);
+				player.sendMessage(new TranslatableComponent("message.soulstone.invalid"), Util.NIL_UUID);
 			return false;
 		}
 
@@ -72,12 +72,12 @@ public class ItemSoulstone extends CreatureTypeItem {
 		CreatureInfo creatureInfo = entityTameable.creatureInfo;
 		if(!creatureInfo.isTameable() || entityTameable.getOwner() != player) {
 			if(!player.getCommandSenderWorld().isClientSide)
-				player.sendMessage(new TranslationTextComponent("message.soulstone.untamed"), Util.NIL_UUID);
+				player.sendMessage(new TranslatableComponent("message.soulstone.untamed"), Util.NIL_UUID);
 			return false;
 		}
 		if(entityTameable.getPetEntry() != null) {
 			if(!player.getCommandSenderWorld().isClientSide)
-				player.sendMessage(new TranslationTextComponent("message.soulstone.exists"), Util.NIL_UUID);
+				player.sendMessage(new TranslatableComponent("message.soulstone.exists"), Util.NIL_UUID);
 			return false;
 		}
 
@@ -99,11 +99,11 @@ public class ItemSoulstone extends CreatureTypeItem {
 				petType = "mount";
 			}
 
-			ITextComponent message = new TranslationTextComponent("message.soulstone." + petType + ".added.prefix")
+			Component message = new TranslatableComponent("message.soulstone." + petType + ".added.prefix")
 					.append(" ")
 					.append(creatureInfo.getTitle())
 					.append(" ")
-					.append(new TranslationTextComponent("message.soulstone." + petType + ".added.suffix"));
+					.append(new TranslatableComponent("message.soulstone." + petType + ".added.suffix"));
 			player.sendMessage(message, Util.NIL_UUID);
 			//player.addStat(ObjectManager.getStat("soulstone"), 1);
 

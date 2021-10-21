@@ -1,8 +1,8 @@
 package com.lycanitesmobs.core.container;
 
 import com.lycanitesmobs.core.item.equipment.ItemEquipment;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 
 public class EquipmentStationEquipmentSlot extends BaseSlot {
 	public EquipmentStationContainer container;
@@ -53,13 +53,13 @@ public class EquipmentStationEquipmentSlot extends BaseSlot {
 
 
 	@Override
-	public ItemStack onTake(PlayerEntity player, ItemStack itemStack) {
+	public ItemStack onTake(Player player, ItemStack itemStack) {
 		return super.onTake(player, itemStack);
 	}
 
 
 	@Override
-	public boolean mayPickup(PlayerEntity player) {
+	public boolean mayPickup(Player player) {
 		return true;
 	}
 }

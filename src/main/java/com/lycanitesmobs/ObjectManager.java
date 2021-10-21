@@ -10,21 +10,21 @@ import com.lycanitesmobs.core.tileentity.EquipmentInfuserTileEntity;
 import com.lycanitesmobs.core.tileentity.EquipmentStationTileEntity;
 import com.lycanitesmobs.core.tileentity.TileEntityEquipmentForge;
 import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
-import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityClassification;
-import net.minecraft.entity.EntityType;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.fluid.FlowingFluid;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.potion.Effect;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
@@ -57,7 +57,7 @@ public class ObjectManager {
 	public static Map<String, Class<? extends Entity>> specialEntities = new HashMap<>();
 	public static Map<Class<? extends Entity>, Constructor<? extends Entity>> specialEntityConstructors = new HashMap<>();
 	public static Map<Class<? extends Entity>, EntityType<? extends Entity>> specialEntityTypes = new HashMap<>();
-	public static Map<Class<? extends TileEntity>, TileEntityType<? extends TileEntity>> tileEntityTypes = new HashMap<>();
+	public static Map<Class<? extends BlockEntity>, BlockEntityType<? extends BlockEntity>> tileEntityTypes = new HashMap<>();
 
     public static Map<String, DamageSource> damageSources = new HashMap<>();
 
@@ -242,7 +242,7 @@ public class ObjectManager {
 
     // ========== Potions ==========
 	@SubscribeEvent
-    public void registerEffects(RegistryEvent.Register<Effect> event) {
+    public void registerEffects(RegistryEvent.Register<MobEffect> event) {
 		for(EffectBase effect : effects.values()) {
         	event.getRegistry().register(effect);
 		}
@@ -260,7 +260,7 @@ public class ObjectManager {
 	@SubscribeEvent
 	public void registerEntities(RegistryEvent.Register<EntityType<?>> event) {
 		for(String entityName : specialEntities.keySet()) {
-			EntityType.Builder entityTypeBuilder = EntityType.Builder.of(EntityFactory.getInstance(), EntityClassification.MISC);
+			EntityType.Builder entityTypeBuilder = EntityType.Builder.of(EntityFactory.getInstance(), MobCategory.MISC);
 			entityTypeBuilder.setTrackingRange(10);
 			entityTypeBuilder.setUpdateInterval(3);
 			entityTypeBuilder.setShouldReceiveVelocityUpdates(true);
@@ -287,7 +287,7 @@ public class ObjectManager {
 
 	// ========== Containers ==========
 	@SubscribeEvent
-	public void registerContainers(RegistryEvent.Register<ContainerType<?>> event) {
+	public void registerContainers(RegistryEvent.Register<MenuType<?>> event) {
 		event.getRegistry().register(CreatureContainer.TYPE);
 		event.getRegistry().register(SummoningPedestalContainer.TYPE);
 		event.getRegistry().register(EquipmentForgeContainer.TYPE);
@@ -297,15 +297,15 @@ public class ObjectManager {
 
 	// ========== Tile Entities ==========
 	@SubscribeEvent
-	public void registerTileEntities(RegistryEvent.Register<TileEntityType<?>> event) {
-		TileEntityType<TileEntity> summoningPedestalType = TileEntityType.Builder.of((Supplier<TileEntity>) TileEntitySummoningPedestal::new,
+	public void registerTileEntities(RegistryEvent.Register<BlockEntityType<?>> event) {
+		BlockEntityType<BlockEntity> summoningPedestalType = BlockEntityType.Builder.of((Supplier<BlockEntity>) TileEntitySummoningPedestal::new,
 				getBlock("summoningpedestal")
 		).build(null);
 		summoningPedestalType.setRegistryName(LycanitesMobs.MODID, "summoningpedestal");
 		event.getRegistry().register(summoningPedestalType);
 		tileEntityTypes.put(TileEntitySummoningPedestal.class, summoningPedestalType);
 
-		TileEntityType<TileEntity> equipmentForgeType = TileEntityType.Builder.of((Supplier<TileEntity>) TileEntityEquipmentForge::new,
+		BlockEntityType<BlockEntity> equipmentForgeType = BlockEntityType.Builder.of((Supplier<BlockEntity>) TileEntityEquipmentForge::new,
 				getBlock("equipmentforge_lesser"),
 				getBlock("equipmentforge_greater"),
 				getBlock("equipmentforge_master")
@@ -314,14 +314,14 @@ public class ObjectManager {
 		event.getRegistry().register(equipmentForgeType);
 		tileEntityTypes.put(TileEntityEquipmentForge.class, equipmentForgeType);
 
-		TileEntityType<TileEntity> equipmentInfuserType = TileEntityType.Builder.of((Supplier<TileEntity>) EquipmentInfuserTileEntity::new,
+		BlockEntityType<BlockEntity> equipmentInfuserType = BlockEntityType.Builder.of((Supplier<BlockEntity>) EquipmentInfuserTileEntity::new,
 				getBlock("equipment_infuser")
 		).build(null);
 		equipmentInfuserType.setRegistryName(LycanitesMobs.MODID, "equipment_infuser");
 		event.getRegistry().register(equipmentInfuserType);
 		tileEntityTypes.put(EquipmentInfuserTileEntity.class, equipmentInfuserType);
 
-		TileEntityType<TileEntity> equipmentStationType = TileEntityType.Builder.of((Supplier<TileEntity>) EquipmentStationTileEntity::new,
+		BlockEntityType<BlockEntity> equipmentStationType = BlockEntityType.Builder.of((Supplier<BlockEntity>) EquipmentStationTileEntity::new,
 				getBlock("equipment_station")
 		).build(null);
 		equipmentStationType.setRegistryName(LycanitesMobs.MODID, "equipment_station");

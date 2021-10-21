@@ -9,11 +9,11 @@ import com.lycanitesmobs.core.helpers.JSONHelper;
 import com.lycanitesmobs.core.info.ItemDrop;
 import com.lycanitesmobs.core.spawner.MobSpawn;
 import com.lycanitesmobs.core.spawner.condition.SpawnCondition;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
 
 import java.util.*;
 
@@ -237,7 +237,7 @@ public class DungeonSchematic {
 	 * @param pos The position to build a Dungeon from with this Schematic.
 	 * @return
 	 */
-	public boolean canBuild(World world, BlockPos pos) {
+	public boolean canBuild(Level world, BlockPos pos) {
 		if(!this.enabled) {
 			return false;
 		}

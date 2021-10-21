@@ -2,14 +2,14 @@ package com.lycanitesmobs.core.entity;
 
 import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.core.info.ModInfo;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.projectile.ThrowableEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.projectile.ThrowableProjectile;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.level.Level;
 
-public class ParticleEntity extends ThrowableEntity {
+public class ParticleEntity extends ThrowableProjectile {
 	// Particle:
 	public int particleAge = 0;
 	public int particleAgeMax = 20;
@@ -20,7 +20,7 @@ public class ParticleEntity extends ThrowableEntity {
     // ==================================================
     //                      Constructor
     // ==================================================
-	public ParticleEntity(World world, double x, double y, double z, String texture, ModInfo group) {
+	public ParticleEntity(Level world, double x, double y, double z, String texture, ModInfo group) {
 		super(EntityType.SNOWBALL, world);
 		this.setPos(x, y, z);
         this.xOld = x;
@@ -72,7 +72,7 @@ public class ParticleEntity extends ThrowableEntity {
     }
 	
 	@Override
-	protected void onHit(RayTraceResult rayTraceResult) {
+	protected void onHit(HitResult rayTraceResult) {
 		return;
 	}
 	
@@ -81,10 +81,10 @@ public class ParticleEntity extends ThrowableEntity {
     //                        NBT
     // ==================================================
 	@Override
-	public void addAdditionalSaveData(CompoundNBT par1NBTTagCompound) {}
+	public void addAdditionalSaveData(CompoundTag par1NBTTagCompound) {}
 
 	@Override
-    public void readAdditionalSaveData(CompoundNBT par1NBTTagCompound) {}
+    public void readAdditionalSaveData(CompoundTag par1NBTTagCompound) {}
 	
 	
     // ==================================================

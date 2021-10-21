@@ -1,16 +1,16 @@
 package com.lycanitesmobs.core.container;
 
 import com.lycanitesmobs.core.inventory.CreatureInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.Container;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
 public class BaseSlot extends Slot {
 	
     // ==================================================
   	//                    Constructor
   	// ==================================================
-	public BaseSlot(IInventory inventory, int slotIndex, int x, int y) {
+	public BaseSlot(Container inventory, int slotIndex, int x, int y) {
 		super(inventory, slotIndex, x, y);
 	}
 	

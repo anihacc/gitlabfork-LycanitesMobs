@@ -7,27 +7,33 @@ import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
 import com.lycanitesmobs.core.entity.goals.actions.WanderGoal;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.entity.*;
-import net.minecraft.entity.monster.IMob;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
-public class EntityIoray extends RideableCreatureEntity implements IMob {
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.Pose;
+
+public class EntityIoray extends RideableCreatureEntity implements Enemy {
 
 	WanderGoal wanderAI;
 
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityIoray(EntityType<? extends EntityIoray> entityType, World world) {
+    public EntityIoray(EntityType<? extends EntityIoray> entityType, Level world) {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEFINED;
+        this.attribute = MobType.UNDEFINED;
         this.spawnsOnLand = false;
         this.spawnsInWater = true;
         this.hasAttackSound = true;
@@ -52,7 +58,7 @@ public class EntityIoray extends RideableCreatureEntity implements IMob {
 	// ========== Living Update ==========
 	@Override
     public void riderEffects(LivingEntity rider) {
-        rider.addEffect(new EffectInstance(Effects.WATER_BREATHING, (5 * 20) + 5, 1));
+        rider.addEffect(new MobEffectInstance(MobEffects.WATER_BREATHING, (5 * 20) + 5, 1));
         super.riderEffects(rider);
     }
 
@@ -196,7 +202,7 @@ public class EntityIoray extends RideableCreatureEntity implements IMob {
     public void onDismounted(Entity entity) {
         super.onDismounted(entity);
         if(entity != null && entity instanceof LivingEntity) {
-            ((LivingEntity)entity).addEffect(new EffectInstance(Effects.WATER_BREATHING, 5 * 20, 1));
+            ((LivingEntity)entity).addEffect(new MobEffectInstance(MobEffects.WATER_BREATHING, 5 * 20, 1));
         }
     }
 

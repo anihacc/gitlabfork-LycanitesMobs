@@ -1,8 +1,8 @@
 package com.lycanitesmobs.core.entity.goals;
 
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.Goal;
 
 public class BaseGoal extends Goal {
 	// Targets:

@@ -2,10 +2,10 @@ package com.lycanitesmobs.core.spawner.trigger;
 
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.core.spawner.Spawner;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.Explosion;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Explosion;
+import net.minecraft.world.level.Level;
 
 public class ExplosionSpawnTrigger extends EntitySpawnTrigger {
 
@@ -35,7 +35,7 @@ public class ExplosionSpawnTrigger extends EntitySpawnTrigger {
 
 
 	/** Called every time an explosion is created. **/
-	public boolean onExplosion(World world, PlayerEntity player, Explosion explosion) {
+	public boolean onExplosion(Level world, Player player, Explosion explosion) {
 		// TODO Figure out strength/size workaround.
 
 		// Player Only:

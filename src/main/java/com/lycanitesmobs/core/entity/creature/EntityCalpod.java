@@ -2,28 +2,28 @@ package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
-import net.minecraft.block.WoodType;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.Pose;
-import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.DamageSource;
-import net.minecraft.world.GameRules;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.properties.WoodType;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.Level;
 
-public class EntityCalpod extends BaseCreatureEntity implements IMob {
+public class EntityCalpod extends BaseCreatureEntity implements Enemy {
 	private int swarmLimit = 5;
 	private boolean griefing = true;
 
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityCalpod(EntityType<? extends EntityCalpod> entityType, World world) {
+    public EntityCalpod(EntityType<? extends EntityCalpod> entityType, Level world) {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.ARTHROPOD;
+        this.attribute = MobType.ARTHROPOD;
         this.hasAttackSound = true;
         this.setupMob();
 	}
@@ -47,7 +47,7 @@ public class EntityCalpod extends BaseCreatureEntity implements IMob {
 	// ========== Living Update ==========
 	@Override
     public void aiStep() {
-		if(!this.getCommandSenderWorld().isClientSide && this.hasAttackTarget() && this.getTarget() instanceof PlayerEntity && this.updateTick % 60 == 0) {
+		if(!this.getCommandSenderWorld().isClientSide && this.hasAttackTarget() && this.getTarget() instanceof Player && this.updateTick % 60 == 0) {
 			this.allyUpdate();
 		}
 

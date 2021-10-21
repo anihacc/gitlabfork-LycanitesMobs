@@ -3,9 +3,9 @@ package com.lycanitesmobs.core.info;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.targeting.FindAttackTargetGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.RevengeGoal;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.nbt.CompoundTag;
 
 public class ExtraMobBehaviour {
 	// ========== Mob ==========
@@ -60,7 +60,7 @@ public class ExtraMobBehaviour {
     // ==================================================
    	// ========== Read ===========
     /** Called from this host passing a compound storing all the extra behaviour options. **/
-    public void read(CompoundNBT nbtTagCompound) {
+    public void read(CompoundTag nbtTagCompound) {
     	// Stat Multipliers:
         if(nbtTagCompound.contains("MultiplierHealth")) {
             this.multiplierHealth = nbtTagCompound.getDouble("MultiplierHealth");
@@ -158,7 +158,7 @@ public class ExtraMobBehaviour {
     		this.host.targetSelector.removeGoal(this.host.aiDefendAnimals);
     		if(this.aiDefendAnimals) {
 				if(this.host.aiDefendAnimals == null) {
-					this.host.aiDefendAnimals = new RevengeGoal(this.host).setHelpClasses(AnimalEntity.class);
+					this.host.aiDefendAnimals = new RevengeGoal(this.host).setHelpClasses(Animal.class);
 				}
     			this.host.targetSelector.addGoal(10, this.host.aiDefendAnimals);
     		}
@@ -167,7 +167,7 @@ public class ExtraMobBehaviour {
     
     // ========== Write ==========
     /** Called from this host passing a compound writing all the extra behaviour options. **/
-    public void write(CompoundNBT nbtTagCompound) {
+    public void write(CompoundTag nbtTagCompound) {
     	// Stat Multipliers:
         nbtTagCompound.putDouble("MultiplierHealth", this.multiplierHealth);
     	nbtTagCompound.putDouble("MultiplierDefense", this.multiplierDefense);

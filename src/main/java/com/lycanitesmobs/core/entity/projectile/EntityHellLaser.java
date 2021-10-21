@@ -5,45 +5,45 @@ import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.entity.LaserProjectileEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.level.Level;
 
 public class EntityHellLaser extends LaserProjectileEntity {
     
     // ==================================================
  	//                   Constructors
  	// ==================================================
-	public EntityHellLaser(EntityType<? extends BaseProjectileEntity> entityType, World world) {
+	public EntityHellLaser(EntityType<? extends BaseProjectileEntity> entityType, Level world) {
 		super(entityType, world);
 	}
 
-	public EntityHellLaser(EntityType<? extends BaseProjectileEntity> entityType, World world, double par2, double par4, double par6, int setTime, int setDelay) {
+	public EntityHellLaser(EntityType<? extends BaseProjectileEntity> entityType, Level world, double par2, double par4, double par6, int setTime, int setDelay) {
 		super(entityType, world, par2, par4, par6, setTime, setDelay);
 	}
 
-	public EntityHellLaser(EntityType<? extends BaseProjectileEntity> entityType, World world, double par2, double par4, double par6) {
+	public EntityHellLaser(EntityType<? extends BaseProjectileEntity> entityType, Level world, double par2, double par4, double par6) {
 		this(entityType, world, par2, par4, par6, 25, 20);
 	}
 
-	public EntityHellLaser(EntityType<? extends BaseProjectileEntity> entityType, World world, double par2, double par4, double par6, int setTime, int setDelay, Entity followEntity) {
+	public EntityHellLaser(EntityType<? extends BaseProjectileEntity> entityType, Level world, double par2, double par4, double par6, int setTime, int setDelay, Entity followEntity) {
 		super(entityType, world, par2, par4, par6, setTime, setDelay, followEntity);
 	}
 
-	public EntityHellLaser(EntityType<? extends BaseProjectileEntity> entityType, World world, LivingEntity entityShooter, int setTime, int setDelay) {
+	public EntityHellLaser(EntityType<? extends BaseProjectileEntity> entityType, Level world, LivingEntity entityShooter, int setTime, int setDelay) {
 		super(entityType, world, entityShooter, setTime, setDelay);
 	}
 
-	public EntityHellLaser(EntityType<? extends BaseProjectileEntity> entityType, World world, LivingEntity entityLiving) {
+	public EntityHellLaser(EntityType<? extends BaseProjectileEntity> entityType, Level world, LivingEntity entityLiving) {
 		this(entityType, world, entityLiving, 25, 20);
 	}
 
-	public EntityHellLaser(EntityType<? extends BaseProjectileEntity> entityType, World world, LivingEntity entityShooter, int setTime, int setDelay, Entity followEntity) {
+	public EntityHellLaser(EntityType<? extends BaseProjectileEntity> entityType, Level world, LivingEntity entityShooter, int setTime, int setDelay, Entity followEntity) {
 		super(entityType, world, entityShooter, setTime, setDelay, followEntity);
 	}
     
@@ -80,7 +80,7 @@ public class EntityHellLaser extends LaserProjectileEntity {
     	boolean damageDealt = super.updateDamage(target);
         if(this.getOwner() != null && damageDealt) {
         	if(target instanceof LivingEntity)
-    			((LivingEntity)target).addEffect(new EffectInstance(Effects.WITHER, this.getEffectDuration(5), 0));
+    			((LivingEntity)target).addEffect(new MobEffectInstance(MobEffects.WITHER, this.getEffectDuration(5), 0));
         }
         return damageDealt;
     }

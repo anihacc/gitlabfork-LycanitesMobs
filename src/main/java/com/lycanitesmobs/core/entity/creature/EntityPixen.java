@@ -3,21 +3,26 @@ package com.lycanitesmobs.core.entity.creature;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
 import com.lycanitesmobs.core.entity.goals.actions.TemptGoal;
-import net.minecraft.block.Blocks;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.entity.*;
-import net.minecraft.entity.monster.IMob;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class EntityPixen extends TameableCreatureEntity implements IMob {
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobType;
+
+public class EntityPixen extends TameableCreatureEntity implements Enemy {
 
     protected boolean wantsToLand;
     protected boolean  isLanded;
@@ -36,11 +41,11 @@ public class EntityPixen extends TameableCreatureEntity implements IMob {
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityPixen(EntityType<? extends EntityPixen> entityType, World world) {
+    public EntityPixen(EntityType<? extends EntityPixen> entityType, Level world) {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEFINED;
+        this.attribute = MobType.UNDEFINED;
         this.spawnsOnLand = true;
         this.spawnsInWater = true;
         this.hasAttackSound = false;
@@ -103,9 +108,9 @@ public class EntityPixen extends TameableCreatureEntity implements IMob {
                     LivingEntity target = (LivingEntity) entityObj;
                     if (target != this && !(target instanceof EntityPixen) && target != this.getTarget() && target != this.getAvoidTarget()) {
                         int randomIndex = this.getRandom().nextInt(this.auraEffects.size());
-                        Effect effect = GameRegistry.findRegistry(Effect.class).getValue(new ResourceLocation(this.auraEffects.get(randomIndex)));
+                        MobEffect effect = GameRegistry.findRegistry(MobEffect.class).getValue(new ResourceLocation(this.auraEffects.get(randomIndex)));
                         if(effect != null) {
-                            target.addEffect(new EffectInstance(effect, this.auraDuration, this.auraAmplifier));
+                            target.addEffect(new MobEffectInstance(effect, this.auraDuration, this.auraAmplifier));
                         }
                     }
                 }
@@ -144,7 +149,7 @@ public class EntityPixen extends TameableCreatureEntity implements IMob {
     // ========== Ranged Attack ==========
     @Override
     public void attackRanged(Entity target, float range) {
-        this.fireProjectile("tricksterflare", target, range, 0, new Vector3d(0, 0, 0), 0.75f, 1f, 1F);
+        this.fireProjectile("tricksterflare", target, range, 0, new Vec3(0, 0, 0), 0.75f, 1f, 1F);
         super.attackRanged(target, range);
     }
     

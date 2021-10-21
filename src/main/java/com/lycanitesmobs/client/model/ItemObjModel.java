@@ -9,16 +9,16 @@ import com.lycanitesmobs.client.renderer.CustomRenderStates;
 import com.lycanitesmobs.client.renderer.IItemModelRenderer;
 import com.lycanitesmobs.client.renderer.layer.LayerItem;
 import com.lycanitesmobs.core.info.ModInfo;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Hand;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Vector2f;
-import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.util.math.vector.Vector4f;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.phys.Vec2;
+import com.mojang.math.Vector3f;
+import com.mojang.math.Vector4f;
 import org.apache.commons.io.IOUtils;
 
 import java.io.BufferedReader;
@@ -48,7 +48,7 @@ public abstract class ItemObjModel implements IAnimationModel {
 	public Map<String, AnimationPart> animationParts = new HashMap<>();
 
 	// Animating:
-	public MatrixStack matrixStack;
+	public PoseStack matrixStack;
 	/** The animator INSTANCE, this is a helper class that performs actual GL11 functions, etc. **/
 	protected Animator animator;
 	/** The animation data for this model. **/
@@ -84,7 +84,7 @@ public abstract class ItemObjModel implements IAnimationModel {
 			InputStream in = Minecraft.getInstance().getResourceManager().getResource(animPartsLoc).getInputStream();
 			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 			try {
-				JsonArray jsonArray = JSONUtils.fromJson(gson, reader, JsonArray.class, false);
+				JsonArray jsonArray = GsonHelper.fromJson(gson, reader, JsonArray.class, false);
 				Iterator<JsonElement> jsonIterator = jsonArray.iterator();
 				while (jsonIterator.hasNext()) {
 					JsonObject partJson = jsonIterator.next().getAsJsonObject();
@@ -114,7 +114,7 @@ public abstract class ItemObjModel implements IAnimationModel {
 			InputStream in = Minecraft.getInstance().getResourceManager().getResource(animationLocation).getInputStream();
 			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 			try {
-				JsonObject json = JSONUtils.fromJson(gson, reader, JsonObject.class, false);
+				JsonObject json = GsonHelper.fromJson(gson, reader, JsonObject.class, false);
 				this.animation = new ModelAnimation();
 				this.animation.loadFromJson(json);
 			}
@@ -166,7 +166,7 @@ public abstract class ItemObjModel implements IAnimationModel {
 	 * @param loop The animation tick for looping animations, etc.
 	 * @param brightness The base brightness to render at.
 	 */
-	public void render(ItemStack itemStack, Hand hand, MatrixStack matrixStack, IVertexBuilder vertexBuilder, IItemModelRenderer renderer, AnimationPart offsetObjPart, LayerItem layer, float loop, int brightness) {
+	public void render(ItemStack itemStack, InteractionHand hand, PoseStack matrixStack, VertexConsumer vertexBuilder, IItemModelRenderer renderer, AnimationPart offsetObjPart, LayerItem layer, float loop, int brightness) {
 		if(itemStack == null) {
 			return;
 		}
@@ -307,12 +307,12 @@ public abstract class ItemObjModel implements IAnimationModel {
 	}
 
 	/** Returns the texture offset to be used for this part and layer. **/
-	public Vector2f getPartTextureOffset(String partName, ItemStack itemStack, LayerItem layer, float loop) {
+	public Vec2 getPartTextureOffset(String partName, ItemStack itemStack, LayerItem layer, float loop) {
 		if(layer != null) {
 			return layer.getTextureOffset(partName, itemStack, loop);
 		}
 
-		return new Vector2f(0, 0);
+		return new Vec2(0, 0);
 	}
 
 	@Override

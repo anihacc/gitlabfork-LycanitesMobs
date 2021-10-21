@@ -6,20 +6,26 @@ import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.CustomItemEntity;
 import com.lycanitesmobs.core.info.ObjectLists;
 import com.lycanitesmobs.core.item.BaseItem;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.util.*;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
 
 import java.util.List;
+
+import net.minecraft.Util;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
 
 public class ItemHalloweenTreat extends BaseItem {
 	
@@ -40,7 +46,7 @@ public class ItemHalloweenTreat extends BaseItem {
  	//                    Item Use
  	// ==================================================
     @Override
-    public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
+    public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
         ItemStack itemStack = player.getItemInHand(hand);
          if(!player.abilities.instabuild) {
              itemStack.setCount(Math.max(0, itemStack.getCount() - 1));
@@ -53,17 +59,17 @@ public class ItemHalloweenTreat extends BaseItem {
          		this.openBad(itemStack, world, player);
          }
 
-        return new ActionResult(ActionResultType.SUCCESS, itemStack);
+        return new InteractionResultHolder(InteractionResult.SUCCESS, itemStack);
      }
     
     
     // ==================================================
   	//                       Good
   	// ==================================================
-    public void openGood(ItemStack itemStack, World world, PlayerEntity player) {
-		ITextComponent message = new TranslationTextComponent("item.lycanitesmobs." + this.itemName + ".good");
+    public void openGood(ItemStack itemStack, Level world, Player player) {
+		Component message = new TranslatableComponent("item.lycanitesmobs." + this.itemName + ".good");
 		player.sendMessage(message, Util.NIL_UUID);
-        this.playSound(world, player.position().x(), player.position().y(), player.position().z(), ObjectManager.getSound(this.itemName + "_good"), SoundCategory.AMBIENT, 5.0F, 1.0F);
+        this.playSound(world, player.position().x(), player.position().y(), player.position().z(), ObjectManager.getSound(this.itemName + "_good"), SoundSource.AMBIENT, 5.0F, 1.0F);
 		
 		// Three Random Treats:
 		List<ItemStack> dropStacks = ObjectLists.getItems("halloween_treats");
@@ -80,10 +86,10 @@ public class ItemHalloweenTreat extends BaseItem {
     // ==================================================
   	//                       Bad
   	// ==================================================
-    public void openBad(ItemStack itemStack, World world, PlayerEntity player) {
-		ITextComponent message = new TranslationTextComponent("item.lycanitesmobs." + this.itemName + ".bad");
+    public void openBad(ItemStack itemStack, Level world, Player player) {
+		Component message = new TranslatableComponent("item.lycanitesmobs." + this.itemName + ".bad");
 		player.sendMessage(message, Util.NIL_UUID);
-        this.playSound(world, player.position().x(), player.position().y(), player.position().z(), ObjectManager.getSound(this.itemName + "_bad"), SoundCategory.AMBIENT, 5.0F, 1.0F);
+        this.playSound(world, player.position().x(), player.position().y(), player.position().z(), ObjectManager.getSound(this.itemName + "_bad"), SoundSource.AMBIENT, 5.0F, 1.0F);
 		
 		// One Random Trick:
 		List<EntityType> entityTypes = ObjectLists.getEntites("halloween_tricks");
@@ -100,13 +106,13 @@ public class ItemHalloweenTreat extends BaseItem {
                     BaseCreatureEntity entityCreature = (BaseCreatureEntity) entity;
 					entityCreature.addLevel(world.random.nextInt(10));
                     if (entityCreature.creatureInfo.getName().equals("ent"))
-                        entityCreature.setCustomName(new StringTextComponent("Twisted Ent"));
+                        entityCreature.setCustomName(new TextComponent("Twisted Ent"));
 					else if (entityCreature.creatureInfo.getName().equals("treant"))
-						entityCreature.setCustomName(new StringTextComponent("Wicked Treant"));
+						entityCreature.setCustomName(new TextComponent("Wicked Treant"));
 					else if (entityCreature.creatureInfo.getName().equals("epion"))
-						entityCreature.setCustomName(new StringTextComponent("Vampire Bat"));
+						entityCreature.setCustomName(new TextComponent("Vampire Bat"));
 					else if (entityCreature.creatureInfo.getName().equals("grue"))
-						entityCreature.setCustomName(new StringTextComponent("Shadow Clown"));
+						entityCreature.setCustomName(new TextComponent("Shadow Clown"));
                 }
 
 	            world.addFreshEntity(entity);

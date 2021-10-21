@@ -9,16 +9,16 @@ import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ItemDrop;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import java.util.ArrayList;
@@ -226,7 +226,7 @@ public class MobSpawn {
 	 * @param biome The biome to check, if null, the biome check is ignored.
 	 * @param forceIgnoreDimension If true, the dimension check is ignored.
 	 **/
-	public boolean canSpawn(World world, int blockCount, Biome biome, boolean forceIgnoreDimension) {
+	public boolean canSpawn(Level world, int blockCount, Biome biome, boolean forceIgnoreDimension) {
 		// Global Check:
 		if(!CreatureManager.getInstance().spawnConfig.isAllowedGlobal(world)) {
 			return false;
@@ -364,7 +364,7 @@ public class MobSpawn {
 	/**
 	 * Creates a new Entity instance for spawning. Returns null on failure.
 	 **/
-	public LivingEntity createEntity(World world) {
+	public LivingEntity createEntity(Level world) {
 		try {
 			if(this.creatureInfo != null) {
 				return this.creatureInfo.createEntity(world);
@@ -388,12 +388,12 @@ public class MobSpawn {
 	/**
 	 * Called when a mob is spawned from this Mob Spawn.
 	 **/
-	public void onSpawned(LivingEntity entityLiving, PlayerEntity player) {
+	public void onSpawned(LivingEntity entityLiving, Player player) {
 		if(!"".equals(this.mobNameTag)) {
-			entityLiving.setCustomName(new StringTextComponent(this.mobNameTag));
+			entityLiving.setCustomName(new TextComponent(this.mobNameTag));
 		}
-		if(!this.getNaturalDespawn() && entityLiving instanceof MobEntity) {
-			((MobEntity)entityLiving).setPersistenceRequired();
+		if(!this.getNaturalDespawn() && entityLiving instanceof Mob) {
+			((Mob)entityLiving).setPersistenceRequired();
 		}
 
 		if(entityLiving instanceof BaseCreatureEntity) {

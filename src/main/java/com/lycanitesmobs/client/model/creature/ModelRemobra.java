@@ -2,8 +2,8 @@ package com.lycanitesmobs.client.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.CreatureObjModelOld;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -58,18 +58,18 @@ public class ModelRemobra extends CreatureObjModelOld {
     	// Idle:
     	if(partName.equals("leftwing")) {
     		rotX = 20;
-	        rotX -= Math.toDegrees(MathHelper.sin(loop * 0.4F) * 0.6F);
-		    rotZ -= Math.toDegrees(MathHelper.sin(loop * 0.4F) * 0.6F);
+	        rotX -= Math.toDegrees(Mth.sin(loop * 0.4F) * 0.6F);
+		    rotZ -= Math.toDegrees(Mth.sin(loop * 0.4F) * 0.6F);
     	}
     	if(partName.equals("rightwing")) {
     		rotX = 20;
-	        rotX -= Math.toDegrees(MathHelper.sin(loop * 0.4F) * 0.6F);
-	        rotZ -= Math.toDegrees(MathHelper.sin(loop * 0.4F + (float)Math.PI) * 0.6F);
+	        rotX -= Math.toDegrees(Mth.sin(loop * 0.4F) * 0.6F);
+	        rotZ -= Math.toDegrees(Mth.sin(loop * 0.4F + (float)Math.PI) * 0.6F);
     	}
     	if(partName.equals("tail")) {
-	        rotX -= Math.toDegrees(MathHelper.sin(loop * 0.1F) * 0.6F);
+	        rotX -= Math.toDegrees(Mth.sin(loop * 0.1F) * 0.6F);
     	}
-		float bob = -MathHelper.sin(loop * 0.2F) * 0.3F;
+		float bob = -Mth.sin(loop * 0.2F) * 0.3F;
 		if(bob < 0) bob = -bob;
 		posY += bob;
 		

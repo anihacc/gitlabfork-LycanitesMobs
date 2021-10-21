@@ -7,16 +7,16 @@ import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.creature.EntityRahovart;
 import com.lycanitesmobs.core.info.ObjectLists;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -28,15 +28,15 @@ public class EntityHellfireWall extends BaseProjectileEntity {
  	//                   Constructors
  	// ==================================================
 
-    public EntityHellfireWall(EntityType<? extends BaseProjectileEntity> entityType, World world) {
+    public EntityHellfireWall(EntityType<? extends BaseProjectileEntity> entityType, Level world) {
         super(entityType, world);
     }
 
-    public EntityHellfireWall(EntityType<? extends BaseProjectileEntity> entityType, World world, LivingEntity par2LivingEntity) {
+    public EntityHellfireWall(EntityType<? extends BaseProjectileEntity> entityType, Level world, LivingEntity par2LivingEntity) {
         super(entityType, world, par2LivingEntity);
     }
 
-    public EntityHellfireWall(EntityType<? extends BaseProjectileEntity> entityType, World world, double par2, double par4, double par6) {
+    public EntityHellfireWall(EntityType<? extends BaseProjectileEntity> entityType, Level world, double par2, double par4, double par6) {
         super(entityType, world, par2, par4, par6);
     }
     
@@ -73,7 +73,7 @@ public class EntityHellfireWall extends BaseProjectileEntity {
 
             for (int j = 0; j < list.size(); ++j) {
                 Entity entity = (Entity)list.get(j);
-                this.onHit(new EntityRayTraceResult(entity));
+                this.onHit(new EntityHitResult(entity));
             }
         }
     }
@@ -102,19 +102,19 @@ public class EntityHellfireWall extends BaseProjectileEntity {
     public void onDamage(LivingEntity target, float damage, boolean attackSuccess) {
 
         // Remove Good Potion Effects:
-        for(EffectInstance potionEffect : target.getActiveEffects().toArray(new EffectInstance[target.getActiveEffects().size()])) {
+        for(MobEffectInstance potionEffect : target.getActiveEffects().toArray(new MobEffectInstance[target.getActiveEffects().size()])) {
             if(ObjectLists.inEffectList("buffs", potionEffect.getEffect()))
                 target.removeEffect(potionEffect.getEffect());
         }
 
         boolean obliterate = true;
-        if(target instanceof PlayerEntity)
+        if(target instanceof Player)
             obliterate = false;
-        else if(target instanceof TameableEntity) {
-            obliterate = !(((TameableEntity)target).getOwner() instanceof PlayerEntity);
+        else if(target instanceof TamableAnimal) {
+            obliterate = !(((TamableAnimal)target).getOwner() instanceof Player);
         }
         else if(target instanceof TameableCreatureEntity) {
-            obliterate = !(((TameableCreatureEntity)target).getOwner() instanceof PlayerEntity);
+            obliterate = !(((TameableCreatureEntity)target).getOwner() instanceof Player);
         }
         if(target instanceof IGroupBoss)
             obliterate = false;

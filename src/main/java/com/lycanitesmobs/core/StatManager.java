@@ -1,10 +1,10 @@
 package com.lycanitesmobs.core;
 
 import com.lycanitesmobs.LycanitesMobs;
-import net.minecraft.stats.IStatFormatter;
+import net.minecraft.stats.StatFormatter;
 import net.minecraft.stats.Stat;
 import net.minecraft.stats.StatType;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.SimpleRegistry;
 import net.minecraftforge.event.RegistryEvent;
@@ -55,7 +55,7 @@ public class StatManager {
 		if(!this.statTypes.containsKey(typeName)) {
 			return null;
 		}
-		return this.statTypes.get(typeName).get(new ResourceLocation(LycanitesMobs.modInfo.modid, name), IStatFormatter.DEFAULT);
+		return this.statTypes.get(typeName).get(new ResourceLocation(LycanitesMobs.modInfo.modid, name), StatFormatter.DEFAULT);
 	}
 
 	@SubscribeEvent

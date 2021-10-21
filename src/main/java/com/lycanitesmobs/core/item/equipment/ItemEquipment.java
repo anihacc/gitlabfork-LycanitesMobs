@@ -9,28 +9,28 @@ import com.lycanitesmobs.core.entity.ExtendedEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.item.BaseItem;
 import com.lycanitesmobs.core.item.equipment.features.*;
-import net.minecraft.block.BlockState;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.inventory.ItemStackHelper;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.item.UseAction;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.client.gui.Font;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.item.UseAnim;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.*;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ToolType;
@@ -38,6 +38,19 @@ import net.minecraftforge.common.ToolType;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
+
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.BaseComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.damagesource.DamageSource;
 
 public class ItemEquipment extends BaseItem {
 	/** The maximum amount of parts that can be added to an Equipment Piece. **/
@@ -62,78 +75,78 @@ public class ItemEquipment extends BaseItem {
 	//                      Info
 	// ==================================================
 	@Override
-	public void appendHoverText(ItemStack itemStack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag tooltipFlag) {
+	public void appendHoverText(ItemStack itemStack, @Nullable Level world, List<Component> tooltip, TooltipFlag tooltipFlag) {
 		super.appendHoverText(itemStack, world, tooltip, tooltipFlag);
-		FontRenderer fontRenderer = Minecraft.getInstance().font;
-		for(ITextComponent description : this.getAdditionalDescriptions(itemStack, world, tooltipFlag)) {
+		Font fontRenderer = Minecraft.getInstance().font;
+		for(Component description : this.getAdditionalDescriptions(itemStack, world, tooltipFlag)) {
 			tooltip.add(description);
 		}
 	}
 
 	@Override
-	public ITextComponent getDescription(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-		return new StringTextComponent("");
+	public Component getDescription(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+		return new TextComponent("");
 	}
 
-	public List<ITextComponent> getAdditionalDescriptions(ItemStack itemStack, @Nullable World world, ITooltipFlag tooltipFlag) {
-		List<ITextComponent> descriptions = new ArrayList<>();
+	public List<Component> getAdditionalDescriptions(ItemStack itemStack, @Nullable Level world, TooltipFlag tooltipFlag) {
+		List<Component> descriptions = new ArrayList<>();
 
 		// Condition:
-		descriptions.add(new TranslationTextComponent("equipment.sharpness").append(" " + this.getSharpness(itemStack) + "/" + SHARPNESS_MAX).withStyle(TextFormatting.BLUE));
-		descriptions.add(new TranslationTextComponent("equipment.mana").append(" " + this.getMana(itemStack) + "/" + MANA_MAX).withStyle(TextFormatting.BLUE));
-		descriptions.add(new StringTextComponent("-------------------"));
+		descriptions.add(new TranslatableComponent("equipment.sharpness").append(" " + this.getSharpness(itemStack) + "/" + SHARPNESS_MAX).withStyle(ChatFormatting.BLUE));
+		descriptions.add(new TranslatableComponent("equipment.mana").append(" " + this.getMana(itemStack) + "/" + MANA_MAX).withStyle(ChatFormatting.BLUE));
+		descriptions.add(new TextComponent("-------------------"));
 
 		// Part Names:
 		for(ItemStack equipmentPartStack : this.getEquipmentPartStacks(itemStack)) {
 			ItemEquipmentPart equipmentPart = this.getEquipmentPart(equipmentPartStack);
 			if(equipmentPart == null)
 				continue;
-			descriptions.add(equipmentPart.getName(itemStack).plainCopy().withStyle(TextFormatting.DARK_GREEN));
+			descriptions.add(equipmentPart.getName(itemStack).plainCopy().withStyle(ChatFormatting.DARK_GREEN));
 		}
-		descriptions.add(new StringTextComponent("-------------------"));
+		descriptions.add(new TextComponent("-------------------"));
 
 		// Damage:
-		descriptions.add(new TranslationTextComponent("equipment.feature.damage")
-				.append(" " + String.format("%.0f", this.getDamageAmount(itemStack) + 1)).withStyle(TextFormatting.GOLD));
-		descriptions.add(new TranslationTextComponent("equipment.feature.damage.cooldown")
-				.append(" " + String.format("%.1f", this.getDamageCooldown(itemStack))).withStyle(TextFormatting.GOLD));
-		descriptions.add(new TranslationTextComponent("equipment.feature.damage.knockback")
-				.append(" " + String.format("%.0f", this.getDamageKnockback(itemStack))).withStyle(TextFormatting.GOLD));
-		descriptions.add(new TranslationTextComponent("equipment.feature.damage.range")
-				.append(" " + String.format("%.1f", this.getDamageRange(itemStack))).withStyle(TextFormatting.GOLD));
-		descriptions.add(new TranslationTextComponent("equipment.feature.damage.sweep")
-				.append(" " + String.format("%.0f", Math.min(this.getDamageSweep(itemStack), 360))).withStyle(TextFormatting.GOLD));
+		descriptions.add(new TranslatableComponent("equipment.feature.damage")
+				.append(" " + String.format("%.0f", this.getDamageAmount(itemStack) + 1)).withStyle(ChatFormatting.GOLD));
+		descriptions.add(new TranslatableComponent("equipment.feature.damage.cooldown")
+				.append(" " + String.format("%.1f", this.getDamageCooldown(itemStack))).withStyle(ChatFormatting.GOLD));
+		descriptions.add(new TranslatableComponent("equipment.feature.damage.knockback")
+				.append(" " + String.format("%.0f", this.getDamageKnockback(itemStack))).withStyle(ChatFormatting.GOLD));
+		descriptions.add(new TranslatableComponent("equipment.feature.damage.range")
+				.append(" " + String.format("%.1f", this.getDamageRange(itemStack))).withStyle(ChatFormatting.GOLD));
+		descriptions.add(new TranslatableComponent("equipment.feature.damage.sweep")
+				.append(" " + String.format("%.0f", Math.min(this.getDamageSweep(itemStack), 360))).withStyle(ChatFormatting.GOLD));
 
 		// Summaries:
-		ITextComponent harvestSummaries = this.getFeatureSummaries(itemStack, "harvest");
-		ITextComponent effectSummaries = this.getFeatureSummaries(itemStack, "effect");
-		ITextComponent projectileSummaries = this.getFeatureSummaries(itemStack, "projectile");
-		ITextComponent summonSummaries = this.getFeatureSummaries(itemStack, "summon");
+		Component harvestSummaries = this.getFeatureSummaries(itemStack, "harvest");
+		Component effectSummaries = this.getFeatureSummaries(itemStack, "effect");
+		Component projectileSummaries = this.getFeatureSummaries(itemStack, "projectile");
+		Component summonSummaries = this.getFeatureSummaries(itemStack, "summon");
 		if(!"".equals(harvestSummaries.getString()) || !"".equals(effectSummaries.getString()) || !"".equals(projectileSummaries.getString()) || !"".equals(summonSummaries.getString())) {
-			descriptions.add(new StringTextComponent("-------------------"));
+			descriptions.add(new TextComponent("-------------------"));
 
 			// Harvest:
 			if (!"".equals(harvestSummaries.getString())) {
-				descriptions.add(new TranslationTextComponent("equipment.feature.harvest")
-						.append(" ").append(harvestSummaries).withStyle(TextFormatting.DARK_PURPLE));
+				descriptions.add(new TranslatableComponent("equipment.feature.harvest")
+						.append(" ").append(harvestSummaries).withStyle(ChatFormatting.DARK_PURPLE));
 			}
 
 			// Effect:
 			if (!"".equals(effectSummaries.getString())) {
-				descriptions.add(new TranslationTextComponent("equipment.feature.effect")
-						.append(" ").append(effectSummaries).withStyle(TextFormatting.DARK_PURPLE));
+				descriptions.add(new TranslatableComponent("equipment.feature.effect")
+						.append(" ").append(effectSummaries).withStyle(ChatFormatting.DARK_PURPLE));
 			}
 
 			// Projectile:
 			if (!"".equals(projectileSummaries.getString())) {
-				descriptions.add(new TranslationTextComponent("equipment.feature.projectile")
-						.append(" ").append(projectileSummaries).withStyle(TextFormatting.DARK_PURPLE));
+				descriptions.add(new TranslatableComponent("equipment.feature.projectile")
+						.append(" ").append(projectileSummaries).withStyle(ChatFormatting.DARK_PURPLE));
 			}
 
 			// Summon:
 			if (!"".equals(summonSummaries.getString())) {
-				descriptions.add(new TranslationTextComponent("equipment.feature.summon")
-						.append(" ").append(summonSummaries).withStyle(TextFormatting.DARK_PURPLE));
+				descriptions.add(new TranslatableComponent("equipment.feature.summon")
+						.append(" ").append(summonSummaries).withStyle(ChatFormatting.DARK_PURPLE));
 			}
 		}
 
@@ -147,16 +160,16 @@ public class ItemEquipment extends BaseItem {
 	 * @param featureType The feature type to get the summaries of.
 	 * @return A string of summaries, empty if none are of the type are found.
 	 */
-	public ITextComponent getFeatureSummaries(ItemStack itemStack, String featureType) {
+	public Component getFeatureSummaries(ItemStack itemStack, String featureType) {
 		Map<EquipmentFeature, ItemStack> effectFeatures = this.getFeaturesByTypeWithPartStack(itemStack, featureType);
-		TextComponent featureSummaries = new StringTextComponent("");
+		BaseComponent featureSummaries = new TextComponent("");
 		boolean first = true;
 		for (EquipmentFeature equipmentFeature : effectFeatures.keySet()) {
 			if(!first) {
 				featureSummaries.append(", ");
 			}
 			first = false;
-			ITextComponent featureSummary = equipmentFeature.getSummary(effectFeatures.get(equipmentFeature), this.getPartLevel(effectFeatures.get(equipmentFeature)));
+			Component featureSummary = equipmentFeature.getSummary(effectFeatures.get(equipmentFeature), this.getPartLevel(effectFeatures.get(equipmentFeature)));
 			if(featureSummary != null) {
 				featureSummaries.append(featureSummary);
 			}
@@ -167,7 +180,7 @@ public class ItemEquipment extends BaseItem {
 	@OnlyIn(Dist.CLIENT)
 	@Nullable
 	@Override
-	public net.minecraft.client.gui.FontRenderer getFontRenderer(ItemStack stack) {
+	public net.minecraft.client.gui.Font getFontRenderer(ItemStack stack) {
 		return ClientManager.getInstance().getFontRenderer();
 	}
 
@@ -192,9 +205,9 @@ public class ItemEquipment extends BaseItem {
 	 */
 	public NonNullList<ItemStack> getEquipmentPartStacks(ItemStack itemStack) {
 		NonNullList<ItemStack> itemStacks = NonNullList.withSize(PART_LIMIT, ItemStack.EMPTY);
-		CompoundNBT nbt = this.getTagCompound(itemStack);
+		CompoundTag nbt = this.getTagCompound(itemStack);
 		if(nbt.contains("Items")) {
-			ItemStackHelper.loadAllItems(nbt, itemStacks); // Reads ItemStacks into a List from "Items" tag.
+			ContainerHelper.loadAllItems(nbt, itemStacks); // Reads ItemStacks into a List from "Items" tag.
 		}
 		return itemStacks;
 	}
@@ -241,8 +254,8 @@ public class ItemEquipment extends BaseItem {
 		}
 		NonNullList<ItemStack> itemStacks = this.getEquipmentPartStacks(equipmentStack);
 		itemStacks.set(slotIndex, equipmentPartStack);
-		CompoundNBT nbt = this.getTagCompound(equipmentStack);
-		ItemStackHelper.saveAllItems(nbt, itemStacks);
+		CompoundTag nbt = this.getTagCompound(equipmentStack);
+		ContainerHelper.saveAllItems(nbt, itemStacks);
 		equipmentStack.setTag(nbt);
 	}
 
@@ -375,8 +388,8 @@ public class ItemEquipment extends BaseItem {
 			sharpnessIncreased = equipmentPart.addSharpness(equipmentPartStack, sharpness) || sharpnessIncreased;
 		}
 
-		CompoundNBT nbt = this.getTagCompound(equipmentStack);
-		ItemStackHelper.saveAllItems(nbt, itemStacks);
+		CompoundTag nbt = this.getTagCompound(equipmentStack);
+		ContainerHelper.saveAllItems(nbt, itemStacks);
 		equipmentStack.setTag(nbt);
 		return sharpnessIncreased;
 	}
@@ -397,8 +410,8 @@ public class ItemEquipment extends BaseItem {
 			sharpnessDecreased = equipmentPart.removeSharpness(equipmentPartStack, sharpness) || sharpnessDecreased;
 		}
 
-		CompoundNBT nbt = this.getTagCompound(equipmentStack);
-		ItemStackHelper.saveAllItems(nbt, itemStacks);
+		CompoundTag nbt = this.getTagCompound(equipmentStack);
+		ContainerHelper.saveAllItems(nbt, itemStacks);
 		equipmentStack.setTag(nbt);
 		return sharpnessDecreased;
 	}
@@ -439,8 +452,8 @@ public class ItemEquipment extends BaseItem {
 			manaIncreased = equipmentPart.addMana(equipmentPartStack, mana) || manaIncreased;
 		}
 
-		CompoundNBT nbt = this.getTagCompound(equipmentStack);
-		ItemStackHelper.saveAllItems(nbt, itemStacks);
+		CompoundTag nbt = this.getTagCompound(equipmentStack);
+		ContainerHelper.saveAllItems(nbt, itemStacks);
 		equipmentStack.setTag(nbt);
 		return manaIncreased;
 	}
@@ -461,8 +474,8 @@ public class ItemEquipment extends BaseItem {
 			manaDecreased = equipmentPart.removeMana(equipmentPartStack, mana) || manaDecreased;
 		}
 
-		CompoundNBT nbt = this.getTagCompound(equipmentStack);
-		ItemStackHelper.saveAllItems(nbt, itemStacks);
+		CompoundTag nbt = this.getTagCompound(equipmentStack);
+		ContainerHelper.saveAllItems(nbt, itemStacks);
 		equipmentStack.setTag(nbt);
 		return manaDecreased;
 	}
@@ -472,8 +485,8 @@ public class ItemEquipment extends BaseItem {
 	//                       Using
 	// ==================================================
 	@Override
-	public UseAction getUseAnimation(ItemStack itemStack) {
-		return UseAction.BOW;
+	public UseAnim getUseAnimation(ItemStack itemStack) {
+		return UseAnim.BOW;
 	}
 
 	@Override
@@ -482,10 +495,10 @@ public class ItemEquipment extends BaseItem {
 	}
 
 	@Override
-	public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
+	public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
 		ItemStack itemStack = player.getItemInHand(hand);
 		if(this.getMana(itemStack) <= 0) {
-			return new ActionResult<>(ActionResultType.FAIL, itemStack);
+			return new InteractionResultHolder<>(InteractionResult.FAIL, itemStack);
 		}
 		boolean active = false;
 
@@ -499,9 +512,9 @@ public class ItemEquipment extends BaseItem {
 
 		if(active) {
 			player.startUsingItem(hand);
-			return new ActionResult<>(ActionResultType.SUCCESS, itemStack);
+			return new InteractionResultHolder<>(InteractionResult.SUCCESS, itemStack);
 		}
-		return new ActionResult<>(ActionResultType.FAIL, itemStack);
+		return new InteractionResultHolder<>(InteractionResult.FAIL, itemStack);
 	}
 
 	@Override
@@ -528,7 +541,7 @@ public class ItemEquipment extends BaseItem {
 	 * @param player The player using the equipment.
 	 * @param hand The active hand.
 	 */
-	public void onItemLeftClick(World world, PlayerEntity player, Hand hand) {
+	public void onItemLeftClick(Level world, Player player, InteractionHand hand) {
 		ItemStack itemStack = player.getItemInHand(hand);
 		if(this.getMana(itemStack) <= 0) {
 			return;
@@ -547,7 +560,7 @@ public class ItemEquipment extends BaseItem {
 	}
 
 	@Override
-	public ActionResultType useOn(ItemUseContext context) {
+	public InteractionResult useOn(UseOnContext context) {
 		boolean active = false;
 		ItemStack itemStack = context.getItemInHand();
 		if(this.getMana(itemStack) <= 0) {
@@ -565,13 +578,13 @@ public class ItemEquipment extends BaseItem {
 		if(active) {
 			context.getPlayer().startUsingItem(context.getHand());
 			this.removeSharpness(itemStack, 1);
-			return ActionResultType.SUCCESS;
+			return InteractionResult.SUCCESS;
 		}
 		return super.useOn(context);
 	}
 
 	@Override
-	public ActionResultType interactLivingEntity(ItemStack itemStack, PlayerEntity player, LivingEntity target, Hand hand) {
+	public InteractionResult interactLivingEntity(ItemStack itemStack, Player player, LivingEntity target, InteractionHand hand) {
 		boolean entityInteraction = false;
 
 		// Harvesting:
@@ -584,9 +597,9 @@ public class ItemEquipment extends BaseItem {
 
 		if(entityInteraction) {
 			this.removeSharpness(itemStack, 1);
-			return ActionResultType.SUCCESS;
+			return InteractionResult.SUCCESS;
 		}
-		return ActionResultType.FAIL;
+		return InteractionResult.FAIL;
 	}
 
 
@@ -611,7 +624,7 @@ public class ItemEquipment extends BaseItem {
 	}
 
 	@Override
-	public int getHarvestLevel(ItemStack itemStack, ToolType tool, @Nullable PlayerEntity player, @Nullable BlockState blockState) {
+	public int getHarvestLevel(ItemStack itemStack, ToolType tool, @Nullable Player player, @Nullable BlockState blockState) {
 		if(this.getSharpness(itemStack) <= 0) {
 			return -1;
 		}
@@ -656,7 +669,7 @@ public class ItemEquipment extends BaseItem {
 	}
 
 	@Override
-	public boolean mineBlock(ItemStack itemStack, World world, BlockState blockState, BlockPos pos, LivingEntity entityLiving) {
+	public boolean mineBlock(ItemStack itemStack, Level world, BlockState blockState, BlockPos pos, LivingEntity entityLiving) {
 		if(this.getSharpness(itemStack) <= 0) {
 			return super.mineBlock(itemStack, world, blockState, pos, entityLiving);
 		}
@@ -716,11 +729,11 @@ public class ItemEquipment extends BaseItem {
 					if (!possibleTarget.isAlive()) {
 						continue;
 					}
-					if (possibleTarget instanceof PlayerEntity) {
+					if (possibleTarget instanceof Player) {
 						continue;
 					}
-					if (possibleTarget instanceof TameableEntity) {
-						TameableEntity possibleTameableTarget = (TameableEntity) possibleTarget;
+					if (possibleTarget instanceof TamableAnimal) {
+						TamableAnimal possibleTameableTarget = (TamableAnimal) possibleTarget;
 						if (possibleTameableTarget.getOwner() != null && !attacker.getCommandSenderWorld().getServer().isPvpAllowed()) {
 							continue;
 						}
@@ -752,8 +765,8 @@ public class ItemEquipment extends BaseItem {
 
 					targets.add(possibleTarget);
 					DamageSource sweepSource = DamageSource.GENERIC;
-					if (attacker instanceof PlayerEntity) {
-						sweepSource = DamageSource.playerAttack((PlayerEntity) attacker);
+					if (attacker instanceof Player) {
+						sweepSource = DamageSource.playerAttack((Player) attacker);
 					}
 					possibleTarget.hurt(sweepSource, sweepDamage);
 				}
@@ -761,8 +774,8 @@ public class ItemEquipment extends BaseItem {
 		}
 
 		// Sweep Particles:
-		if(attacker instanceof PlayerEntity && targets.size() > 1) {
-			PlayerEntity playerAttacker = (PlayerEntity)attacker;
+		if(attacker instanceof Player && targets.size() > 1) {
+			Player playerAttacker = (Player)attacker;
 			playerAttacker.sweepAttack();
 			attacker.getCommandSenderWorld().playSound(null, attacker.position().x(), attacker.position().y(), attacker.position().z(), SoundEvents.PLAYER_ATTACK_SWEEP, attacker.getSoundSource(), 1.0F, 1.0F);
 		}
@@ -774,7 +787,7 @@ public class ItemEquipment extends BaseItem {
 			if (knockback != 0 && attacker != null && target != null) {
 				double xDist = attacker.position().x() - target.position().x();
 				double zDist = attacker.position().z() - target.position().z();
-				double xzDist = Math.max(MathHelper.sqrt(xDist * xDist + zDist * zDist), 0.01D);
+				double xzDist = Math.max(Mth.sqrt(xDist * xDist + zDist * zDist), 0.01D);
 				double motionCap = 10;
 				if (target.getDeltaMovement().x() < motionCap && target.getDeltaMovement().x() > -motionCap && target.getDeltaMovement().z() < motionCap && target.getDeltaMovement().z() > -motionCap) {
 					target.push(
@@ -818,9 +831,9 @@ public class ItemEquipment extends BaseItem {
 	 * @return The Attribute Modifier multimap with changes applied to it.
 	 */
 	@Override
-	public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack itemStack) {
+	public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack itemStack) {
 		Multimap<Attribute, AttributeModifier> multimap = MultimapBuilder.hashKeys().arrayListValues().build(super.getAttributeModifiers(slot, itemStack));
-		if (slot == EquipmentSlotType.MAINHAND) {
+		if (slot == EquipmentSlot.MAINHAND) {
 			multimap.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Weapon modifier", this.getDamageAmount(itemStack), AttributeModifier.Operation.ADDITION));
 			multimap.put(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Weapon modifier", -this.getDamageCooldown(itemStack), AttributeModifier.Operation.ADDITION));
 		}

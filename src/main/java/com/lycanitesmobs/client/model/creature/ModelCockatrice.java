@@ -2,8 +2,8 @@ package com.lycanitesmobs.client.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.template.ModelTemplateDragon;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.util.Mth;
 
 public class ModelCockatrice extends ModelTemplateDragon {
 
@@ -42,17 +42,17 @@ public class ModelCockatrice extends ModelTemplateDragon {
         float rotZ = 0F;
 
 		if(partName.equals("wattle")) {
-			rotZ += (float) -Math.toDegrees(MathHelper.cos(loop * 0.2F) * 0.2F + 0.1F);
+			rotZ += (float) -Math.toDegrees(Mth.cos(loop * 0.2F) * 0.2F + 0.1F);
 		}
 
 		if(partName.equals("tail") || partName.equals("tail01") || partName.equals("tail02")) {
-			rotX += (float) -Math.toDegrees(MathHelper.cos(loop * 0.2F) * 0.2F - 0.1F);
-			rotY += (float) -Math.toDegrees(MathHelper.cos(loop * 0.1F) * 0.4F - 0.2F);
+			rotX += (float) -Math.toDegrees(Mth.cos(loop * 0.2F) * 0.2F - 0.1F);
+			rotY += (float) -Math.toDegrees(Mth.cos(loop * 0.1F) * 0.4F - 0.2F);
 		}
 
         if(entity != null && !entity.isOnGround()) {
-			float flightLoop = MathHelper.sin(loop * 0.4F);
-			float flightLoopRev = MathHelper.sin(loop * 0.4F + (float)Math.PI);
+			float flightLoop = Mth.sin(loop * 0.4F);
+			float flightLoopRev = Mth.sin(loop * 0.4F + (float)Math.PI);
 
             if (partName.equals("wingleftupper")) {
 				this.rotate(80F, -(float)Math.toDegrees(flightLoop * 0.3F), -35F);

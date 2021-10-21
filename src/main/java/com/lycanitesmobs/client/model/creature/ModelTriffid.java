@@ -2,8 +2,8 @@ package com.lycanitesmobs.client.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.CreatureObjModel;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.util.Mth;
 
 public class ModelTriffid extends CreatureObjModel {
 
@@ -47,10 +47,10 @@ public class ModelTriffid extends CreatureObjModel {
 
         // Idle:
         if(partName.equals("mouthtop")) {
-            rotX -= MathHelper.cos(loop * 0.2F) * 4F;
+            rotX -= Mth.cos(loop * 0.2F) * 4F;
         }
         if(partName.equals("mouthbottom")) {
-            rotX += MathHelper.cos(loop * 0.2F) * 4F;
+            rotX += Mth.cos(loop * 0.2F) * 4F;
         }
 
         float animationScaleZ = 0.09F;
@@ -60,43 +60,43 @@ public class ModelTriffid extends CreatureObjModel {
         float animationDistanceY = 0.2F;
         float animationDistanceX = 0.15F;
         if(partName.equals("body")) {
-            rotZ += (animationDistanceZ / 2) - Math.toDegrees(MathHelper.cos(loop * 0.02F) * (animationDistanceZ / 2));
-            rotX += (animationDistanceX / 2) - Math.toDegrees(MathHelper.sin(loop * 0.01F) * (animationDistanceX / 2));
+            rotZ += (animationDistanceZ / 2) - Math.toDegrees(Mth.cos(loop * 0.02F) * (animationDistanceZ / 2));
+            rotX += (animationDistanceX / 2) - Math.toDegrees(Mth.sin(loop * 0.01F) * (animationDistanceX / 2));
         }
         if(partName.equals("tentacleleftmiddle")) {
-            rotZ -= Math.toDegrees(MathHelper.cos(loop * animationScaleZ) * animationDistanceZ + animationDistanceZ);
-            rotY += Math.toDegrees(MathHelper.cos(loop * animationScaleY) * animationDistanceY + animationDistanceY);
-            rotX -= Math.toDegrees(MathHelper.sin(loop * animationScaleX) * animationDistanceX);
+            rotZ -= Math.toDegrees(Mth.cos(loop * animationScaleZ) * animationDistanceZ + animationDistanceZ);
+            rotY += Math.toDegrees(Mth.cos(loop * animationScaleY) * animationDistanceY + animationDistanceY);
+            rotX -= Math.toDegrees(Mth.sin(loop * animationScaleX) * animationDistanceX);
         }
         if(partName.equals("tentaclerightfront")) {
-            rotZ += Math.toDegrees(MathHelper.cos(loop * animationScaleZ) * animationDistanceZ + animationDistanceZ);
-            rotY += Math.toDegrees(MathHelper.cos(loop * animationScaleY) * animationDistanceY + animationDistanceY);
-            rotX += Math.toDegrees(MathHelper.sin(loop * animationScaleX) * animationDistanceX);
+            rotZ += Math.toDegrees(Mth.cos(loop * animationScaleZ) * animationDistanceZ + animationDistanceZ);
+            rotY += Math.toDegrees(Mth.cos(loop * animationScaleY) * animationDistanceY + animationDistanceY);
+            rotX += Math.toDegrees(Mth.sin(loop * animationScaleX) * animationDistanceX);
         }
         if(partName.equals("tentaclerightback")) {
-            rotZ -= Math.toDegrees(MathHelper.cos(loop * animationScaleZ) * animationDistanceZ + animationDistanceZ);
-            rotY += Math.toDegrees(MathHelper.cos(loop * animationScaleY) * animationDistanceY + animationDistanceY);
-            rotX += Math.toDegrees(MathHelper.sin(loop * animationScaleX) * animationDistanceX);
+            rotZ -= Math.toDegrees(Mth.cos(loop * animationScaleZ) * animationDistanceZ + animationDistanceZ);
+            rotY += Math.toDegrees(Mth.cos(loop * animationScaleY) * animationDistanceY + animationDistanceY);
+            rotX += Math.toDegrees(Mth.sin(loop * animationScaleX) * animationDistanceX);
         }
         if(partName.equals("armleftmiddle")) {
-            rotZ += Math.toDegrees(MathHelper.cos(loop * animationScaleZ) * animationDistanceZ + animationDistanceZ);
-            rotY -= Math.toDegrees(MathHelper.cos(loop * animationScaleY) * animationDistanceY + animationDistanceY);
-            rotX += Math.toDegrees(MathHelper.sin(loop * animationScaleX) * animationDistanceX);
+            rotZ += Math.toDegrees(Mth.cos(loop * animationScaleZ) * animationDistanceZ + animationDistanceZ);
+            rotY -= Math.toDegrees(Mth.cos(loop * animationScaleY) * animationDistanceY + animationDistanceY);
+            rotX += Math.toDegrees(Mth.sin(loop * animationScaleX) * animationDistanceX);
         }
         if(partName.equals("armleftfront")) {
-            rotZ -= Math.toDegrees(MathHelper.cos(loop * animationScaleZ) * animationDistanceZ + animationDistanceZ);
-            rotY += Math.toDegrees(MathHelper.cos(loop * animationScaleY) * animationDistanceY + animationDistanceY);
-            rotX -= Math.toDegrees(MathHelper.sin(loop * animationScaleX) * animationDistanceX);
+            rotZ -= Math.toDegrees(Mth.cos(loop * animationScaleZ) * animationDistanceZ + animationDistanceZ);
+            rotY += Math.toDegrees(Mth.cos(loop * animationScaleY) * animationDistanceY + animationDistanceY);
+            rotX -= Math.toDegrees(Mth.sin(loop * animationScaleX) * animationDistanceX);
         }
         if(partName.equals("armrightback")) {
-            rotZ -= Math.toDegrees(MathHelper.cos(loop * animationScaleZ) * animationDistanceZ + animationDistanceZ);
-            rotY -= Math.toDegrees(MathHelper.cos(loop * animationScaleY) * animationDistanceY + animationDistanceY);
-            rotX -= Math.toDegrees(MathHelper.sin(loop * animationScaleX) * animationDistanceX);
+            rotZ -= Math.toDegrees(Mth.cos(loop * animationScaleZ) * animationDistanceZ + animationDistanceZ);
+            rotY -= Math.toDegrees(Mth.cos(loop * animationScaleY) * animationDistanceY + animationDistanceY);
+            rotX -= Math.toDegrees(Mth.sin(loop * animationScaleX) * animationDistanceX);
         }
         if(partName.equals("armrightmiddle")) {
-            rotZ -= Math.toDegrees(MathHelper.cos(loop * animationScaleZ) * animationDistanceZ + animationDistanceZ);
-            rotY -= Math.toDegrees(MathHelper.cos(loop * animationScaleY) * animationDistanceY + animationDistanceY);
-            rotX -= Math.toDegrees(MathHelper.sin(loop * animationScaleX) * animationDistanceX);
+            rotZ -= Math.toDegrees(Mth.cos(loop * animationScaleZ) * animationDistanceZ + animationDistanceZ);
+            rotY -= Math.toDegrees(Mth.cos(loop * animationScaleY) * animationDistanceY + animationDistanceY);
+            rotX -= Math.toDegrees(Mth.sin(loop * animationScaleX) * animationDistanceX);
         }
 
         // Attack:

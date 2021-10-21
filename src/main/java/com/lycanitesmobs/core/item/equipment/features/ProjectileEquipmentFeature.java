@@ -6,17 +6,17 @@ import com.lycanitesmobs.core.entity.CustomProjectileEntity;
 import com.lycanitesmobs.core.entity.ExtendedEntity;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.Pose;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.BaseComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
 
 public class ProjectileEquipmentFeature extends EquipmentFeature {
 	/** The name of the projectile to spawn. **/
@@ -96,13 +96,13 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 	}
 
 	@Override
-	public ITextComponent getDescription(ItemStack itemStack, int level) {
+	public Component getDescription(ItemStack itemStack, int level) {
 		if(!this.isActive(itemStack, level)) {
 			return null;
 		}
 
 		ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile(this.projectileName);
-		TextComponent description = (TextComponent) new TranslationTextComponent("equipment.feature." + this.featureType).append(" ")
+		BaseComponent description = (BaseComponent) new TranslatableComponent("equipment.feature." + this.featureType).append(" ")
 				.append(projectileInfo.getTitle());
 
 		if(this.bonusDamage != 0) {
@@ -111,11 +111,11 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 
 		if(!"simple".equals(this.projectilePattern)) {
 			description.append(" ")
-					.append(new TranslationTextComponent("equipment.feature.projectile.pattern." + this.projectilePattern));
+					.append(new TranslatableComponent("equipment.feature.projectile.pattern." + this.projectilePattern));
 		}
 
 		description.append(" ")
-				.append( new TranslationTextComponent("equipment.feature.projectile.trigger." + this.projectileTrigger));
+				.append( new TranslatableComponent("equipment.feature.projectile.trigger." + this.projectileTrigger));
 		if("hit".equals(this.projectileTrigger)) {
 			description.append(" " + String.format("%.0f", this.hitChance * 100) + "%");
 		}
@@ -127,12 +127,12 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 	}
 
 	@Override
-	public ITextComponent getSummary(ItemStack itemStack, int level) {
+	public Component getSummary(ItemStack itemStack, int level) {
 		if(!this.isActive(itemStack, level)) {
 			return null;
 		}
 		ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile(this.projectileName);
-		TextComponent summary = projectileInfo.getTitle();
+		BaseComponent summary = projectileInfo.getTitle();
 		if(this.bonusDamage != 0) {
 			summary.append(" +" + this.bonusDamage);
 		}
@@ -145,7 +145,7 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 	 * @param shooter The player using the equipment.
 	 * @param hand The hand the player is holding the equipment in.
 	 */
-	public boolean onUsePrimary(World world, PlayerEntity shooter, Hand hand) {
+	public boolean onUsePrimary(Level world, Player shooter, InteractionHand hand) {
 		if(!"primary".equalsIgnoreCase(this.projectileTrigger)) {
 			return false;
 		}
@@ -168,7 +168,7 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 	 * @param hand The hand the player is holding the equipment in.
 	 * @return True so that the item becomes active.
 	 */
-	public boolean onUseSecondary(World world, PlayerEntity shooter, Hand hand) {
+	public boolean onUseSecondary(Level world, Player shooter, InteractionHand hand) {
 		return "secondary".equalsIgnoreCase(this.projectileTrigger);
 	}
 
@@ -233,9 +233,9 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 			}
 		}
 
-		World world = shooter.getCommandSenderWorld();
+		Level world = shooter.getCommandSenderWorld();
 		BaseProjectileEntity mainProjectile = null;
-		Vector3d firePos = new Vector3d(shooter.position().x(), shooter.position().y() + (shooter.getDimensions(Pose.STANDING).height * 0.65), shooter.position().z());
+		Vec3 firePos = new Vec3(shooter.position().x(), shooter.position().y() + (shooter.getDimensions(Pose.STANDING).height * 0.65), shooter.position().z());
 		double offsetX = 0;
 
 		// Patterns:
@@ -285,16 +285,16 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 			}
 		}
 
-		if(shooter instanceof PlayerEntity && mainProjectile != null) {
-			world.playSound(null, shooter.blockPosition(), mainProjectile.getLaunchSound(), SoundCategory.NEUTRAL, 0.5F, 0.4F / (shooter.getRandom().nextFloat() * 0.4F + 0.8F));
+		if(shooter instanceof Player && mainProjectile != null) {
+			world.playSound(null, shooter.blockPosition(), mainProjectile.getLaunchSound(), SoundSource.NEUTRAL, 0.5F, 0.4F / (shooter.getRandom().nextFloat() * 0.4F + 0.8F));
 		}
 	}
 
 	/** Returns the Vec3f in front or behind the provided entity's position coords with the given distance and angle (in degrees), use a negative distance for behind. **/
-	public Vector3d getFacingPosition(LivingEntity entity, double distance, double angle) {
+	public Vec3 getFacingPosition(LivingEntity entity, double distance, double angle) {
 		angle = Math.toRadians(angle);
 		double xAmount = -Math.sin(angle);
 		double zAmount = Math.cos(angle);
-		return new Vector3d(entity.position().x() + (distance * xAmount), entity.position().y(), entity.position().z() + (distance * zAmount));
+		return new Vec3(entity.position().x() + (distance * xAmount), entity.position().y(), entity.position().z() + (distance * zAmount));
 	}
 }

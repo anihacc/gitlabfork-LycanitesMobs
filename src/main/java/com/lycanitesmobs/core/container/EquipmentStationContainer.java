@@ -4,16 +4,16 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.info.ItemManager;
 import com.lycanitesmobs.core.item.equipment.ItemEquipment;
 import com.lycanitesmobs.core.tileentity.EquipmentStationTileEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.core.BlockPos;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 
 public class EquipmentStationContainer extends BaseContainer {
-	public static final ContainerType<EquipmentStationContainer> TYPE = (ContainerType<EquipmentStationContainer>)IForgeContainerType.create(EquipmentStationContainer::new).setRegistryName(LycanitesMobs.MODID, "equipment_station");
+	public static final MenuType<EquipmentStationContainer> TYPE = (MenuType<EquipmentStationContainer>)IForgeContainerType.create(EquipmentStationContainer::new).setRegistryName(LycanitesMobs.MODID, "equipment_station");
 	public EquipmentStationTileEntity equipmentStation;
 	EquipmentStationEquipmentSlot equipmentSlot;
 	EquipmentStationRepairSlot repairSlot;
@@ -24,7 +24,7 @@ public class EquipmentStationContainer extends BaseContainer {
 	 * @param playerInventory The accessing player's inventory.
 	 * @param extraData A packet sent from the server to create the Container from.
 	 */
-	public EquipmentStationContainer(int windowId, PlayerInventory playerInventory, PacketBuffer extraData) {
+	public EquipmentStationContainer(int windowId, Inventory playerInventory, FriendlyByteBuf extraData) {
 		this(windowId, playerInventory, (EquipmentStationTileEntity) playerInventory.player.getCommandSenderWorld().getBlockEntity(BlockPos.of(extraData.readLong())));
 	}
 
@@ -33,7 +33,7 @@ public class EquipmentStationContainer extends BaseContainer {
 	 * @param equipmentStation The Equipment Forge Tile Entity.
 	 * @param playerInventory The Inventory of the accessing player.
 	 */
-	public EquipmentStationContainer(int windowId, PlayerInventory playerInventory, EquipmentStationTileEntity equipmentStation) {
+	public EquipmentStationContainer(int windowId, Inventory playerInventory, EquipmentStationTileEntity equipmentStation) {
 		super(TYPE, windowId);
 		this.equipmentStation = equipmentStation;
 
@@ -56,7 +56,7 @@ public class EquipmentStationContainer extends BaseContainer {
 	}
 
 	@Override
-	public boolean stillValid(PlayerEntity player) {
+	public boolean stillValid(Player player) {
 		if(this.equipmentStation == null || !this.equipmentStation.stillValid(player)) {
 			return false;
 		}
@@ -96,7 +96,7 @@ public class EquipmentStationContainer extends BaseContainer {
 	 * Disabled until fixed later.
 	 */
 	@Override
-	public ItemStack quickMoveStack(PlayerEntity player, int slotID) {
+	public ItemStack quickMoveStack(Player player, int slotID) {
 		return ItemStack.EMPTY;
 	}
 }

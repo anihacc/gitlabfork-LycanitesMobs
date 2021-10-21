@@ -5,8 +5,8 @@ import com.lycanitesmobs.client.model.template.ModelTemplateElemental;
 import com.lycanitesmobs.client.renderer.CreatureRenderer;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
 import com.lycanitesmobs.client.renderer.layer.specific.LayerZephyr;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.math.vector.Vector2f;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.phys.Vec2;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -67,9 +67,9 @@ public class ModelZephyr extends ModelTemplateElemental {
 	//              Get Part Texture Offset
 	// ==================================================
 	@Override
-	public Vector2f getBaseTextureOffset(String partName, Entity entity, boolean trophy, float loop) {
+	public Vec2 getBaseTextureOffset(String partName, Entity entity, boolean trophy, float loop) {
 		if(partName.contains("ribbon")) {
-			return new Vector2f(-loop * 25, 0);
+			return new Vec2(-loop * 25, 0);
 		}
 		return super.getBaseTextureOffset(partName, entity, trophy, loop);
 	}

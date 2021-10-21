@@ -2,10 +2,10 @@ package com.lycanitesmobs.core.entity.goals.targeting;
 
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.Pose;
-import net.minecraft.entity.passive.TameableEntity;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.TamableAnimal;
 
 public class DefendEntitiesGoal extends TargetingGoal {
 	/** The entity class to defend. **/
@@ -66,8 +66,8 @@ public class DefendEntitiesGoal extends TargetingGoal {
 
 		// Has Target Check:
 		LivingEntity targetTarget = target.getLastHurtByMob();
-		if(target instanceof CreatureEntity) {
-			targetTarget = ((CreatureEntity)target).getTarget();
+		if(target instanceof PathfinderMob) {
+			targetTarget = ((PathfinderMob)target).getTarget();
 		}
 		if(targetTarget == null) {
 			return false;
@@ -75,7 +75,7 @@ public class DefendEntitiesGoal extends TargetingGoal {
 
 		// Ownable Checks:
 		if(this.host.getOwner() != null) {
-			if(target instanceof TameableEntity && this.host.getOwner() == ((TameableEntity)target).getOwner()) {
+			if(target instanceof TamableAnimal && this.host.getOwner() == ((TamableAnimal)target).getOwner()) {
 				return false;
 			}
 			if(target instanceof TameableCreatureEntity && this.host.getOwner() == ((TameableCreatureEntity)target).getOwner()) {

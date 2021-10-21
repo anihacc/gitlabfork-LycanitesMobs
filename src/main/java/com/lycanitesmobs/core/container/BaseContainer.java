@@ -1,17 +1,17 @@
 package com.lycanitesmobs.core.container;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.Container;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class BaseContainer extends Container {
+public abstract class BaseContainer extends AbstractContainerMenu {
 	public Map<Integer, String> specialSlots = new HashMap<>();
 	public int playerInventoryStart = -1;
 	public int playerInventoryFinish = -1;
@@ -23,7 +23,7 @@ public abstract class BaseContainer extends Container {
 	// ==================================================
   	//                    Constructor
   	// ==================================================
-	public BaseContainer(ContainerType<?> type, int windowId) {
+	public BaseContainer(MenuType<?> type, int windowId) {
 		super(type, windowId);
 	}
 	
@@ -37,11 +37,11 @@ public abstract class BaseContainer extends Container {
 	 * @param y The starting y position of the grid.
 	 * @param slotIndex The inventory index for this slot.
 	 */
-	public Slot addSlot(IInventory inventory, int slotIndex, int x, int y) {
+	public Slot addSlot(Container inventory, int slotIndex, int x, int y) {
 		return this.addSlot(new BaseSlot(inventory, slotIndex, x, y));
 	}
 	
-	public void addPlayerSlots(PlayerInventory playerInventory, int offsetX, int offsetY) {
+	public void addPlayerSlots(Inventory playerInventory, int offsetX, int offsetY) {
 		// Player Hotbar:
 		this.playerInventoryStart = this.slots.size();
 		this.addSlotGrid(playerInventory, 8, 142, 1, 0, 8);
@@ -63,7 +63,7 @@ public abstract class BaseContainer extends Container {
 	 * @param start The starting slot index to draw (0 is the first slot).
 	 * @param finish The finishing slot index to draw (use -1 for the last slot index).
 	 */
-	public void addSlotGrid(IInventory inventory, int x, int y, int totalRows, int start, int finish) {
+	public void addSlotGrid(Container inventory, int x, int y, int totalRows, int start, int finish) {
 		// Assess Grid Shape:
 		int totalSlots = (finish - start) + 1;
 		if(totalSlots < 1)
@@ -87,10 +87,10 @@ public abstract class BaseContainer extends Container {
 		}
 			
 	}
-	public void addSlotGrid(IInventory inventory, int x, int y, int totalRows) {
+	public void addSlotGrid(Container inventory, int x, int y, int totalRows) {
 		this.addSlotGrid(inventory, x, y, totalRows, 0);
 	}
-	public void addSlotGrid(IInventory inventory, int x, int y, int totalRows, int start) {
+	public void addSlotGrid(Container inventory, int x, int y, int totalRows, int start) {
 		this.addSlotGrid(inventory, x, y, totalRows, start, inventory.getContainerSize() - 1);
 	}
 	
@@ -102,7 +102,7 @@ public abstract class BaseContainer extends Container {
 	 * @param start The starting slot index to draw (0 is the first slot).
 	 * @param finish The finishing slot index to draw (use -1 for the last slot index).
 	 */
-	public void addSlotsByColumn(IInventory inventory, int x, int y, int columnMax, int start, int finish) {
+	public void addSlotsByColumn(Container inventory, int x, int y, int columnMax, int start, int finish) {
 		int row = 0;
 		int column = 0;
 		for(int slot = 0; slot <= finish; slot++) {
@@ -120,7 +120,7 @@ public abstract class BaseContainer extends Container {
   	//                   Auto Placing
   	// ==================================================
 	@Override
-	public ItemStack quickMoveStack(PlayerEntity player, int slotID) {
+	public ItemStack quickMoveStack(Player player, int slotID) {
 		ItemStack itemStack = ItemStack.EMPTY;
 		Slot slot = this.slots.get(slotID);
 		if(slot == null || !slot.hasItem())
@@ -183,7 +183,7 @@ public abstract class BaseContainer extends Container {
   	//                     Interact
   	// ==================================================
 	@Override
-	public boolean stillValid(PlayerEntity entityplayer) {
+	public boolean stillValid(Player entityplayer) {
 		return true;
 	}
 }

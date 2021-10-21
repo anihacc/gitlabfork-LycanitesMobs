@@ -7,10 +7,10 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.spawner.Spawner;
 import com.lycanitesmobs.core.spawner.condition.SpawnCondition;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import java.util.*;
 
@@ -36,7 +36,7 @@ public abstract class SpawnTrigger {
 	public int cooldown = 0;
 
 	/** Stores the age tick of each player when they last attempted to sleep. **/
-	protected Map<PlayerEntity, Long> playerUsedTicks = new HashMap<>();
+	protected Map<Player, Long> playerUsedTicks = new HashMap<>();
 
 
 	/** Creates a Spawn Trigger from the provided JSON data. **/
@@ -124,7 +124,7 @@ public abstract class SpawnTrigger {
 
 
 	/** Triggers an actual spawn. **/
-	public boolean trigger(World world, PlayerEntity player, BlockPos triggerPos, int level, int chain) {
+	public boolean trigger(Level world, Player player, BlockPos triggerPos, int level, int chain) {
 		ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
 
 		// Cooldown:
@@ -152,7 +152,7 @@ public abstract class SpawnTrigger {
 	}
 
 	/** Checks all Conditions specific to this Trigger. **/
-	public boolean triggerConditionsMet(World world, PlayerEntity player, BlockPos triggerPos) {
+	public boolean triggerConditionsMet(Level world, Player player, BlockPos triggerPos) {
 		if(this.conditions.size() == 0) {
 			return true;
 		}

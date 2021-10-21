@@ -3,15 +3,15 @@ package com.lycanitesmobs.core.entity;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.projectile.ProjectileEntity;
-import net.minecraft.entity.projectile.ThrowableEntity;
-import net.minecraft.network.IPacket;
-import net.minecraft.network.play.server.SSpawnObjectPacket;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.entity.projectile.ThrowableProjectile;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.level.Level;
 
 public class RapidFireProjectileEntity extends BaseProjectileEntity {
 	// Properties:
@@ -33,12 +33,12 @@ public class RapidFireProjectileEntity extends BaseProjectileEntity {
     // ==================================================
  	//                   Constructors
  	// ==================================================
-	public RapidFireProjectileEntity(EntityType<? extends BaseProjectileEntity> entityType, World world) {
+	public RapidFireProjectileEntity(EntityType<? extends BaseProjectileEntity> entityType, Level world) {
 		super(entityType, world);
 		this.noPhysics = true;
 	}
 
-	public RapidFireProjectileEntity(EntityType<? extends BaseProjectileEntity> entityType, Class entityClass, World world, int setTime, int setDelay) {
+	public RapidFireProjectileEntity(EntityType<? extends BaseProjectileEntity> entityType, Class entityClass, Level world, int setTime, int setDelay) {
 		super(entityType, world);
 		this.projectileClass = entityClass;
 		this.rapidTime = setTime;
@@ -46,7 +46,7 @@ public class RapidFireProjectileEntity extends BaseProjectileEntity {
 		this.noPhysics = true;
 	}
 
-	public RapidFireProjectileEntity(EntityType<? extends BaseProjectileEntity> entityType, Class entityClass, World world, double x, double y, double z, int setTime, int setDelay) {
+	public RapidFireProjectileEntity(EntityType<? extends BaseProjectileEntity> entityType, Class entityClass, Level world, double x, double y, double z, int setTime, int setDelay) {
         super(entityType, world, x, y, z);
 		this.projectileClass = entityClass;
         this.rapidTime = setTime;
@@ -54,7 +54,7 @@ public class RapidFireProjectileEntity extends BaseProjectileEntity {
         this.noPhysics = true;
     }
 
-    public RapidFireProjectileEntity(EntityType<? extends BaseProjectileEntity> entityType, Class entityClass, World world, LivingEntity entityLivingBase, int setTime, int setDelay) {
+    public RapidFireProjectileEntity(EntityType<? extends BaseProjectileEntity> entityType, Class entityClass, Level world, LivingEntity entityLivingBase, int setTime, int setDelay) {
         super(entityType, world, entityLivingBase);
         //this.setSize(projectileWidth, projectileHeight);
         this.projectileClass = entityClass;
@@ -67,7 +67,7 @@ public class RapidFireProjectileEntity extends BaseProjectileEntity {
         this.noPhysics = true;
     }
 
-	public RapidFireProjectileEntity(EntityType<? extends BaseProjectileEntity> entityType, ProjectileInfo projectileInfo, World world, double par2, double par4, double par6, int setTime, int setDelay) {
+	public RapidFireProjectileEntity(EntityType<? extends BaseProjectileEntity> entityType, ProjectileInfo projectileInfo, Level world, double par2, double par4, double par6, int setTime, int setDelay) {
 		super(entityType, world, par2, par4, par6);
 		//this.setSize(projectileWidth, projectileHeight);
 		this.projectileInfo = projectileInfo;
@@ -76,7 +76,7 @@ public class RapidFireProjectileEntity extends BaseProjectileEntity {
 		this.noPhysics = true;
 	}
 
-	public RapidFireProjectileEntity(EntityType<? extends BaseProjectileEntity> entityType, ProjectileInfo projectileInfo, World world, LivingEntity entityLivingBase, int setTime, int setDelay) {
+	public RapidFireProjectileEntity(EntityType<? extends BaseProjectileEntity> entityType, ProjectileInfo projectileInfo, Level world, LivingEntity entityLivingBase, int setTime, int setDelay) {
 		super(entityType, world, entityLivingBase);
 		//this.setSize(projectileWidth, projectileHeight);
 		this.projectileInfo = projectileInfo;
@@ -90,8 +90,8 @@ public class RapidFireProjectileEntity extends BaseProjectileEntity {
 	}
 
 	@Override
-	public IPacket<?> getAddEntityPacket() {
-		return new SSpawnObjectPacket(this);
+	public Packet<?> getAddEntityPacket() {
+		return new ClientboundAddEntityPacket(this);
 	}
 	
     
@@ -136,12 +136,12 @@ public class RapidFireProjectileEntity extends BaseProjectileEntity {
  	//                 Fire Projectile
  	// ==================================================
     public void fireProjectile() {
-    	World world = this.getCommandSenderWorld();
+    	Level world = this.getCommandSenderWorld();
     	if(world.isClientSide)
     		return;
     	
 		try {
-	        ProjectileEntity projectile;
+	        Projectile projectile;
 
 	        if(this.shootingEntity == null) {
 				if(this.projectileInfo != null) {
@@ -162,8 +162,8 @@ public class RapidFireProjectileEntity extends BaseProjectileEntity {
 					projectile = ProjectileManager.getInstance().createOldProjectile(this.projectileClass, world, this.shootingEntity);
 					projectile.shoot(this.getDeltaMovement().x, this.getDeltaMovement().y, this.getDeltaMovement().z, 1, 1);
 				}
-                if(projectile instanceof ThrowableEntity) {
-                    ThrowableEntity entityThrowable = (ThrowableEntity)projectile;
+                if(projectile instanceof ThrowableProjectile) {
+                    ThrowableProjectile entityThrowable = (ThrowableProjectile)projectile;
                     entityThrowable.setPos(this.shootingEntity.position().x() + this.offsetX, this.shootingEntity.position().y() + this.offsetY, this.shootingEntity.position().z() + this.offsetZ);
                 }
 	        }
@@ -205,7 +205,7 @@ public class RapidFireProjectileEntity extends BaseProjectileEntity {
  	//                     Impact
  	// ==================================================
     @Override
-    protected void onHit(RayTraceResult rayTraceResult) {
+    protected void onHit(HitResult rayTraceResult) {
     	return;
     }
     

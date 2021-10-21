@@ -3,8 +3,8 @@ package com.lycanitesmobs.client.model.creature;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.CreatureObjModelOld;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -83,7 +83,7 @@ public class ModelNingen extends CreatureObjModelOld {
     		angleX = -1.0F;
     	}
     	if(partName.equals("mouth")) {
-    		rotation += Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F - 0.05F);
+    		rotation += Math.toDegrees(Mth.cos(loop * 0.09F) * 0.05F - 0.05F);
     		if(entity instanceof BaseCreatureEntity && ((BaseCreatureEntity)entity).isAttackOnCooldown())
     			rotation = 20;
         	doAngle(rotation, angleX, angleY, angleZ);
@@ -94,8 +94,8 @@ public class ModelNingen extends CreatureObjModelOld {
     	
     	// Arms (Idle and Attack):
     	if(partName.equals("leftarm")) {
-	        rotZ -= Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F + 0.05F);
-	        rotX -= Math.toDegrees(MathHelper.sin(loop * 0.067F) * 0.05F);
+	        rotZ -= Math.toDegrees(Mth.cos(loop * 0.09F) * 0.05F + 0.05F);
+	        rotX -= Math.toDegrees(Mth.sin(loop * 0.067F) * 0.05F);
     		if(entity instanceof BaseCreatureEntity && ((BaseCreatureEntity)entity).isAttackOnCooldown()) {
     			if(attackAlt)
     				rotY = 40;
@@ -104,8 +104,8 @@ public class ModelNingen extends CreatureObjModelOld {
     		}
     	}
     	if(partName.equals("rightarm")) {
-	        rotZ += Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F + 0.05F);
-	        rotX += Math.toDegrees(MathHelper.sin(loop * 0.067F) * 0.05F);
+	        rotZ += Math.toDegrees(Mth.cos(loop * 0.09F) * 0.05F + 0.05F);
+	        rotX += Math.toDegrees(Mth.sin(loop * 0.067F) * 0.05F);
     		if(entity instanceof BaseCreatureEntity && ((BaseCreatureEntity)entity).isAttackOnCooldown()) {
     			if(attackAlt)
     				rotY = 40;
@@ -129,7 +129,7 @@ public class ModelNingen extends CreatureObjModelOld {
     	if(partName.equals("rightarm"))
     		doTranslate(0.4F, 0.0F, 0.2F);
     	if(partName.equals("leftarm") || partName.equals("rightarm"))
-    		doRotate(0.0F, 0.0F, (float)rotateToPoint(0, 0, -0.5F, MathHelper.sin(time * walkSwing) * walkSwing));
+    		doRotate(0.0F, 0.0F, (float)rotateToPoint(0, 0, -0.5F, Mth.sin(time * walkSwing) * walkSwing));
     	if(partName.equals("leftarm"))
     		doTranslate(0.4F, 0.0F, -0.2F);
     	if(partName.equals("rightarm"))
@@ -137,7 +137,7 @@ public class ModelNingen extends CreatureObjModelOld {
     	
     	// Body and Tail (Walking):
     	if(partName.equals("body")) {
-    		rotZ += rotateToPoint(0, 0, -0.5F, MathHelper.sin(time * walkSwing) * walkSwing);
+    		rotZ += rotateToPoint(0, 0, -0.5F, Mth.sin(time * walkSwing) * walkSwing);
     	}
     	if(partName.equals("tail01") || partName.equals("tail02") || partName.equals("tail03") || partName.equals("tail04") || partName.equals("tail05") || partName.equals("tail06")) {
     		double[] tailAnimation = new double[] {0.0D, 0.0D, 0.0D, 0.0D};
@@ -169,8 +169,8 @@ public class ModelNingen extends CreatureObjModelOld {
     
     public double[] getTailRotation(String tailName, String targetName, int tailID, float walkSwing, float walkOffset, float time) {
     	double[] animation = new double[4]; // xPos, xRot, yRot, zRot
-    	animation[0] = MathHelper.sin((time + (walkOffset * tailID)) * walkSwing * tailID) * walkSwing;
-    	float parentX = MathHelper.sin((time + (walkOffset * (tailID - 1))) * walkSwing * tailID) * walkSwing;
+    	animation[0] = Mth.sin((time + (walkOffset * tailID)) * walkSwing * tailID) * walkSwing;
+    	float parentX = Mth.sin((time + (walkOffset * (tailID - 1))) * walkSwing * tailID) * walkSwing;
     	float[] partDifference = comparePartCenters(tailName, targetName);
     	if(tailID == 1)
     		partDifference[1] += 0.5F;

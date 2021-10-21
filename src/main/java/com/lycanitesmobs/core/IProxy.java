@@ -1,17 +1,17 @@
 package com.lycanitesmobs.core;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 
 public interface IProxy {
 	void registerEvents();
 
-	World getWorld();
+	Level getWorld();
 
 	void addEntityToWorld(int entityId, Entity entity);
 
-	public PlayerEntity getClientPlayer();
+	public Player getClientPlayer();
 
-	public void openScreen(int screenId, PlayerEntity player);
+	public void openScreen(int screenId, Player player);
 }

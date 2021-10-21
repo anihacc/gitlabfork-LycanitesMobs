@@ -4,12 +4,18 @@ import com.lycanitesmobs.core.entity.RideableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import com.lycanitesmobs.core.info.ElementInfo;
 import net.minecraft.entity.*;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 
 import java.util.List;
+
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.Pose;
 
 public class EntityWarg extends RideableCreatureEntity {
 
@@ -19,11 +25,11 @@ public class EntityWarg extends RideableCreatureEntity {
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityWarg(EntityType<? extends EntityWarg> entityType, World world) {
+    public EntityWarg(EntityType<? extends EntityWarg> entityType, Level world) {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEFINED;
+        this.attribute = MobType.UNDEFINED;
         this.hasAttackSound = true;
         this.spreadFire = false;
 
@@ -39,7 +45,7 @@ public class EntityWarg extends RideableCreatureEntity {
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setTargetClass(PlayerEntity.class).setLongMemory(false));
+        this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setTargetClass(Player.class).setLongMemory(false));
         this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this));
     }
 	
@@ -82,8 +88,8 @@ public class EntityWarg extends RideableCreatureEntity {
             if(!possibleTargets.isEmpty()) {
                 for(LivingEntity possibleTarget : possibleTargets) {
                     boolean doDamage = true;
-                    if(this.getRider() instanceof PlayerEntity) {
-                        if(MinecraftForge.EVENT_BUS.post(new AttackEntityEvent((PlayerEntity)this.getRider(), possibleTarget))) {
+                    if(this.getRider() instanceof Player) {
+                        if(MinecraftForge.EVENT_BUS.post(new AttackEntityEvent((Player)this.getRider(), possibleTarget))) {
                             doDamage = false;
                         }
                     }

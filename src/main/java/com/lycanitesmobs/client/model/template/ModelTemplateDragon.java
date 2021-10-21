@@ -1,8 +1,8 @@
 package com.lycanitesmobs.client.model.template;
 
 import com.lycanitesmobs.client.model.CreatureObjModel;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.util.Mth;
 
 public class ModelTemplateDragon extends CreatureObjModel {
     public boolean foldWings = true;
@@ -22,25 +22,25 @@ public class ModelTemplateDragon extends CreatureObjModel {
 
         // Idle:
         if(partName.equals("mouth") || partName.equals("mouthbottom")) {
-            this.rotate((float)-Math.toDegrees(MathHelper.cos(loop * 0.1F) * 0.1F - 0.1F), 0.0F, 0.0F);
+            this.rotate((float)-Math.toDegrees(Mth.cos(loop * 0.1F) * 0.1F - 0.1F), 0.0F, 0.0F);
         }
         if(partName.equals("mouthtop")) {
-            this.rotate((float)+Math.toDegrees(MathHelper.cos(loop * 0.1F) * 0.1F - 0.1F), 0.0F, 0.0F);
+            this.rotate((float)+Math.toDegrees(Mth.cos(loop * 0.1F) * 0.1F - 0.1F), 0.0F, 0.0F);
         }
         if(partName.equals("neck")) {
-            this.rotate((float) -Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F - 0.05F), 0.0F, 0.0F);
+            this.rotate((float) -Math.toDegrees(Mth.cos(loop * 0.09F) * 0.05F - 0.05F), 0.0F, 0.0F);
         }
         if(partName.equals("tail") || partName.equals("tail01") || partName.equals("tail02")) {
-            rotX += (float)-Math.toDegrees(MathHelper.cos(loop * 0.1F) * 0.05F - 0.25F);
-            rotY += (float)-Math.toDegrees(MathHelper.cos(loop * 0.05F) * 0.05F);
+            rotX += (float)-Math.toDegrees(Mth.cos(loop * 0.1F) * 0.05F - 0.25F);
+            rotY += (float)-Math.toDegrees(Mth.cos(loop * 0.05F) * 0.05F);
         }
 
         // Walking:
         if(entity != null && entity.isOnGround()) {
-            float walkLoop = MathHelper.cos(time * 0.3F);
-            float walkLoopRev = MathHelper.cos(time * 0.3F + (float)Math.PI);
-            float walkIdle = MathHelper.sin(loop * 0.1F);
-            float walkIdleRev = MathHelper.sin(loop * 0.1F + (float)Math.PI);
+            float walkLoop = Mth.cos(time * 0.3F);
+            float walkLoopRev = Mth.cos(time * 0.3F + (float)Math.PI);
+            float walkIdle = Mth.sin(loop * 0.1F);
+            float walkIdleRev = Mth.sin(loop * 0.1F + (float)Math.PI);
             float walkSwing = 0.6F;
             if (partName.equals("legleft") || partName.equals("legrightfront") || partName.equals("armrightfront01") || partName.equals("legleftback")) {
                 rotX += Math.toDegrees(walkLoopRev * walkSwing * distance);
@@ -102,8 +102,8 @@ public class ModelTemplateDragon extends CreatureObjModel {
 
         // Jumping/Flying:
         if(entity != null && !entity.isOnGround()) {
-            float flightLoop = MathHelper.sin(loop * 0.4F);
-            float flightLoopRev = MathHelper.sin(loop * 0.4F + (float)Math.PI);
+            float flightLoop = Mth.sin(loop * 0.4F);
+            float flightLoopRev = Mth.sin(loop * 0.4F + (float)Math.PI);
             if(partName.equals("body")) {
                 if(entity.getPassengers().isEmpty()) {
                     posY += flightLoop / 2;

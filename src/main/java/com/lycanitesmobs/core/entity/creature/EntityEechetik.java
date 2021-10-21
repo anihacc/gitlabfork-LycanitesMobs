@@ -4,31 +4,37 @@ import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.EffectBase;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.entity.*;
-import net.minecraft.entity.monster.IMob;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.GameRules;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.Level;
 
 import java.util.List;
 
-public class EntityEechetik extends TameableCreatureEntity implements IMob {
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.Pose;
+
+public class EntityEechetik extends TameableCreatureEntity implements Enemy {
 
 	public int myceliumRadius = 2;
 
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityEechetik(EntityType<? extends EntityEechetik> entityType, World world) {
+    public EntityEechetik(EntityType<? extends EntityEechetik> entityType, Level world) {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.ARTHROPOD;
+        this.attribute = MobType.ARTHROPOD;
         this.hasAttackSound = true;
         
         this.setupMob();
@@ -60,7 +66,7 @@ public class EntityEechetik extends TameableCreatureEntity implements IMob {
 		if(!this.getCommandSenderWorld().isClientSide && this.updateTick % 40 == 0 && this.hasAttackTarget()) {
 			EffectBase plague = ObjectManager.getEffect("plague");
 			if(plague != null) {
-				EffectInstance potionEffect = new EffectInstance(plague, this.getEffectDuration(2), 1);
+				MobEffectInstance potionEffect = new MobEffectInstance(plague, this.getEffectDuration(2), 1);
 				List aoeTargets = this.getNearbyEntities(LivingEntity.class, null, 2);
 				for(Object entityObj : aoeTargets) {
 					LivingEntity target = (LivingEntity) entityObj;

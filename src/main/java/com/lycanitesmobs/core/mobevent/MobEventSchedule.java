@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.mobevent;
 
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.ExtendedWorld;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 
 public class MobEventSchedule {
 	/** The Mob Event that this Schedule starts. **/
@@ -53,7 +53,7 @@ public class MobEventSchedule {
 	 * Returns true if this scheduled event can start on the provided world.
 	 * @return
 	 */
-	public boolean canStart(World world) {
+	public boolean canStart(Level world) {
 		if(world == null) {
 			return false;
 		}

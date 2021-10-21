@@ -3,30 +3,30 @@ package com.lycanitesmobs.core.entity;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
 
 public class CustomProjectileModelEntity extends CustomProjectileEntity {
 
 	// ==================================================
 	//                   Constructors
 	// ==================================================
-	public CustomProjectileModelEntity(EntityType<? extends BaseProjectileEntity> entityType, World world) {
+	public CustomProjectileModelEntity(EntityType<? extends BaseProjectileEntity> entityType, Level world) {
 		super(entityType, world);
 		this.modInfo = LycanitesMobs.modInfo;
 	}
 
-	public CustomProjectileModelEntity(EntityType<? extends BaseProjectileEntity> entityType, World world, ProjectileInfo projectileInfo) {
+	public CustomProjectileModelEntity(EntityType<? extends BaseProjectileEntity> entityType, Level world, ProjectileInfo projectileInfo) {
 		super(entityType, world, projectileInfo);
 	}
 
-	public CustomProjectileModelEntity(EntityType<? extends BaseProjectileEntity> entityType, World world, LivingEntity entityLiving, ProjectileInfo projectileInfo) {
+	public CustomProjectileModelEntity(EntityType<? extends BaseProjectileEntity> entityType, Level world, LivingEntity entityLiving, ProjectileInfo projectileInfo) {
 		super(entityType, world, entityLiving, projectileInfo);
 	}
 
-	public CustomProjectileModelEntity(EntityType<? extends BaseProjectileEntity> entityType, World world, double x, double y, double z, ProjectileInfo projectileInfo) {
+	public CustomProjectileModelEntity(EntityType<? extends BaseProjectileEntity> entityType, Level world, double x, double y, double z, ProjectileInfo projectileInfo) {
 		super(entityType, world, x, y, z, projectileInfo);
 	}
 

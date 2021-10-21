@@ -2,8 +2,8 @@ package com.lycanitesmobs.client.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.CreatureObjModelOld;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -59,17 +59,17 @@ public class ModelIka extends CreatureObjModelOld {
     	
     	// Idle:
         if(partName.equals("tail")) {
-            rotX = (float)-Math.toDegrees(MathHelper.cos(loop * 0.1F) * 0.05F - 0.05F);
-            rotY = (float)-Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F - 0.05F);
+            rotX = (float)-Math.toDegrees(Mth.cos(loop * 0.1F) * 0.05F - 0.05F);
+            rotY = (float)-Math.toDegrees(Mth.cos(loop * 0.09F) * 0.05F - 0.05F);
         }
 
         // Walking:
         float walkSwing = 0.2F;
         if(partName.equals("legleft")) {
-            rotY += Math.toDegrees(MathHelper.cos(time * 0.6662F + (float) Math.PI) * walkSwing * distance);
+            rotY += Math.toDegrees(Mth.cos(time * 0.6662F + (float) Math.PI) * walkSwing * distance);
         }
         if(partName.equals("legright")) {
-            rotY += Math.toDegrees(MathHelper.cos(time * 0.6662F) * walkSwing * distance);
+            rotY += Math.toDegrees(Mth.cos(time * 0.6662F) * walkSwing * distance);
         }
 		
 		// Shell:

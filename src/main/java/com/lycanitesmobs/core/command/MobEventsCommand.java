@@ -6,13 +6,13 @@ import com.lycanitesmobs.core.mobevent.MobEventManager;
 import com.lycanitesmobs.core.mobevent.MobEventPlayerServer;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.Commands;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 
 public class MobEventsCommand {
-	public static ArgumentBuilder<CommandSource, ?> register() {
+	public static ArgumentBuilder<CommandSourceStack, ?> register() {
 		return Commands.literal("mobevents")
 				.then(Commands.literal("reload").executes(MobEventsCommand::reload))
 				.then(Commands.literal("enable").executes(MobEventsCommand::enable))
@@ -23,16 +23,16 @@ public class MobEventsCommand {
 				.then(Commands.literal("list").executes(MobEventsCommand::list));
 	}
 
-	public static int reload(final CommandContext<CommandSource> context) {
+	public static int reload(final CommandContext<CommandSourceStack> context) {
 		if (!context.getSource().hasPermission(2)) {
 			return 0;
 		}
 		MobEventManager.getInstance().reload();
-		context.getSource().sendSuccess(new TranslationTextComponent("lyc.command.mobevents.reload"), true);
+		context.getSource().sendSuccess(new TranslatableComponent("lyc.command.mobevents.reload"), true);
 		return 0;
 	}
 
-	public static int enable(final CommandContext<CommandSource> context) {
+	public static int enable(final CommandContext<CommandSourceStack> context) {
 		if (!context.getSource().hasPermission(2)) {
 			return 0;
 		}
@@ -42,47 +42,47 @@ public class MobEventsCommand {
 		MobEventManager.getInstance().mobEventsRandom = true;
 		ConfigMobEvent.INSTANCE.mobEventsRandom.set(true);
 		ConfigMobEvent.INSTANCE.mobEventsRandom.save();
-		context.getSource().sendSuccess(new TranslationTextComponent("lyc.command.mobevents.enable"), true);
+		context.getSource().sendSuccess(new TranslatableComponent("lyc.command.mobevents.enable"), true);
 		return 0;
 	}
 
-	public static int disable(final CommandContext<CommandSource> context) {
+	public static int disable(final CommandContext<CommandSourceStack> context) {
 		if (!context.getSource().hasPermission(2)) {
 			return 0;
 		}
 		MobEventManager.getInstance().mobEventsRandom = false;
 		ConfigMobEvent.INSTANCE.mobEventsRandom.set(false);
 		ConfigMobEvent.INSTANCE.mobEventsRandom.save();
-		context.getSource().sendSuccess(new TranslationTextComponent("lyc.command.mobevents.disable"), true);
+		context.getSource().sendSuccess(new TranslatableComponent("lyc.command.mobevents.disable"), true);
 		return 0;
 	}
 
-	public static int creativeEnable(final CommandContext<CommandSource> context) {
+	public static int creativeEnable(final CommandContext<CommandSourceStack> context) {
 		if (!context.getSource().hasPermission(2)) {
 			return 0;
 		}
 		MobEventPlayerServer.testOnCreative = true;
-		context.getSource().sendSuccess(new TranslationTextComponent("lyc.command.mobevents.creative.enable"), true);
+		context.getSource().sendSuccess(new TranslatableComponent("lyc.command.mobevents.creative.enable"), true);
 		return 0;
 	}
 
-	public static int creativeDisable(final CommandContext<CommandSource> context) {
+	public static int creativeDisable(final CommandContext<CommandSourceStack> context) {
 		if (!context.getSource().hasPermission(2)) {
 			return 0;
 		}
 		MobEventPlayerServer.testOnCreative = false;
-		context.getSource().sendSuccess(new TranslationTextComponent("lyc.command.mobevents.creative.disable"), true);
+		context.getSource().sendSuccess(new TranslatableComponent("lyc.command.mobevents.creative.disable"), true);
 		return 0;
 	}
 
-	public static int list(final CommandContext<CommandSource> context) {
+	public static int list(final CommandContext<CommandSourceStack> context) {
 		if (!context.getSource().hasPermission(2)) {
 			return 0;
 		}
-		context.getSource().sendSuccess(new TranslationTextComponent("lyc.command.mobevents.list"), true);
+		context.getSource().sendSuccess(new TranslatableComponent("lyc.command.mobevents.list"), true);
 		for(MobEvent mobEvent : MobEventManager.getInstance().mobEvents.values()) {
 			String eventName = mobEvent.name + " (" + mobEvent.getTitle().getString() + ")";
-			context.getSource().sendSuccess(new StringTextComponent(eventName), true);
+			context.getSource().sendSuccess(new TextComponent(eventName), true);
 		}
 		return 0;
 	}

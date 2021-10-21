@@ -11,19 +11,19 @@ import com.lycanitesmobs.core.entity.*;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.item.summoningstaff.ItemStaffSummoning;
 import com.lycanitesmobs.client.mobevent.MobEventPlayerClient;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -43,7 +43,7 @@ public class BaseOverlay extends BaseGui {
     //                     Constructor
     // ==================================================
 	public BaseOverlay(Minecraft minecraft) {
-		super(new TranslationTextComponent("gui.overlay"));
+		super(new TranslatableComponent("gui.overlay"));
 		this.minecraft = Minecraft.getInstance();
 		this.drawHelper = new DrawHelper(minecraft, minecraft.font);
 	}
@@ -56,12 +56,12 @@ public class BaseOverlay extends BaseGui {
 	public void onRenderExperienceBar(RenderGameOverlayEvent event) {
         if(ClientManager.getInstance().getClientPlayer() == null)
             return;
-        PlayerEntity player = ClientManager.getInstance().getClientPlayer();
+        Player player = ClientManager.getInstance().getClientPlayer();
 
 		if(event.isCancelable() || event.getType() != ElementType.EXPERIENCE) {
 			return;
 		}
-		MatrixStack matrixStack = event.getMatrixStack();
+		PoseStack matrixStack = event.getMatrixStack();
 
 		matrixStack.pushPose();
 		RenderSystem.disableLighting();
@@ -90,8 +90,8 @@ public class BaseOverlay extends BaseGui {
 		// ========== Summoning Focus Bar ==========
         ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
 		if(playerExt != null && !this.minecraft.player.abilities.instabuild && (
-                (this.minecraft.player.getItemInHand(Hand.MAIN_HAND).getItem() instanceof ItemStaffSummoning)
-                || (this.minecraft.player.getItemInHand(Hand.OFF_HAND).getItem() instanceof ItemStaffSummoning)
+                (this.minecraft.player.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof ItemStaffSummoning)
+                || (this.minecraft.player.getItemInHand(InteractionHand.OFF_HAND).getItem() instanceof ItemStaffSummoning)
                 )) {
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 			this.minecraft.getTextureManager().bind(TextureManager.getTexture("GUIInventoryCreature"));
@@ -129,9 +129,9 @@ public class BaseOverlay extends BaseGui {
             
             // Mount Controls Message:
             if(this.mountMessageTime > 0) {
-            	ITextComponent mountMessage = new TranslationTextComponent("gui.mount.controls.prefix")
+            	Component mountMessage = new TranslatableComponent("gui.mount.controls.prefix")
 						.append(" ").append(KeyHandler.instance.mountAbility.getTranslatedKeyMessage())
-						.append(" ").append(new TranslationTextComponent("gui.mount.controls.ability"));
+						.append(" ").append(new TranslatableComponent("gui.mount.controls.ability"));
 //						.append(" ").append(KeyHandler.instance.dismount.getTranslatedKeyMessage())
 //						.append(" ").append(new TranslationTextComponent("gui.mount.controls.dismount"));
 				this.minecraft.gui.setOverlayMessage(mountMessage, false);
@@ -161,9 +161,9 @@ public class BaseOverlay extends BaseGui {
 			this.mountMessageTime = this.mountMessageTimeMax;
 
 		// ========== Taming Reputation Bar ==========
-		RayTraceResult mouseOver = Minecraft.getInstance().hitResult;
-		if(mouseOver instanceof EntityRayTraceResult) {
-			Entity mouseOverEntity = ((EntityRayTraceResult) mouseOver).getEntity();
+		HitResult mouseOver = Minecraft.getInstance().hitResult;
+		if(mouseOver instanceof EntityHitResult) {
+			Entity mouseOverEntity = ((EntityHitResult) mouseOver).getEntity();
 			if (mouseOverEntity instanceof BaseCreatureEntity) {
 				BaseCreatureEntity creatureEntity = (BaseCreatureEntity)mouseOverEntity;
 				CreatureInfo creatureInfo = creatureEntity.creatureInfo;
@@ -182,7 +182,7 @@ public class BaseOverlay extends BaseGui {
 						barFillTexture = "GUIPetBarHealth";
 					}
 					this.drawHelper.drawTexture(matrixStack, TextureManager.getTexture(barFillTexture), barX, barY, 0, reputationNormal, 1, barWidth * reputationNormal, barHeight);
-					String reputationText = new TranslationTextComponent("entity.reputation").getString() + ": " + relationshipEntry.getReputation() + "/" + creatureInfo.getTamingReputation();
+					String reputationText = new TranslatableComponent("entity.reputation").getString() + ": " + relationshipEntry.getReputation() + "/" + creatureInfo.getTamingReputation();
 					this.drawHelper.getFontRenderer().draw(matrixStack, reputationText, barCenter - ((float) this.drawHelper.getStringWidth(reputationText) / 2), barY + 2, 0xFFFFFF);
 				}
 			}
@@ -204,9 +204,9 @@ public class BaseOverlay extends BaseGui {
 		}
 
 		// Entity:
-		RayTraceResult mouseOver = Minecraft.getInstance().hitResult;
-		if(mouseOver instanceof EntityRayTraceResult) {
-			Entity mouseOverEntity = ((EntityRayTraceResult)mouseOver).getEntity();
+		HitResult mouseOver = Minecraft.getInstance().hitResult;
+		if(mouseOver instanceof EntityHitResult) {
+			Entity mouseOverEntity = ((EntityHitResult)mouseOver).getEntity();
 			if(mouseOverEntity instanceof BaseCreatureEntity) {
 				BaseCreatureEntity mouseOverCreature = (BaseCreatureEntity)mouseOverEntity;
 				event.getLeft().add("");

@@ -5,7 +5,7 @@ import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.entity.CustomProjectileEntity;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 
 public class ProjectileRenderFactory<T extends BaseProjectileEntity> implements IRenderFactory {
@@ -27,7 +27,7 @@ public class ProjectileRenderFactory<T extends BaseProjectileEntity> implements 
 	}
 
     @Override
-    public EntityRenderer<? super T> createRenderFor(EntityRendererManager manager) {
+    public EntityRenderer<? super T> createRenderFor(EntityRenderDispatcher manager) {
 		// Old Projectile Obj Models:
 		if(this.oldModel) {
 			try {

@@ -9,11 +9,11 @@ import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureEffect;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureScrolling;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import net.minecraft.util.math.vector.Vector4f;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector2f;
+import com.mojang.math.Vector4f;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.util.Mth;
+import net.minecraft.world.phys.Vec2;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -46,7 +46,7 @@ public class ModelWisp extends ModelTemplateElemental {
 		super.addCustomLayers(renderer);
 		renderer.addLayer(new LayerCreatureEffect(renderer, "ball", true, CustomRenderStates.BLEND.NORMAL.id, true));
 		renderer.addLayer(new LayerCreatureEffect(renderer, "ball_glow",  "ball", true, CustomRenderStates.BLEND.ADD.id, true));
-		renderer.addLayer(new LayerCreatureScrolling(renderer, "hair", true, CustomRenderStates.BLEND.NORMAL.id, true, new Vector2f(0, 4)));
+		renderer.addLayer(new LayerCreatureScrolling(renderer, "hair", true, CustomRenderStates.BLEND.NORMAL.id, true, new Vec2(0, 4)));
 	}
 
 	@Override
@@ -73,35 +73,35 @@ public class ModelWisp extends ModelTemplateElemental {
 
 		// Hair:
 		if(partName.equals("haircenter")) {
-			this.rotate((float)Math.toDegrees(MathHelper.cos(loop * 0.1F) * 0.1F), 0, 0);
+			this.rotate((float)Math.toDegrees(Mth.cos(loop * 0.1F) * 0.1F), 0, 0);
 		}
 		else if(partName.equals("hairleft")) {
-			this.rotate((float)Math.toDegrees(MathHelper.cos(loop * 0.05F) * 0.1F), (float)Math.toDegrees(MathHelper.cos(loop * 0.1F) * 0.2F - 0.2F), 0);
+			this.rotate((float)Math.toDegrees(Mth.cos(loop * 0.05F) * 0.1F), (float)Math.toDegrees(Mth.cos(loop * 0.1F) * 0.2F - 0.2F), 0);
 		}
 		else if(partName.equals("hairright")) {
-			this.rotate((float)Math.toDegrees(MathHelper.cos(loop * 0.05F) * 0.1F), -(float)Math.toDegrees(MathHelper.cos(loop * 0.1F) * 0.2F - 0.2F), 0);
+			this.rotate((float)Math.toDegrees(Mth.cos(loop * 0.05F) * 0.1F), -(float)Math.toDegrees(Mth.cos(loop * 0.1F) * 0.2F - 0.2F), 0);
 		}
 		else if(partName.contains("fringeleft")) {
 			this.rotate(
-					-(float)Math.toDegrees(MathHelper.sin(loop * 0.067F) * 0.05F),
+					-(float)Math.toDegrees(Mth.sin(loop * 0.067F) * 0.05F),
 					0,
-					-(float)Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.1F)
+					-(float)Math.toDegrees(Mth.cos(loop * 0.09F) * 0.1F)
 			);
 		}
 		else if(partName.contains("fringeright")) {
 			this.rotate(
-					(float)Math.toDegrees(MathHelper.sin(loop * 0.067F) * 0.05F),
+					(float)Math.toDegrees(Mth.sin(loop * 0.067F) * 0.05F),
 					0,
-					(float)Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.1F)
+					(float)Math.toDegrees(Mth.cos(loop * 0.09F) * 0.1F)
 			);
 		}
 
 		// Arms:
 		else if(partName.equals("armleft")) {
-			this.rotate(0, 0, (float)Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.1F));
+			this.rotate(0, 0, (float)Math.toDegrees(Mth.cos(loop * 0.09F) * 0.1F));
 		}
 		else if(partName.equals("armright")) {
-			this.rotate(0, 0, -(float)Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.1F));
+			this.rotate(0, 0, -(float)Math.toDegrees(Mth.cos(loop * 0.09F) * 0.1F));
 		}
 		if(entity instanceof BaseCreatureEntity && ((BaseCreatureEntity)entity).isAttackOnCooldown()) {
 			if (partName.equals("armleft"))

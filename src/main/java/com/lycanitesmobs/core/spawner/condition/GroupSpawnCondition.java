@@ -3,9 +3,9 @@ package com.lycanitesmobs.core.spawner.condition;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -40,7 +40,7 @@ public class GroupSpawnCondition extends SpawnCondition {
 
 
     @Override
-    public boolean isMet(World world, PlayerEntity player, BlockPos position) {
+    public boolean isMet(Level world, Player player, BlockPos position) {
 		int conditionsMet = 0;
 		int conditionsRequired = this.conditionsRequired > 0 ? this.conditionsRequired : this.conditions.size();
 		for(SpawnCondition condition : this.conditions) {

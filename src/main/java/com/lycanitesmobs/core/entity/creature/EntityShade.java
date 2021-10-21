@@ -4,26 +4,32 @@ import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.RideableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import net.minecraft.entity.*;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.DamageSource;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 
 import java.util.List;
+
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.Pose;
 
 public class EntityShade extends RideableCreatureEntity {
 
 	// ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityShade(EntityType<? extends EntityShade> entityType, World world) {
+    public EntityShade(EntityType<? extends EntityShade> entityType, Level world) {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEFINED;
+        this.attribute = MobType.UNDEFINED;
         this.hasAttackSound = true;
         this.hasJumpSound = true;
         this.canGrow = false;
@@ -122,16 +128,16 @@ public class EntityShade extends RideableCreatureEntity {
         if(!possibleTargets.isEmpty()) {
             for(LivingEntity possibleTarget : possibleTargets) {
                 boolean doDamage = true;
-                if(this.getRider() instanceof PlayerEntity) {
-                    if(MinecraftForge.EVENT_BUS.post(new AttackEntityEvent((PlayerEntity)this.getRider(), possibleTarget))) {
+                if(this.getRider() instanceof Player) {
+                    if(MinecraftForge.EVENT_BUS.post(new AttackEntityEvent((Player)this.getRider(), possibleTarget))) {
                         doDamage = false;
                     }
                 }
                 if(doDamage) {
                     if (ObjectManager.getEffect("fear") != null)
-                        possibleTarget.addEffect(new EffectInstance(ObjectManager.getEffect("fear"), this.getEffectDuration(5), 1));
+                        possibleTarget.addEffect(new MobEffectInstance(ObjectManager.getEffect("fear"), this.getEffectDuration(5), 1));
                     else
-                        possibleTarget.addEffect(new EffectInstance(Effects.WEAKNESS, 10 * 20, 0));
+                        possibleTarget.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 10 * 20, 0));
                 }
             }
         }

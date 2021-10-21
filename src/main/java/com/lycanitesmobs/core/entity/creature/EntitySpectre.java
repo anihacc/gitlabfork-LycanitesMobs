@@ -6,19 +6,19 @@ import com.lycanitesmobs.api.IGroupHeavy;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import com.lycanitesmobs.core.entity.goals.actions.abilities.StealthGoal;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.Pose;
-import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.play.server.SEntityVelocityPacket;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.Level;
 
-public class EntitySpectre extends TameableCreatureEntity implements IMob, IGroupHeavy {
+public class EntitySpectre extends TameableCreatureEntity implements Enemy, IGroupHeavy {
 
 	protected int pullRange = 6;
 	protected int pullEnergy = 0;
@@ -30,11 +30,11 @@ public class EntitySpectre extends TameableCreatureEntity implements IMob, IGrou
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntitySpectre(EntityType<? extends EntitySpectre> entityType, World world) {
+    public EntitySpectre(EntityType<? extends EntitySpectre> entityType, Level world) {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEFINED;
+        this.attribute = MobType.UNDEFINED;
         this.hasAttackSound = true;
         this.spawnsInWater = true;
         this.setupMob();
@@ -73,15 +73,15 @@ public class EntitySpectre extends TameableCreatureEntity implements IMob, IGrou
 				for (LivingEntity entity : this.getNearbyEntities(LivingEntity.class, null, this.pullRange)) {
 					if (entity == this || entity == this.getControllingPassenger() || entity instanceof IGroupBoss || entity instanceof IGroupHeavy || entity.hasEffect(ObjectManager.getEffect("weight")) || !this.canAttack(entity))
 						continue;
-					ServerPlayerEntity player = null;
-					if (entity instanceof ServerPlayerEntity) {
-						player = (ServerPlayerEntity) entity;
+					ServerPlayer player = null;
+					if (entity instanceof ServerPlayer) {
+						player = (ServerPlayer) entity;
 						if (player.abilities.instabuild)
 							continue;
 					}
 					double xDist = this.position().x() - entity.position().x();
 					double zDist = this.position().z() - entity.position().z();
-					double xzDist = MathHelper.sqrt(xDist * xDist + zDist * zDist);
+					double xzDist = Mth.sqrt(xDist * xDist + zDist * zDist);
 					double factor = 0.1D;
 					double motionCap = 10;
 					if(entity.getDeltaMovement().x() < motionCap && entity.getDeltaMovement().x() > -motionCap && entity.getDeltaMovement().z() < motionCap && entity.getDeltaMovement().z() > -motionCap) {
@@ -92,7 +92,7 @@ public class EntitySpectre extends TameableCreatureEntity implements IMob, IGrou
 						);
 					}
 					if (player != null)
-						player.connection.send(new SEntityVelocityPacket(entity));
+						player.connection.send(new ClientboundSetEntityMotionPacket(entity));
 				}
 				if(--this.pullEnergy <= 0) {
 					this.pullRecharging = true;

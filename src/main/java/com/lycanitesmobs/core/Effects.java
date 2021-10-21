@@ -9,17 +9,17 @@ import com.lycanitesmobs.core.entity.ExtendedEntity;
 import com.lycanitesmobs.core.entity.FearEntity;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.network.MessageEntityVelocity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.play.server.SEntityVelocityPacket;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.util.Mth;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
@@ -105,23 +105,23 @@ public class Effects {
 		}
 		
 		// Night Vision Stops Blindness:
-		if(entity.hasEffect(net.minecraft.potion.Effects.BLINDNESS) && entity.hasEffect(net.minecraft.potion.Effects.NIGHT_VISION)) {
-			entity.removeEffect(net.minecraft.potion.Effects.BLINDNESS);
+		if(entity.hasEffect(net.minecraft.world.effect.MobEffects.BLINDNESS) && entity.hasEffect(net.minecraft.world.effect.MobEffects.NIGHT_VISION)) {
+			entity.removeEffect(net.minecraft.world.effect.MobEffects.BLINDNESS);
 		}
 
 
 		// Disable Nausea:
 		this.disableNausea = ConfigExtra.INSTANCE.disableNausea.get();
-		if(this.disableNausea && event.getEntityLiving() instanceof PlayerEntity) {
-			if(entity.hasEffect(net.minecraft.potion.Effects.CONFUSION)) {
-				entity.removeEffect(net.minecraft.potion.Effects.CONFUSION);
+		if(this.disableNausea && event.getEntityLiving() instanceof Player) {
+			if(entity.hasEffect(net.minecraft.world.effect.MobEffects.CONFUSION)) {
+				entity.removeEffect(net.minecraft.world.effect.MobEffects.CONFUSION);
 			}
 		}
 
 		// Immunity:
 		boolean invulnerable = false;
-		if(entity instanceof PlayerEntity) {
-			PlayerEntity player = (PlayerEntity)entity;
+		if(entity instanceof Player) {
+			Player player = (Player)entity;
 			invulnerable = player.isCreative() || player.isSpectator();
 		}
 
@@ -139,7 +139,7 @@ public class Effects {
 		// Weight
 		EffectBase weight = ObjectManager.getEffect("weight");
 		if(weight != null) {
-			if(!invulnerable && entity.hasEffect(weight) && !entity.hasEffect(net.minecraft.potion.Effects.DAMAGE_BOOST)) {
+			if(!invulnerable && entity.hasEffect(weight) && !entity.hasEffect(net.minecraft.world.effect.MobEffects.DAMAGE_BOOST)) {
 				if(entity.getDeltaMovement().y() > -0.2D)
 					entity.setDeltaMovement(entity.getDeltaMovement().add(0, -0.2D, 0));
 			}
@@ -171,9 +171,9 @@ public class Effects {
 					double motionZ = strength * (entity.getCommandSenderWorld().random.nextDouble() - 0.5D);
 					entity.setDeltaMovement(entity.getDeltaMovement().add(motionX, motionY, motionZ));
 					try {
-						if (entity instanceof ServerPlayerEntity) {
-							ServerPlayerEntity player = (ServerPlayerEntity) entity;
-							player.connection.send(new SEntityVelocityPacket(entity));
+						if (entity instanceof ServerPlayer) {
+							ServerPlayer player = (ServerPlayer) entity;
+							player.connection.send(new ClientboundSetEntityMotionPacket(entity));
 							MessageEntityVelocity messageEntityVelocity = new MessageEntityVelocity(
 									player,
 									strength * (entity.getCommandSenderWorld().random.nextDouble() - 0.5D),
@@ -199,11 +199,11 @@ public class Effects {
 				// Poison:
 				int poisonAmplifier = entity.getEffect(plague).getAmplifier();
 				int poisonDuration = entity.getEffect(plague).getDuration();
-				if(entity.hasEffect(net.minecraft.potion.Effects.POISON)) {
-					poisonAmplifier = Math.max(poisonAmplifier, entity.getEffect(net.minecraft.potion.Effects.POISON).getAmplifier());
-					poisonDuration = Math.max(poisonDuration, entity.getEffect(net.minecraft.potion.Effects.POISON).getDuration());
+				if(entity.hasEffect(net.minecraft.world.effect.MobEffects.POISON)) {
+					poisonAmplifier = Math.max(poisonAmplifier, entity.getEffect(net.minecraft.world.effect.MobEffects.POISON).getAmplifier());
+					poisonDuration = Math.max(poisonDuration, entity.getEffect(net.minecraft.world.effect.MobEffects.POISON).getDuration());
 				}
-				entity.addEffect(new EffectInstance(net.minecraft.potion.Effects.POISON, poisonDuration, poisonAmplifier));
+				entity.addEffect(new MobEffectInstance(net.minecraft.world.effect.MobEffects.POISON, poisonDuration, poisonAmplifier));
 
 				// Spread:
 				if(entity.getCommandSenderWorld().getGameTime() % 20 == 0) {
@@ -211,16 +211,16 @@ public class Effects {
 					for(Object entityObj : aoeTargets) {
 						LivingEntity target = (LivingEntity)entityObj;
 						if(target != entity && !entity.isAlliedTo(target)) {
-							if(target instanceof PlayerEntity && !entity.canSee(target)) {
+							if(target instanceof Player && !entity.canSee(target)) {
 								continue;
 							}
 							int amplifier = entity.getEffect(plague).getAmplifier();
 							int duration = entity.getEffect(plague).getDuration();
 							if(amplifier > 0) {
-								target.addEffect(new EffectInstance(plague, duration, amplifier - 1));
+								target.addEffect(new MobEffectInstance(plague, duration, amplifier - 1));
 							}
 							else {
-								target.addEffect(new EffectInstance(net.minecraft.potion.Effects.POISON, duration, amplifier));
+								target.addEffect(new MobEffectInstance(net.minecraft.world.effect.MobEffects.POISON, duration, amplifier));
 							}
 						}
 					}
@@ -261,9 +261,9 @@ public class Effects {
 		// ========== Buffs ==========
 		// Swiftswimming
 		EffectBase swiftswimming = ObjectManager.getEffect("swiftswimming");
-		if(swiftswimming != null && entity instanceof PlayerEntity) {
-			PlayerEntity player = (PlayerEntity)entity;
-			ModifiableAttributeInstance movement = entity.getAttribute(net.minecraftforge.common.ForgeMod.SWIM_SPEED.get());
+		if(swiftswimming != null && entity instanceof Player) {
+			Player player = (Player)entity;
+			AttributeInstance movement = entity.getAttribute(net.minecraftforge.common.ForgeMod.SWIM_SPEED.get());
 			int amplifier = -1;
 			if(entity.hasEffect(swiftswimming)) {
 				amplifier = entity.getEffect(swiftswimming).getAmplifier();
@@ -298,17 +298,17 @@ public class Effects {
 		EffectBase immunization = ObjectManager.getEffect("immunization");
 		if(immunization != null && !entity.getCommandSenderWorld().isClientSide) {
 			if(entity.hasEffect(ObjectManager.getEffect("immunization"))) {
-				if(entity.hasEffect(net.minecraft.potion.Effects.POISON)) {
-					entity.removeEffect(net.minecraft.potion.Effects.POISON);
+				if(entity.hasEffect(net.minecraft.world.effect.MobEffects.POISON)) {
+					entity.removeEffect(net.minecraft.world.effect.MobEffects.POISON);
 				}
-				if(entity.hasEffect(net.minecraft.potion.Effects.HUNGER)) {
-					entity.removeEffect(net.minecraft.potion.Effects.HUNGER);
+				if(entity.hasEffect(net.minecraft.world.effect.MobEffects.HUNGER)) {
+					entity.removeEffect(net.minecraft.world.effect.MobEffects.HUNGER);
 				}
-				if(entity.hasEffect(net.minecraft.potion.Effects.WEAKNESS)) {
-					entity.removeEffect(net.minecraft.potion.Effects.WEAKNESS);
+				if(entity.hasEffect(net.minecraft.world.effect.MobEffects.WEAKNESS)) {
+					entity.removeEffect(net.minecraft.world.effect.MobEffects.WEAKNESS);
 				}
-				if(entity.hasEffect(net.minecraft.potion.Effects.CONFUSION)) {
-					entity.removeEffect(net.minecraft.potion.Effects.CONFUSION);
+				if(entity.hasEffect(net.minecraft.world.effect.MobEffects.CONFUSION)) {
+					entity.removeEffect(net.minecraft.world.effect.MobEffects.CONFUSION);
 				}
 				if(ObjectManager.getEffect("paralysis") != null) {
 					if(entity.hasEffect(ObjectManager.getEffect("paralysis"))) {
@@ -322,11 +322,11 @@ public class Effects {
 		EffectBase cleansed = ObjectManager.getEffect("cleansed");
 		if(ObjectManager.getEffect("cleansed") != null && !entity.getCommandSenderWorld().isClientSide) {
 			if(entity.hasEffect(ObjectManager.getEffect("cleansed"))) {
-				if(entity.hasEffect(net.minecraft.potion.Effects.WITHER)) {
-					entity.removeEffect(net.minecraft.potion.Effects.WITHER);
+				if(entity.hasEffect(net.minecraft.world.effect.MobEffects.WITHER)) {
+					entity.removeEffect(net.minecraft.world.effect.MobEffects.WITHER);
 				}
-				if(entity.hasEffect(net.minecraft.potion.Effects.UNLUCK)) {
-					entity.removeEffect(net.minecraft.potion.Effects.UNLUCK);
+				if(entity.hasEffect(net.minecraft.world.effect.MobEffects.UNLUCK)) {
+					entity.removeEffect(net.minecraft.world.effect.MobEffects.UNLUCK);
 				}
 				if(ObjectManager.getEffect("fear") != null) {
 					if(entity.hasEffect(ObjectManager.getEffect("fear"))) {
@@ -353,8 +353,8 @@ public class Effects {
 			return;
 
 		boolean invulnerable = false;
-		if(entity instanceof PlayerEntity) {
-			PlayerEntity player = (PlayerEntity)entity;
+		if(entity instanceof Player) {
+			Player player = (Player)entity;
 			invulnerable = player.abilities.invulnerable;
 		}
 		if(invulnerable) {
@@ -490,7 +490,7 @@ public class Effects {
 				double knockback = target.getEffect(repulsion).getAmplifier() + 2;
 				double xDist = attacker.position().x() - target.position().x();
 				double zDist = attacker.position().z() - target.position().z();
-				double xzDist = Math.max(MathHelper.sqrt(xDist * xDist + zDist * zDist), 0.01D);
+				double xzDist = Math.max(Mth.sqrt(xDist * xDist + zDist * zDist), 0.01D);
 				double motionCap = 10;
 				double xVel = xDist / xzDist * knockback;
 				double zVel = zDist / xzDist * knockback;
@@ -535,14 +535,14 @@ public class Effects {
 	/** This uses the player sleep in bed event to spawn mobs. **/
 	@SubscribeEvent
 	public void onSleep(PlayerSleepInBedEvent event) {
-		PlayerEntity player = event.getPlayer();
+		Player player = event.getPlayer();
 		if(player == null || player.getCommandSenderWorld().isClientSide || event.isCanceled())
 			return;
 
 		// Insomnia:
 		EffectBase insomnia = ObjectManager.getEffect("insomnia");
 		if(insomnia != null && player.hasEffect(insomnia)) {
-			event.setResult(PlayerEntity.SleepResult.NOT_SAFE);
+			event.setResult(Player.BedSleepingProblem.NOT_SAFE);
 		}
 	}
 

@@ -1,14 +1,14 @@
 package com.lycanitesmobs.client.obj;
 
-import net.minecraft.util.math.vector.Vector2f;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.world.phys.Vec2;
+import com.mojang.math.Vector3f;
 
 import java.util.ArrayList;
 
 public class IndexedModel {
 
 	private ArrayList<Vector3f> vertices;
-	private ArrayList<Vector2f> texCoords;
+	private ArrayList<Vec2> texCoords;
 	private ArrayList<Vector3f> normals;
 	private ArrayList<Vector3f> tangents;
 	private ArrayList<Integer> indices;
@@ -27,7 +27,7 @@ public class IndexedModel {
 		return vertices;
 	}
 
-	public ArrayList<Vector2f> getTexCoords() {
+	public ArrayList<Vec2> getTexCoords() {
 		return texCoords;
 	}
 

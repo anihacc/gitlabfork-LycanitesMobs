@@ -2,10 +2,10 @@ package com.lycanitesmobs.core.spawner.location;
 
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.core.helpers.JSONHelper;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.material.Material;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +24,7 @@ public class MaterialSpawnLocation extends BlockSpawnLocation {
 
 	/** Returns if the provided block position is valid. **/
 	@Override
-	public boolean isValidBlock(World world, BlockPos blockPos) {
+	public boolean isValidBlock(Level world, BlockPos blockPos) {
 		BlockState blockState = world.getBlockState(blockPos);
 
 		if(!this.surface || !this.underground) {

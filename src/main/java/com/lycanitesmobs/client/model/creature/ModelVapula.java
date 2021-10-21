@@ -7,10 +7,10 @@ import com.lycanitesmobs.client.renderer.CustomRenderStates;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureEffect;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import net.minecraft.util.math.vector.Vector4f;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.MathHelper;
+import com.mojang.math.Vector4f;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -62,13 +62,13 @@ public class ModelVapula extends ModelTemplateElemental {
 
 		// Fingers:
 		else if(partName.equals("fingerleft01") || partName.equals("fingerright01")) {
-			this.rotate(0,(float)Math.toDegrees(MathHelper.cos(loop * 0.2F) * 0.2F - 0.2F), 0);
+			this.rotate(0,(float)Math.toDegrees(Mth.cos(loop * 0.2F) * 0.2F - 0.2F), 0);
 		}
 		else if(partName.equals("fingerleft02") || partName.equals("fingerright02")) {
-			this.rotate(0,(float)Math.toDegrees(MathHelper.cos((loop + 20) * 0.2F) * 0.2F - 0.2F), 0);
+			this.rotate(0,(float)Math.toDegrees(Mth.cos((loop + 20) * 0.2F) * 0.2F - 0.2F), 0);
 		}
 		else if(partName.equals("fingerleft03") || partName.equals("fingerright03")) {
-			this.rotate(0,(float)Math.toDegrees(MathHelper.cos((loop + 40) * 0.2F) * 0.2F - 0.2F), 0);
+			this.rotate(0,(float)Math.toDegrees(Mth.cos((loop + 40) * 0.2F) * 0.2F - 0.2F), 0);
 		}
 	}
 

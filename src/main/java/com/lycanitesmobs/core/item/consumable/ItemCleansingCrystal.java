@@ -3,14 +3,14 @@ package com.lycanitesmobs.core.item.consumable;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.item.BaseItem;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.level.Level;
 
 public class ItemCleansingCrystal extends BaseItem {
 
@@ -29,16 +29,16 @@ public class ItemCleansingCrystal extends BaseItem {
  	//                    Item Use
  	// ==================================================
     @Override
-    public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
+    public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
 		ItemStack itemStack = player.getItemInHand(hand);
 			if(!player.abilities.instabuild) {
 				itemStack.setCount(Math.max(0, itemStack.getCount() - 1));
 			}
 
 			if(!world.isClientSide && ObjectManager.getEffect("cleansed") != null) {
-				player.addEffect(new EffectInstance(ObjectManager.getEffect("cleansed"), 10 * 20));
+				player.addEffect(new MobEffectInstance(ObjectManager.getEffect("cleansed"), 10 * 20));
 			}
 
-			return new ActionResult(ActionResultType.SUCCESS, itemStack);
+			return new InteractionResultHolder(InteractionResult.SUCCESS, itemStack);
 		}
 }

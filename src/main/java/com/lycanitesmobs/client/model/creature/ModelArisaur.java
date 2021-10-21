@@ -3,8 +3,8 @@ package com.lycanitesmobs.client.model.creature;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.template.ModelTemplateBiped;
 import com.lycanitesmobs.client.model.template.ModelTemplateQuadruped;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -34,13 +34,13 @@ public class ModelArisaur extends ModelTemplateQuadruped {
     		float rotX = 0;
     		float rotZ = 0;
 			if (partName.contains("left")) {
-				rotZ -= Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F + 0.05F);
+				rotZ -= Math.toDegrees(Mth.cos(loop * 0.09F) * 0.05F + 0.05F);
 			}
 			if (partName.contains("right")) {
-				rotZ += Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F + 0.05F);
+				rotZ += Math.toDegrees(Mth.cos(loop * 0.09F) * 0.05F + 0.05F);
 			}
 			if (!partName.contains("body")) {
-				rotX += Math.toDegrees(MathHelper.sin(loop * 0.067F) * 0.05F);
+				rotX += Math.toDegrees(Mth.sin(loop * 0.067F) * 0.05F);
 			}
     		this.rotate(rotX, 0, rotZ);
 		}

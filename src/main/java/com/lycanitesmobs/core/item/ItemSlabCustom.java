@@ -1,19 +1,19 @@
 package com.lycanitesmobs.core.item;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.SlabBlock;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.state.Property;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.SlabBlock;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.level.Level;
 
 // This is a copy of ItemSlab and only altered to allow for any block to be the double slab.
 public class ItemSlabCustom extends BlockItem
@@ -38,14 +38,14 @@ public class ItemSlabCustom extends BlockItem
     }
 
     @Override
-    public ITextComponent getName(ItemStack stack) {
+    public Component getName(ItemStack stack) {
         return this.singleSlab.getName();
     }
 
     /**
      * Called when a Block is right-clicked with this Item
      */
-    public ActionResultType onItemUse(PlayerEntity player, World worldIn, BlockPos pos, Hand hand, Direction facing, float hitX, float hitY, float hitZ) {
+    public InteractionResult onItemUse(Player player, Level worldIn, BlockPos pos, InteractionHand hand, Direction facing, float hitX, float hitY, float hitZ) {
         // TODO Do we still need this custom BlockItem?
         /*ItemStack itemStack = player.getHeldItem(hand);
         if (itemStack.getCount() != 0 && player.canPlayerEdit(pos.offset(facing), facing, itemStack)) {
@@ -76,7 +76,7 @@ public class ItemSlabCustom extends BlockItem
         else {
             return ActionResultType.FAIL;
         }*/
-        return ActionResultType.FAIL;
+        return InteractionResult.FAIL;
     }
 
     /*@OnlyIn(Dist.CLIENT)

@@ -10,7 +10,7 @@ import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.Variant;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 import org.apache.commons.io.IOUtils;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -54,9 +54,9 @@ public class PlayerFamiliars {
 	}
 
 	public static class FamiliarLoader implements Runnable {
-		PlayerEntity player;
+		Player player;
 
-		public FamiliarLoader(PlayerEntity player) {
+		public FamiliarLoader(Player player) {
 			this.player = player;
 		}
 
@@ -163,7 +163,7 @@ public class PlayerFamiliars {
 		}
 	}
 
-	public Map<UUID, PetEntry> getFamiliarsForPlayer(PlayerEntity player) {
+	public Map<UUID, PetEntry> getFamiliarsForPlayer(Player player) {
 		long currentTime = System.currentTimeMillis() / 1000;
 		long loadedTime = this.getPlayerFamiliarLoadedTime(player);
 		if (loadedTime < 0 || currentTime - loadedTime > 30 * 60) {
@@ -185,7 +185,7 @@ public class PlayerFamiliars {
 		return playerFamiliarEntries;
 	}
 
-	public long getPlayerFamiliarLoadedTime(PlayerEntity player) {
+	public long getPlayerFamiliarLoadedTime(Player player) {
 		UUID uuid = player.getUUID();
 		if (!this.playerFamiliarLoadedTimes.containsKey(uuid)) {
 			return -1;
@@ -193,7 +193,7 @@ public class PlayerFamiliars {
 		return this.playerFamiliarLoadedTimes.get(uuid);
 	}
 
-	public void updatePlayerFamiliarLoadedTime(PlayerEntity player) {
+	public void updatePlayerFamiliarLoadedTime(Player player) {
 		this.playerFamiliarLoadedTimes.put(player.getUUID(), System.currentTimeMillis() / 1000);
 	}
 }

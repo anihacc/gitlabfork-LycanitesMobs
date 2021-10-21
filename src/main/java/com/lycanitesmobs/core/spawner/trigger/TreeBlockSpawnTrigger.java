@@ -2,13 +2,13 @@ package com.lycanitesmobs.core.spawner.trigger;
 
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.core.spawner.Spawner;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.LeavesBlock;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.LeavesBlock;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 
@@ -26,11 +26,11 @@ public class TreeBlockSpawnTrigger extends BlockSpawnTrigger {
 
 
 	@Override
-	public boolean isTriggerBlock(BlockState blockState, World world, BlockPos blockPos, int fortune, @Nullable LivingEntity entity) {
+	public boolean isTriggerBlock(BlockState blockState, Level world, BlockPos blockPos, int fortune, @Nullable LivingEntity entity) {
 		return this.isTreeLogBlock(blockState.getBlock(), world, blockPos) || this.isTreeLeavesBlock(blockState.getBlock(), world, blockPos);
 	}
 
-	public boolean isTreeLogBlock(Block block, World world, BlockPos pos) {
+	public boolean isTreeLogBlock(Block block, Level world, BlockPos pos) {
 		if(this.isLog(world.getBlockState(pos))) {
 			int x = pos.getX();
 			int y = pos.getY();
@@ -53,7 +53,7 @@ public class TreeBlockSpawnTrigger extends BlockSpawnTrigger {
 		return false;
 	}
 
-	public boolean isTreeLeavesBlock(Block block, World world, BlockPos pos) {
+	public boolean isTreeLeavesBlock(Block block, Level world, BlockPos pos) {
 		if(this.isLeaves(world.getBlockState(pos))) {
 			int x = pos.getX();
 			int y = pos.getY();

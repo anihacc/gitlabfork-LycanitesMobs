@@ -3,14 +3,14 @@ package com.lycanitesmobs.core.container;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.RideableCreatureEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 
 public class CreatureContainer extends BaseContainer {
-	public static final ContainerType<CreatureContainer> TYPE = (ContainerType<CreatureContainer>)IForgeContainerType.create(CreatureContainer::new).setRegistryName(LycanitesMobs.MODID, "creature");
+	public static final MenuType<CreatureContainer> TYPE = (MenuType<CreatureContainer>)IForgeContainerType.create(CreatureContainer::new).setRegistryName(LycanitesMobs.MODID, "creature");
 	public BaseCreatureEntity creature;
 
 	/**
@@ -19,7 +19,7 @@ public class CreatureContainer extends BaseContainer {
 	 * @param playerInventory The accessing player's inventory.
 	 * @param extraData A packet sent from the server to create the Container from.
 	 */
-	public CreatureContainer(int windowId, PlayerInventory playerInventory, PacketBuffer extraData) {
+	public CreatureContainer(int windowId, Inventory playerInventory, FriendlyByteBuf extraData) {
 		this(windowId, playerInventory, (BaseCreatureEntity)playerInventory.player.getCommandSenderWorld().getEntity(extraData.readInt()));
 	}
 
@@ -29,7 +29,7 @@ public class CreatureContainer extends BaseContainer {
 	 * @param playerInventory The accessing player's inventory.
 	 * @param creature The creature to access.
 	 */
-	public CreatureContainer(int windowId, PlayerInventory playerInventory, BaseCreatureEntity creature) {
+	public CreatureContainer(int windowId, Inventory playerInventory, BaseCreatureEntity creature) {
 		super(TYPE, windowId);
 		this.creature = creature;
 
@@ -89,7 +89,7 @@ public class CreatureContainer extends BaseContainer {
   	//                  Container Closed
   	// ==================================================
 	@Override
-	public void removed(PlayerEntity player) {
+	public void removed(Player player) {
 		super.removed(player);
 	}
 }

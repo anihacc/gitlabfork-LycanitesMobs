@@ -2,8 +2,8 @@ package com.lycanitesmobs.client.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.CreatureObjModel;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -35,15 +35,15 @@ public class ModelEpion extends CreatureObjModel {
 
 		// Idle:
 		if(partName.equals("mouth")) {
-			this.rotate((float)-Math.toDegrees(MathHelper.cos(loop * 0.1F) * 0.1F - 0.1F), 0.0F, 0.0F);
+			this.rotate((float)-Math.toDegrees(Mth.cos(loop * 0.1F) * 0.1F - 0.1F), 0.0F, 0.0F);
 		}
 		if(partName.equals("earleft")) {
-			rotZ -= Math.toDegrees(MathHelper.cos(loop * 0.18F) * 0.05F + 0.05F);
-			rotX -= Math.toDegrees(MathHelper.sin(loop * 0.067F) * 0.05F);
+			rotZ -= Math.toDegrees(Mth.cos(loop * 0.18F) * 0.05F + 0.05F);
+			rotX -= Math.toDegrees(Mth.sin(loop * 0.067F) * 0.05F);
 		}
 		if(partName.equals("earright")) {
-			rotZ += Math.toDegrees(MathHelper.cos(loop * 0.18F) * 0.05F + 0.05F);
-			rotX += Math.toDegrees(MathHelper.sin(loop * 0.067F) * 0.05F);
+			rotZ += Math.toDegrees(Mth.cos(loop * 0.18F) * 0.05F + 0.05F);
+			rotX += Math.toDegrees(Mth.sin(loop * 0.067F) * 0.05F);
 		}
 		if(entity.isVehicle()) {
 			if(partName.equals("earleft") || partName.equals("earright")) {
@@ -56,11 +56,11 @@ public class ModelEpion extends CreatureObjModel {
 			float walkSwing = 0.6F;
 			if(partName.equals("wingleft01")) {
 				rotZ -= 29;
-				rotY += Math.toDegrees(MathHelper.cos(time * walkSwing + (float) Math.PI) * 0.1F * distance);
+				rotY += Math.toDegrees(Mth.cos(time * walkSwing + (float) Math.PI) * 0.1F * distance);
 			}
 			if(partName.equals("wingright01")) {
 				rotZ += 29;
-				rotY += (Math.toDegrees(MathHelper.cos(time * walkSwing) * 0.1F) - 10 * distance);
+				rotY += (Math.toDegrees(Mth.cos(time * walkSwing) * 0.1F) - 10 * distance);
 			}
 			if(partName.equals("wingleft02")) {
 				rotZ += 120;
@@ -73,21 +73,21 @@ public class ModelEpion extends CreatureObjModel {
 		// Flying:
 		else {
 			if (partName.equals("body")) {
-				float bob = -MathHelper.sin(loop * 0.2F) * (entity.isVehicle() ? 0.1F : 0.6F);
+				float bob = -Mth.sin(loop * 0.2F) * (entity.isVehicle() ? 0.1F : 0.6F);
 				if (bob < 0) bob = -bob;
 				posY += bob;
 			}
 			if (partName.contains("wingleft")) {
-				rotZ -= Math.toDegrees(MathHelper.sin(loop * 0.4F) * 0.6F);
+				rotZ -= Math.toDegrees(Mth.sin(loop * 0.4F) * 0.6F);
 			}
 			if (partName.contains("wingright")) {
-				rotZ -= Math.toDegrees(MathHelper.sin(loop * 0.4F + (float) Math.PI) * 0.6F);
+				rotZ -= Math.toDegrees(Mth.sin(loop * 0.4F + (float) Math.PI) * 0.6F);
 			}
 			if (partName.equals("wingleft01")) {
-				rotX -= Math.toDegrees(MathHelper.sin(loop * 0.4F) * 0.1F);
+				rotX -= Math.toDegrees(Mth.sin(loop * 0.4F) * 0.1F);
 			}
 			if (partName.equals("wingright01")) {
-				rotX -= Math.toDegrees(MathHelper.sin(loop * 0.4F) * 0.1F);
+				rotX -= Math.toDegrees(Mth.sin(loop * 0.4F) * 0.1F);
 			}
 		}
 

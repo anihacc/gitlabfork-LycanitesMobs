@@ -9,25 +9,25 @@ import com.lycanitesmobs.client.mobevent.MobEventPlayerClient;
 import com.lycanitesmobs.core.mobevent.MobEventPlayerServer;
 import com.lycanitesmobs.core.network.MessageMobEvent;
 import com.lycanitesmobs.core.network.MessageWorldEvent;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.storage.WorldSavedData;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.saveddata.SavedData;
 
 import java.util.*;
 
-public class ExtendedWorld extends WorldSavedData {
+public class ExtendedWorld extends SavedData {
 	public static String EXT_PROP_NAME = "LycanitesMobs";
-	public static Map<World, ExtendedWorld> loadedExtWorlds = new HashMap<>();
+	public static Map<Level, ExtendedWorld> loadedExtWorlds = new HashMap<>();
 
     /** The world INSTANCE to work with. **/
-	public World world;
+	public Level world;
 	public boolean initialized = false;
 	public long lastSpawnerTime = 0;
 	public long lastEventScheduleTime = 0;
@@ -56,7 +56,7 @@ public class ExtendedWorld extends WorldSavedData {
 	// ==================================================
     //                   Get for World
     // ==================================================
-	public static ExtendedWorld getForWorld(World world) {
+	public static ExtendedWorld getForWorld(Level world) {
 		if(world == null) {
 			//LycanitesMobs.logWarning("", "Tried to access an ExtendedWorld from a null World.");
 			return null;
@@ -71,8 +71,8 @@ public class ExtendedWorld extends WorldSavedData {
         }
 
 		// Server Side:
-		if(world instanceof ServerWorld) {
-			ServerWorld serverWorld = (ServerWorld) world;
+		if(world instanceof ServerLevel) {
+			ServerLevel serverWorld = (ServerLevel) world;
 			world.increaseMaxEntityRadius(25);
 			ExtendedWorld worldSavedData = serverWorld.getDataStorage().get(ExtendedWorld::new, EXT_PROP_NAME);
 			if (worldSavedData != null) {
@@ -103,7 +103,7 @@ public class ExtendedWorld extends WorldSavedData {
 	public ExtendedWorld() {
 		super(EXT_PROP_NAME);
 	}
-	public ExtendedWorld(World world) {
+	public ExtendedWorld(Level world) {
 		super(EXT_PROP_NAME);
 		this.world = world;
 	}
@@ -278,7 +278,7 @@ public class ExtendedWorld extends WorldSavedData {
     /**
      * Starts a provided Mob Event (provided by INSTANCE) on the provided world.
      *  **/
-    public void startMobEvent(MobEvent mobEvent, PlayerEntity player, BlockPos pos, int level, int variant) {
+    public void startMobEvent(MobEvent mobEvent, Player player, BlockPos pos, int level, int variant) {
         if(mobEvent == null) {
             LycanitesMobs.logWarning("", "Tried to start a null mob event.");
             return;
@@ -315,7 +315,7 @@ public class ExtendedWorld extends WorldSavedData {
     /**
      * Starts a provided Mob Event (provided by name) on the provided world.
      **/
-    public MobEvent startMobEvent(String mobEventName, PlayerEntity player, BlockPos pos, int level, int variant) {
+    public MobEvent startMobEvent(String mobEventName, Player player, BlockPos pos, int level, int variant) {
         MobEvent mobEvent;
         if(MobEventManager.getInstance().mobEvents.containsKey(mobEventName)) {
             mobEvent = MobEventManager.getInstance().mobEvents.get(mobEventName);
@@ -426,7 +426,7 @@ public class ExtendedWorld extends WorldSavedData {
 	 * @param pos The position to search around.
 	 * @return True if a boss is present.
 	 */
-	public boolean isBossNearby(Vector3d pos) {
+	public boolean isBossNearby(Vec3 pos) {
 		for(BossEntry bossEntry : this.bosses.values()) {
 			if(bossEntry == null || bossEntry.entity == null || !bossEntry.entity.isAlive()) {
 				continue;
@@ -495,7 +495,7 @@ public class ExtendedWorld extends WorldSavedData {
     //                    Read From NBT
     // ==================================================
 	@Override
-	public void load(CompoundNBT nbtTagCompound) {
+	public void load(CompoundTag nbtTagCompound) {
 		// Events:
 		if(nbtTagCompound.contains("WorldEventStartTargetTime"))  {
 			this.worldEventStartTargetTime = nbtTagCompound.getInt("WorldEventStartTargetTime");
@@ -513,10 +513,10 @@ public class ExtendedWorld extends WorldSavedData {
 
 		// Dungeons:
 		if(nbtTagCompound.contains("Dungeons"))  {
-			ListNBT nbtDungeonList = nbtTagCompound.getList("Dungeons", 10);
+			ListTag nbtDungeonList = nbtTagCompound.getList("Dungeons", 10);
 			for(int i = 0; i < nbtDungeonList.size(); i++) {
 				try {
-					CompoundNBT dungeonNBT = nbtDungeonList.getCompound(i);
+					CompoundTag dungeonNBT = nbtDungeonList.getCompound(i);
 					DungeonInstance dungeonInstance = new DungeonInstance();
 					dungeonInstance.readFromNBT(dungeonNBT);
 					if(dungeonInstance.uuid != null && !this.dungeons.containsKey(dungeonInstance.uuid)) {
@@ -535,7 +535,7 @@ public class ExtendedWorld extends WorldSavedData {
     //                    Write To NBT
     // ==================================================
 	@Override
-	public CompoundNBT save(CompoundNBT nbtTagCompound) {
+	public CompoundTag save(CompoundTag nbtTagCompound) {
     	// Events:
 		nbtTagCompound.putLong("WorldEventStartTargetTime", this.worldEventStartTargetTime);
 		nbtTagCompound.putLong("WorldEventLastStartedTime", this.worldEventLastStartedTime);
@@ -544,9 +544,9 @@ public class ExtendedWorld extends WorldSavedData {
     	// TODO Save all active mob events, not just the world event.
 
 		// Dungeons:
-		ListNBT nbtDungeonList = new ListNBT();
+		ListTag nbtDungeonList = new ListTag();
 		for(DungeonInstance dungeonInstance : this.dungeons.values()) {
-			CompoundNBT dungeonNBT = new CompoundNBT();
+			CompoundTag dungeonNBT = new CompoundTag();
 			dungeonNBT = dungeonInstance.writeToNBT(dungeonNBT);
 			if(dungeonNBT != null) {
 				nbtDungeonList.add(dungeonNBT);

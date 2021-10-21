@@ -9,35 +9,35 @@ import com.lycanitesmobs.client.renderer.layer.LayerProjectileBase;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.entity.IEntityRenderer;
-import net.minecraft.client.renderer.entity.layers.LayerRenderer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.client.renderer.entity.RenderLayerParent;
+import net.minecraft.client.renderer.entity.layers.RenderLayer;
+import net.minecraft.resources.ResourceLocation;
+import com.mojang.math.Vector3f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
-public class ProjectileModelRenderer extends EntityRenderer<BaseProjectileEntity> implements IEntityRenderer<BaseProjectileEntity, ProjectileModel> {
+public class ProjectileModelRenderer extends EntityRenderer<BaseProjectileEntity> implements RenderLayerParent<BaseProjectileEntity, ProjectileModel> {
 	protected ProjectileModel renderModel;
 	protected ProjectileModel defaultModel;
-	protected final List<LayerRenderer<BaseProjectileEntity, ProjectileModel>> renderLayers = Lists.newArrayList(); // TODO Layers for projectiles.
+	protected final List<RenderLayer<BaseProjectileEntity, ProjectileModel>> renderLayers = Lists.newArrayList(); // TODO Layers for projectiles.
 
 
-	public ProjectileModelRenderer(EntityRendererManager renderManager, ProjectileInfo projectileInfo) {
+	public ProjectileModelRenderer(EntityRenderDispatcher renderManager, ProjectileInfo projectileInfo) {
 		super(renderManager);
 		this.renderModel = ModelManager.getInstance().getProjectileModel(projectileInfo);
 		this.defaultModel = this.renderModel;
 		this.renderModel.addCustomLayers(this);
 	}
 
-    public ProjectileModelRenderer(EntityRendererManager renderManager, String projectileName) {
+    public ProjectileModelRenderer(EntityRenderDispatcher renderManager, String projectileName) {
     	super(renderManager);
 		ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile(projectileName);
 		if(projectileInfo != null) {
@@ -54,7 +54,7 @@ public class ProjectileModelRenderer extends EntityRenderer<BaseProjectileEntity
     }
 
 	@Override
-	public void render(BaseProjectileEntity entity, float partialTicks, float yaw, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, int brightness) {
+	public void render(BaseProjectileEntity entity, float partialTicks, float yaw, PoseStack matrixStack, MultiBufferSource renderTypeBuffer, int brightness) {
 		// Model States:
 		float time = 0;
 		float distance = 0;
@@ -86,7 +86,7 @@ public class ProjectileModelRenderer extends EntityRenderer<BaseProjectileEntity
 
 				this.getModel().generateAnimationFrames(entity, time, distance, loop, lookYaw, lookPitch, 1, brightness);
 				this.renderModel(entity, matrixStack, renderTypeBuffer, null, time, distance, loop, lookYaw, lookPitch, 1, brightness, invisible, allyInvisible);
-				for(LayerRenderer<BaseProjectileEntity, ProjectileModel> layer : this.renderLayers) {
+				for(RenderLayer<BaseProjectileEntity, ProjectileModel> layer : this.renderLayers) {
 					if(!(layer instanceof LayerProjectileBase)) {
 						continue;
 					}
@@ -120,7 +120,7 @@ public class ProjectileModelRenderer extends EntityRenderer<BaseProjectileEntity
 	 * @param invisible If true, the entity has invisibility or some form of stealth.
 	 * @param allyInvisible If true, the entity has invisibility or some form of stealth but is allied to the player so should be translucent, etc.
 	 */
-	protected void renderModel(BaseProjectileEntity entity, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, LayerProjectileBase layer, float time, float distance, float loop, float lookY, float lookX, float scale, int brightness, boolean invisible, boolean allyInvisible) {
+	protected void renderModel(BaseProjectileEntity entity, PoseStack matrixStack, MultiBufferSource renderTypeBuffer, LayerProjectileBase layer, float time, float distance, float loop, float lookY, float lookX, float scale, int brightness, boolean invisible, boolean allyInvisible) {
 		ResourceLocation texture = this.getEntityTexture(entity, layer);
 		if(texture == null) {
 			return;
@@ -143,7 +143,7 @@ public class ProjectileModelRenderer extends EntityRenderer<BaseProjectileEntity
 		return this.renderModel;
 	}
 
-	public final boolean addLayer(LayerRenderer<BaseProjectileEntity, ProjectileModel> layer) {
+	public final boolean addLayer(RenderLayer<BaseProjectileEntity, ProjectileModel> layer) {
 		return this.renderLayers.add(layer);
 	}
 

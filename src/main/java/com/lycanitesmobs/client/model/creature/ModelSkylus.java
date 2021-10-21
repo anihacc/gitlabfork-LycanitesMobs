@@ -3,8 +3,8 @@ package com.lycanitesmobs.client.model.creature;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.CreatureObjModelOld;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -59,26 +59,26 @@ public class ModelSkylus extends CreatureObjModelOld {
     	
     	// Idle:
     	if(partName.equals("tentaclem") || partName.equals("tentaclel2") || partName.equals("tentacler2")) {
-	        rotZ -= Math.toDegrees(MathHelper.cos(loop * 0.4F) * 0.05F + 0.05F);
-	        rotY -= Math.toDegrees(MathHelper.cos(loop * 0.05F) * 0.2F);
-	        rotX -= Math.toDegrees(MathHelper.sin(loop * 0.3F) * 0.05F);
+	        rotZ -= Math.toDegrees(Mth.cos(loop * 0.4F) * 0.05F + 0.05F);
+	        rotY -= Math.toDegrees(Mth.cos(loop * 0.05F) * 0.2F);
+	        rotX -= Math.toDegrees(Mth.sin(loop * 0.3F) * 0.05F);
     	}
     	if(partName.equals("tentaclel1") || partName.equals("tentacler1")) {
-	        rotZ += Math.toDegrees(MathHelper.cos(loop * 0.4F) * 0.05F + 0.05F);
-	        rotY += Math.toDegrees(MathHelper.cos(loop * 0.05F) * 0.2F);
-	        rotX += Math.toDegrees(MathHelper.sin(loop * 0.3F) * 0.05F);
+	        rotZ += Math.toDegrees(Mth.cos(loop * 0.4F) * 0.05F + 0.05F);
+	        rotY += Math.toDegrees(Mth.cos(loop * 0.05F) * 0.2F);
+	        rotX += Math.toDegrees(Mth.sin(loop * 0.3F) * 0.05F);
     	}
     	
     	// Walking:
     	if(entity == null || entity.isOnGround() || entity.isInWater()) {
 	    	float walkSwing = 0.6F;
 	    	if(partName.equals("tentaclem") || partName.equals("tentaclel2") || partName.equals("tentacler2")) {
-	    		rotX += Math.toDegrees(MathHelper.cos(time * walkSwing) * 1.0F * distance * 0.5F);
-				rotZ -= Math.toDegrees(MathHelper.cos(time * walkSwing) * 0.5F * distance * 0.5F);
+	    		rotX += Math.toDegrees(Mth.cos(time * walkSwing) * 1.0F * distance * 0.5F);
+				rotZ -= Math.toDegrees(Mth.cos(time * walkSwing) * 0.5F * distance * 0.5F);
 	    	}
 	    	if(partName.equals("tentaclel1") || partName.equals("tentacler1")) {
-	    		rotX += Math.toDegrees(MathHelper.cos(time * walkSwing + (float)Math.PI) * 1.0F * distance * 0.5F);
-				rotZ += Math.toDegrees(MathHelper.cos(time * walkSwing + (float)Math.PI) * 0.5F * distance * 0.5F);
+	    		rotX += Math.toDegrees(Mth.cos(time * walkSwing + (float)Math.PI) * 1.0F * distance * 0.5F);
+				rotZ += Math.toDegrees(Mth.cos(time * walkSwing + (float)Math.PI) * 0.5F * distance * 0.5F);
 	    	}
     	}
 				

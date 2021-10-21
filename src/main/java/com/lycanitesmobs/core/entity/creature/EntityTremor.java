@@ -3,23 +3,29 @@ package com.lycanitesmobs.core.entity.creature;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import net.minecraft.entity.*;
-import net.minecraft.entity.boss.WitherEntity;
-import net.minecraft.entity.monster.IMob;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.DamageSource;
-import net.minecraft.world.Explosion;
-import net.minecraft.world.GameRules;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.boss.wither.WitherBoss;
+import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.level.Explosion;
+import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.Level;
 
-public class EntityTremor extends TameableCreatureEntity implements IMob {
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.Pose;
 
-    public EntityTremor(EntityType<? extends EntityTremor> entityType, World world) {
+public class EntityTremor extends TameableCreatureEntity implements Enemy {
+
+    public EntityTremor(EntityType<? extends EntityTremor> entityType, Level world) {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEFINED;
+        this.attribute = MobType.UNDEFINED;
         this.hasAttackSound = true;
 
 		this.setupMob();
@@ -63,10 +69,10 @@ public class EntityTremor extends TameableCreatureEntity implements IMob {
     	
     	// Explosion:
 		int explosionStrength = Math.max(0, this.creatureInfo.getFlag("explosionStrength", 1));
-		Explosion.Mode explosionMode = explosionStrength > 0 && this.getCommandSenderWorld().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING) ? Explosion.Mode.BREAK : Explosion.Mode.NONE;
+		Explosion.BlockInteraction explosionMode = explosionStrength > 0 && this.getCommandSenderWorld().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING) ? Explosion.BlockInteraction.BREAK : Explosion.BlockInteraction.NONE;
 		if(this.isPetType("familiar")) {
 			explosionStrength = 1;
-			explosionMode = Explosion.Mode.NONE;
+			explosionMode = Explosion.BlockInteraction.NONE;
 		}
 		this.getCommandSenderWorld().explode(this, this.position().x(), this.position().y(), this.position().z(), explosionStrength, explosionMode);
 
@@ -90,15 +96,15 @@ public class EntityTremor extends TameableCreatureEntity implements IMob {
 
 	@Override
 	public boolean isVulnerableTo(Entity entity) {
-		if(entity instanceof WitherEntity) {
+		if(entity instanceof WitherBoss) {
 			return false;
 		}
 		return super.isVulnerableTo(entity);
 	}
 
 	@Override
-	public boolean canBeAffected(EffectInstance effectInstance) {
-    	if(effectInstance.getEffect() == Effects.WITHER) {
+	public boolean canBeAffected(MobEffectInstance effectInstance) {
+    	if(effectInstance.getEffect() == MobEffects.WITHER) {
     		return false;
 		}
 		return super.canBeAffected(effectInstance);
@@ -109,7 +115,7 @@ public class EntityTremor extends TameableCreatureEntity implements IMob {
 
     @Override
 	public boolean canBeTargetedBy(LivingEntity entity) {
-    	if(entity instanceof WitherEntity) {
+    	if(entity instanceof WitherBoss) {
     		return false;
 		}
 		return super.canBeTargetedBy(entity);

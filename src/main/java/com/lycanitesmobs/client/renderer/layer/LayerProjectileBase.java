@@ -3,17 +3,17 @@ package com.lycanitesmobs.client.renderer.layer;
 import com.lycanitesmobs.client.model.ProjectileModel;
 import com.lycanitesmobs.client.renderer.ProjectileModelRenderer;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.entity.layers.LayerRenderer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Vector2f;
-import net.minecraft.util.math.vector.Vector4f;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.entity.layers.RenderLayer;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.phys.Vec2;
+import com.mojang.math.Vector4f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class LayerProjectileBase extends LayerRenderer<BaseProjectileEntity, ProjectileModel> {
+public class LayerProjectileBase extends RenderLayer<BaseProjectileEntity, ProjectileModel> {
     public ProjectileModelRenderer renderer;
     public String name;
     public boolean glow = false;
@@ -27,7 +27,7 @@ public class LayerProjectileBase extends LayerRenderer<BaseProjectileEntity, Pro
     }
 
     @Override
-    public void render(MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, int ticks, BaseProjectileEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {}
+    public void render(PoseStack matrixStack, MultiBufferSource renderTypeBuffer, int ticks, BaseProjectileEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {}
 
     public boolean canRenderLayer(BaseProjectileEntity entity, float scale) {
         if(entity == null)
@@ -68,8 +68,8 @@ public class LayerProjectileBase extends LayerRenderer<BaseProjectileEntity, Pro
      * @param entity The entity to render.
      * @return The part texture offset.
      */
-    public Vector2f getTextureOffset(String partName, BaseProjectileEntity entity, float loop) {
-        return new Vector2f(0, 0);
+    public Vec2 getTextureOffset(String partName, BaseProjectileEntity entity, float loop) {
+        return new Vec2(0, 0);
     }
 
     /**

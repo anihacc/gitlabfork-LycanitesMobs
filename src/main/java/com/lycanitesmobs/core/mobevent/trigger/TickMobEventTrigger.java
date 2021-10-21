@@ -2,8 +2,8 @@ package com.lycanitesmobs.core.mobevent.trigger;
 
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.core.mobevent.MobEvent;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 public class TickMobEventTrigger extends MobEventTrigger {
 	/** The chance of this Trigger successfully firing every trigger tick. **/
@@ -32,7 +32,7 @@ public class TickMobEventTrigger extends MobEventTrigger {
 
 
 	/** Called every world tick. **/
-	public void onTick(World world, long ticks) {
+	public void onTick(Level world, long ticks) {
 		// Tick Rate:
 		if(ticks == 0 || ticks % this.tickRate != 0) {
 			return;

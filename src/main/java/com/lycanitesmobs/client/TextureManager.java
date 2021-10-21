@@ -1,7 +1,7 @@
 package com.lycanitesmobs.client;
 
 import com.lycanitesmobs.core.info.ModInfo;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.HashMap;
 import java.util.Map;

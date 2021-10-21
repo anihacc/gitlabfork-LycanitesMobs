@@ -3,13 +3,13 @@ package com.lycanitesmobs.core.spawner.trigger;
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.core.helpers.JSONHelper;
 import com.lycanitesmobs.core.spawner.Spawner;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.util.FakePlayer;
 
 import javax.annotation.Nullable;
@@ -96,7 +96,7 @@ public class BlockSpawnTrigger extends SpawnTrigger {
 
 
 	/** Called every time a block breaks. **/
-	public void onBlockBreak(World world, PlayerEntity player, BlockPos breakPos, BlockState blockState, int chain) {
+	public void onBlockBreak(Level world, Player player, BlockPos breakPos, BlockState blockState, int chain) {
 		if(!this.onBreak) {
 			return;
 		}
@@ -105,7 +105,7 @@ public class BlockSpawnTrigger extends SpawnTrigger {
 
 
 	/** Called every time a block is harvested. **/
-	public void onBlockHarvest(World world, PlayerEntity player, BlockPos breakPos, BlockState blockState, int chain, int fortune, boolean silkTouch) {
+	public void onBlockHarvest(Level world, Player player, BlockPos breakPos, BlockState blockState, int chain, int fortune, boolean silkTouch) {
 		if(!this.onHarvest) {
 			return;
 		}
@@ -129,7 +129,7 @@ public class BlockSpawnTrigger extends SpawnTrigger {
 
 
 	/** Called every time a block is placed. **/
-	public void onBlockPlace(World world, PlayerEntity player, BlockPos breakPos, BlockState blockState, int chain) {
+	public void onBlockPlace(Level world, Player player, BlockPos breakPos, BlockState blockState, int chain) {
 		if(!this.onPlace) {
 			return;
 		}
@@ -138,7 +138,7 @@ public class BlockSpawnTrigger extends SpawnTrigger {
 
 
 	/** Called every time a player breaks a block. **/
-	public void onBlockTriggered(World world, PlayerEntity player, BlockPos blockPos, BlockState blockState, int chain, int fortune) {
+	public void onBlockTriggered(Level world, Player player, BlockPos blockPos, BlockState blockState, int chain, int fortune) {
 		// Check Player:
 		if(this.playerOnly && (player == null || player instanceof FakePlayer)) {
 			return;
@@ -158,7 +158,7 @@ public class BlockSpawnTrigger extends SpawnTrigger {
 	}
 
 	/** Returns true if the provided block is a match for this trigger. **/
-	public boolean isTriggerBlock(BlockState blockState, World world, BlockPos blockPos, int fortune, @Nullable LivingEntity entity) {
+	public boolean isTriggerBlock(BlockState blockState, Level world, BlockPos blockPos, int fortune, @Nullable LivingEntity entity) {
 		if(this.blocks.size() > 0) {
 			Block block = blockState.getBlock();
 			if (this.blocks.contains(block)) {
@@ -181,7 +181,7 @@ public class BlockSpawnTrigger extends SpawnTrigger {
 	}
 
 	/** Returns a value to represent the block's rarity for higher level spawns with increased chances of tougher mobs, etc. **/
-	public int getBlockLevel(BlockState blockState, World world, BlockPos blockPos) {
+	public int getBlockLevel(BlockState blockState, Level world, BlockPos blockPos) {
 		return 0;
 	}
 }

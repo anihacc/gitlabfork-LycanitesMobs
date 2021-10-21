@@ -2,22 +2,22 @@ package com.lycanitesmobs.client.gui;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.gui.buttons.ButtonBase;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.MainWindow;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.platform.Window;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.util.Util;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.Util;
+import net.minecraft.network.chat.Component;
 
 import java.net.URI;
 
-public abstract class BaseScreen extends Screen implements Button.IPressable {
+public abstract class BaseScreen extends Screen implements Button.OnPress {
 	public DrawHelper drawHelper;
-	public MainWindow scaledResolution;
+	public Window scaledResolution;
 	public float zLevel = 0;
 
-	public BaseScreen(ITextComponent screenName) {
+	public BaseScreen(Component screenName) {
         super(screenName);
     }
 
@@ -50,7 +50,7 @@ public abstract class BaseScreen extends Screen implements Button.IPressable {
 	 * @param partialTicks Ticks for animation.
 	 */
 	@Override
-	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+	public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
 		this.renderBackground(matrixStack, mouseX, mouseY, partialTicks);
 		this.renderWidgets(matrixStack, mouseX, mouseY, partialTicks);
 		super.render(matrixStack, mouseX, mouseY, partialTicks); // Renders buttons.
@@ -64,7 +64,7 @@ public abstract class BaseScreen extends Screen implements Button.IPressable {
 	 * @param mouseY The y position of the mouse cursor.
 	 * @param partialTicks Ticks for animation.
 	 */
-	protected abstract void renderBackground(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks);
+	protected abstract void renderBackground(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks);
 
 	/**
 	 * Updates widgets like buttons and other controls for this screen. Super renders the button list, called after this.
@@ -73,7 +73,7 @@ public abstract class BaseScreen extends Screen implements Button.IPressable {
 	 * @param mouseY The y position of the mouse cursor.
 	 * @param partialTicks Ticks for animation.
 	 */
-	protected void renderWidgets(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {}
+	protected void renderWidgets(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {}
 
 	/**
 	 * Draws foreground elements.
@@ -82,7 +82,7 @@ public abstract class BaseScreen extends Screen implements Button.IPressable {
 	 * @param mouseY The y position of the mouse cursor.
 	 * @param partialTicks Ticks for animation.
 	 */
-	protected abstract void renderForeground(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks);
+	protected abstract void renderForeground(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks);
 
 	@Override
 	public void onPress(Button guiButton) {

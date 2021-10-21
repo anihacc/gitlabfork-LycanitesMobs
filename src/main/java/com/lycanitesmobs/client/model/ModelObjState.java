@@ -1,6 +1,6 @@
 package com.lycanitesmobs.client.model;
 
-import net.minecraft.entity.Entity;
+import net.minecraft.world.entity.Entity;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -18,21 +18,21 @@ import com.lycanitesmobs.core.info.ItemManager;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.info.projectile.behaviours.ProjectileBehaviour;
 import com.lycanitesmobs.core.item.ChargeItem;
-import net.minecraft.block.DispenserBlock;
-import net.minecraft.entity.EntityClassification;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.Item;
-import net.minecraft.particles.BasicParticleType;
-import net.minecraft.particles.ParticleType;
+import net.minecraft.world.level.block.DispenserBlock;
+import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.Item;
+import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.core.particles.ParticleType;
 import net.minecraft.particles.RedstoneParticleData;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.core.Registry;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.network.chat.BaseComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.registries.RegistryManager;
 
@@ -138,9 +138,9 @@ public class ProjectileInfo {
 	/** The vanilla particle to play from this projectile when in water. **/
 	public String waterParticleId = null;
 	/** The vanilla particle to play from this projectile. **/
-	public BasicParticleType particleType = null;
+	public SimpleParticleType particleType = null;
 	/** The vanilla particle to play from this projectile when in water. **/
-	public BasicParticleType waterParticleType = null;
+	public SimpleParticleType waterParticleType = null;
 
 
 	/**
@@ -171,7 +171,7 @@ public class ProjectileInfo {
 			if(json.has("entityClass")) {
 				this.entityClass = (Class<? extends BaseProjectileEntity>) Class.forName(json.get("entityClass").getAsString());
 			}
-			this.entityConstructor = this.entityClass.getConstructor(EntityType.class, World.class);
+			this.entityConstructor = this.entityClass.getConstructor(EntityType.class, Level.class);
 		} catch (Exception e) {
 			LycanitesMobs.logError("[Projectile] Unable to find the Java Entity Class: " + json.get("entityClass").getAsString() + " for " + this.getName());
 			throw new RuntimeException(e);
@@ -314,27 +314,27 @@ public class ProjectileInfo {
 		return this.modInfo.modid + ":" + this.getName();
 	}
 
-	public BasicParticleType getParticleType() {
+	public SimpleParticleType getParticleType() {
 		if (this.particleCount <= 0 || this.particleId == null) {
 			return null;
 		}
 		if (this.particleType == null) {
 			ParticleType<?> particleType = RegistryManager.ACTIVE.getRegistry(Registry.PARTICLE_TYPE_REGISTRY).getValue(new ResourceLocation(this.particleId));
-			if (particleType instanceof BasicParticleType) {
-				this.particleType = (BasicParticleType)particleType;
+			if (particleType instanceof SimpleParticleType) {
+				this.particleType = (SimpleParticleType)particleType;
 			}
 		}
 		return this.particleType;
 	}
 
-	public BasicParticleType getWaterParticleType() {
+	public SimpleParticleType getWaterParticleType() {
 		if (this.particleCount <= 0 || this.waterParticleId == null) {
 			return null;
 		}
 		if (this.waterParticleType == null) {
 			ParticleType<?> particleType = RegistryManager.ACTIVE.getRegistry(Registry.PARTICLE_TYPE_REGISTRY).getValue(new ResourceLocation(this.waterParticleId));
-			if(particleType instanceof BasicParticleType) {
-				this.waterParticleType = (BasicParticleType)particleType;
+			if(particleType instanceof SimpleParticleType) {
+				this.waterParticleType = (SimpleParticleType)particleType;
 			}
 		}
 		return this.waterParticleType;
@@ -348,7 +348,7 @@ public class ProjectileInfo {
 	@Nonnull
 	public EntityType<? extends BaseProjectileEntity> getEntityType() {
 		if(this.entityType == null) {
-			EntityType.Builder entityTypeBuilder = EntityType.Builder.of(EntityFactory.getInstance(), EntityClassification.MISC);
+			EntityType.Builder entityTypeBuilder = EntityType.Builder.of(EntityFactory.getInstance(), MobCategory.MISC);
 			//entityTypeBuilder.setCustomClientFactory(EntityFactory.getInstance().createOnClientFunction);
 			entityTypeBuilder.setTrackingRange(40);
 			entityTypeBuilder.setUpdateInterval(3);
@@ -381,8 +381,8 @@ public class ProjectileInfo {
 	 * Returns a translated title for this projectile. Ex: Chaos Orb
 	 * @return The display name of this projectile.
 	 */
-	public TextComponent getTitle() {
-		return new TranslationTextComponent("entity." + this.getLocalisationKey());
+	public BaseComponent getTitle() {
+		return new TranslatableComponent("entity." + this.getLocalisationKey());
 	}
 
 	/**
@@ -390,7 +390,7 @@ public class ProjectileInfo {
 	 * @param world The world to create the projectile in.
 	 * @param entityLivingBase The entity that created the projectile.
 	 */
-	public BaseProjectileEntity createProjectile(World world, LivingEntity entityLivingBase) {
+	public BaseProjectileEntity createProjectile(Level world, LivingEntity entityLivingBase) {
 		if(this.modelClassName != null && ModelManager.getInstance().getProjectileModel(this) != null) {
 			return new CustomProjectileModelEntity(this.getEntityType(), world, entityLivingBase, this);
 		}
@@ -404,7 +404,7 @@ public class ProjectileInfo {
 	 * @param y The y position of the projectile.
 	 * @param z The z position of the projectile.
 	 */
-	public BaseProjectileEntity createProjectile(World world, double x, double y, double z) {
+	public BaseProjectileEntity createProjectile(Level world, double x, double y, double z) {
 		return new CustomProjectileEntity(this.getEntityType(), world, x, y, z, this);
 	}
 

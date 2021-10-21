@@ -7,10 +7,10 @@ import com.lycanitesmobs.core.entity.CreatureRelationshipEntry;
 import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.info.CreatureKnowledge;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkEvent;
 
@@ -34,8 +34,8 @@ public class MessageCreature {
 		if(ctx.get().getDirection() != NetworkDirection.PLAY_TO_CLIENT)
 			return;
 
-		PlayerEntity player = ClientManager.getInstance().getClientPlayer();
-		World world = player.getCommandSenderWorld();
+		Player player = ClientManager.getInstance().getClientPlayer();
+		Level world = player.getCommandSenderWorld();
 		Entity entity = world.getEntity(message.entityID);
 		if (!(entity instanceof BaseCreatureEntity)) {
 			return;
@@ -49,7 +49,7 @@ public class MessageCreature {
 	/**
 	 * Reads the message from bytes.
 	 */
-	public static MessageCreature decode(PacketBuffer packet) {
+	public static MessageCreature decode(FriendlyByteBuf packet) {
 		MessageCreature message = new MessageCreature();
 		try {
 			message.entityID = packet.readInt();
@@ -65,7 +65,7 @@ public class MessageCreature {
 	/**
 	 * Writes the message into bytes.
 	 */
-	public static void encode(MessageCreature message, PacketBuffer packet) {
+	public static void encode(MessageCreature message, FriendlyByteBuf packet) {
         packet.writeInt(message.entityID);
         packet.writeInt(message.playerReputation);
 	}

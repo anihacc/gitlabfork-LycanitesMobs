@@ -4,13 +4,13 @@ import com.google.gson.JsonObject;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.helpers.JSONHelper;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.monster.AbstractIllagerEntity;
-import net.minecraft.entity.monster.piglin.AbstractPiglinEntity;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.monster.AbstractIllager;
+import net.minecraft.world.entity.monster.piglin.AbstractPiglin;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.resources.ResourceLocation;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -215,16 +215,16 @@ public class CreatureGroup {
 			return false;
 		}
 
-		if(this.animals && entity instanceof AnimalEntity) {
+		if(this.animals && entity instanceof Animal) {
 			return true;
 		}
-		if(this.humanoids && (entity.getType() == EntityType.PLAYER || entity.getType() == EntityType.VILLAGER || entity instanceof AbstractIllagerEntity || entity instanceof AbstractPiglinEntity)) {
+		if(this.humanoids && (entity.getType() == EntityType.PLAYER || entity.getType() == EntityType.VILLAGER || entity instanceof AbstractIllager || entity instanceof AbstractPiglin)) {
 			return true;
 		}
 		if(this.players && entity.getType() == EntityType.PLAYER) {
 			return true;
 		}
-		if(this.villagers && (entity.getType() == EntityType.VILLAGER || entity instanceof AbstractIllagerEntity || entity instanceof AbstractPiglinEntity)) {
+		if(this.villagers && (entity.getType() == EntityType.VILLAGER || entity instanceof AbstractIllager || entity instanceof AbstractPiglin)) {
 			return true;
 		}
 		if(this.raiders && (entity.getType() == EntityType.PILLAGER || entity.getType() == EntityType.RAVAGER)) {

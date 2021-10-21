@@ -2,8 +2,8 @@ package com.lycanitesmobs.client.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.CreatureObjModelOld;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -58,24 +58,24 @@ public class ModelGhoul extends CreatureObjModelOld {
     	
     	// Idle:
     	if(partName.equals("leftarm")) {
-	        rotZ -= Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F + 0.05F);
-	        rotX -= Math.toDegrees(MathHelper.sin(loop * 0.067F) * 0.05F);
+	        rotZ -= Math.toDegrees(Mth.cos(loop * 0.09F) * 0.05F + 0.05F);
+	        rotX -= Math.toDegrees(Mth.sin(loop * 0.067F) * 0.05F);
     	}
     	if(partName.equals("rightarm")) {
-	        rotZ += Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F + 0.05F);
-	        rotX += Math.toDegrees(MathHelper.sin(loop * 0.067F) * 0.05F);
+	        rotZ += Math.toDegrees(Mth.cos(loop * 0.09F) * 0.05F + 0.05F);
+	        rotX += Math.toDegrees(Mth.sin(loop * 0.067F) * 0.05F);
     	}
     	
     	// Walking:
     	float walkSwing = 0.6F;
     	if(partName.equals("leftarm"))
-    		rotX += Math.toDegrees(MathHelper.cos(time * walkSwing) * 2.0F * distance * 0.5F);
+    		rotX += Math.toDegrees(Mth.cos(time * walkSwing) * 2.0F * distance * 0.5F);
     	if(partName.equals("rightarm"))
-    		rotX += Math.toDegrees(MathHelper.cos(time * walkSwing + (float)Math.PI) * 2.0F * distance * 0.5F);
+    		rotX += Math.toDegrees(Mth.cos(time * walkSwing + (float)Math.PI) * 2.0F * distance * 0.5F);
     	if(partName.equals("leftleg"))
-    		rotX += Math.toDegrees(MathHelper.cos(time * walkSwing + (float)Math.PI) * 1.4F * distance);
+    		rotX += Math.toDegrees(Mth.cos(time * walkSwing + (float)Math.PI) * 1.4F * distance);
     	if(partName.equals("rightleg"))
-    		rotX += Math.toDegrees(MathHelper.cos(time * walkSwing) * 1.4F * distance);
+    		rotX += Math.toDegrees(Mth.cos(time * walkSwing) * 1.4F * distance);
     	
     	// Apply Animations:
     	doAngle(rotation, angleX, angleY, angleZ);

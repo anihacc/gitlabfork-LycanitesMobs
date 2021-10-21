@@ -1,10 +1,10 @@
 package com.lycanitesmobs.core.network;
 
 import com.lycanitesmobs.core.tileentity.TileEntityBase;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.BlockPos;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkEvent;
 
@@ -29,8 +29,8 @@ public class MessageTileEntityButton {
 			return;
 
 		ctx.get().enqueueWork(() -> {
-			PlayerEntity player = ctx.get().getSender();
-			TileEntity tileEntity = player.getCommandSenderWorld().getBlockEntity(message.tileEntityPos);
+			Player player = ctx.get().getSender();
+			BlockEntity tileEntity = player.getCommandSenderWorld().getBlockEntity(message.tileEntityPos);
 			if(!(tileEntity instanceof TileEntityBase)) {
 				return;
 			}
@@ -42,7 +42,7 @@ public class MessageTileEntityButton {
 	/**
 	 * Reads the message from bytes.
 	 */
-	public static MessageTileEntityButton decode(PacketBuffer packet) {
+	public static MessageTileEntityButton decode(FriendlyByteBuf packet) {
 		MessageTileEntityButton message = new MessageTileEntityButton();
 		message.buttonId = packet.readInt();
 		message.tileEntityPos = new BlockPos(packet.readInt(), packet.readInt(), packet.readInt());
@@ -52,7 +52,7 @@ public class MessageTileEntityButton {
 	/**
 	 * Writes the message into bytes.
 	 */
-	public static void encode(MessageTileEntityButton message, PacketBuffer packet) {
+	public static void encode(MessageTileEntityButton message, FriendlyByteBuf packet) {
 		packet.writeInt(message.buttonId);
 		packet.writeInt(message.tileEntityPos.getX());
 		packet.writeInt(message.tileEntityPos.getY());

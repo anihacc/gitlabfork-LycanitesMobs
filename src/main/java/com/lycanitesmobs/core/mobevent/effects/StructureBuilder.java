@@ -1,8 +1,8 @@
 package com.lycanitesmobs.core.mobevent.effects;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,5 +27,5 @@ public abstract class StructureBuilder {
 	}
 
 
-	public abstract void build(World world, PlayerEntity player, BlockPos pos, int level, int ticks, int variant);
+	public abstract void build(Level world, Player player, BlockPos pos, int level, int ticks, int variant);
 }

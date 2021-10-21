@@ -7,37 +7,37 @@ import com.lycanitesmobs.core.entity.CustomItemEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.FlowingFluidBlock;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.Pose;
-import net.minecraft.entity.monster.IMob;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.pathfinding.PathNodeType;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.GameRules;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LiquidBlock;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class EntityCherufe extends BaseCreatureEntity implements IMob {
+public class EntityCherufe extends BaseCreatureEntity implements Enemy {
 
     public int blockMeltingRadius = 2;
 	
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityCherufe(EntityType<? extends EntityCherufe> entityType, World world) {
+    public EntityCherufe(EntityType<? extends EntityCherufe> entityType, Level world) {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEFINED;
+        this.attribute = MobType.UNDEFINED;
         this.spawnsOnLand = true;
         this.spawnsInWater = true;
         this.isLavaCreature = true;
@@ -45,7 +45,7 @@ public class EntityCherufe extends BaseCreatureEntity implements IMob {
 
         this.setupMob();
 
-        this.setPathfindingMalus(PathNodeType.LAVA, 0F);
+        this.setPathfindingMalus(BlockPathTypes.LAVA, 0F);
     }
 
     @Override
@@ -99,7 +99,7 @@ public class EntityCherufe extends BaseCreatureEntity implements IMob {
                     for(int h = 0; h <= Math.ceil(this.getDimensions(Pose.STANDING).height); h++) {
                         Block block = this.getCommandSenderWorld().getBlockState(this.blockPosition().offset(w, h, d)).getBlock();
                         if(block == Blocks.OBSIDIAN || block == Blocks.COBBLESTONE || block == Blocks.DIRT || block == Blocks.GRAVEL || block == Blocks.SAND) {
-							BlockState blockState = Blocks.LAVA.defaultBlockState().setValue(FlowingFluidBlock.LEVEL, 5);
+							BlockState blockState = Blocks.LAVA.defaultBlockState().setValue(LiquidBlock.LEVEL, 5);
                             if(block == Blocks.OBSIDIAN)
                                 blockState = Blocks.LAVA.defaultBlockState();
                             this.getCommandSenderWorld().setBlockAndUpdate(this.blockPosition().offset(w, h, d), blockState);
@@ -173,7 +173,7 @@ public class EntityCherufe extends BaseCreatureEntity implements IMob {
     // ========== Ranged Attack ==========
 	@Override
 	public void attackRanged(Entity target, float range) {
-		this.fireProjectile("magma", target, range, 0, new Vector3d(0, 0, 0), 1.2f, 2f, 1F);
+		this.fireProjectile("magma", target, range, 0, new Vec3(0, 0, 0), 1.2f, 2f, 1F);
 		super.attackRanged(target, range);
 	}
     

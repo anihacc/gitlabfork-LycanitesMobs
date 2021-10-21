@@ -3,10 +3,10 @@ package com.lycanitesmobs.core.spawner.condition;
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.ExtendedWorld;
 import com.lycanitesmobs.core.helpers.JSONHelper;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.DimensionType;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.dimension.DimensionType;
+import net.minecraft.world.level.Level;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -130,7 +130,7 @@ public class WorldSpawnCondition extends SpawnCondition {
 
 
     @Override
-    public boolean isMet(World world, PlayerEntity player, BlockPos position) {
+    public boolean isMet(Level world, Player player, BlockPos position) {
 		ExtendedWorld worldExt = ExtendedWorld.getForWorld(world);
 		int time = (int)Math.floor(world.getDayTime() % 24000D);
 		int day = (int)Math.floor((worldExt.useTotalWorldTime ? world.getGameTime() : world.getDayTime()) / 23999D);
@@ -203,7 +203,7 @@ public class WorldSpawnCondition extends SpawnCondition {
 	 * @param world The world to get the biome from.
 	 * @return True if the biome is allowed, false if not.
 	 */
-	public boolean isAllowedDimension(World world) {
+	public boolean isAllowedDimension(Level world) {
 		String dimension = world.dimension().location().toString();
 
 		// Dimension IDs:
@@ -225,7 +225,7 @@ public class WorldSpawnCondition extends SpawnCondition {
 	 * @param position The position to get the biome from, can be null.
 	 * @return True if the biome is allowed, false if not.
 	 */
-	public boolean isAllowedBiome(World world, BlockPos position) {
+	public boolean isAllowedBiome(Level world, BlockPos position) {
 		if(position != null) {
 			String biomeId = world.getBiomeManager().getBiome(position).getRegistryName().toString();
 

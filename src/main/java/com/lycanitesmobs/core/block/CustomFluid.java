@@ -1,9 +1,11 @@
 package com.lycanitesmobs.core.block;
 
-import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.state.StateContainer;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
+
+import net.minecraftforge.fluids.ForgeFlowingFluid.Properties;
 
 abstract public class CustomFluid extends ForgeFlowingFluid {
 
@@ -17,7 +19,7 @@ abstract public class CustomFluid extends ForgeFlowingFluid {
 			super(properties, name);
 		}
 
-		protected void createFluidStateDefinition(StateContainer.Builder<Fluid, FluidState> fluidStateDefinitionBuilder) {
+		protected void createFluidStateDefinition(StateDefinition.Builder<Fluid, FluidState> fluidStateDefinitionBuilder) {
 			super.createFluidStateDefinition(fluidStateDefinitionBuilder);
 			fluidStateDefinitionBuilder.add(LEVEL);
 		}

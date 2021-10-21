@@ -2,9 +2,9 @@ package com.lycanitesmobs.core.info.projectile.behaviours;
 
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 /** Projectile Effects add new behaviour and other effects to projectiles such as placing blocks on impact, firing additional projectiles, etc. **/
 public abstract class ProjectileBehaviour {
@@ -73,7 +73,7 @@ public abstract class ProjectileBehaviour {
 	 * @param canDamage True if the project can damage the contact entity.
 	 * @return True if damage should be prevented.
 	 */
-	public boolean canDamage(BaseProjectileEntity projectile, World world, LivingEntity target, boolean canDamage) {
+	public boolean canDamage(BaseProjectileEntity projectile, Level world, LivingEntity target, boolean canDamage) {
 		return true;
 	}
 
@@ -83,7 +83,7 @@ public abstract class ProjectileBehaviour {
 	 * @param world The impact world.
 	 * @param pos The impact block position.
 	 */
-	public void onProjectileImpact(BaseProjectileEntity projectile, World world, BlockPos pos) {}
+	public void onProjectileImpact(BaseProjectileEntity projectile, Level world, BlockPos pos) {}
 
 	/**
 	 * Called when the projectile deals damage to an entity.
@@ -91,6 +91,6 @@ public abstract class ProjectileBehaviour {
 	 * @param world The impact world.
 	 * @param damage The damage dealt.
 	 */
-	public void onProjectileDamage(BaseProjectileEntity projectile, World world, LivingEntity target, float damage) {}
+	public void onProjectileDamage(BaseProjectileEntity projectile, Level world, LivingEntity target, float damage) {}
 
 }

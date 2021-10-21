@@ -10,12 +10,12 @@ import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.mobevent.effects.MobEventEffect;
 import com.lycanitesmobs.core.mobevent.trigger.MobEventTrigger;
 import com.lycanitesmobs.core.spawner.condition.SpawnCondition;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -137,8 +137,8 @@ public class MobEvent {
     
 
     /** Returns the translated name of this event. **/
-	public ITextComponent getTitle() {
-		return new TranslationTextComponent("mobevent." + this.title + ".name");
+	public Component getTitle() {
+		return new TranslatableComponent("mobevent." + this.title + ".name");
 	}
 
 	
@@ -153,7 +153,7 @@ public class MobEvent {
 	 * @param world The world to start the event in.
 	 * @param player The player that triggered the event, this can be null for world based events where all player based checks will fail.
 	 **/
-	public boolean canStart(World world, PlayerEntity player) {
+	public boolean canStart(Level world, Player player) {
 		if(world == null) {
 			return false;
 		}
@@ -221,7 +221,7 @@ public class MobEvent {
 	 * @param variant The variant to spawn, if less than 0 a random variant is picked as normal.
 	 * @return
 	 */
-	public boolean trigger(World world, PlayerEntity player, BlockPos pos, int level, int variant) {
+	public boolean trigger(Level world, Player player, BlockPos pos, int level, int variant) {
 		LycanitesMobs.logDebug("MobEvents", "~O==================== Mob Event Triggered: " + this.name + " ====================O~");
 		ExtendedWorld worldExt = ExtendedWorld.getForWorld(world);
 		if(worldExt == null) {
@@ -246,7 +246,7 @@ public class MobEvent {
 	 * @param ticks How many ticks the event has been active for.
 	 * @param variant The variant to spawn, if less than 0 a random variant is picked as normal.
 	 */
-	public void onUpdate(World world, PlayerEntity player, BlockPos pos, int level, int ticks, int variant) {
+	public void onUpdate(Level world, Player player, BlockPos pos, int level, int ticks, int variant) {
 		for(MobEventEffect mobEventEffect : this.effects) {
 			mobEventEffect.onUpdate(world, player, pos, level, ticks, variant);
 		}
@@ -262,7 +262,7 @@ public class MobEvent {
 	 * @param ticks How many ticks the event has been active for.
 	 * @param variant The variant to spawn, if less than 0 a random variant is picked as normal.
 	 */
-	public void onSpawn(LivingEntity entity, World world, PlayerEntity player, BlockPos pos, int level, int ticks, int variant) {
+	public void onSpawn(LivingEntity entity, Level world, Player player, BlockPos pos, int level, int ticks, int variant) {
 		for(MobEventEffect mobEventEffect : this.effects) {
 			mobEventEffect.onSpawn(entity, world, player, pos, level, ticks);
 		}
@@ -291,7 +291,7 @@ public class MobEvent {
 	 * @param world The world the event is taking place in.
 	 * @return
 	 */
-	public MobEventPlayerServer getServerEventPlayer(World world) {
+	public MobEventPlayerServer getServerEventPlayer(Level world) {
         return new MobEventPlayerServer(this, world);
     }
 
@@ -300,7 +300,7 @@ public class MobEvent {
 	 * @param world The world the event is taking place in.
 	 * @return
 	 */
-    public MobEventPlayerClient getClientEventPlayer(World world) {
+    public MobEventPlayerClient getClientEventPlayer(Level world) {
         return new MobEventPlayerClient(this, world);
     }
 }

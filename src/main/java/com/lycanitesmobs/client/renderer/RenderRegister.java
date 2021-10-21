@@ -9,9 +9,9 @@ import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ItemManager;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
-import net.minecraft.block.Block;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.RenderTypeLookup;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 
 public class RenderRegister {
@@ -60,7 +60,7 @@ public class RenderRegister {
 
     public void registerBlockRenderLayers() {
         for(Block block : ItemManager.getInstance().cutoutBlocks) {
-            RenderTypeLookup.setRenderLayer(block, RenderType.cutout());
+            ItemBlockRenderTypes.setRenderLayer(block, RenderType.cutout());
         }
     }
 }

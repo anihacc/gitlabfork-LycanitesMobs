@@ -9,14 +9,14 @@ import com.lycanitesmobs.client.gui.buttons.ButtonBase;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.pets.PetEntry;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.gui.widget.Widget;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.BaseComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 
 public class PetsBeastiaryScreen extends BeastiaryScreen {
 	public CreatureFilterList petTypeList;
@@ -25,7 +25,7 @@ public class PetsBeastiaryScreen extends BeastiaryScreen {
 	private int releaseConfirmId = 300;
 	private int releaseCancelId = 301;
 
-	public PetsBeastiaryScreen(PlayerEntity player) {
+	public PetsBeastiaryScreen(Player player) {
 		super(player);
 		this.playerExt.selectedSubspecies = 0;
 		this.playerExt.selectedVariant = 0;
@@ -48,73 +48,73 @@ public class PetsBeastiaryScreen extends BeastiaryScreen {
 		int buttonWidth = 80;
 		int buttonHeight = 20;
 		int buttonSpacing = 2;
-		int buttonMarginX = 10 + Math.max(Math.max(this.drawHelper.getStringWidth(new TranslationTextComponent("gui.pet.actions").getString()), this.drawHelper.getStringWidth(new TranslationTextComponent("gui.pet.stance").getString())), this.drawHelper.getStringWidth(new TranslationTextComponent("gui.pet.movement").getString()));
+		int buttonMarginX = 10 + Math.max(Math.max(this.drawHelper.getStringWidth(new TranslatableComponent("gui.pet.actions").getString()), this.drawHelper.getStringWidth(new TranslatableComponent("gui.pet.stance").getString())), this.drawHelper.getStringWidth(new TranslatableComponent("gui.pet.movement").getString()));
 		int buttonX = this.colRightX + buttonMarginX;
 		int buttonY = this.colRightY + this.colRightHeight - ((buttonHeight + buttonSpacing) * 3);
 
 		// Actions:
-		ButtonBase button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.ACTIVE.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, new TranslationTextComponent("gui.pet.active"), this);
+		ButtonBase button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.ACTIVE.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, new TranslatableComponent("gui.pet.active"), this);
 		this.addButton(button);
 
 		buttonX += buttonWidth + buttonSpacing;
-		button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.TELEPORT.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, new TranslationTextComponent("gui.pet.teleport"), this);
+		button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.TELEPORT.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, new TranslatableComponent("gui.pet.teleport"), this);
 		this.addButton(button);
 
 		buttonX += buttonWidth + buttonSpacing;
-		button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.PVP.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, new TranslationTextComponent("gui.pet.pvp"), this);
+		button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.PVP.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, new TranslatableComponent("gui.pet.pvp"), this);
 		this.addButton(button);
 
 		buttonX += buttonWidth + buttonSpacing;
-		button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.RELEASE.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, new TranslationTextComponent("gui.pet.release"), this);
+		button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.RELEASE.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, new TranslatableComponent("gui.pet.release"), this);
 		this.addButton(button);
 
 		// Stance:
 		buttonX = this.colRightX + buttonMarginX;
 		buttonY += buttonHeight + 2;
-		button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.PASSIVE.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, new TranslationTextComponent("gui.pet.passive"), this);
+		button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.PASSIVE.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, new TranslatableComponent("gui.pet.passive"), this);
 		this.addButton(button);
 
 		buttonX += buttonWidth + buttonSpacing;
-		button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.DEFENSIVE.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, new TranslationTextComponent("gui.pet.defensive"), this);
+		button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.DEFENSIVE.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, new TranslatableComponent("gui.pet.defensive"), this);
 		this.addButton(button);
 
 		buttonX += buttonWidth + buttonSpacing;
-		button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.ASSIST.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, new TranslationTextComponent("gui.pet.assist"), this);
+		button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.ASSIST.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, new TranslatableComponent("gui.pet.assist"), this);
 		this.addButton(button);
 
 		buttonX += buttonWidth + buttonSpacing;
-		button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.AGGRESSIVE.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, new TranslationTextComponent("gui.pet.aggressive"), this);
+		button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.AGGRESSIVE.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, new TranslatableComponent("gui.pet.aggressive"), this);
 		this.addButton(button);
 
 		// Movement:
 		buttonX = this.colRightX + buttonMarginX;
 		buttonY += buttonHeight + 2;
-		button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.FOLLOW.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, new TranslationTextComponent("gui.pet.follow"), this);
+		button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.FOLLOW.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, new TranslatableComponent("gui.pet.follow"), this);
 		this.addButton(button);
 
 		buttonX += buttonWidth + buttonSpacing;
-		button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.WANDER.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, new TranslationTextComponent("gui.pet.wander"), this);
+		button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.WANDER.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, new TranslatableComponent("gui.pet.wander"), this);
 		this.addButton(button);
 
 		buttonX += buttonWidth + buttonSpacing;
-		button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.SIT.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, new TranslationTextComponent("gui.pet.sit"), this);
+		button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.SIT.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, new TranslatableComponent("gui.pet.sit"), this);
 		this.addButton(button);
 
 		// Release Confirmation:
 		buttonX = this.colRightX + Math.round((float)this.colRightWidth / 2) - (buttonWidth + buttonSpacing);
 		buttonY = this.colRightY + Math.round((float)this.colRightHeight / 2) - Math.round((float)buttonHeight / 2);
-		button = new ButtonBase(this.releaseConfirmId, buttonX, buttonY, buttonWidth, buttonHeight, new TranslationTextComponent("common.yes"), this);
+		button = new ButtonBase(this.releaseConfirmId, buttonX, buttonY, buttonWidth, buttonHeight, new TranslatableComponent("common.yes"), this);
 		button.visible = false;
 		this.addButton(button);
 
 		buttonX += buttonSpacing;
-		button = new ButtonBase(this.releaseCancelId, buttonX + buttonWidth, buttonY, buttonWidth, buttonHeight, new TranslationTextComponent("common.no"), this);
+		button = new ButtonBase(this.releaseCancelId, buttonX + buttonWidth, buttonY, buttonWidth, buttonHeight, new TranslatableComponent("common.no"), this);
 		button.visible = false;
 		this.addButton(button);
 	}
 
 	@Override
-	public void renderBackground(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+	public void renderBackground(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
 		super.renderBackground(matrixStack, mouseX, mouseY, partialTicks);
 
 		// Model:
@@ -124,7 +124,7 @@ public class PetsBeastiaryScreen extends BeastiaryScreen {
 	}
 
 	@Override
-	protected void renderWidgets(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+	protected void renderWidgets(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
 		super.renderWidgets(matrixStack, mouseX, mouseY, partialTicks);
 
 		boolean empty = this.playerExt.petManager.entries.isEmpty();
@@ -135,7 +135,7 @@ public class PetsBeastiaryScreen extends BeastiaryScreen {
 		}
 
 		// Update Buttons:
-		for (Widget buttonWidget : this.buttons) {
+		for (AbstractWidget buttonWidget : this.buttons) {
 			if (!(buttonWidget instanceof ButtonBase))
 				continue;
 			ButtonBase button = (ButtonBase) buttonWidget;
@@ -148,15 +148,15 @@ public class PetsBeastiaryScreen extends BeastiaryScreen {
 					// Actions:
 					if (button.buttonId == BaseCreatureEntity.PET_COMMAND_ID.ACTIVE.id + this.petCommandIdStart) {
 						if (!this.playerExt.selectedPet.spawningActive) {
-							button.setMessage(new TranslationTextComponent("gui.pet.summon"));
+							button.setMessage(new TranslatableComponent("gui.pet.summon"));
 						} else {
-							button.setMessage(new TranslationTextComponent("gui.pet.dismiss"));
+							button.setMessage(new TranslatableComponent("gui.pet.dismiss"));
 						}
 					} else if (button.buttonId == BaseCreatureEntity.PET_COMMAND_ID.PVP.id + this.petCommandIdStart) {
 						if (this.playerExt.selectedPet.summonSet.getPVP()) {
-							button.setMessage(new TranslationTextComponent(new TranslationTextComponent("gui.pet.pvp").getString() + ": " + new TranslationTextComponent("common.yes").getString()));
+							button.setMessage(new TranslatableComponent(new TranslatableComponent("gui.pet.pvp").getString() + ": " + new TranslatableComponent("common.yes").getString()));
 						} else {
-							button.setMessage(new TranslationTextComponent(new TranslationTextComponent("gui.pet.pvp").getString() + ": " + new TranslationTextComponent("common.no").getString()));
+							button.setMessage(new TranslatableComponent(new TranslatableComponent("gui.pet.pvp").getString() + ": " + new TranslatableComponent("common.no").getString()));
 						}
 					}
 
@@ -195,7 +195,7 @@ public class PetsBeastiaryScreen extends BeastiaryScreen {
 	}
 
 	@Override
-	public void renderForeground(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+	public void renderForeground(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
 		super.renderForeground(matrixStack, mouseX, mouseY, partialTicks);
 
 		int marginX = 0;
@@ -205,13 +205,13 @@ public class PetsBeastiaryScreen extends BeastiaryScreen {
 
 		// Empty:
 		if(this.playerExt.petManager.entries.isEmpty()) {
-			String text = new TranslationTextComponent("gui.beastiary.pets.empty.info").getString();
+			String text = new TranslatableComponent("gui.beastiary.pets.empty.info").getString();
 			this.drawHelper.drawStringWrapped(matrixStack, text, nextX, nextY, width, 0xFFFFFF, true);
 			return;
 		}
 
 		// Player Spirit:
-		String text = "\u00A7l" + new TranslationTextComponent("gui.beastiary.player.spirit").getString() + ": ";
+		String text = "\u00A7l" + new TranslatableComponent("gui.beastiary.player.spirit").getString() + ": ";
 		this.drawHelper.drawString(matrixStack, text, nextX, nextY, 0xFFFFFF);
 		int barX = nextX + this.drawHelper.getStringWidth(text);
 		int spiritMax = Math.round((float)this.playerExt.spiritMax / this.playerExt.spiritCharge);
@@ -229,17 +229,17 @@ public class PetsBeastiaryScreen extends BeastiaryScreen {
 		if(this.playerExt.selectedPet != null) {
 			// Spirit:
 			nextY += 4 + this.drawHelper.getWordWrappedHeight(text, colRightWidth);
-			text = "\u00A7l" + new TranslationTextComponent("creature.stat.spirit").getString() + ": ";
+			text = "\u00A7l" + new TranslatableComponent("creature.stat.spirit").getString() + ": ";
 			this.drawHelper.drawString(matrixStack, text, nextX, nextY, 0xFFFFFF);
 			this.drawLevel(matrixStack, this.playerExt.selectedPet.getCreatureInfo(), TextureManager.getTexture("GUIPetLevel"), nextX + this.drawHelper.getStringWidth(text), nextY);
 
 			// Health:
 			nextY += 4 + this.drawHelper.getWordWrappedHeight(text, colRightWidth);
 			if(this.playerExt.selectedPet.respawnTime <= 0) {
-				text = "\u00A7l" + new TranslationTextComponent("creature.stat.health").getString() + ": ";
+				text = "\u00A7l" + new TranslatableComponent("creature.stat.health").getString() + ": ";
 			}
 			else {
-				text = "\u00A7l" + new TranslationTextComponent("creature.stat.respawning").getString() + ": ";
+				text = "\u00A7l" + new TranslatableComponent("creature.stat.respawning").getString() + ": ";
 			}
 			this.drawHelper.drawString(matrixStack, text, nextX, nextY, 0xFFFFFF);
 
@@ -263,7 +263,7 @@ public class PetsBeastiaryScreen extends BeastiaryScreen {
 
 			// Experience:
 			nextY += 4 + this.drawHelper.getWordWrappedHeight(text, colRightWidth);
-			text = "\u00A7l" + new TranslationTextComponent("creature.stat.experience").getString() + ": ";
+			text = "\u00A7l" + new TranslatableComponent("creature.stat.experience").getString() + ": ";
 			this.drawHelper.drawString(matrixStack, text, nextX, nextY, 0xFFFFFF);
 
 			barY = nextY - 1;
@@ -281,7 +281,7 @@ public class PetsBeastiaryScreen extends BeastiaryScreen {
 		// Base Display:
 		else {
 			nextY += 4 + this.drawHelper.getWordWrappedHeight(text, colRightWidth);
-			text = new TranslationTextComponent("gui.beastiary.pets.select").getString();
+			text = new TranslatableComponent("gui.beastiary.pets.select").getString();
 			this.drawHelper.drawStringWrapped(matrixStack, text, nextX, nextY, width, 0xFFFFFF, true);
 		}
 
@@ -290,16 +290,16 @@ public class PetsBeastiaryScreen extends BeastiaryScreen {
 		int buttonSpacing = 2;
 		int buttonY = this.colRightY + this.colRightHeight - ((buttonHeight + buttonSpacing) * 3);
 		if(this.playerExt.selectedPet != null && !this.playerExt.selectedPet.releaseEntity) {
-			this.drawHelper.drawString(matrixStack, "\u00A7l" + new TranslationTextComponent("gui.pet.actions").getString(), this.colRightX, buttonY + 6, 0xFFFFFF);
+			this.drawHelper.drawString(matrixStack, "\u00A7l" + new TranslatableComponent("gui.pet.actions").getString(), this.colRightX, buttonY + 6, 0xFFFFFF);
 			buttonY += buttonHeight + buttonSpacing;
-			this.drawHelper.drawString(matrixStack, "\u00A7l" + new TranslationTextComponent("gui.pet.stance").getString(), this.colRightX, buttonY + 6, 0xFFFFFF);
+			this.drawHelper.drawString(matrixStack, "\u00A7l" + new TranslatableComponent("gui.pet.stance").getString(), this.colRightX, buttonY + 6, 0xFFFFFF);
 			buttonY += buttonHeight + buttonSpacing;
-			this.drawHelper.drawString(matrixStack, "\u00A7l" + new TranslationTextComponent("gui.pet.movement").getString(), this.colRightX, buttonY + 6, 0xFFFFFF);
+			this.drawHelper.drawString(matrixStack, "\u00A7l" + new TranslatableComponent("gui.pet.movement").getString(), this.colRightX, buttonY + 6, 0xFFFFFF);
 		}
 
 		// Release Confirmation:
 		if(this.playerExt.selectedPet != null && this.playerExt.selectedPet.releaseEntity) {
-			text = new TranslationTextComponent("gui.pet.release.confirm").getString();
+			text = new TranslatableComponent("gui.pet.release.confirm").getString();
 			nextX = this.colRightX;
 			nextY = this.colRightY + Math.round((float) this.colRightHeight / 2) - Math.round((float) buttonHeight / 2) - this.drawHelper.getWordWrappedHeight(text, this.colRightWidth) - 2;
 			this.drawHelper.drawStringWrapped(matrixStack, text, nextX, nextY, this.colRightWidth, 0xFFFFFF, true);
@@ -388,21 +388,21 @@ public class PetsBeastiaryScreen extends BeastiaryScreen {
 	}
 
 	@Override
-	public ITextComponent getTitle() {
+	public Component getTitle() {
 		if(this.playerExt.selectedPet != null) {
-			ITextComponent title = ((TextComponent)this.playerExt.selectedPet.getDisplayName())
+			Component title = ((BaseComponent)this.playerExt.selectedPet.getDisplayName())
 					.append(" ")
-					.append(new TranslationTextComponent("creature.stat.level"))
+					.append(new TranslatableComponent("creature.stat.level"))
 					.append(" " + this.playerExt.selectedPet.getLevel());
 			if(this.playerExt.selectedPet.releaseEntity) {
-				title = new TranslationTextComponent("gui.pet.release").append(" ").append(title);
+				title = new TranslatableComponent("gui.pet.release").append(" ").append(title);
 			}
 			return title;
 		}
 		if(this.playerExt.petManager.entries.isEmpty()) {
-			return new TranslationTextComponent(new TranslationTextComponent("gui.beastiary.pets.empty.title").getString());
+			return new TranslatableComponent(new TranslatableComponent("gui.beastiary.pets.empty.title").getString());
 		}
-		return new TranslationTextComponent(new TranslationTextComponent("gui.beastiary.pets").getString());
+		return new TranslatableComponent(new TranslatableComponent("gui.beastiary.pets").getString());
 	}
 
 	@Override
@@ -423,6 +423,6 @@ public class PetsBeastiaryScreen extends BeastiaryScreen {
 			soundSuffix += "." + creatureInfo.getSubspecies(this.playerExt.selectedPet.subspeciesIndex).name;
 		}
 		SoundEvent soundEvent = ObjectManager.getSound(creatureInfo.getName() + soundSuffix + "_tame");
-		this.player.getCommandSenderWorld().playSound(this.player, this.player.position().x(), this.player.position().y(), this.player.position().z(), soundEvent, SoundCategory.NEUTRAL, 1, 1);
+		this.player.getCommandSenderWorld().playSound(this.player, this.player.position().x(), this.player.position().y(), this.player.position().z(), soundEvent, SoundSource.NEUTRAL, 1, 1);
 	}
 }

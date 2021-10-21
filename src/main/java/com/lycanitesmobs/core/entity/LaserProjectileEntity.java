@@ -2,23 +2,23 @@ package com.lycanitesmobs.core.entity;
 
 import com.lycanitesmobs.Utilities;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.Pose;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 
 import java.lang.reflect.Constructor;
 import java.util.HashSet;
@@ -60,39 +60,39 @@ public class LaserProjectileEntity extends BaseProjectileEntity {
 	public int offsetIDStart = 14;
 
     // Data Parameters:
-    protected static final DataParameter<Integer> SHOOTING_ENTITY_ID = EntityDataManager.defineId(LaserProjectileEntity.class, DataSerializers.INT);
-    protected static final DataParameter<Integer> LASER_END_ID = EntityDataManager.defineId(LaserProjectileEntity.class, DataSerializers.INT);
-    protected static final DataParameter<Integer> LASER_TIME = EntityDataManager.defineId(LaserProjectileEntity.class, DataSerializers.INT);
-    protected static final DataParameter<Float> OFFSET_X = EntityDataManager.defineId(LaserProjectileEntity.class, DataSerializers.FLOAT);
-    protected static final DataParameter<Float> OFFSET_Y = EntityDataManager.defineId(LaserProjectileEntity.class, DataSerializers.FLOAT);
-    protected static final DataParameter<Float> OFFSET_Z = EntityDataManager.defineId(LaserProjectileEntity.class, DataSerializers.FLOAT);
+    protected static final EntityDataAccessor<Integer> SHOOTING_ENTITY_ID = SynchedEntityData.defineId(LaserProjectileEntity.class, EntityDataSerializers.INT);
+    protected static final EntityDataAccessor<Integer> LASER_END_ID = SynchedEntityData.defineId(LaserProjectileEntity.class, EntityDataSerializers.INT);
+    protected static final EntityDataAccessor<Integer> LASER_TIME = SynchedEntityData.defineId(LaserProjectileEntity.class, EntityDataSerializers.INT);
+    protected static final EntityDataAccessor<Float> OFFSET_X = SynchedEntityData.defineId(LaserProjectileEntity.class, EntityDataSerializers.FLOAT);
+    protected static final EntityDataAccessor<Float> OFFSET_Y = SynchedEntityData.defineId(LaserProjectileEntity.class, EntityDataSerializers.FLOAT);
+    protected static final EntityDataAccessor<Float> OFFSET_Z = SynchedEntityData.defineId(LaserProjectileEntity.class, EntityDataSerializers.FLOAT);
 	
     // ==================================================
  	//                   Constructors
  	// ==================================================
-    public LaserProjectileEntity(EntityType<? extends BaseProjectileEntity> entityType, World world) {
+    public LaserProjectileEntity(EntityType<? extends BaseProjectileEntity> entityType, Level world) {
         super(entityType, world);
         this.setStats();
         this.setTime(0);
     }
 
-    public LaserProjectileEntity(EntityType<? extends BaseProjectileEntity> entityType, World world, double par2, double par4, double par6, int setTime, int setDelay) {
+    public LaserProjectileEntity(EntityType<? extends BaseProjectileEntity> entityType, Level world, double par2, double par4, double par6, int setTime, int setDelay) {
         super(entityType, world, par2, par4, par6);
         this.laserTime = setTime;
         this.laserDelay = setDelay;
         this.setStats();
     }
 
-    public LaserProjectileEntity(EntityType<? extends BaseProjectileEntity> entityType, World world, double par2, double par4, double par6, int setTime, int setDelay, Entity followEntity) {
+    public LaserProjectileEntity(EntityType<? extends BaseProjectileEntity> entityType, Level world, double par2, double par4, double par6, int setTime, int setDelay, Entity followEntity) {
         this(entityType, world, par2, par4, par6, setTime, setDelay);
         this.followEntity = followEntity;
     }
 
-    public LaserProjectileEntity(EntityType<? extends BaseProjectileEntity> entityType, World world, LivingEntity par2LivingEntity, int setTime, int setDelay) {
+    public LaserProjectileEntity(EntityType<? extends BaseProjectileEntity> entityType, Level world, LivingEntity par2LivingEntity, int setTime, int setDelay) {
         this(entityType, world, par2LivingEntity, setTime, setDelay, null);
     }
 
-    public LaserProjectileEntity(EntityType<? extends BaseProjectileEntity> entityType, World world, LivingEntity entityLiving, int setTime, int setDelay, Entity followEntity) {
+    public LaserProjectileEntity(EntityType<? extends BaseProjectileEntity> entityType, Level world, LivingEntity entityLiving, int setTime, int setDelay, Entity followEntity) {
         super(entityType, world, entityLiving);
         this.shootingEntity = entityLiving;
         this.laserTime = setTime;
@@ -120,7 +120,7 @@ public class LaserProjectileEntity extends BaseProjectileEntity {
     }
 
     @Override
-    public AxisAlignedBB getBoundingBoxForCulling() {
+    public AABB getBoundingBoxForCulling() {
         if(this.laserEnd == null)
             return super.getBoundingBoxForCulling();
         double distance = this.distanceTo(this.laserEnd);
@@ -269,7 +269,7 @@ public class LaserProjectileEntity extends BaseProjectileEntity {
 					lockedLaser = true;
 				}
 				else {
-					Vector3d lookDirection = this.shootingEntity.getLookAngle();
+					Vec3 lookDirection = this.shootingEntity.getLookAngle();
 					this.targetX = this.shootingEntity.position().x() + (lookDirection.x * this.laserRange);
 					this.targetY = this.shootingEntity.position().y() + this.shootingEntity.getEyeHeight() + (lookDirection.y * this.laserRange);
 					this.targetZ = this.shootingEntity.position().z() + (lookDirection.z * this.laserRange);
@@ -283,7 +283,7 @@ public class LaserProjectileEntity extends BaseProjectileEntity {
 				excludedEntities.add(this.shootingEntity);
 			if(this.followEntity != null)
 				excludedEntities.add(this.followEntity);
-			RayTraceResult rayTraceResult = Utilities.raytrace(this.getCommandSenderWorld(), this.position().x(), this.position().y(), this.position().z(), this.targetX, this.targetY, this.targetZ, this.laserWidth, this, excludedEntities);
+			HitResult rayTraceResult = Utilities.raytrace(this.getCommandSenderWorld(), this.position().x(), this.position().y(), this.position().z(), this.targetX, this.targetY, this.targetZ, this.laserWidth, this, excludedEntities);
 			
 			// Update Laser End Position:
 			double newTargetX = this.targetX;
@@ -297,8 +297,8 @@ public class LaserProjectileEntity extends BaseProjectileEntity {
 			this.laserEnd.onUpdateEnd(newTargetX, newTargetY, newTargetZ);
 			
 			// Damage:
-			if(this.laserTime % this.laserDelay == 0 && this.isAlive() && rayTraceResult instanceof EntityRayTraceResult) {
-				EntityRayTraceResult entityRayTraceResult = (EntityRayTraceResult)rayTraceResult;
+			if(this.laserTime % this.laserDelay == 0 && this.isAlive() && rayTraceResult instanceof EntityHitResult) {
+				EntityHitResult entityRayTraceResult = (EntityHitResult)rayTraceResult;
 				if(this.laserEnd.distanceTo(entityRayTraceResult.getEntity()) <= (this.laserWidth * 10)) {
 					boolean doDamage = true;
 					if (entityRayTraceResult.getEntity() instanceof LivingEntity) {
@@ -332,17 +332,17 @@ public class LaserProjectileEntity extends BaseProjectileEntity {
  	//                 Fire Projectile
  	// ==================================================
     public void fireProjectile() {
-    	World world = this.getCommandSenderWorld();
+    	Level world = this.getCommandSenderWorld();
     	if(world.isClientSide)
     		return;
     	
 		try {
 			if(this.shootingEntity == null) {
-				Constructor laserEndConstructor = this.getLaserEndClass().getConstructor(EntityType.class, World.class, Double.class, Double.class, Double.class, LaserProjectileEntity.class);
+				Constructor laserEndConstructor = this.getLaserEndClass().getConstructor(EntityType.class, Level.class, Double.class, Double.class, Double.class, LaserProjectileEntity.class);
 				this.laserEnd = (LaserEndProjectileEntity)laserEndConstructor.newInstance(ProjectileManager.getInstance().oldProjectileTypes.get(this.getLaserEndClass()), world, this.position().x(), this.position().y(), this.position().z(), this);
 			}
 	        else {
-				Constructor laserEndConstructor = this.getLaserEndClass().getConstructor(EntityType.class, World.class, LivingEntity.class, LaserProjectileEntity.class);
+				Constructor laserEndConstructor = this.getLaserEndClass().getConstructor(EntityType.class, Level.class, LivingEntity.class, LaserProjectileEntity.class);
 				this.laserEnd = (LaserEndProjectileEntity)laserEndConstructor.newInstance(ProjectileManager.getInstance().oldProjectileTypes.get(this.getLaserEndClass()), world, this.shootingEntity, this);
 	        }
 	        
@@ -430,7 +430,7 @@ public class LaserProjectileEntity extends BaseProjectileEntity {
  	//                     Impact
  	// ==================================================
     @Override
-    protected void onHit(RayTraceResult rayTraceResult) {
+    protected void onHit(HitResult rayTraceResult) {
     	return;
     }
     
@@ -568,7 +568,7 @@ public class LaserProjectileEntity extends BaseProjectileEntity {
     // ==================================================
    	// ========== Read ===========
     @Override
-    public void readAdditionalSaveData(CompoundNBT nbtTagCompound) {
+    public void readAdditionalSaveData(CompoundTag nbtTagCompound) {
     	if(nbtTagCompound.contains("LaserTime"))
     		this.setTime(nbtTagCompound.getInt("LaserTime"));
     	if(nbtTagCompound.contains("OffsetX"))
@@ -582,7 +582,7 @@ public class LaserProjectileEntity extends BaseProjectileEntity {
     
     // ========== Write ==========
     @Override
-    public void addAdditionalSaveData(CompoundNBT nbtTagCompound) {
+    public void addAdditionalSaveData(CompoundTag nbtTagCompound) {
     	nbtTagCompound.putInt("LaserTime", this.laserTime);
     	nbtTagCompound.putDouble("OffsetX", this.offsetX);
     	nbtTagCompound.putDouble("OffsetY", this.offsetY);

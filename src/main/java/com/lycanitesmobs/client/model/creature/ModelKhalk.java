@@ -6,8 +6,8 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.CreatureObjModelOld;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -79,16 +79,16 @@ public class ModelKhalk extends CreatureObjModelOld {
     	
     	// Idle:
     	if(partName.equals("tail")) {
-    		rotX = (float)-Math.toDegrees(MathHelper.cos(loop * 0.1F) * 0.05F - 0.05F);
-    		rotY = (float)-Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F - 0.05F);
+    		rotX = (float)-Math.toDegrees(Mth.cos(loop * 0.1F) * 0.05F - 0.05F);
+    		rotY = (float)-Math.toDegrees(Mth.cos(loop * 0.09F) * 0.05F - 0.05F);
     	}
 		
     	// Walking:
     	float walkSwing = 0.3F;
     	if(partName.equals("legrightfront") || partName.equals("legleftback"))
-    		rotX += Math.toDegrees(MathHelper.cos(time * 0.6662F + (float)Math.PI) * walkSwing * distance);
+    		rotX += Math.toDegrees(Mth.cos(time * 0.6662F + (float)Math.PI) * walkSwing * distance);
     	if(partName.equals("legleftfront") || partName.equals("legrightback"))
-    		rotX += Math.toDegrees(MathHelper.cos(time * 0.6662F) * walkSwing * distance);
+    		rotX += Math.toDegrees(Mth.cos(time * 0.6662F) * walkSwing * distance);
     	
     	// Apply Animations:
 		this.doAngle(rotation, angleX, angleY, angleZ);

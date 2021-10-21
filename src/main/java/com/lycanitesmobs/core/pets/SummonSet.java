@@ -3,8 +3,8 @@ package com.lycanitesmobs.core.pets;
 import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.info.*;
-import net.minecraft.entity.EntityType;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.nbt.CompoundTag;
 
 public class SummonSet {
 	public ExtendedPlayer playerExt;
@@ -208,7 +208,7 @@ public class SummonSet {
     // ==================================================
    	// ========== Read ===========
     /** Reads a list of Creature Knowledge from a player's NBTTag. **/
-    public void read(CompoundNBT nbtTagCompound) {
+    public void read(CompoundTag nbtTagCompound) {
 		if(nbtTagCompound.contains("SummonType"))
     		this.setSummonType(nbtTagCompound.getString("SummonType"));
 
@@ -239,7 +239,7 @@ public class SummonSet {
     
     // ========== Write ==========
     /** Writes a list of Creature Knowledge to a player's NBTTag. **/
-    public void write(CompoundNBT nbtTagCompound) {
+    public void write(CompoundTag nbtTagCompound) {
 		nbtTagCompound.putString("SummonType", this.summonType);
 
 		nbtTagCompound.putInt("Subspecies", this.getSubspecies());

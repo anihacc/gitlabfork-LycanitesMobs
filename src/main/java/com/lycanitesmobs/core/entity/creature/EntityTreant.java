@@ -5,33 +5,33 @@ import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import com.lycanitesmobs.core.info.ObjectLists;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class EntityTreant extends BaseCreatureEntity implements IMob, IGroupHeavy {
+public class EntityTreant extends BaseCreatureEntity implements Enemy, IGroupHeavy {
     
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityTreant(EntityType<? extends EntityTreant> entityType, World world) {
+    public EntityTreant(EntityType<? extends EntityTreant> entityType, Level world) {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEFINED;
+        this.attribute = MobType.UNDEFINED;
         this.spawnsUnderground = false;
         this.hasAttackSound = true;
         this.spreadFire = true;
@@ -46,7 +46,7 @@ public class EntityTreant extends BaseCreatureEntity implements IMob, IGroupHeav
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setTargetClass(PlayerEntity.class).setLongMemory(false));
+        this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setTargetClass(Player.class).setLongMemory(false));
         this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this));
     }
 	
@@ -62,9 +62,9 @@ public class EntityTreant extends BaseCreatureEntity implements IMob, IGroupHeav
         // Water Healing:
 		if(this.getAirSupply() >= 0) {
 			if (this.isInWater())
-				this.addEffect(new EffectInstance(Effects.REGENERATION, 3 * 20, 1));
+				this.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 3 * 20, 1));
 			else if (this.isInWaterRainOrBubble())
-				this.addEffect(new EffectInstance(Effects.REGENERATION, 3 * 20, 0));
+				this.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 3 * 20, 0));
 		}
     }
     
@@ -103,8 +103,8 @@ public class EntityTreant extends BaseCreatureEntity implements IMob, IGroupHeav
 			ItemStack heldItem = ItemStack.EMPTY;
 			if(damageSrc.getEntity() instanceof LivingEntity) {
 				LivingEntity entityLiving = (LivingEntity)damageSrc.getEntity();
-				if(!entityLiving.getItemInHand(Hand.MAIN_HAND).isEmpty()) {
-					heldItem = entityLiving.getItemInHand(Hand.MAIN_HAND);
+				if(!entityLiving.getItemInHand(InteractionHand.MAIN_HAND).isEmpty()) {
+					heldItem = entityLiving.getItemInHand(InteractionHand.MAIN_HAND);
 				}
 			}
 			if(ObjectLists.isAxe(heldItem)) {
@@ -161,7 +161,7 @@ public class EntityTreant extends BaseCreatureEntity implements IMob, IGroupHeav
     // ========== Rendering Distance ==========
     /** Returns a larger bounding box for rendering this large entity. **/
     @OnlyIn(Dist.CLIENT)
-    public AxisAlignedBB getBoundingBoxForCulling() {
+    public AABB getBoundingBoxForCulling() {
         return this.getBoundingBox().inflate(50, 20, 50).move(0, -10, 0);
     }
 }

@@ -1,9 +1,9 @@
 package com.lycanitesmobs.core.item.equipment.features;
 
 import com.google.gson.JsonObject;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 
 import javax.annotation.Nullable;
 
@@ -77,18 +77,18 @@ public class EquipmentFeature {
 	}
 
 	/** Returns a description of this feature. Returns null if the feature is not active. **/
-	public ITextComponent getDescription(ItemStack itemStack, int level) {
+	public Component getDescription(ItemStack itemStack, int level) {
 		if(!this.isActive(itemStack, level)) {
 			return null;
 		}
-		return new StringTextComponent("");
+		return new TextComponent("");
 	}
 
 	/** Returns a description of this feature. Returns null if the feature is not active. **/
-	public ITextComponent getSummary(ItemStack itemStack, int level) {
+	public Component getSummary(ItemStack itemStack, int level) {
 		if(!this.isActive(itemStack, level)) {
 			return null;
 		}
-		return new StringTextComponent(this.featureType);
+		return new TextComponent(this.featureType);
 	}
 }

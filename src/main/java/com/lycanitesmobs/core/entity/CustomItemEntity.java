@@ -1,10 +1,10 @@
 package com.lycanitesmobs.core.entity;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.DamageSource;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.level.Level;
 
 public class CustomItemEntity extends ItemEntity {
 	protected boolean canBurn = true;
@@ -12,15 +12,15 @@ public class CustomItemEntity extends ItemEntity {
 	// ==================================================
    	//                     Constructor
    	// ==================================================
-	public CustomItemEntity(World world) {
+	public CustomItemEntity(Level world) {
 		super(EntityType.ITEM, world);
 	}
 	
-	public CustomItemEntity(World world, double x, double y, double z) {
+	public CustomItemEntity(Level world, double x, double y, double z) {
         super(world, x, y, z);
     }
 
-    public CustomItemEntity(World world, double x, double y, double z, ItemStack itemStack) {
+    public CustomItemEntity(Level world, double x, double y, double z, ItemStack itemStack) {
         super(world, x, y, z, itemStack);
     }
     

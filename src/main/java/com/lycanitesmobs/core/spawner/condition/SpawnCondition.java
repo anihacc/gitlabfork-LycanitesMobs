@@ -1,9 +1,9 @@
 package com.lycanitesmobs.core.spawner.condition;
 
 import com.google.gson.JsonObject;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 public abstract class SpawnCondition {
     /** Spawn Conditions determine if the Spawner is allowed to be triggered. **/
@@ -48,7 +48,7 @@ public abstract class SpawnCondition {
 	 * @param position The positon to check the conditions from, can be null for some types.
 	 * @return True if conditions are met.
 	 */
-    public boolean isMet(World world, PlayerEntity player, BlockPos position) {
+    public boolean isMet(Level world, Player player, BlockPos position) {
         return true;
     }
 }

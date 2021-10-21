@@ -2,9 +2,9 @@ package com.lycanitesmobs.core.spawner.condition;
 
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.Utilities;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import java.util.Calendar;
 
@@ -48,7 +48,7 @@ public class DateSpawnCondition extends SpawnCondition {
 
 
     @Override
-    public boolean isMet(World world, PlayerEntity player, BlockPos position) {
+    public boolean isMet(Level world, Player player, BlockPos position) {
 		Calendar calendar = Calendar.getInstance();
 
     	// Check Month:

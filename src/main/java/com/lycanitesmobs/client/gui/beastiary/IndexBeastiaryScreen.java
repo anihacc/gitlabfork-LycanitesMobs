@@ -4,10 +4,10 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.gui.beastiary.lists.BeastiaryIndexList;
 import com.lycanitesmobs.client.gui.buttons.ButtonBase;
 import com.lycanitesmobs.core.VersionChecker;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -16,7 +16,7 @@ public class IndexBeastiaryScreen extends BeastiaryScreen {
 	public BeastiaryIndexList indexList;
 	VersionChecker.VersionInfo versionInfo;
 
-	public IndexBeastiaryScreen(PlayerEntity player) {
+	public IndexBeastiaryScreen(Player player) {
 		super(player);
 		this.versionInfo = VersionChecker.INSTANCE.getLatestVersion();
 	}
@@ -37,17 +37,17 @@ public class IndexBeastiaryScreen extends BeastiaryScreen {
 		ButtonBase button;
 
 		// Links:
-		button = new ButtonBase(100, buttonX, buttonY, buttonWidth, buttonHeight, new TranslationTextComponent("Website"), this);
+		button = new ButtonBase(100, buttonX, buttonY, buttonWidth, buttonHeight, new TranslatableComponent("Website"), this);
 		this.addButton(button);
-		button = new ButtonBase(101, buttonX + buttonWidthPadded, buttonY, buttonWidth, buttonHeight, new TranslationTextComponent("Twitter"), this);
+		button = new ButtonBase(101, buttonX + buttonWidthPadded, buttonY, buttonWidth, buttonHeight, new TranslatableComponent("Twitter"), this);
 		this.addButton(button);
-		button = new ButtonBase(102, buttonX + (buttonWidthPadded * 2), buttonY, buttonWidth, buttonHeight, new TranslationTextComponent("Patreon"), this);
+		button = new ButtonBase(102, buttonX + (buttonWidthPadded * 2), buttonY, buttonWidth, buttonHeight, new TranslatableComponent("Patreon"), this);
 		this.addButton(button);
-		button = new ButtonBase(103, buttonX + (buttonWidthPadded * 3), buttonY, buttonWidth, buttonHeight, new TranslationTextComponent("Guilded"), this);
+		button = new ButtonBase(103, buttonX + (buttonWidthPadded * 3), buttonY, buttonWidth, buttonHeight, new TranslatableComponent("Guilded"), this);
 		this.addButton(button);
-		button = new ButtonBase(104, buttonX + (buttonWidthPadded * 4), buttonY, buttonWidth, buttonHeight, new TranslationTextComponent("Discord"), this);
+		button = new ButtonBase(104, buttonX + (buttonWidthPadded * 4), buttonY, buttonWidth, buttonHeight, new TranslatableComponent("Discord"), this);
 		this.addButton(button);
-		button = new ButtonBase(105, buttonX + (buttonWidthPadded * 5), buttonY, buttonWidth, buttonHeight, new TranslationTextComponent("Shard"), this);
+		button = new ButtonBase(105, buttonX + (buttonWidthPadded * 5), buttonY, buttonWidth, buttonHeight, new TranslatableComponent("Shard"), this);
 		this.addButton(button);
 
 		// Lists:
@@ -58,23 +58,23 @@ public class IndexBeastiaryScreen extends BeastiaryScreen {
 	}
 
 	@Override
-	public void renderBackground(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+	public void renderBackground(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
 		super.renderBackground(matrixStack, mouseX, mouseY, partialTicks);
 	}
 
 	@Override
-	public void renderWidgets(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+	public void renderWidgets(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
 		super.renderWidgets(matrixStack, mouseX, mouseY, partialTicks);
 		if(this.indexList != null)
 			this.indexList.render(matrixStack, mouseX, mouseY, partialTicks);
 	}
 
 	@Override
-	public void renderForeground(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+	public void renderForeground(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
 		super.renderForeground(matrixStack, mouseX, mouseY, partialTicks);
 
 		int yOffset = this.colRightY + 13;
-		String info = new TranslationTextComponent("gui.beastiary.index.description").getString();
+		String info = new TranslatableComponent("gui.beastiary.index.description").getString();
 		this.drawHelper.drawStringWrapped(matrixStack, info, this.colRightX + 1, yOffset, this.colRightWidth, 0xFFFFFF, true);
 		yOffset += this.drawHelper.getWordWrappedHeight(info, this.colRightWidth);
 
@@ -82,13 +82,13 @@ public class IndexBeastiaryScreen extends BeastiaryScreen {
 			return;
 
 		// Check Mod Version:
-		String version = "\n\u00A7l" + new TranslationTextComponent("gui.beastiary.index.version").getString() + ": \u00A7r";
+		String version = "\n\u00A7l" + new TranslatableComponent("gui.beastiary.index.version").getString() + ": \u00A7r";
 		if(this.versionInfo.isNewer) {
 			version += "\u00A74";
 		}
 		version += LycanitesMobs.versionNumber + "\u00A7r";
 		if(this.versionInfo.isNewer) {
-			version += " \u00A7l" + new TranslationTextComponent("gui.beastiary.index.version.newer").getString() + ": \u00A7r\u00A72" + this.versionInfo.versionNumber + "\u00A7r";
+			version += " \u00A7l" + new TranslatableComponent("gui.beastiary.index.version.newer").getString() + ": \u00A7r\u00A72" + this.versionInfo.versionNumber + "\u00A7r";
 		}
 		this.drawHelper.drawStringWrapped(matrixStack, version, this.colRightX + 1, yOffset, this.colRightWidth, 0xFFFFFF, true);
 	}
@@ -129,7 +129,7 @@ public class IndexBeastiaryScreen extends BeastiaryScreen {
 	}
 
 	@Override
-	public ITextComponent getTitle() {
-		return new TranslationTextComponent("gui.beastiary.index.title");
+	public Component getTitle() {
+		return new TranslatableComponent("gui.beastiary.index.title");
 	}
 }

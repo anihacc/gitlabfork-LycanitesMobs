@@ -8,9 +8,9 @@ import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureEffect;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.creature.EntityAsmodeus;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -123,33 +123,33 @@ public class ModelAsmodeus extends CreatureObjModelOld {
         // Idle - Arms:
         float armSwing = 0.3F;
         if (partName.equals("armleft")) {
-            rotZ += -Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F - 0.05F);
-            rotX += -Math.toDegrees(MathHelper.sin(loop * 0.067F) * 0.05F);
+            rotZ += -Math.toDegrees(Mth.cos(loop * 0.09F) * 0.05F - 0.05F);
+            rotX += -Math.toDegrees(Mth.sin(loop * 0.067F) * 0.05F);
         }
         if (partName.equals("armright")) {
-            rotZ += Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F + 0.05F);
-            rotX += Math.toDegrees(MathHelper.sin(loop * 0.067F) * 0.05F);
+            rotZ += Math.toDegrees(Mth.cos(loop * 0.09F) * 0.05F + 0.05F);
+            rotX += Math.toDegrees(Mth.sin(loop * 0.067F) * 0.05F);
         }
 
         // Walking:
         if (entity == null || entity.isOnGround()) {
             // Arms:
             if (partName.equals("armleft")) {
-                rotX += Math.toDegrees(MathHelper.cos(time * 0.6662F) * 2.0F * distance * armSwing);
+                rotX += Math.toDegrees(Mth.cos(time * 0.6662F) * 2.0F * distance * armSwing);
             }
             if (partName.equals("armright")) {
-                rotX += Math.toDegrees(MathHelper.cos(time * 0.6662F + (float) Math.PI) * 2.0F * distance * armSwing);
+                rotX += Math.toDegrees(Mth.cos(time * 0.6662F + (float) Math.PI) * 2.0F * distance * armSwing);
             }
 
             // Legs:
             float walkSwing = 0.3F;
             if (partName.equals("legleftfront") || partName.equals("legleftback") || partName.equals("legrightmiddle"))
-                rotation += Math.toDegrees(MathHelper.cos(time * 0.6662F + (float) Math.PI) * walkSwing * distance);
+                rotation += Math.toDegrees(Mth.cos(time * 0.6662F + (float) Math.PI) * walkSwing * distance);
             if (partName.equals("legleftmiddle") || partName.equals("legrightfront") || partName.equals("legrightback"))
-                rotation += Math.toDegrees(MathHelper.cos(time * 0.6662F) * walkSwing * distance);
+                rotation += Math.toDegrees(Mth.cos(time * 0.6662F) * walkSwing * distance);
 
             // Bobbing:
-            float bob = MathHelper.cos(time * 0.6662F + (float) Math.PI) * walkSwing * distance;
+            float bob = Mth.cos(time * 0.6662F + (float) Math.PI) * walkSwing * distance;
             if (bob < 0) bob += -bob * 2;
             posY += bob;
         }
@@ -192,7 +192,7 @@ public class ModelAsmodeus extends CreatureObjModelOld {
         // Spinning Shield:
         if(partName.contains("shield")) {
             rotY += loop * 30;
-            float shieldScale = 1.05F + ((0.5F + (MathHelper.sin(loop / 4) / 2)) / 8);
+            float shieldScale = 1.05F + ((0.5F + (Mth.sin(loop / 4) / 2)) / 8);
             this.doScale(shieldScale, shieldScale, shieldScale);
         }
 		

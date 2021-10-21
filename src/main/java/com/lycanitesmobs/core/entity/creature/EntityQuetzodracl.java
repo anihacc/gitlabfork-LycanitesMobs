@@ -5,15 +5,21 @@ import com.lycanitesmobs.api.IGroupHeavy;
 import com.lycanitesmobs.core.entity.ExtendedEntity;
 import com.lycanitesmobs.core.entity.RideableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
-import net.minecraft.block.Blocks;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.entity.*;
-import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
-public class EntityQuetzodracl extends RideableCreatureEntity implements IMob, IGroupHeavy {
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.Pose;
+
+public class EntityQuetzodracl extends RideableCreatureEntity implements Enemy, IGroupHeavy {
 
     protected AttackMeleeGoal attackAI;
     protected int waterTime = 0;
@@ -23,11 +29,11 @@ public class EntityQuetzodracl extends RideableCreatureEntity implements IMob, I
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityQuetzodracl(EntityType<? extends EntityQuetzodracl> entityType, World world) {
+    public EntityQuetzodracl(EntityType<? extends EntityQuetzodracl> entityType, Level world) {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEFINED;
+        this.attribute = MobType.UNDEFINED;
         this.hasAttackSound = true;
         this.flySoundSpeed = 20;
         this.setupMob();
@@ -145,7 +151,7 @@ public class EntityQuetzodracl extends RideableCreatureEntity implements IMob, I
                 return groundPos.above();
             }
         }
-        if(this.hasPickupEntity() && this.getPickupEntity() instanceof PlayerEntity)
+        if(this.hasPickupEntity() && this.getPickupEntity() instanceof Player)
             wanderPosition = new BlockPos(wanderPosition.getX(), this.restrictYHeightFromGround(wanderPosition, 6, 14), wanderPosition.getZ());
         return wanderPosition;
     }
@@ -210,7 +216,7 @@ public class EntityQuetzodracl extends RideableCreatureEntity implements IMob, I
     	// Drop Weight Effect:
         if(this.hasPickupEntity()) {
             if(ObjectManager.getEffect("weight") != null)
-                this.getPickupEntity().addEffect(new EffectInstance(ObjectManager.getEffect("weight"), this.getEffectDuration(5), 1));
+                this.getPickupEntity().addEffect(new MobEffectInstance(ObjectManager.getEffect("weight"), this.getEffectDuration(5), 1));
         }
     	super.dropPickupEntity();
     }

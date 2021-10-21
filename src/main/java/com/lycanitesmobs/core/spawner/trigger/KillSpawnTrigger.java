@@ -2,8 +2,8 @@ package com.lycanitesmobs.core.spawner.trigger;
 
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.core.spawner.Spawner;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 
 public class KillSpawnTrigger extends EntitySpawnTrigger {
 
@@ -21,7 +21,7 @@ public class KillSpawnTrigger extends EntitySpawnTrigger {
 
 
 	/** Called every time a player kills an entity. **/
-	public void onKill(PlayerEntity player, LivingEntity killedEntity) {
+	public void onKill(Player player, LivingEntity killedEntity) {
 
 		// Check Entity:
 		if(!this.isMatchingEntity(killedEntity)) {

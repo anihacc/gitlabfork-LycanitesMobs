@@ -8,9 +8,9 @@ import com.lycanitesmobs.core.item.equipment.CreatureSaddleItem;
 import com.lycanitesmobs.core.item.consumable.CreatureTreatItem;
 import com.lycanitesmobs.core.item.special.ItemSoulstone;
 import com.lycanitesmobs.core.item.special.ItemSoulstoneFilled;
-import net.minecraft.item.Item;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.item.Item;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -84,8 +84,8 @@ public class CreatureType {
 	 * Returns a translated title for this creature type. Ex: Beast
 	 * @return The display name of this creature type.
 	 */
-	public ITextComponent getTitle() {
-		return new TranslationTextComponent("creaturetype." + this.getName());
+	public Component getTitle() {
+		return new TranslatableComponent("creaturetype." + this.getName());
 	}
 
 	/**

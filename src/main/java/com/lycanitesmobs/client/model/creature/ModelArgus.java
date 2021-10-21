@@ -7,9 +7,9 @@ import com.lycanitesmobs.client.renderer.CustomRenderStates;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureEffect;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -66,15 +66,15 @@ public class ModelArgus extends ModelTemplateElemental {
 
 		// Arms:
 		if(partName.contains("arm")) {
-			float rotX = (float)Math.toDegrees(MathHelper.sin(loop * 0.067F) * 0.05F) * 4;
-			float rotY = (float)Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.1F);
+			float rotX = (float)Math.toDegrees(Mth.sin(loop * 0.067F) * 0.05F) * 4;
+			float rotY = (float)Math.toDegrees(Mth.cos(loop * 0.09F) * 0.1F);
 			if("arm01".equals(partName) || "arm02".equals(partName) || "arm03".equals(partName)) {
 				this.rotate(rotX, rotY, loop * 8);
-				this.translate(MathHelper.cos(loop) * 0.05F - 0.05F, MathHelper.cos(loop) * 0.05F - 0.05F, 0);
+				this.translate(Mth.cos(loop) * 0.05F - 0.05F, Mth.cos(loop) * 0.05F - 0.05F, 0);
 			}
 			else if("arm04".equals(partName) || "arm05".equals(partName) || "arm06".equals(partName)) {
 				this.rotate(rotX, rotY, -loop * 8);
-				this.translate(MathHelper.cos(-loop) * 0.05F - 0.05F, MathHelper.cos(-loop) * 0.05F - 0.05F, 0);
+				this.translate(Mth.cos(-loop) * 0.05F - 0.05F, Mth.cos(-loop) * 0.05F - 0.05F, 0);
 			}
 		}
 
@@ -83,8 +83,8 @@ public class ModelArgus extends ModelTemplateElemental {
 			float tailSwipeX = 32F;
 			float tailSwipeY = 32F;
 			this.rotate(
-					(MathHelper.cos(loop * 0.1F) * tailSwipeX) - (tailSwipeX * 90),
-					(MathHelper.sin(loop * 0.2F) * tailSwipeY) - (tailSwipeY * 90),
+					(Mth.cos(loop * 0.1F) * tailSwipeX) - (tailSwipeX * 90),
+					(Mth.sin(loop * 0.2F) * tailSwipeY) - (tailSwipeY * 90),
 					0
 			);
 		}

@@ -2,17 +2,17 @@ package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.monster.IMob;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.world.level.Level;
 
-public class EntityVorach extends TameableCreatureEntity implements IMob {
+public class EntityVorach extends TameableCreatureEntity implements Enemy {
 
-	public EntityVorach(EntityType<? extends EntityVorach> entityType, World world) {
+	public EntityVorach(EntityType<? extends EntityVorach> entityType, Level world) {
 		super(entityType, world);
-		this.attribute = CreatureAttribute.UNDEAD;
+		this.attribute = MobType.UNDEAD;
 		this.hasAttackSound = true;
 		this.spreadFire = true;
 		this.setupMob();

@@ -7,27 +7,27 @@ import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
 import com.lycanitesmobs.core.entity.goals.actions.abilities.StealthGoal;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.Pose;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.Level;
 
 public class EntityUmibas extends TameableCreatureEntity implements IGroupHeavy {
 
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityUmibas(EntityType<? extends EntityUmibas> entityType, World world) {
+    public EntityUmibas(EntityType<? extends EntityUmibas> entityType, Level world) {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.ARTHROPOD;
+        this.attribute = MobType.ARTHROPOD;
         this.spawnsOnLand = true;
         this.spawnsInWater = true;
         this.hasAttackSound = false;
@@ -101,7 +101,7 @@ public class EntityUmibas extends TameableCreatureEntity implements IGroupHeavy 
         double d0 = target.position().x() - this.position().x() + accuracy;
         double d1 = target.position().y() + (double)target.getEyeHeight() - 1.100000023841858D - projectile.position().y() + accuracy;
         double d2 = target.position().z() - this.position().z() + accuracy;
-        float f1 = MathHelper.sqrt(d0 * d0 + d2 * d2) * 0.2F;
+        float f1 = Mth.sqrt(d0 * d0 + d2 * d2) * 0.2F;
         float velocity = 1.2F;
         projectile.shoot(d0, d1 + (double) f1, d2, velocity, 6.0F);
 

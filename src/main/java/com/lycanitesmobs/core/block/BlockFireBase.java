@@ -5,16 +5,16 @@ import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.info.ItemManager;
 import com.lycanitesmobs.core.info.ModInfo;
 import net.minecraft.block.*;
-import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.particles.ParticleTypes;
-import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.util.Direction;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.Util;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.core.Direction;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.Util;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.*;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -22,15 +22,26 @@ import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.Random;
 
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.PipeBlock;
+import net.minecraft.world.level.block.TntBlock;
+import net.minecraft.world.level.block.state.BlockState;
+
 public class BlockFireBase extends BlockBase {
     public static final BooleanProperty PERMANENT = BooleanProperty.create("permanent");
     public static final BooleanProperty STATIC = BooleanProperty.create("static");
-    public static final BooleanProperty NORTH = SixWayBlock.NORTH;
-    public static final BooleanProperty EAST = SixWayBlock.EAST;
-    public static final BooleanProperty SOUTH = SixWayBlock.SOUTH;
-    public static final BooleanProperty WEST = SixWayBlock.WEST;
-    public static final BooleanProperty UP = SixWayBlock.UP;
-    private static final Map<Direction, BooleanProperty> FACING_TO_PROPERTY_MAP = SixWayBlock.PROPERTY_BY_DIRECTION.entrySet().stream().filter((p_199776_0_) -> p_199776_0_.getKey() != Direction.DOWN).collect(Util.toMap());
+    public static final BooleanProperty NORTH = PipeBlock.NORTH;
+    public static final BooleanProperty EAST = PipeBlock.EAST;
+    public static final BooleanProperty SOUTH = PipeBlock.SOUTH;
+    public static final BooleanProperty WEST = PipeBlock.WEST;
+    public static final BooleanProperty UP = PipeBlock.UP;
+    private static final Map<Direction, BooleanProperty> FACING_TO_PROPERTY_MAP = PipeBlock.PROPERTY_BY_DIRECTION.entrySet().stream().filter((p_199776_0_) -> p_199776_0_.getKey() != Direction.DOWN).collect(Util.toMap());
 
     public boolean dieInRain = true;
     public boolean triggerTNT = true;
@@ -64,17 +75,17 @@ public class BlockFireBase extends BlockBase {
     }
 
     @Override
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(AGE, PERMANENT, STATIC, NORTH, EAST, SOUTH, WEST, UP);
     }
 
     @Override
     @Nullable
-    public BlockState getStateForPlacement(BlockItemUseContext context) {
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
         return this.getStateForPlacement(context.getLevel(), context.getClickedPos());
     }
 
-    public BlockState getStateForPlacement(IBlockReader world, BlockPos blockPos) {
+    public BlockState getStateForPlacement(BlockGetter world, BlockPos blockPos) {
         BlockPos lowerBlockPos = blockPos.below();
         BlockState lowerBlockState = world.getBlockState(lowerBlockPos);
         if (!this.canCatchFire(world, blockPos, Direction.UP) && lowerBlockState.isFaceSturdy(world, lowerBlockPos, Direction.UP)) {
@@ -95,12 +106,12 @@ public class BlockFireBase extends BlockBase {
 
     /** Returns true if this block can place another block at the specified location. **/
     @Override
-    public boolean canSurvive(BlockState state, IWorldReader worldIn, BlockPos pos) {
+    public boolean canSurvive(BlockState state, LevelReader worldIn, BlockPos pos) {
         BlockPos blockpos = pos.below();
         return worldIn.getBlockState(blockpos).isFaceSturdy(worldIn, blockpos, Direction.UP) || this.areNeighborsFlammable(worldIn, pos);
     }
 
-    protected boolean areNeighborsFlammable(IBlockReader worldIn, BlockPos pos) {
+    protected boolean areNeighborsFlammable(BlockGetter worldIn, BlockPos pos) {
         for(Direction direction : Direction.values()) {
             if (this.canCatchFire(worldIn, pos.relative(direction), direction.getOpposite())) {
                 return true;
@@ -110,18 +121,18 @@ public class BlockFireBase extends BlockBase {
     }
 
     @Override
-    public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
+    public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor worldIn, BlockPos currentPos, BlockPos facingPos) {
         //return this.isValidPosition(state, worldIn, currentPos) ? this.getStateForPlacement(worldIn, currentPos).with(AGE, state.get(AGE)) : Blocks.AIR.getDefaultState();
         return this.getStateForPlacement(worldIn, currentPos).setValue(AGE, state.getValue(AGE));
     }
 
     @Override
-    public int tickRate(IWorldReader world) {
+    public int tickRate(LevelReader world) {
         return this.tickRate;
     }
 
     @Override
-    public void tick(BlockState blockState, ServerWorld world, BlockPos pos, Random rand) {
+    public void tick(BlockState blockState, ServerLevel world, BlockPos pos, Random rand) {
         if (blockState.getValue(STATIC) || !world.isAreaLoaded(pos, 2)) {
             return;
         }
@@ -227,7 +238,7 @@ public class BlockFireBase extends BlockBase {
     }
 
     /** Returns true if any adjacent blocks can catch fire. **/
-    protected boolean canNeighborCatchFire(World worldIn, BlockPos pos) {
+    protected boolean canNeighborCatchFire(Level worldIn, BlockPos pos) {
         for (Direction direction : Direction.values()) {
             if (this.canCatchFire(worldIn, pos.relative(direction), direction.getOpposite())) {
                 return true;
@@ -237,7 +248,7 @@ public class BlockFireBase extends BlockBase {
     }
 
     /** Gets the flammability of nearby blocks, highly flammable blocks that are near each other will help spread fire faster. **/
-    protected int getNeighborEncouragement(World worldIn, BlockPos pos) {
+    protected int getNeighborEncouragement(Level worldIn, BlockPos pos) {
         if (!worldIn.isEmptyBlock(pos))
             return 0;
         else {
@@ -250,7 +261,7 @@ public class BlockFireBase extends BlockBase {
     }
 
     /** Attempts to ignite the position. **/
-    private void tryCatchFire(World world, BlockPos pos, int chance, Random random, int age, Direction face) {
+    private void tryCatchFire(Level world, BlockPos pos, int chance, Random random, int age, Direction face) {
         int flammability = this.getBlockFlammability(world, pos, face);
         if (Math.round(random.nextInt(chance) / this.spreadChance) < flammability) {
             BlockState blockState = world.getBlockState(pos);
@@ -265,51 +276,51 @@ public class BlockFireBase extends BlockBase {
                 this.burnBlockDestroy(world, pos);
             }
 
-            if (this.triggerTNT && blockState.getBlock() instanceof TNTBlock) {
-                TNTBlock.explode(world, pos);
+            if (this.triggerTNT && blockState.getBlock() instanceof TntBlock) {
+                TntBlock.explode(world, pos);
             }
         }
     }
 
     /** Burns away a block, typically replacing it with this fire block, but can change it to other things depending on the type of fire block. **/
-    public void burnBlockReplace(World world, BlockPos pos, int newFireAge) {
+    public void burnBlockReplace(Level world, BlockPos pos, int newFireAge) {
         world.setBlock(pos, this.defaultBlockState().setValue(AGE, newFireAge).setValue(PERMANENT, false), 3);
     }
 
     /** Burns away a block, typically setting it to air but can change it to other things depending on the type of fire block. **/
-    public void burnBlockDestroy(World world, BlockPos pos) {
+    public void burnBlockDestroy(Level world, BlockPos pos) {
         world.removeBlock(pos, false);
     }
 
     /** Returns true if the block at the provided position and face can catch fire. **/
-    public boolean canCatchFire(IBlockReader world, BlockPos pos, Direction face) {
+    public boolean canCatchFire(BlockGetter world, BlockPos pos, Direction face) {
         return world.getBlockState(pos).isFlammable(world, pos, face);
     }
 
     /** Checks if the provided block is a fire source, can be overridden for custom sources. **/
-    public boolean isBlockFireSource(BlockState state, IWorldReader world, BlockPos pos, Direction side) {
+    public boolean isBlockFireSource(BlockState state, LevelReader world, BlockPos pos, Direction side) {
         return state.isFireSource(world, pos, side);
     }
 
     /** Returns how flammable the target block is. **/
-    public int getBlockFlammability(IBlockReader world, BlockPos pos, Direction face) {
+    public int getBlockFlammability(BlockGetter world, BlockPos pos, Direction face) {
         return world.getBlockState(pos).getFlammability(world, pos, face);
     }
 
     /** Returns true if this fire block should be extinguished, can check for rain and position, etc. **/
-    protected boolean canDie(World world, BlockPos pos) {
+    protected boolean canDie(Level world, BlockPos pos) {
         return world.isRainingAt(pos) || world.isRainingAt(pos.west()) || world.isRainingAt(pos.east()) || world.isRainingAt(pos.north()) || world.isRainingAt(pos.south());
     }
 
     /** Client side animation and sounds. **/
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void animateTick(BlockState state, World world, BlockPos pos, Random random) {
+    public void animateTick(BlockState state, Level world, BlockPos pos, Random random) {
         double x = pos.getX();
         double y = pos.getY();
         double z = pos.getZ();
         if(random.nextInt(24) == 0) {
-            world.playLocalSound(x + 0.5D, y + 0.5D, z + 0.5D, ObjectManager.getSound(this.blockName), SoundCategory.BLOCKS, 0.5F + random.nextFloat(), random.nextFloat() * 0.7F + 0.3F, false);
+            world.playLocalSound(x + 0.5D, y + 0.5D, z + 0.5D, ObjectManager.getSound(this.blockName), SoundSource.BLOCKS, 0.5F + random.nextFloat(), random.nextFloat() * 0.7F + 0.3F, false);
         }
         super.animateTick(state, world, pos, random);
     }

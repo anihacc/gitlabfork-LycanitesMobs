@@ -1,11 +1,11 @@
 package com.lycanitesmobs.core.mobevent.effects;
 
 import com.google.gson.JsonObject;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.storage.IServerWorldInfo;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.storage.ServerLevelData;
 
 public class WorldMobEventEffect extends MobEventEffect {
 
@@ -35,11 +35,11 @@ public class WorldMobEventEffect extends MobEventEffect {
 
 
 	@Override
-	public void onUpdate(World world, PlayerEntity player, BlockPos pos, int level, int ticks, int variant) {
+	public void onUpdate(Level world, Player player, BlockPos pos, int level, int ticks, int variant) {
 		if(ticks == 0) {
-			IServerWorldInfo serverWorldInfo = null;
-			if (world instanceof IServerWorldInfo) {
-				serverWorldInfo = (IServerWorldInfo)world;
+			ServerLevelData serverWorldInfo = null;
+			if (world instanceof ServerLevelData) {
+				serverWorldInfo = (ServerLevelData)world;
 			}
 
 			// Rain:
@@ -67,7 +67,7 @@ public class WorldMobEventEffect extends MobEventEffect {
 				if (excessTime > targetTime) {
 					targetTime += dayTime;
 				}
-				for (ServerWorld serverWorld : world.getServer().getAllLevels()) {
+				for (ServerLevel serverWorld : world.getServer().getAllLevels()) {
 					serverWorld.setDayTime(currentTime - excessTime + targetTime);
 				}
 			}

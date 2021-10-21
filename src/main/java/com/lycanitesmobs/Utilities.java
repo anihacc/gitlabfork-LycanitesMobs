@@ -1,12 +1,12 @@
 package com.lycanitesmobs;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.util.math.RayTraceContext;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -16,10 +16,10 @@ public class Utilities {
   	//                      Raytrace
   	// ==================================================
 	// ========== Raytrace All ==========
-    public static RayTraceResult raytrace(World world, double x, double y, double z, double tx, double ty, double tz, float borderSize, Entity entity, HashSet<Entity> excluded) {
-		Vector3d startVec = new Vector3d(x, y, z);
-        Vector3d lookVec = new Vector3d(tx - x, ty - y, tz - z);
-        Vector3d endVec = new Vector3d(tx, ty, tz);
+    public static HitResult raytrace(Level world, double x, double y, double z, double tx, double ty, double tz, float borderSize, Entity entity, HashSet<Entity> excluded) {
+		Vec3 startVec = new Vec3(x, y, z);
+        Vec3 lookVec = new Vec3(tx - x, ty - y, tz - z);
+        Vec3 endVec = new Vec3(tx, ty, tz);
 		float minX = (float)(x < tx ? x : tx);
 		float minY = (float)(y < ty ? y : ty);
 		float minZ = (float)(z < tz ? z : tz);
@@ -28,12 +28,12 @@ public class Utilities {
 		float maxZ = (float)(z > tz ? z : tz);
 
 		// Get Block Collision:
-        RayTraceResult collision = world.clip(new RayTraceContext(startVec, endVec, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, entity));
-		startVec = new Vector3d(x, y, z);
+        HitResult collision = world.clip(new ClipContext(startVec, endVec, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, entity));
+		startVec = new Vec3(x, y, z);
 
 		// Get Entity Collision:
 		if(excluded != null) {
-			AxisAlignedBB bb = new AxisAlignedBB(minX, minY, minZ, maxX, maxY, maxZ).expandTowards(borderSize, borderSize, borderSize);
+			AABB bb = new AABB(minX, minY, minZ, maxX, maxY, maxZ).expandTowards(borderSize, borderSize, borderSize);
 			List<Entity> allHitEntities = world.getEntities(null, bb);
 			Entity closestHitEntity = null;
 			double closestEntDistance = Float.POSITIVE_INFINITY;
@@ -47,7 +47,7 @@ public class Utilities {
 				}
 			}
 			if(closestHitEntity != null) {
-				collision = new EntityRayTraceResult(closestHitEntity);
+				collision = new EntityHitResult(closestHitEntity);
 			}
 		}
 		

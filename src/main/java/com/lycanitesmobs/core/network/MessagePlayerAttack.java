@@ -1,9 +1,9 @@
 package com.lycanitesmobs.core.network;
 
 import com.lycanitesmobs.core.entity.ExtendedPlayer;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkEvent;
 
@@ -27,7 +27,7 @@ public class MessagePlayerAttack {
 			return;
 
 		ctx.get().enqueueWork(() -> {
-			PlayerEntity player = ctx.get().getSender();
+			Player player = ctx.get().getSender();
 			ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
 			if(message.attackEntityID != 0)
 				playerExt.meleeAttack(player.getCommandSenderWorld().getEntity(message.attackEntityID));
@@ -37,7 +37,7 @@ public class MessagePlayerAttack {
 	/**
 	 * Reads the message from bytes.
 	 */
-	public static MessagePlayerAttack decode(PacketBuffer packet) {
+	public static MessagePlayerAttack decode(FriendlyByteBuf packet) {
 		MessagePlayerAttack message = new MessagePlayerAttack();
         message.attackEntityID = packet.readInt();
 		return message;
@@ -46,7 +46,7 @@ public class MessagePlayerAttack {
 	/**
 	 * Writes the message into bytes.
 	 */
-	public static void encode(MessagePlayerAttack message, PacketBuffer packet) {
+	public static void encode(MessagePlayerAttack message, FriendlyByteBuf packet) {
         packet.writeInt(message.attackEntityID);
 	}
 	

@@ -1,12 +1,12 @@
 package com.lycanitesmobs.core.dungeon.instance;
 
-import net.minecraft.block.Blocks;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.vector.Vector3i;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.core.Vec3i;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.Level;
 
 import java.util.Random;
 
@@ -99,7 +99,7 @@ public class SectorConnector {
 	 * @param chunkPos The chunk position to build within.
 	 * @param random The instance of random to use.
 	 */
-	public void buildEntrance(IWorld worldWriter, World world, ChunkPos chunkPos, Random random) {
+	public void buildEntrance(LevelAccessor worldWriter, Level world, ChunkPos chunkPos, Random random) {
 		SectorInstance sectorInstance = this.parentSector;
 		if(sectorInstance == null) {
 			sectorInstance = this.childSector;
@@ -109,10 +109,10 @@ public class SectorConnector {
 		}
 
 		// Get Position and Size:
-		Vector3i size = sectorInstance.getRoomSize();
+		Vec3i size = sectorInstance.getRoomSize();
 		if(this.childSector != null && sectorInstance != this.childSector) {
-			Vector3i childSize = this.childSector.getRoomSize();
-			size = new Vector3i(Math.min(size.getX(), childSize.getX()), Math.min(size.getY(), childSize.getY()), Math.min(size.getZ(), childSize.getZ()));
+			Vec3i childSize = this.childSector.getRoomSize();
+			size = new Vec3i(Math.min(size.getX(), childSize.getX()), Math.min(size.getY(), childSize.getY()), Math.min(size.getZ(), childSize.getZ()));
 		}
 		int entranceHeight = 2;
 		int entranceRadius = 1;
@@ -162,7 +162,7 @@ public class SectorConnector {
 	 * @param chunkPos The chunk position to build within.
 	 * @param random The instance of random to use.
 	 */
-	public void buildTest(IWorld worldWriter, World world, ChunkPos chunkPos, Random random) {
+	public void buildTest(LevelAccessor worldWriter, Level world, ChunkPos chunkPos, Random random) {
 		SectorInstance sectorInstance = this.parentSector;
 		if(sectorInstance == null) {
 			sectorInstance = this.childSector;

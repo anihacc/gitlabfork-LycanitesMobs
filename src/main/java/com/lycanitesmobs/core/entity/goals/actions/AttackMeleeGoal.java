@@ -2,16 +2,18 @@ package com.lycanitesmobs.core.entity.goals.actions;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.pathfinding.Path;
-import net.minecraft.pathfinding.PathPoint;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.pathfinder.Path;
+import net.minecraft.world.level.pathfinder.Node;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
 
 import java.util.EnumSet;
+
+import net.minecraft.world.entity.ai.goal.Goal.Flag;
 
 public class AttackMeleeGoal extends Goal {
 	// Targets:
@@ -171,7 +173,7 @@ public class AttackMeleeGoal extends Goal {
         		return false;
         	else if(this.host.useDirectNavigator() && (this.host.directNavigator.atTargetPosition() || !this.host.directNavigator.isTargetPositionValid()))
         		return false;
-        return this.host.positionNearHome(MathHelper.floor(attackTarget.position().x()), MathHelper.floor(attackTarget.position().y()), MathHelper.floor(attackTarget.position().z()));
+        return this.host.positionNearHome(Mth.floor(attackTarget.position().x()), Mth.floor(attackTarget.position().y()), Mth.floor(attackTarget.position().z()));
     }
 	
     
@@ -219,7 +221,7 @@ public class AttackMeleeGoal extends Goal {
 					this.host.getNavigation().moveTo(this.attackTarget, this.speed);
 				}
 				if(this.host.getNavigation().getPath() != null) {
-	                PathPoint finalPathPoint = this.host.getNavigation().getPath().getEndNode();
+	                Node finalPathPoint = this.host.getNavigation().getPath().getEndNode();
 	                if(finalPathPoint != null && this.attackTarget.distanceToSqr(finalPathPoint.x, finalPathPoint.y, finalPathPoint.z) < 1) {
 						this.failedPathFindingPenalty = 0;
 					}
@@ -242,7 +244,7 @@ public class AttackMeleeGoal extends Goal {
             if(--this.attackTime <= 0) {
                 this.attackTime = this.host.getMeleeCooldown();
                 if(!this.host.getMainHandItem().isEmpty())
-                    this.host.swing(Hand.MAIN_HAND);
+                    this.host.swing(InteractionHand.MAIN_HAND);
                 this.host.attackMelee(this.attackTarget, this.damageScale);
             }
 
@@ -250,7 +252,7 @@ public class AttackMeleeGoal extends Goal {
             double d0 = this.host.position().x() - this.attackTarget.position().x();
             double d1 = this.host.position().z() - this.attackTarget.position().z();
             float f = (float)(Math.atan2(d1, d0) * 180.0D / Math.PI) + 90.0F;
-            f = MathHelper.wrapDegrees(f - this.host.yRot);
+            f = Mth.wrapDegrees(f - this.host.yRot);
             if(f < -30f) f = -30f;
             if(f > 30f) f = 30f;
             this.host.yRot = this.host.yRot + f;
@@ -263,7 +265,7 @@ public class AttackMeleeGoal extends Goal {
 	 * @return The time in ticks to wait before calculating a new chase path.
 	 */
 	public int getFailedPathFindingPenalty() {
-		if (this.attackTarget instanceof PlayerEntity) {
+		if (this.attackTarget instanceof Player) {
 			return this.failedPathFindingPenaltyPlayerMax;
 		}
 		return this.failedPathFindingPenaltyMax;

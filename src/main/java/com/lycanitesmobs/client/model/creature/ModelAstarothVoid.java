@@ -2,8 +2,8 @@ package com.lycanitesmobs.client.model.creature;
 
 
 import com.lycanitesmobs.LycanitesMobs;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -54,16 +54,16 @@ public class ModelAstarothVoid extends ModelAstaroth {
 
 			if(partName.contains("left")) {
 				this.rotate(
-						(float) Math.toDegrees(MathHelper.sin(loop * 0.067F) * 0.05F),
-						(float) Math.toDegrees(MathHelper.sin((loop + (loopOffset / 2)) * 0.2F) * 0.25F) - 10,
-						(float) -Math.toDegrees(MathHelper.cos((loop + (loopOffset / 2)) * 0.09F) * 0.1F)
+						(float) Math.toDegrees(Mth.sin(loop * 0.067F) * 0.05F),
+						(float) Math.toDegrees(Mth.sin((loop + (loopOffset / 2)) * 0.2F) * 0.25F) - 10,
+						(float) -Math.toDegrees(Mth.cos((loop + (loopOffset / 2)) * 0.09F) * 0.1F)
 				);
 			}
 			else {
 				this.rotate(
-						(float) Math.toDegrees(MathHelper.sin(loop * 0.067F) * 0.05F),
-						(float) -Math.toDegrees(MathHelper.sin((loop + (loopOffset / 2)) * 0.2F) * 0.25F) - 10,
-						(float) -Math.toDegrees(MathHelper.cos((loop + (loopOffset / 2)) * 0.09F) * 0.1F)
+						(float) Math.toDegrees(Mth.sin(loop * 0.067F) * 0.05F),
+						(float) -Math.toDegrees(Mth.sin((loop + (loopOffset / 2)) * 0.2F) * 0.25F) - 10,
+						(float) -Math.toDegrees(Mth.cos((loop + (loopOffset / 2)) * 0.09F) * 0.1F)
 				);
 			}
 		}

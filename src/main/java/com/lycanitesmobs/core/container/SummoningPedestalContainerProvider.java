@@ -1,16 +1,16 @@
 package com.lycanitesmobs.core.container;
 
 import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.network.chat.Component;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class SummoningPedestalContainerProvider implements INamedContainerProvider {
+public class SummoningPedestalContainerProvider implements MenuProvider {
 	public TileEntitySummoningPedestal summoningPedestal;
 
 	public SummoningPedestalContainerProvider(@Nonnull TileEntitySummoningPedestal summoningPedestal) {
@@ -19,12 +19,12 @@ public class SummoningPedestalContainerProvider implements INamedContainerProvid
 
 	@Nullable
 	@Override
-	public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity playerEntity) {
+	public AbstractContainerMenu createMenu(int windowId, Inventory playerInventory, Player playerEntity) {
 		return new SummoningPedestalContainer(windowId, playerInventory, this.summoningPedestal);
 	}
 
 	@Override
-	public ITextComponent getDisplayName() {
+	public Component getDisplayName() {
 		return this.summoningPedestal.getName();
 	}
 }

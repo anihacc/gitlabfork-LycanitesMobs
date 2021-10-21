@@ -1,18 +1,18 @@
 package com.lycanitesmobs.core.entity.goals.actions;
 
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.EnumSet;
 
-import net.minecraft.entity.ai.goal.Goal.Flag;
+import net.minecraft.world.entity.ai.goal.Goal.Flag;
 
 public class BegGoal extends Goal {
 	// Targets:
     private TameableCreatureEntity host;
-    private PlayerEntity player;
+    private Player player;
     
     // Properties:
     private float range = 8.0F * 8.0F;
@@ -87,7 +87,7 @@ public class BegGoal extends Goal {
 	// ==================================================
  	//                    Got Beg Item
  	// ==================================================
-    private boolean gotBegItem(PlayerEntity player) {
+    private boolean gotBegItem(Player player) {
         ItemStack itemstack = player.inventory.getSelected();
         if(itemstack.isEmpty())
         	return false;

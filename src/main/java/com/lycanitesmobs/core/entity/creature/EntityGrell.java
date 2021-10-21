@@ -7,22 +7,22 @@ import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.FindAttackTargetGoal;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.Pose;
-import net.minecraft.entity.monster.GhastEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.monster.Ghast;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 
 public class EntityGrell extends RideableCreatureEntity {
 
-    public EntityGrell(EntityType<? extends EntityGrell> entityType, World world) {
+    public EntityGrell(EntityType<? extends EntityGrell> entityType, Level world) {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEAD;
+        this.attribute = MobType.UNDEAD;
         this.hasAttackSound = false;
 
         this.setupMob();
@@ -37,7 +37,7 @@ public class EntityGrell extends RideableCreatureEntity {
         this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(false).setMaxChaseDistanceSq(3.0F));
         this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackRangedGoal(this).setSpeed(0.25D).setRange(40.0F).setMinChaseDistance(10.0F).setLongMemory(false));
 
-        this.targetSelector.addGoal(this.nextFindTargetIndex++, new FindAttackTargetGoal(this).addTargets(GhastEntity.class));
+        this.targetSelector.addGoal(this.nextFindTargetIndex++, new FindAttackTargetGoal(this).addTargets(Ghast.class));
     }
 
     public boolean isFlying() { return true; }
@@ -49,7 +49,7 @@ public class EntityGrell extends RideableCreatureEntity {
 
     @Override
     public void attackRanged(Entity target, float range) {
-        this.fireProjectile("acidglob", target, range, 0, new Vector3d(0, 0, 0), 0.6f, 2f, 1F);
+        this.fireProjectile("acidglob", target, range, 0, new Vec3(0, 0, 0), 0.6f, 2f, 1F);
         super.attackRanged(target, range);
     }
     
@@ -74,8 +74,8 @@ public class EntityGrell extends RideableCreatureEntity {
         if(this.getStamina() < this.getStaminaCost())
             return;
 
-        if(rider instanceof PlayerEntity) {
-            PlayerEntity player = (PlayerEntity)rider;
+        if(rider instanceof Player) {
+            Player player = (Player)rider;
             ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile("acidglob");
             if(projectileInfo != null) {
                 BaseProjectileEntity projectile = projectileInfo.createProjectile(this.getCommandSenderWorld(), player);

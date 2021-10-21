@@ -5,29 +5,29 @@ import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import com.lycanitesmobs.core.entity.goals.actions.abilities.GetBlockGoal;
 import com.lycanitesmobs.core.entity.goals.actions.abilities.GetItemGoal;
 import com.lycanitesmobs.core.info.ObjectLists;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.GameRules;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.Level;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class EntityKobold extends TameableCreatureEntity implements IMob {
+public class EntityKobold extends TameableCreatureEntity implements Enemy {
     public boolean griefing = true;
     public boolean theivery = true;
 
-    public EntityKobold(EntityType<? extends EntityKobold> entityType, World world) {
+    public EntityKobold(EntityType<? extends EntityKobold> entityType, Level world) {
         super(entityType, world);
 
         // Setup:
-        this.attribute = CreatureAttribute.UNDEFINED;
+        this.attribute = MobType.UNDEFINED;
         this.hasAttackSound = true;
         this.spreadFire = false;
 
@@ -45,7 +45,7 @@ public class EntityKobold extends TameableCreatureEntity implements IMob {
 
 		super.registerGoals();
 
-		this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setTargetClass(PlayerEntity.class).setLongMemory(false));
+		this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setTargetClass(Player.class).setLongMemory(false));
 		this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this));
     }
 
@@ -96,21 +96,21 @@ public class EntityKobold extends TameableCreatureEntity implements IMob {
 
 	@Override
 	public boolean shouldCreatureGroupRevenge(LivingEntity target) {
-		if(target instanceof PlayerEntity && (target.getHealth() / target.getMaxHealth()) <= 0.5F)
+		if(target instanceof Player && (target.getHealth() / target.getMaxHealth()) <= 0.5F)
 			return true;
 		return super.shouldCreatureGroupRevenge(target);
 	}
 
 	@Override
 	public boolean shouldCreatureGroupHunt(LivingEntity target) {
-		if(target instanceof PlayerEntity && (target.getHealth() / target.getMaxHealth()) <= 0.5F)
+		if(target instanceof Player && (target.getHealth() / target.getMaxHealth()) <= 0.5F)
 			return true;
 		return super.shouldCreatureGroupHunt(target);
 	}
 
 	@Override
 	public boolean shouldCreatureGroupFlee(LivingEntity target) {
-		if(target instanceof PlayerEntity && (target.getHealth() / target.getMaxHealth()) <= 0.5F)
+		if(target instanceof Player && (target.getHealth() / target.getMaxHealth()) <= 0.5F)
 			return false;
 		return super.shouldCreatureGroupFlee(target);
 	}

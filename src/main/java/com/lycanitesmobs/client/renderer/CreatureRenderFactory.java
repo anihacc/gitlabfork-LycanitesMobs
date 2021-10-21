@@ -4,7 +4,7 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 
 public class CreatureRenderFactory<T extends BaseCreatureEntity> implements IRenderFactory {
@@ -15,7 +15,7 @@ public class CreatureRenderFactory<T extends BaseCreatureEntity> implements IRen
     }
 
     @Override
-    public EntityRenderer<? super T> createRenderFor(EntityRendererManager manager) {
+    public EntityRenderer<? super T> createRenderFor(EntityRenderDispatcher manager) {
         try {
             return new CreatureRenderer(this.creatureInfo.getName(), manager, (float) this.creatureInfo.width / 2);
         }

@@ -1,16 +1,16 @@
 package com.lycanitesmobs.core.container;
 
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.network.chat.Component;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class CreatureContainerProvider implements INamedContainerProvider {
+public class CreatureContainerProvider implements MenuProvider {
 	public BaseCreatureEntity creature;
 
 	public CreatureContainerProvider(@Nonnull BaseCreatureEntity creature) {
@@ -19,12 +19,12 @@ public class CreatureContainerProvider implements INamedContainerProvider {
 
 	@Nullable
 	@Override
-	public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity playerEntity) {
+	public AbstractContainerMenu createMenu(int windowId, Inventory playerInventory, Player playerEntity) {
 		return new CreatureContainer(windowId, playerInventory, this.creature);
 	}
 
 	@Override
-	public ITextComponent getDisplayName() {
+	public Component getDisplayName() {
 		return this.creature.getDisplayName();
 	}
 }

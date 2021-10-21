@@ -4,8 +4,8 @@ import com.lycanitesmobs.client.ClientManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.info.CreatureKnowledge;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkEvent;
 
@@ -31,7 +31,7 @@ public class MessageCreatureKnowledge {
 		if(ctx.get().getDirection() != NetworkDirection.PLAY_TO_CLIENT)
 			return;
 
-		PlayerEntity player = ClientManager.getInstance().getClientPlayer();
+		Player player = ClientManager.getInstance().getClientPlayer();
 		ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
 		if(playerExt == null)
 			return;
@@ -42,7 +42,7 @@ public class MessageCreatureKnowledge {
 	/**
 	 * Reads the message from bytes.
 	 */
-	public static MessageCreatureKnowledge decode(PacketBuffer packet) {
+	public static MessageCreatureKnowledge decode(FriendlyByteBuf packet) {
 		MessageCreatureKnowledge message = new MessageCreatureKnowledge();
 		try {
 			message.creatureName = packet.readUtf(256);
@@ -59,7 +59,7 @@ public class MessageCreatureKnowledge {
 	/**
 	 * Writes the message into bytes.
 	 */
-	public static void encode(MessageCreatureKnowledge message, PacketBuffer packet) {
+	public static void encode(MessageCreatureKnowledge message, FriendlyByteBuf packet) {
 		packet.writeUtf(message.creatureName);
         packet.writeInt(message.rank);
         packet.writeInt(message.experience);

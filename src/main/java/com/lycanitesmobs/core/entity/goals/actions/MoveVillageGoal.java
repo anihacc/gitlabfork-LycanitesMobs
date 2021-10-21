@@ -1,18 +1,18 @@
 package com.lycanitesmobs.core.entity.goals.actions;
 
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import net.minecraft.entity.ai.RandomPositionGenerator;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.pathfinding.PathNavigator;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.gen.Heightmap;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.entity.ai.util.RandomPos;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.server.level.ServerLevel;
 
 import java.util.EnumSet;
 import java.util.Random;
 
-import net.minecraft.entity.ai.goal.Goal.Flag;
+import net.minecraft.world.entity.ai.goal.Goal.Flag;
 
 public class MoveVillageGoal extends Goal {
 	// Targets:
@@ -57,12 +57,12 @@ public class MoveVillageGoal extends Goal {
         } else if (this.host.getRandom().nextInt(this.frequency) != 0) {
             return false;
         } else {
-            ServerWorld serverWorld = (ServerWorld)this.host.level;
+            ServerLevel serverWorld = (ServerLevel)this.host.level;
             BlockPos blockPos = new BlockPos(this.host.blockPosition());
             if (!serverWorld.isCloseToVillage(blockPos, 6)) {
                 return false;
             } else {
-                Vector3d lvt_3_1_ = RandomPositionGenerator.getLandPos(this.host, 15, 7, (p_220755_1_) -> {
+                Vec3 lvt_3_1_ = RandomPos.getLandPos(this.host, 15, 7, (p_220755_1_) -> {
                     return (double)(-serverWorld.getBlockFloorHeight(p_220755_1_));
                 });
                 this.blockPos = lvt_3_1_ == null ? null : new BlockPos(lvt_3_1_);
@@ -87,15 +87,15 @@ public class MoveVillageGoal extends Goal {
     @Override
     public void tick() {
         if (this.blockPos != null) {
-            PathNavigator lvt_1_1_ = this.host.getNavigation();
+            PathNavigation lvt_1_1_ = this.host.getNavigation();
             if (lvt_1_1_.isDone() && !this.blockPos.closerThan(this.host.position(), 10.0D)) {
-                Vector3d lvt_2_1_ = new Vector3d(this.blockPos.getX(), this.blockPos.getY(), this.blockPos.getZ());
-                Vector3d lvt_3_1_ = new Vector3d(this.host.position().x(), this.host.position().y(), this.host.position().z());
-                Vector3d lvt_4_1_ = lvt_3_1_.subtract(lvt_2_1_);
+                Vec3 lvt_2_1_ = new Vec3(this.blockPos.getX(), this.blockPos.getY(), this.blockPos.getZ());
+                Vec3 lvt_3_1_ = new Vec3(this.host.position().x(), this.host.position().y(), this.host.position().z());
+                Vec3 lvt_4_1_ = lvt_3_1_.subtract(lvt_2_1_);
                 lvt_2_1_ = lvt_4_1_.scale(0.4D).add(lvt_2_1_);
-                Vector3d lvt_5_1_ = lvt_2_1_.subtract(lvt_3_1_).normalize().scale(10.0D).add(lvt_3_1_);
+                Vec3 lvt_5_1_ = lvt_2_1_.subtract(lvt_3_1_).normalize().scale(10.0D).add(lvt_3_1_);
                 BlockPos lvt_6_1_ = new BlockPos(lvt_5_1_);
-                lvt_6_1_ = this.host.level.getHeightmapPos(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, lvt_6_1_);
+                lvt_6_1_ = this.host.level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, lvt_6_1_);
                 if (!lvt_1_1_.moveTo((double) lvt_6_1_.getX(), (double) lvt_6_1_.getY(), (double) lvt_6_1_.getZ(), 1.0D)) {
                     this.moveRandomly();
                 }
@@ -106,7 +106,7 @@ public class MoveVillageGoal extends Goal {
 
     private void moveRandomly() {
         Random lvt_1_1_ = this.host.getRandom();
-        BlockPos lvt_2_1_ = this.host.level.getHeightmapPos(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, this.host.blockPosition().offset(-8 + lvt_1_1_.nextInt(16), 0, -8 + lvt_1_1_.nextInt(16)));
+        BlockPos lvt_2_1_ = this.host.level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, this.host.blockPosition().offset(-8 + lvt_1_1_.nextInt(16), 0, -8 + lvt_1_1_.nextInt(16)));
         this.host.getNavigation().moveTo((double)lvt_2_1_.getX(), (double)lvt_2_1_.getY(), (double)lvt_2_1_.getZ(), 1.0D);
     }
 }

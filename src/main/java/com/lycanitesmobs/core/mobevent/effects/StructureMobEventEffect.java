@@ -1,9 +1,9 @@
 package com.lycanitesmobs.core.mobevent.effects;
 
 import com.google.gson.JsonObject;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 public class StructureMobEventEffect extends MobEventEffect {
 
@@ -20,7 +20,7 @@ public class StructureMobEventEffect extends MobEventEffect {
 
 
 	@Override
-	public void onUpdate(World world, PlayerEntity player, BlockPos pos, int level, int ticks, int variant) {
+	public void onUpdate(Level world, Player player, BlockPos pos, int level, int ticks, int variant) {
 		if(this.structureBuilder != null) {
 			this.structureBuilder.build(world, player, pos, level, ticks, variant);
 		}

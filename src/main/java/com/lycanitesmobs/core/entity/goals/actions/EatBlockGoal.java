@@ -2,17 +2,17 @@ package com.lycanitesmobs.core.entity.goals.actions;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
 
 import java.util.EnumSet;
 
-import net.minecraft.entity.ai.goal.Goal.Flag;
+import net.minecraft.world.entity.ai.goal.Goal.Flag;
 
 public class EatBlockGoal extends Goal {
 	// Targets:
@@ -56,9 +56,9 @@ public class EatBlockGoal extends Goal {
     	 if(this.host.getRandom().nextInt(this.host.isBaby() ? 50 : 1000) != 0)
              return false;
     	 
-    	 int i = MathHelper.floor(this.host.position().x());
-         int j = MathHelper.floor(this.host.position().y());
-         int k = MathHelper.floor(this.host.position().z());
+    	 int i = Mth.floor(this.host.position().x());
+         int j = Mth.floor(this.host.position().y());
+         int k = Mth.floor(this.host.position().z());
 
          BlockState blockState = this.host.getCommandSenderWorld().getBlockState(new BlockPos(i, j - 1, k));
          return this.isValidBlock(blockState);
@@ -99,9 +99,9 @@ public class EatBlockGoal extends Goal {
     public void tick() {
          if(--this.eatTime != 0) return;
          
-         int i = MathHelper.floor(this.host.position().x());
-         int j = MathHelper.floor(this.host.position().y());
-         int k = MathHelper.floor(this.host.position().z());
+         int i = Mth.floor(this.host.position().x());
+         int j = Mth.floor(this.host.position().y());
+         int k = Mth.floor(this.host.position().z());
          BlockState blockState = this.host.getCommandSenderWorld().getBlockState(new BlockPos(i, j - 1, k));
          
          if(this.isValidBlock(blockState)) {

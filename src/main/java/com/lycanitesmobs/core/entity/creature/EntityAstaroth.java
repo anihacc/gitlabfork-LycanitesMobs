@@ -7,22 +7,28 @@ import com.lycanitesmobs.core.entity.projectile.EntityHellShield;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.entity.*;
-import net.minecraft.entity.monster.IMob;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.util.Mth;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 
-public class EntityAstaroth extends TameableCreatureEntity implements IMob {
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.Pose;
+
+public class EntityAstaroth extends TameableCreatureEntity implements Enemy {
     
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityAstaroth(EntityType<? extends EntityAstaroth> entityType, World world) {
+    public EntityAstaroth(EntityType<? extends EntityAstaroth> entityType, Level world) {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEFINED;
+        this.attribute = MobType.UNDEFINED;
         this.hasAttackSound = false;
         this.solidCollision = false;
         this.setupMob();
@@ -60,7 +66,7 @@ public class EntityAstaroth extends TameableCreatureEntity implements IMob {
                 double dX = this.getMasterTarget().position().x() - this.position().x();
                 double dY = this.getMasterTarget().position().y() + (this.getMasterTarget().getDimensions(Pose.STANDING).height * 0.75D) - projectile.position().y();
                 double dZ = this.getMasterTarget().position().z() - this.position().z();
-                double distance = MathHelper.sqrt(dX * dX + dZ * dZ) * 0.1F;
+                double distance = Mth.sqrt(dX * dX + dZ * dZ) * 0.1F;
                 float velocity = 0.8F;
                 projectile.shoot(dX, dY + distance, dZ, velocity, 0.0F);
                 this.getCommandSenderWorld().addFreshEntity(projectile);
@@ -82,7 +88,7 @@ public class EntityAstaroth extends TameableCreatureEntity implements IMob {
     // ========== Ranged Attack ==========
     @Override
     public void attackRanged(Entity target, float range) {
-        this.fireProjectile("devilstar", target, range, 0, new Vector3d(0, 0, 0), 1.2f, 1f, 1F);
+        this.fireProjectile("devilstar", target, range, 0, new Vec3(0, 0, 0), 1.2f, 1f, 1F);
         super.attackRanged(target, range);
     }
 	

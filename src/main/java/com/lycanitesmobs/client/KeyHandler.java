@@ -11,11 +11,11 @@ import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.network.MessagePlayerAttack;
 import com.lycanitesmobs.core.network.MessagePlayerControl;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.inventory.InventoryScreen;
-import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.client.gui.screens.inventory.InventoryScreen;
+import net.minecraft.client.KeyMapping;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -28,16 +28,16 @@ public class KeyHandler {
 	
 	public boolean inventoryOpen = false;
 	
-	public KeyBinding dismount = new KeyBinding("key.mount.dismount", GLFW.GLFW_KEY_V, "Lycanites Mobs");
-	public KeyBinding descend = new KeyBinding("key.mount.descend", GLFW.GLFW_KEY_LEFT_ALT, "Lycanites Mobs");
-	public KeyBinding mountAbility = new KeyBinding("key.mount.ability", GLFW.GLFW_KEY_G, "Lycanites Mobs");
-	public KeyBinding mountInventory = new KeyBinding("key.mount.inventory", GLFW.GLFW_KEY_K, "Lycanites Mobs");
+	public KeyMapping dismount = new KeyMapping("key.mount.dismount", GLFW.GLFW_KEY_V, "Lycanites Mobs");
+	public KeyMapping descend = new KeyMapping("key.mount.descend", GLFW.GLFW_KEY_LEFT_ALT, "Lycanites Mobs");
+	public KeyMapping mountAbility = new KeyMapping("key.mount.ability", GLFW.GLFW_KEY_G, "Lycanites Mobs");
+	public KeyMapping mountInventory = new KeyMapping("key.mount.inventory", GLFW.GLFW_KEY_K, "Lycanites Mobs");
 
-	public KeyBinding beastiary = new KeyBinding("key.beastiary", GLFW.GLFW_KEY_UNKNOWN, "Lycanites Mobs");
-	public KeyBinding index = new KeyBinding("key.index", GLFW.GLFW_KEY_B, "Lycanites Mobs");
-	public KeyBinding pets = new KeyBinding("key.pets", GLFW.GLFW_KEY_UNKNOWN, "Lycanites Mobs");
-	public KeyBinding summoning = new KeyBinding("key.summoning", GLFW.GLFW_KEY_UNKNOWN, "Lycanites Mobs");
-	public KeyBinding minionSelection = new KeyBinding("key.minions", GLFW.GLFW_KEY_R, "Lycanites Mobs");
+	public KeyMapping beastiary = new KeyMapping("key.beastiary", GLFW.GLFW_KEY_UNKNOWN, "Lycanites Mobs");
+	public KeyMapping index = new KeyMapping("key.index", GLFW.GLFW_KEY_B, "Lycanites Mobs");
+	public KeyMapping pets = new KeyMapping("key.pets", GLFW.GLFW_KEY_UNKNOWN, "Lycanites Mobs");
+	public KeyMapping summoning = new KeyMapping("key.summoning", GLFW.GLFW_KEY_UNKNOWN, "Lycanites Mobs");
+	public KeyMapping minionSelection = new KeyMapping("key.minions", GLFW.GLFW_KEY_R, "Lycanites Mobs");
 
 
 	public KeyHandler(Minecraft mc) {
@@ -168,8 +168,8 @@ public class KeyHandler {
         // Left (Attack):
         if(event.getButton() == 0) {
             // Disable attack for large entity reach override:
-            if(!this.mc.player.isSpectator() && !this.mc.player.isHandsBusy() && this.mc.hitResult.getType() == RayTraceResult.Type.ENTITY) {
-                Entity entityHit = ((EntityRayTraceResult)this.mc.hitResult).getEntity();
+            if(!this.mc.player.isSpectator() && !this.mc.player.isHandsBusy() && this.mc.hitResult.getType() == HitResult.Type.ENTITY) {
+                Entity entityHit = ((EntityHitResult)this.mc.hitResult).getEntity();
                 if(playerExt.canMeleeBigEntity(entityHit)) {
                     MessagePlayerAttack message = new MessagePlayerAttack(entityHit);
                     LycanitesMobs.packetHandler.sendToServer(message);

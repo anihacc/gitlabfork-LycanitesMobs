@@ -2,10 +2,10 @@ package com.lycanitesmobs.core.network;
 
 import com.lycanitesmobs.core.pets.SummonSet;
 import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.BlockPos;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkEvent;
 
@@ -40,8 +40,8 @@ public class MessageSummoningPedestalSummonSet {
 			return;
 
 		ctx.get().enqueueWork(() -> {
-			PlayerEntity player = ctx.get().getSender();
-			TileEntity tileEntity = player.getCommandSenderWorld().getBlockEntity(new BlockPos(message.x, message.y, message.z));
+			Player player = ctx.get().getSender();
+			BlockEntity tileEntity = player.getCommandSenderWorld().getBlockEntity(new BlockPos(message.x, message.y, message.z));
 			TileEntitySummoningPedestal summoningPedestal = null;
 			if(tileEntity instanceof TileEntitySummoningPedestal)
 				summoningPedestal = (TileEntitySummoningPedestal)tileEntity;
@@ -56,7 +56,7 @@ public class MessageSummoningPedestalSummonSet {
 	/**
 	 * Reads the message from bytes.
 	 */
-	public static MessageSummoningPedestalSummonSet decode(PacketBuffer packet) {
+	public static MessageSummoningPedestalSummonSet decode(FriendlyByteBuf packet) {
 		MessageSummoningPedestalSummonSet message = new MessageSummoningPedestalSummonSet();
         message.x = packet.readInt();
         message.y = packet.readInt();
@@ -71,7 +71,7 @@ public class MessageSummoningPedestalSummonSet {
 	/**
 	 * Writes the message into bytes.
 	 */
-	public static void encode(MessageSummoningPedestalSummonSet message, PacketBuffer packet) {
+	public static void encode(MessageSummoningPedestalSummonSet message, FriendlyByteBuf packet) {
         packet.writeInt(message.x);
         packet.writeInt(message.y);
         packet.writeInt(message.z);

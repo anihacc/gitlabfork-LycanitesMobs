@@ -5,26 +5,33 @@ import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
 import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.entity.*;
-import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 
 import java.util.HashMap;
 
-public class EntityJengu extends TameableCreatureEntity implements IMob, IFusable {
+import com.lycanitesmobs.core.entity.BaseCreatureEntity.COMMAND_PIORITIES;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.Pose;
+
+public class EntityJengu extends TameableCreatureEntity implements Enemy, IFusable {
 
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityJengu(EntityType<? extends EntityJengu> entityType, World world) {
+    public EntityJengu(EntityType<? extends EntityJengu> entityType, Level world) {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEFINED;
+        this.attribute = MobType.UNDEFINED;
         this.spawnsInWater = true;
         this.hasAttackSound = false;
         this.setupMob();
@@ -63,7 +70,7 @@ public class EntityJengu extends TameableCreatureEntity implements IMob, IFusabl
     // ========== Ranged Attack ==========
     @Override
     public void attackRanged(Entity target, float range) {
-        this.fireProjectile("aquapulse", target, range, 0, new Vector3d(0, 0, 0), 0.6f, 2f, 1F);
+        this.fireProjectile("aquapulse", target, range, 0, new Vec3(0, 0, 0), 0.6f, 2f, 1F);
         super.attackRanged(target, range);
     }
     
@@ -124,7 +131,7 @@ public class EntityJengu extends TameableCreatureEntity implements IMob, IFusabl
     // ==================================================
     // ========== Get Interact Commands ==========
     @Override
-    public HashMap<Integer, String> getInteractCommands(PlayerEntity player, ItemStack itemStack) {
+    public HashMap<Integer, String> getInteractCommands(Player player, ItemStack itemStack) {
         HashMap<Integer, String> commands = new HashMap<>();
         commands.putAll(super.getInteractCommands(player, itemStack));
 
@@ -139,7 +146,7 @@ public class EntityJengu extends TameableCreatureEntity implements IMob, IFusabl
 
     // ========== Perform Command ==========
     @Override
-    public boolean performCommand(String command, PlayerEntity player, ItemStack itemStack) {
+    public boolean performCommand(String command, Player player, ItemStack itemStack) {
 
         // Water:
         if(command.equals("Water")) {

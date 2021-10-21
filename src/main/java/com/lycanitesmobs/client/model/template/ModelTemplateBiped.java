@@ -3,8 +3,8 @@ package com.lycanitesmobs.client.model.template;
 import com.lycanitesmobs.client.model.CreatureObjModel;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.creature.EntityAspid;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.util.Mth;
 
 public class ModelTemplateBiped extends CreatureObjModel {
     protected float walkSwing = 0.6F;
@@ -35,36 +35,36 @@ public class ModelTemplateBiped extends CreatureObjModel {
 
         // Idle:
         if (partName.equals("mouth") || partName.contains("mouthbottom")) {
-            this.rotate((float)-Math.toDegrees(MathHelper.cos(loop * this.mouthRate * 0.09F) * 0.1F - 0.1F) * this.mouthScale, 0.0F, 0.0F);
+            this.rotate((float)-Math.toDegrees(Mth.cos(loop * this.mouthRate * 0.09F) * 0.1F - 0.1F) * this.mouthScale, 0.0F, 0.0F);
         }
         if (partName.contains("mouthtop")) {
-            this.rotate((float)Math.toDegrees(MathHelper.cos(loop * this.mouthRate * 0.09F) * 0.1F - 0.1F) * this.mouthScale, 0.0F, 0.0F);
+            this.rotate((float)Math.toDegrees(Mth.cos(loop * this.mouthRate * 0.09F) * 0.1F - 0.1F) * this.mouthScale, 0.0F, 0.0F);
         }
         if (partName.contains("mouthleft")) {
-            this.rotate(0.0F, (float)-Math.toDegrees(MathHelper.cos(loop * this.mouthRate * 0.09F) * 0.1F - 0.1F) * this.mouthScale, 0.0F);
+            this.rotate(0.0F, (float)-Math.toDegrees(Mth.cos(loop * this.mouthRate * 0.09F) * 0.1F - 0.1F) * this.mouthScale, 0.0F);
         }
         if (partName.contains("mouthright")) {
-            this.rotate(0.0F, (float)Math.toDegrees(MathHelper.cos(loop * this.mouthRate * 0.09F) * 0.1F - 0.1F) * this.mouthScale, 0.0F);
+            this.rotate(0.0F, (float)Math.toDegrees(Mth.cos(loop * this.mouthRate * 0.09F) * 0.1F - 0.1F) * this.mouthScale, 0.0F);
         }
         if(partName.equals("neck")) {
-            this.rotate((float) -Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.1F - 0.05F), 0.0F, 0.0F);
+            this.rotate((float) -Math.toDegrees(Mth.cos(loop * 0.09F) * 0.1F - 0.05F), 0.0F, 0.0F);
         }
         if(partName.contains("armleft")) {
-            rotZ -= Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F + 0.05F);
-            rotX -= Math.toDegrees(MathHelper.sin(loop * 0.067F) * 0.05F);
+            rotZ -= Math.toDegrees(Mth.cos(loop * 0.09F) * 0.05F + 0.05F);
+            rotX -= Math.toDegrees(Mth.sin(loop * 0.067F) * 0.05F);
         }
         if(partName.contains("armright")) {
-            rotZ += Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F + 0.05F);
-            rotX += Math.toDegrees(MathHelper.sin(loop * 0.067F) * 0.05F);
+            rotZ += Math.toDegrees(Mth.cos(loop * 0.09F) * 0.05F + 0.05F);
+            rotX += Math.toDegrees(Mth.sin(loop * 0.067F) * 0.05F);
         }
         if(entity == null || entity.isOnGround() || entity.isInWater()) {
             if(partName.contains("wingleft")) {
-                rotZ += Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F + 0.05F);
-                rotX += Math.toDegrees(MathHelper.sin(loop * 0.067F) * 0.05F);
+                rotZ += Math.toDegrees(Mth.cos(loop * 0.09F) * 0.05F + 0.05F);
+                rotX += Math.toDegrees(Mth.sin(loop * 0.067F) * 0.05F);
             }
             if(partName.contains("wingright")) {
-                rotZ -= Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F + 0.05F);
-                rotX -= Math.toDegrees(MathHelper.sin(loop * 0.067F) * 0.05F);
+                rotZ -= Math.toDegrees(Mth.cos(loop * 0.09F) * 0.05F + 0.05F);
+                rotX -= Math.toDegrees(Mth.sin(loop * 0.067F) * 0.05F);
             }
         }
 
@@ -89,82 +89,82 @@ public class ModelTemplateBiped extends CreatureObjModel {
             else if(partName.equals("tail.007")) {
                 sine = 6;
             }
-            sine = (MathHelper.sin(sine / 6) - 0.5F);
-            float tailRotX = (float)-Math.toDegrees(MathHelper.cos((loop + time) * 0.1F) * 0.05F - 0.05F);
-            float tailRotY = (float)-Math.toDegrees(MathHelper.cos((loop + time) * sine * 0.1F) * 0.4F);
-            tailRotX += Math.toDegrees(MathHelper.cos(time * 0.5F) * 0.1F * distance * 0.5F);
-            tailRotY += Math.toDegrees(MathHelper.cos(time * 0.25F) * distance * 0.5F);
+            sine = (Mth.sin(sine / 6) - 0.5F);
+            float tailRotX = (float)-Math.toDegrees(Mth.cos((loop + time) * 0.1F) * 0.05F - 0.05F);
+            float tailRotY = (float)-Math.toDegrees(Mth.cos((loop + time) * sine * 0.1F) * 0.4F);
+            tailRotX += Math.toDegrees(Mth.cos(time * 0.5F) * 0.1F * distance * 0.5F);
+            tailRotY += Math.toDegrees(Mth.cos(time * 0.25F) * distance * 0.5F);
             this.rotate(tailRotX * this.tailScaleX, tailRotY * this.tailScaleY, 0);
         }
 
 		// Fingers:
 		if(partName.contains("finger")) {
 			if(partName.contains("thumb")) {
-				this.rotate(-(float) Math.toDegrees(MathHelper.cos(loop * 0.2F) * 0.2F - 0.2F), 0, 0);
+				this.rotate(-(float) Math.toDegrees(Mth.cos(loop * 0.2F) * 0.2F - 0.2F), 0, 0);
 			}
 			else {
-				this.rotate((float) Math.toDegrees(MathHelper.cos(loop * 0.2F) * 0.2F - 0.2F), 0, 0);
+				this.rotate((float) Math.toDegrees(Mth.cos(loop * 0.2F) * 0.2F - 0.2F), 0, 0);
 			}
 		}
 
         // Walking:
         if(entity == null || entity.isOnGround() || entity.isInWater()) {
             if(partName.contains("armleft") || partName.equals("wingright")) {
-                rotX += Math.toDegrees(MathHelper.cos(time * this.walkSwing) * 1.0F * distance * 0.5F * this.legScaleX);
+                rotX += Math.toDegrees(Mth.cos(time * this.walkSwing) * 1.0F * distance * 0.5F * this.legScaleX);
                 if(!partName.contains("lower")) {
-                    rotZ -= Math.toDegrees(MathHelper.cos(time * this.walkSwing) * 0.5F * distance * 0.5F * this.legScaleX);
+                    rotZ -= Math.toDegrees(Mth.cos(time * this.walkSwing) * 0.5F * distance * 0.5F * this.legScaleX);
                 }
             }
             if(partName.contains("armright") || partName.equals("wingleft")) {
-                rotX += Math.toDegrees(MathHelper.cos(time * this.walkSwing + (float)Math.PI) * 1.0F * distance * 0.5F * this.legScaleX);
+                rotX += Math.toDegrees(Mth.cos(time * this.walkSwing + (float)Math.PI) * 1.0F * distance * 0.5F * this.legScaleX);
                 if(!partName.contains("lower")) {
-                    rotZ += Math.toDegrees(MathHelper.cos(time * this.walkSwing + (float) Math.PI) * 0.5F * distance * 0.5F * this.legScaleX);
+                    rotZ += Math.toDegrees(Mth.cos(time * this.walkSwing + (float) Math.PI) * 0.5F * distance * 0.5F * this.legScaleX);
                 }
             }
 
             if(partName.equals("legleft"))
-                rotX += Math.toDegrees(MathHelper.cos(time * this.walkSwing + (float)Math.PI) * 1.4F * distance * this.legScaleX);
+                rotX += Math.toDegrees(Mth.cos(time * this.walkSwing + (float)Math.PI) * 1.4F * distance * this.legScaleX);
             if(partName.equals("legright"))
-                rotX += Math.toDegrees(MathHelper.cos(time * this.walkSwing) * 1.4F * distance * this.legScaleX);
+                rotX += Math.toDegrees(Mth.cos(time * this.walkSwing) * 1.4F * distance * this.legScaleX);
 
             if(partName.equals("legleftupper"))
-                rotX += Math.toDegrees(MathHelper.cos(time * this.walkSwing + (float)Math.PI) * 1.4F * (distance * 0.5F) * this.legScaleX);
+                rotX += Math.toDegrees(Mth.cos(time * this.walkSwing + (float)Math.PI) * 1.4F * (distance * 0.5F) * this.legScaleX);
             if(partName.equals("legleftlower"))
-                rotX += Math.toDegrees(MathHelper.cos(time * this.walkSwing + (float)Math.PI) * 1.4F * (distance * 0.5F) * this.legScaleX);
+                rotX += Math.toDegrees(Mth.cos(time * this.walkSwing + (float)Math.PI) * 1.4F * (distance * 0.5F) * this.legScaleX);
             if(partName.equals("legrightupper"))
-                rotX += Math.toDegrees(MathHelper.cos(time * this.walkSwing) * 1.4F * (distance * 0.5F) * this.legScaleX);
+                rotX += Math.toDegrees(Mth.cos(time * this.walkSwing) * 1.4F * (distance * 0.5F) * this.legScaleX);
             if(partName.equals("legrightlower"))
-                rotX += Math.toDegrees(MathHelper.cos(time * this.walkSwing) * 1.4F * (distance * 0.5F) * this.legScaleX);
+                rotX += Math.toDegrees(Mth.cos(time * this.walkSwing) * 1.4F * (distance * 0.5F) * this.legScaleX);
 
             if(partName.contains("legleft0"))
-                rotX += Math.toDegrees(MathHelper.cos(time * this.walkSwing + (float)Math.PI) * 0.6F * distance * this.legScaleX);
+                rotX += Math.toDegrees(Mth.cos(time * this.walkSwing + (float)Math.PI) * 0.6F * distance * this.legScaleX);
             if(partName.contains("legright0"))
-                rotX += Math.toDegrees(MathHelper.cos(time * this.walkSwing) * 0.6F * distance * this.legScaleX);
+                rotX += Math.toDegrees(Mth.cos(time * this.walkSwing) * 0.6F * distance * this.legScaleX);
         }
 
         // Jumping/Flying:
         if(entity != null && !entity.isOnGround() && !entity.isInWater() && (creatureEntity == null || !creatureEntity.hasPerchTarget())) {
             if(partName.contains("wingleft")) {
                 rotX = 20;
-                rotX -= Math.toDegrees(MathHelper.sin(loop * 0.4F * this.wingScale) * 0.6F);
-                rotZ -= Math.toDegrees(MathHelper.sin(loop * 0.4F * this.wingScale) * 0.6F);
+                rotX -= Math.toDegrees(Mth.sin(loop * 0.4F * this.wingScale) * 0.6F);
+                rotZ -= Math.toDegrees(Mth.sin(loop * 0.4F * this.wingScale) * 0.6F);
             }
             if(partName.contains("wingright")) {
                 rotX = 20;
-                rotX -= Math.toDegrees(MathHelper.sin(loop * 0.4F * this.wingScale) * 0.6F);
-                rotZ -= Math.toDegrees(MathHelper.sin(loop * 0.4F * this.wingScale + (float)Math.PI) * 0.6F);
+                rotX -= Math.toDegrees(Mth.sin(loop * 0.4F * this.wingScale) * 0.6F);
+                rotZ -= Math.toDegrees(Mth.sin(loop * 0.4F * this.wingScale + (float)Math.PI) * 0.6F);
             }
             if(partName.contains("legleft")) {
-                rotZ += Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F + 0.05F);
-                rotX += Math.toDegrees(MathHelper.sin(loop * 0.067F) * 0.05F);
+                rotZ += Math.toDegrees(Mth.cos(loop * 0.09F) * 0.05F + 0.05F);
+                rotX += Math.toDegrees(Mth.sin(loop * 0.067F) * 0.05F);
             }
             if(partName.contains("legright")) {
-                rotZ -= Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F + 0.05F);
-                rotX -= Math.toDegrees(MathHelper.sin(loop * 0.067F) * 0.05F);
+                rotZ -= Math.toDegrees(Mth.cos(loop * 0.09F) * 0.05F + 0.05F);
+                rotX -= Math.toDegrees(Mth.sin(loop * 0.067F) * 0.05F);
             }
             if(entity instanceof BaseCreatureEntity && ((BaseCreatureEntity)entity).isFlying()) {
                 if (partName.equals("body")) {
-                    float bob = MathHelper.sin(loop * 0.4F) * 0.15F;
+                    float bob = Mth.sin(loop * 0.4F) * 0.15F;
                     posY += bob * this.flightBobScale;
                 }
             }

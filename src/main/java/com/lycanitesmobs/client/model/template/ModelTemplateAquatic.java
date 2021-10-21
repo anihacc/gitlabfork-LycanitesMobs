@@ -1,8 +1,8 @@
 package com.lycanitesmobs.client.model.template;
 
 import com.lycanitesmobs.client.model.CreatureObjModel;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.util.Mth;
 
 public class ModelTemplateAquatic extends CreatureObjModel {
 
@@ -21,33 +21,33 @@ public class ModelTemplateAquatic extends CreatureObjModel {
 
         // Idle:
         if(partName.equals("body")) {
-            this.rotate(0, (float) -Math.toDegrees(MathHelper.cos(loop * 0.2F) * 0.05F - 0.05F), 0);
+            this.rotate(0, (float) -Math.toDegrees(Mth.cos(loop * 0.2F) * 0.05F - 0.05F), 0);
         }
         if(partName.equals("mouth")) {
-            this.rotate(5F - (float)-Math.toDegrees(MathHelper.cos(loop * -0.1F) * 0.1F), 0.0F, 0.0F);
+            this.rotate(5F - (float)-Math.toDegrees(Mth.cos(loop * -0.1F) * 0.1F), 0.0F, 0.0F);
         }
         if(partName.equals("neck")) {
-            this.rotate((float) -Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F - 0.05F), 0.0F, 0.0F);
+            this.rotate((float) -Math.toDegrees(Mth.cos(loop * 0.09F) * 0.05F - 0.05F), 0.0F, 0.0F);
         }
         float speed = 0.5f;
         if(distance > 0)
             speed = 1f;
         if(partName.equals("armleft") || partName.equals("legleftfront") || partName.equals("legrightback")) {
-            rotZ -= Math.toDegrees(MathHelper.cos(loop * 0.25F * speed) * 0.1F);
-            rotX -= Math.toDegrees(MathHelper.sin(loop * 0.067F * speed) * 0.05F);
+            rotZ -= Math.toDegrees(Mth.cos(loop * 0.25F * speed) * 0.1F);
+            rotX -= Math.toDegrees(Mth.sin(loop * 0.067F * speed) * 0.05F);
         }
         if(partName.equals("armright") || partName.equals("legrightfront") || partName.equals("legleftback")) {
-            rotZ += Math.toDegrees(MathHelper.cos(loop * 0.25F * speed) * 0.1F);
-            rotX += Math.toDegrees(MathHelper.sin(loop * 0.067F * speed) * 0.05F);
+            rotZ += Math.toDegrees(Mth.cos(loop * 0.25F * speed) * 0.1F);
+            rotX += Math.toDegrees(Mth.sin(loop * 0.067F * speed) * 0.05F);
         }
         if(partName.equals("tail")) {
-            rotY += (float)-Math.toDegrees(MathHelper.cos(loop * 0.25f * speed) * 0.25F);
+            rotY += (float)-Math.toDegrees(Mth.cos(loop * 0.25f * speed) * 0.25F);
         }
 
         // Walking:
         if(entity == null || entity.isInWater()) {
             if(partName.equals("body")) {
-                rotY += (float)-Math.toDegrees(MathHelper.cos(time * 0.1F) * 0.2F);
+                rotY += (float)-Math.toDegrees(Mth.cos(time * 0.1F) * 0.2F);
             }
         }
 
@@ -55,13 +55,13 @@ public class ModelTemplateAquatic extends CreatureObjModel {
         if(entity != null && !entity.isOnGround() && !entity.isInWater()) {
             if(partName.equals("wingleft")) {
                 rotX = 20;
-                rotX -= Math.toDegrees(MathHelper.sin(loop * 0.4F) * 0.6F);
-                rotZ -= Math.toDegrees(MathHelper.sin(loop * 0.4F) * 0.6F);
+                rotX -= Math.toDegrees(Mth.sin(loop * 0.4F) * 0.6F);
+                rotZ -= Math.toDegrees(Mth.sin(loop * 0.4F) * 0.6F);
             }
             if(partName.equals("wingright")) {
                 rotX = 20;
-                rotX -= Math.toDegrees(MathHelper.sin(loop * 0.4F) * 0.6F);
-                rotZ -= Math.toDegrees(MathHelper.sin(loop * 0.4F + (float)Math.PI) * 0.6F);
+                rotX -= Math.toDegrees(Mth.sin(loop * 0.4F) * 0.6F);
+                rotZ -= Math.toDegrees(Mth.sin(loop * 0.4F + (float)Math.PI) * 0.6F);
             }
             if(partName.equals("legleftfront") || partName.equals("legleftback"))
                 rotZ -= 25;

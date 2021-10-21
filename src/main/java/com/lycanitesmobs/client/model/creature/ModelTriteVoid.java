@@ -2,8 +2,8 @@ package com.lycanitesmobs.client.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.template.ModelTemplateInsect;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -39,7 +39,7 @@ public class ModelTriteVoid extends ModelTemplateInsect {
 
 		// Walking Bob:
 		if(partName.equals("body")) {
-			float bob = MathHelper.cos(time * 0.6662F + (float) Math.PI) * 0.3F * distance;
+			float bob = Mth.cos(time * 0.6662F + (float) Math.PI) * 0.3F * distance;
 			if (bob < 0)
 				bob += -bob * 2;
 			translate(0, bob, 0);
@@ -57,16 +57,16 @@ public class ModelTriteVoid extends ModelTemplateInsect {
 
 			if(partName.contains("left")) {
 				this.rotate(
-						(float) Math.toDegrees(MathHelper.sin(loop * 0.067F) * 0.05F),
-						(float) Math.toDegrees(MathHelper.sin((loop + (loopOffset / 2)) * 0.2F) * 0.25F) - 10,
-						(float) -Math.toDegrees(MathHelper.cos((loop + (loopOffset / 2)) * 0.09F) * 0.1F)
+						(float) Math.toDegrees(Mth.sin(loop * 0.067F) * 0.05F),
+						(float) Math.toDegrees(Mth.sin((loop + (loopOffset / 2)) * 0.2F) * 0.25F) - 10,
+						(float) -Math.toDegrees(Mth.cos((loop + (loopOffset / 2)) * 0.09F) * 0.1F)
 				);
 			}
 			else {
 				this.rotate(
-						(float) Math.toDegrees(MathHelper.sin(loop * 0.067F) * 0.05F),
-						(float) -Math.toDegrees(MathHelper.sin((loop + (loopOffset / 2)) * 0.2F) * 0.25F) - 10,
-						(float) -Math.toDegrees(MathHelper.cos((loop + (loopOffset / 2)) * 0.09F) * 0.1F)
+						(float) Math.toDegrees(Mth.sin(loop * 0.067F) * 0.05F),
+						(float) -Math.toDegrees(Mth.sin((loop + (loopOffset / 2)) * 0.2F) * 0.25F) - 10,
+						(float) -Math.toDegrees(Mth.cos((loop + (loopOffset / 2)) * 0.09F) * 0.1F)
 				);
 			}
 		}

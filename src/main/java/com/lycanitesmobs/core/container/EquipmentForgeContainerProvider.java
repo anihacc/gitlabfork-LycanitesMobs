@@ -1,16 +1,16 @@
 package com.lycanitesmobs.core.container;
 
 import com.lycanitesmobs.core.tileentity.TileEntityEquipmentForge;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.network.chat.Component;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class EquipmentForgeContainerProvider implements INamedContainerProvider {
+public class EquipmentForgeContainerProvider implements MenuProvider {
 	public TileEntityEquipmentForge equipmentForge;
 
 	public EquipmentForgeContainerProvider(@Nonnull TileEntityEquipmentForge equipmentForge) {
@@ -19,12 +19,12 @@ public class EquipmentForgeContainerProvider implements INamedContainerProvider 
 
 	@Nullable
 	@Override
-	public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity playerEntity) {
+	public AbstractContainerMenu createMenu(int windowId, Inventory playerInventory, Player playerEntity) {
 		return new EquipmentForgeContainer(windowId, playerInventory, this.equipmentForge);
 	}
 
 	@Override
-	public ITextComponent getDisplayName() {
+	public Component getDisplayName() {
 		return this.equipmentForge.getName();
 	}
 }

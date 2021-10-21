@@ -1,14 +1,14 @@
 package com.lycanitesmobs.core.item;
 
 import com.lycanitesmobs.ObjectManager;
-import net.minecraft.block.Blocks;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class LMBlocksGroup extends ItemGroup {
+public class LMBlocksGroup extends CreativeModeTab {
 
 	// ========== Constructor ==========
 	public LMBlocksGroup(String modID) {

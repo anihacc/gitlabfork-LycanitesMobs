@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.entity.goals.actions.abilities;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.Goal;
 
 import java.util.EnumSet;
 

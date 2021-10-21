@@ -6,8 +6,8 @@ import com.lycanitesmobs.client.renderer.CreatureRenderer;
 import com.lycanitesmobs.client.renderer.CustomRenderStates;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureEffect;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -46,7 +46,7 @@ public class ModelShade extends ModelTemplateBiped {
     	super.animatePart(partName, entity, time, distance * 0.5F, loop, lookY, lookX, scale);
 
 		if(partName.equals("mouth")) {
-			this.rotate((float)-Math.toDegrees(MathHelper.cos(loop * 0.2F) * 0.1F), 0.0F, 0.0F);
+			this.rotate((float)-Math.toDegrees(Mth.cos(loop * 0.2F) * 0.1F), 0.0F, 0.0F);
 		}
     }
 }

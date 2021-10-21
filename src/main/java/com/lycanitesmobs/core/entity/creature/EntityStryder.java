@@ -6,30 +6,30 @@ import com.lycanitesmobs.core.entity.ExtendedEntity;
 import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.entity.RideableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.pathfinding.PathNodeType;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 public class EntityStryder extends RideableCreatureEntity implements IGroupHeavy {
     protected int pickupCooldown = 100;
 
-    public EntityStryder(EntityType<? extends EntityStryder> entityType, World world) {
+    public EntityStryder(EntityType<? extends EntityStryder> entityType, Level world) {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEFINED;
+        this.attribute = MobType.UNDEFINED;
         this.spawnsOnLand = true;
         this.spawnsInWater = true;
         this.hasAttackSound = true;
@@ -40,7 +40,7 @@ public class EntityStryder extends RideableCreatureEntity implements IGroupHeavy
         this.hitAreaWidthScale = 1.5f;
         this.hitAreaHeightScale = 1;
 
-        this.setPathfindingMalus(PathNodeType.WATER, 0F);
+        this.setPathfindingMalus(BlockPathTypes.WATER, 0F);
         this.maxUpStep = 4.0F;
     }
 
@@ -66,14 +66,14 @@ public class EntityStryder extends RideableCreatureEntity implements IGroupHeavy
                     extendedEntity.setPickedUpByEntity(this);
 
                 if(this.isTamed() && !this.canAttack(this.getPickupEntity())) {
-                    this.getPickupEntity().addEffect(new EffectInstance(Effects.WATER_BREATHING, this.getEffectDuration(5), 1));
+                    this.getPickupEntity().addEffect(new MobEffectInstance(MobEffects.WATER_BREATHING, this.getEffectDuration(5), 1));
                 }
 
                 else if(this.pickupTime++ % 40 == 0) {
                     this.attackEntityAsMob(this.getPickupEntity(), 0.5F);
                     if(this.getPickupEntity() instanceof LivingEntity) {
                         if(ObjectManager.getEffect("penetration") != null)
-                            this.getPickupEntity().addEffect(new EffectInstance(ObjectManager.getEffect("penetration"), this.getEffectDuration(5), 1));
+                            this.getPickupEntity().addEffect(new MobEffectInstance(ObjectManager.getEffect("penetration"), this.getEffectDuration(5), 1));
                     }
                 }
             }
@@ -136,8 +136,8 @@ public class EntityStryder extends RideableCreatureEntity implements IGroupHeavy
 
     @Override
     public boolean canStandOnFluid(Fluid fluid) {
-        if (this.getControllingPassenger() instanceof PlayerEntity) {
-            PlayerEntity player = (PlayerEntity) this.getControllingPassenger();
+        if (this.getControllingPassenger() instanceof Player) {
+            Player player = (Player) this.getControllingPassenger();
             ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
             if (playerExt != null && playerExt.isControlActive(ExtendedPlayer.CONTROL_ID.DESCEND)) {
                 return false;

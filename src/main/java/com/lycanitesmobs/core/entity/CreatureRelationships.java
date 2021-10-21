@@ -1,9 +1,9 @@
 package com.lycanitesmobs.core.entity;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -37,15 +37,15 @@ public class CreatureRelationships {
 	 * Returns all player entities that have a relationship and their reputation.
 	 * @return A list of all player entities with a relationship entry.
 	 */
-	public List<PlayerEntity> getPlayers() {
-		List<PlayerEntity> players = new ArrayList<>();
+	public List<Player> getPlayers() {
+		List<Player> players = new ArrayList<>();
 
 		if (this.getCreatureEntity().getCommandSenderWorld().isClientSide()) {
 			return players;
 		}
 
 		for (CreatureRelationshipEntry relationshipEntry : this.relationships.values()) {
-			PlayerEntity player = this.getCreatureEntity().getCommandSenderWorld().getPlayerByUUID(relationshipEntry.getTargetEntityUUID());
+			Player player = this.getCreatureEntity().getCommandSenderWorld().getPlayerByUUID(relationshipEntry.getTargetEntityUUID());
 			if (player != null) {
 				players.add(player);
 			}
@@ -80,12 +80,12 @@ public class CreatureRelationships {
 	 * Loads relationships from nbt data.
 	 * @param nbt The nbt data to load from.
 	 */
-	public void load(CompoundNBT nbt) {
+	public void load(CompoundTag nbt) {
 		if(nbt.contains("CreatureRelationships")) {
 			this.relationships.clear();
-			ListNBT relationshipNbtList = nbt.getList("CreatureRelationships", 10);
+			ListTag relationshipNbtList = nbt.getList("CreatureRelationships", 10);
 			for(int i = 0; i < relationshipNbtList.size(); i++) {
-				CompoundNBT relationshipNbt = relationshipNbtList.getCompound(i);
+				CompoundTag relationshipNbt = relationshipNbtList.getCompound(i);
 				CreatureRelationshipEntry creatureRelationshipEntry = new CreatureRelationshipEntry(this);
 				creatureRelationshipEntry.load(relationshipNbt);
 				this.relationships.put(creatureRelationshipEntry.getTargetEntityUUID(), creatureRelationshipEntry);
@@ -97,10 +97,10 @@ public class CreatureRelationships {
 	 * Saves relationships to nbt data.
 	 * @param nbt The nbt data to save to.
 	 */
-	public void save(CompoundNBT nbt) {
-		ListNBT relationshipNbtList = new ListNBT();
+	public void save(CompoundTag nbt) {
+		ListTag relationshipNbtList = new ListTag();
 		for (CreatureRelationshipEntry creatureRelationshipEntry : this.relationships.values()) {
-			CompoundNBT relationshipNbt = new CompoundNBT();
+			CompoundTag relationshipNbt = new CompoundTag();
 			creatureRelationshipEntry.save(relationshipNbt);
 			relationshipNbtList.add(relationshipNbt);
 		}

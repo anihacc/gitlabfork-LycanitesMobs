@@ -1,27 +1,27 @@
 package com.lycanitesmobs.client.gui;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.IReorderingProcessor;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Matrix3f;
-import net.minecraft.util.math.vector.Matrix4f;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.client.gui.Font;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.resources.ResourceLocation;
+import com.mojang.math.Matrix3f;
+import com.mojang.math.Matrix4f;
+import net.minecraft.network.chat.TextComponent;
 import org.lwjgl.opengl.GL11;
 
 import java.util.List;
 
 public class DrawHelper {
 	protected Minecraft minecraft;
-	protected FontRenderer fontRenderer;
+	protected Font fontRenderer;
 
-	public DrawHelper(Minecraft minecraft, FontRenderer fontRenderer) {
+	public DrawHelper(Minecraft minecraft, Font fontRenderer) {
 		this.minecraft = minecraft;
 		this.fontRenderer = fontRenderer;
 	}
@@ -38,7 +38,7 @@ public class DrawHelper {
 	 * Returns the font renderer.
 	 * @return The font renderer to use.
 	 */
-	public FontRenderer getFontRenderer() {
+	public Font getFontRenderer() {
 		return this.fontRenderer;
 	}
 
@@ -51,7 +51,7 @@ public class DrawHelper {
 	 * @param color The color of the text.
 	 * @param shadow If true, a drop shadow will be drawn under the text.
 	 */
-	public void drawString(MatrixStack matrixStack, String text, int x, int y, int color, boolean shadow) {
+	public void drawString(PoseStack matrixStack, String text, int x, int y, int color, boolean shadow) {
 		if (shadow) {
 			this.getFontRenderer().drawShadow(matrixStack, text, x, y, color);
 			return;
@@ -59,7 +59,7 @@ public class DrawHelper {
 		this.getFontRenderer().draw(matrixStack, text, x, y, color);
 	}
 
-	public void drawString(MatrixStack matrixStack, String text, int x, int y, int color) {
+	public void drawString(PoseStack matrixStack, String text, int x, int y, int color) {
 		this.drawString(matrixStack, text, x, y, color, false);
 	}
 
@@ -72,7 +72,7 @@ public class DrawHelper {
 	 * @param color The color of the text.
 	 * @param shadow If true, a drop shadow will be drawn under the text.
 	 */
-	public void drawStringCentered(MatrixStack matrixStack, String text, int x, int y, int color, boolean shadow) {
+	public void drawStringCentered(PoseStack matrixStack, String text, int x, int y, int color, boolean shadow) {
 		int textWidth = this.getStringWidth(text);
 		int textOffset = (int)Math.floor((double)textWidth / 2);
 		this.drawString(matrixStack, text, x - textOffset, y, color, shadow);
@@ -88,11 +88,11 @@ public class DrawHelper {
 	 * @param color The color of the text.
 	 * @param shadow If true, a drop shadow wil be drawn under the text.
 	 */
-	public void drawStringWrapped(MatrixStack matrixStack, String text, int x, int y, int wrapWidth, int color, boolean shadow) {
-		StringTextComponent textComponent = new StringTextComponent(text);
-		List<IReorderingProcessor> textLines = this.getFontRenderer().split(textComponent, wrapWidth);
+	public void drawStringWrapped(PoseStack matrixStack, String text, int x, int y, int wrapWidth, int color, boolean shadow) {
+		TextComponent textComponent = new TextComponent(text);
+		List<FormattedCharSequence> textLines = this.getFontRenderer().split(textComponent, wrapWidth);
 		int lineY = y;
-		for(IReorderingProcessor textLine : textLines) {
+		for(FormattedCharSequence textLine : textLines) {
 			if (shadow) {
 				this.getFontRenderer().drawShadow(matrixStack, textLine, (float)x, (float)lineY, color);
 				lineY += 10;
@@ -134,15 +134,15 @@ public class DrawHelper {
 	 * @param width The width of the texture.
 	 * @param height The height of the texture.
 	 */
-	public void drawTexture(MatrixStack matrixStack, ResourceLocation texture, float x, float y, float z, float u, float v, float width, float height) {
+	public void drawTexture(PoseStack matrixStack, ResourceLocation texture, float x, float y, float z, float u, float v, float width, float height) {
 		this.preDraw();
 
 		this.getMinecraft().getTextureManager().bind(texture);
 		Matrix3f normal = matrixStack.last().normal();
 		Matrix4f matrix = matrixStack.last().pose();
-		Tessellator tessellator = Tessellator.getInstance();
+		Tesselator tessellator = Tesselator.getInstance();
 		BufferBuilder buffer = tessellator.getBuilder();
-		buffer.begin(7, DefaultVertexFormats.POSITION_TEX);
+		buffer.begin(7, DefaultVertexFormat.POSITION_TEX);
 		buffer.vertex(matrix, x, y + height, z).uv(0, v).endVertex();
 		buffer.vertex(matrix, x + width, y + height, z).uv(u, v).endVertex();
 		buffer.vertex(matrix, x + width, y, z).uv(u, 0).endVertex();
@@ -164,15 +164,15 @@ public class DrawHelper {
 	 * @param height The height of the texture.
 	 * @param resolution The resolution (width or height) of the texture.
 	 */
-	public void drawTextureTiled(MatrixStack matrixStack, ResourceLocation texture, float x, float y, float z, float u, float v, float width, float height, float resolution) {
+	public void drawTextureTiled(PoseStack matrixStack, ResourceLocation texture, float x, float y, float z, float u, float v, float width, float height, float resolution) {
 		this.preDraw();
 
 		this.getMinecraft().getTextureManager().bind(texture);
 		float scaleX = 0.00390625F * resolution;
 		float scaleY = scaleX;
-		Tessellator tessellator = Tessellator.getInstance();
+		Tesselator tessellator = Tesselator.getInstance();
 		BufferBuilder buffer = tessellator.getBuilder();
-		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+		buffer.begin(GL11.GL_QUADS, DefaultVertexFormat.POSITION_TEX);
 		buffer.vertex(x + 0, y + height, z)
 				.uv(((u + 0) * scaleX), (v + height) * scaleY).endVertex();
 		buffer.vertex(x + width, y + height, z)
@@ -198,7 +198,7 @@ public class DrawHelper {
 	 * @param segments How many segments to draw.
 	 * @param segmentLimit How many segments to draw up to before squishing them. If negative the bar is draw backwards.
 	 */
-	public void drawBar(MatrixStack matrixStack, ResourceLocation texture, int x, int y, float z, float width, float height, int segments, int segmentLimit) {
+	public void drawBar(PoseStack matrixStack, ResourceLocation texture, int x, int y, float z, float width, float height, int segments, int segmentLimit) {
 		boolean reverse = segmentLimit < 0;
 		if(reverse) {
 			segmentLimit = -segmentLimit;
@@ -230,12 +230,12 @@ public class DrawHelper {
 	}
 
 	@Deprecated // TODO: Migrate all guis to use DrawTexture instead.
-	public void drawTexturedModalRect(MatrixStack matrixStack, int x, int y, int u, int v, int width, int height) {
+	public void drawTexturedModalRect(PoseStack matrixStack, int x, int y, int u, int v, int width, int height) {
 		this.drawTexturedModalRect(matrixStack, x, y, u, v, width, height, 1);
 	}
 
 	@Deprecated // TODO: Migrate all guis to use DrawTexture instead. The resolution scaling stuff was removed in 1.14.
-	public void drawTexturedModalRect(MatrixStack matrixStack, int x, int y, int u, int v, int width, int height, int resolution) {
+	public void drawTexturedModalRect(PoseStack matrixStack, int x, int y, int u, int v, int width, int height, int resolution) {
 		this.preDraw();
 
 		float scaleX = 0.00390625F * resolution;
@@ -243,9 +243,9 @@ public class DrawHelper {
 
 		Matrix3f normal = matrixStack.last().normal();
 		Matrix4f matrix = matrixStack.last().pose();
-		Tessellator tessellator = Tessellator.getInstance();
+		Tesselator tessellator = Tesselator.getInstance();
 		BufferBuilder buffer = tessellator.getBuilder();
-		buffer.begin(7, DefaultVertexFormats.POSITION_TEX);
+		buffer.begin(7, DefaultVertexFormat.POSITION_TEX);
 		buffer.vertex(matrix, (float)(x), (float)(y + height), 0)
 				.uv(((float)u * scaleX), ((float)(v + height) * scaleY)).endVertex();
 		buffer.vertex(matrix, (float)(x + width), (float)(y + height), 0)

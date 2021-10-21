@@ -2,24 +2,24 @@ package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.core.entity.RideableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.potion.Effects;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.level.Level;
 
 public class EntityVentoraptor extends RideableCreatureEntity {
     
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityVentoraptor(EntityType<? extends EntityVentoraptor> entityType, World world) {
+    public EntityVentoraptor(EntityType<? extends EntityVentoraptor> entityType, Level world) {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEFINED;
+        this.attribute = MobType.UNDEFINED;
         this.spawnsUnderground = false;
         this.hasAttackSound = true;
         this.hasJumpSound = true;
@@ -37,7 +37,7 @@ public class EntityVentoraptor extends RideableCreatureEntity {
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setTargetClass(PlayerEntity.class).setLongMemory(false));
+        this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setTargetClass(Player.class).setLongMemory(false));
         this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this));
     }
 	
@@ -65,10 +65,10 @@ public class EntityVentoraptor extends RideableCreatureEntity {
 
     @Override
     public void riderEffects(LivingEntity rider) {
-        if(rider.hasEffect(Effects.WEAKNESS))
-            rider.removeEffect(Effects.WEAKNESS);
-        if(rider.hasEffect(Effects.MOVEMENT_SLOWDOWN))
-            rider.removeEffect(Effects.MOVEMENT_SLOWDOWN);
+        if(rider.hasEffect(MobEffects.WEAKNESS))
+            rider.removeEffect(MobEffects.WEAKNESS);
+        if(rider.hasEffect(MobEffects.MOVEMENT_SLOWDOWN))
+            rider.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
     }
 
 	

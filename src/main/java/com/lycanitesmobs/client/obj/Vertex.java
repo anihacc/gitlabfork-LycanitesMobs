@@ -1,15 +1,15 @@
 package com.lycanitesmobs.client.obj;
 
-import net.minecraft.util.math.vector.Vector2f;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.world.phys.Vec2;
+import com.mojang.math.Vector3f;
 
 public class Vertex {
     private Vector3f pos;
-    private Vector2f texCoords;
+    private Vec2 texCoords;
     private Vector3f normal;
     private Vector3f tangent;
 
-    public Vertex(Vector3f pos, Vector2f texCoords, Vector3f normal, Vector3f tangent) {
+    public Vertex(Vector3f pos, Vec2 texCoords, Vector3f normal, Vector3f tangent) {
         this.pos = pos;
         this.texCoords = texCoords;
         this.normal = normal;
@@ -20,7 +20,7 @@ public class Vertex {
         return this.pos;
     }
     
-    public Vector2f getTexCoords() {
+    public Vec2 getTexCoords() {
         return this.texCoords;
     }
 

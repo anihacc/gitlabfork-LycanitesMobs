@@ -1,31 +1,31 @@
 package com.lycanitesmobs.core.tileentity;
 
 import com.lycanitesmobs.LycanitesMobs;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.Container;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.level.block.entity.TickableBlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 
 import javax.annotation.Nullable;
 
-public abstract class TileEntityBase extends TileEntity implements ITickableTileEntity, IInventory {
+public abstract class TileEntityBase extends BlockEntity implements TickableBlockEntity, Container {
     /**
      * Constructor
      */
     public TileEntityBase() {
-        super(TileEntityType.CHEST);
+        super(BlockEntityType.CHEST);
     }
 
     /**
      * Gets the Tile Entity Type used by this Tile Entity. Should be overridden.
      * @return The Tile Entity Type.
      */
-    public TileEntityType<?> getType() {
+    public BlockEntityType<?> getType() {
         return super.getType();
     }
 
@@ -36,7 +36,7 @@ public abstract class TileEntityBase extends TileEntity implements ITickableTile
     public void tick() {}
 
     @Override
-    public boolean stillValid(PlayerEntity player) {
+    public boolean stillValid(Player player) {
         return this.getBlockPos().distSqr(player.blockPosition()) < 16F;
     }
 
@@ -65,7 +65,7 @@ public abstract class TileEntityBase extends TileEntity implements ITickableTile
      */
     @Override
     @Nullable
-    public SUpdateTileEntityPacket getUpdatePacket() {
+    public ClientboundBlockEntityDataPacket getUpdatePacket() {
         return super.getUpdatePacket();
     }
 
@@ -75,7 +75,7 @@ public abstract class TileEntityBase extends TileEntity implements ITickableTile
      * @param pkt The packet received.
      */
     @Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
         super.onDataPacket(net, pkt);
     }
 
@@ -90,7 +90,7 @@ public abstract class TileEntityBase extends TileEntity implements ITickableTile
      * @param nbtTagCompound The NBT to read from.
      */
     @Override
-    public void load(BlockState blockState, CompoundNBT nbtTagCompound) {
+    public void load(BlockState blockState, CompoundTag nbtTagCompound) {
         super.load(blockState, nbtTagCompound);
     }
 
@@ -100,7 +100,7 @@ public abstract class TileEntityBase extends TileEntity implements ITickableTile
      * @return The written to NBT data.
      */
     @Override
-    public CompoundNBT save(CompoundNBT nbtTagCompound) {
+    public CompoundTag save(CompoundTag nbtTagCompound) {
         return super.save(nbtTagCompound);
     }
 }

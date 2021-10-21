@@ -2,9 +2,9 @@ package com.lycanitesmobs.core.spawner.trigger;
 
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.core.spawner.Spawner;
-import net.minecraft.block.BlockState;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 public class MixBlockSpawnTrigger extends BlockSpawnTrigger {
 
@@ -20,13 +20,13 @@ public class MixBlockSpawnTrigger extends BlockSpawnTrigger {
 	}
 
 	@Override
-	public int getBlockLevel(BlockState blockState, World world, BlockPos blockPos) {
+	public int getBlockLevel(BlockState blockState, Level world, BlockPos blockPos) {
 		return 0;
 	}
 
 
 	/** Called every time liquids mix to form a block. **/
-	public void onMix(World world, BlockState blockState, BlockPos mixPos) {
+	public void onMix(Level world, BlockState blockState, BlockPos mixPos) {
 		// Check Block:
 		if(!this.isTriggerBlock(blockState, world, mixPos, 0, null)) {
 			return;

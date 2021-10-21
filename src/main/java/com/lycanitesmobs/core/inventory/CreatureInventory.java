@@ -2,25 +2,31 @@ package com.lycanitesmobs.core.inventory;
 
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.RideableCreatureEntity;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ItemStackHelper;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.Container;
+import net.minecraft.world.ContainerHelper;
 import net.minecraft.item.*;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CreatureInventory implements IInventory {
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.ArmorMaterials;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+
+public class CreatureInventory implements Container {
 
     // Basic Armor Values: (Copied values from EntityHorse)
     public static final Map<String, Integer> armorValues = new HashMap<>();
@@ -57,7 +63,7 @@ public class CreatureInventory implements IInventory {
     // ==================================================
     //                    Data Parameters
     // ==================================================
-    public static DataParameter<ItemStack> getEquipmentDataParameter(String type) {
+    public static EntityDataAccessor<ItemStack> getEquipmentDataParameter(String type) {
         if(type.equals("head"))
             return BaseCreatureEntity.EQUIPMENT_HEAD;
         if(type.equals("chest"))
@@ -72,7 +78,7 @@ public class CreatureInventory implements IInventory {
     }
 
     /** Registers parameters to the provided datamanager. **/
-    public static void registerData(EntityDataManager dataManager) {
+    public static void registerData(SynchedEntityData dataManager) {
         for(String equipmentType : equipmentTypes)
             dataManager.define(getEquipmentDataParameter(equipmentType), ItemStack.EMPTY);
     }
@@ -101,11 +107,11 @@ public class CreatureInventory implements IInventory {
   	//                     Details
   	// ==================================================
     public String getName() {
-        return this.inventoryName + new TranslationTextComponent("entity.level").getString() + " " + this.creature.getMobLevel();
+        return this.inventoryName + new TranslatableComponent("entity.level").getString() + " " + this.creature.getMobLevel();
     }
 
-    public ITextComponent getDisplayName() {
-        return new TranslationTextComponent(this.getName());
+    public Component getDisplayName() {
+        return new TranslatableComponent(this.getName());
     }
 
 	public boolean hasCustomName() {
@@ -179,7 +185,7 @@ public class CreatureInventory implements IInventory {
 		// Update Datawatcher:
         for(String type : this.equipmentSlotToType.values()) {
 			ItemStack itemStack = this.getEquipmentStack(type);
-            DataParameter<ItemStack> dataParameter = getEquipmentDataParameter(type);
+            EntityDataAccessor<ItemStack> dataParameter = getEquipmentDataParameter(type);
             if(dataParameter == null)
                 continue;
 			if(itemStack == null)
@@ -193,15 +199,15 @@ public class CreatureInventory implements IInventory {
 	}
 	
 	@Override
-	public boolean stillValid(PlayerEntity entityplayer) {
+	public boolean stillValid(Player entityplayer) {
 		return true;
 	}
 	
 	@Override
-	public void startOpen(PlayerEntity player) {}
+	public void startOpen(Player player) {}
 	
 	@Override
-	public void stopOpen(PlayerEntity player) {}
+	public void stopOpen(Player player) {}
 
     @Override
     public void clearContent() {
@@ -436,13 +442,13 @@ public class CreatureInventory implements IInventory {
 		// Advanced Armor:
 		if(!this.basicArmor && itemStack.getItem() instanceof ArmorItem) {
 			ArmorItem armorstack = (ArmorItem)(itemStack.getItem());
-			if(armorstack.getSlot() == EquipmentSlotType.HEAD)
+			if(armorstack.getSlot() == EquipmentSlot.HEAD)
 				return "head";
-			if(armorstack.getSlot() == EquipmentSlotType.CHEST)
+			if(armorstack.getSlot() == EquipmentSlot.CHEST)
 				return "chest";
-			if(armorstack.getSlot() == EquipmentSlotType.LEGS)
+			if(armorstack.getSlot() == EquipmentSlot.LEGS)
 				return "legs";
-			if(armorstack.getSlot() == EquipmentSlotType.FEET)
+			if(armorstack.getSlot() == EquipmentSlot.FEET)
 				return "feet";
 		}
 		
@@ -472,15 +478,15 @@ public class CreatureInventory implements IInventory {
     		return null;
     	if(equipmentStack.getItem() instanceof ArmorItem) {
     		ArmorItem armor = (ArmorItem) equipmentStack.getItem();
-    		if(armor.getMaterial() == ArmorMaterial.LEATHER)
+    		if(armor.getMaterial() == ArmorMaterials.LEATHER)
     			return "Leather";
-    		else if(armor.getMaterial() == ArmorMaterial.IRON)
+    		else if(armor.getMaterial() == ArmorMaterials.IRON)
     			return "Iron";
-    		else if(armor.getMaterial() == ArmorMaterial.CHAIN)
+    		else if(armor.getMaterial() == ArmorMaterials.CHAIN)
     			return "Chain";
-    		else if(armor.getMaterial() == ArmorMaterial.GOLD)
+    		else if(armor.getMaterial() == ArmorMaterials.GOLD)
     			return "Gold";
-    		else if(armor.getMaterial() == ArmorMaterial.DIAMOND)
+    		else if(armor.getMaterial() == ArmorMaterials.DIAMOND)
     			return "Diamond";
     	}
     	if(equipmentStack.getItem() == Items.LEATHER_HORSE_ARMOR)
@@ -530,10 +536,10 @@ public class CreatureInventory implements IInventory {
 	 * Loads inventory from nbt data.
 	 * @param nbt The nbt data to load from.
 	 */
-	public void load(CompoundNBT nbt) {
+	public void load(CompoundTag nbt) {
     	// Read Items:
         NonNullList<ItemStack> itemStacks = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
-        ItemStackHelper.loadAllItems(nbt, itemStacks); // Reads ItemStack into a List from "Items" tag.
+        ContainerHelper.loadAllItems(nbt, itemStacks); // Reads ItemStack into a List from "Items" tag.
 
     	for(int i = 0; i < itemStacks.size(); ++i) {
     		if(i < this.getContainerSize()) {
@@ -552,7 +558,7 @@ public class CreatureInventory implements IInventory {
 	 * Saves inventory to nbt data.
 	 * @param nbt The nbt data to save to.
 	 */
-	public void save(CompoundNBT nbt) {
+	public void save(CompoundTag nbt) {
     	// Write Items:
         NonNullList<ItemStack> itemStacks = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
         for(int i = 0; i < this.getContainerSize(); i++) {
@@ -560,7 +566,7 @@ public class CreatureInventory implements IInventory {
 				itemStacks.set(i, this.getItem(i));
 			}
         }
-        ItemStackHelper.saveAllItems(nbt, itemStacks); // Adds ItemStack NBT into the NBT Tag Compound.
+        ContainerHelper.saveAllItems(nbt, itemStacks); // Adds ItemStack NBT into the NBT Tag Compound.
     	
     }
 

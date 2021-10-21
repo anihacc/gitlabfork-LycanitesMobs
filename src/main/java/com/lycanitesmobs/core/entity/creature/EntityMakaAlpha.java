@@ -5,31 +5,31 @@ import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.DefendEntitiesGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.FindAttackTargetGoal;
 import com.lycanitesmobs.core.info.CreatureManager;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 public class EntityMakaAlpha extends AgeableCreatureEntity {
 	
 	// ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityMakaAlpha(EntityType<? extends EntityMakaAlpha> entityType, World world) {
+    public EntityMakaAlpha(EntityType<? extends EntityMakaAlpha> entityType, Level world) {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEFINED;
+        this.attribute = MobType.UNDEFINED;
         this.hasAttackSound = true;
         this.attackCooldownMax = 10;
         this.setupMob();
@@ -42,7 +42,7 @@ public class EntityMakaAlpha extends AgeableCreatureEntity {
 		this.targetSelector.addGoal(this.nextFindTargetIndex++, new FindAttackTargetGoal(this).addTargets(this.getClass()));
 		this.targetSelector.addGoal(this.nextSpecialTargetIndex++, new DefendEntitiesGoal(this, EntityMaka.class));
 
-		this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setTargetClass(PlayerEntity.class).setLongMemory(false));
+		this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setTargetClass(Player.class).setLongMemory(false));
 		this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this));
     }
 	
@@ -90,7 +90,7 @@ public class EntityMakaAlpha extends AgeableCreatureEntity {
 
     // ========== Can leash ==========
     @Override
-    public boolean canBeLeashed(PlayerEntity player) {
+    public boolean canBeLeashed(Player player) {
         return true;
     }
 
@@ -124,16 +124,16 @@ public class EntityMakaAlpha extends AgeableCreatureEntity {
     public void setTarget(LivingEntity entity) {
     	if(entity == null && this.getTarget() instanceof EntityMakaAlpha) {
     		this.heal((this.getMaxHealth() - this.getHealth()) / 2);
-    		this.addEffect(new EffectInstance(Effects.REGENERATION, 20 * 20, 2, false, false));
+    		this.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 20 * 20, 2, false, false));
 			this.getTarget().heal((this.getMaxHealth() - this.getHealth()) / 2);
-			this.getTarget().addEffect(new EffectInstance(Effects.REGENERATION, 20 * 20, 2, false, false));
+			this.getTarget().addEffect(new MobEffectInstance(MobEffects.REGENERATION, 20 * 20, 2, false, false));
     	}
     	super.setTarget(entity);
     }
 
 	@Override
 	public boolean rollAttackTargetChance(LivingEntity target) {
-    	if(target instanceof PlayerEntity || target.getType() == this.getType())
+    	if(target instanceof Player || target.getType() == this.getType())
     		return this.getRandom().nextDouble() <= 0.01D;
 		return true;
 	}

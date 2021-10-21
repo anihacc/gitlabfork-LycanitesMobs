@@ -3,8 +3,8 @@ package com.lycanitesmobs.client.model.creature;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.CreatureObjModel;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -44,7 +44,7 @@ public class ModelRaiko extends CreatureObjModel {
     	
     	// Idle:
     	if(partName.equals("mouth")) {
-    		this.rotate((float)-Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F - 0.05F), 0.0F, 0.0F);
+    		this.rotate((float)-Math.toDegrees(Mth.cos(loop * 0.09F) * 0.05F - 0.05F), 0.0F, 0.0F);
     	}
 
 		// Walking:
@@ -58,22 +58,22 @@ public class ModelRaiko extends CreatureObjModel {
 				wingOffset = 0;
 			}
 			if(partName.equals("wingright")) {
-				rotX += Math.toDegrees(MathHelper.sin(loop * 0.067F) * 0.05F) - (45 * wingOffset);
+				rotX += Math.toDegrees(Mth.sin(loop * 0.067F) * 0.05F) - (45 * wingOffset);
 				this.rotate(1, 20 * wingOffset, 0 * wingOffset);
-				rotZ -= Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F + 0.05F) + (90 * wingOffset);
+				rotZ -= Math.toDegrees(Mth.cos(loop * 0.09F) * 0.05F + 0.05F) + (90 * wingOffset);
 				this.scale(-1, 1, 1);
 			}
 			if(partName.equals("wingleft")) {
-				rotX += Math.toDegrees(MathHelper.sin(loop * 0.067F) * 0.05F) - (45 * wingOffset);
+				rotX += Math.toDegrees(Mth.sin(loop * 0.067F) * 0.05F) - (45 * wingOffset);
 				this.rotate(1, -20 * wingOffset, 0 * wingOffset);
-				rotZ += Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F + 0.05F) + (90 * wingOffset);
+				rotZ += Math.toDegrees(Mth.cos(loop * 0.09F) * 0.05F + 0.05F) + (90 * wingOffset);
 				this.scale(-1, 1, 1);
 			}
 			if(partName.equals("legleft")) {
-				rotX += Math.toDegrees(MathHelper.cos(time * walkSwing + (float) Math.PI) * 0.8F * distance);
+				rotX += Math.toDegrees(Mth.cos(time * walkSwing + (float) Math.PI) * 0.8F * distance);
 			}
 			if(partName.equals("legright")) {
-				rotX += Math.toDegrees(MathHelper.cos(time * walkSwing) * 0.8F * distance);
+				rotX += Math.toDegrees(Mth.cos(time * walkSwing) * 0.8F * distance);
 			}
 			if (partName.contains("clawback")) {
 				rotX += 90;
@@ -83,7 +83,7 @@ public class ModelRaiko extends CreatureObjModel {
 			}
 		}
 		else if(partName.equals("body")) {
-			float bob = -MathHelper.sin(loop * 0.2F) * 0.1F;
+			float bob = -Mth.sin(loop * 0.2F) * 0.1F;
 			if (bob < 0)
 				bob = -bob;
 			posY += bob;
@@ -93,13 +93,13 @@ public class ModelRaiko extends CreatureObjModel {
     	if(!entity.isInWater() && !entity.isOnGround()) {
 			if (partName.equals("wingleft")) {
 				rotX = 20;
-				rotX -= Math.toDegrees(MathHelper.sin(loop * 0.4F) * 0.6F);
-				rotZ -= Math.toDegrees(MathHelper.sin(loop * 0.4F) * 0.6F);
+				rotX -= Math.toDegrees(Mth.sin(loop * 0.4F) * 0.6F);
+				rotZ -= Math.toDegrees(Mth.sin(loop * 0.4F) * 0.6F);
 			}
 			if (partName.equals("wingright")) {
 				rotX = 20;
-				rotX -= Math.toDegrees(MathHelper.sin(loop * 0.4F) * 0.6F);
-				rotZ -= Math.toDegrees(MathHelper.sin(loop * 0.4F + (float) Math.PI) * 0.6F);
+				rotX -= Math.toDegrees(Mth.sin(loop * 0.4F) * 0.6F);
+				rotZ -= Math.toDegrees(Mth.sin(loop * 0.4F + (float) Math.PI) * 0.6F);
 			}
 			if (entity instanceof BaseCreatureEntity && ((BaseCreatureEntity) entity).hasPickupEntity()) {
 				if (partName.contains("clawback")) {
@@ -111,16 +111,16 @@ public class ModelRaiko extends CreatureObjModel {
 			}
 			else {
 				if(partName.equals("legleft")) {
-					rotX -= Math.toDegrees(MathHelper.sin(loop * 0.1F + (float)Math.PI) * 0.2F);
+					rotX -= Math.toDegrees(Mth.sin(loop * 0.1F + (float)Math.PI) * 0.2F);
 				}
 				if(partName.equals("legright")) {
-					rotX -= Math.toDegrees(MathHelper.sin(loop * 0.1F) * 0.2F);
+					rotX -= Math.toDegrees(Mth.sin(loop * 0.1F) * 0.2F);
 				}
 				if (partName.contains("clawback")) {
-					rotX += Math.toDegrees(MathHelper.sin(loop * 0.1F) * 0.4F);
+					rotX += Math.toDegrees(Mth.sin(loop * 0.1F) * 0.4F);
 				}
 				else if (partName.contains("claw")) {
-					rotX -= Math.toDegrees(MathHelper.sin(loop * 0.1F) * 0.4F);
+					rotX -= Math.toDegrees(Mth.sin(loop * 0.1F) * 0.4F);
 				}
 			}
 		}

@@ -2,11 +2,11 @@ package com.lycanitesmobs.core.spawner.location;
 
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.LycanitesMobs;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +54,7 @@ public class RandomSpawnLocation extends BlockSpawnLocation {
     }
 
     @Override
-    public List<BlockPos> getSpawnPositions(World world, PlayerEntity player, BlockPos triggerPos) {
+    public List<BlockPos> getSpawnPositions(Level world, Player player, BlockPos triggerPos) {
         List<BlockPos> spawnPositions = new ArrayList<>();
 		LycanitesMobs.logDebug("JSONSpawner", "Getting " + this.limit + " Random Spawn Positions");
 
@@ -74,7 +74,7 @@ public class RandomSpawnLocation extends BlockSpawnLocation {
 	 * @param triggerPos The trigger position to search around.
 	 * @return Returns a BlockPos or null if no coord was found.
 	 */
-	public BlockPos getRandomPosition(World world, PlayerEntity player, BlockPos triggerPos) {
+	public BlockPos getRandomPosition(Level world, Player player, BlockPos triggerPos) {
 		int[] xz = this.getRandomXZCoord(world, triggerPos);
 		int x = xz[0];
 		int z = xz[1];
@@ -88,7 +88,7 @@ public class RandomSpawnLocation extends BlockSpawnLocation {
 	 * @param triggerPos The trigger position to randomize around.
 	 * @return An integer array containing two ints the X and Z position.
 	 */
-	public int[] getRandomXZCoord(World world, BlockPos triggerPos) {
+	public int[] getRandomXZCoord(Level world, BlockPos triggerPos) {
 		double difficultyScale = this.normalDifficultyRangeScale;
 		if(world.getDifficulty().getId() <= 1) {
 			difficultyScale = this.easyDifficultyRangeScale;
@@ -132,7 +132,7 @@ public class RandomSpawnLocation extends BlockSpawnLocation {
 	 * @param triggerPos The position to search from using XZ coords and up and down within range of the Y coord.
 	 * @return The y position, -1 if a valid position could not be found.
 	 */
-	public int getRandomYCoord(World world, BlockPos triggerPos) {
+	public int getRandomYCoord(Level world, BlockPos triggerPos) {
 		double difficultyScale = this.normalDifficultyRangeScale;
 		if(world.getDifficulty().getId() <= 1) {
 			difficultyScale = this.easyDifficultyRangeScale;
@@ -221,7 +221,7 @@ public class RandomSpawnLocation extends BlockSpawnLocation {
 
 	/** Returns if the provided block position is valid. **/
 	@Override
-	public boolean isValidBlock(World world, BlockPos blockPos) {
+	public boolean isValidBlock(Level world, BlockPos blockPos) {
 		if(!super.isValidBlock(world, blockPos)) {
 			return false;
 		}
@@ -232,7 +232,7 @@ public class RandomSpawnLocation extends BlockSpawnLocation {
 	}
 
 	/** Returns true if the specified position has a block underneath it that a mob can safely stand on. **/
-	public boolean posHasGround(World world, BlockPos pos) {
+	public boolean posHasGround(Level world, BlockPos pos) {
 		if(pos == null || pos.getY() == 0)
 			return false;
 		BlockState possibleGroundBlock = world.getBlockState(pos.below());
@@ -250,7 +250,7 @@ public class RandomSpawnLocation extends BlockSpawnLocation {
 	}
 
 	/** Returns the height of valid blocks from the starting position checking upwards until the position no longer has a valid block or maxY is reached. **/
-	public int getValidBlockHeight(World world, BlockPos startPos, int maxY) {
+	public int getValidBlockHeight(Level world, BlockPos startPos, int maxY) {
 		int y;
 		for(y = startPos.getY(); y <= maxY; y++) {
 			BlockPos checkPos = new BlockPos(startPos.getX(), y, startPos.getZ());

@@ -2,17 +2,17 @@ package com.lycanitesmobs.core.entity;
 
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.inventory.CreatureInventory;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.FlyingEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.FlyingMob;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -22,7 +22,7 @@ public class FearEntity extends BaseCreatureEntity {
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public FearEntity(EntityType<? extends FearEntity> entityType, World world) {
+    public FearEntity(EntityType<? extends FearEntity> entityType, Level world) {
         super(entityType, world);
         
         // Setup:
@@ -34,7 +34,7 @@ public class FearEntity extends BaseCreatureEntity {
         this.setupMob();
     }
 
-    public FearEntity(EntityType<? extends FearEntity> entityType, World world, LivingEntity feared) {
+    public FearEntity(EntityType<? extends FearEntity> entityType, Level world, LivingEntity feared) {
         this(entityType, world);
         this.setFearedEntity(feared);
     }
@@ -93,7 +93,7 @@ public class FearEntity extends BaseCreatureEntity {
         }
         
         // Set Rotation:
-        if(this.hasPickupEntity() && !(this.getPickupEntity() instanceof PlayerEntity)) {
+        if(this.hasPickupEntity() && !(this.getPickupEntity() instanceof Player)) {
         	this.getPickupEntity().yRot = this.yRot;
         	this.getPickupEntity().xRot = this.xRot;
         }
@@ -113,15 +113,15 @@ public class FearEntity extends BaseCreatureEntity {
 
         // Copy Movement Debuffs:
 		if(this.fearedEntity != null) {
-			if (fearedEntity.hasEffect(Effects.LEVITATION)) {
-				EffectInstance activeDebuff = fearedEntity.getEffect(Effects.LEVITATION);
-				this.addEffect(new EffectInstance(Effects.LEVITATION, activeDebuff.getDuration(), activeDebuff.getAmplifier()));
+			if (fearedEntity.hasEffect(MobEffects.LEVITATION)) {
+				MobEffectInstance activeDebuff = fearedEntity.getEffect(MobEffects.LEVITATION);
+				this.addEffect(new MobEffectInstance(MobEffects.LEVITATION, activeDebuff.getDuration(), activeDebuff.getAmplifier()));
 			}
 
-			Effect instability = ObjectManager.getEffect("instability");
+			MobEffect instability = ObjectManager.getEffect("instability");
 			if (instability != null && fearedEntity.hasEffect(instability)) {
-				EffectInstance activeDebuff = fearedEntity.getEffect(instability);
-				this.addEffect(new EffectInstance(instability, activeDebuff.getDuration(), activeDebuff.getAmplifier()));
+				MobEffectInstance activeDebuff = fearedEntity.getEffect(instability);
+				this.addEffect(new MobEffectInstance(instability, activeDebuff.getDuration(), activeDebuff.getAmplifier()));
 			}
 		}
     }
@@ -142,7 +142,7 @@ public class FearEntity extends BaseCreatureEntity {
         this.maxUpStep = feared.maxUpStep;
 		this.moveTo(feared.position().x(), feared.position().y(), feared.position().z(), feared.yRot, feared.xRot);
 		
-        if(!(feared instanceof PlayerEntity)) {
+        if(!(feared instanceof Player)) {
 	        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(feared.getAttribute(Attributes.MOVEMENT_SPEED).getBaseValue());
         }
     }
@@ -157,7 +157,7 @@ public class FearEntity extends BaseCreatureEntity {
     }
     
     @Override
-    public boolean canBeAffected(EffectInstance effectInstance) {
+    public boolean canBeAffected(MobEffectInstance effectInstance) {
         return false;
     }
     
@@ -170,10 +170,10 @@ public class FearEntity extends BaseCreatureEntity {
     	if(this.pickupEntity != null) {
     		if(this.pickupEntity instanceof BaseCreatureEntity)
     			return ((BaseCreatureEntity)this.pickupEntity).isFlying();
-    		if(this.pickupEntity instanceof FlyingEntity)
+    		if(this.pickupEntity instanceof FlyingMob)
     			return true;
-    		if(this.pickupEntity instanceof PlayerEntity)
-    			return ((PlayerEntity)this.pickupEntity).abilities.instabuild;
+    		if(this.pickupEntity instanceof Player)
+    			return ((Player)this.pickupEntity).abilities.instabuild;
     	}
     	return false;
     }
@@ -185,7 +185,7 @@ public class FearEntity extends BaseCreatureEntity {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public boolean isInvisibleTo(PlayerEntity player) {
+    public boolean isInvisibleTo(Player player) {
         return true;
     }
 

@@ -7,29 +7,35 @@ import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import com.lycanitesmobs.core.entity.goals.actions.PlayerControlGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.FindAttackTargetGoal;
 import net.minecraft.entity.*;
-import net.minecraft.entity.monster.EndermanEntity;
-import net.minecraft.entity.monster.HoglinEntity;
-import net.minecraft.entity.monster.ZombifiedPiglinEntity;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.monster.EnderMan;
+import net.minecraft.world.entity.monster.hoglin.Hoglin;
+import net.minecraft.world.entity.monster.ZombifiedPiglin;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 
 import java.util.List;
 
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.Pose;
+
 public class EntityKathoga extends RideableCreatureEntity {
 	
 	PlayerControlGoal playerControlAI;
 
-    public EntityKathoga(EntityType<? extends EntityKathoga> entityType, World world) {
+    public EntityKathoga(EntityType<? extends EntityKathoga> entityType, Level world) {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEAD;
+        this.attribute = MobType.UNDEAD;
         this.hasAttackSound = true;
         this.spreadFire = true;
         this.setupMob();
@@ -45,9 +51,9 @@ public class EntityKathoga extends RideableCreatureEntity {
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setTargetClass(ZombifiedPiglinEntity.class).setSpeed(1.5D).setDamageScale(8.0D).setRange(2.5D));
-        this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setTargetClass(HoglinEntity.class).setSpeed(1.5D).setDamageScale(8.0D).setRange(2.5D));
-        this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setTargetClass(EndermanEntity.class).setSpeed(1.5D).setDamageScale(8.0D).setRange(2.5D));
+        this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setTargetClass(ZombifiedPiglin.class).setSpeed(1.5D).setDamageScale(8.0D).setRange(2.5D));
+        this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setTargetClass(Hoglin.class).setSpeed(1.5D).setDamageScale(8.0D).setRange(2.5D));
+        this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setTargetClass(EnderMan.class).setSpeed(1.5D).setDamageScale(8.0D).setRange(2.5D));
         this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setSpeed(1.5D));
 
         this.targetSelector.addGoal(this.nextFindTargetIndex++, new FindAttackTargetGoal(this).addTargets(EntityType.ZOMBIFIED_PIGLIN));
@@ -67,13 +73,13 @@ public class EntityKathoga extends RideableCreatureEntity {
         super.aiStep();
         
         // Become a farmed animal if removed from the Nether to another dimension, prevents natural despawning.
-        if(this.getCommandSenderWorld().dimension() != World.NETHER)
+        if(this.getCommandSenderWorld().dimension() != Level.NETHER)
         	this.setFarmed();
     }
     
     public void riderEffects(LivingEntity rider) {
-    	if(rider.hasEffect(Effects.WITHER))
-    		rider.removeEffect(Effects.WITHER);
+    	if(rider.hasEffect(MobEffects.WITHER))
+    		rider.removeEffect(MobEffects.WITHER);
         if(rider.isOnFire())
             rider.setSecondsOnFire(0);
     }
@@ -109,7 +115,7 @@ public class EntityKathoga extends RideableCreatureEntity {
         	return false;
         
     	// Breed:
-        if((target instanceof AnimalEntity || (target instanceof BaseCreatureEntity && ((BaseCreatureEntity)target).creatureInfo.isFarmable())) && target.getDimensions(Pose.STANDING).height >= 1F)
+        if((target instanceof Animal || (target instanceof BaseCreatureEntity && ((BaseCreatureEntity)target).creatureInfo.isFarmable())) && target.getDimensions(Pose.STANDING).height >= 1F)
     		this.breed();
     	
         return true;
@@ -131,13 +137,13 @@ public class EntityKathoga extends RideableCreatureEntity {
         if(!possibleTargets.isEmpty()) {
             for(LivingEntity possibleTarget : possibleTargets) {
                 boolean doDamage = true;
-                if(this.getRider() instanceof PlayerEntity) {
-                    if(MinecraftForge.EVENT_BUS.post(new AttackEntityEvent((PlayerEntity)this.getRider(), possibleTarget))) {
+                if(this.getRider() instanceof Player) {
+                    if(MinecraftForge.EVENT_BUS.post(new AttackEntityEvent((Player)this.getRider(), possibleTarget))) {
                         doDamage = false;
                     }
                 }
                 if(doDamage) {
-                    possibleTarget.addEffect(new EffectInstance(Effects.WITHER, 10 * 20, 0));
+                    possibleTarget.addEffect(new MobEffectInstance(MobEffects.WITHER, 10 * 20, 0));
                 }
             }
         }

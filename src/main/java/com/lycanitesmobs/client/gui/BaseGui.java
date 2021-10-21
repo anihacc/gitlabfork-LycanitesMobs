@@ -1,21 +1,21 @@
 package com.lycanitesmobs.client.gui;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.vector.Quaternion;
-import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.world.entity.LivingEntity;
+import com.mojang.math.Quaternion;
+import com.mojang.math.Vector3f;
+import net.minecraft.network.chat.Component;
 
-public abstract class BaseGui extends AbstractGui {
-    public BaseGui(ITextComponent screenName) {
+public abstract class BaseGui extends GuiComponent {
+    public BaseGui(Component screenName) {
         super();
     }
 
-    public static void renderLivingEntity(MatrixStack matrixStack, int x, int y, float scale, float lookX, float lookY, LivingEntity entity) {
+    public static void renderLivingEntity(PoseStack matrixStack, int x, int y, float scale, float lookX, float lookY, LivingEntity entity) {
         float lookXRot = (float)Math.atan((double)(lookX / 40.0F));
         float lookYRot = (float)Math.atan((double)(lookY / 40.0F));
         matrixStack.pushPose();
@@ -41,11 +41,11 @@ public abstract class BaseGui extends AbstractGui {
         entity.yHeadRotO = entity.yRot;
         entity.setOnGround(true);
 
-        EntityRendererManager renderManager = Minecraft.getInstance().getEntityRenderDispatcher();
+        EntityRenderDispatcher renderManager = Minecraft.getInstance().getEntityRenderDispatcher();
         modelRotationPitch.conj();
         renderManager.overrideCameraOrientation(modelRotationPitch);
         renderManager.setRenderShadow(false);
-        IRenderTypeBuffer.Impl renderTypeBuffer = Minecraft.getInstance().renderBuffers().bufferSource();
+        MultiBufferSource.BufferSource renderTypeBuffer = Minecraft.getInstance().renderBuffers().bufferSource();
         renderManager.render(entity, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, matrixStack, renderTypeBuffer, 15728880);
         renderTypeBuffer.endBatch();
         renderManager.setRenderShadow(true);

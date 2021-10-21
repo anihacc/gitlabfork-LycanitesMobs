@@ -4,9 +4,9 @@ import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.client.renderer.CreatureRenderer;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Vector2f;
-import net.minecraft.util.math.vector.Vector4f;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.phys.Vec2;
+import com.mojang.math.Vector4f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -42,8 +42,8 @@ public class LayerZephyr extends LayerCreatureBase {
     }
 
 	@Override
-	public Vector2f getTextureOffset(String partName, BaseCreatureEntity entity, boolean trophy, float loop) {
-		return new Vector2f(-loop * 25, 0);
+	public Vec2 getTextureOffset(String partName, BaseCreatureEntity entity, boolean trophy, float loop) {
+		return new Vec2(-loop * 25, 0);
 	}
 
 	@Override

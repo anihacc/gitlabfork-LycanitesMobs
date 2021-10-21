@@ -5,23 +5,23 @@ import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.block.BlockFireBase;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.info.ElementManager;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Direction;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.core.Direction;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorldReader;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -44,31 +44,31 @@ public class BlockShadowfire extends BlockFireBase {
 		this.blindness = true;
 	}
 
-    protected boolean canNeighborCatchFire(World worldIn, BlockPos pos) {
+    protected boolean canNeighborCatchFire(Level worldIn, BlockPos pos) {
         return false;
     }
 
-    protected int getNeighborEncouragement(World worldIn, BlockPos pos) {
+    protected int getNeighborEncouragement(Level worldIn, BlockPos pos) {
         return 0;
     }
 
-	public boolean canCatchFire(IBlockReader world, BlockPos pos, Direction face) {
+	public boolean canCatchFire(BlockGetter world, BlockPos pos, Direction face) {
         return false;
     }
 
 	@Override
-	public boolean isBlockFireSource(BlockState state, IWorldReader world, BlockPos pos, Direction side) {
+	public boolean isBlockFireSource(BlockState state, LevelReader world, BlockPos pos, Direction side) {
 		if(state.getBlock() == Blocks.OBSIDIAN || state.getBlock() == Blocks.CRYING_OBSIDIAN)
 			return true;
 		return true; // TODO Figure out why the PERMANENT property isn't working consistently.
 	}
 
-    protected boolean canDie(World world, BlockPos pos) {
+    protected boolean canDie(Level world, BlockPos pos) {
         return false;
     }
 
     @Override
-	public void entityInside(BlockState blockState, World world, BlockPos pos, Entity entity) {
+	public void entityInside(BlockState blockState, Level world, BlockPos pos, Entity entity) {
 		super.entityInside(blockState, world, pos, entity);
 
 		if(entity instanceof ItemEntity)
@@ -77,14 +77,14 @@ public class BlockShadowfire extends BlockFireBase {
 		if(entity instanceof LivingEntity) {
 			LivingEntity livingEntity = (LivingEntity)entity;
 
-			Effect decay = ObjectManager.getEffect("decay");
+			MobEffect decay = ObjectManager.getEffect("decay");
 			if(decay != null) {
-				EffectInstance effect = new EffectInstance(decay, 5 * 20, 0);
+				MobEffectInstance effect = new MobEffectInstance(decay, 5 * 20, 0);
 				if(livingEntity.canBeAffected(effect))
 					livingEntity.addEffect(effect);
 			}
 
-			EffectInstance blindness = new EffectInstance(Effects.BLINDNESS, 5 * 20, 0);
+			MobEffectInstance blindness = new MobEffectInstance(MobEffects.BLINDNESS, 5 * 20, 0);
 			if(this.blindness && livingEntity.canBeAffected(blindness)) {
 				livingEntity.addEffect(blindness);
 			}
@@ -98,7 +98,7 @@ public class BlockShadowfire extends BlockFireBase {
 
     @Override
 	@OnlyIn(Dist.CLIENT)
-	public void animateTick(BlockState state, World world, BlockPos pos, Random random) {
+	public void animateTick(BlockState state, Level world, BlockPos pos, Random random) {
 		double x = pos.getX();
 		double y = pos.getY();
 		double z = pos.getZ();

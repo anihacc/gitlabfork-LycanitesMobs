@@ -1,9 +1,9 @@
 package com.lycanitesmobs.core.item.summoningstaff;
 
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
 public class ItemStaffStable extends ItemStaffSummoning {
 	
@@ -38,7 +38,7 @@ public class ItemStaffStable extends ItemStaffSummoning {
     }
 
     @Override
-	protected void damageStaff(ItemStack itemStack, int amountToDamage, ServerPlayerEntity entity) {
+	protected void damageStaff(ItemStack itemStack, int amountToDamage, ServerPlayer entity) {
 		amountToDamage = Math.max(1, (int)Math.floor((double)amountToDamage / 2));
 		super.damageStaff(itemStack, amountToDamage, entity);
 	}

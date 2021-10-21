@@ -5,9 +5,9 @@ import com.lycanitesmobs.core.mobevent.trigger.AltarMobEventTrigger;
 import com.lycanitesmobs.core.mobevent.trigger.MobEventTrigger;
 import com.lycanitesmobs.core.mobevent.trigger.RandomMobEventTrigger;
 import com.lycanitesmobs.core.mobevent.trigger.TickMobEventTrigger;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -68,7 +68,7 @@ public class MobEventListener {
 	/** Called every tick in a world and counts down to the next event then fires it! The countdown is paused during an event. **/
 	@SubscribeEvent
 	public void onWorldUpdate(TickEvent.WorldTickEvent event) {
-		World world = event.world;
+		Level world = event.world;
 		if(world.isClientSide) {
 			return;
 		}
@@ -126,7 +126,7 @@ public class MobEventListener {
 	/**
 	 * Triggers a Random Mob Event Trigger if one is available.
 	 *  **/
-	public void triggerRandomMobEvent(World world, ExtendedWorld worldExt, int level) {
+	public void triggerRandomMobEvent(Level world, ExtendedWorld worldExt, int level) {
         // Get Triggers and Total Weight:
 		List<RandomMobEventTrigger> validTriggers = new ArrayList<>();
 		int totalWeights = 0;

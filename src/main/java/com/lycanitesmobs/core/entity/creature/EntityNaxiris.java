@@ -8,16 +8,22 @@ import com.lycanitesmobs.core.info.ObjectLists;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.entity.*;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.Pose;
 
 public class EntityNaxiris extends RideableCreatureEntity {
 	public boolean griefing = true;
@@ -25,11 +31,11 @@ public class EntityNaxiris extends RideableCreatureEntity {
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityNaxiris(EntityType<? extends EntityNaxiris> entityType, World world) {
+    public EntityNaxiris(EntityType<? extends EntityNaxiris> entityType, Level world) {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEFINED;
+        this.attribute = MobType.UNDEFINED;
         this.hasAttackSound = false;
         
         this.setAttackCooldownMax(20);
@@ -56,8 +62,8 @@ public class EntityNaxiris extends RideableCreatureEntity {
     // ==================================================
     @Override
     public void riderEffects(LivingEntity rider) {
-        if(rider.hasEffect(Effects.DIG_SLOWDOWN))
-            rider.removeEffect(Effects.DIG_SLOWDOWN);
+        if(rider.hasEffect(MobEffects.DIG_SLOWDOWN))
+            rider.removeEffect(MobEffects.DIG_SLOWDOWN);
         if(rider.hasEffect(ObjectManager.getEffect("weight")))
             rider.removeEffect(ObjectManager.getEffect("weight"));
     }
@@ -77,8 +83,8 @@ public class EntityNaxiris extends RideableCreatureEntity {
     		// Eat Buffs:
         	if(damageEntity instanceof LivingEntity) {
         		LivingEntity targetLiving = (LivingEntity)damageEntity;
-        		List<Effect> goodEffects = new ArrayList<>();
-        		for(EffectInstance effect : targetLiving.getActiveEffects()) {
+        		List<MobEffect> goodEffects = new ArrayList<>();
+        		for(MobEffectInstance effect : targetLiving.getActiveEffects()) {
 					if(ObjectLists.inEffectList("buffs", effect.getEffect()))
 						goodEffects.add(effect.getEffect());
         		}
@@ -123,7 +129,7 @@ public class EntityNaxiris extends RideableCreatureEntity {
 	// ========== Ranged Attack ==========
     @Override
     public void attackRanged(Entity target, float range) {
-        this.fireProjectile("arcanelaserstorm", target, range, 0, new Vector3d(0, 0, 0), 0.6f, 2f, 1F);
+        this.fireProjectile("arcanelaserstorm", target, range, 0, new Vec3(0, 0, 0), 0.6f, 2f, 1F);
         super.attackRanged(target, range);
     }
     
@@ -175,8 +181,8 @@ public class EntityNaxiris extends RideableCreatureEntity {
         if(this.getStamina() < this.getStaminaCost())
             return;
 
-        if(rider instanceof PlayerEntity) {
-            PlayerEntity player = (PlayerEntity)rider;
+        if(rider instanceof Player) {
+            Player player = (Player)rider;
 			ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile("arcanelaserstorm");
 			if(projectileInfo != null) {
 				BaseProjectileEntity projectile = projectileInfo.createProjectile(this.getCommandSenderWorld(), player);

@@ -2,9 +2,9 @@ package com.lycanitesmobs.core.mobevent;
 
 import com.lycanitesmobs.ExtendedWorld;
 import com.lycanitesmobs.LycanitesMobs;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 public class MobEventPlayerServer {
     public static boolean testOnCreative = false;
@@ -17,13 +17,13 @@ public class MobEventPlayerServer {
     public int ticks = 0;
 
     /** The world that this event is active in. **/
-    public World world;
+    public Level world;
 
     /** The world time that this event started at. **/
     public long startedWorldTime = 0;
 
     /** The player that triggered this event. Can be null as not all events are player specific. **/
-    public PlayerEntity player;
+    public Player player;
 
     /** The origin position of this event. This is not always relevant. **/
     public BlockPos origin = new BlockPos(0, 0, 0);
@@ -41,7 +41,7 @@ public class MobEventPlayerServer {
 	// ==================================================
     //                     Constructor
     // ==================================================
-	public MobEventPlayerServer(MobEvent mobEvent, World world) {
+	public MobEventPlayerServer(MobEvent mobEvent, Level world) {
 		this.mobEvent = mobEvent;
         this.world = world;
         if(world.isClientSide)

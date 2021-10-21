@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.dungeon.definition;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.core.helpers.JSONHelper;
-import net.minecraft.util.math.vector.Vector3i;
+import net.minecraft.core.Vec3i;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,13 +25,13 @@ public class DungeonSector {
 	public boolean changeTheme = false;
 
 	/** Defines the minimum size of this sector. **/
-	public Vector3i sizeMin = new Vector3i(8, 8, 8);
+	public Vec3i sizeMin = new Vec3i(8, 8, 8);
 
 	/** Defines the maximum size of this sector. **/
-	public Vector3i sizeMax = new Vector3i(10, 10, 10);
+	public Vec3i sizeMax = new Vec3i(10, 10, 10);
 
 	/** Sets a padding around this sector to count towards block occupation. This is will be automatically increased by negative segment layers as needed and is at least one for entrance carving. **/
-	public Vector3i padding = new Vector3i(1, 0, 1);
+	public Vec3i padding = new Vec3i(1, 0, 1);
 
     /** A list of Structures used by this sector. **/
     public List<String> structures = new ArrayList<>();
@@ -88,10 +88,10 @@ public class DungeonSector {
 
 		this.padding = JSONHelper.getVector3i(json, "padding");
 		if(this.padding.getX() <= 0) {
-			this.padding = new Vector3i(this.wall.padding, this.padding.getY(), this.padding.getZ());
+			this.padding = new Vec3i(this.wall.padding, this.padding.getY(), this.padding.getZ());
 		}
 		if(this.padding.getZ() <= 0) {
-			this.padding = new Vector3i(this.padding.getX(), this.padding.getY(), this.wall.padding);
+			this.padding = new Vec3i(this.padding.getX(), this.padding.getY(), this.wall.padding);
 		}
 	}
 
@@ -101,7 +101,7 @@ public class DungeonSector {
 	 * @param random The instance of Random to use.
 	 * @return A random size to use.
 	 */
-	public Vector3i getRandomSize(Random random) {
+	public Vec3i getRandomSize(Random random) {
 		int x = this.sizeMin.getX();
 		if(this.sizeMax.getX() > x)
 			x += random.nextInt(this.sizeMax.getX() - x + 1);
@@ -111,6 +111,6 @@ public class DungeonSector {
 		int z = this.sizeMin.getZ();
 		if(this.sizeMax.getZ() > z)
 			z += random.nextInt(this.sizeMax.getZ() - z + 1);
-		return new Vector3i(x, y, z);
+		return new Vec3i(x, y, z);
 	}
 }

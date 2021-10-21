@@ -8,23 +8,25 @@ import com.lycanitesmobs.core.entity.goals.actions.ChaseGoal;
 import com.lycanitesmobs.core.entity.goals.actions.abilities.EffectAuraGoal;
 import com.lycanitesmobs.core.entity.goals.actions.abilities.FaceTargetGoal;
 import com.lycanitesmobs.core.entity.goals.actions.abilities.SummonMinionsGoal;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.Pose;
-import net.minecraft.entity.monster.IMob;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 
-public class EntityApollyon extends TameableCreatureEntity implements IMob {
+import com.lycanitesmobs.core.entity.BaseCreatureEntity.TARGET_TYPES;
 
-    public EntityApollyon(EntityType<? extends EntityApollyon> entityType, World world) {
+public class EntityApollyon extends TameableCreatureEntity implements Enemy {
+
+    public EntityApollyon(EntityType<? extends EntityApollyon> entityType, Level world) {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEAD;
+        this.attribute = MobType.UNDEAD;
         this.hasAttackSound = false;
         this.setupMob();
     }
@@ -37,11 +39,11 @@ public class EntityApollyon extends TameableCreatureEntity implements IMob {
         this.goalSelector.addGoal(this.nextCombatGoalIndex, new ChaseGoal(this).setMinDistance(16F).setMaxDistance(64F).setSpeed(1));
 //        this.goalSelector.addGoal(this.nextCombatGoalIndex, new BuildAroundTargetGoal(this).setBlock(ObjectManager.getBlock("doomfire")).setTickRate(40).setRange(3).setEnclose(true).setTargetBit(TARGET_BITS.ATTACK));
         this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackRangedGoal(this).setSpeed(1.0D).setRange(32.0F).setMinChaseDistance(16.0F).setChaseTime(-1));
-        this.goalSelector.addGoal(this.nextCombatGoalIndex, new EffectAuraGoal(this).setEffect(Effects.DAMAGE_BOOST).setAmplifier(2).setEffectSeconds(2).setRange(32).setCheckSight(false)
+        this.goalSelector.addGoal(this.nextCombatGoalIndex, new EffectAuraGoal(this).setEffect(MobEffects.DAMAGE_BOOST).setAmplifier(2).setEffectSeconds(2).setRange(32).setCheckSight(false)
                 .setTargetTypes(TARGET_TYPES.ALLY.id).setTargetCreatureType("demon"));
-        this.goalSelector.addGoal(this.nextCombatGoalIndex, new EffectAuraGoal(this).setEffect(Effects.MOVEMENT_SPEED).setAmplifier(2).setEffectSeconds(2).setRange(32).setCheckSight(false)
+        this.goalSelector.addGoal(this.nextCombatGoalIndex, new EffectAuraGoal(this).setEffect(MobEffects.MOVEMENT_SPEED).setAmplifier(2).setEffectSeconds(2).setRange(32).setCheckSight(false)
                 .setTargetTypes(TARGET_TYPES.ALLY.id).setTargetCreatureType("demon"));
-        this.goalSelector.addGoal(this.nextCombatGoalIndex, new EffectAuraGoal(this).setEffect(Effects.DAMAGE_RESISTANCE).setAmplifier(2).setEffectSeconds(2).setRange(32).setCheckSight(false)
+        this.goalSelector.addGoal(this.nextCombatGoalIndex, new EffectAuraGoal(this).setEffect(MobEffects.DAMAGE_RESISTANCE).setAmplifier(2).setEffectSeconds(2).setRange(32).setCheckSight(false)
                 .setTargetTypes(TARGET_TYPES.ALLY.id).setTargetCreatureType("demon"));
         this.goalSelector.addGoal(this.nextCombatGoalIndex, new SummonMinionsGoal(this).setMinionInfo("belphegor").setSummonCap(2)
                 .setConditions(new GoalConditions().setRareVariantOnly(true)));
@@ -62,7 +64,7 @@ public class EntityApollyon extends TameableCreatureEntity implements IMob {
 
     @Override
     public void attackRanged(Entity target, float range) {
-        BaseProjectileEntity projectile = this.fireProjectile("doomfireball", target, range, 0, Vector3d.ZERO, 0.6f, 3f, 4F);
+        BaseProjectileEntity projectile = this.fireProjectile("doomfireball", target, range, 0, Vec3.ZERO, 0.6f, 3f, 4F);
         if (projectile != null) {
             projectile.setPos(target.position().x, target.position().y + 4 + this.getRandom().nextDouble() * 3, target.position().z);
             projectile.shoot(0, -1, 0, 0.5F, 4);

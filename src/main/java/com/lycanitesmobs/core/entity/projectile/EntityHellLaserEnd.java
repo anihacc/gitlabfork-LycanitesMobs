@@ -6,26 +6,26 @@ import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.entity.LaserEndProjectileEntity;
 import com.lycanitesmobs.core.entity.LaserProjectileEntity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.level.Level;
 
 public class EntityHellLaserEnd extends LaserEndProjectileEntity {
     
     // ==================================================
  	//                   Constructors
  	// ==================================================
-	public EntityHellLaserEnd(EntityType<? extends BaseProjectileEntity> entityType, World world) {
+	public EntityHellLaserEnd(EntityType<? extends BaseProjectileEntity> entityType, Level world) {
         super(entityType, world);
     }
 
-    public EntityHellLaserEnd(EntityType<? extends BaseProjectileEntity> entityType, World world, double par2, double par4, double par6, LaserProjectileEntity laser) {
+    public EntityHellLaserEnd(EntityType<? extends BaseProjectileEntity> entityType, Level world, double par2, double par4, double par6, LaserProjectileEntity laser) {
         super(entityType, world, par2, par4, par6, laser);
     }
     
-    public EntityHellLaserEnd(EntityType<? extends BaseProjectileEntity> entityType, World world, LivingEntity shooter, LaserProjectileEntity laser) {
+    public EntityHellLaserEnd(EntityType<? extends BaseProjectileEntity> entityType, Level world, LivingEntity shooter, LaserProjectileEntity laser) {
         super(entityType, world, shooter, laser);
     }
     

@@ -2,8 +2,8 @@ package com.lycanitesmobs.core.network;
 
 import com.lycanitesmobs.client.ClientManager;
 import com.lycanitesmobs.core.entity.ExtendedPlayer;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkEvent;
 
@@ -25,7 +25,7 @@ public class MessageSummonSetSelection {
 		// Server Side:
 		if(ctx.get().getDirection() == NetworkDirection.PLAY_TO_SERVER) {
 			ctx.get().enqueueWork(() -> {
-				PlayerEntity player = ctx.get().getSender();
+				Player player = ctx.get().getSender();
 				ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
 				playerExt.setSelectedSummonSet(message.summonSetID);
             });
@@ -33,7 +33,7 @@ public class MessageSummonSetSelection {
         }
 
         // Client Side:
-        PlayerEntity player = ClientManager.getInstance().getClientPlayer();
+        Player player = ClientManager.getInstance().getClientPlayer();
         ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
         if(playerExt == null)
         	return;
@@ -43,7 +43,7 @@ public class MessageSummonSetSelection {
 	/**
 	 * Reads the message from bytes.
 	 */
-	public static MessageSummonSetSelection decode(PacketBuffer packet) {
+	public static MessageSummonSetSelection decode(FriendlyByteBuf packet) {
 		MessageSummonSetSelection message = new MessageSummonSetSelection();
 		message.summonSetID = packet.readByte();
 		return message;
@@ -52,7 +52,7 @@ public class MessageSummonSetSelection {
 	/**
 	 * Writes the message into bytes.
 	 */
-	public static void encode(MessageSummonSetSelection message, PacketBuffer packet) {
+	public static void encode(MessageSummonSetSelection message, FriendlyByteBuf packet) {
 		packet.writeByte(message.summonSetID);
 	}
 	

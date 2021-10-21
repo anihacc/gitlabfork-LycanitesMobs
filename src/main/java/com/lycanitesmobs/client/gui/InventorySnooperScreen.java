@@ -1,8 +1,8 @@
 package com.lycanitesmobs.client.gui;
 
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.inventory.InventoryScreen;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.inventory.InventoryScreen;
+import net.minecraft.world.entity.player.Player;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class InventorySnooperScreen extends InventoryScreen {
 
-	public InventorySnooperScreen(PlayerEntity entityPlayer) {
+	public InventorySnooperScreen(Player entityPlayer) {
 		super(entityPlayer);
 	}
 	

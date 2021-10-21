@@ -2,11 +2,11 @@ package com.lycanitesmobs.core.network;
 
 import com.lycanitesmobs.client.ClientManager;
 import com.lycanitesmobs.core.entity.ExtendedEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkEvent;
 
@@ -30,8 +30,8 @@ public class MessageEntityPerched {
 		if(ctx.get().getDirection() != NetworkDirection.PLAY_TO_CLIENT)
 			return;
 
-		PlayerEntity player = ClientManager.getInstance().getClientPlayer();
-		World world = player.getCommandSenderWorld();
+		Player player = ClientManager.getInstance().getClientPlayer();
+		Level world = player.getCommandSenderWorld();
 		Entity perchedOnEntity = world.getEntity(message.perchedOnEntityID);
 		Entity perchedByEntity = message.perchedByEntityID != 0 ? world.getEntity(message.perchedByEntityID) : null;
 
@@ -46,7 +46,7 @@ public class MessageEntityPerched {
 	/**
 	 * Reads the message from bytes.
 	 */
-	public static MessageEntityPerched decode(PacketBuffer packet) {
+	public static MessageEntityPerched decode(FriendlyByteBuf packet) {
 		MessageEntityPerched message = new MessageEntityPerched();
 		message.perchedOnEntityID = packet.readInt();
 		message.perchedByEntityID = packet.readInt();
@@ -56,7 +56,7 @@ public class MessageEntityPerched {
 	/**
 	 * Writes the message into bytes.
 	 */
-	public static void encode(MessageEntityPerched message, PacketBuffer packet) {
+	public static void encode(MessageEntityPerched message, FriendlyByteBuf packet) {
 		packet.writeInt(message.perchedOnEntityID);
 		packet.writeInt(message.perchedByEntityID);
 	}

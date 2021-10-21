@@ -11,11 +11,11 @@ import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.CreatureType;
 import com.lycanitesmobs.core.item.ItemColorCustomSpawnEgg;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.ScreenManager;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.resources.IReloadableResourceManager;
-import net.minecraft.resources.IResourceManager;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.packs.resources.ReloadableResourceManager;
+import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -35,7 +35,7 @@ public class ClientManager {
 		return INSTANCE;
 	}
 
-	protected FontRenderer fontRenderer;
+	protected Font fontRenderer;
 
 	/**
 	 * Sets up the Language Manager used for additional language files.
@@ -48,11 +48,11 @@ public class ClientManager {
 	 * Registers all GUI Screens, etc used by this mod.
 	 */
 	public void registerScreens() {
-		ScreenManager.register(CreatureContainer.TYPE, CreatureInventoryScreen::new);
-		ScreenManager.register(SummoningPedestalContainer.TYPE, SummoningPedestalScreen::new);
-		ScreenManager.register(EquipmentForgeContainer.TYPE, EquipmentForgeScreen::new);
-		ScreenManager.register(EquipmentInfuserContainer.TYPE, EquipmentInfuserScreen::new);
-		ScreenManager.register(EquipmentStationContainer.TYPE, EquipmentStationScreen::new);
+		MenuScreens.register(CreatureContainer.TYPE, CreatureInventoryScreen::new);
+		MenuScreens.register(SummoningPedestalContainer.TYPE, SummoningPedestalScreen::new);
+		MenuScreens.register(EquipmentForgeContainer.TYPE, EquipmentForgeScreen::new);
+		MenuScreens.register(EquipmentInfuserContainer.TYPE, EquipmentInfuserScreen::new);
+		MenuScreens.register(EquipmentStationContainer.TYPE, EquipmentStationScreen::new);
 	}
 
 	/**
@@ -63,9 +63,9 @@ public class ClientManager {
 		MinecraftForge.EVENT_BUS.register(new KeyHandler(Minecraft.getInstance()));
 		MinecraftForge.EVENT_BUS.register(new BaseOverlay(Minecraft.getInstance()));
 		MinecraftForge.EVENT_BUS.register(new ClientEventListener());
-		IResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
-		if(resourceManager instanceof IReloadableResourceManager) {
-			((IReloadableResourceManager)resourceManager).registerReloadListener(LanguageLoader.getInstance());
+		ResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
+		if(resourceManager instanceof ReloadableResourceManager) {
+			((ReloadableResourceManager)resourceManager).registerReloadListener(LanguageLoader.getInstance());
 		}
 	}
 
@@ -83,14 +83,14 @@ public class ClientManager {
 	 * Returns the client player entity.
 	 * @return Client player entity.
 	 */
-	public PlayerEntity getClientPlayer() {
+	public Player getClientPlayer() {
 		return Minecraft.getInstance().player;
 	}
 
 	/**
 	 * Displays a Screen GUI on the client.
 	 */
-	public void displayGuiScreen(String screenName, PlayerEntity player) {
+	public void displayGuiScreen(String screenName, Player player) {
 		if("beastiary".equals(screenName)) {
 			Minecraft.getInstance().setScreen(new SummoningBeastiaryScreen(player));
 		}
@@ -100,7 +100,7 @@ public class ClientManager {
 	 * Returns the Font Renderer used by Lycanites Mobs.
 	 * @return A sexy Font Renderer, thanks for the heads up CedKilleur!
 	 */
-    public FontRenderer getFontRenderer() {
+    public Font getFontRenderer() {
     	return Minecraft.getInstance().font;
 		/*if(this.fontRenderer == null) {
 			ResourceLocation fontResource = new ResourceLocation(LycanitesMobs.MODID, "fonts/diavlo_light.otf");

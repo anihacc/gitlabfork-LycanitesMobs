@@ -2,10 +2,10 @@ package com.lycanitesmobs.core.network;
 
 import com.lycanitesmobs.client.ClientManager;
 import com.lycanitesmobs.ExtendedWorld;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkEvent;
 
@@ -34,8 +34,8 @@ public class MessageMobEvent {
 			return;
 
 		ctx.get().enqueueWork(() -> {
-			PlayerEntity player = ClientManager.getInstance().getClientPlayer();
-			World world = player.getCommandSenderWorld();
+			Player player = ClientManager.getInstance().getClientPlayer();
+			Level world = player.getCommandSenderWorld();
 			ExtendedWorld worldExt = ExtendedWorld.getForWorld(world);
 
 			if ("".equals(message.mobEventName))
@@ -49,7 +49,7 @@ public class MessageMobEvent {
 	/**
 	 * Reads the message from bytes.
 	 */
-	public static MessageMobEvent decode(PacketBuffer packet) {
+	public static MessageMobEvent decode(FriendlyByteBuf packet) {
 		MessageMobEvent message = new MessageMobEvent();
         message.mobEventName = packet.readUtf(256);
         message.pos = packet.readBlockPos();
@@ -61,7 +61,7 @@ public class MessageMobEvent {
 	/**
 	 * Writes the message into bytes.
 	 */
-	public static void encode(MessageMobEvent message, PacketBuffer packet) {
+	public static void encode(MessageMobEvent message, FriendlyByteBuf packet) {
         packet.writeUtf(message.mobEventName);
         packet.writeBlockPos(message.pos);
         packet.writeInt(message.level);

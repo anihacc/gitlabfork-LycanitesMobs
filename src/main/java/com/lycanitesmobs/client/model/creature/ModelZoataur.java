@@ -3,8 +3,8 @@ package com.lycanitesmobs.client.model.creature;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.template.ModelTemplateDragon;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -38,8 +38,8 @@ public class ModelZoataur extends ModelTemplateDragon {
     	super.animatePart(partName, entity, time, distance, loop, lookY, lookX, scale);
 
 		// Idle:
-		float walkIdle = MathHelper.sin(loop * 0.1F);
-		float walkIdleRev = MathHelper.sin(loop * 0.1F + (float)Math.PI);
+		float walkIdle = Mth.sin(loop * 0.1F);
+		float walkIdleRev = Mth.sin(loop * 0.1F + (float)Math.PI);
 		if(partName.equals("wingleft01")) {
 			this.rotate(0, (float)Math.toDegrees(walkIdle * 0.1F), 0);
 		}

@@ -3,8 +3,8 @@ package com.lycanitesmobs.client.model.creature;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.CreatureObjModelOld;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -63,9 +63,9 @@ public class ModelEyewig extends CreatureObjModelOld {
     	
     	// Idle:
     	if(partName.equals("leftmouth"))
-    		rotY += (float)-Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.1F - 0.05F);
+    		rotY += (float)-Math.toDegrees(Mth.cos(loop * 0.09F) * 0.1F - 0.05F);
     	if(partName.equals("rightmouth"))
-    		rotY -= (float)-Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.1F - 0.05F);
+    		rotY -= (float)-Math.toDegrees(Mth.cos(loop * 0.09F) * 0.1F - 0.05F);
 		
     	// Leg Angles:
     	if(partName.equals("frontleftleg") || partName.equals("middleleftleg") || partName.equals("backleftleg")
@@ -79,10 +79,10 @@ public class ModelEyewig extends CreatureObjModelOld {
     	// Walking:
     	float walkSwing = 0.3F;
     	if(partName.equals("frontrightleg") || partName.equals("middleleftleg") || partName.equals("backrightleg"))
-    		rotation += Math.toDegrees(MathHelper.cos(time * 0.6662F + (float)Math.PI) * walkSwing * distance);
+    		rotation += Math.toDegrees(Mth.cos(time * 0.6662F + (float)Math.PI) * walkSwing * distance);
     	if(partName.equals("frontleftleg") || partName.equals("middlerightleg") || partName.equals("backleftleg"))
-    		rotation += Math.toDegrees(MathHelper.cos(time * 0.6662F) * walkSwing * distance);
-		float bob = MathHelper.cos(time * 0.6662F + (float)Math.PI) * walkSwing * distance;
+    		rotation += Math.toDegrees(Mth.cos(time * 0.6662F) * walkSwing * distance);
+		float bob = Mth.cos(time * 0.6662F + (float)Math.PI) * walkSwing * distance;
 		if(bob < 0) bob += -bob * 2;
 		//posY += bob;
 		

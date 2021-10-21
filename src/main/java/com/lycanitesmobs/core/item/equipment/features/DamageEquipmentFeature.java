@@ -1,10 +1,10 @@
 package com.lycanitesmobs.core.item.equipment.features;
 
 import com.google.gson.JsonObject;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.BaseComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 
 public class DamageEquipmentFeature extends EquipmentFeature {
 	/** How much damage this part adds to the weapon attack. **/
@@ -44,37 +44,37 @@ public class DamageEquipmentFeature extends EquipmentFeature {
 	}
 
 	@Override
-	public ITextComponent getDescription(ItemStack itemStack, int level) {
+	public Component getDescription(ItemStack itemStack, int level) {
 		if(!this.isActive(itemStack, level)) {
 			return null;
 		}
-		TextComponent description = (TextComponent) new TranslationTextComponent("equipment.feature." + this.featureType)
+		BaseComponent description = (BaseComponent) new TranslatableComponent("equipment.feature." + this.featureType)
 			.append(" " + this.damageAmount);
 		if(this.damageCooldown > 0) {
 			description.append("\n")
-					.append(new TranslationTextComponent("equipment.feature.damage.cooldown"))
+					.append(new TranslatableComponent("equipment.feature.damage.cooldown"))
 					.append(" " + String.format("%.1f", this.damageCooldown));
 		}
 		if(this.damageKnockback > 0) {
 			description.append("\n")
-					.append(new TranslationTextComponent("equipment.feature.damage.knockback"))
+					.append(new TranslatableComponent("equipment.feature.damage.knockback"))
 					.append(" " + String.format("%.0f", this.damageKnockback));
 		}
 		if(this.damageRange > 0) {
 			description.append("\n")
-					.append(new TranslationTextComponent("equipment.feature.damage.range"))
+					.append(new TranslatableComponent("equipment.feature.damage.range"))
 					.append(" " + String.format("%.1f", this.damageRange));
 		}
 		if(this.damageSweep > 0) {
 			description.append("\n")
-					.append(new TranslationTextComponent("equipment.feature.damage.sweep"))
+					.append(new TranslatableComponent("equipment.feature.damage.sweep"))
 					.append(" " + String.format("%.0f", this.damageSweep));
 		}
 		return description;
 	}
 
 	@Override
-	public ITextComponent getSummary(ItemStack itemStack, int level) {
+	public Component getSummary(ItemStack itemStack, int level) {
 		return this.getDescription(itemStack, level);
 	}
 }

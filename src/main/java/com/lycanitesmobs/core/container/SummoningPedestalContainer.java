@@ -2,16 +2,16 @@ package com.lycanitesmobs.core.container;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.core.BlockPos;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 
 public class SummoningPedestalContainer extends BaseContainer {
-    public static final ContainerType<SummoningPedestalContainer> TYPE = (ContainerType<SummoningPedestalContainer>)IForgeContainerType.create(SummoningPedestalContainer::new).setRegistryName(LycanitesMobs.MODID, "summoning_pedestal");
+    public static final MenuType<SummoningPedestalContainer> TYPE = (MenuType<SummoningPedestalContainer>)IForgeContainerType.create(SummoningPedestalContainer::new).setRegistryName(LycanitesMobs.MODID, "summoning_pedestal");
     public TileEntitySummoningPedestal summoningPedestal;
 
     /**
@@ -20,7 +20,7 @@ public class SummoningPedestalContainer extends BaseContainer {
      * @param playerInventory The accessing player's inventory.
      * @param extraData A packet sent from the server to create the Container from.
      */
-    public SummoningPedestalContainer(int windowId, PlayerInventory playerInventory, PacketBuffer extraData) {
+    public SummoningPedestalContainer(int windowId, Inventory playerInventory, FriendlyByteBuf extraData) {
         this(windowId, playerInventory, (TileEntitySummoningPedestal)playerInventory.player.getCommandSenderWorld().getBlockEntity(BlockPos.of(extraData.readLong())));
     }
 
@@ -30,7 +30,7 @@ public class SummoningPedestalContainer extends BaseContainer {
      * @param playerInventory
      * @param summoningPedestal
      */
-    public SummoningPedestalContainer(int windowId, PlayerInventory playerInventory, TileEntitySummoningPedestal summoningPedestal) {
+    public SummoningPedestalContainer(int windowId, Inventory playerInventory, TileEntitySummoningPedestal summoningPedestal) {
         super(TYPE, windowId);
         this.summoningPedestal = summoningPedestal;
         this.inventoryStart = this.slots.size();
@@ -48,14 +48,14 @@ public class SummoningPedestalContainer extends BaseContainer {
     }
 
     @Override
-    public boolean stillValid(PlayerEntity player) {
+    public boolean stillValid(Player player) {
         if(this.summoningPedestal == null || !this.summoningPedestal.stillValid(player))
             return false;
         return player == this.summoningPedestal.getPlayer();
     }
 
     @Override
-    public ItemStack quickMoveStack(PlayerEntity player, int slotID) {
+    public ItemStack quickMoveStack(Player player, int slotID) {
         return ItemStack.EMPTY;
     }
 }

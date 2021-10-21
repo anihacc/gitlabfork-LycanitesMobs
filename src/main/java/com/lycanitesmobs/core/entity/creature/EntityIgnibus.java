@@ -6,29 +6,35 @@ import com.lycanitesmobs.core.entity.RideableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
-import net.minecraft.block.Blocks;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.entity.*;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.Pose;
 
 public class EntityIgnibus extends RideableCreatureEntity implements IGroupHeavy {
     protected boolean wantsToLand;
     protected boolean  isLanded;
 
-    public EntityIgnibus(EntityType<? extends EntityIgnibus> entityType, World world) {
+    public EntityIgnibus(EntityType<? extends EntityIgnibus> entityType, Level world) {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEFINED;
+        this.attribute = MobType.UNDEFINED;
         this.spawnsOnLand = true;
         this.spawnsInWater = true;
         this.isLavaCreature = true;
@@ -94,7 +100,7 @@ public class EntityIgnibus extends RideableCreatureEntity implements IGroupHeavy
 
     @Override
     public void riderEffects(LivingEntity rider) {
-        rider.addEffect(new EffectInstance(Effects.FIRE_RESISTANCE, (5 * 20) + 5, 1));
+        rider.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, (5 * 20) + 5, 1));
         super.riderEffects(rider);
     }
 
@@ -142,7 +148,7 @@ public class EntityIgnibus extends RideableCreatureEntity implements IGroupHeavy
 
         for (int projectileX = -1; projectileX <= 1; projectileX++) {
             for (int projectileY = -1; projectileY <= 1; projectileY++) {
-                Vector3d offset = this.getFacingPositionDouble(0, -6D + (0.5D * projectileY), 0, 4, this.yRot);
+                Vec3 offset = this.getFacingPositionDouble(0, -6D + (0.5D * projectileY), 0, 4, this.yRot);
                 offset.add(this.getFacingPositionDouble(0, 0, 0, 2D * projectileX, this.yRot + 90D));
                 RapidFireProjectileEntity projectile = new RapidFireProjectileEntity(ProjectileManager.getInstance().oldProjectileTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getCommandSenderWorld(), this, 15, 3);
                 this.fireProjectile(projectile, target, range, 0, offset, 0.6f, 3f, 4F);
@@ -196,8 +202,8 @@ public class EntityIgnibus extends RideableCreatureEntity implements IGroupHeavy
         if(this.getStamina() < this.getStaminaCost())
             return;
 
-        if(rider instanceof PlayerEntity) {
-            PlayerEntity player = (PlayerEntity)rider;
+        if(rider instanceof Player) {
+            Player player = (Player)rider;
             ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile("scorchfireball");
             if(projectileInfo == null) {
                 return;

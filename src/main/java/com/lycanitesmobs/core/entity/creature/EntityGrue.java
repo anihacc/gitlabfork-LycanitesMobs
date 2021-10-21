@@ -5,33 +5,39 @@ import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import com.lycanitesmobs.core.entity.goals.actions.abilities.StealthGoal;
 import com.lycanitesmobs.core.info.ObjectLists;
-import net.minecraft.block.BlockState;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.entity.*;
-import net.minecraft.entity.monster.IMob;
-import net.minecraft.particles.IParticleData;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class EntityGrue extends TameableCreatureEntity implements IMob {
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.Pose;
+
+public class EntityGrue extends TameableCreatureEntity implements Enemy {
     
 	private int teleportTime = 60;
 	
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityGrue(EntityType<? extends EntityGrue> entityType, World world) {
+    public EntityGrue(EntityType<? extends EntityGrue> entityType, Level world) {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEFINED;
+        this.attribute = MobType.UNDEFINED;
         this.hasAttackSound = true;
         this.spawnsInWater = true;
         this.setupMob();
@@ -102,7 +108,7 @@ public class EntityGrue extends TameableCreatureEntity implements IMob {
     @Override
     public void startStealth() {
     	if(this.getCommandSenderWorld().isClientSide) {
-            IParticleData particle = ParticleTypes.WITCH;
+            ParticleOptions particle = ParticleTypes.WITCH;
             double d0 = this.random.nextGaussian() * 0.02D;
             double d1 = this.random.nextGaussian() * 0.02D;
             double d2 = this.random.nextGaussian() * 0.02D;
@@ -125,8 +131,8 @@ public class EntityGrue extends TameableCreatureEntity implements IMob {
     	// Leech:
     	if(this.isRareVariant() && target instanceof LivingEntity) {
     		LivingEntity targetLiving = (LivingEntity)target;
-    		List<Effect> goodEffects = new ArrayList<>();
-    		for(EffectInstance effectInstance : targetLiving.getActiveEffects()) {
+    		List<MobEffect> goodEffects = new ArrayList<>();
+    		for(MobEffectInstance effectInstance : targetLiving.getActiveEffects()) {
 				if(ObjectLists.inEffectList("buffs", effectInstance.getEffect()))
 					goodEffects.add(effectInstance.getEffect());
     		}

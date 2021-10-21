@@ -1,9 +1,9 @@
 package com.lycanitesmobs.client.gui.buttons;
 
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
 
-import net.minecraft.client.gui.widget.button.Button.IPressable;
+import net.minecraft.client.gui.components.Button.OnPress;
 
 public abstract class Tab extends ButtonBase {
 	public ResourceLocation texture = new ResourceLocation("textures/gui/container/creative_inventory/tabs.png");
@@ -15,7 +15,7 @@ public abstract class Tab extends ButtonBase {
 
     public int tabID = 0;
 
-    public Tab(int id, int posX, int posY, ResourceLocation icon, ITextComponent text, IPressable pressable) {
+    public Tab(int id, int posX, int posY, ResourceLocation icon, Component text, OnPress pressable) {
         super(550 + id, posX, posY, tabWidth, tabHeight, text, pressable);
         this.icon = icon;
         this.tabID = id;

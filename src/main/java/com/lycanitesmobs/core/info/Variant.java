@@ -4,11 +4,11 @@ package com.lycanitesmobs.core.info;
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.core.config.ConfigCreatureSubspecies;
 import com.lycanitesmobs.core.entity.CreatureStats;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.network.chat.BaseComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -156,8 +156,8 @@ public class Variant {
 	 * Gets the display name of this Subspecies.
 	 * @return The Subspecies title.
 	 */
-	public TextComponent getTitle() {
-		return new TranslationTextComponent("subspecies." + this.color);
+	public BaseComponent getTitle() {
+		return new TranslatableComponent("subspecies." + this.color);
     }
 
 
@@ -176,7 +176,7 @@ public class Variant {
 	 */
 	public boolean canSpawn(LivingEntity entityLiving) {
 		if(entityLiving != null) {
-			World world = entityLiving.getCommandSenderWorld();
+			Level world = entityLiving.getCommandSenderWorld();
 
 			// Spawn Day Limit:
 			int day = (int)Math.floor(world.getGameTime() / 23999D);

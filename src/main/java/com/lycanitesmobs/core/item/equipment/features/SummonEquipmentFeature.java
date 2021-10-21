@@ -5,16 +5,16 @@ import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.BaseComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class SummonEquipmentFeature extends EquipmentFeature {
@@ -60,12 +60,12 @@ public class SummonEquipmentFeature extends EquipmentFeature {
 	}
 
 	@Override
-	public ITextComponent getDescription(ItemStack itemStack, int level) {
+	public Component getDescription(ItemStack itemStack, int level) {
 		if(!this.isActive(itemStack, level)) {
 			return null;
 		}
-		TextComponent description = (TextComponent) new TranslationTextComponent("equipment.feature." + this.featureType)
-			.append(" ").append(new TranslationTextComponent("entity." + this.summonMobId));
+		BaseComponent description = (BaseComponent) new TranslatableComponent("equipment.feature." + this.featureType)
+			.append(" ").append(new TranslatableComponent("entity." + this.summonMobId));
 
 		if(this.summonCountMin != this.summonCountMax) {
 			description.append(" x" + (this.summonCountMin + " - " + this.summonCountMax));
@@ -84,11 +84,11 @@ public class SummonEquipmentFeature extends EquipmentFeature {
 	}
 
 	@Override
-	public ITextComponent getSummary(ItemStack itemStack, int level) {
+	public Component getSummary(ItemStack itemStack, int level) {
 		if(!this.isActive(itemStack, level)) {
 			return null;
 		}
-		return new TranslationTextComponent("entity." + this.summonMobId);
+		return new TranslatableComponent("entity." + this.summonMobId);
 	}
 
 	/**
@@ -134,15 +134,15 @@ public class SummonEquipmentFeature extends EquipmentFeature {
 						entityCreature.setTemporary(this.summonDuration * 20);
 						entityCreature.setSizeScale(this.sizeScale);
 
-						if (attacker instanceof PlayerEntity && entityCreature instanceof TameableCreatureEntity) {
+						if (attacker instanceof Player && entityCreature instanceof TameableCreatureEntity) {
 							TameableCreatureEntity entityTameable = (TameableCreatureEntity) entityCreature;
-							entityTameable.setPlayerOwner((PlayerEntity) attacker);
+							entityTameable.setPlayerOwner((Player) attacker);
 							entityTameable.setSitting(false);
 							entityTameable.setFollowing(true);
 							entityTameable.setPassive(false);
 							entityTameable.setAssist(true);
 							entityTameable.setAggressive(true);
-							entityTameable.setPVP(target instanceof PlayerEntity);
+							entityTameable.setPVP(target instanceof Player);
 						}
 
 						float randomAngle = 45F + (45F * attacker.getRandom().nextFloat());

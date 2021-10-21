@@ -9,11 +9,11 @@ import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureEffect;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureScrolling;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import net.minecraft.util.math.vector.Vector4f;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector2f;
+import com.mojang.math.Vector4f;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.util.Mth;
+import net.minecraft.world.phys.Vec2;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -46,7 +46,7 @@ public class ModelWraith extends ModelTemplateElemental {
 		super.addCustomLayers(renderer);
 		renderer.addLayer(new LayerCreatureEffect(renderer, "overlay", true, CustomRenderStates.BLEND.NORMAL.id, true));
 		renderer.addLayer(new LayerCreatureEffect(renderer, "skull", false, CustomRenderStates.BLEND.NORMAL.id, true));
-		renderer.addLayer(new LayerCreatureScrolling(renderer, "", true, CustomRenderStates.BLEND.ADD.id, true, new Vector2f(-8, 0)));
+		renderer.addLayer(new LayerCreatureScrolling(renderer, "", true, CustomRenderStates.BLEND.ADD.id, true, new Vec2(-8, 0)));
 	}
 
 	@Override
@@ -66,17 +66,17 @@ public class ModelWraith extends ModelTemplateElemental {
 		if(entity instanceof BaseCreatureEntity) {
 			BaseCreatureEntity entityCreature = (BaseCreatureEntity)entity;
 			if (entityCreature.hasAttackTarget() && partName.equals("mouth")) {
-				this.rotate(20 + (float)-Math.toDegrees(MathHelper.cos(loop) * 0.1F), 0.0F, 0.0F);
+				this.rotate(20 + (float)-Math.toDegrees(Mth.cos(loop) * 0.1F), 0.0F, 0.0F);
 			}
 		}
 
 		// Vibrate:
 		float vibration = loop * 2;
 		if("head".equals(partName)) {
-			this.translate(MathHelper.cos(vibration) * 0.01f, MathHelper.cos(vibration) * 0.01f, MathHelper.cos(vibration) * 0.01f);
+			this.translate(Mth.cos(vibration) * 0.01f, Mth.cos(vibration) * 0.01f, Mth.cos(vibration) * 0.01f);
 		}
 		else if("mouth".equals(partName)) {
-			this.rotate((float)-Math.toDegrees(MathHelper.cos(vibration) * 0.025F), 0.0F, 0.0F);
+			this.rotate((float)-Math.toDegrees(Mth.cos(vibration) * 0.025F), 0.0F, 0.0F);
 		}
 	}
 
@@ -100,8 +100,8 @@ public class ModelWraith extends ModelTemplateElemental {
 	//              Get Part Texture Offset
 	// ==================================================
 	@Override
-	public Vector2f getBaseTextureOffset(String partName, Entity entity, boolean trophy, float loop) {
-    	return new Vector2f(-loop * 8, 0);
+	public Vec2 getBaseTextureOffset(String partName, Entity entity, boolean trophy, float loop) {
+    	return new Vec2(-loop * 8, 0);
 	}
 
 

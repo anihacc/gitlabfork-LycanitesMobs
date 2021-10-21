@@ -1,8 +1,8 @@
 package com.lycanitesmobs.core.network;
 
 import com.lycanitesmobs.core.entity.ExtendedPlayer;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkEvent;
 
@@ -25,7 +25,7 @@ public class MessagePlayerControl {
 			return;
 
 		ctx.get().enqueueWork(() -> {
-			PlayerEntity player = ctx.get().getSender();
+			Player player = ctx.get().getSender();
 			ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
 			playerExt.updateControlStates(message.controlStates);
         });
@@ -34,7 +34,7 @@ public class MessagePlayerControl {
 	/**
 	 * Reads the message from bytes.
 	 */
-	public static MessagePlayerControl decode(PacketBuffer packet) {
+	public static MessagePlayerControl decode(FriendlyByteBuf packet) {
 		MessagePlayerControl message = new MessagePlayerControl();
 		message.controlStates = packet.readByte();
 		return message;
@@ -43,7 +43,7 @@ public class MessagePlayerControl {
 	/**
 	 * Writes the message into bytes.
 	 */
-	public static void encode(MessagePlayerControl message, PacketBuffer packet) {
+	public static void encode(MessagePlayerControl message, FriendlyByteBuf packet) {
 		packet.writeByte(message.controlStates);
 	}
 	

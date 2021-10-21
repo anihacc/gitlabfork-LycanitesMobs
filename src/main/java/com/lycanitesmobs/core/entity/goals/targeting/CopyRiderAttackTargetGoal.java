@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.entity.goals.targeting;
 
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.LivingEntity;
 
 public class CopyRiderAttackTargetGoal extends TargetingGoal {
 	// Targets:

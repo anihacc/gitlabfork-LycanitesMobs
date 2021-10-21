@@ -4,11 +4,11 @@ import com.lycanitesmobs.ExtendedWorld;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.dungeon.DungeonManager;
 import com.lycanitesmobs.core.dungeon.definition.DungeonSchematic;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.Level;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +40,7 @@ public class DungeonInstance {
 	public ChunkPos chunkMax;
 
 	/** The world that the dungeon should build in. **/
-	public World world;
+	public Level world;
 
 	/** The seed for generating this dungeon. All random decisions are based on this seed so that the Dungeon Layout can generate the same on world reload, etc. **/
 	long seed = 0;
@@ -72,7 +72,7 @@ public class DungeonInstance {
 	 * @param world The world that this Instance will build in.
 	 * @return True on success and false if unable to initialize.
 	 */
-	public boolean init(World world) {
+	public boolean init(Level world) {
 		this.world = world;
 		if(this.complete) {
 			return true;
@@ -151,7 +151,7 @@ public class DungeonInstance {
 	 * @param world The world being built in. This cannot be used for placement during WorldGen.
 	 * @param chunkPos The chunk position to build within.
 	 */
-	public void buildChunk(IWorld worldWriter, World world, ChunkPos chunkPos, Random random) {
+	public void buildChunk(LevelAccessor worldWriter, Level world, ChunkPos chunkPos, Random random) {
 		if(this.complete || this.layout == null || !this.layout.sectorChunkMap.containsKey(chunkPos)) {
 			return;
 		}
@@ -172,7 +172,7 @@ public class DungeonInstance {
 	 * Loads this Dungeon Instance from the provided NBT data, this is mostly just if the dungeon is built and what its origin position is.
 	 * @param nbtTagCompound The NBT Data to read from.
 	 */
-	public void readFromNBT(CompoundNBT nbtTagCompound) {
+	public void readFromNBT(CompoundTag nbtTagCompound) {
 		this.uuid = nbtTagCompound.getUUID("Id");
 		this.schematic = DungeonManager.getInstance().getSchematic(nbtTagCompound.getString("Schematic"));
 		this.seed = nbtTagCompound.getLong("Seed");
@@ -196,7 +196,7 @@ public class DungeonInstance {
 	 * @param nbtTagCompound The NBTData to write to.
 	 * @return The written to NBTData. Null if this Dungeon Instance cannot be saved.
 	 */
-	public CompoundNBT writeToNBT(CompoundNBT nbtTagCompound) {
+	public CompoundTag writeToNBT(CompoundTag nbtTagCompound) {
 		if(this.uuid == null || this.schematic == null)
 			return null;
 

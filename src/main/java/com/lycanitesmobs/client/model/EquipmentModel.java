@@ -6,13 +6,13 @@ import com.lycanitesmobs.client.renderer.IItemModelRenderer;
 import com.lycanitesmobs.client.renderer.layer.LayerItem;
 import com.lycanitesmobs.core.item.equipment.ItemEquipment;
 import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Hand;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.core.NonNullList;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +37,7 @@ public class EquipmentModel implements IItemModelRenderer {
 	 * @param loop The animation tick for looping animations, etc.
 	 * @param brightness The base brightness to render at.
 	 */
-	public void render(ItemStack itemStack, Hand hand, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, IItemModelRenderer renderer, float loop, int brightness) {
+	public void render(ItemStack itemStack, InteractionHand hand, PoseStack matrixStack, MultiBufferSource renderTypeBuffer, IItemModelRenderer renderer, float loop, int brightness) {
 		if(!(itemStack.getItem() instanceof ItemEquipment)) {
 			return;
 		}
@@ -115,7 +115,7 @@ public class EquipmentModel implements IItemModelRenderer {
 	 * @param loop The animation tick for looping animations, etc.
 	 * @param brightness The base brightness to render at.
 	 */
-	public ItemObjModel renderPart(ItemStack partStack, Hand hand, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, IItemModelRenderer renderer, AnimationPart offsetPart, float loop, int brightness) {
+	public ItemObjModel renderPart(ItemStack partStack, InteractionHand hand, PoseStack matrixStack, MultiBufferSource renderTypeBuffer, IItemModelRenderer renderer, AnimationPart offsetPart, float loop, int brightness) {
 		if(partStack.isEmpty() || !(partStack.getItem() instanceof ItemEquipmentPart)) {
 			return null;
 		}

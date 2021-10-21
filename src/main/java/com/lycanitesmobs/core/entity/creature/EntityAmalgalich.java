@@ -9,36 +9,38 @@ import com.lycanitesmobs.core.entity.goals.actions.FindNearbyPlayersGoal;
 import com.lycanitesmobs.core.entity.goals.actions.abilities.*;
 import com.lycanitesmobs.core.entity.goals.targeting.CopyMasterAttackTargetGoal;
 import com.lycanitesmobs.core.info.CreatureManager;
-import net.minecraft.block.Block;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.monster.ZombifiedPiglinEntity;
-import net.minecraft.entity.passive.IronGolemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.world.entity.monster.ZombifiedPiglin;
+import net.minecraft.world.entity.animal.IronGolem;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class EntityAmalgalich extends BaseCreatureEntity implements IMob, IGroupHeavy, IGroupBoss {
+import com.lycanitesmobs.core.entity.BaseCreatureEntity.TARGET_TYPES;
+
+public class EntityAmalgalich extends BaseCreatureEntity implements Enemy, IGroupHeavy, IGroupBoss {
     private ForceGoal consumptionGoalP0;
     private ForceGoal consumptionGoalP2;
     private int consumptionDuration = 15 * 20;
     private int consumptionWindUp = 3 * 20;
     private int consumptionAnimationTime = 0;
 
-    public EntityAmalgalich(EntityType<? extends EntityAmalgalich> entityType, World world) {
+    public EntityAmalgalich(EntityType<? extends EntityAmalgalich> entityType, Level world) {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEAD;
+        this.attribute = MobType.UNDEAD;
         this.hasAttackSound = true;
         this.setAttackCooldownMax(30);
         this.hasJumpSound = false;
@@ -64,8 +66,8 @@ public class EntityAmalgalich extends BaseCreatureEntity implements IMob, IGroup
         this.goalSelector.addGoal(this.nextIdleGoalIndex, new FaceTargetGoal(this));
         this.goalSelector.addGoal(this.nextIdleGoalIndex, new HealWhenNoPlayersGoal(this));
         this.goalSelector.addGoal(this.nextIdleGoalIndex, new SummonMinionsGoal(this).setMinionInfo("banshee").setAntiFlight(true));
-        this.goalSelector.addGoal(this.nextIdleGoalIndex, new FireProjectilesGoal(this).setProjectile("spectralbolt").setFireRate(40).setVelocity(1.6F).setScale(8F).setAllPlayers(true).setOverhead(true).setOffset(new Vector3d(0, 6, 0)));
-        this.goalSelector.addGoal(this.nextIdleGoalIndex, new FireProjectilesGoal(this).setProjectile("spectralbolt").setFireRate(60).setVelocity(1.6F).setScale(8F).setOverhead(true).setOffset(new Vector3d(0, 8, 0)));
+        this.goalSelector.addGoal(this.nextIdleGoalIndex, new FireProjectilesGoal(this).setProjectile("spectralbolt").setFireRate(40).setVelocity(1.6F).setScale(8F).setAllPlayers(true).setOverhead(true).setOffset(new Vec3(0, 6, 0)));
+        this.goalSelector.addGoal(this.nextIdleGoalIndex, new FireProjectilesGoal(this).setProjectile("spectralbolt").setFireRate(60).setVelocity(1.6F).setScale(8F).setOverhead(true).setOffset(new Vec3(0, 8, 0)));
         this.goalSelector.addGoal(this.nextIdleGoalIndex, new EffectAuraGoal(this).setEffect("decay").setAmplifier(0).setEffectSeconds(5).setRange(52).setCheckSight(false).setTargetTypes(TARGET_TYPES.ENEMY.id));
 
         // Phase 1:
@@ -96,7 +98,7 @@ public class EntityAmalgalich extends BaseCreatureEntity implements IMob, IGroup
 
     /** Returns a larger bounding box for rendering this large entity. **/
     @OnlyIn(Dist.CLIENT)
-    public AxisAlignedBB getBoundingBoxForCulling() {
+    public AABB getBoundingBoxForCulling() {
         return this.getBoundingBox().inflate(200, 50, 200).move(0, -25, 0);
     }
 
@@ -177,7 +179,7 @@ public class EntityAmalgalich extends BaseCreatureEntity implements IMob, IGroup
 
     @Override
     public void attackRanged(Entity target, float range) {
-        this.fireProjectile("spectralbolt", target, range, 0, new Vector3d(0, -12, 0), 1.2f, 8f, 0F);
+        this.fireProjectile("spectralbolt", target, range, 0, new Vec3(0, -12, 0), 1.2f, 8f, 0F);
         super.attackRanged(target, range);
     }
 
@@ -290,16 +292,16 @@ public class EntityAmalgalich extends BaseCreatureEntity implements IMob, IGroup
 
     @Override
     public boolean isVulnerableTo(Entity entity) {
-        if(entity instanceof ZombifiedPiglinEntity) {
+        if(entity instanceof ZombifiedPiglin) {
             entity.remove();
             return false;
         }
-        if(entity instanceof IronGolemEntity) {
+        if(entity instanceof IronGolem) {
             entity.remove();
             return false;
         }
-        if(entity instanceof PlayerEntity) {
-            PlayerEntity player = (PlayerEntity)entity;
+        if(entity instanceof Player) {
+            Player player = (Player)entity;
             if (!player.abilities.invulnerable && player.position().y() > this.position().y() + CreatureManager.getInstance().config.bossAntiFlight) {
                 return false;
             }
@@ -321,9 +323,9 @@ public class EntityAmalgalich extends BaseCreatureEntity implements IMob, IGroup
     /** Called when this entity has been attacked, uses a DamageSource and damage value. **/
     @Override
     public boolean hurt(DamageSource damageSrc, float damageAmount) {
-        if(this.playerTargets != null && damageSrc.getEntity() != null && damageSrc.getEntity() instanceof PlayerEntity) {
+        if(this.playerTargets != null && damageSrc.getEntity() != null && damageSrc.getEntity() instanceof Player) {
             if (!this.playerTargets.contains(damageSrc.getEntity()))
-                this.playerTargets.add((PlayerEntity)damageSrc.getEntity());
+                this.playerTargets.add((Player)damageSrc.getEntity());
         }
         return super.hurt(damageSrc, damageAmount);
     }
@@ -334,14 +336,14 @@ public class EntityAmalgalich extends BaseCreatureEntity implements IMob, IGroup
     // ==================================================
     // ========== Read ===========
     @Override
-    public void readAdditionalSaveData(CompoundNBT nbt) {
+    public void readAdditionalSaveData(CompoundTag nbt) {
         super.readAdditionalSaveData(nbt);
     }
 
     // ========== Write ==========
     /** Used when saving this mob to a chunk. **/
     @Override
-    public void addAdditionalSaveData(CompoundNBT nbt) {
+    public void addAdditionalSaveData(CompoundTag nbt) {
         super.addAdditionalSaveData(nbt);
     }
 

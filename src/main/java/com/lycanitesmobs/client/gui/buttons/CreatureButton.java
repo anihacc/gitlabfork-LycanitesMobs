@@ -3,17 +3,17 @@ package com.lycanitesmobs.client.gui.buttons;
 import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.info.CreatureInfo;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.network.chat.Component;
 import org.lwjgl.opengl.GL11;
 
 public class CreatureButton extends ButtonBase {
 	public CreatureInfo creatureInfo;
 	public int summonSetId = 0;
 	
-	public CreatureButton(int buttonID, int x, int y, int w, int h, ITextComponent text, int summonSetId, CreatureInfo creatureInfo, Button.IPressable pressable) {
+	public CreatureButton(int buttonID, int x, int y, int w, int h, Component text, int summonSetId, CreatureInfo creatureInfo, Button.OnPress pressable) {
         super(buttonID, x, y, w, h, text, pressable);
         this.summonSetId = summonSetId;
         this.creatureInfo = creatureInfo;
@@ -21,7 +21,7 @@ public class CreatureButton extends ButtonBase {
 	
 
 	@Override
-	public void renderButton(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+	public void renderButton(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         if(!this.visible) {
 			return;
 		}

@@ -5,8 +5,8 @@ import com.lycanitesmobs.client.model.template.ModelTemplateBiped;
 import com.lycanitesmobs.client.renderer.CreatureRenderer;
 import com.lycanitesmobs.client.renderer.CustomRenderStates;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureEffect;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -81,16 +81,16 @@ public class ModelWraamon extends ModelTemplateBiped {
 
     	// Idle:
 		if(partName.equals("nose")) {
-			this.rotate((float)-Math.toDegrees(MathHelper.cos(loop * 0.2F) * 0.1F), (float)-Math.toDegrees(MathHelper.cos(loop * 0.4F) * 0.1F), 0.0F);
+			this.rotate((float)-Math.toDegrees(Mth.cos(loop * 0.2F) * 0.1F), (float)-Math.toDegrees(Mth.cos(loop * 0.4F) * 0.1F), 0.0F);
 		}
 		else if(partName.equals("tailleft")) {
-			float rotX = (float)-Math.toDegrees(MathHelper.cos(loop * 0.1F) * 0.05F - 0.05F);
-			float rotY = (float)-Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F - 0.05F);
+			float rotX = (float)-Math.toDegrees(Mth.cos(loop * 0.1F) * 0.05F - 0.05F);
+			float rotY = (float)-Math.toDegrees(Mth.cos(loop * 0.09F) * 0.05F - 0.05F);
 			this.rotate(rotX, rotY, 0);
 		}
 		else if(partName.equals("tailright")) {
-			float rotX = (float)Math.toDegrees(MathHelper.cos(loop * 0.1F) * 0.05F - 0.05F);
-			float rotY = (float)Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F - 0.05F);
+			float rotX = (float)Math.toDegrees(Mth.cos(loop * 0.1F) * 0.05F - 0.05F);
+			float rotY = (float)Math.toDegrees(Mth.cos(loop * 0.09F) * 0.05F - 0.05F);
 			this.rotate(rotX, rotY, 0);
 		}
     }

@@ -6,11 +6,11 @@ import com.lycanitesmobs.client.gui.widgets.BaseListEntry;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.Subspecies;
 import com.lycanitesmobs.core.info.Variant;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.gui.IGuiEventListener;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextComponent;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.components.events.GuiEventListener;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.BaseComponent;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -102,7 +102,7 @@ public class SubspeciesList extends BaseList<BeastiaryScreen> {
 	}
 
 	@Override
-	protected void renderBackground(MatrixStack stack) {
+	protected void renderBackground(PoseStack stack) {
 		if(!this.summoning) {
 			if(this.creature != this.screen.playerExt.selectedCreature) {
 				this.refreshList();
@@ -132,15 +132,15 @@ public class SubspeciesList extends BaseList<BeastiaryScreen> {
 		}
 
 		@Override
-		public void render(MatrixStack matrixStack, int index, int top, int left, int bottom, int right, int mouseX, int mouseY, boolean focus, float partialTicks) {
+		public void render(PoseStack matrixStack, int index, int top, int left, int bottom, int right, int mouseX, int mouseY, boolean focus, float partialTicks) {
 			Subspecies subspecies = this.parentList.creature.getSubspecies(this.subspeciesIndex);
-			ITextComponent subspeciesName = new StringTextComponent("");
+			Component subspeciesName = new TextComponent("");
 			if(subspecies.name != null) {
-				subspeciesName = new StringTextComponent(" ").append(subspecies.getTitle());
+				subspeciesName = new TextComponent(" ").append(subspecies.getTitle());
 			}
 
 			Variant variant = subspecies.getVariant(this.variantIndex);
-			TextComponent variantName = new StringTextComponent("Normal");
+			BaseComponent variantName = new TextComponent("Normal");
 			if(variant != null) {
 				variantName = variant.getTitle();
 			}
@@ -155,7 +155,7 @@ public class SubspeciesList extends BaseList<BeastiaryScreen> {
 		}
 
 		@Override
-		public List<? extends IGuiEventListener> children() {
+		public List<? extends GuiEventListener> children() {
 			return null;
 		}
 	}

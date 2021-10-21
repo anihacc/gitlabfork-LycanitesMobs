@@ -3,14 +3,14 @@ package com.lycanitesmobs.core.block.effect;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.block.BlockBase;
 import com.lycanitesmobs.core.info.ItemManager;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.state.StateContainer;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -42,7 +42,7 @@ public class BlockFrostweb extends BlockBase {
 	}
 
 	@Override
-	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 		builder.add(AGE);
 	}
 
@@ -70,9 +70,9 @@ public class BlockFrostweb extends BlockBase {
 	//                Collision Effects
 	// ==================================================
 	@Override
-	public void entityInside(BlockState blockState, World world, BlockPos pos, Entity entity) {
+	public void entityInside(BlockState blockState, Level world, BlockPos pos, Entity entity) {
 		super.entityInside(blockState, world, pos, entity);
-		entity.makeStuckInBlock(blockState, new Vector3d(0.25D, (double)0.05F, 0.25D));
+		entity.makeStuckInBlock(blockState, new Vec3(0.25D, (double)0.05F, 0.25D));
 	}
     
     
@@ -81,7 +81,7 @@ public class BlockFrostweb extends BlockBase {
 	// ==================================================
     @Override
 	@OnlyIn(Dist.CLIENT)
-	public void animateTick(BlockState state, World world, BlockPos pos, Random random) {
+	public void animateTick(BlockState state, Level world, BlockPos pos, Random random) {
 		double x = pos.getX();
 		double y = pos.getY();
 		double z = pos.getZ();

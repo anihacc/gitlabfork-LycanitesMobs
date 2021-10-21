@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.block;
 
 import com.lycanitesmobs.core.info.ModInfo;
-import net.minecraft.block.Block;
+import net.minecraft.world.level.block.Block;
 
 public class BlockDoubleSlab extends BlockPillar {
     protected String slabName;

@@ -2,8 +2,8 @@ package com.lycanitesmobs.client.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.template.ModelTemplateDragon;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.util.Mth;
 
 public class ModelMorock extends ModelTemplateDragon {
 
@@ -37,7 +37,7 @@ public class ModelMorock extends ModelTemplateDragon {
 
         // Walking:
         if(entity != null && entity.isOnGround()) {
-            float walkIdle = MathHelper.sin(loop * 0.1F);
+            float walkIdle = Mth.sin(loop * 0.1F);
             if(partName.equals("armleft02")) {
                 rotZ += 160 + Math.toDegrees(walkIdle * 0.05F);
             }

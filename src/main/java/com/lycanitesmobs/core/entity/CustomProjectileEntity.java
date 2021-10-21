@@ -6,22 +6,22 @@ import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import com.lycanitesmobs.core.info.projectile.behaviours.ProjectileBehaviour;
 import com.lycanitesmobs.core.info.projectile.behaviours.ProjectileBehaviourLaser;
-import net.minecraft.block.Blocks;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.client.particle.FallingDustParticle;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.particles.BlockParticleData;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.particles.RedstoneParticleData;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.particles.DustParticleOptions;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.Tags;
 
 import java.util.ArrayList;
@@ -47,7 +47,7 @@ public class CustomProjectileEntity extends BaseProjectileEntity {
 	protected int targetId = -1;
 
 	/** Used by laser behaviours to keep track of the laser ending position. **/
-	protected Vector3d laserEnd;
+	protected Vec3 laserEnd;
 
 	/** The width of this projectile's laser, used by laser behaviours. **/
 	public float laserWidth;
@@ -59,28 +59,28 @@ public class CustomProjectileEntity extends BaseProjectileEntity {
 	public List<BaseProjectileEntity> spawnedProjectiles = new ArrayList<>();
 
 	// Data Parameters:
-	protected static final DataParameter<String> PROJECTILE_NAME = EntityDataManager.defineId(CustomProjectileEntity.class, DataSerializers.STRING);
-	protected static final DataParameter<Integer> THROWING_ENTITY_ID = EntityDataManager.defineId(CustomProjectileEntity.class, DataSerializers.INT);
-	protected static final DataParameter<Integer> PARENT_PROJECTILE_ID = EntityDataManager.defineId(CustomProjectileEntity.class, DataSerializers.INT);
-	protected static final DataParameter<Integer> TARGET_ID = EntityDataManager.defineId(CustomProjectileEntity.class, DataSerializers.INT);
-	protected static final DataParameter<Float> LASER_ANGLE = EntityDataManager.defineId(CustomProjectileEntity.class, DataSerializers.FLOAT);
+	protected static final EntityDataAccessor<String> PROJECTILE_NAME = SynchedEntityData.defineId(CustomProjectileEntity.class, EntityDataSerializers.STRING);
+	protected static final EntityDataAccessor<Integer> THROWING_ENTITY_ID = SynchedEntityData.defineId(CustomProjectileEntity.class, EntityDataSerializers.INT);
+	protected static final EntityDataAccessor<Integer> PARENT_PROJECTILE_ID = SynchedEntityData.defineId(CustomProjectileEntity.class, EntityDataSerializers.INT);
+	protected static final EntityDataAccessor<Integer> TARGET_ID = SynchedEntityData.defineId(CustomProjectileEntity.class, EntityDataSerializers.INT);
+	protected static final EntityDataAccessor<Float> LASER_ANGLE = SynchedEntityData.defineId(CustomProjectileEntity.class, EntityDataSerializers.FLOAT);
 
 
 	// ==================================================
 	//                   Constructors
 	// ==================================================
-	public CustomProjectileEntity(EntityType<? extends BaseProjectileEntity> entityType, World world) {
+	public CustomProjectileEntity(EntityType<? extends BaseProjectileEntity> entityType, Level world) {
 		super(entityType, world);
 		this.modInfo = LycanitesMobs.modInfo;
 	}
 
-	public CustomProjectileEntity(EntityType<? extends BaseProjectileEntity> entityType, World world, ProjectileInfo projectileInfo) {
+	public CustomProjectileEntity(EntityType<? extends BaseProjectileEntity> entityType, Level world, ProjectileInfo projectileInfo) {
 		super(entityType, world);
 		this.modInfo = LycanitesMobs.modInfo;
 		this.setProjectileInfo(projectileInfo);
 	}
 
-	public CustomProjectileEntity(EntityType<? extends BaseProjectileEntity> entityType, World world, LivingEntity entityLiving, ProjectileInfo projectileInfo) {
+	public CustomProjectileEntity(EntityType<? extends BaseProjectileEntity> entityType, Level world, LivingEntity entityLiving, ProjectileInfo projectileInfo) {
 		super(entityType, world, entityLiving);
 		if(projectileInfo != null)
 			this.shootFromRotation(entityLiving, entityLiving.xRot, entityLiving.yRot, 0.0F, (float)projectileInfo.velocity, 1.0F); // Shoot from Entity
@@ -88,7 +88,7 @@ public class CustomProjectileEntity extends BaseProjectileEntity {
 		this.setProjectileInfo(projectileInfo);
 	}
 
-	public CustomProjectileEntity(EntityType<? extends BaseProjectileEntity> entityType, World world, double x, double y, double z, ProjectileInfo projectileInfo) {
+	public CustomProjectileEntity(EntityType<? extends BaseProjectileEntity> entityType, Level world, double x, double y, double z, ProjectileInfo projectileInfo) {
 		super(entityType, world, x, y, z);
 		this.modInfo = LycanitesMobs.modInfo;
 		this.setProjectileInfo(projectileInfo);
@@ -189,10 +189,10 @@ public class CustomProjectileEntity extends BaseProjectileEntity {
 							this.getCommandSenderWorld().addParticle(this.projectileInfo.getWaterParticleType().getType(), this.getX() + (this.random.nextDouble() - 0.5D) * (double) this.getBbWidth(), this.getY() + this.random.nextDouble() * (double) this.getBbHeight(), this.getZ() + (this.random.nextDouble() - 0.5D) * (double) this.getBbWidth(), 0.0D, 0.0D, 0.0D);
 						}
 						else if ("minecraft:dust_redstone".equalsIgnoreCase(this.projectileInfo.waterParticleId)) {
-							this.getCommandSenderWorld().addParticle(RedstoneParticleData.REDSTONE, this.getX() + (this.random.nextDouble() - 0.5D) * (double) this.getBbWidth(), this.getY() + this.random.nextDouble() * (double) this.getBbHeight(), this.getZ() + (this.random.nextDouble() - 0.5D) * (double) this.getBbWidth(), 0.0D, 0.0D, 0.0D);
+							this.getCommandSenderWorld().addParticle(DustParticleOptions.REDSTONE, this.getX() + (this.random.nextDouble() - 0.5D) * (double) this.getBbWidth(), this.getY() + this.random.nextDouble() * (double) this.getBbHeight(), this.getZ() + (this.random.nextDouble() - 0.5D) * (double) this.getBbWidth(), 0.0D, 0.0D, 0.0D);
 						}
 						else if ("minecraft:dust_falling_dirt".equalsIgnoreCase(this.projectileInfo.waterParticleId)) {
-							this.getCommandSenderWorld().addParticle(new BlockParticleData(ParticleTypes.BLOCK, Blocks.DIRT.defaultBlockState()), this.getX() + (this.random.nextDouble() - 0.5D) * (double) this.getBbWidth(), this.getY() + this.random.nextDouble() * (double) this.getBbHeight(), this.getZ() + (this.random.nextDouble() - 0.5D) * (double) this.getBbWidth(), 0.0D, 0.0D, 0.0D);
+							this.getCommandSenderWorld().addParticle(new BlockParticleOption(ParticleTypes.BLOCK, Blocks.DIRT.defaultBlockState()), this.getX() + (this.random.nextDouble() - 0.5D) * (double) this.getBbWidth(), this.getY() + this.random.nextDouble() * (double) this.getBbHeight(), this.getZ() + (this.random.nextDouble() - 0.5D) * (double) this.getBbWidth(), 0.0D, 0.0D, 0.0D);
 						}
 					}
 					else {
@@ -200,10 +200,10 @@ public class CustomProjectileEntity extends BaseProjectileEntity {
 							this.getCommandSenderWorld().addParticle(this.projectileInfo.getParticleType().getType(), this.getX() + (this.random.nextDouble() - 0.5D) * (double) this.getBbWidth(), this.getY() + this.random.nextDouble() * (double) this.getBbHeight(), this.getZ() + (this.random.nextDouble() - 0.5D) * (double) this.getBbWidth(), 0.0D, 0.0D, 0.0D);
 						}
 						else if ("minecraft:dust_redstone".equalsIgnoreCase(this.projectileInfo.particleId)) {
-							this.getCommandSenderWorld().addParticle(RedstoneParticleData.REDSTONE, this.getX() + (this.random.nextDouble() - 0.5D) * (double) this.getBbWidth(), this.getY() + this.random.nextDouble() * (double) this.getBbHeight(), this.getZ() + (this.random.nextDouble() - 0.5D) * (double) this.getBbWidth(), 0.0D, 0.0D, 0.0D);
+							this.getCommandSenderWorld().addParticle(DustParticleOptions.REDSTONE, this.getX() + (this.random.nextDouble() - 0.5D) * (double) this.getBbWidth(), this.getY() + this.random.nextDouble() * (double) this.getBbHeight(), this.getZ() + (this.random.nextDouble() - 0.5D) * (double) this.getBbWidth(), 0.0D, 0.0D, 0.0D);
 						}
 						else if ("minecraft:dust_falling_dirt".equalsIgnoreCase(this.projectileInfo.particleId)) {
-							this.getCommandSenderWorld().addParticle(new BlockParticleData(ParticleTypes.BLOCK, Blocks.DIRT.defaultBlockState()), this.getX() + (this.random.nextDouble() - 0.5D) * (double) this.getBbWidth(), this.getY() + this.random.nextDouble() * (double) this.getBbHeight(), this.getZ() + (this.random.nextDouble() - 0.5D) * (double) this.getBbWidth(), 0.0D, 0.0D, 0.0D);
+							this.getCommandSenderWorld().addParticle(new BlockParticleOption(ParticleTypes.BLOCK, Blocks.DIRT.defaultBlockState()), this.getX() + (this.random.nextDouble() - 0.5D) * (double) this.getBbWidth(), this.getY() + this.random.nextDouble() * (double) this.getBbHeight(), this.getZ() + (this.random.nextDouble() - 0.5D) * (double) this.getBbWidth(), 0.0D, 0.0D, 0.0D);
 						}
 					}
 				}
@@ -358,7 +358,7 @@ public class CustomProjectileEntity extends BaseProjectileEntity {
 	/**
 	 * Sets the laser end used by this projectile or clears it if null. Also updates the laser angle.
 	 */
-	public void setLaserEnd(Vector3d laserEnd) {
+	public void setLaserEnd(Vec3 laserEnd) {
 		this.laserEnd = laserEnd;
 		if(!this.getCommandSenderWorld().isClientSide) {
 			this.entityData.set(LASER_ANGLE, this.laserAngle);
@@ -369,7 +369,7 @@ public class CustomProjectileEntity extends BaseProjectileEntity {
 	 * Gets the laser end used by this projectile if any. Also updates the laser angle.
 	 * @return The laser end for laser projectile behaviours.
 	 */
-	public Vector3d getLaserEnd() {
+	public Vec3 getLaserEnd() {
 		if(this.getCommandSenderWorld().isClientSide) {
 			this.laserAngle = this.entityData.get(LASER_ANGLE);
 		}
@@ -386,7 +386,7 @@ public class CustomProjectileEntity extends BaseProjectileEntity {
 	//                       NBT
 	// ==================================================
 	@Override
-	public void addAdditionalSaveData(CompoundNBT compound) {
+	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
 
 		if(this.projectileInfo != null) {
@@ -395,7 +395,7 @@ public class CustomProjectileEntity extends BaseProjectileEntity {
 	}
 
 	@Override
-	public void readAdditionalSaveData(CompoundNBT compound) {
+	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
 
 		if(compound.contains("ProjectileName")) {

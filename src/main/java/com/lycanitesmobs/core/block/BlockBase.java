@@ -2,23 +2,23 @@ package com.lycanitesmobs.core.block;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.info.ModInfo;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.Entity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.state.IntegerProperty;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.util.text.*;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorldReader;
-import net.minecraft.world.TickPriority;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.TickPriority;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -26,6 +26,11 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
+
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 
 public class BlockBase extends Block {
 	
@@ -73,18 +78,18 @@ public class BlockBase extends Block {
 	}
 
 	@Override
-	public IFormattableTextComponent getName() {
-    	return new TranslationTextComponent(this.getDescriptionId());
+	public MutableComponent getName() {
+    	return new TranslatableComponent(this.getDescriptionId());
 	}
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
-    public void appendHoverText(ItemStack stack, @Nullable IBlockReader world, List<ITextComponent> tooltip, ITooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, @Nullable BlockGetter world, List<Component> tooltip, TooltipFlag flag) {
         tooltip.add(this.getDescription(stack, world));
     }
 
-    public ITextComponent getDescription(ItemStack itemStack, @Nullable IBlockReader world) {
-        return new TranslationTextComponent(this.getDescriptionId() + ".description").withStyle(TextFormatting.GREEN);
+    public Component getDescription(ItemStack itemStack, @Nullable BlockGetter world) {
+        return new TranslatableComponent(this.getDescriptionId() + ".description").withStyle(ChatFormatting.GREEN);
     }
 	
 	
@@ -92,7 +97,7 @@ public class BlockBase extends Block {
 	//                      Place
 	// ==================================================
 	@Override
-	public void onPlace(BlockState state, World world, BlockPos pos, BlockState oldState, boolean isMoving) {
+	public void onPlace(BlockState state, Level world, BlockPos pos, BlockState oldState, boolean isMoving) {
 		// Initial Block Ticking:
 		if(this.tickRate > 0) {
 			world.getBlockTicks().scheduleTick(pos, this, this.tickRate(world));
@@ -104,13 +109,13 @@ public class BlockBase extends Block {
 	//                     Ticking
 	// ==================================================
     // ========== Tick Rate ==========
-    public int tickRate(IWorldReader world) {
+    public int tickRate(LevelReader world) {
     	return this.tickRate;
     }
 
     // ========== Tick Update ==========
     @Override
-    public void tick(BlockState state, ServerWorld world, BlockPos pos, Random random) { //tick()
+    public void tick(BlockState state, ServerLevel world, BlockPos pos, Random random) { //tick()
         if (world.isClientSide)
             return;
 
@@ -125,7 +130,7 @@ public class BlockBase extends Block {
 
     // ========== Can Remove ==========
     /** Returns true if the block should be removed naturally (remove on tick). **/
-    public boolean canRemove(World world, BlockPos pos, BlockState state, Random random) {
+    public boolean canRemove(Level world, BlockPos pos, BlockState state, Random random) {
         return true;
     }
     
@@ -134,16 +139,16 @@ public class BlockBase extends Block {
 	//                    Collision
 	// ==================================================
 	@Override
-	public VoxelShape getShape(BlockState blockState, IBlockReader world, BlockPos blockPos, ISelectionContext selectionContext) {
+	public VoxelShape getShape(BlockState blockState, BlockGetter world, BlockPos blockPos, CollisionContext selectionContext) {
     	if(this.noBreakCollision) {
-			return VoxelShapes.empty();
+			return Shapes.empty();
 		}
 		return super.getShape(blockState, world, blockPos, selectionContext);
 	}
 
 	@Override
-	public VoxelShape getCollisionShape(BlockState blockState, IBlockReader world, BlockPos blockPos, ISelectionContext selectionContext) {
-		return this.hasCollision ? blockState.getShape(world, blockPos) : VoxelShapes.empty();
+	public VoxelShape getCollisionShape(BlockState blockState, BlockGetter world, BlockPos blockPos, CollisionContext selectionContext) {
+		return this.hasCollision ? blockState.getShape(world, blockPos) : Shapes.empty();
 	}
     
     
@@ -151,12 +156,12 @@ public class BlockBase extends Block {
 	//                Collision Effects
 	// ==================================================
 	@Override
-	public void stepOn(World world, BlockPos pos, Entity entity) {
+	public void stepOn(Level world, BlockPos pos, Entity entity) {
 		super.stepOn(world, pos, entity);
 	}
 
     @Override
-    public void entityInside(BlockState blockState, World world, BlockPos pos, Entity entity) {
+    public void entityInside(BlockState blockState, Level world, BlockPos pos, Entity entity) {
 		super.entityInside(blockState, world, pos, entity);
 	}
 }

@@ -4,14 +4,14 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.info.CreatureType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.level.Level;
 
 public class ItemSoulstoneFilled extends ItemSoulstone {
 	public ItemSoulstoneFilled(Item.Properties properties, CreatureType creatureType) {
@@ -24,15 +24,15 @@ public class ItemSoulstoneFilled extends ItemSoulstone {
     public void setup() {}
     
     @Override
-    public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
+    public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
         ItemStack itemStack = player.getItemInHand(hand);
     	ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
     	if(playerExt == null) {
-            return new ActionResult(ActionResultType.SUCCESS, itemStack);
+            return new InteractionResultHolder(InteractionResult.SUCCESS, itemStack);
         }
         if(this.creatureType.tameableCreatures.isEmpty()) {
             LycanitesMobs.logInfo("", "Tried to use a " + this.creatureType.getSoulstoneName() + " but there are no tameable creatures for this type yet.");
-            return new ActionResult(ActionResultType.FAIL, itemStack);
+            return new InteractionResultHolder(InteractionResult.FAIL, itemStack);
         }
 
         if(!player.getCommandSenderWorld().isClientSide) {
@@ -47,15 +47,15 @@ public class ItemSoulstoneFilled extends ItemSoulstone {
             super.interactLivingEntity(itemStack, player, entity, hand);
         }
 
-        return new ActionResult(ActionResultType.SUCCESS, itemStack);
+        return new InteractionResultHolder(InteractionResult.SUCCESS, itemStack);
     }
 
 
     @Override
-    public ActionResultType interactLivingEntity(ItemStack stack, PlayerEntity player, LivingEntity entity, Hand hand) {
+    public InteractionResult interactLivingEntity(ItemStack stack, Player player, LivingEntity entity, InteractionHand hand) {
         if(this.creatureType.tameableCreatures.isEmpty()) {
             return super.interactLivingEntity(stack, player, entity, hand);
         }
-        return ActionResultType.FAIL;
+        return InteractionResult.FAIL;
     }
 }

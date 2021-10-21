@@ -1,8 +1,8 @@
 package com.lycanitesmobs.core.entity.goals.actions.abilities;
 
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.player.Player;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -12,7 +12,7 @@ public class HealWhenNoPlayersGoal extends Goal {
 	BaseCreatureEntity host;
 
 	// Targets:
-	public List<PlayerEntity> playerTargets = new ArrayList<>();
+	public List<Player> playerTargets = new ArrayList<>();
 	public boolean firstPlayerTargetCheck = false;
 
     // Properties:
@@ -61,7 +61,7 @@ public class HealWhenNoPlayersGoal extends Goal {
 			return;
 		}
 		this.firstPlayerTargetCheck = true;
-		this.playerTargets = this.host.getNearbyEntities(PlayerEntity.class, null, 64);
+		this.playerTargets = this.host.getNearbyEntities(Player.class, null, 64);
 		if (this.host.updateTick % 20 == 0 && this.playerTargets.isEmpty()) {
 			this.host.heal(this.healAmount);
 		}

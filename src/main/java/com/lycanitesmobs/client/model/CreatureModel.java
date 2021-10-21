@@ -6,13 +6,13 @@ import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureEquipment;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureSaddle;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.client.renderer.entity.model.EntityModel;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.math.vector.Vector2f;
-import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.util.math.vector.Vector4f;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.phys.Vec2;
+import com.mojang.math.Vector3f;
+import com.mojang.math.Vector4f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -20,7 +20,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public abstract class CreatureModel extends EntityModel<BaseCreatureEntity> implements IAnimationModel {
 
 	// Matrix:
-	public MatrixStack matrixStack;
+	public PoseStack matrixStack;
 
     public CreatureModel() {
         this(1.0F);
@@ -36,7 +36,7 @@ public abstract class CreatureModel extends EntityModel<BaseCreatureEntity> impl
     public void setupAnim(BaseCreatureEntity entity, float time, float distance, float loop, float lookY, float lookX) {}
 
 	@Override
-	public void renderToBuffer(MatrixStack matrixStack, IVertexBuilder vertexBuilder, int someIntA, int someIntB, float someFloatA, float someFloatB, float someFloatC, float someFloatD) {}
+	public void renderToBuffer(PoseStack matrixStack, VertexConsumer vertexBuilder, int someIntA, int someIntB, float someFloatA, float someFloatB, float someFloatC, float someFloatD) {}
 
 	/**
 	 * Generates all animation frames for a render tick.
@@ -71,7 +71,7 @@ public abstract class CreatureModel extends EntityModel<BaseCreatureEntity> impl
 	 * @param brightness The brightness of the mob based on block location, etc.
 	 * @param fade The damage fade to render (red flash when damaged).
 	 */
-	public abstract void render(BaseCreatureEntity entity, MatrixStack matrixStack, IVertexBuilder vertexBuilder, LayerCreatureBase layer, float time, float distance, float loop, float lookY, float lookX, float scale, int brightness, int fade);
+	public abstract void render(BaseCreatureEntity entity, PoseStack matrixStack, VertexConsumer vertexBuilder, LayerCreatureBase layer, float time, float distance, float loop, float lookY, float lookX, float scale, int brightness, int fade);
 
 	/**
 	 * Called by the renderer to add custom layers to it.
@@ -145,7 +145,7 @@ public abstract class CreatureModel extends EntityModel<BaseCreatureEntity> impl
 	 * @param loop The animation tick for looping effects.
 	 * @return The texture offset to render the part at.
 	 */
-	public Vector2f getPartTextureOffset(String partName, Entity entity, LayerCreatureBase layer, boolean trophy, float loop) {
+	public Vec2 getPartTextureOffset(String partName, Entity entity, LayerCreatureBase layer, boolean trophy, float loop) {
 		if(layer == null || !(entity instanceof BaseCreatureEntity))
 			return this.getBaseTextureOffset(partName, entity, trophy, loop);
 		return layer.getTextureOffset(partName, (BaseCreatureEntity)entity, trophy, loop);
@@ -159,8 +159,8 @@ public abstract class CreatureModel extends EntityModel<BaseCreatureEntity> impl
 	 * @param loop The animation tick for looping effects.
 	 * @return The texture offset to render the part at.
 	 */
-	public Vector2f getBaseTextureOffset(String partName, Entity entity, boolean trophy, float loop) {
-		return new Vector2f(0, 0);
+	public Vec2 getBaseTextureOffset(String partName, Entity entity, boolean trophy, float loop) {
+		return new Vec2(0, 0);
 	}
 
 	/**

@@ -3,10 +3,10 @@ package com.lycanitesmobs.core.mobevent.trigger;
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.core.info.AltarInfo;
 import com.lycanitesmobs.core.mobevent.MobEvent;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 public class AltarMobEventTrigger extends MobEventTrigger {
 	/** The Altar to trigger from. TODO Altars should be created via JSON here instead. **/
@@ -37,10 +37,10 @@ public class AltarMobEventTrigger extends MobEventTrigger {
 	 * @param variant The level of the activated the Altar.
 	 * @return
 	 */
-	public boolean onActivate(Entity entity, World world, BlockPos pos, int variant) {
-		PlayerEntity player = null;
-		if(entity instanceof PlayerEntity) {
-			player = (PlayerEntity)entity;
+	public boolean onActivate(Entity entity, Level world, BlockPos pos, int variant) {
+		Player player = null;
+		if(entity instanceof Player) {
+			player = (Player)entity;
 		}
 		if(!this.canTrigger(world, player)) {
 			return false;

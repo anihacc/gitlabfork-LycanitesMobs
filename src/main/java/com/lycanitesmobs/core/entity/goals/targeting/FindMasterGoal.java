@@ -2,10 +2,10 @@ package com.lycanitesmobs.core.entity.goals.targeting;
 
 import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
-import net.minecraft.entity.passive.AnimalEntity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.animal.Animal;
 
 public class FindMasterGoal extends TargetingGoal {
 	// Targets:
@@ -79,7 +79,7 @@ public class FindMasterGoal extends TargetingGoal {
         if(this.targetClass != null && !this.targetClass.isAssignableFrom(target.getClass()))
             return false;
 
-        if(target instanceof AnimalEntity && ((AnimalEntity)target).getAge() < 0)
+        if(target instanceof Animal && ((Animal)target).getAge() < 0)
             return false;
     	if(target instanceof AgeableCreatureEntity && ((AgeableCreatureEntity)target).getGrowingAge() < 0)
             return false;
@@ -98,7 +98,7 @@ public class FindMasterGoal extends TargetingGoal {
     protected double getTargetDistance() {
     	if(this.targetingRange > 0)
     		return this.targetingRange;
-    	ModifiableAttributeInstance attributeinstance = this.host.getAttribute(Attributes.FOLLOW_RANGE);
+    	AttributeInstance attributeinstance = this.host.getAttribute(Attributes.FOLLOW_RANGE);
         return attributeinstance.getValue();
     }
     

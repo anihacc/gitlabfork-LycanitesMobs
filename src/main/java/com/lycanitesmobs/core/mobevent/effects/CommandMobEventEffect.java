@@ -1,10 +1,10 @@
 package com.lycanitesmobs.core.mobevent.effects;
 
 import com.google.gson.JsonObject;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 public class CommandMobEventEffect extends MobEventEffect {
 	/** The command to run. **/
@@ -20,7 +20,7 @@ public class CommandMobEventEffect extends MobEventEffect {
 	}
 
 	@Override
-	public void onUpdate(World world, PlayerEntity player, BlockPos pos, int level, int ticks, int variant) {
+	public void onUpdate(Level world, Player player, BlockPos pos, int level, int ticks, int variant) {
 		super.onUpdate(world, player, pos, level, ticks, variant);
 		if(!this.canActivate(world, player, pos, level, ticks)) {
 			return;

@@ -1,21 +1,21 @@
 package com.lycanitesmobs.core.entity.goals.actions;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityPredicate;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.player.Player;
 
 import java.util.EnumSet;
 
-import net.minecraft.entity.ai.goal.Goal.Flag;
+import net.minecraft.world.entity.ai.goal.Goal.Flag;
 
 public class WatchClosestGoal extends Goal {
     // Targets:
-    private MobEntity host;
+    private Mob host;
     protected Entity closestEntity;
-    private final EntityPredicate searchPredicate = (new EntityPredicate()).range(64.0D);
+    private final TargetingConditions searchPredicate = (new TargetingConditions()).range(64.0D);
 
     // Properties
     private Class watchedClass = LivingEntity.class;
@@ -28,7 +28,7 @@ public class WatchClosestGoal extends Goal {
     // ==================================================
    	//                     Constructor
    	// ==================================================
-    public WatchClosestGoal(MobEntity setHost) {
+    public WatchClosestGoal(Mob setHost) {
     	this.host = setHost;
         this.setFlags(EnumSet.of(Flag.LOOK));
     }
@@ -61,7 +61,7 @@ public class WatchClosestGoal extends Goal {
         else {
             if(this.host.getTarget() != null)
                 this.closestEntity = this.host.getTarget();
-            if(this.watchedClass == PlayerEntity.class)
+            if(this.watchedClass == Player.class)
                 this.closestEntity = this.host.getCommandSenderWorld().getNearestPlayer(this.host.position().x(), this.host.position().y(), this.host.position().z(), this.maxDistance, entity -> true);
             else
                 this.host.level.getNearbyEntities(LivingEntity.class, this.searchPredicate, this.host, this.host.getBoundingBox().inflate((double)this.maxDistance));

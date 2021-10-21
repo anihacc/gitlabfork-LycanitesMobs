@@ -4,24 +4,24 @@ import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
 import com.lycanitesmobs.core.entity.goals.actions.AvoidGoal;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.monster.IMob;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 
-public class EntityBrucha extends TameableCreatureEntity implements IMob {
+public class EntityBrucha extends TameableCreatureEntity implements Enemy {
 	AvoidGoal aiAvoid;
 
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityBrucha(EntityType<? extends EntityBrucha> entityType, World world) {
+    public EntityBrucha(EntityType<? extends EntityBrucha> entityType, Level world) {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEFINED;
+        this.attribute = MobType.UNDEFINED;
         this.hasAttackSound = true;
         this.setupMob();
     }
@@ -42,7 +42,7 @@ public class EntityBrucha extends TameableCreatureEntity implements IMob {
     @Override
     public void attackRanged(Entity target, float range) {
         for(int i = -2; i < 12; i++) {
-            this.fireProjectile("quill", target, range, 0, new Vector3d(0, 0, 0), 0.75f, 1f, i * 2.0F * (this.getRandom().nextFloat() - 0.5F));
+            this.fireProjectile("quill", target, range, 0, new Vec3(0, 0, 0), 0.75f, 1f, i * 2.0F * (this.getRandom().nextFloat() - 0.5F));
         }
 
         super.attackRanged(target, range);

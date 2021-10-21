@@ -1,15 +1,15 @@
 package com.lycanitesmobs.core.entity.navigate;
 
 import com.lycanitesmobs.LycanitesMobs;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 public class ArenaNodeNetworkGrid extends ArenaNodeNetwork {
 
     // ==================================================
     //                    Constructor
     // ==================================================
-    public ArenaNodeNetworkGrid(World world, BlockPos centerPos, int arenaNodeX, int arenaNodeY, int arenaNodeZ, int nodeDistance) {
+    public ArenaNodeNetworkGrid(Level world, BlockPos centerPos, int arenaNodeX, int arenaNodeY, int arenaNodeZ, int nodeDistance) {
         super(world);
 
         // Build Arena Node Layout:

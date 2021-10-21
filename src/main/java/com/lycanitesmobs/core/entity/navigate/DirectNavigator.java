@@ -1,12 +1,12 @@
 package com.lycanitesmobs.core.entity.navigate;
 
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.Pose;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
+import net.minecraft.world.phys.Vec3;
 
 public class DirectNavigator {
 	// Targets:
@@ -121,7 +121,7 @@ public class DirectNavigator {
 		this.host.setDeltaMovement(this.host.getDeltaMovement().add(motionX, motionY, motionZ));
 		
 		float fullAngle = (float)(Math.atan2(this.host.getDeltaMovement().z(), this.host.getDeltaMovement().x()) * 180.0D / Math.PI) - 90.0F;
-		float angle = MathHelper.wrapDegrees(fullAngle - this.host.yRot);
+		float angle = Mth.wrapDegrees(fullAngle - this.host.yRot);
 		this.host.zza = 0.5F;
 		if(this.faceMovement && this.host.getTarget() != null && (this.host.getDeltaMovement().x() > 0.025F || this.host.getDeltaMovement().z() > 0.025F))
 			this.host.yRot += angle;
@@ -133,13 +133,13 @@ public class DirectNavigator {
   	// ==================================================
 	public void flightMovement(double moveStrafe, double moveForward) {
 		if(this.host.isUnderWater()) {
-            this.host.travelSwimming(new Vector3d(moveStrafe, 0, moveForward));
+            this.host.travelSwimming(new Vec3(moveStrafe, 0, moveForward));
         }
         else if(this.host.lavaContact()) {
-            this.host.travelSwimming(new Vector3d(moveStrafe, 0, moveForward));
+            this.host.travelSwimming(new Vec3(moveStrafe, 0, moveForward));
         }
         else {
-            this.host.travelFlying(new Vector3d(moveStrafe, 0, moveForward));
+            this.host.travelFlying(new Vec3(moveStrafe, 0, moveForward));
         }
         this.host.updateLimbSwing();
 	}
@@ -153,7 +153,7 @@ public class DirectNavigator {
 		double distX = targetPosition.getX() - this.host.position().x();
 		double distZ = targetPosition.getZ() - this.host.position().z();
 		float fullAngle = (float)(Math.atan2(distZ, distX) * 180.0D / Math.PI);// - 90.0F;
-		float angle = MathHelper.wrapDegrees(fullAngle - this.host.yRot);
+		float angle = Mth.wrapDegrees(fullAngle - this.host.yRot);
 		if(angle > 30.0F) angle = 30.0F;
 		if(angle < -30.0F) angle = -30.0F;
 		this.host.yBodyRot = this.host.yRot += angle;
@@ -164,7 +164,7 @@ public class DirectNavigator {
 		double distX = target.getX() - this.host.position().x();
 		double distZ = target.getZ() - this.host.position().z();
 		float fullAngle = (float)(Math.atan2(distZ, distX) * 180.0D / Math.PI) - 90.0F;
-		float angle = MathHelper.wrapDegrees(fullAngle - this.host.yRot);
+		float angle = Mth.wrapDegrees(fullAngle - this.host.yRot);
 		this.host.yRot += angle; 
     }
 }

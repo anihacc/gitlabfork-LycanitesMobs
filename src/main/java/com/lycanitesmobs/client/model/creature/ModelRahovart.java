@@ -3,8 +3,8 @@ package com.lycanitesmobs.client.model.creature;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.CreatureObjModelOld;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -72,31 +72,31 @@ public class ModelRahovart extends CreatureObjModelOld {
     	
     	// Idle:
         if (partName.equals("mouth")) {
-            rotX += (MathHelper.cos(loop * 0.09F) * 0.05F - 0.05F);
+            rotX += (Mth.cos(loop * 0.09F) * 0.05F - 0.05F);
         }
     	if(partName.equals("armleft")) {
-	        rotZ -= Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F + 0.05F);
-	        rotX -= Math.toDegrees(MathHelper.sin(loop * 0.067F) * 0.05F);
+	        rotZ -= Math.toDegrees(Mth.cos(loop * 0.09F) * 0.05F + 0.05F);
+	        rotX -= Math.toDegrees(Mth.sin(loop * 0.067F) * 0.05F);
     	}
     	if(partName.equals("armright")) {
-	        rotZ += Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F + 0.05F);
-	        rotX += Math.toDegrees(MathHelper.sin(loop * 0.067F) * 0.05F);
+	        rotZ += Math.toDegrees(Mth.cos(loop * 0.09F) * 0.05F + 0.05F);
+	        rotX += Math.toDegrees(Mth.sin(loop * 0.067F) * 0.05F);
     	}
         if(partName.equals("tail")) {
-            rotX = (float)-Math.toDegrees(MathHelper.cos(loop * 0.1F) * 0.05F - 0.05F);
-            rotY = (float)-Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F - 0.05F);
+            rotX = (float)-Math.toDegrees(Mth.cos(loop * 0.1F) * 0.05F - 0.05F);
+            rotY = (float)-Math.toDegrees(Mth.cos(loop * 0.09F) * 0.05F - 0.05F);
         }
     	
     	// Walking:
     	float walkSwing = 0.05F;
     	if(partName.equals("armleft"))
-    		rotX += Math.toDegrees(MathHelper.cos(time * walkSwing) * distance * 0.5F);
+    		rotX += Math.toDegrees(Mth.cos(time * walkSwing) * distance * 0.5F);
     	if(partName.equals("armright"))
-    		rotX += Math.toDegrees(MathHelper.cos(time * walkSwing + (float)Math.PI) * distance * 0.5F);
+    		rotX += Math.toDegrees(Mth.cos(time * walkSwing + (float)Math.PI) * distance * 0.5F);
     	if(partName.equals("legleft"))
-    		rotX += Math.toDegrees(MathHelper.cos(time * walkSwing + (float)Math.PI) * distance);
+    		rotX += Math.toDegrees(Mth.cos(time * walkSwing + (float)Math.PI) * distance);
     	if(partName.equals("legright"))
-    		rotX += Math.toDegrees(MathHelper.cos(time * walkSwing) * distance);
+    		rotX += Math.toDegrees(Mth.cos(time * walkSwing) * distance);
 				
 		// Attack:
 		if(entity instanceof BaseCreatureEntity && ((BaseCreatureEntity)entity).isAttackOnCooldown()) {

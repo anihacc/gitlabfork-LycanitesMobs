@@ -2,30 +2,30 @@ package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.Pose;
-import net.minecraft.entity.monster.IMob;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.DamageSource;
-import net.minecraft.world.Explosion;
-import net.minecraft.world.GameRules;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.level.Explosion;
+import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.Level;
 
-public class EntityWraith extends TameableCreatureEntity implements IMob {
+public class EntityWraith extends TameableCreatureEntity implements Enemy {
 
     protected int detonateTimer = -1;
     
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityWraith(EntityType<? extends EntityWraith> entityType, World world) {
+    public EntityWraith(EntityType<? extends EntityWraith> entityType, Level world) {
         super(entityType, world);
         
         // Setup:
-		this.attribute = CreatureAttribute.UNDEFINED;
+		this.attribute = MobType.UNDEFINED;
         this.hasAttackSound = true;
         this.setupMob();
 
@@ -50,7 +50,7 @@ public class EntityWraith extends TameableCreatureEntity implements IMob {
         // Detonate:
         if(!this.getCommandSenderWorld().isClientSide) {
             if(this.detonateTimer == 0) {
-                this.getCommandSenderWorld().explode(this, this.position().x(), this.position().y(), this.position().z(), 1, Explosion.Mode.BREAK);
+                this.getCommandSenderWorld().explode(this, this.position().x(), this.position().y(), this.position().z(), 1, Explosion.BlockInteraction.BREAK);
                 this.remove();
             }
             else if(this.detonateTimer > 0) {
@@ -117,7 +117,7 @@ public class EntityWraith extends TameableCreatureEntity implements IMob {
 			if(this.subspecies != null)
 				explosionRadius = 3;
 			explosionRadius = Math.max(1, Math.round((float)explosionRadius * (float)this.sizeScale));
-			this.getCommandSenderWorld().explode(this, this.position().x(), this.position().y(), this.position().z(), explosionRadius, Explosion.Mode.BREAK);
+			this.getCommandSenderWorld().explode(this, this.position().x(), this.position().y(), this.position().z(), explosionRadius, Explosion.BlockInteraction.BREAK);
 		}
         super.die(par1DamageSource);
     }
@@ -152,7 +152,7 @@ public class EntityWraith extends TameableCreatureEntity implements IMob {
 	// ==================================================
 	// ========== Read ===========
 	@Override
-	public void readAdditionalSaveData(CompoundNBT nbt) {
+	public void readAdditionalSaveData(CompoundTag nbt) {
 		super.readAdditionalSaveData(nbt);
 		if(nbt.contains("DetonateTimer")) {
 			this.detonateTimer = nbt.getInt("DetonateTimer");
@@ -161,7 +161,7 @@ public class EntityWraith extends TameableCreatureEntity implements IMob {
 
 	// ========== Write ==========
 	@Override
-	public void addAdditionalSaveData(CompoundNBT nbt) {
+	public void addAdditionalSaveData(CompoundTag nbt) {
 		super.addAdditionalSaveData(nbt);
 		if(this.detonateTimer > -1) {
 			nbt.putInt("DetonateTimer", this.detonateTimer);

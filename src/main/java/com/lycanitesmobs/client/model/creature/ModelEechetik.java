@@ -3,8 +3,8 @@ package com.lycanitesmobs.client.model.creature;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.template.ModelTemplateElemental;
 import com.lycanitesmobs.client.renderer.CreatureRenderer;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -63,51 +63,51 @@ public class ModelEechetik extends ModelTemplateElemental {
 
 		// Idle:
 		if (partName.equals("wingleftbottom") || partName.equals("winglefttop")) {
-			this.rotate(0, 10 + (float)Math.toDegrees(MathHelper.sin(loop * 2F) * 0.4F), 0);
+			this.rotate(0, 10 + (float)Math.toDegrees(Mth.sin(loop * 2F) * 0.4F), 0);
 		}
 		else if (partName.equals("wingrightbottom") || partName.equals("wingrighttop")) {
-			this.rotate(0, -10 + (float)Math.toDegrees(MathHelper.sin(loop * 2F + (float)Math.PI) * 0.4F), 0);
+			this.rotate(0, -10 + (float)Math.toDegrees(Mth.sin(loop * 2F + (float)Math.PI) * 0.4F), 0);
 		}
 		else if(partName.contains("armleft")) {
 			this.rotate(
-					(float)Math.toDegrees(MathHelper.sin(loop * 0.067F) * 0.05F),
-					(float)Math.toDegrees(MathHelper.sin((loop + (loopOffset / 2)) * 0.2F) * 0.25F) - 10,
-					(float)-Math.toDegrees(MathHelper.cos((loop + (loopOffset / 2)) * 0.09F) * 0.1F)
+					(float)Math.toDegrees(Mth.sin(loop * 0.067F) * 0.05F),
+					(float)Math.toDegrees(Mth.sin((loop + (loopOffset / 2)) * 0.2F) * 0.25F) - 10,
+					(float)-Math.toDegrees(Mth.cos((loop + (loopOffset / 2)) * 0.09F) * 0.1F)
 					);
 		}
 		else if(partName.contains("armright")) {
 			this.rotate(
-					(float)Math.toDegrees(MathHelper.sin(loop * 0.067F) * 0.05F),
-					(float)-Math.toDegrees(MathHelper.sin((loop + (loopOffset / 2)) * 0.2F) * 0.25F) + 10,
-					(float)Math.toDegrees(MathHelper.cos((loop + (loopOffset / 2)) * 0.09F) * 0.1F)
+					(float)Math.toDegrees(Mth.sin(loop * 0.067F) * 0.05F),
+					(float)-Math.toDegrees(Mth.sin((loop + (loopOffset / 2)) * 0.2F) * 0.25F) + 10,
+					(float)Math.toDegrees(Mth.cos((loop + (loopOffset / 2)) * 0.09F) * 0.1F)
 			);
 		}
 		else if(partName.contains("mouthleft")) {
 			this.rotate(
-					(float)Math.toDegrees(MathHelper.sin(loop * 0.067F) * 0.1F),
+					(float)Math.toDegrees(Mth.sin(loop * 0.067F) * 0.1F),
 					0,
-					(float)-Math.toDegrees(MathHelper.cos((loop + loopOffset) * 0.2F) * 0.1F)
+					(float)-Math.toDegrees(Mth.cos((loop + loopOffset) * 0.2F) * 0.1F)
 			);
 		}
 		else if(partName.contains("mouthright")) {
 			this.rotate(
-					(float)Math.toDegrees(MathHelper.sin(loop * 0.067F) * 0.1F),
+					(float)Math.toDegrees(Mth.sin(loop * 0.067F) * 0.1F),
 					0,
-					(float)Math.toDegrees(MathHelper.cos((loop + loopOffset) * 0.2F) * 0.1F)
+					(float)Math.toDegrees(Mth.cos((loop + loopOffset) * 0.2F) * 0.1F)
 			);
 		}
 		else if(partName.contains("antennaleft")) {
 			this.rotate(
-					(float)Math.toDegrees(MathHelper.sin(loop * 0.067F) * 0.1F),
+					(float)Math.toDegrees(Mth.sin(loop * 0.067F) * 0.1F),
 					0,
-					(float)-Math.toDegrees(MathHelper.cos((loop + loopOffset) * 0.2F) * 0.1F)
+					(float)-Math.toDegrees(Mth.cos((loop + loopOffset) * 0.2F) * 0.1F)
 			);
 		}
 		else if(partName.contains("antennaright")) {
 			this.rotate(
-					(float)Math.toDegrees(MathHelper.sin(loop * 0.067F) * 0.1F),
+					(float)Math.toDegrees(Mth.sin(loop * 0.067F) * 0.1F),
 					0,
-					(float)Math.toDegrees(MathHelper.cos((loop + loopOffset) * 0.2F) * 0.1F)
+					(float)Math.toDegrees(Mth.cos((loop + loopOffset) * 0.2F) * 0.1F)
 			);
 		}
 	}

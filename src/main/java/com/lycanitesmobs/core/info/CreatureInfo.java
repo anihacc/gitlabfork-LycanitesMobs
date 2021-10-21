@@ -8,19 +8,19 @@ import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.core.entity.*;
 import com.lycanitesmobs.core.helpers.JSONHelper;
-import net.minecraft.entity.EntityClassification;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tags.ITag;
+import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.tags.Tag;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nonnull;
 import java.awt.*;
@@ -161,7 +161,7 @@ public class CreatureInfo {
 	public double hitboxScale = 1;
 
 	/** The offset relative to this creatures width and height that riding entities should be offset by. **/
-	public Vector3d mountOffset = new Vector3d(0.0D, 1.0D, 0.0D);
+	public Vec3 mountOffset = new Vec3(0.0D, 1.0D, 0.0D);
 
 
 	// Flags:
@@ -192,7 +192,7 @@ public class CreatureInfo {
 		// Entity Class:
 		try {
 			this.entityClass = (Class<? extends BaseCreatureEntity>) Class.forName(json.get("entityClass").getAsString());
-			this.entityConstructor = this.entityClass.getConstructor(EntityType.class, World.class);
+			this.entityConstructor = this.entityClass.getConstructor(EntityType.class, Level.class);
 		}
 		catch(Exception e) {
 			LycanitesMobs.logError("[Creature] Unable to find the Java Entity Class: " + json.get("entityClass").getAsString() + " for " + this.getName());
@@ -473,7 +473,7 @@ public class CreatureInfo {
 	@Nonnull
 	public EntityType<? extends LivingEntity> getEntityType() {
 		if(this.entityType == null) {
-			EntityType.Builder entityTypeBuilder = EntityType.Builder.of(EntityFactory.getInstance(), this.peaceful ? EntityClassification.CREATURE : EntityClassification.MONSTER);
+			EntityType.Builder entityTypeBuilder = EntityType.Builder.of(EntityFactory.getInstance(), this.peaceful ? MobCategory.CREATURE : MobCategory.MONSTER);
 //			entityTypeBuilder.setCustomClientFactory(EntityFactory.getInstance().createOnClientFunction); // Was created when experimenting with custom spawn packets, not in use currently but may be needed in the future.
 			entityTypeBuilder.setTrackingRange(this.isBoss() ? 32 : 10);
 			entityTypeBuilder.setUpdateInterval(3);
@@ -509,8 +509,8 @@ public class CreatureInfo {
 	 * Returns a translated title for this creature. Ex: Lurker
 	 * @return The display name of this creature.
 	 */
-	public ITextComponent getTitle() {
-		return new TranslationTextComponent("entity." + this.getLocalisationKey());
+	public Component getTitle() {
+		return new TranslatableComponent("entity." + this.getLocalisationKey());
 	}
 
 
@@ -518,8 +518,8 @@ public class CreatureInfo {
 	 * Returns a translated description of this creature.
 	 * @return The creature description.
 	 */
-	public ITextComponent getDescription() {
-		return new TranslationTextComponent("entity." + this.getLocalisationKey() + ".description");
+	public Component getDescription() {
+		return new TranslatableComponent("entity." + this.getLocalisationKey() + ".description");
 	}
 
 
@@ -527,8 +527,8 @@ public class CreatureInfo {
 	 * Returns a translated description of this creature.
 	 * @return The creature description.
 	 */
-	public ITextComponent getHabitatDescription() {
-		return new TranslationTextComponent("entity." + this.getLocalisationKey() + ".habitat");
+	public Component getHabitatDescription() {
+		return new TranslatableComponent("entity." + this.getLocalisationKey() + ".habitat");
 	}
 
 
@@ -536,8 +536,8 @@ public class CreatureInfo {
 	 * Returns a translated description of this creature.
 	 * @return The creature description.
 	 */
-	public ITextComponent getCombatDescription() {
-		return new TranslationTextComponent("entity." + this.getLocalisationKey() + ".combat");
+	public Component getCombatDescription() {
+		return new TranslatableComponent("entity." + this.getLocalisationKey() + ".combat");
 	}
 
 
@@ -545,15 +545,15 @@ public class CreatureInfo {
 	 * Returns a comma separated list of Elements used by this Creature.
 	 * @return The Elements used by this Creature.
 	 */
-	public ITextComponent getElementNames(Subspecies subspecies) {
+	public Component getElementNames(Subspecies subspecies) {
 		List<ElementInfo> elements = this.elements;
 		if(subspecies != null && !subspecies.elements.isEmpty()) {
 			elements = subspecies.elements;
 		}
 		if(elements.isEmpty()) {
-			return new TranslationTextComponent("common.none");
+			return new TranslatableComponent("common.none");
 		}
-		StringTextComponent elementNames = new StringTextComponent("");
+		TextComponent elementNames = new TextComponent("");
 		boolean firstElement = true;
 		for(ElementInfo element : elements) {
 			if(!firstElement) {
@@ -570,18 +570,18 @@ public class CreatureInfo {
 	 * Returns a comma separated list of Diets used by this Creature.
 	 * @return The Diets used by this Creature.
 	 */
-	public ITextComponent getDietNames() {
+	public Component getDietNames() {
 		if(this.diets.isEmpty()) {
-			return new TranslationTextComponent("common.none");
+			return new TranslatableComponent("common.none");
 		}
-		StringTextComponent dietNames = new StringTextComponent("");
+		TextComponent dietNames = new TextComponent("");
 		boolean firstDiet = true;
 		for(String diet : this.diets) {
 			if(!firstDiet) {
 				dietNames.append(", ");
 			}
 			firstDiet = false;
-			dietNames.append(new TranslationTextComponent("diet." + diet));
+			dietNames.append(new TranslatableComponent("diet." + diet));
 		}
 		return dietNames;
 	}
@@ -591,23 +591,23 @@ public class CreatureInfo {
 	 * Returns a comma separated list of Biomes native for this Creature.
 	 * @return The Biomes native for this Creature.
 	 */
-	public ITextComponent getBiomeNames() {
+	public Component getBiomeNames() {
 		List<String> biomeIds = new ArrayList<>();
 		if(this.creatureSpawn.biomesFromTags != null)
 			biomeIds.addAll(this.creatureSpawn.biomesFromTags);
 		if(this.creatureSpawn.biomeIds != null)
 			biomeIds.addAll(this.creatureSpawn.biomeIds);
 		if(biomeIds.isEmpty()) {
-			return new TranslationTextComponent("gui.beastiary.biomes.none");
+			return new TranslatableComponent("gui.beastiary.biomes.none");
 		}
-		StringTextComponent biomeNames = new StringTextComponent("");
+		TextComponent biomeNames = new TextComponent("");
 		boolean firstBiome = true;
 		for(String biomeId : biomeIds) {
 			if(!firstBiome) {
 				biomeNames.append(", ");
 			}
 			firstBiome = false;
-			biomeNames.append(new StringTextComponent(biomeId)); // TODO Figure out how to get biome display names now.
+			biomeNames.append(new TextComponent(biomeId)); // TODO Figure out how to get biome display names now.
 		}
 		return biomeNames;
 	}
@@ -617,11 +617,11 @@ public class CreatureInfo {
 	 * Returns a comma separated list of items dropped by this Creature.
 	 * @return The items dropped by this Creature.
 	 */
-	public ITextComponent getDropNames() {
+	public Component getDropNames() {
 		if(this.drops.isEmpty()) {
-			return new StringTextComponent("");
+			return new TextComponent("");
 		}
-		StringTextComponent dropNames = new StringTextComponent("");
+		TextComponent dropNames = new TextComponent("");
 		boolean firstDrop = true;
 		for(ItemDrop drop : this.drops) {
 			if(!firstDrop) {
@@ -651,7 +651,7 @@ public class CreatureInfo {
 				dropNames.append(" ");
 				Variant variant = subspecies.getVariant(drop.variantIndex);
 				if(variant == null) {
-					dropNames.append(new TranslationTextComponent("subspecies.normal"));
+					dropNames.append(new TranslatableComponent("subspecies.normal"));
 				}
 				else {
 					dropNames.append(variant.getTitle());
@@ -818,7 +818,7 @@ public class CreatureInfo {
 		}
 		for(String diet : this.diets) {
 			ResourceLocation dietTagId = new ResourceLocation(LycanitesMobs.MODID, "diet_" + diet);
-			ITag<Item> dietTag = ItemTags.getAllTags().getTag(dietTagId);
+			Tag<Item> dietTag = ItemTags.getAllTags().getTag(dietTagId);
 			if(dietTag == null) {
 				LycanitesMobs.logWarning("", "[Creature] Cannot find diet: " + dietTagId);
 				return false;
@@ -835,7 +835,7 @@ public class CreatureInfo {
 	 * @param world The world to create the entity in.
 	 * @return The created entity.
 	 */
-	public LivingEntity createEntity(World world) {
+	public LivingEntity createEntity(Level world) {
 		try {
 			if(this.entityClass == null)
 				return null;

@@ -5,13 +5,13 @@ import com.lycanitesmobs.core.spawner.SpawnerEventListener;
 import com.lycanitesmobs.core.spawner.SpawnerManager;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.Commands;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 
 public class SpawnersCommand {
-	public static ArgumentBuilder<CommandSource, ?> register() {
+	public static ArgumentBuilder<CommandSourceStack, ?> register() {
 		return Commands.literal("spawners")
 				.then(Commands.literal("reload").executes(SpawnersCommand::reload))
 				.then(Commands.literal("creative")
@@ -20,44 +20,44 @@ public class SpawnersCommand {
 				.then(Commands.literal("list").executes(SpawnersCommand::list));
 	}
 
-	public static int reload(final CommandContext<CommandSource> context) {
+	public static int reload(final CommandContext<CommandSourceStack> context) {
 		if (!context.getSource().hasPermission(2)) {
 			return 0;
 		}
 		SpawnerManager.getInstance().reload();
-		context.getSource().sendSuccess(new TranslationTextComponent("lyc.command.spawners.reload"), true);
+		context.getSource().sendSuccess(new TranslatableComponent("lyc.command.spawners.reload"), true);
 		return 0;
 	}
 
-	public static int creativeEnable(final CommandContext<CommandSource> context) {
+	public static int creativeEnable(final CommandContext<CommandSourceStack> context) {
 		if (!context.getSource().hasPermission(2)) {
 			return 0;
 		}
 		SpawnerEventListener.testOnCreative = true;
-		context.getSource().sendSuccess(new TranslationTextComponent("lyc.command.spawners.creative.enable"), true);
+		context.getSource().sendSuccess(new TranslatableComponent("lyc.command.spawners.creative.enable"), true);
 		return 0;
 	}
 
-	public static int creativeDisable(final CommandContext<CommandSource> context) {
+	public static int creativeDisable(final CommandContext<CommandSourceStack> context) {
 		if (!context.getSource().hasPermission(2)) {
 			return 0;
 		}
 		SpawnerEventListener.testOnCreative = false;
-		context.getSource().sendSuccess(new TranslationTextComponent("lyc.command.spawners.creative.disable"), true);
+		context.getSource().sendSuccess(new TranslatableComponent("lyc.command.spawners.creative.disable"), true);
 		return 0;
 	}
 
-	public static int list(final CommandContext<CommandSource> context) {
+	public static int list(final CommandContext<CommandSourceStack> context) {
 		if (!context.getSource().hasPermission(2)) {
 			return 0;
 		}
-		context.getSource().sendSuccess(new TranslationTextComponent("lyc.command.spawners.list"), true);
+		context.getSource().sendSuccess(new TranslatableComponent("lyc.command.spawners.list"), true);
 		for(Spawner spawner : SpawnerManager.getInstance().spawners.values()) {
 			if(!"".equals(spawner.eventName)) {
 				continue;
 			}
 			String spawnerName = spawner.name;
-			context.getSource().sendSuccess(new StringTextComponent(spawnerName), true);
+			context.getSource().sendSuccess(new TextComponent(spawnerName), true);
 		}
 		return 0;
 	}

@@ -4,8 +4,8 @@ import com.lycanitesmobs.client.gui.beastiary.BeastiaryScreen;
 import com.lycanitesmobs.client.gui.widgets.BaseList;
 import com.lycanitesmobs.client.gui.widgets.BaseListEntry;
 import com.lycanitesmobs.core.VersionChecker;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.gui.IGuiEventListener;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.components.events.GuiEventListener;
 
 import java.util.List;
 
@@ -41,7 +41,7 @@ public class BeastiaryIndexList extends BaseList {
 		}
 
 		@Override
-		public void render(MatrixStack matrixStack, int index, int top, int left, int bottom, int right, int mouseX, int mouseY, boolean focus, float partialTicks) {
+		public void render(PoseStack matrixStack, int index, int top, int left, int bottom, int right, int mouseX, int mouseY, boolean focus, float partialTicks) {
 			if(index == 0 && this.parentList.versionInfo != null) {
 				this.parentList.drawHelper.drawStringWrapped(matrixStack, this.parentList.versionInfo.getUpdateNotes(), left + 6, top, this.parentList.getWidth() - 20, 0xFFFFFF, true);
 			}
@@ -51,7 +51,7 @@ public class BeastiaryIndexList extends BaseList {
 		protected void onClicked() {}
 
 		@Override
-		public List<? extends IGuiEventListener> children() {
+		public List<? extends GuiEventListener> children() {
 			return null;
 		}
 	}

@@ -10,13 +10,13 @@ import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import com.lycanitesmobs.core.mobevent.MobEventPlayerServer;
 import com.lycanitesmobs.core.mobevent.effects.StructureBuilder;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.Explosion;
-import net.minecraft.world.World;
-import net.minecraft.world.gen.Heightmap;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Explosion;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.levelgen.Heightmap;
 
 public class AsmodeusStructureBuilder extends StructureBuilder {
 
@@ -25,7 +25,7 @@ public class AsmodeusStructureBuilder extends StructureBuilder {
 	}
 
 	@Override
-	public void build(World world, PlayerEntity player, BlockPos pos, int level, int ticks, int variant) {
+	public void build(Level world, Player player, BlockPos pos, int level, int ticks, int variant) {
 		ExtendedWorld worldExt = ExtendedWorld.getForWorld(world);
 		int originX = pos.getX();
 		int originY = pos.getY();
@@ -70,7 +70,7 @@ public class AsmodeusStructureBuilder extends StructureBuilder {
 
 		// Explosions:
 		if(ticks >= 10 * 20 && ticks % 10 == 0) {
-			world.explode(null, originX - 20 + world.random.nextInt(40), originY + 25 + world.random.nextInt(10), originZ - 20 + world.random.nextInt(40), 2, Explosion.Mode.NONE);
+			world.explode(null, originX - 20 + world.random.nextInt(40), originY + 25 + world.random.nextInt(10), originZ - 20 + world.random.nextInt(40), 2, Explosion.BlockInteraction.NONE);
 		}
 
 		// Spawn Boss:
@@ -92,7 +92,7 @@ public class AsmodeusStructureBuilder extends StructureBuilder {
 	// ==================================================
 	//                     Arena Floor
 	// ==================================================
-	public void buildArenaFloor(World world, int originX, int originY, int originZ) {
+	public void buildArenaFloor(Level world, int originX, int originY, int originZ) {
 		int radius = 80;
 		int height = 30;
 		int minX = originX - radius;
@@ -107,7 +107,7 @@ public class AsmodeusStructureBuilder extends StructureBuilder {
 
 		for(int x = minX; x <= maxX; x++) {
 			for(int z = minZ; z <= maxZ; z++) {
-				int topY = world.getHeightmapPos(Heightmap.Type.WORLD_SURFACE, new BlockPos(x, 0, z)).getY();
+				int topY = world.getHeightmapPos(Heightmap.Types.WORLD_SURFACE, new BlockPos(x, 0, z)).getY();
 				for(int y = minY; y <= maxY; y++) {
 					BlockPos buildPos = new BlockPos(x, y, z);
 					if(y == minY) {
@@ -132,7 +132,7 @@ public class AsmodeusStructureBuilder extends StructureBuilder {
 	// ==================================================
 	//                     Arena Walls
 	// ==================================================
-	public void buildArenaWalls(World world, int originX, int originY, int originZ) {
+	public void buildArenaWalls(Level world, int originX, int originY, int originZ) {
 		int radius = 80;
 		int thickness = 4;
 		int height = 20;
@@ -178,7 +178,7 @@ public class AsmodeusStructureBuilder extends StructureBuilder {
 	// ==================================================
 	//                   Arena Obstacles
 	// ==================================================
-	public void buildObstacles(World world, int originX, int originY, int originZ) {
+	public void buildObstacles(Level world, int originX, int originY, int originZ) {
 		int gap = 20;
 		for (int x = -2; x <= 2; x++) {
 			for (int z = -2; z <= 2; z++) {
@@ -190,7 +190,7 @@ public class AsmodeusStructureBuilder extends StructureBuilder {
 	}
 
 	/** Builds an actual pillar. **/
-	public void buildPillar(World world, int originX, int originY, int originZ) {
+	public void buildPillar(Level world, int originX, int originY, int originZ) {
 		int radius = 2;
 		int height = 30;
 		int minX = originX - radius;

@@ -5,29 +5,29 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.config.ConfigDungeons;
 import com.lycanitesmobs.core.dungeon.instance.DungeonInstance;
 import com.mojang.serialization.Codec;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.world.ISeedReader;
-import net.minecraft.world.World;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.NoFeatureConfig;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
-public class DungeonFeature extends Feature<NoFeatureConfig> {
-	public DungeonFeature(Codec<NoFeatureConfig> configFactory) {
+public class DungeonFeature extends Feature<NoneFeatureConfiguration> {
+	public DungeonFeature(Codec<NoneFeatureConfiguration> configFactory) {
 		super(configFactory);
 	}
 
 	@Override
-	public boolean place(ISeedReader reader, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config) {
+	public boolean place(WorldGenLevel reader, ChunkGenerator generator, Random rand, BlockPos pos, NoneFeatureConfiguration config) {
 		boolean enabled = ConfigDungeons.INSTANCE.dungeonsEnabled.get();
 		int dungeonDistance = ConfigDungeons.INSTANCE.dungeonDistance.get();
 
-		World world = reader.getLevel();
+		Level world = reader.getLevel();
 		ExtendedWorld extendedWorld = ExtendedWorld.getForWorld(world);
 		if(!enabled || extendedWorld == null) {
 			return false;

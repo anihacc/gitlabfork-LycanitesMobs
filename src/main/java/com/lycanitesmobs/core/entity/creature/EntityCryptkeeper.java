@@ -5,28 +5,28 @@ import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import com.lycanitesmobs.core.entity.goals.actions.BreakDoorGoal;
 import com.lycanitesmobs.core.entity.goals.actions.MoveVillageGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.FindAttackTargetGoal;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
-import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.monster.ZombieVillagerEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.pathfinding.GroundPathNavigator;
-import net.minecraft.world.IServerWorld;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.npc.Villager;
+import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.world.entity.monster.ZombieVillager;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
+import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.Level;
 
-public class EntityCryptkeeper extends AgeableCreatureEntity implements IMob {
+public class EntityCryptkeeper extends AgeableCreatureEntity implements Enemy {
     
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityCryptkeeper(EntityType<? extends EntityCryptkeeper> entityType, World world) {
+    public EntityCryptkeeper(EntityType<? extends EntityCryptkeeper> entityType, Level world) {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEAD;
+        this.attribute = MobType.UNDEAD;
         this.hasAttackSound = false;
         this.spreadFire = true;
         this.canGrow = false;
@@ -44,11 +44,11 @@ public class EntityCryptkeeper extends AgeableCreatureEntity implements IMob {
         this.targetSelector.addGoal(this.nextFindTargetIndex++, new FindAttackTargetGoal(this).addTargets(EntityType.HUSK));
 
         this.goalSelector.addGoal(this.nextDistractionGoalIndex++, new BreakDoorGoal(this));
-        this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setTargetClass(PlayerEntity.class).setLongMemory(false));
+        this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setTargetClass(Player.class).setLongMemory(false));
         this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this));
 
-        if(this.getNavigation() instanceof GroundPathNavigator) {
-            GroundPathNavigator pathNavigateGround = (GroundPathNavigator)this.getNavigation();
+        if(this.getNavigation() instanceof GroundPathNavigation) {
+            GroundPathNavigation pathNavigateGround = (GroundPathNavigation)this.getNavigation();
             pathNavigateGround.setCanOpenDoors(true);
             pathNavigateGround.setAvoidSun(true);
         }
@@ -69,14 +69,14 @@ public class EntityCryptkeeper extends AgeableCreatureEntity implements IMob {
     public void onKillEntity(LivingEntity entityLivingBase) {
         super.onKillEntity(entityLivingBase);
 
-        if(this.getCommandSenderWorld().getDifficulty().getId() >= 2 && entityLivingBase instanceof VillagerEntity) {
+        if(this.getCommandSenderWorld().getDifficulty().getId() >= 2 && entityLivingBase instanceof Villager) {
             if (this.getCommandSenderWorld().getDifficulty().getId() == 2 && this.random.nextBoolean()) return;
 
-            VillagerEntity villagerentity = (VillagerEntity)entityLivingBase;
-            ZombieVillagerEntity zombievillagerentity = EntityType.ZOMBIE_VILLAGER.create(this.level);
+            Villager villagerentity = (Villager)entityLivingBase;
+            ZombieVillager zombievillagerentity = EntityType.ZOMBIE_VILLAGER.create(this.level);
             zombievillagerentity.copyPosition(villagerentity);
             villagerentity.remove();
-            zombievillagerentity.finalizeSpawn((IServerWorld) this.getCommandSenderWorld(), this.getCommandSenderWorld().getCurrentDifficultyAt(zombievillagerentity.blockPosition()),SpawnReason.CONVERSION, null, null);
+            zombievillagerentity.finalizeSpawn((ServerLevelAccessor) this.getCommandSenderWorld(), this.getCommandSenderWorld().getCurrentDifficultyAt(zombievillagerentity.blockPosition()),MobSpawnType.CONVERSION, null, null);
             zombievillagerentity.setVillagerData(villagerentity.getVillagerData());
             zombievillagerentity.setTradeOffers(villagerentity.getOffers().createTag());
             zombievillagerentity.setVillagerXp(villagerentity.getVillagerXp());

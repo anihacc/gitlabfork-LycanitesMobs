@@ -3,8 +3,8 @@ package com.lycanitesmobs.client.model.creature;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.template.ModelTemplateQuadruped;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -66,13 +66,13 @@ public class ModelJouste extends ModelTemplateQuadruped {
         // Walking:
         float walkSwing = 0.3F;
         if (partName.equals("legrightfront") || partName.equals("legleftback")) {
-            rotation += Math.toDegrees(MathHelper.cos(time * 0.6662F + (float) Math.PI) * walkSwing * distance);
+            rotation += Math.toDegrees(Mth.cos(time * 0.6662F + (float) Math.PI) * walkSwing * distance);
         }
         else if (partName.equals("legleftfront") || partName.equals("legrightback")) {
-            rotation += Math.toDegrees(MathHelper.cos(time * 0.6662F) * walkSwing * distance);
+            rotation += Math.toDegrees(Mth.cos(time * 0.6662F) * walkSwing * distance);
         }
         else if (partName.equals("body")) {
-            float bob = MathHelper.cos(time * 0.6662F + (float) Math.PI) * walkSwing * distance;
+            float bob = Mth.cos(time * 0.6662F + (float) Math.PI) * walkSwing * distance;
             if (bob < 0) {
                 bob += -bob * 2;
             }

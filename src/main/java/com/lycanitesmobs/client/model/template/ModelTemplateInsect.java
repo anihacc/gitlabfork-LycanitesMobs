@@ -2,8 +2,8 @@ package com.lycanitesmobs.client.model.template;
 
 import com.lycanitesmobs.client.model.CreatureObjModel;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.util.Mth;
 
 public class ModelTemplateInsect extends CreatureObjModel {
     public double mouthScaleX = 0F;
@@ -24,37 +24,37 @@ public class ModelTemplateInsect extends CreatureObjModel {
 
         // Idle:
         if(partName.equals("mouthleft") || partName.equals("antennaleft") || partName.equals("antennaleftfront") || partName.equals("antennarightback")) {
-            rotX -= this.mouthScaleX * -Math.toDegrees(MathHelper.cos(loop * 0.1F) * 0.1F + 0.05F);
-            rotY += this.mouthScaleY * -Math.toDegrees(MathHelper.cos(loop * 0.1F) * 0.1F - 0.05F);
+            rotX -= this.mouthScaleX * -Math.toDegrees(Mth.cos(loop * 0.1F) * 0.1F + 0.05F);
+            rotY += this.mouthScaleY * -Math.toDegrees(Mth.cos(loop * 0.1F) * 0.1F - 0.05F);
         }
         if(partName.equals("mouthright") || partName.equals("antennaright") || partName.equals("antennarightfront") || partName.equals("antennaleftback")) {
-            rotX += this.mouthScaleX * -Math.toDegrees(MathHelper.cos(loop * 0.1F) * 0.1F - 0.05F);
-            rotY -= this.mouthScaleY * -Math.toDegrees(MathHelper.cos(loop * 0.1F) * 0.1F - 0.05F);
+            rotX += this.mouthScaleX * -Math.toDegrees(Mth.cos(loop * 0.1F) * 0.1F - 0.05F);
+            rotY -= this.mouthScaleY * -Math.toDegrees(Mth.cos(loop * 0.1F) * 0.1F - 0.05F);
         }
         if(partName.equals("tail")) {
-            rotX = (float)-Math.toDegrees(MathHelper.cos(loop * 0.1F) * 0.05F - 0.05F);
-            rotY = (float)-Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F - 0.05F);
+            rotX = (float)-Math.toDegrees(Mth.cos(loop * 0.1F) * 0.05F - 0.05F);
+            rotY = (float)-Math.toDegrees(Mth.cos(loop * 0.09F) * 0.05F - 0.05F);
         }
         if(partName.equals("wingleft") || partName.equals("winglefttop") || partName.equals("wingleftbottom") || partName.equals("wingrightmiddle")) {
             rotX = 20;
-            rotX -= Math.toDegrees(MathHelper.sin(loop * 3.2F) * 0.6F);
-            rotZ -= Math.toDegrees(MathHelper.sin(loop * 3.2F) * 0.6F);
+            rotX -= Math.toDegrees(Mth.sin(loop * 3.2F) * 0.6F);
+            rotZ -= Math.toDegrees(Mth.sin(loop * 3.2F) * 0.6F);
         }
         if(partName.equals("wingright") || partName.equals("wingrighttop") || partName.equals("wingrightbottom") || partName.equals("wingleftmiddle")) {
             rotX = 20;
-            rotX -= Math.toDegrees(MathHelper.sin(loop * 3.2F) * 0.6F);
-            rotZ -= Math.toDegrees(MathHelper.sin(loop * 3.2F + (float)Math.PI) * 0.6F);
+            rotX -= Math.toDegrees(Mth.sin(loop * 3.2F) * 0.6F);
+            rotZ -= Math.toDegrees(Mth.sin(loop * 3.2F + (float)Math.PI) * 0.6F);
         }
 
         // Walking:
         float walkSwing = 0.3F;
         if(partName.equals("legrightfront") || partName.equals("legleftmiddle") || partName.equals("legrightback")) {
-            rotX += Math.toDegrees(MathHelper.cos(time * 0.3331F + (float)Math.PI) * walkSwing * distance);
-            rotZ += Math.toDegrees(MathHelper.cos(time * 0.6662F + (float)Math.PI) * walkSwing * distance);
+            rotX += Math.toDegrees(Mth.cos(time * 0.3331F + (float)Math.PI) * walkSwing * distance);
+            rotZ += Math.toDegrees(Mth.cos(time * 0.6662F + (float)Math.PI) * walkSwing * distance);
         }
         if(partName.equals("legleftfront") || partName.equals("legrightmiddle") || partName.equals("legleftback")) {
-            rotX += Math.toDegrees(MathHelper.cos(time * 0.3331F) * walkSwing * distance);
-            rotZ += Math.toDegrees(MathHelper.cos(time * 0.6662F) * walkSwing * distance);
+            rotX += Math.toDegrees(Mth.cos(time * 0.3331F) * walkSwing * distance);
+            rotZ += Math.toDegrees(Mth.cos(time * 0.6662F) * walkSwing * distance);
         }
 
         // Flying:
@@ -62,7 +62,7 @@ public class ModelTemplateInsect extends CreatureObjModel {
             if(entity instanceof BaseCreatureEntity) {
                 BaseCreatureEntity entityCreature = (BaseCreatureEntity)entity;
                 if(entityCreature.isFlying() && partName.equals("body")) {
-                    float bob = -MathHelper.sin(loop * 0.2F) * 0.3F;
+                    float bob = -Mth.sin(loop * 0.2F) * 0.3F;
                     if(bob < 0)
                         bob = -bob;
                     posY += bob;

@@ -8,15 +8,18 @@ import com.lycanitesmobs.core.entity.goals.actions.abilities.FireProjectilesGoal
 import net.minecraft.entity.*;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
+
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobType;
 
 public class EntityTpumpkyn extends TameableCreatureEntity {
 
-    public EntityTpumpkyn(EntityType<? extends EntityTpumpkyn> entityType, World world) {
+    public EntityTpumpkyn(EntityType<? extends EntityTpumpkyn> entityType, Level world) {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEFINED;
+        this.attribute = MobType.UNDEFINED;
         this.hasAttackSound = true;
         this.setupMob();
     }

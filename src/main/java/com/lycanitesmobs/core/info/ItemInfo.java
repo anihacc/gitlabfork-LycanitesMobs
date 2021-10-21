@@ -6,11 +6,11 @@ import com.google.gson.JsonObject;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.item.GenericItem;
-import net.minecraft.item.Food;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectInstance;
+import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
 
 import java.util.Iterator;
 
@@ -44,7 +44,7 @@ public class ItemInfo {
 		}
 
 		// Group:
-		ItemGroup group = ItemManager.getInstance().itemsGroup;
+		CreativeModeTab group = ItemManager.getInstance().itemsGroup;
 		if(json.has("group")) {
 			String groupName = json.get("group").getAsString();
 			if("blocks".equalsIgnoreCase(groupName))
@@ -59,10 +59,10 @@ public class ItemInfo {
 			maxStackSize = json.get("maxStackSize").getAsInt();
 
 		// Food:
-		Food food = null;
+		FoodProperties food = null;
 		if(json.has("food")) {
 			JsonObject foodJson = json.get("food").getAsJsonObject();
-			Food.Builder foodBuilder = new Food.Builder();
+			FoodProperties.Builder foodBuilder = new FoodProperties.Builder();
 			foodBuilder.nutrition(foodJson.get("hunger").getAsInt());
 			foodBuilder.saturationMod(foodJson.get("saturation").getAsFloat());
 
@@ -82,7 +82,7 @@ public class ItemInfo {
 					JsonObject foodEffectJson = jsonIterator.next().getAsJsonObject();
 					String effectId = foodEffectJson.get("effectId").getAsString();
 					String[] effectIds = effectId.split(":"); // Can't get effects from registry yet, this means no effects from other mods. :(
-					Effect effect;
+					MobEffect effect;
 					if("minecraft".equals(effectIds[0]))
 						effect = ObjectLists.allEffects.get(effectIds[1]);
 					else
@@ -91,7 +91,7 @@ public class ItemInfo {
 						LycanitesMobs.logWarning("", "Unable to add food effect: " + effectId);
 						continue;
 					}
-					EffectInstance effectInstance = new EffectInstance(effect, foodEffectJson.get("duration").getAsInt() * 20, foodEffectJson.get("amplifier").getAsInt());
+					MobEffectInstance effectInstance = new MobEffectInstance(effect, foodEffectJson.get("duration").getAsInt() * 20, foodEffectJson.get("amplifier").getAsInt());
 
 					float chance = 1F;
 					if(foodEffectJson.has("chance"))

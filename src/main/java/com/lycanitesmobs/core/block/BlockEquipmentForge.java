@@ -4,24 +4,30 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.container.EquipmentForgeContainerProvider;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.tileentity.TileEntityEquipmentForge;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.state.DirectionProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.fml.network.NetworkHooks;
+
+import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
 
 public class BlockEquipmentForge extends BlockBase {
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
@@ -51,22 +57,22 @@ public class BlockEquipmentForge extends BlockBase {
 	}
 
 	@Override
-	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 		builder.add(FACING);
 	}
 
 	@Override
-	public BlockState getStateForPlacement(BlockItemUseContext context) {
+	public BlockState getStateForPlacement(BlockPlaceContext context) {
 		return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
 	}
 
 	@Override
-	public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+	public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
 		super.onRemove(state, worldIn, pos, newState, isMoving);
 	}
 
 	@Override
-	public BlockState rotate(BlockState state, IWorld world, BlockPos pos, Rotation direction) {
+	public BlockState rotate(BlockState state, LevelAccessor world, BlockPos pos, Rotation direction) {
 		return state.setValue(FACING, direction.rotate(state.getValue(FACING)));
 	}
 
@@ -76,7 +82,7 @@ public class BlockEquipmentForge extends BlockBase {
 	}
 
 	@Override
-	public void setPlacedBy(World world, BlockPos pos, BlockState state, LivingEntity entity, ItemStack itemStack) {
+	public void setPlacedBy(Level world, BlockPos pos, BlockState state, LivingEntity entity, ItemStack itemStack) {
 		super.setPlacedBy(world, pos, state, entity, itemStack);
 	}
 
@@ -86,26 +92,26 @@ public class BlockEquipmentForge extends BlockBase {
 	}
 
 	@Override
-	public TileEntity createTileEntity(BlockState blockState, IBlockReader world) {
+	public BlockEntity createTileEntity(BlockState blockState, BlockGetter world) {
 		TileEntityEquipmentForge tileEntityEquipmentForge = new TileEntityEquipmentForge();
 		tileEntityEquipmentForge.setLevel(this.level);
 		return tileEntityEquipmentForge;
 	}
 
 	@Override //onBlockActivated()
-	public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
-		if(!world.isClientSide() && player instanceof ServerPlayerEntity) {
-			TileEntity tileEntity = world.getBlockEntity(pos);
+	public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
+		if(!world.isClientSide() && player instanceof ServerPlayer) {
+			BlockEntity tileEntity = world.getBlockEntity(pos);
 			if(tileEntity instanceof TileEntityEquipmentForge) {
-				NetworkHooks.openGui((ServerPlayerEntity) player, new EquipmentForgeContainerProvider((TileEntityEquipmentForge)tileEntity), buf -> buf.writeBlockPos(pos));
+				NetworkHooks.openGui((ServerPlayer) player, new EquipmentForgeContainerProvider((TileEntityEquipmentForge)tileEntity), buf -> buf.writeBlockPos(pos));
 			}
 		}
-		return ActionResultType.SUCCESS;
+		return InteractionResult.SUCCESS;
 	}
 
     @Override
-    public boolean triggerEvent(BlockState state, World worldIn, BlockPos pos, int eventID, int eventParam) {
-        TileEntity tileEntity = worldIn.getBlockEntity(pos);
+    public boolean triggerEvent(BlockState state, Level worldIn, BlockPos pos, int eventID, int eventParam) {
+        BlockEntity tileEntity = worldIn.getBlockEntity(pos);
         return tileEntity != null && tileEntity.triggerEvent(eventID, eventParam);
     }
 }

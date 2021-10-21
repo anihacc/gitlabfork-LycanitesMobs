@@ -5,19 +5,21 @@ import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.navigate.CreaturePathNavigator;
 import com.lycanitesmobs.core.info.ObjectLists;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.pathfinding.GroundPathNavigator;
-import net.minecraft.pathfinding.PathNavigator;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.core.BlockPos;
 
 import java.util.EnumSet;
+
+import net.minecraft.world.entity.ai.goal.Goal.Flag;
 
 public class TemptGoal extends Goal {
     // Targets:
     private BaseCreatureEntity host;
-    private PlayerEntity player;
+    private Player player;
     
     // Properties:
     private double speed = 1.0D;
@@ -208,8 +210,8 @@ public class TemptGoal extends Goal {
         this.targetY = this.player.position().y();
         this.targetZ = this.player.position().z();
         this.isRunning = true;
-        if (this.host.getNavigation() instanceof GroundPathNavigator || this.host.getNavigation() instanceof CreaturePathNavigator) {
-            PathNavigator navigateGround = this.host.getNavigation();
+        if (this.host.getNavigation() instanceof GroundPathNavigation || this.host.getNavigation() instanceof CreaturePathNavigator) {
+            PathNavigation navigateGround = this.host.getNavigation();
             this.canSwim = !navigateGround.canFloat();
             navigateGround.setCanFloat(true);
         }
@@ -234,8 +236,8 @@ public class TemptGoal extends Goal {
             }
         }
         this.isRunning = false;
-        if (this.host.getNavigation() instanceof GroundPathNavigator || this.host.getNavigation() instanceof CreaturePathNavigator) {
-            PathNavigator navigateGround = this.host.getNavigation();
+        if (this.host.getNavigation() instanceof GroundPathNavigation || this.host.getNavigation() instanceof CreaturePathNavigator) {
+            PathNavigation navigateGround = this.host.getNavigation();
             navigateGround.setCanFloat(this.canSwim);
         }
     }

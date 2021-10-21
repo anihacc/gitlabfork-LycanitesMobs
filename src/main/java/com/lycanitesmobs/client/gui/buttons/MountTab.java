@@ -1,21 +1,21 @@
 package com.lycanitesmobs.client.gui.buttons;
 
 import com.lycanitesmobs.client.KeyHandler;
-import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.client.KeyMapping;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.TranslatableComponent;
 
-import net.minecraft.client.gui.widget.button.Button.IPressable;
+import net.minecraft.client.gui.components.Button.OnPress;
 
 public class MountTab extends Tab {
 	
-	public MountTab(int id, IPressable pressable) {
-        super(id, Tab.startX, Tab.startY, new ResourceLocation("textures/items/saddle.png"), new TranslationTextComponent("Mounts"), pressable);
+	public MountTab(int id, OnPress pressable) {
+        super(id, Tab.startX, Tab.startY, new ResourceLocation("textures/items/saddle.png"), new TranslatableComponent("Mounts"), pressable);
     }
 
     @Override
     public void onTabClicked () {
-        KeyBinding.set(KeyHandler.instance.mountInventory.getKey(), true); //TODO Add a better way that works!
+        KeyMapping.set(KeyHandler.instance.mountInventory.getKey(), true); //TODO Add a better way that works!
     }
 
     @Override

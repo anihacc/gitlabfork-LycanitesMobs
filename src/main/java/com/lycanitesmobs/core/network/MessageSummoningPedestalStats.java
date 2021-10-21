@@ -2,10 +2,10 @@ package com.lycanitesmobs.core.network;
 
 import com.lycanitesmobs.client.ClientManager;
 import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.BlockPos;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkEvent;
 
@@ -39,8 +39,8 @@ public class MessageSummoningPedestalStats {
 		if(ctx.get().getDirection() != NetworkDirection.PLAY_TO_CLIENT)
 			return;
 
-		PlayerEntity player = ClientManager.getInstance().getClientPlayer();
-        TileEntity tileEntity = player.getCommandSenderWorld().getBlockEntity(new BlockPos(message.x, message.y, message.z));
+		Player player = ClientManager.getInstance().getClientPlayer();
+        BlockEntity tileEntity = player.getCommandSenderWorld().getBlockEntity(new BlockPos(message.x, message.y, message.z));
         TileEntitySummoningPedestal summoningPedestal = null;
         if(tileEntity instanceof TileEntitySummoningPedestal)
             summoningPedestal = (TileEntitySummoningPedestal)tileEntity;
@@ -55,7 +55,7 @@ public class MessageSummoningPedestalStats {
 	/**
 	 * Reads the message from bytes.
 	 */
-	public static MessageSummoningPedestalStats decode(PacketBuffer packet) {
+	public static MessageSummoningPedestalStats decode(FriendlyByteBuf packet) {
 		MessageSummoningPedestalStats message = new MessageSummoningPedestalStats();
         message.x = packet.readInt();
         message.y = packet.readInt();
@@ -70,7 +70,7 @@ public class MessageSummoningPedestalStats {
 	/**
 	 * Writes the message into bytes.
 	 */
-	public static void encode(MessageSummoningPedestalStats message, PacketBuffer packet) {
+	public static void encode(MessageSummoningPedestalStats message, FriendlyByteBuf packet) {
         packet.writeInt(message.x);
         packet.writeInt(message.y);
         packet.writeInt(message.z);

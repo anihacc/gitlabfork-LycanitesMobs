@@ -1,11 +1,11 @@
 package com.lycanitesmobs.core.network;
 
 import com.lycanitesmobs.LycanitesMobs;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
@@ -63,7 +63,7 @@ public class PacketHandler {
 	 * @param message The network packet message to send.
 	 * @param player The player to send to.
 	 */
-	public <MSG> void sendToPlayer(MSG message, ServerPlayerEntity player) {
+	public <MSG> void sendToPlayer(MSG message, ServerPlayer player) {
 		HANDLER.sendTo(message, player.connection.getConnection(), NetworkDirection.PLAY_TO_CLIENT);
 	}
 	
@@ -77,10 +77,10 @@ public class PacketHandler {
 	 * @param pos The position to find players from.
 	 * @param range The range to find players within.
 	 */
-	public <MSG> void sendToAllAround(MSG message, World world, Vector3d pos, double range) {
-		for(PlayerEntity player : world.players()) {
-			if(player instanceof ServerPlayerEntity && player.distanceToSqr(pos) <= (range * range)) {
-				ServerPlayerEntity serverPlayer = (ServerPlayerEntity) player;
+	public <MSG> void sendToAllAround(MSG message, Level world, Vec3 pos, double range) {
+		for(Player player : world.players()) {
+			if(player instanceof ServerPlayer && player.distanceToSqr(pos) <= (range * range)) {
+				ServerPlayer serverPlayer = (ServerPlayer) player;
 				this.sendToPlayer(message, serverPlayer);
 			}
 		}
@@ -95,10 +95,10 @@ public class PacketHandler {
 	 * @param message The network packet message to send.
 	 * @param world The world to find players to send packets to.
 	 */
-	public <MSG> void sendToWorld(MSG message, World world) {
-		for(PlayerEntity player : world.players()) {
-			if(player instanceof ServerPlayerEntity) {
-				ServerPlayerEntity serverPlayer = (ServerPlayerEntity) player;
+	public <MSG> void sendToWorld(MSG message, Level world) {
+		for(Player player : world.players()) {
+			if(player instanceof ServerPlayer) {
+				ServerPlayer serverPlayer = (ServerPlayer) player;
 				HANDLER.sendTo(message, serverPlayer.connection.getConnection(), NetworkDirection.PLAY_TO_CLIENT);
 			}
 		}

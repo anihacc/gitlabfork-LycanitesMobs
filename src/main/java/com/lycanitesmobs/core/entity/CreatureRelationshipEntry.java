@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.entity;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.nbt.CompoundTag;
 
 import java.util.UUID;
 
@@ -109,7 +109,7 @@ public class CreatureRelationshipEntry {
 	 * Loads relationships from nbt data.
 	 * @param nbt The nbt data to load from.
 	 */
-	public void load(CompoundNBT nbt) {
+	public void load(CompoundTag nbt) {
 		if(nbt.hasUUID("TargetUUID")) {
 			this.targetEntityUUID = nbt.getUUID("TargetUUID");
 		}
@@ -122,7 +122,7 @@ public class CreatureRelationshipEntry {
 	 * Saves relationships to nbt data.
 	 * @param nbt The nbt data to save to.
 	 */
-	public void save(CompoundNBT nbt) {
+	public void save(CompoundTag nbt) {
 		nbt.putUUID("TargetUUID", this.targetEntityUUID);
 		nbt.putInt("Reputation", this.reputation);
 	}

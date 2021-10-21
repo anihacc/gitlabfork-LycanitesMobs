@@ -3,8 +3,8 @@ package com.lycanitesmobs.client.model.creature;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.CreatureObjModelOld;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -78,27 +78,27 @@ public class ModelErepede extends CreatureObjModelOld {
     		this.uncenterPartToPart(partName, "head");
     	}
     	if(partName.equals("topmouth")) {
-    		rotX += (float)Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F - 0.05F);
+    		rotX += (float)Math.toDegrees(Mth.cos(loop * 0.09F) * 0.05F - 0.05F);
     	}
     	if(partName.equals("leftmouth")) {
-    		rotY -= (float)Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F - 0.05F);
+    		rotY -= (float)Math.toDegrees(Mth.cos(loop * 0.09F) * 0.05F - 0.05F);
     	}
     	if(partName.equals("rightmouth")) {
-    		rotY += (float)Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F - 0.05F);
+    		rotY += (float)Math.toDegrees(Mth.cos(loop * 0.09F) * 0.05F - 0.05F);
     	}
     	if(partName.equals("bottommouth")) {
-    		rotX -= (float)Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F - 0.05F);
+    		rotX -= (float)Math.toDegrees(Mth.cos(loop * 0.09F) * 0.05F - 0.05F);
     	}
     	
     	// Walking:
     	float walkSwing = 0.3F;
     	if(partName.equals("frontrightleg") || partName.equals("middleleftleg") || partName.equals("backrightleg")) {
-    		rotZ += Math.toDegrees(MathHelper.cos(time * 0.6662F + (float)Math.PI) * walkSwing * distance);
-    		rotY += Math.toDegrees(MathHelper.cos(time * 0.6662F + (float)Math.PI) * walkSwing * distance);
+    		rotZ += Math.toDegrees(Mth.cos(time * 0.6662F + (float)Math.PI) * walkSwing * distance);
+    		rotY += Math.toDegrees(Mth.cos(time * 0.6662F + (float)Math.PI) * walkSwing * distance);
     	}
     	if(partName.equals("frontleftleg") || partName.equals("middlerightleg") || partName.equals("backleftleg")) {
-    		rotZ += Math.toDegrees(MathHelper.cos(time * 0.6662F) * walkSwing * distance);
-    		rotY += Math.toDegrees(MathHelper.cos(time * 0.6662F) * walkSwing * distance);
+    		rotZ += Math.toDegrees(Mth.cos(time * 0.6662F) * walkSwing * distance);
+    		rotY += Math.toDegrees(Mth.cos(time * 0.6662F) * walkSwing * distance);
     	}
 		
 		// Attack:

@@ -5,8 +5,8 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.pets.PetEntry;
 import com.lycanitesmobs.core.pets.PetManager;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkEvent;
 
@@ -33,7 +33,7 @@ public class MessagePetEntryRemove {
 		// Server Side:
 		if(ctx.get().getDirection() == NetworkDirection.PLAY_TO_SERVER) {
 			ctx.get().enqueueWork(() -> {
-				PlayerEntity player = ctx.get().getSender();
+				Player player = ctx.get().getSender();
 				ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
 
 				PetManager petManager = playerExt.petManager;
@@ -48,7 +48,7 @@ public class MessagePetEntryRemove {
         }
 
         // Client Side:
-        PlayerEntity player = ClientManager.getInstance().getClientPlayer();
+        Player player = ClientManager.getInstance().getClientPlayer();
         ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
 		if(playerExt == null)
 			return;
@@ -65,7 +65,7 @@ public class MessagePetEntryRemove {
 	/**
 	 * Reads the message from bytes.
 	 */
-	public static MessagePetEntryRemove decode(PacketBuffer packet) {
+	public static MessagePetEntryRemove decode(FriendlyByteBuf packet) {
 		MessagePetEntryRemove message = new MessagePetEntryRemove();
 		try {
             message.petEntryID = packet.readUUID();
@@ -79,7 +79,7 @@ public class MessagePetEntryRemove {
 	/**
 	 * Writes the message into bytes.
 	 */
-	public static void encode(MessagePetEntryRemove message, PacketBuffer packet) {
+	public static void encode(MessagePetEntryRemove message, FriendlyByteBuf packet) {
 		try {
 			packet.writeUUID(message.petEntryID);
 		} catch (Exception e) {

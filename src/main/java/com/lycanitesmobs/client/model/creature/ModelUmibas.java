@@ -3,8 +3,8 @@ package com.lycanitesmobs.client.model.creature;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.CreatureObjModel;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.util.Mth;
 
 public class ModelUmibas extends CreatureObjModel {
 
@@ -48,13 +48,13 @@ public class ModelUmibas extends CreatureObjModel {
 
         // Idle:
         if(partName.equals("mouthtop"))
-            this.rotate(-(float)-Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F - 0.05F), 0.0F, 0.0F);
+            this.rotate(-(float)-Math.toDegrees(Mth.cos(loop * 0.09F) * 0.05F - 0.05F), 0.0F, 0.0F);
         if(partName.equals("mouthleft"))
-            rotY += (float)-Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.1F - 0.05F);
+            rotY += (float)-Math.toDegrees(Mth.cos(loop * 0.09F) * 0.1F - 0.05F);
         if(partName.equals("mouthright"))
-            rotY -= (float)-Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.1F - 0.05F);
+            rotY -= (float)-Math.toDegrees(Mth.cos(loop * 0.09F) * 0.1F - 0.05F);
         if(partName.equals("mouthbottom"))
-            this.rotate((float)-Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F - 0.05F), 0.0F, 0.0F);
+            this.rotate((float)-Math.toDegrees(Mth.cos(loop * 0.09F) * 0.05F - 0.05F), 0.0F, 0.0F);
 
         // Attack:
         if(entity instanceof BaseCreatureEntity && ((BaseCreatureEntity)entity).isAttackOnCooldown()) {
@@ -74,56 +74,56 @@ public class ModelUmibas extends CreatureObjModel {
             time = loop;
         time /= 2;
         if(partName.equals("head")) {
-            posX += MathHelper.sin((time - walkSwing) * walkSwing) * walkSwing;
+            posX += Mth.sin((time - walkSwing) * walkSwing) * walkSwing;
         }
         if(partName.equals("body")) {
-            posX += MathHelper.sin(time * walkSwing) * walkSwing;
-            float parentX = MathHelper.sin((time - walkSwing) * walkSwing) * walkSwing;
+            posX += Mth.sin(time * walkSwing) * walkSwing;
+            float parentX = Mth.sin((time - walkSwing) * walkSwing) * walkSwing;
             rotY += this.rotateToPoint(0, posX, -0.6F, parentX);
         }
         if(partName.equals("body01")) {
-            posX += MathHelper.sin((time + walkSwing) * walkSwing) * walkSwing;
-            float parentX = MathHelper.sin(time * walkSwing) * walkSwing;
+            posX += Mth.sin((time + walkSwing) * walkSwing) * walkSwing;
+            float parentX = Mth.sin(time * walkSwing) * walkSwing;
             rotY += this.rotateToPoint(0, posX, -0.6F, parentX);
         }
         if(partName.equals("body02")) {
-            posX += MathHelper.sin((time + (walkSwing * 2)) * walkSwing) * walkSwing;
-            float parentX = MathHelper.sin((time + walkSwing) * walkSwing) * walkSwing;
+            posX += Mth.sin((time + (walkSwing * 2)) * walkSwing) * walkSwing;
+            float parentX = Mth.sin((time + walkSwing) * walkSwing) * walkSwing;
             rotY += this.rotateToPoint(0, posX, -0.6F, parentX);
         }
         if(partName.equals("body03")) {
-            posX += MathHelper.sin((time + (walkSwing * 3)) * walkSwing) * walkSwing;
-            float parentX = MathHelper.sin((time + (walkSwing * 2)) * walkSwing) * walkSwing;
+            posX += Mth.sin((time + (walkSwing * 3)) * walkSwing) * walkSwing;
+            float parentX = Mth.sin((time + (walkSwing * 2)) * walkSwing) * walkSwing;
             rotY += this.rotateToPoint(0, posX, -0.6F, parentX);
         }
         if(partName.equals("body04")) {
-            posX += MathHelper.sin((time + (walkSwing * 4)) * walkSwing) * walkSwing;
-            float parentX = MathHelper.sin((time + (walkSwing * 3)) * walkSwing) * walkSwing;
+            posX += Mth.sin((time + (walkSwing * 4)) * walkSwing) * walkSwing;
+            float parentX = Mth.sin((time + (walkSwing * 3)) * walkSwing) * walkSwing;
             rotY += this.rotateToPoint(0, posX, -0.6F, parentX);
         }
         if(partName.equals("body05")) {
-            posX += MathHelper.sin((time + (walkSwing * 5)) * walkSwing) * walkSwing;
-            float parentX = MathHelper.sin((time + (walkSwing * 4)) * walkSwing) * walkSwing;
+            posX += Mth.sin((time + (walkSwing * 5)) * walkSwing) * walkSwing;
+            float parentX = Mth.sin((time + (walkSwing * 4)) * walkSwing) * walkSwing;
             rotY += this.rotateToPoint(0, posX, -0.6F, parentX);
         }
         if(partName.equals("body06")) {
-            posX += MathHelper.sin((time + (walkSwing * 6)) * walkSwing) * walkSwing;
-            float parentX = MathHelper.sin((time + (walkSwing * 5)) * walkSwing) * walkSwing;
+            posX += Mth.sin((time + (walkSwing * 6)) * walkSwing) * walkSwing;
+            float parentX = Mth.sin((time + (walkSwing * 5)) * walkSwing) * walkSwing;
             rotY += this.rotateToPoint(0, posX, -0.6F, parentX);
         }
         if(partName.equals("body07")) {
-            posX += MathHelper.sin((time + (walkSwing * 7)) * walkSwing) * walkSwing;
-            float parentX = MathHelper.sin((time + (walkSwing * 6)) * walkSwing) * walkSwing;
+            posX += Mth.sin((time + (walkSwing * 7)) * walkSwing) * walkSwing;
+            float parentX = Mth.sin((time + (walkSwing * 6)) * walkSwing) * walkSwing;
             rotY += this.rotateToPoint(0, posX, -0.6F, parentX);
         }
         if(partName.equals("body08")) {
-            posX += MathHelper.sin((time + (walkSwing * 8)) * walkSwing) * walkSwing;
-            float parentX = MathHelper.sin((time + (walkSwing * 7)) * walkSwing) * walkSwing;
+            posX += Mth.sin((time + (walkSwing * 8)) * walkSwing) * walkSwing;
+            float parentX = Mth.sin((time + (walkSwing * 7)) * walkSwing) * walkSwing;
             rotY += this.rotateToPoint(0, posX, -0.6F, parentX);
         }
         if(partName.equals("body09")) {
-            posX += MathHelper.sin((time + (walkSwing * 9)) * walkSwing) * walkSwing;
-            float parentX = MathHelper.sin((time + (walkSwing * 8)) * walkSwing) * walkSwing;
+            posX += Mth.sin((time + (walkSwing * 9)) * walkSwing) * walkSwing;
+            float parentX = Mth.sin((time + (walkSwing * 8)) * walkSwing) * walkSwing;
             rotY += this.rotateToPoint(0, posX, -0.6F, parentX);
         }
 

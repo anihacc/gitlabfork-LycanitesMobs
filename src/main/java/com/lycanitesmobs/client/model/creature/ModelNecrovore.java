@@ -2,8 +2,8 @@ package com.lycanitesmobs.client.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.template.ModelTemplateQuadruped;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -27,7 +27,7 @@ public class ModelNecrovore extends ModelTemplateQuadruped {
 
     	// Idle:
 		if(partName.contains("tail")) {
-			rotate(0.0F, (float)-Math.toDegrees(MathHelper.cos(loop * 0.2F) * 0.2F + 0.1F), 0.0F);
+			rotate(0.0F, (float)-Math.toDegrees(Mth.cos(loop * 0.2F) * 0.2F + 0.1F), 0.0F);
 		}
 
 		// Attack:

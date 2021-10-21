@@ -5,15 +5,15 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.creature.EntityVespidQueen;
 import com.lycanitesmobs.core.entity.goals.TargetSorterNearest;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.pathfinding.Path;
-import net.minecraft.pathfinding.PathPoint;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.pathfinder.Path;
+import net.minecraft.world.level.pathfinder.Node;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.util.Mth;
 
 import java.util.Collections;
 import java.util.Iterator;
@@ -176,7 +176,7 @@ public abstract class TargetingGoal extends Goal {
     protected double getTargetDistance() {
         if(this.targetingRange > 0)
             return this.targetingRange;
-    	ModifiableAttributeInstance attributeInstance = this.host.getAttribute(Attributes.FOLLOW_RANGE);
+    	AttributeInstance attributeInstance = this.host.getAttribute(Attributes.FOLLOW_RANGE);
         return attributeInstance.getValue();
     }
 
@@ -232,8 +232,8 @@ public abstract class TargetingGoal extends Goal {
             return false;
 
         // Player Checks:
-		if(checkTarget instanceof PlayerEntity) {
-			if(!targetCreative && ((PlayerEntity)checkTarget).isCreative())
+		if(checkTarget instanceof Player) {
+			if(!targetCreative && ((Player)checkTarget).isCreative())
 				return false;
 			if(checkTarget.isSpectator())
 				return false;
@@ -245,11 +245,11 @@ public abstract class TargetingGoal extends Goal {
         }
         
         // Home Check:
-        if(!this.host.positionNearHome(MathHelper.floor(checkTarget.position().x()), MathHelper.floor(checkTarget.position().y()), MathHelper.floor(checkTarget.position().z())))
+        if(!this.host.positionNearHome(Mth.floor(checkTarget.position().x()), Mth.floor(checkTarget.position().y()), Mth.floor(checkTarget.position().z())))
             return false;
         
         // Sight Check:
-        if(this.shouldCheckSight() && !checkTarget.hasEffect(Effects.GLOWING) && !this.host.getSensing().canSee(checkTarget)) // Glowing
+        if(this.shouldCheckSight() && !checkTarget.hasEffect(MobEffects.GLOWING) && !this.host.getSensing().canSee(checkTarget)) // Glowing
             return false;
         
         // Nearby Check:
@@ -296,7 +296,7 @@ public abstract class TargetingGoal extends Goal {
             return false;
 
 		// Player Check:
-		if(checkTarget instanceof PlayerEntity)
+		if(checkTarget instanceof Player)
 			return false;
 
         // Protective:
@@ -323,12 +323,12 @@ public abstract class TargetingGoal extends Goal {
         if(path == null)
             return false;
         else {
-            PathPoint pathpoint = path.getEndNode();
+            Node pathpoint = path.getEndNode();
             if(pathpoint == null)
                 return false;
             else {
-                int i = pathpoint.x - MathHelper.floor(target.position().x());
-                int j = pathpoint.z - MathHelper.floor(target.position().z());
+                int i = pathpoint.x - Mth.floor(target.position().x());
+                int j = pathpoint.z - Mth.floor(target.position().z());
                 return (double)(i * i + j * j) <= 2.25D;
             }
         }

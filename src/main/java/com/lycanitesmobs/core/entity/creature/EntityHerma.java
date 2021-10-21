@@ -3,26 +3,26 @@ package com.lycanitesmobs.core.entity.creature;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import com.lycanitesmobs.core.entity.goals.actions.WanderGoal;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.monster.IMob;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
-public class EntityHerma extends TameableCreatureEntity implements IMob {
+public class EntityHerma extends TameableCreatureEntity implements Enemy {
 
 	WanderGoal wanderAI;
 
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityHerma(EntityType<? extends EntityHerma> entityType, World world) {
+    public EntityHerma(EntityType<? extends EntityHerma> entityType, Level world) {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEFINED;
+        this.attribute = MobType.UNDEFINED;
         this.spawnsOnLand = true;
         this.spawnsInWater = true;
         this.hasAttackSound = true;

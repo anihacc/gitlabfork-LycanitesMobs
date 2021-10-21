@@ -2,10 +2,10 @@ package com.lycanitesmobs.core.entity.goals.actions;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
 
 public class FollowOwnerGoal extends FollowGoal {
 	// Targets:
@@ -109,9 +109,9 @@ public class FollowOwnerGoal extends FollowGoal {
 				return;
 			}
 
-	    	int i = MathHelper.floor(this.getTarget().position().x()) - 2;
-	        int j = MathHelper.floor(this.getTarget().getBoundingBox().minY);
-	        int k = MathHelper.floor(this.getTarget().position().z()) - 2;
+	    	int i = Mth.floor(this.getTarget().position().x()) - 2;
+	        int j = Mth.floor(this.getTarget().getBoundingBox().minY);
+	        int k = Mth.floor(this.getTarget().position().z()) - 2;
 
             if(this.host.isFlying() || this.getTarget().isInWater()) {
                 this.host.moveTo(i, j + 1, k, this.host.yRot, this.host.xRot);

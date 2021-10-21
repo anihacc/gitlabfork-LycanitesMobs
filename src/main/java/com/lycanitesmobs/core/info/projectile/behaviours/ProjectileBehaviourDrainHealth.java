@@ -8,11 +8,11 @@ import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class ProjectileBehaviourDrainHealth extends ProjectileBehaviour {
@@ -31,7 +31,7 @@ public class ProjectileBehaviourDrainHealth extends ProjectileBehaviour {
 	}
 
 	@Override
-	public void onProjectileDamage(BaseProjectileEntity projectile, World world, LivingEntity target, float damage) {
+	public void onProjectileDamage(BaseProjectileEntity projectile, Level world, LivingEntity target, float damage) {
 		if(projectile.getOwner() == null) {
 			return;
 		}

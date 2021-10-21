@@ -4,12 +4,12 @@ import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.BaseGoal;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 
 import java.util.EnumSet;
 
-import net.minecraft.entity.ai.goal.Goal.Flag;
+import net.minecraft.world.entity.ai.goal.Goal.Flag;
 
 public class SummonMinionsGoal extends BaseGoal {
     // Properties:
@@ -116,7 +116,7 @@ public class SummonMinionsGoal extends BaseGoal {
 
 		// Anti Flight Mode:
 		if(this.antiFlight) {
-			for (PlayerEntity target : this.host.playerTargets) {
+			for (Player target : this.host.playerTargets) {
 				if(target.isCreative() || target.isSpectator())
 					continue;
 				if (CreatureManager.getInstance().config.bossAntiFlight > 0 && target.position().y() > this.host.position().y() + CreatureManager.getInstance().config.bossAntiFlight + 1) {

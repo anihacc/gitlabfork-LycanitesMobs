@@ -4,7 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.lycanitesmobs.LycanitesMobs;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
@@ -104,20 +104,20 @@ public class VersionChecker {
 		}
 
 		public String getUpdateNotes() {
-			String content = "\u00A7l\u00A7n" + new TranslationTextComponent("gui.beastiary.index.changes").getString() + "\u00A7r";
-			content += "\n\u00A7l" + new TranslationTextComponent("gui.beastiary.index.changes.name").getString() + ":\u00A7r " + this.name;
+			String content = "\u00A7l\u00A7n" + new TranslatableComponent("gui.beastiary.index.changes").getString() + "\u00A7r";
+			content += "\n\u00A7l" + new TranslatableComponent("gui.beastiary.index.changes.name").getString() + ":\u00A7r " + this.name;
 			if(this.newFeatures.length() > 0)
-				content += "\n\n\u00A7l" + new TranslationTextComponent("gui.beastiary.index.changes.new").getString() + ":\u00A7r\n" + this.newFeatures;
+				content += "\n\n\u00A7l" + new TranslatableComponent("gui.beastiary.index.changes.new").getString() + ":\u00A7r\n" + this.newFeatures;
 			if(this.configChanges.length() > 0)
-				content += "\n\n\u00A7l" + new TranslationTextComponent("gui.beastiary.index.changes.config").getString() + ":\u00A7r\n" + this.configChanges;
+				content += "\n\n\u00A7l" + new TranslatableComponent("gui.beastiary.index.changes.config").getString() + ":\u00A7r\n" + this.configChanges;
 			if(this.majorFixes.length() > 0)
-				content += "\n\n\u00A7l" + new TranslationTextComponent("gui.beastiary.index.changes.major").getString() + ":\u00A7r\n" + this.majorFixes;
+				content += "\n\n\u00A7l" + new TranslatableComponent("gui.beastiary.index.changes.major").getString() + ":\u00A7r\n" + this.majorFixes;
 			if(this.changes.length() > 0)
-				content += "\n\n\u00A7l" + new TranslationTextComponent("gui.beastiary.index.changes.gameplay").getString() + ":\u00A7r\n" + this.changes;
+				content += "\n\n\u00A7l" + new TranslatableComponent("gui.beastiary.index.changes.gameplay").getString() + ":\u00A7r\n" + this.changes;
 			if(this.balancing.length() > 0)
-				content += "\n\n\u00A7l" + new TranslationTextComponent("gui.beastiary.index.changes.balancing").getString() + ":\u00A7r\n" + this.balancing;
+				content += "\n\n\u00A7l" + new TranslatableComponent("gui.beastiary.index.changes.balancing").getString() + ":\u00A7r\n" + this.balancing;
 			if(this.minorFixes.length() > 0)
-				content += "\n\n\u00A7l" + new TranslationTextComponent("gui.beastiary.index.changes.minor").getString() + ":\u00A7r\n" + this.minorFixes;
+				content += "\n\n\u00A7l" + new TranslatableComponent("gui.beastiary.index.changes.minor").getString() + ":\u00A7r\n" + this.minorFixes;
 
 			return content;
 		}

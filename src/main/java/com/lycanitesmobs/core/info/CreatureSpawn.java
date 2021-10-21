@@ -4,10 +4,10 @@ import com.google.gson.JsonObject;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.helpers.JSONHelper;
 import com.lycanitesmobs.core.spawner.SpawnerMobRegistry;
-import net.minecraft.entity.EntityClassification;
-import net.minecraft.world.DimensionType;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.level.dimension.DimensionType;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraftforge.common.DungeonHooks;
 
 import java.util.ArrayList;
@@ -29,7 +29,7 @@ public class CreatureSpawn {
 	public List<String> spawners = new ArrayList<>();
 
 	/** A list of Vanilla Creature Types to use. **/
-	public List<EntityClassification> vanillaSpawnerTypes = new ArrayList<>();
+	public List<MobCategory> vanillaSpawnerTypes = new ArrayList<>();
 
 
 	// Dimensions:
@@ -114,13 +114,13 @@ public class CreatureSpawn {
 				SpawnerMobRegistry.createSpawn(creatureInfo, spawner);
 
 				if ("monster".equalsIgnoreCase(spawner))
-					this.vanillaSpawnerTypes.add(EntityClassification.MONSTER);
+					this.vanillaSpawnerTypes.add(MobCategory.MONSTER);
 				else if ("creature".equalsIgnoreCase(spawner))
-					this.vanillaSpawnerTypes.add(EntityClassification.CREATURE);
+					this.vanillaSpawnerTypes.add(MobCategory.CREATURE);
 				else if ("watercreature".equalsIgnoreCase(spawner))
-					this.vanillaSpawnerTypes.add(EntityClassification.WATER_CREATURE);
+					this.vanillaSpawnerTypes.add(MobCategory.WATER_CREATURE);
 				else if ("ambient".equalsIgnoreCase(spawner))
-					this.vanillaSpawnerTypes.add(EntityClassification.AMBIENT);
+					this.vanillaSpawnerTypes.add(MobCategory.AMBIENT);
 			}
 		}
 
@@ -198,7 +198,7 @@ public class CreatureSpawn {
 	 * @param world The world to check.
 	 * @return True if allowed, false if disallowed.
 	 */
-	public boolean isAllowedDimension(World world) {
+	public boolean isAllowedDimension(Level world) {
 		if(world == null) {
 			LycanitesMobs.logDebug("MobSpawns", "No world or dimension spawn settings were found, defaulting to valid.");
 			return true;

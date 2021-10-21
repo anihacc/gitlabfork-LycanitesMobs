@@ -6,22 +6,28 @@ import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.info.ElementInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundCategory;
+import net.minecraft.client.gui.Font;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.text.*;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.BaseComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 
 public class ChargeItem extends BaseItem {
     /** How much experience a Charge Item grants per element matched. **/
@@ -46,32 +52,32 @@ public class ChargeItem extends BaseItem {
     }
 
     @Override
-    public ITextComponent getName(ItemStack itemStack) {
-        return this.getProjectileName().append(" ").append(new TranslationTextComponent("item.lycanitesmobs.charge"));
+    public Component getName(ItemStack itemStack) {
+        return this.getProjectileName().append(" ").append(new TranslatableComponent("item.lycanitesmobs.charge"));
     }
 
     @Override
-    public void appendHoverText(ItemStack itemStack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag tooltipFlag) {
+    public void appendHoverText(ItemStack itemStack, @Nullable Level world, List<Component> tooltip, TooltipFlag tooltipFlag) {
         super.appendHoverText(itemStack, world, tooltip, tooltipFlag);
-        FontRenderer fontRenderer = Minecraft.getInstance().font;
-        for(ITextComponent description : this.getAdditionalDescriptions(itemStack, world, tooltipFlag)) {
+        Font fontRenderer = Minecraft.getInstance().font;
+        for(Component description : this.getAdditionalDescriptions(itemStack, world, tooltipFlag)) {
             tooltip.add(description);
         }
     }
 
     @Override
-    public ITextComponent getDescription(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        return new TranslationTextComponent("item.lycanitesmobs.charge.description").withStyle(TextFormatting.GREEN);
+    public Component getDescription(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+        return new TranslatableComponent("item.lycanitesmobs.charge.description").withStyle(ChatFormatting.GREEN);
     }
 
-    public List<ITextComponent> getAdditionalDescriptions(ItemStack itemStack, @Nullable World world, ITooltipFlag tooltipFlag) {
-        List<ITextComponent> descriptions = new ArrayList<>();
+    public List<Component> getAdditionalDescriptions(ItemStack itemStack, @Nullable Level world, TooltipFlag tooltipFlag) {
+        List<Component> descriptions = new ArrayList<>();
 
-        descriptions.add(new TranslationTextComponent("item.lycanitesmobs.charge.projectile").withStyle(TextFormatting.GOLD)
+        descriptions.add(new TranslatableComponent("item.lycanitesmobs.charge.projectile").withStyle(ChatFormatting.GOLD)
                 .append(" ").append(this.getProjectileName()));
 
         if(!this.getElements().isEmpty()) {
-            descriptions.add(new TranslationTextComponent("item.lycanitesmobs.charge.elements").withStyle(TextFormatting.DARK_AQUA)
+            descriptions.add(new TranslatableComponent("item.lycanitesmobs.charge.elements").withStyle(ChatFormatting.DARK_AQUA)
                     .append(" ").append(this.getElementNames()));
         }
 
@@ -79,29 +85,29 @@ public class ChargeItem extends BaseItem {
     }
 
     @Override
-    public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
+    public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
         ItemStack itemStack = player.getItemInHand(hand);
 
         if(!world.isClientSide && player.isShiftKeyDown()) { // isSneaking()
             BaseProjectileEntity projectile = this.createProjectile(itemStack, world, player);
             if(projectile == null) {
                 LycanitesMobs.logWarning("", "Failed to create projectile from Charge Item: " + this.itemName);
-                return new ActionResult<>(ActionResultType.FAIL, itemStack);
+                return new InteractionResultHolder<>(InteractionResult.FAIL, itemStack);
             }
             world.addFreshEntity(projectile);
             if(!player.abilities.instabuild) {
                 itemStack.setCount(Math.max(0, itemStack.getCount() - 1));
             }
-            this.playSound(world, player.blockPosition(), projectile.getLaunchSound(), SoundCategory.NEUTRAL, 0.5F, 0.4F / (player.getRandom().nextFloat() * 0.4F + 0.8F));
+            this.playSound(world, player.blockPosition(), projectile.getLaunchSound(), SoundSource.NEUTRAL, 0.5F, 0.4F / (player.getRandom().nextFloat() * 0.4F + 0.8F));
         }
 
-        return new ActionResult<>(ActionResultType.SUCCESS, itemStack);
+        return new InteractionResultHolder<>(InteractionResult.SUCCESS, itemStack);
     }
 
     @Override
-    public ActionResultType interactLivingEntity(ItemStack stack, PlayerEntity player, LivingEntity entity, Hand hand) {
+    public InteractionResult interactLivingEntity(ItemStack stack, Player player, LivingEntity entity, InteractionHand hand) {
         if(entity instanceof TameableCreatureEntity && ((TameableCreatureEntity)entity).getPlayerOwner() == player) {
-            return ActionResultType.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
         return super.interactLivingEntity(stack, player, entity, hand);
     }
@@ -113,7 +119,7 @@ public class ChargeItem extends BaseItem {
      * @param entityPlayer The player using the charge.
      * @return A projectile instance.
      */
-    public BaseProjectileEntity createProjectile(ItemStack itemStack, World world, PlayerEntity entityPlayer) {
+    public BaseProjectileEntity createProjectile(ItemStack itemStack, Level world, Player entityPlayer) {
         if(this.projectileInfo != null) {
             return this.projectileInfo.createProjectile(world, entityPlayer);
         }
@@ -135,8 +141,8 @@ public class ChargeItem extends BaseItem {
      * Returns a comma separated list of Elements this Charge contains.
      * @return The Elements this Charge contains.
      */
-    public ITextComponent getElementNames() {
-        TextComponent elementNames = new StringTextComponent("");
+    public Component getElementNames() {
+        BaseComponent elementNames = new TextComponent("");
         boolean firstElement = true;
         for(ElementInfo element : this.getElements()) {
             if(!firstElement) {
@@ -152,10 +158,10 @@ public class ChargeItem extends BaseItem {
      * Returns the display name of the projectile fired by this Charge.
      * @return The Projectile this Charge fires.
      */
-    public TextComponent getProjectileName() {
+    public BaseComponent getProjectileName() {
         if(this.projectileInfo != null) {
             return this.projectileInfo.getTitle();
         }
-        return new TranslationTextComponent("item.lycanitesmobs.charge");
+        return new TranslatableComponent("item.lycanitesmobs.charge");
     }
 }

@@ -2,8 +2,8 @@ package com.lycanitesmobs.client.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.template.ModelTemplateAquatic;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.util.Mth;
 
 public class ModelAbaia extends ModelTemplateAquatic {
 
@@ -44,8 +44,8 @@ public class ModelAbaia extends ModelTemplateAquatic {
 
         // Tail:
         if(partName.equals("body") || partName.equals("tail01") || partName.equals("tail02")) {
-            rotX += (float)-Math.toDegrees(MathHelper.cos(loop * 0.25f) * 0.25F);
-            rotY += (float)-Math.toDegrees(MathHelper.cos(loop * 0.5f) * 0.25F);
+            rotX += (float)-Math.toDegrees(Mth.cos(loop * 0.25f) * 0.25F);
+            rotY += (float)-Math.toDegrees(Mth.cos(loop * 0.5f) * 0.25F);
         }
 
         // Apply Animations:

@@ -1,14 +1,14 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 
 import java.util.List;
 
@@ -19,11 +19,11 @@ public class EntityNymph extends TameableCreatureEntity {
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityNymph(EntityType<? extends EntityNymph> entityType, World world) {
+    public EntityNymph(EntityType<? extends EntityNymph> entityType, Level world) {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEFINED;
+        this.attribute = MobType.UNDEFINED;
         this.hasAttackSound = false;
 
 		this.fleeHealthPercent = 1.0F;
@@ -61,7 +61,7 @@ public class EntityNymph extends TameableCreatureEntity {
 					for (Object entityObj : aoeTargets) {
 						LivingEntity target = (LivingEntity) entityObj;
 						if (target != this && !(target instanceof EntityNymph) && target != this.getTarget() && target != this.getAvoidTarget()) {
-							target.addEffect(new EffectInstance(Effects.REGENERATION, 3 * 20, 0));
+							target.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 3 * 20, 0));
 						}
 					}
 				}
@@ -105,7 +105,7 @@ public class EntityNymph extends TameableCreatureEntity {
     // ========== Ranged Attack ==========
     @Override
     public void attackRanged(Entity target, float range) {
-		this.fireProjectile("faebolt", target, range, 0, new Vector3d(0, 0, 0), 0.75f, 1f, 1F);
+		this.fireProjectile("faebolt", target, range, 0, new Vec3(0, 0, 0), 0.75f, 1f, 1F);
 		super.attackRanged(target, range);
     }
 

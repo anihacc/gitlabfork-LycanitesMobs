@@ -4,18 +4,24 @@ import com.google.common.collect.ImmutableSet;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.block.fluid.BaseFluidBlock;
 import com.lycanitesmobs.core.info.ItemManager;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.material.Material;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.material.Material;
 import net.minecraft.world.gen.feature.*;
-import net.minecraft.world.gen.placement.ChanceConfig;
-import net.minecraft.world.gen.placement.NoPlacementConfig;
-import net.minecraft.world.gen.placement.Placement;
-import net.minecraft.world.gen.placement.TopSolidRangeConfig;
+import net.minecraft.world.level.levelgen.placement.ChanceDecoratorConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneDecoratorConfiguration;
+import net.minecraft.world.level.levelgen.placement.FeatureDecorator;
+import net.minecraft.world.level.levelgen.feature.configurations.RangeDecoratorConfiguration;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.configurations.BlockStateConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.SpringConfiguration;
 
 public class WorldGenManager {
 	private static WorldGenManager INSTANCE;
@@ -27,11 +33,11 @@ public class WorldGenManager {
 	}
 	
 	// Placements:
-	public AlwaysPlacement alwaysPlacement = new AlwaysPlacement(NoPlacementConfig.CODEC);
+	public AlwaysPlacement alwaysPlacement = new AlwaysPlacement(NoneDecoratorConfiguration.CODEC);
 	
 	// Features:
-	public ChunkSpawnFeature chunkSpawnFeature = new ChunkSpawnFeature(NoFeatureConfig.CODEC);
-	public DungeonFeature dungeonFeature = new DungeonFeature(NoFeatureConfig.CODEC);
+	public ChunkSpawnFeature chunkSpawnFeature = new ChunkSpawnFeature(NoneFeatureConfiguration.CODEC);
+	public DungeonFeature dungeonFeature = new DungeonFeature(NoneFeatureConfiguration.CODEC);
 	public Map<String, ConfiguredFeature<?, ?>> fluidConfiguredFeatures = new HashMap<>();
 
 	/**
@@ -42,15 +48,15 @@ public class WorldGenManager {
 			BaseFluidBlock fluidBlock = ItemManager.getInstance().worldgenFluidBlocks.get(fluidName);
 			ConfiguredFeature<?, ?> lakeFeature = null;
 			ConfiguredFeature<?, ?> springFeature = null;
-			LiquidsConfig springConfig = new LiquidsConfig(fluidBlock.getFluid().defaultFluidState(), true, 4, 1, ImmutableSet.of(Blocks.STONE, Blocks.GRANITE, Blocks.DIORITE, Blocks.ANDESITE));
+			SpringConfiguration springConfig = new SpringConfiguration(fluidBlock.getFluid().defaultFluidState(), true, 4, 1, ImmutableSet.of(Blocks.STONE, Blocks.GRANITE, Blocks.DIORITE, Blocks.ANDESITE));
 
 			if (fluidBlock.defaultBlockState().getMaterial() == Material.WATER) {
-				lakeFeature = Feature.LAKE.configured(new BlockStateFeatureConfig(fluidBlock.defaultBlockState())).decorated(Placement.WATER_LAKE.configured(new ChanceConfig(40)));
-				springFeature = Feature.SPRING.configured(springConfig).decorated(Placement.RANGE_BIASED.configured(new TopSolidRangeConfig(8, 8, 256))).squared().count(20);
+				lakeFeature = Feature.LAKE.configured(new BlockStateConfiguration(fluidBlock.defaultBlockState())).decorated(FeatureDecorator.WATER_LAKE.configured(new ChanceDecoratorConfiguration(40)));
+				springFeature = Feature.SPRING.configured(springConfig).decorated(FeatureDecorator.RANGE_BIASED.configured(new RangeDecoratorConfiguration(8, 8, 256))).squared().count(20);
 			}
 			else {
-				lakeFeature = Feature.LAKE.configured(new BlockStateFeatureConfig(fluidBlock.defaultBlockState())).decorated(Placement.LAVA_LAKE.configured(new ChanceConfig(40)));
-				springFeature = Feature.SPRING.configured(springConfig).decorated(Placement.RANGE_VERY_BIASED.configured(new TopSolidRangeConfig(8, 16, 256))).squared().count(20);
+				lakeFeature = Feature.LAKE.configured(new BlockStateConfiguration(fluidBlock.defaultBlockState())).decorated(FeatureDecorator.LAVA_LAKE.configured(new ChanceDecoratorConfiguration(40)));
+				springFeature = Feature.SPRING.configured(springConfig).decorated(FeatureDecorator.RANGE_VERY_BIASED.configured(new RangeDecoratorConfiguration(8, 16, 256))).squared().count(20);
 			}
 
 			fluidConfiguredFeatures.put(fluidName + "_lake", lakeFeature);
@@ -59,7 +65,7 @@ public class WorldGenManager {
 	}
 
 	@SubscribeEvent
-	public void registerPlacements(RegistryEvent.Register<Placement<?>> event) {
+	public void registerPlacements(RegistryEvent.Register<FeatureDecorator<?>> event) {
 		event.getRegistry().register(this.alwaysPlacement.setRegistryName(LycanitesMobs.modInfo.modid, "always"));
 	}
 

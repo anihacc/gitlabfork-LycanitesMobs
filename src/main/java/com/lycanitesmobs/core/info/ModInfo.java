@@ -1,8 +1,8 @@
 package com.lycanitesmobs.core.info;
 
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 
 import java.util.HashMap;
@@ -64,7 +64,7 @@ public class ModInfo {
 	 * Returns the display title of this mod.
 	 * @return The text to display.
 	 */
-	public ITextComponent getTitle() {
-    	return new TranslationTextComponent(this.modid + ".name");
+	public Component getTitle() {
+    	return new TranslatableComponent(this.modid + ".name");
 	}
 }

@@ -9,23 +9,23 @@ import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.pets.SummonSet;
 import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.widget.list.ExtendedList;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.client.gui.components.ObjectSelectionList;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import org.lwjgl.opengl.GL11;
 
 public class SummoningPedestalScreen extends BaseContainerScreen<SummoningPedestalContainer> {
-    public PlayerEntity player;
+    public Player player;
     public ExtendedPlayer playerExt;
     public TileEntitySummoningPedestal summoningPedestal;
     public SummonSet summonSet;
 
-    public ExtendedList list;
+    public ObjectSelectionList list;
 
     public int centerX;
     public int centerY;
@@ -38,7 +38,7 @@ public class SummoningPedestalScreen extends BaseContainerScreen<SummoningPedest
 
     public static int TAB_BUTTON_ID = 55555;
 
-    public SummoningPedestalScreen(SummoningPedestalContainer container, PlayerInventory playerInventory, ITextComponent name) {
+    public SummoningPedestalScreen(SummoningPedestalContainer container, Inventory playerInventory, Component name) {
         super(container, playerInventory, name);
         this.summoningPedestal = container.summoningPedestal;
         this.player = playerInventory.player;
@@ -83,16 +83,16 @@ public class SummoningPedestalScreen extends BaseContainerScreen<SummoningPedest
 
         // Sitting and Following:
         buttonY += buttonHeight + (buttonSpacing * 2);
-        this.addButton(new ButtonBase(BaseCreatureEntity.GUI_COMMAND.SITTING.id, buttonX, buttonY, buttonWidth * 2, buttonHeight, new TranslationTextComponent("..."), this));
+        this.addButton(new ButtonBase(BaseCreatureEntity.GUI_COMMAND.SITTING.id, buttonX, buttonY, buttonWidth * 2, buttonHeight, new TranslatableComponent("..."), this));
 
         // Passive and Stance:
         buttonY += buttonHeight + (buttonSpacing * 2);
-        this.addButton(new ButtonBase(BaseCreatureEntity.GUI_COMMAND.PASSIVE.id, buttonX, buttonY, buttonWidth, buttonHeight, new TranslationTextComponent("..."), this));
-        this.addButton(new ButtonBase(BaseCreatureEntity.GUI_COMMAND.STANCE.id, buttonXRight, buttonY, buttonWidth, buttonHeight, new TranslationTextComponent("..."), this));
+        this.addButton(new ButtonBase(BaseCreatureEntity.GUI_COMMAND.PASSIVE.id, buttonX, buttonY, buttonWidth, buttonHeight, new TranslatableComponent("..."), this));
+        this.addButton(new ButtonBase(BaseCreatureEntity.GUI_COMMAND.STANCE.id, buttonXRight, buttonY, buttonWidth, buttonHeight, new TranslatableComponent("..."), this));
 
         // PVP:
         buttonY += buttonHeight + (buttonSpacing * 2);
-        this.addButton(new ButtonBase(BaseCreatureEntity.GUI_COMMAND.PVP.id, buttonX, buttonY, buttonWidth * 2, buttonHeight, new TranslationTextComponent("..."), this));
+        this.addButton(new ButtonBase(BaseCreatureEntity.GUI_COMMAND.PVP.id, buttonX, buttonY, buttonWidth * 2, buttonHeight, new TranslatableComponent("..."), this));
 
         // List:
         if(this.hasPets() && this.summoningPedestal.summonSet != null) {
@@ -108,7 +108,7 @@ public class SummoningPedestalScreen extends BaseContainerScreen<SummoningPedest
     }
 
     @Override
-    protected void renderBackground(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+    protected void renderBackground(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         GL11.glColor4f(255, 255, 255, 1.0F);
         Minecraft.getInstance().getTextureManager().bind(this.getTexture());
 
@@ -125,7 +125,7 @@ public class SummoningPedestalScreen extends BaseContainerScreen<SummoningPedest
     }
 
     @Override
-    public void renderWidgets(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+    public void renderWidgets(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         for(Object buttonObj : this.buttons) {
             if(buttonObj instanceof ButtonBase) {
                 ButtonBase button = (ButtonBase)buttonObj;
@@ -146,16 +146,16 @@ public class SummoningPedestalScreen extends BaseContainerScreen<SummoningPedest
 
                 // Behaviour Buttons:
                 if (button.buttonId == BaseCreatureEntity.GUI_COMMAND.SITTING.id)
-                    button.setMessage(new TranslationTextComponent(new TranslationTextComponent("gui.pet.sit").getString() + ": " + (this.summonSet.getSitting() ? new TranslationTextComponent("common.yes").getString() : new TranslationTextComponent("common.no").getString())));
+                    button.setMessage(new TranslatableComponent(new TranslatableComponent("gui.pet.sit").getString() + ": " + (this.summonSet.getSitting() ? new TranslatableComponent("common.yes").getString() : new TranslatableComponent("common.no").getString())));
 
                 if (button.buttonId == BaseCreatureEntity.GUI_COMMAND.PASSIVE.id)
-                    button.setMessage(new TranslationTextComponent(new TranslationTextComponent("gui.pet.passive").getString() + ": " + (this.summonSet.getPassive() ? new TranslationTextComponent("common.yes").getString() : new TranslationTextComponent("common.no").getString())));
+                    button.setMessage(new TranslatableComponent(new TranslatableComponent("gui.pet.passive").getString() + ": " + (this.summonSet.getPassive() ? new TranslatableComponent("common.yes").getString() : new TranslatableComponent("common.no").getString())));
 
                 if (button.buttonId == BaseCreatureEntity.GUI_COMMAND.STANCE.id)
-                    button.setMessage(new TranslationTextComponent((this.summonSet.getAggressive() ? new TranslationTextComponent("gui.pet.aggressive").getString() : new TranslationTextComponent("gui.pet.defensive").getString())));
+                    button.setMessage(new TranslatableComponent((this.summonSet.getAggressive() ? new TranslatableComponent("gui.pet.aggressive").getString() : new TranslatableComponent("gui.pet.defensive").getString())));
 
                 if (button.buttonId == BaseCreatureEntity.GUI_COMMAND.PVP.id)
-                    button.setMessage(new TranslationTextComponent(new TranslationTextComponent("gui.pet.pvp").getString() + ": " + (this.summonSet.getPVP() ? new TranslationTextComponent("common.yes").getString() : new TranslationTextComponent("common.no").getString())));
+                    button.setMessage(new TranslatableComponent(new TranslatableComponent("gui.pet.pvp").getString() + ": " + (this.summonSet.getPVP() ? new TranslatableComponent("common.yes").getString() : new TranslatableComponent("common.no").getString())));
             }
         }
 
@@ -168,14 +168,14 @@ public class SummoningPedestalScreen extends BaseContainerScreen<SummoningPedest
     }
 
     @Override
-    protected void renderForeground(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+    protected void renderForeground(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         GL11.glColor4f(255, 255, 255, 1.0F);
         Minecraft.getInstance().getTextureManager().bind(this.getTexture());
 
         // No Pets:
         if (!this.hasPets()) {
-            this.drawHelper.drawString(matrixStack, new TranslationTextComponent("gui.beastiary.summoning.empty.title").getString(), this.centerX - 96, this.windowY + 6, 0xFFFFFF);
-            this.drawHelper.drawStringWrapped(matrixStack, new TranslationTextComponent("gui.beastiary.summoning.empty.info").getString(), this.windowX + 16, this.windowY + 30, this.windowWidth - 32, 0xFFFFFF, false);
+            this.drawHelper.drawString(matrixStack, new TranslatableComponent("gui.beastiary.summoning.empty.title").getString(), this.centerX - 96, this.windowY + 6, 0xFFFFFF);
+            this.drawHelper.drawStringWrapped(matrixStack, new TranslatableComponent("gui.beastiary.summoning.empty.info").getString(), this.windowX + 16, this.windowY + 30, this.windowWidth - 32, 0xFFFFFF, false);
             return;
         }
 
@@ -217,15 +217,15 @@ public class SummoningPedestalScreen extends BaseContainerScreen<SummoningPedest
         super.keyTyped(par1, par2);
     }*/
 
-    public ITextComponent getTitle() {
-        return new TranslationTextComponent("gui." + "summoningpedestal");
+    public Component getTitle() {
+        return new TranslatableComponent("gui." + "summoningpedestal");
     }
 
-    public ITextComponent getEnergyTitle() {
-        return new TranslationTextComponent("stat.portal");
+    public Component getEnergyTitle() {
+        return new TranslatableComponent("stat.portal");
     }
 
-    public void drawFuel(MatrixStack matrixStack) {
+    public void drawFuel(PoseStack matrixStack) {
         int fuelX = this.windowX + 132;
         int fuelY = this.windowY + 42;
         this.drawHelper.drawTexturedModalRect(matrixStack, fuelX, fuelY, 47, 170, 18, 18);
@@ -242,7 +242,7 @@ public class SummoningPedestalScreen extends BaseContainerScreen<SummoningPedest
         this.drawHelper.drawTexturedModalRect(matrixStack, barX, barY, barU, barV, barWidth, barHeight);
     }
 
-    public void drawCapacityBar(MatrixStack matrixStack) {
+    public void drawCapacityBar(PoseStack matrixStack) {
         int energyBarWidth = 9;
         int energyBarHeight = 9;
         int energyBarX = this.windowX + 16;
@@ -251,7 +251,7 @@ public class SummoningPedestalScreen extends BaseContainerScreen<SummoningPedest
         this.drawHelper.drawBar(matrixStack, TextureManager.getTexture("GUIPetSpirit"), energyBarX, energyBarY, 0, energyBarWidth, energyBarHeight, this.summoningPedestal.capacity / this.summoningPedestal.capacityCharge, 10);
     }
 
-    public void drawProgressBar(MatrixStack matrixStack) {
+    public void drawProgressBar(PoseStack matrixStack) {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
         int barWidth = (256 / 4) + 16;

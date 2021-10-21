@@ -4,18 +4,24 @@ import com.lycanitesmobs.core.entity.ExtendedEntity;
 import com.lycanitesmobs.core.entity.RideableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.FindAttackTargetGoal;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.entity.*;
-import net.minecraft.entity.monster.CreeperEntity;
-import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.monster.Creeper;
+import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 
-public class EntityRoc extends RideableCreatureEntity implements IMob {
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.Pose;
+
+public class EntityRoc extends RideableCreatureEntity implements Enemy {
     public AttackMeleeGoal attackAI;
 
     public boolean creeperDropping = true;
@@ -25,11 +31,11 @@ public class EntityRoc extends RideableCreatureEntity implements IMob {
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityRoc(EntityType<? extends EntityRoc> entityType, World world) {
+    public EntityRoc(EntityType<? extends EntityRoc> entityType, Level world) {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEFINED;
+        this.attribute = MobType.UNDEFINED;
         this.hasAttackSound = true;
         this.flySoundSpeed = 20;
 
@@ -67,7 +73,7 @@ public class EntityRoc extends RideableCreatureEntity implements IMob {
         // Entity Pickup Update:
         if(!this.getCommandSenderWorld().isClientSide && this.getControllingPassenger() == null) {
             // Attack AI and Creeper Carrying:
-	    	this.attackAI.setEnabled(this.hasPickupEntity() ? this.getPickupEntity() instanceof CreeperEntity : this.creeperDropCooldown <= 0);
+	    	this.attackAI.setEnabled(this.hasPickupEntity() ? this.getPickupEntity() instanceof Creeper : this.creeperDropCooldown <= 0);
             if(this.creeperDropCooldown > 0) {
                 this.creeperDropCooldown--;
             }
@@ -79,8 +85,8 @@ public class EntityRoc extends RideableCreatureEntity implements IMob {
 	    			extendedEntity.setPickedUpByEntity(this);
 
                 // Drop Creeper On Target:
-                if(this.getPickupEntity() instanceof CreeperEntity && this.hasAttackTarget() && !(this.getTarget() instanceof CreeperEntity)) {
-                    double distance = new Vector3d(this.position().x(), 0, this.position().z()).distanceTo(new Vector3d(this.getTarget().position().x(), 0, this.getTarget().position().z()));
+                if(this.getPickupEntity() instanceof Creeper && this.hasAttackTarget() && !(this.getTarget() instanceof Creeper)) {
+                    double distance = new Vec3(this.position().x(), 0, this.position().z()).distanceTo(new Vec3(this.getTarget().position().x(), 0, this.getTarget().position().z()));
                     if(distance <= 2D && this.position().y() > this.getTarget().position().y()) {
                         this.getPickupEntity().setLastHurtByMob(this.getTarget());
                         this.dropPickupEntity();
@@ -91,7 +97,7 @@ public class EntityRoc extends RideableCreatureEntity implements IMob {
                 // Random Dropping:
                 if(this.hasPickupEntity()) {
                     if (this.tickCount % 100 == 0 && this.getRandom().nextBoolean()) {
-                        if (this.getPickupEntity() instanceof PlayerEntity) {
+                        if (this.getPickupEntity() instanceof Player) {
                             for (int distToGround = 0; distToGround < 8; distToGround++) {
                                 Block searchBlock = this.getCommandSenderWorld().getBlockState(new BlockPos((int) this.position().x(), (int) this.position().y() - distToGround, (int) this.position().z())).getBlock();
                                 if (searchBlock != null && searchBlock != Blocks.AIR) {
@@ -100,7 +106,7 @@ public class EntityRoc extends RideableCreatureEntity implements IMob {
                                     break;
                                 }
                             }
-                        } else if (!(this.getPickupEntity() instanceof CreeperEntity))
+                        } else if (!(this.getPickupEntity() instanceof Creeper))
                             this.dropPickupEntity();
                     }
                 }
@@ -118,17 +124,17 @@ public class EntityRoc extends RideableCreatureEntity implements IMob {
         }
 
         // Mounted Creeper Carrying:
-        if(!this.getCommandSenderWorld().isClientSide && this.getControllingPassenger() == null && this.getPickupEntity() instanceof CreeperEntity) {
-            ((CreeperEntity) this.getPickupEntity()).setTarget(null); // Prevent the carried Creeper from exploding on the riding player.
+        if(!this.getCommandSenderWorld().isClientSide && this.getControllingPassenger() == null && this.getPickupEntity() instanceof Creeper) {
+            ((Creeper) this.getPickupEntity()).setTarget(null); // Prevent the carried Creeper from exploding on the riding player.
         }
     }
 
     @Override
     public void riderEffects(LivingEntity rider) {
-        if(rider.hasEffect(Effects.WEAKNESS))
-            rider.removeEffect(Effects.WEAKNESS);
-        if(rider.hasEffect(Effects.DIG_SLOWDOWN))
-            rider.removeEffect(Effects.DIG_SLOWDOWN);
+        if(rider.hasEffect(MobEffects.WEAKNESS))
+            rider.removeEffect(MobEffects.WEAKNESS);
+        if(rider.hasEffect(MobEffects.DIG_SLOWDOWN))
+            rider.removeEffect(MobEffects.DIG_SLOWDOWN);
     }
 
 
@@ -167,9 +173,9 @@ public class EntityRoc extends RideableCreatureEntity implements IMob {
             if (this.canPickupEntity(entityLivingBase)) {
                 this.pickupEntity(entityLivingBase);
             }
-            if(entityLivingBase instanceof CreeperEntity) {
+            if(entityLivingBase instanceof Creeper) {
                 entityLivingBase.setLastHurtByMob(null);
-                ((CreeperEntity) entityLivingBase).setTarget(null);
+                ((Creeper) entityLivingBase).setTarget(null);
                 this.setTarget(null);
             }
         }
@@ -190,11 +196,11 @@ public class EntityRoc extends RideableCreatureEntity implements IMob {
         }
 
         // Creeper Bombing:
-        if(!this.creeperDropping && targetEntity instanceof CreeperEntity) {
+        if(!this.creeperDropping && targetEntity instanceof Creeper) {
             return false;
         }
         if(this.hasPickupEntity()) {
-            if (targetEntity instanceof CreeperEntity)
+            if (targetEntity instanceof Creeper)
                 return false;
         }
         if(this.creeperDropCooldown > 0) {
@@ -247,7 +253,7 @@ public class EntityRoc extends RideableCreatureEntity implements IMob {
 
     @Override
     public boolean canAttackWithPickup() {
-        if(this.getPickupEntity() instanceof CreeperEntity) {
+        if(this.getPickupEntity() instanceof Creeper) {
             return true;
         }
         return super.canAttackWithPickup();
@@ -276,7 +282,7 @@ public class EntityRoc extends RideableCreatureEntity implements IMob {
     /** Takes an initial chunk coordinate for a random wander position and ten allows the entity to make changes to the position or react to it. **/
     @Override
     public BlockPos getWanderPosition(BlockPos wanderPosition) {
-        if(this.hasPickupEntity() && this.getPickupEntity() instanceof PlayerEntity)
+        if(this.hasPickupEntity() && this.getPickupEntity() instanceof Player)
             return new BlockPos(wanderPosition.getX(), this.restrictYHeightFromGround(wanderPosition, 6, 14), wanderPosition.getZ());
         return super.getWanderPosition(wanderPosition);
     }
@@ -294,8 +300,8 @@ public class EntityRoc extends RideableCreatureEntity implements IMob {
             return;
 
         if(this.hasPickupEntity()) {
-            if(this.getPickupEntity() instanceof CreeperEntity) {
-                ((CreeperEntity)this.getPickupEntity()).ignite();
+            if(this.getPickupEntity() instanceof Creeper) {
+                ((Creeper)this.getPickupEntity()).ignite();
             }
             this.dropPickupEntity();
             return;

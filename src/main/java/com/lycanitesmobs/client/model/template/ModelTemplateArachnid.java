@@ -2,8 +2,8 @@ package com.lycanitesmobs.client.model.template;
 
 import com.lycanitesmobs.client.model.CreatureObjModel;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.util.Mth;
 
 public class ModelTemplateArachnid extends CreatureObjModel {
 
@@ -23,41 +23,41 @@ public class ModelTemplateArachnid extends CreatureObjModel {
 
         // Idle:
         if(partName.equals("mouthleft"))
-            rotate((float)-Math.toDegrees(MathHelper.cos(loop * 0.09F + (float)Math.PI) * 0.05F - 0.05F), 0.0F, 0.0F);
+            rotate((float)-Math.toDegrees(Mth.cos(loop * 0.09F + (float)Math.PI) * 0.05F - 0.05F), 0.0F, 0.0F);
         if(partName.equals("mouthright"))
-            rotate((float)-Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F - 0.05F), 0.0F, 0.0F);
+            rotate((float)-Math.toDegrees(Mth.cos(loop * 0.09F) * 0.05F - 0.05F), 0.0F, 0.0F);
         if(partName.equals("armleft")) {
-            rotZ -= Math.toDegrees(MathHelper.cos(loop * 0.25F) * 0.1F);
-            rotX -= Math.toDegrees(MathHelper.sin(loop * 0.067F) * 0.05F);
+            rotZ -= Math.toDegrees(Mth.cos(loop * 0.25F) * 0.1F);
+            rotX -= Math.toDegrees(Mth.sin(loop * 0.067F) * 0.05F);
         }
         if(partName.equals("armright")) {
-            rotZ += Math.toDegrees(MathHelper.cos(loop * 0.25F) * 0.1F);
-            rotX += Math.toDegrees(MathHelper.sin(loop * 0.067F) * 0.05F);
+            rotZ += Math.toDegrees(Mth.cos(loop * 0.25F) * 0.1F);
+            rotX += Math.toDegrees(Mth.sin(loop * 0.067F) * 0.05F);
         }
         if(partName.equals("tail")) {
-            rotX = (float)-Math.toDegrees(MathHelper.cos(loop * 0.1F) * 0.05F - 0.05F);
-            rotY = (float)-Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F - 0.05F);
+            rotX = (float)-Math.toDegrees(Mth.cos(loop * 0.1F) * 0.05F - 0.05F);
+            rotY = (float)-Math.toDegrees(Mth.cos(loop * 0.09F) * 0.05F - 0.05F);
         }
         if(partName.equals("wingleft")) {
             rotX = 20;
-            rotX -= Math.toDegrees(MathHelper.sin(loop * 3.2F) * 0.6F);
-            rotZ -= Math.toDegrees(MathHelper.sin(loop * 3.2F) * 0.6F);
+            rotX -= Math.toDegrees(Mth.sin(loop * 3.2F) * 0.6F);
+            rotZ -= Math.toDegrees(Mth.sin(loop * 3.2F) * 0.6F);
         }
         if(partName.equals("wingright")) {
             rotX = 20;
-            rotX -= Math.toDegrees(MathHelper.sin(loop * 3.2F) * 0.6F);
-            rotZ -= Math.toDegrees(MathHelper.sin(loop * 3.2F + (float)Math.PI) * 0.6F);
+            rotX -= Math.toDegrees(Mth.sin(loop * 3.2F) * 0.6F);
+            rotZ -= Math.toDegrees(Mth.sin(loop * 3.2F + (float)Math.PI) * 0.6F);
         }
 
         // Walking:
         float walkSwing = 0.6F;
         if(partName.equals("legrightfront") || partName.equals("legrightmiddleback") || partName.equals("legleftmiddlefront") || partName.equals("legleftback")) {
-            rotX += Math.toDegrees(MathHelper.cos(time * 0.3331F + (float)Math.PI) * walkSwing * distance);
-            rotZ += Math.toDegrees(MathHelper.cos(time * 0.6662F + (float)Math.PI) * walkSwing * distance);
+            rotX += Math.toDegrees(Mth.cos(time * 0.3331F + (float)Math.PI) * walkSwing * distance);
+            rotZ += Math.toDegrees(Mth.cos(time * 0.6662F + (float)Math.PI) * walkSwing * distance);
         }
         if(partName.equals("legleftfront") || partName.equals("legleftmiddleback") || partName.equals("legrightmiddlefront") || partName.equals("legrightback")) {
-            rotX += Math.toDegrees(MathHelper.cos(time * 0.3331F) * walkSwing * distance);
-            rotZ += Math.toDegrees(MathHelper.cos(time * 0.6662F) * walkSwing * distance);
+            rotX += Math.toDegrees(Mth.cos(time * 0.3331F) * walkSwing * distance);
+            rotZ += Math.toDegrees(Mth.cos(time * 0.6662F) * walkSwing * distance);
         }
 
         // Flying:
@@ -65,7 +65,7 @@ public class ModelTemplateArachnid extends CreatureObjModel {
             if(entity instanceof BaseCreatureEntity) {
                 BaseCreatureEntity entityCreature = (BaseCreatureEntity)entity;
                 if(entityCreature.isFlying()) {
-                    float bob = -MathHelper.sin(loop * 0.2F) * 0.3F;
+                    float bob = -Mth.sin(loop * 0.2F) * 0.3F;
                     if(bob < 0)
                         bob = -bob;
                     posY += bob;

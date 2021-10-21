@@ -5,8 +5,8 @@ import com.lycanitesmobs.client.gui.SummoningPedestalScreen;
 import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.gui.IGuiEventListener;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -48,7 +48,7 @@ public class SummoningPedestalList extends BaseList<SummoningPedestalScreen> {
 		}
 
 		@Override
-		public void render(MatrixStack matrixStack, int index, int top, int left, int bottom, int right, int mouseX, int mouseY, boolean focus, float partialTicks) {
+		public void render(PoseStack matrixStack, int index, int top, int left, int bottom, int right, int mouseX, int mouseY, boolean focus, float partialTicks) {
 			CreatureInfo creatureInfo = CreatureManager.getInstance().getCreature(this.minionName);
 
 			// Summon Level:
@@ -66,7 +66,7 @@ public class SummoningPedestalList extends BaseList<SummoningPedestalScreen> {
 		}
 
 		@Override
-		public List<? extends IGuiEventListener> children() {
+		public List<? extends GuiEventListener> children() {
 			return null;
 		}
 

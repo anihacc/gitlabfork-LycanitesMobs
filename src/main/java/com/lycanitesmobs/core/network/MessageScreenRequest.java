@@ -1,8 +1,8 @@
 package com.lycanitesmobs.core.network;
 
 import com.lycanitesmobs.LycanitesMobs;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkEvent;
 
@@ -31,7 +31,7 @@ public class MessageScreenRequest {
 			return;
 
 		ctx.get().enqueueWork(() -> {
-			PlayerEntity player = ctx.get().getSender();
+			Player player = ctx.get().getSender();
 			LycanitesMobs.PROXY.openScreen(message.screenId, player);
 		});
 	}
@@ -39,7 +39,7 @@ public class MessageScreenRequest {
 	/**
 	 * Reads the message from bytes.
 	 */
-	public static MessageScreenRequest decode(PacketBuffer packet) {
+	public static MessageScreenRequest decode(FriendlyByteBuf packet) {
 		MessageScreenRequest message = new MessageScreenRequest();
 		message.screenId = packet.readByte();
 		return message;
@@ -48,7 +48,7 @@ public class MessageScreenRequest {
 	/**
 	 * Writes the message into bytes.
 	 */
-	public static void encode(MessageScreenRequest message, PacketBuffer packet) {
+	public static void encode(MessageScreenRequest message, FriendlyByteBuf packet) {
 		packet.writeByte(message.screenId);
 	}
 	

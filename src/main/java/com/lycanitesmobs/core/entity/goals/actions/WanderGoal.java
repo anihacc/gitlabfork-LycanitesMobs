@@ -1,13 +1,13 @@
 package com.lycanitesmobs.core.entity.goals.actions;
 
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.EnumSet;
 
-import net.minecraft.entity.ai.goal.Goal.Flag;
+import net.minecraft.world.entity.ai.goal.Goal.Flag;
 
 public class WanderGoal extends Goal {
 	// Targets:
@@ -50,7 +50,7 @@ public class WanderGoal extends Goal {
 		else if (!this.host.rollWanderChance())
 			return false;
 		else {
-			Vector3d newTarget = RandomPositionGenerator.findRandomTarget(this.host, 10, 7, this.host.getFlyingHeight());
+			Vec3 newTarget = RandomPositionGenerator.findRandomTarget(this.host, 10, 7, this.host.getFlyingHeight());
 			if (newTarget == null) {
 				return false;
 			}
@@ -75,7 +75,7 @@ public class WanderGoal extends Goal {
 			if (this.host.getNavigation().isDone()) {
 				return false;
 			}
-			else if (this.host.distanceToSqr(new Vector3d(this.xPosition, this.yPosition, this.zPosition)) < 4) {
+			else if (this.host.distanceToSqr(new Vec3(this.xPosition, this.yPosition, this.zPosition)) < 4) {
 				this.host.getNavigation().stop();
 				return false;
 			}

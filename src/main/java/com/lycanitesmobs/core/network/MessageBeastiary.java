@@ -5,8 +5,8 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.info.Beastiary;
 import com.lycanitesmobs.core.info.CreatureKnowledge;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkEvent;
 
@@ -43,7 +43,7 @@ public class MessageBeastiary {
 		if(ctx.get().getDirection() != NetworkDirection.PLAY_TO_CLIENT)
 			return;
 
-		PlayerEntity player = ClientManager.getInstance().getClientPlayer();
+		Player player = ClientManager.getInstance().getClientPlayer();
 		ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
 		if(playerExt == null)
 			return;
@@ -63,7 +63,7 @@ public class MessageBeastiary {
 	/**
 	 * Reads the message from bytes.
 	 */
-	public static MessageBeastiary decode(PacketBuffer packet) {
+	public static MessageBeastiary decode(FriendlyByteBuf packet) {
 		MessageBeastiary message = new MessageBeastiary();
 		message.entryAmount = Math.min(300, packet.readInt());
         if(message.entryAmount == 300) {
@@ -85,7 +85,7 @@ public class MessageBeastiary {
 	/**
 	 * Writes the message into bytes.
 	 */
-	public static void encode(MessageBeastiary message, PacketBuffer packet) {
+	public static void encode(MessageBeastiary message, FriendlyByteBuf packet) {
         packet.writeInt(message.entryAmount);
         if(message.entryAmount > 0) {
             for(int i = 0; i < message.entryAmount; i++) {

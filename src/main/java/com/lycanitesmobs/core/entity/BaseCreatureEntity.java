@@ -27,52 +27,52 @@ import com.lycanitesmobs.core.network.MessageCreature;
 import com.lycanitesmobs.core.pets.PetEntry;
 import com.lycanitesmobs.core.spawner.SpawnerEventListener;
 import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.WoodType;
-import net.minecraft.block.material.Material;
-import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.properties.WoodType;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.attributes.RangedAttribute;
-import net.minecraft.entity.ai.controller.MovementController;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.item.BoatEntity;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.item.minecart.MinecartEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.entity.projectile.ThrowableEntity;
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.DyeItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.pathfinding.PathNavigator;
-import net.minecraft.pathfinding.PathNodeType;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.attributes.RangedAttribute;
+import net.minecraft.world.entity.ai.control.MoveControl;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.vehicle.Boat;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.vehicle.Minecart;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.projectile.ThrowableProjectile;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.DyeItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.*;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.core.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.util.math.vector.Vector3i;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.phys.Vec3;
+import com.mojang.math.Vector3f;
+import net.minecraft.core.Vec3i;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.BaseComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.*;
-import net.minecraft.world.server.ServerBossInfo;
+import net.minecraft.server.level.ServerBossEvent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.NetworkHooks;
@@ -81,7 +81,28 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
-public abstract class BaseCreatureEntity extends CreatureEntity {
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.EntityDamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.ServerLevelAccessor;
+
+public abstract class BaseCreatureEntity extends PathfinderMob {
 	public static final Attribute DEFENSE = (new RangedAttribute("generic.defense", 4.0D, 0.0D, 1024.0D)).setRegistryName(LycanitesMobs.MODID, "defense").setSyncable(true);
 	public static final Attribute RANGED_SPEED = (new RangedAttribute("generic.rangedSpeed", 4.0D, 0.0D, 1024.0D)).setRegistryName(LycanitesMobs.MODID, "ranged_speed").setSyncable(true);
 
@@ -95,7 +116,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	/** The Variant of this creature, if null this creature is the default common variant. **/
 	public Variant variant = null;
 	/** What attribute is this creature, used for effects such as Bane of Arthropods. **/
-	public CreatureAttribute attribute = CreatureAttribute.UNDEAD;
+	public MobType attribute = MobType.UNDEAD;
 	/** The Creature's relationships, for advanced memory and taming. **/
 	public CreatureRelationships relationships;
 	/** A class that opens up extra stats and behaviours for NBT based customization.**/
@@ -121,7 +142,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
 	// Size:
 	/** The main size of this creature, used to override vanilla sizing. **/
-	public EntitySize creatureSize;
+	public EntityDimensions creatureSize;
     /** The size scale of this mob. Randomly varies normally by 10%. **/
 	public double sizeScale = 1.0D;
     /** A scale relative to this entity's width for melee and ranged hit collision. **/
@@ -260,13 +281,13 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	/** The entity that this mob is perching on. **/
 	private LivingEntity perchTarget;
 	/** A list of multiple player targets, used by boss goals. **/
-	public List<PlayerEntity> playerTargets = new ArrayList<>();
+	public List<Player> playerTargets = new ArrayList<>();
 	/** A list of all minions summoned by this creature. **/
 	public List<LivingEntity> minions = new ArrayList<>();
 
 	// Client:
 	/** A list of player entities that need to have their GUI of this mob reopened on refresh. **/
-	public List<PlayerEntity> guiViewers = new ArrayList<>();
+	public List<Player> guiViewers = new ArrayList<>();
 	/** Counts from the guiRefreshTime down to 0 when a GUI refresh has been scheduled. **/
 	public int guiRefreshTick = 0;
 	/** The amount of ticks to wait before a GUI refresh. **/
@@ -282,55 +303,55 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     /** An extra animation boolean. **/
     public boolean extraAnimation01 = false;
     /** Holds Information for this mobs boss health should it be displayed in the boss health bar. Used by bosses and rare subspecies. **/
-    public ServerBossInfo bossInfo;
+    public ServerBossEvent bossInfo;
     /** If positive, this creature entity is only being used for rendering in a GUI, etc and should play animation based off of this instead. **/
     public float onlyRenderTicks = -1;
 
 	// Data Manager:
 	/** Used to sync what targets this creature has. **/
-    protected static final DataParameter<Byte> TARGET = EntityDataManager.defineId(BaseCreatureEntity.class, DataSerializers.BYTE);
+    protected static final EntityDataAccessor<Byte> TARGET = SynchedEntityData.defineId(BaseCreatureEntity.class, EntityDataSerializers.BYTE);
     /** Used to sync which attack phase this creature is in. **/
-	protected static final DataParameter<Byte> ATTACK_PHASE = EntityDataManager.defineId(BaseCreatureEntity.class, DataSerializers.BYTE);
+	protected static final EntityDataAccessor<Byte> ATTACK_PHASE = SynchedEntityData.defineId(BaseCreatureEntity.class, EntityDataSerializers.BYTE);
 	/** Used to sync what animation states this creature is in. **/
-	protected static final DataParameter<Byte> ANIMATION_STATE = EntityDataManager.defineId(BaseCreatureEntity.class, DataSerializers.BYTE);
+	protected static final EntityDataAccessor<Byte> ANIMATION_STATE = SynchedEntityData.defineId(BaseCreatureEntity.class, EntityDataSerializers.BYTE);
 	/** Used to sync the current attack cooldown animation, useful for when creature attack cooldowns change dynamically. **/
-	protected static final DataParameter<Integer> ANIMATION_ATTACK_COOLDOWN_MAX = EntityDataManager.defineId(BaseCreatureEntity.class, DataSerializers.INT);
+	protected static final EntityDataAccessor<Integer> ANIMATION_ATTACK_COOLDOWN_MAX = SynchedEntityData.defineId(BaseCreatureEntity.class, EntityDataSerializers.INT);
 
 	/** Used to sync if this creature is climbing or not. TODO Perhaps move this into ANIMATION_STATE_BITS. **/
-	protected static final DataParameter<Byte> CLIMBING = EntityDataManager.defineId(BaseCreatureEntity.class, DataSerializers.BYTE);
+	protected static final EntityDataAccessor<Byte> CLIMBING = SynchedEntityData.defineId(BaseCreatureEntity.class, EntityDataSerializers.BYTE);
 	/** Used to sync the stealth percentage of this creature. Where 0.0 is unstealthed and 1.0 is fully stealthed, see burrowing Crusks for an example. **/
-	protected static final DataParameter<Float> STEALTH = EntityDataManager.defineId(BaseCreatureEntity.class, DataSerializers.FLOAT);
+	protected static final EntityDataAccessor<Float> STEALTH = SynchedEntityData.defineId(BaseCreatureEntity.class, EntityDataSerializers.FLOAT);
 
 	/** Used to sync the baby status of this creature. **/
-	protected static final DataParameter<Boolean> BABY = EntityDataManager.defineId(BaseCreatureEntity.class, DataSerializers.BOOLEAN);
+	protected static final EntityDataAccessor<Boolean> BABY = SynchedEntityData.defineId(BaseCreatureEntity.class, EntityDataSerializers.BOOLEAN);
 	/** Used to sync the dyed coloring of this creature. This will go towards colorable pet collars or saddles, etc in the future. **/
-	protected static final DataParameter<Byte> COLOR = EntityDataManager.defineId(BaseCreatureEntity.class, DataSerializers.BYTE);
+	protected static final EntityDataAccessor<Byte> COLOR = SynchedEntityData.defineId(BaseCreatureEntity.class, EntityDataSerializers.BYTE);
 	/** Used to sync the size scale of this creature. **/
-	protected static final DataParameter<Float> SIZE = EntityDataManager.defineId(BaseCreatureEntity.class, DataSerializers.FLOAT);
+	protected static final EntityDataAccessor<Float> SIZE = SynchedEntityData.defineId(BaseCreatureEntity.class, EntityDataSerializers.FLOAT);
 	/** Used to sync the stat level of this creature. **/
-	protected static final DataParameter<Integer> LEVEL = EntityDataManager.defineId(BaseCreatureEntity.class, DataSerializers.INT);
+	protected static final EntityDataAccessor<Integer> LEVEL = SynchedEntityData.defineId(BaseCreatureEntity.class, EntityDataSerializers.INT);
 	/** Used to sync the experience of this creature. **/
-	protected static final DataParameter<Integer> EXPERIENCE = EntityDataManager.defineId(BaseCreatureEntity.class, DataSerializers.INT);
+	protected static final EntityDataAccessor<Integer> EXPERIENCE = SynchedEntityData.defineId(BaseCreatureEntity.class, EntityDataSerializers.INT);
 	/** Used to sync the subspecies used by this creature. **/
-	protected static final DataParameter<Byte> SUBSPECIES = EntityDataManager.defineId(BaseCreatureEntity.class, DataSerializers.BYTE);
+	protected static final EntityDataAccessor<Byte> SUBSPECIES = SynchedEntityData.defineId(BaseCreatureEntity.class, EntityDataSerializers.BYTE);
 	/** Used to sync the variant used by this creature. **/
-	protected static final DataParameter<Byte> VARIANT = EntityDataManager.defineId(BaseCreatureEntity.class, DataSerializers.BYTE);
+	protected static final EntityDataAccessor<Byte> VARIANT = SynchedEntityData.defineId(BaseCreatureEntity.class, EntityDataSerializers.BYTE);
 
 	/** Used to sync the central arena position that this creature is using if any. See Asmodeus jumping for an example. **/
-	protected static final DataParameter<Optional<BlockPos>> ARENA = EntityDataManager.defineId(BaseCreatureEntity.class, DataSerializers.OPTIONAL_BLOCK_POS);
+	protected static final EntityDataAccessor<Optional<BlockPos>> ARENA = SynchedEntityData.defineId(BaseCreatureEntity.class, EntityDataSerializers.OPTIONAL_BLOCK_POS);
 
 	/** Used to sync the Head Equipment slot of this creature. Currently unused. **/
-	public static final DataParameter<ItemStack> EQUIPMENT_HEAD = EntityDataManager.defineId(BaseCreatureEntity.class, DataSerializers.ITEM_STACK);
+	public static final EntityDataAccessor<ItemStack> EQUIPMENT_HEAD = SynchedEntityData.defineId(BaseCreatureEntity.class, EntityDataSerializers.ITEM_STACK);
 	/** Used to sync the Chest Equipment slot of this creature. Used by Pet (Horse) Armor. **/
-	public static final DataParameter<ItemStack> EQUIPMENT_CHEST = EntityDataManager.defineId(BaseCreatureEntity.class, DataSerializers.ITEM_STACK);
+	public static final EntityDataAccessor<ItemStack> EQUIPMENT_CHEST = SynchedEntityData.defineId(BaseCreatureEntity.class, EntityDataSerializers.ITEM_STACK);
 	/** Used to sync the Legs Equipment slot of this creature. Currently unused. **/
-	public static final DataParameter<ItemStack> EQUIPMENT_LEGS = EntityDataManager.defineId(BaseCreatureEntity.class, DataSerializers.ITEM_STACK);
+	public static final EntityDataAccessor<ItemStack> EQUIPMENT_LEGS = SynchedEntityData.defineId(BaseCreatureEntity.class, EntityDataSerializers.ITEM_STACK);
 	/** Used to sync the Feet Equipment slot of this creature. Currently unused. **/
-	public static final DataParameter<ItemStack> EQUIPMENT_FEET = EntityDataManager.defineId(BaseCreatureEntity.class, DataSerializers.ITEM_STACK);
+	public static final EntityDataAccessor<ItemStack> EQUIPMENT_FEET = SynchedEntityData.defineId(BaseCreatureEntity.class, EntityDataSerializers.ITEM_STACK);
 	/** Used to sync the Bag Equipment slot of this creature. **/
-	public static final DataParameter<ItemStack> EQUIPMENT_BAG = EntityDataManager.defineId(BaseCreatureEntity.class, DataSerializers.ITEM_STACK);
+	public static final EntityDataAccessor<ItemStack> EQUIPMENT_BAG = SynchedEntityData.defineId(BaseCreatureEntity.class, EntityDataSerializers.ITEM_STACK);
 	/** Used to sync the Saddle Equipment slot of this creature. **/
-	public static final DataParameter<ItemStack> EQUIPMENT_SADDLE = EntityDataManager.defineId(BaseCreatureEntity.class, DataSerializers.ITEM_STACK);
+	public static final EntityDataAccessor<ItemStack> EQUIPMENT_SADDLE = SynchedEntityData.defineId(BaseCreatureEntity.class, EntityDataSerializers.ITEM_STACK);
 
 	protected void onKillEntity(LivingEntity entityLivingBase) {
 	}
@@ -407,7 +428,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	 * @param entityType The Entity Type.
 	 * @param world The world the entity is in.
 	 */
-	protected BaseCreatureEntity(EntityType<? extends BaseCreatureEntity> entityType, World world) {
+	protected BaseCreatureEntity(EntityType<? extends BaseCreatureEntity> entityType, Level world) {
         super(entityType, world);
 
         // Init Dynamic Attributes:
@@ -418,22 +439,22 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
         // Path On Fire or In Lava:
         if(!this.canBurn()) {
-            this.setPathfindingMalus(PathNodeType.DANGER_FIRE, 0.0F);
+            this.setPathfindingMalus(BlockPathTypes.DANGER_FIRE, 0.0F);
             if(this.canBreatheUnderlava()) {
-                this.setPathfindingMalus(PathNodeType.LAVA, 1.0F);
+                this.setPathfindingMalus(BlockPathTypes.LAVA, 1.0F);
                 if(!this.canBreatheAir()) {
-                    this.setPathfindingMalus(PathNodeType.LAVA, 8.0F);
+                    this.setPathfindingMalus(BlockPathTypes.LAVA, 8.0F);
                 }
             }
         }
 
         // Path In Water:
         if(this.waterDamage())
-            this.setPathfindingMalus(PathNodeType.WATER, -1.0F);
+            this.setPathfindingMalus(BlockPathTypes.WATER, -1.0F);
         else if(this.canBreatheUnderwater()) {
-            this.setPathfindingMalus(PathNodeType.WATER, 1.0F);
+            this.setPathfindingMalus(BlockPathTypes.WATER, 1.0F);
             if(!this.canBreatheAir())
-                this.setPathfindingMalus(PathNodeType.WATER, 8.0F);
+                this.setPathfindingMalus(BlockPathTypes.WATER, 8.0F);
         }
 
         // Swimming:
@@ -477,7 +498,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		CreatureInventory.registerData(this.entityData);
 
 		this.loadCreatureFlags();
-		this.creatureSize = new EntitySize((float)this.creatureInfo.width, (float)this.creatureInfo.height, false);
+		this.creatureSize = new EntityDimensions((float)this.creatureInfo.width, (float)this.creatureInfo.height, false);
 
 		this.creatureStats = new CreatureStats(this);
 		this.relationships = new CreatureRelationships(this);
@@ -500,8 +521,8 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	 * Returns Registers attributes and returns an attribute map for assigning to an EntityType.
 	 * @return Returns a mutable AttributeModifierMap.
 	 */
-	public static AttributeModifierMap.MutableAttribute registerCustomAttributes() {
-		return CreatureEntity.createLivingAttributes()
+	public static AttributeSupplier.Builder registerCustomAttributes() {
+		return PathfinderMob.createLivingAttributes()
 				.add(DEFENSE)
 				.add(Attributes.ATTACK_DAMAGE)
 				.add(Attributes.ATTACK_SPEED)
@@ -568,7 +589,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		// Lesser Actions:
 		this.goalSelector.addGoal(this.nextTravelGoalIndex++, new FollowMasterGoal(this).setStrayDistance(12.0D));
 		this.goalSelector.addGoal(this.nextIdleGoalIndex++, new WanderGoal(this));
-		this.goalSelector.addGoal(this.nextIdleGoalIndex++, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
+		this.goalSelector.addGoal(this.nextIdleGoalIndex++, new WatchClosestGoal(this).setTargetClass(Player.class));
 		this.goalSelector.addGoal(this.nextIdleGoalIndex++, new LookIdleGoal(this));
 	}
     
@@ -609,7 +630,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	}
 
 	@Override
-	public int getExperienceReward(PlayerEntity player) {
+	public int getExperienceReward(Player player) {
 		float scaledExp = this.creatureInfo.experience;
 		if(this.getVariant() != null) {
 			if ("uncommon".equals(this.getVariant().rarity))
@@ -624,7 +645,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     // ========== Name ==========
     /** Returns the display name of this entity. Use this when displaying it's name. **/
     @Override
-    public ITextComponent getName() {
+    public Component getName() {
     	if(this.hasCustomName())
     		return this.getCustomName();
     	else
@@ -632,8 +653,8 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     }
 
     /** Returns the display title of this entity. **/
-    public ITextComponent getTitle() {
-		TextComponent name = new StringTextComponent("");
+    public Component getTitle() {
+		BaseComponent name = new TextComponent("");
 
     	if(!"".equals(this.getAgeName().getString())) {
 			name.append(this.getAgeName()).append(" ");
@@ -647,13 +668,13 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     }
     
     /** Returns the species name of this entity. **/
-    public ITextComponent getSpeciesName() {
+    public Component getSpeciesName() {
     	return this.creatureInfo.getTitle();
     }
 
     /** Returns the subpsecies title (translated name) of this entity, returns a blank string if this is a base species mob. **/
-    public ITextComponent getSubspeciesTitle() {
-		TextComponent subspeciesName = new StringTextComponent("");
+    public Component getSubspeciesTitle() {
+		BaseComponent subspeciesName = new TextComponent("");
 		if(this.getVariant() != null) {
 			subspeciesName = this.getVariant().getTitle();
 		}
@@ -667,16 +688,16 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     }
 
 	/** Returns a mobs level to append to the name if above level 1. **/
-	public TextComponent getLevelName() {
+	public BaseComponent getLevelName() {
 		if(this.getMobLevel() < 2) {
-			return new StringTextComponent("");
+			return new TextComponent("");
 		}
-		return (TextComponent) new TranslationTextComponent("entity.level").append(" " + this.getMobLevel());
+		return (BaseComponent) new TranslatableComponent("entity.level").append(" " + this.getMobLevel());
 	}
 
     /** Gets the name of this entity relative to it's age, more useful for EntityCreatureAgeable. **/
-    public TextComponent getAgeName() {
-    	return new StringTextComponent("");
+    public BaseComponent getAgeName() {
+    	return new TextComponent("");
     }
 
 
@@ -707,23 +728,23 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		}
 
     	// Relationships:
-		for (PlayerEntity player : this.relationships.getPlayers()) {
+		for (Player player : this.relationships.getPlayers()) {
 			CreatureRelationshipEntry relationshipEntry = this.relationships.getEntry(player);
 			if (relationshipEntry == null) {
 				continue;
 			}
 			MessageCreature message = new MessageCreature(this, relationshipEntry.reputation);
-			LycanitesMobs.packetHandler.sendToPlayer(message, (ServerPlayerEntity)player);
+			LycanitesMobs.packetHandler.sendToPlayer(message, (ServerPlayer)player);
 		}
 	}
 
 	@Override
-	public void onSyncedDataUpdated(DataParameter<?> key) {
+	public void onSyncedDataUpdated(EntityDataAccessor<?> key) {
     	// TODO Move data manager sync to here and remove these getters.
     	super.onSyncedDataUpdated(key);
 	}
 
-    public boolean getBoolFromDataManager(DataParameter<Boolean> key) {
+    public boolean getBoolFromDataManager(EntityDataAccessor<Boolean> key) {
         try {
             return this.getEntityData().get(key);
         }
@@ -732,7 +753,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
         }
     }
 
-    public byte getByteFromDataManager(DataParameter<Byte> key) {
+    public byte getByteFromDataManager(EntityDataAccessor<Byte> key) {
         try {
             return this.getEntityData().get(key);
         }
@@ -741,7 +762,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
         }
     }
 
-    public int getIntFromDataManager(DataParameter<Integer> key) {
+    public int getIntFromDataManager(EntityDataAccessor<Integer> key) {
         try {
             return this.getEntityData().get(key);
         }
@@ -750,7 +771,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
         }
     }
 
-    public float getFloatFromDataManager(DataParameter<Float> key) {
+    public float getFloatFromDataManager(EntityDataAccessor<Float> key) {
         try {
             return this.getEntityData().get(key);
         }
@@ -759,7 +780,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
         }
     }
 
-    public String getStringFromDataManager(DataParameter<String> key) {
+    public String getStringFromDataManager(EntityDataAccessor<String> key) {
         try {
             return this.getEntityData().get(key);
         }
@@ -768,7 +789,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
         }
     }
 
-	public Optional<UUID> getUUIDFromDataManager(DataParameter<Optional<UUID>> key) {
+	public Optional<UUID> getUUIDFromDataManager(EntityDataAccessor<Optional<UUID>> key) {
 		try {
 			return this.getEntityData().get(key);
 		}
@@ -777,7 +798,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		}
 	}
 
-    public ItemStack getItemStackFromDataManager(DataParameter<ItemStack> key) {
+    public ItemStack getItemStackFromDataManager(EntityDataAccessor<ItemStack> key) {
         try {
             return this.getEntityData().get(key);
         }
@@ -786,7 +807,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
         }
     }
 
-    public Optional<BlockPos> getBlockPosFromDataManager(DataParameter<Optional<BlockPos>> key) {
+    public Optional<BlockPos> getBlockPosFromDataManager(EntityDataAccessor<Optional<BlockPos>> key) {
         try {
             return this.getEntityData().get(key);
         }
@@ -802,7 +823,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     // ========== Can Spawn Here ==========
     /** Checks if the creature is able to spawn at it's initial position. **/
     @Override
-    public boolean checkSpawnRules(IWorld world, SpawnReason spawnReason) {
+    public boolean checkSpawnRules(LevelAccessor world, MobSpawnType spawnReason) {
 	    return this.checkSpawnVanilla(this.getCommandSenderWorld(), spawnReason, this.blockPosition());
     }
 
@@ -813,11 +834,11 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
 	// ========== Vanilla Spawn Check ==========
     /** Performs checks when spawned by a vanilla spawner or possibly another modded spawner if they use the vanilla checks. **/
-    public boolean checkSpawnVanilla(World world, SpawnReason spawnReason, BlockPos pos) {
+    public boolean checkSpawnVanilla(Level world, MobSpawnType spawnReason, BlockPos pos) {
         if(world.isClientSide) {
 			return false;
 		}
-        if(spawnReason != SpawnReason.NATURAL && spawnReason != SpawnReason.SPAWNER) {
+        if(spawnReason != MobSpawnType.NATURAL && spawnReason != MobSpawnType.SPAWNER) {
         	return true;
 		}
 
@@ -850,7 +871,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		}
         
     	// Mob Spawner Check:
-        if(spawnReason == SpawnReason.SPAWNER) {
+        if(spawnReason == MobSpawnType.SPAWNER) {
         	LycanitesMobs.logDebug("MobSpawns", "Spawned from Mob Spawner, skipping other checks.");
         	LycanitesMobs.logDebug("MobSpawns", "Vanilla Spawn Check Passed!");
         	return true;
@@ -875,7 +896,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
     // ========== Fixed Spawn Check ==========
     /** First stage checks for vanilla spawning, if this check fails the creature will not spawn. **/
-    public boolean fixedSpawnCheck(World world, BlockPos pos) {
+    public boolean fixedSpawnCheck(Level world, BlockPos pos) {
 		if(!this.checkSpawnLightLevel(world, pos)) {
 			return false;
 		}
@@ -894,7 +915,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
     // ========== Environment Spawn Check ==========
     /** Second stage checks for vanilla spawning, this check is ignored if there is a valid monster spawner nearby. **/
-    public boolean environmentSpawnCheck(World world, BlockPos pos) {
+    public boolean environmentSpawnCheck(Level world, BlockPos pos) {
         if(this.creatureInfo.creatureSpawn.worldDayMin > 0) {
             int currentDay = (int) Math.floor(world.getGameTime() / 24000D);
             LycanitesMobs.logDebug("MobSpawns", "Checking game time, currently on day: " + currentDay + ", must be at least day: " + this.creatureInfo.creatureSpawn.worldDayMin + ".");
@@ -920,16 +941,16 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     }
 
     // ========== Spawn Dimension Check ==========
-    public boolean isNativeDimension(World world) {
+    public boolean isNativeDimension(Level world) {
         return this.creatureInfo.creatureSpawn.isAllowedDimension(world);
     }
 
 	// ========== Collision Spawn Check ==========
 	/** Returns true if there is no collision stopping this mob from spawning. **/
-	public boolean checkSpawnCollision(World world, BlockPos pos) {
+	public boolean checkSpawnCollision(Level world, BlockPos pos) {
 		double radius = this.creatureInfo.width;
 		double height = this.creatureInfo.height;
-		AxisAlignedBB spawnBoundries = new AxisAlignedBB(pos.getX() - radius, pos.getY(), pos.getZ() - radius, pos.getX() + radius, pos.getY() + height, pos.getZ() + radius);
+		AABB spawnBoundries = new AABB(pos.getX() - radius, pos.getY(), pos.getZ() - radius, pos.getX() + radius, pos.getY() + height, pos.getZ() + radius);
 		if(!this.spawnsInBlock && !world.noCollision(spawnBoundries)) {
 			return false;
 		}
@@ -938,7 +959,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
 	// ========== Light Level Spawn Check ==========
 	/** Returns true if the light level is valid for spawning. **/
-	public boolean checkSpawnLightLevel(World world, BlockPos pos) {
+	public boolean checkSpawnLightLevel(Level world, BlockPos pos) {
 		if(this.creatureInfo.creatureSpawn.spawnsInDark && this.creatureInfo.creatureSpawn.spawnsInLight) {
 			return true;
 		}
@@ -960,7 +981,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
 	// ========== Group Limit Spawn Check ==========
 	/** Checks for nearby entities of this type, mobs use this so that too many don't spawn in the same area. Returns true if the mob should spawn. **/
-	public boolean checkSpawnGroupLimit(World world, BlockPos pos, double range) {
+	public boolean checkSpawnGroupLimit(Level world, BlockPos pos, double range) {
 		if(range <= 0) {
 			return true;
 		}
@@ -999,7 +1020,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
 	// ========== Boss Spawn Check ==========
 	/** Checks for nearby bosses, mobs usually shouldn't randomly spawn near a boss. **/
-	public boolean checkSpawnBoss(World world, BlockPos pos) {
+	public boolean checkSpawnBoss(Level world, BlockPos pos) {
 		CreatureGroup bossGroup = CreatureManager.getInstance().getCreatureGroup("boss");
 		if(bossGroup == null)
 			return true;
@@ -1010,7 +1031,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     // ========== Egg Spawn ==========
     /** Called once this mob is initially spawned. **/
     @Override
-    public ILivingEntityData finalizeSpawn(IServerWorld world, DifficultyInstance difficultyInstance, SpawnReason spawnReason, @Nullable ILivingEntityData livingEntityData, @Nullable CompoundNBT compoundNBT) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficultyInstance, MobSpawnType spawnReason, @Nullable SpawnGroupData livingEntityData, @Nullable CompoundTag compoundNBT) {
 		livingEntityData = super.finalizeSpawn(world, difficultyInstance, spawnReason, livingEntityData, compoundNBT);
         return livingEntityData;
     }
@@ -1121,19 +1142,19 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
         return !this.isBoss();
     }
 
-    public void createBossInfo(BossInfo.Color color, boolean darkenSky) {
-		TextComponent name = (TextComponent)this.getName();
+    public void createBossInfo(BossEvent.BossBarColor color, boolean darkenSky) {
+		BaseComponent name = (BaseComponent)this.getName();
         if(this.isBossAlways())
             name.append(" (Phase " + (this.getBattlePhase() + 1) + ")");
-        this.bossInfo = (ServerBossInfo)(new ServerBossInfo(name, color, BossInfo.Overlay.PROGRESS)).setDarkenScreen(darkenSky);
+        this.bossInfo = (ServerBossEvent)(new ServerBossEvent(name, color, BossEvent.BossBarOverlay.PROGRESS)).setDarkenScreen(darkenSky);
     }
 
-    public BossInfo getBossInfo() {
+    public BossEvent getBossInfo() {
         if(this.bossInfo == null && this.showBossInfo() && !this.getCommandSenderWorld().isClientSide) {
             if(this.isBoss())
-                this.createBossInfo(BossInfo.Color.RED, false);
+                this.createBossInfo(BossEvent.BossBarColor.RED, false);
             else
-                this.createBossInfo(BossInfo.Color.GREEN, false);
+                this.createBossInfo(BossEvent.BossBarColor.GREEN, false);
         }
         return this.bossInfo;
     }
@@ -1141,7 +1162,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     /** Updates the boss name for the health bar. **/
     public void refreshBossHealthName() {
         if(this.bossInfo != null) {
-			TextComponent name = (TextComponent)this.getTitle();
+			BaseComponent name = (BaseComponent)this.getTitle();
 			if(this.isBossAlways())
 				name.append(" (Phase " + (this.getBattlePhase() + 1) + ")");
             this.bossInfo.setName(name);
@@ -1360,7 +1381,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	 */
 	@Override
 	@Nonnull
-	public EntitySize getDimensions(Pose pose) {
+	public EntityDimensions getDimensions(Pose pose) {
 		if(pose == Pose.SLEEPING) {
 			return SLEEPING_DIMENSIONS;
 		}
@@ -1383,7 +1404,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	}
 
 	@Override
-	public AxisAlignedBB getBoundingBox() {
+	public AABB getBoundingBox() {
 		return super.getBoundingBox();
 	}
 
@@ -1678,13 +1699,13 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		if(perchTarget != null) {
 			ExtendedEntity perchEntityExt = ExtendedEntity.getForEntity(this.getPerchTarget());
 			if(perchEntityExt != null) {
-				Vector3d perchPosition = perchEntityExt.getPerchPosition();
+				Vec3 perchPosition = perchEntityExt.getPerchPosition();
 				this.setPos(perchPosition.x, perchPosition.y, perchPosition.z);
 				this.setDeltaMovement(perchTarget.getDeltaMovement());
 				this.yRot = perchTarget.yRot;
 			}
-			if(perchTarget instanceof PlayerEntity) {
-				ExtendedPlayer perchPlayerExt = ExtendedPlayer.getForPlayer((PlayerEntity) perchTarget);
+			if(perchTarget instanceof Player) {
+				ExtendedPlayer perchPlayerExt = ExtendedPlayer.getForPlayer((Player) perchTarget);
 				if(perchPlayerExt.isControlActive(ExtendedPlayer.CONTROL_ID.MOUNT_DISMOUNT)) {
 					this.perchOnEntity(null);
 				}
@@ -1698,7 +1719,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
 		// Beastiary Proximity Discovery:
 		if(!this.getCommandSenderWorld().isClientSide && this.updateTick % 20 == 0) {
-			for(PlayerEntity player : this.getCommandSenderWorld().players()) {
+			for(Player player : this.getCommandSenderWorld().players()) {
 				if(this.distanceTo(player) <= 10) {
 					ExtendedPlayer extendedPlayer = ExtendedPlayer.getForPlayer(player);
 					if(extendedPlayer != null) {
@@ -1797,8 +1818,8 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
         // Remove Creative Attack Target:
         if(this.hasAttackTarget()) {
-            if(this.getTarget() instanceof PlayerEntity) {
-                PlayerEntity targetPlayer = (PlayerEntity)this.getTarget();
+            if(this.getTarget() instanceof Player) {
+                Player targetPlayer = (Player)this.getTarget();
                 if(targetPlayer.abilities.invulnerable)
                     this.setTarget(null);
             }
@@ -1865,7 +1886,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     	if(!this.getCommandSenderWorld().isClientSide) {
 	        if(this.isStealthed() && !this.isInvisible())
 	        	this.setInvisible(true);
-	        else if(!this.isStealthed() && this.isInvisible() && !this.hasEffect(Effects.INVISIBILITY))
+	        else if(!this.isStealthed() && this.isInvisible() && !this.hasEffect(MobEffects.INVISIBILITY))
                 this.setInvisible(false);
     	}
         if(this.isStealthed()) {
@@ -1873,7 +1894,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
                 this.startStealth();
             this.onStealth();
         }
-        else if(this.isInvisible() && !this.hasEffect(Effects.INVISIBILITY) && !this.getCommandSenderWorld().isClientSide) {
+        else if(this.isInvisible() && !this.hasEffect(MobEffects.INVISIBILITY) && !this.getCommandSenderWorld().isClientSide) {
             this.setInvisible(false);
         }
         this.stealthPrev = this.isStealthed();
@@ -2099,7 +2120,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     // ========== Move with Heading ==========
     /** Moves the entity, redirects to the direct navigator if this mob should use that instead. **/
     @Override
-    public void travel(Vector3d direction) {
+    public void travel(Vec3 direction) {
 		if(this.useDirectNavigator()) {
 			this.directNavigator.flightMovement(direction.x(), direction.z());
 			this.updateLimbSwing();
@@ -2117,7 +2138,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		}
     }
 
-    public void travelFlying(Vector3d direction) {
+    public void travelFlying(Vec3 direction) {
     	double flightDampening = 0.91F;
 		if (this.onGround) {
 			BlockState groundState = this.getCommandSenderWorld().getBlockState(this.blockPosition().below());
@@ -2129,7 +2150,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		this.updateLimbSwing();
 	}
 
-	public void travelSwimming(Vector3d direction) {
+	public void travelSwimming(Vec3 direction) {
 		super.moveRelative(0.1F, direction);
 		this.move(MoverType.SELF, this.getDeltaMovement());
 		this.setDeltaMovement(this.getDeltaMovement().scale(0.9D));
@@ -2145,7 +2166,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
         this.animationSpeedOld = this.animationSpeed;
         double distanceX = this.position().x() - this.xo;
         double distanceZ = this.position().z() - this.zo;
-        float distance = MathHelper.sqrt(distanceX * distanceX + distanceZ * distanceZ) * 4.0F;
+        float distance = Mth.sqrt(distanceX * distanceX + distanceZ * distanceZ) * 4.0F;
         if (distance > 1.0F) {
             distance = 1.0F;
         }
@@ -2156,25 +2177,25 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     // ========== Get New Navigator ==========
     /** Called when this entity is constructed for initial navigator. **/
     @Override
-    protected PathNavigator createNavigation(World world) {
+    protected PathNavigation createNavigation(Level world) {
         return new CreaturePathNavigator(this, world);
     }
 
     // ========== Get New Move Helper ==========
     /** Called when this entity is constructed for initial move helper. **/
-    protected MovementController createMoveController() {
+    protected MoveControl createMoveController() {
         return new CreatureMoveController(this);
     }
 
     // ========== Get Navigator ==========
     /** Returns the movement helper that this entity should use. **/
-    public PathNavigator getNavigation() {
+    public PathNavigation getNavigation() {
         return super.getNavigation();
     }
 
     // ========== Get Move Helper ==========
     /** Returns the movement helper that this entity should use. **/
-    public MovementController getMoveControl() {
+    public MoveControl getMoveControl() {
         return super.getMoveControl();
     }
     
@@ -2214,7 +2235,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
             if(!this.leashAIActive) {
                 this.goalSelector.addGoal(2, this.leashMoveTowardsRestrictionAI); // Main Goals
                 if (!this.isStrongSwimmer())
-                    this.setPathfindingMalus(PathNodeType.WATER, 0.0F);
+                    this.setPathfindingMalus(BlockPathTypes.WATER, 0.0F);
                 this.leashAIActive = true;
             }
 
@@ -2235,7 +2256,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
             this.leashAIActive = false;
             this.goalSelector.removeGoal(this.leashMoveTowardsRestrictionAI); // Main Goals
             if (!this.isStrongSwimmer())
-                this.setPathfindingMalus(PathNodeType.WATER, PathNodeType.WATER.getMalus());
+                this.setPathfindingMalus(BlockPathTypes.WATER, BlockPathTypes.WATER.getMalus());
             this.hasRestriction();
         }
     }
@@ -2267,7 +2288,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     // ========== Can Be Leashed To ==========
     /** Returns whether or not this entity can be leashed to the specified player. Useful for tamed entites. **/
     @Override
-    public boolean canBeLeashed(PlayerEntity player) { return false; }
+    public boolean canBeLeashed(Player player) { return false; }
     
     // ========== Test Leash ==========
     /** Called on the update to see if the leash should snap at the given distance. **/
@@ -2369,7 +2390,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 			if(zDist == 0) {
 				zDist = 0.05D;
 			}
-			double xzDist = MathHelper.sqrt(xDist * xDist + zDist * zDist);
+			double xzDist = Mth.sqrt(xDist * xDist + zDist * zDist);
             /*this.motionX = xDist / xzDist * 0.5D * 0.8D + this.motionX * 0.2D;
             this.motionZ = zDist / xzDist * 0.5D * 0.8D + this.motionZ * 0.2D;
             this.motionY = leapHeight;*/
@@ -2420,15 +2441,15 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		if (targetEntity == null) {
 			return false;
 		}
-		Vector3d targetViewVector = targetEntity.getViewVector(1.0F).normalize();
-		Vector3d distance = new Vector3d(this.getX() - targetEntity.getX(), this.getEyeY() - targetEntity.getEyeY(), this.getZ() - targetEntity.getZ());
+		Vec3 targetViewVector = targetEntity.getViewVector(1.0F).normalize();
+		Vec3 distance = new Vec3(this.getX() - targetEntity.getX(), this.getEyeY() - targetEntity.getEyeY(), this.getZ() - targetEntity.getZ());
 		double distanceStraight = distance.length();
 		distance = distance.normalize();
 		double lookDistance = targetViewVector.dot(distance);
 		double lookRange = 1.5D;
 		double comparison = 1.0D - (lookRange / distanceStraight);
-		if (targetEntity instanceof PlayerEntity) {
-			return lookDistance > comparison && ((PlayerEntity) targetEntity).canSee(this);
+		if (targetEntity instanceof Player) {
+			return lookDistance > comparison && ((Player) targetEntity).canSee(this);
 		}
 		return lookDistance > comparison;
 	}
@@ -2480,7 +2501,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     /** Returns the distance that the specified XYZ position is from the home position. **/
     public double getDistanceFromHome(int x, int y, int z) {
     	if(!hasHome()) return 0;
-    	return Math.sqrt(this.homePosition.distSqr(new Vector3i(x, y, z)));
+    	return Math.sqrt(this.homePosition.distSqr(new Vec3i(x, y, z)));
     }
 
     /** Returns the distance that the entity's position is from the home position. **/
@@ -2607,7 +2628,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
     /** Returns whether or not this mob is allowed to attack the given target entity. **/
 	public boolean canAttack(LivingEntity targetEntity) {
-		if(this.getCommandSenderWorld().getDifficulty() == Difficulty.PEACEFUL && targetEntity instanceof PlayerEntity) {
+		if(this.getCommandSenderWorld().getDifficulty() == Difficulty.PEACEFUL && targetEntity instanceof Player) {
 			return false;
 		}
 
@@ -2616,8 +2637,8 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		}
 
 		// Players:
-        if(targetEntity instanceof PlayerEntity) {
-            PlayerEntity targetPlayer = (PlayerEntity)targetEntity;
+        if(targetEntity instanceof Player) {
+            Player targetPlayer = (Player)targetEntity;
             if(targetPlayer.abilities.invulnerable) {
 				return false;
 			}
@@ -2753,8 +2774,8 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     public LivingEntity getMasterAttackTarget() {
     	if(this.masterTarget == null)
     		return null;
-		if(this.masterTarget instanceof MobEntity)
-			return ((MobEntity)this.masterTarget).getTarget();
+		if(this.masterTarget instanceof Mob)
+			return ((Mob)this.masterTarget).getTarget();
     	return null;
     }
 
@@ -2762,8 +2783,8 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     public LivingEntity getParentAttackTarget() {
     	if(this.parentTarget == null)
     		return null;
-		if(this.parentTarget instanceof MobEntity)
-			return ((MobEntity)this.parentTarget).getTarget();
+		if(this.parentTarget instanceof Mob)
+			return ((Mob)this.parentTarget).getTarget();
     	return null;
     }
     
@@ -2849,7 +2870,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	 * @param noPierce If true, this creature's piercing stat will be ignored, used for when blocked by a shield, etc.
 	 * @return True if damage is dealt.
 	 */
-	public boolean doRangedDamage(Entity target, ThrowableEntity projectile, float damage, boolean noPierce) {
+	public boolean doRangedDamage(Entity target, ThrowableProjectile projectile, float damage, boolean noPierce) {
 		damage *= this.creatureStats.getDamage() / 2;
 		double pierceDamage = noPierce ? 0 : this.creatureStats.getPierce();
 
@@ -2887,7 +2908,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	 * @param inaccuracy How inaccurate the projectile aiming is.
 	 * @return The newly created projectile.
 	 */
-	public BaseProjectileEntity fireProjectile(String projectileName, Entity target, float range, float angle, Vector3d offset, float velocity, float scale, float inaccuracy) {
+	public BaseProjectileEntity fireProjectile(String projectileName, Entity target, float range, float angle, Vec3 offset, float velocity, float scale, float inaccuracy) {
 		ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile(projectileName);
 		if(projectileInfo == null) {
 			return null;
@@ -2907,7 +2928,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	 * @param inaccuracy How inaccurate the projectile aiming is.
 	 * @return The newly created projectile.
 	 */
-	public BaseProjectileEntity fireProjectile(Class<? extends BaseProjectileEntity> projectileClass, Entity target, float range, float angle, Vector3d offset, float velocity, float scale, float inaccuracy) {
+	public BaseProjectileEntity fireProjectile(Class<? extends BaseProjectileEntity> projectileClass, Entity target, float range, float angle, Vec3 offset, float velocity, float scale, float inaccuracy) {
 		BaseProjectileEntity projectile = ProjectileManager.getInstance().createOldProjectile(projectileClass, this.getCommandSenderWorld(), this);
 		return this.fireProjectile(projectile, target, range, angle, offset, velocity, scale, inaccuracy);
 	}
@@ -2924,7 +2945,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	 * @param inaccuracy How inaccurate the projectile aiming is.
 	 * @return The fired created projectile.
 	 */
-	public BaseProjectileEntity fireProjectile(BaseProjectileEntity projectile, Entity target, float range, float angle, Vector3d offset, float velocity, float scale, float inaccuracy) {
+	public BaseProjectileEntity fireProjectile(BaseProjectileEntity projectile, Entity target, float range, float angle, Vec3 offset, float velocity, float scale, float inaccuracy) {
 		if(projectile == null) {
 			return null;
 		}
@@ -2936,10 +2957,10 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		);
 		projectile.setProjectileScale(scale);
 
-		Vector3d facing = this.getFacingPositionDouble(this.position().x(), this.position().y(), this.position().z(), range, angle);
+		Vec3 facing = this.getFacingPositionDouble(this.position().x(), this.position().y(), this.position().z(), range, angle);
 		double distanceX = facing.x - this.position().x();
 		double distanceZ = facing.z - this.position().z();
-		double distanceXZ = MathHelper.sqrt(distanceX * distanceX + distanceZ * distanceZ) * 0.1D;
+		double distanceXZ = Mth.sqrt(distanceX * distanceX + distanceZ * distanceZ) * 0.1D;
 		double distanceY = distanceXZ;
 		if(target != null) {
 			double targetX = target.position().x() - this.position().x();
@@ -2999,8 +3020,8 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
 		// Player Shielding:
 		boolean targetIsShielding = false;
-		if (target instanceof PlayerEntity) {
-			PlayerEntity targetPlayer = (PlayerEntity)target;
+		if (target instanceof Player) {
+			Player targetPlayer = (Player)target;
 			targetIsShielding = targetPlayer.isBlocking() && targetPlayer.getUseItem().isShield(targetPlayer);
 		}
 
@@ -3026,7 +3047,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
         // After Successful Attack:
         if(attackSuccess) {
             if(i > 0) {
-            	target.push((double)(-MathHelper.sin(this.yRot * (float)Math.PI / 180.0F) * (float)i * 0.5F), 0.1D, (double)(MathHelper.cos(this.yRot * (float)Math.PI / 180.0F) * (float)i * 0.5F));
+            	target.push((double)(-Mth.sin(this.yRot * (float)Math.PI / 180.0F) * (float)i * 0.5F), 0.1D, (double)(Mth.cos(this.yRot * (float)Math.PI / 180.0F) * (float)i * 0.5F));
                 this.setDeltaMovement(this.getDeltaMovement().multiply(0.6D, 1, 0.6D));
             }
 
@@ -3036,8 +3057,8 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
             	target.setSecondsOnFire(fireEnchantDuration * 4);
 
 			// Interrupt Shielding Players:
-			if (target instanceof PlayerEntity && this.canInteruptShields(true)) {
-				PlayerEntity targetPlayer = (PlayerEntity)target;
+			if (target instanceof Player && this.canInteruptShields(true)) {
+				Player targetPlayer = (Player)target;
 				if (targetIsShielding && this.canInteruptShields(false)) {
 					ItemStack playerActiveItemStack = targetPlayer.isUsingItem() ? targetPlayer.getUseItem() : ItemStack.EMPTY;
 					targetPlayer.getCooldowns().addCooldown(playerActiveItemStack.getItem(), 100);
@@ -3097,7 +3118,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		damageAmount = this.getDamageAfterMagicAbsorb(damageSrc, damageAmount);
 		damageAmount = this.getDamageAfterDefense(damageAmount);
 		if(this.isBoss() || this.isRareVariant()) {
-			if (!(damageSrc.getEntity() instanceof PlayerEntity))
+			if (!(damageSrc.getEntity() instanceof Player))
 				damageAmount *= 0.25F;
 		}
 
@@ -3106,8 +3127,8 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		damageAmount = Math.max(damageAmount - this.getAbsorptionAmount(), 0.0F);
 		this.setAbsorptionAmount(this.getAbsorptionAmount() - (damageBeforeAbsorption - damageAmount));
 		float absorbedDamage = damageBeforeAbsorption - damageAmount;
-		if (absorbedDamage > 0.0F && absorbedDamage < 3.4028235E37F && damageSrc.getEntity() instanceof ServerPlayerEntity) {
-			((ServerPlayerEntity)damageSrc.getEntity()).awardStat(Stats.DAMAGE_DEALT_ABSORBED, Math.round(absorbedDamage * 10.0F));
+		if (absorbedDamage > 0.0F && absorbedDamage < 3.4028235E37F && damageSrc.getEntity() instanceof ServerPlayer) {
+			((ServerPlayer)damageSrc.getEntity()).awardStat(Stats.DAMAGE_DEALT_ABSORBED, Math.round(absorbedDamage * 10.0F));
 		}
 
 		damageAmount = net.minecraftforge.common.ForgeHooks.onLivingDamage(this, damageSrc, damageAmount);
@@ -3135,13 +3156,13 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
         if(super.hurt(damageSrc, damageAmount)) {
         	this.onDamage(damageSrc, damageAmount);
 
-        	if (this.dropsRequirePlayerDamage && damageSrc.getEntity() instanceof PlayerEntity) {
+        	if (this.dropsRequirePlayerDamage && damageSrc.getEntity() instanceof Player) {
         		this.dropsRequirePlayerDamage = false;
 			}
 
             Entity entity = damageSrc.getDirectEntity();
-            if(entity instanceof ThrowableEntity) {
-				entity = ((ThrowableEntity) entity).getOwner();
+            if(entity instanceof ThrowableProjectile) {
+				entity = ((ThrowableProjectile) entity).getOwner();
 			}
 
             // Damaged by Living Entity:
@@ -3208,9 +3229,9 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
             if(!this.isBoundPet())
                 this.inventory.dropInventory();
             if(damageSource.getEntity() != null) {
-                if(damageSource.getEntity() instanceof PlayerEntity) {
+                if(damageSource.getEntity() instanceof Player) {
                     try {
-                        PlayerEntity player = (PlayerEntity) damageSource.getEntity();
+                        Player player = (Player) damageSource.getEntity();
                         //player.addStat(ObjectManager.getStat(this.creatureInfo.getName() + ".kill"), 1); TODO Player Stats
 						ExtendedPlayer extendedPlayer = ExtendedPlayer.getForPlayer(player);
 						if (extendedPlayer != null) {
@@ -3461,14 +3482,14 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     }
 
     /** Returns the XYZ in front or behind the provided XYZ coords with the given distance and angle (in degrees), use a negative distance for behind. **/
-    public Vector3d getFacingPositionDouble(double x, double y, double z, double distance, double angle) {
+    public Vec3 getFacingPositionDouble(double x, double y, double z, double distance, double angle) {
     	if(distance == 0) {
 			distance = 1;
 		}
         angle = Math.toRadians(angle);
         double xAmount = -Math.sin(angle);
         double zAmount = Math.cos(angle);
-        return new Vector3d(x + (distance * xAmount), y, z + (distance * zAmount));
+        return new Vec3(x + (distance * xAmount), y, z + (distance * zAmount));
     }
 
 
@@ -3577,7 +3598,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 						owner = ((TameableCreatureEntity)this).getPlayerOwner();
 						if(owner != null) {
 							transformedCreature.applyLevel(transformedLevel);
-							fusionTameable.setPlayerOwner((PlayerEntity)owner);
+							fusionTameable.setPlayerOwner((Player)owner);
 							((TameableCreatureEntity)this).copyPetBehaviourTo(fusionTameable);
 						}
 					}
@@ -3589,7 +3610,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 							partnerOwner = ((TameableCreatureEntity)partnerCreature).getPlayerOwner();
 							if(partnerOwner != null) {
 								transformedCreature.applyLevel(transformedLevel);
-								fusionTameable.setPlayerOwner((PlayerEntity)partnerOwner);
+								fusionTameable.setPlayerOwner((Player)partnerOwner);
 								((TameableCreatureEntity)partnerCreature).copyPetBehaviourTo(fusionTameable);
 
 								// Temporary:
@@ -3620,8 +3641,8 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 				// Tamed:
 				if (transformedCreature instanceof TameableCreatureEntity) {
 					TameableCreatureEntity fusionTameable = (TameableCreatureEntity) transformedCreature;
-					if (this.getOwner() != null && this.getOwner() instanceof PlayerEntity) {
-						fusionTameable.setPlayerOwner((PlayerEntity) this.getOwner());
+					if (this.getOwner() != null && this.getOwner() instanceof Player) {
+						fusionTameable.setPlayerOwner((Player) this.getOwner());
 						if(this instanceof TameableCreatureEntity) {
 							((TameableCreatureEntity)this).copyPetBehaviourTo(fusionTameable);
 						}
@@ -3793,9 +3814,9 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     /** Called while this mob is stealthed on the update, can be used to clear enemies targets that are targeting this mob, although a new event listener is in place now to handle this. The main EventListener also helps handling anti-targeting. **/
     public void onStealth() {
     	if(!this.getCommandSenderWorld().isClientSide) {
-    		if(this.getTarget() != null && this.getTarget() instanceof MobEntity)
-    			if(((MobEntity) this.getTarget()).getTarget() != null)
-    				((MobEntity)this.getTarget()).setTarget(null);
+    		if(this.getTarget() != null && this.getTarget() instanceof Mob)
+    			if(((Mob) this.getTarget()).getTarget() != null)
+    				((Mob)this.getTarget()).setTarget(null);
     	}
     }
     
@@ -3878,7 +3899,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
             return false;
 		if(entity instanceof IGroupBoss)
 			return false;
-		if(entity instanceof PlayerEntity && ((PlayerEntity)entity).isCreative()) {
+		if(entity instanceof Player && ((Player)entity).isCreative()) {
 			return false;
 		}
 		if(entity.isSpectator()) {
@@ -3892,7 +3913,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     	ExtendedEntity extendedEntity = ExtendedEntity.getForEntity(entity);
 		if(extendedEntity == null)
 			return false;
-		if((entity.getVehicle() != null && !(entity.getVehicle() instanceof BoatEntity) && !(entity.getVehicle() instanceof MinecartEntity)) || entity.getControllingPassenger() != null)
+		if((entity.getVehicle() != null && !(entity.getVehicle() instanceof Boat) && !(entity.getVehicle() instanceof Minecart)) || entity.getControllingPassenger() != null)
 			return false;
         if(ObjectManager.getEffect("weight") != null)
             if((entity).hasEffect(ObjectManager.getEffect("weight")))
@@ -3944,7 +3965,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     public void destroyArea(int x, int y, int z, float strength, boolean drop, int range) {
     	this.destroyArea(x, y, z, strength, drop, range, null, 0);
     }
-	public void destroyArea(int x, int y, int z, float strength, boolean drop, int range, PlayerEntity player, int chain) {
+	public void destroyArea(int x, int y, int z, float strength, boolean drop, int range, Player player, int chain) {
 		range = Math.max(range -1, 0);
 		for(int w = -((int)Math.ceil(this.getDimensions(Pose.STANDING).width) - range); w <= (Math.ceil(this.getDimensions(Pose.STANDING).width) + range); w++) {
 			for (int d = -((int) Math.ceil(this.getDimensions(Pose.STANDING).width) - range); d <= (Math.ceil(this.getDimensions(Pose.STANDING).width) + range); d++) {
@@ -4137,7 +4158,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     // ==================================================
     // ========== GUI ==========
     /** This adds the provided PlayerEntity to the guiViewers array list, where on the next GUI refresh it will open the GUI. **/
-    public void openGUI(PlayerEntity player) {
+    public void openGUI(Player player) {
     	if(this.getCommandSenderWorld().isClientSide)
     		return;
     	this.addGUIViewer(player);
@@ -4146,13 +4167,13 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     }
     
     /** This adds the provided PlayerEntity to the guiViewers array list, where on the next GUI refresh it will open the GUI. **/
-    public void addGUIViewer(PlayerEntity player) {
+    public void addGUIViewer(Player player) {
     	if(!this.getCommandSenderWorld().isClientSide)
     		this.guiViewers.add(player);
     }
     
     /** This removes the provided PlayerEntity from the guiViewers array list. **/
-    public void removeGUIViewer(PlayerEntity player) {
+    public void removeGUIViewer(Player player) {
     	if(!this.getCommandSenderWorld().isClientSide)
     		this.guiViewers.remove(player);
     }
@@ -4162,7 +4183,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     	if(this.getCommandSenderWorld().isClientSide)
     		return;
     	if(this.guiViewers.size() > 0) {
-        	for(PlayerEntity player : this.guiViewers.toArray(new PlayerEntity[this.guiViewers.size()])) {
+        	for(Player player : this.guiViewers.toArray(new Player[this.guiViewers.size()])) {
         		if(player.containerMenu instanceof CreatureContainer) {
         			if(((CreatureContainer)player.containerMenu).creature == this)
         				this.openGUIToPlayer(player);
@@ -4174,9 +4195,9 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     }
     
     /** Actually opens the GUI to the player, should be used by openGUI() for an initial opening and then by refreshGUIViewers() for constant updates. **/
-    public void openGUIToPlayer(PlayerEntity player) {
-    	if(player instanceof ServerPlayerEntity)
-			NetworkHooks.openGui((ServerPlayerEntity)player, new CreatureContainerProvider(this), buf -> buf.writeInt(this.getId()));
+    public void openGUIToPlayer(Player player) {
+    	if(player instanceof ServerPlayer)
+			NetworkHooks.openGui((ServerPlayer)player, new CreatureContainerProvider(this), buf -> buf.writeInt(this.getId()));
     }
     
     /** Schedules a GUI refresh, normally takes 2 ticks for everything to update for display. **/
@@ -4186,19 +4207,19 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
     /** The main interact method that is called when a player right clicks this entity. **/
     @Override
-    public ActionResultType mobInteract(PlayerEntity player, Hand hand) { // New process interact
+    public InteractionResult mobInteract(Player player, InteractionHand hand) { // New process interact
 		if(this.hasPerchTarget()) {
-			return ActionResultType.FAIL;
+			return InteractionResult.FAIL;
 		}
 	    if(this.assessInteractCommand(getInteractCommands(player, player.getItemInHand(hand)), player, player.getItemInHand(hand))) {
-			return ActionResultType.SUCCESS;
+			return InteractionResult.SUCCESS;
 		}
 	    return super.mobInteract(player, hand);
     }
 
     // ========== Assess Interact Command ==========
     /** Performs the best possible command and returns true or false if there isn't one. **/
-    public boolean assessInteractCommand(HashMap<Integer, String> commands, PlayerEntity player, ItemStack itemStack) {
+    public boolean assessInteractCommand(HashMap<Integer, String> commands, Player player, ItemStack itemStack) {
     	if(commands.isEmpty())
     		return false;
     	int priority = 100;
@@ -4212,7 +4233,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     
     // ========== Get Interact Commands ==========
     /** Gets a map of all possible interact events with the key being the priority, lower is better. **/
-    public HashMap<Integer, String> getInteractCommands(PlayerEntity player, @Nonnull ItemStack itemStack) {
+    public HashMap<Integer, String> getInteractCommands(Player player, @Nonnull ItemStack itemStack) {
     	HashMap<Integer, String> commands = new HashMap<>();
     	
     	// Item Commands:
@@ -4251,7 +4272,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	 * @param itemStack The item the player is holding.
 	 * @return True if the player's item should not activate, false if it should.
 	 */
-    public boolean performCommand(String command, PlayerEntity player, ItemStack itemStack) {
+    public boolean performCommand(String command, Player player, ItemStack itemStack) {
     	// Leash:
     	if("Leash".equals(command)) {
     		this.setLeashedTo(player, true);
@@ -4275,7 +4296,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     
     // ========== Can Name Tag ==========
     /** Returns true if this mob can be given a new name with a name tag by the provided player entity. **/
-    public boolean canNameTag(PlayerEntity player) {
+    public boolean canNameTag(Player player) {
     	return true;
     }
 
@@ -4297,11 +4318,11 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     
     // ========== Consume Player's Item ==========
     /** Consumes 1 item from the the item stack currently held by the specified player. **/
-    public void consumePlayersItem(PlayerEntity player, ItemStack itemStack) {
+    public void consumePlayersItem(Player player, ItemStack itemStack) {
     	consumePlayersItem(player, itemStack, 1);
     }
     /** Consumes the specified amount from the item stack currently held by the specified player. **/
-    public void consumePlayersItem(PlayerEntity player, ItemStack itemStack, int amount) {
+    public void consumePlayersItem(Player player, ItemStack itemStack, int amount) {
     	if(!player.abilities.invulnerable)
             itemStack.setCount(Math.max(0, itemStack.getCount() - amount));
         if(itemStack.getCount() <= 0)
@@ -4310,11 +4331,11 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
     // ========== Replace Player's Item ==========
     /** Replaces 1 of the specified itemstack with a new itemstack. **/
-    public void replacePlayersItem(PlayerEntity player, ItemStack itemStack, ItemStack newStack) {
+    public void replacePlayersItem(Player player, ItemStack itemStack, ItemStack newStack) {
     	replacePlayersItem(player, itemStack, 1, newStack);
     }
     /** Replaces the specified itemstack and amount with a new itemstack. **/
-    public void replacePlayersItem(PlayerEntity player, ItemStack itemStack, int amount, ItemStack newStack) {
+    public void replacePlayersItem(Player player, ItemStack itemStack, int amount, ItemStack newStack) {
     	if(!player.abilities.invulnerable)
             itemStack.setCount(Math.max(0, itemStack.getCount() - amount));
     	
@@ -4327,7 +4348,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     }
     
     // ========== Perform GUI Command ==========
-    public void performGUICommand(PlayerEntity player, int guiCommandID) {
+    public void performGUICommand(Player player, int guiCommandID) {
     	scheduleGUIRefresh();
     }
     
@@ -4522,8 +4543,8 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
             if(entity == null)
                 return false;
             if(this.distanceTo(entity) > this.bossRange) {
-            	if(entity instanceof PlayerEntity) {
-					((PlayerEntity)entity).displayClientMessage(new TranslationTextComponent("boss.damage.protection.range"), true);
+            	if(entity instanceof Player) {
+					((Player)entity).displayClientMessage(new TranslatableComponent("boss.damage.protection.range"), true);
 				}
             	return false;
 			}
@@ -4547,7 +4568,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
     /** Returns whether or not the specified potion effect can be applied to this entity. **/
     @Override
-    public boolean canBeAffected(EffectInstance effectInstance) {
+    public boolean canBeAffected(MobEffectInstance effectInstance) {
 		for(ElementInfo element : getElements()) {
 			if(!element.isEffectApplicable(effectInstance)) {
 				return false;
@@ -4590,7 +4611,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     public boolean webProof() { return false; }
 
     @Override
-    public void makeStuckInBlock(BlockState blockState, Vector3d motionMultiplier) {
+    public void makeStuckInBlock(BlockState blockState, Vec3 motionMultiplier) {
     	if(blockState.getBlock() == Blocks.COBWEB && webProof()) {
     		return;
 		}
@@ -4744,7 +4765,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     // ========== Creature Attribute ==========
     /** Returns this creature's attribute. **/
    	@Override
-    public CreatureAttribute getMobType() { return this.attribute; }
+    public MobType getMobType() { return this.attribute; }
 
     // ========== Mounted Y Offset ==========
     /** An X Offset used to position the mob that is riding this mob. **/
@@ -4823,7 +4844,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
    	// ========== Read ===========
     /** Used when loading this mob from a saved chunk. **/
     @Override
-    public void readAdditionalSaveData(CompoundNBT nbt) {
+    public void readAdditionalSaveData(CompoundTag nbt) {
 		if(this.creatureInfo.dummy) {
 			super.readAdditionalSaveData(nbt);
 			return;
@@ -4920,9 +4941,9 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
         this.inventory.load(nbt);
 
         if(nbt.contains("Drops")) {
-			ListNBT nbtDropList = nbt.getList("Drops", 10);
+			ListTag nbtDropList = nbt.getList("Drops", 10);
 			for(int i = 0; i < nbtDropList.size(); i++) {
-				CompoundNBT dropNBT = nbtDropList.getCompound(i);
+				CompoundTag dropNBT = nbtDropList.getCompound(i);
 				ItemDrop drop = new ItemDrop(dropNBT);
 				this.addSavedItemDrop(drop);
 			}
@@ -4949,9 +4970,9 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		}
 
 		if(nbt.contains("MinionIds")) {
-			ListNBT minionIds = nbt.getList("MinionIds", 10);
+			ListTag minionIds = nbt.getList("MinionIds", 10);
 			for(int i = 0; i < minionIds.size(); i++) {
-				CompoundNBT minionId = minionIds.getCompound(i);
+				CompoundTag minionId = minionIds.getCompound(i);
 				if(minionId.contains("ID")) {
 					Entity entity = this.getCommandSenderWorld().getEntity(minionId.getInt("ID"));
 					if(entity instanceof LivingEntity)
@@ -4964,7 +4985,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     // ========== Write ==========
     /** Used when saving this mob to a chunk. **/
     @Override
-    public void addAdditionalSaveData(CompoundNBT nbt) {
+    public void addAdditionalSaveData(CompoundTag nbt) {
 		if(this.creatureInfo.dummy) {
 			super.addAdditionalSaveData(nbt);
 			return;
@@ -5021,9 +5042,9 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
         this.relationships.save(nbt);
         this.inventory.save(nbt);
 
-		ListNBT nbtDropList = new ListNBT();
+		ListTag nbtDropList = new ListTag();
         for(ItemDrop drop : this.savedDrops) {
-			CompoundNBT dropNBT = new CompoundNBT();
+			CompoundTag dropNBT = new CompoundTag();
 			if(drop.writeToNBT(dropNBT)) {
 				nbtDropList.add(dropNBT);
 			}
@@ -5031,13 +5052,13 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		nbt.put("Drops", nbtDropList);
 		nbt.putBoolean("DropsRequirePlayerDamage", this.dropsRequirePlayerDamage);
         
-        CompoundNBT extTagCompound = new CompoundNBT();
+        CompoundTag extTagCompound = new CompoundTag();
         this.extraMobBehaviour.write(extTagCompound);
         nbt.put("ExtraBehaviour", extTagCompound);
 
-		ListNBT minionIds = new ListNBT();
+		ListTag minionIds = new ListTag();
 		for(LivingEntity minion : this.minions) {
-			CompoundNBT minionId = new CompoundNBT();
+			CompoundTag minionId = new CompoundTag();
 			minionId.putInt("ID", minion.getId());
 			minionIds.add(minionId);
 		}
@@ -5146,7 +5167,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
      * @param player The player to check for when coloring, this is to stop players from dying other players pets. If provided with null it should return if this creature can be dyed in general.
      * @return True if tis entity can be dyed by the player or if the player is null, if it can be dyed at all (null is passed by the renderer).
      */
-    public boolean canBeColored(PlayerEntity player) {
+    public boolean canBeColored(Player player) {
     	return false;
     }
     
@@ -5181,14 +5202,14 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     }
 
     @Override
-    public void startSeenByPlayer(ServerPlayerEntity player) {
+    public void startSeenByPlayer(ServerPlayer player) {
         super.startSeenByPlayer(player);
         if(this.getBossInfo() != null)
             this.bossInfo.addPlayer(player);
     }
 
     @Override
-    public void stopSeenByPlayer(ServerPlayerEntity player) {
+    public void stopSeenByPlayer(ServerPlayer player) {
         super.stopSeenByPlayer(player);
         if(this.getBossInfo() != null)
             this.bossInfo.removePlayer(player);
@@ -5318,7 +5339,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     // ==================================================
     //                  Group Data
     // ==================================================
-    public class GroupData implements ILivingEntityData {
+    public class GroupData implements SpawnGroupData {
         public boolean isChild;
 
         public GroupData(boolean child) {

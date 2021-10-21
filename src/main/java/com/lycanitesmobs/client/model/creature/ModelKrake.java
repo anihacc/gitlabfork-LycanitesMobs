@@ -2,8 +2,8 @@ package com.lycanitesmobs.client.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.template.ModelTemplateBiped;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -39,7 +39,7 @@ public class ModelKrake extends ModelTemplateBiped {
     	super.animatePart(partName, entity, time, distance * 0.5F, loop, lookY, lookX, scale);
 
 		if(partName.contains("spike")) {
-			this.rotate((float)-Math.toDegrees(MathHelper.sin(loop * 0.2F) * 0.1F), 0, 0);
+			this.rotate((float)-Math.toDegrees(Mth.sin(loop * 0.2F) * 0.1F), 0, 0);
 		}
     }
 }

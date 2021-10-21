@@ -2,25 +2,25 @@ package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.monster.IMob;
-import net.minecraft.pathfinding.PathNodeType;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
-public class EntityAglebemu extends TameableCreatureEntity implements IMob {
+public class EntityAglebemu extends TameableCreatureEntity implements Enemy {
 
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityAglebemu(EntityType<? extends EntityAglebemu> entityType, World world) {
+    public EntityAglebemu(EntityType<? extends EntityAglebemu> entityType, Level world) {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEFINED;
+        this.attribute = MobType.UNDEFINED;
         this.spawnsOnLand = true;
         this.spawnsInWater = true;
         this.hasAttackSound = true;
@@ -30,7 +30,7 @@ public class EntityAglebemu extends TameableCreatureEntity implements IMob {
         this.babySpawnChance = 0.01D;
         this.setupMob();
 
-        this.setPathfindingMalus(PathNodeType.WATER, 0F);
+        this.setPathfindingMalus(BlockPathTypes.WATER, 0F);
     }
 
     // ========== Init AI ==========

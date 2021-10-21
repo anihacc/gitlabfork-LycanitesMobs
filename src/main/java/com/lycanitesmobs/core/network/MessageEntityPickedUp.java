@@ -2,11 +2,11 @@ package com.lycanitesmobs.core.network;
 
 import com.lycanitesmobs.client.ClientManager;
 import com.lycanitesmobs.core.entity.ExtendedEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkEvent;
 
@@ -30,8 +30,8 @@ public class MessageEntityPickedUp {
 		if(ctx.get().getDirection() != NetworkDirection.PLAY_TO_CLIENT)
 			return;
 
-		PlayerEntity player = ClientManager.getInstance().getClientPlayer();
-		World world = player.getCommandSenderWorld();
+		Player player = ClientManager.getInstance().getClientPlayer();
+		Level world = player.getCommandSenderWorld();
 		Entity pickedUpEntity = world.getEntity(message.pickedUpEntityID);
 		Entity pickedUpByEntity = message.pickedUpByEntityID != 0 ? world.getEntity(message.pickedUpByEntityID) : null;
 
@@ -46,7 +46,7 @@ public class MessageEntityPickedUp {
 	/**
 	 * Reads the message from bytes.
 	 */
-	public static MessageEntityPickedUp decode(PacketBuffer packet) {
+	public static MessageEntityPickedUp decode(FriendlyByteBuf packet) {
 		MessageEntityPickedUp message = new MessageEntityPickedUp();
 		message.pickedUpEntityID = packet.readInt();
 		message.pickedUpByEntityID = packet.readInt();
@@ -56,7 +56,7 @@ public class MessageEntityPickedUp {
 	/**
 	 * Writes the message into bytes.
 	 */
-	public static void encode(MessageEntityPickedUp message, PacketBuffer packet) {
+	public static void encode(MessageEntityPickedUp message, FriendlyByteBuf packet) {
 		packet.writeInt(message.pickedUpEntityID);
 		packet.writeInt(message.pickedUpByEntityID);
 	}

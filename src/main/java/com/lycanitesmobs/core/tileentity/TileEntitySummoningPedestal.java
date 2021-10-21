@@ -12,27 +12,27 @@ import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import com.lycanitesmobs.core.network.MessageSummoningPedestalStats;
 import com.lycanitesmobs.core.network.MessageSummoningPedestalSummonSet;
 import com.lycanitesmobs.core.pets.SummonSet;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ItemStackHelper;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.network.Connection;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -78,7 +78,7 @@ public class TileEntitySummoningPedestal extends TileEntityBase {
     }
 
     @Override
-    public TileEntityType<?> getType() {
+    public BlockEntityType<?> getType() {
         return ObjectManager.tileEntityTypes.get(this.getClass());
     }
 
@@ -112,7 +112,7 @@ public class TileEntitySummoningPedestal extends TileEntityBase {
         if(this.loadMinionIDs != null) {
             int range = 20;
             List nearbyEntities = this.getLevel().getEntitiesOfClass(BaseCreatureEntity.class,
-                    new AxisAlignedBB(this.getBlockPos().getX() - range, this.getBlockPos().getY() - range, this.getBlockPos().getZ() - range,
+                    new AABB(this.getBlockPos().getX() - range, this.getBlockPos().getY() - range, this.getBlockPos().getZ() - range,
                             this.getBlockPos().getX() + range, this.getBlockPos().getY() + range, this.getBlockPos().getZ() + range));
             Iterator possibleEntities = nearbyEntities.iterator();
             while(possibleEntities.hasNext()) {
@@ -199,7 +199,7 @@ public class TileEntitySummoningPedestal extends TileEntityBase {
         // Sync To Client:
         if(this.updateTick % 20 == 0) {
             MessageSummoningPedestalStats message = new MessageSummoningPedestalStats(this.capacity, this.summonProgress, this.summoningFuel, this.summoningFuelMax, this.getBlockPos().getX(), this.getBlockPos().getY(), this.getBlockPos().getZ());
-            LycanitesMobs.packetHandler.sendToAllAround(message, this.getLevel(), Vector3d.atLowerCornerOf(this.getBlockPos()), 5);
+            LycanitesMobs.packetHandler.sendToAllAround(message, this.getLevel(), Vec3.atLowerCornerOf(this.getBlockPos()), 5);
         }
 
         this.updateTick++;
@@ -211,8 +211,8 @@ public class TileEntitySummoningPedestal extends TileEntityBase {
     // ========================================
     /** Sets the owner of this block. **/
     public void setOwner(LivingEntity entity) {
-        if(entity instanceof PlayerEntity) {
-            PlayerEntity entityPlayer = (PlayerEntity)entity;
+        if(entity instanceof Player) {
+            Player entityPlayer = (Player)entity;
             this.ownerUUID = entityPlayer.getUUID();
         }
     }
@@ -224,16 +224,16 @@ public class TileEntitySummoningPedestal extends TileEntityBase {
     }
 
     /** Returns the name of the owner of this pedestal. **/
-    public ITextComponent getOwnerName() {
+    public Component getOwnerName() {
         if(this.getPlayer() != null) {
             return this.getPlayer().getDisplayName();
         }
-        return new StringTextComponent("");
+        return new TextComponent("");
     }
 
     /** Returns the player that this belongs to or null if owned by no player. **/
 	@Nullable
-    public PlayerEntity getPlayer() {
+    public Player getPlayer() {
         if(this.ownerUUID == null) {
 			return null;
 		}
@@ -312,7 +312,7 @@ public class TileEntitySummoningPedestal extends TileEntityBase {
      */
     @Override
     public ItemStack removeItem(int index, int count) {
-        return ItemStackHelper.removeItem(this.itemStacks, index, count);
+        return ContainerHelper.removeItem(this.itemStacks, index, count);
     }
 
     /**
@@ -320,7 +320,7 @@ public class TileEntitySummoningPedestal extends TileEntityBase {
      */
     @Override
     public ItemStack removeItemNoUpdate(int index) {
-        return ItemStackHelper.takeItem(this.itemStacks, index);
+        return ContainerHelper.takeItem(this.itemStacks, index);
     }
 
     /**
@@ -348,12 +348,12 @@ public class TileEntitySummoningPedestal extends TileEntityBase {
     }
 
     @Override
-    public void startOpen(PlayerEntity player) {
+    public void startOpen(Player player) {
 
     }
 
     @Override
-    public void stopOpen(PlayerEntity player) {
+    public void stopOpen(Player player) {
 
     }
 
@@ -375,8 +375,8 @@ public class TileEntitySummoningPedestal extends TileEntityBase {
      * Gets the display name of this tile entity.
      * @return The display name.
      */
-    public ITextComponent getName() {
-        return new TranslationTextComponent(this.inventoryName);
+    public Component getName() {
+        return new TranslatableComponent(this.inventoryName);
     }
 
     /**
@@ -401,12 +401,12 @@ public class TileEntitySummoningPedestal extends TileEntityBase {
     //             Network Packets
     // ========================================
     @Override
-    public SUpdateTileEntityPacket getUpdatePacket() {
-        CompoundNBT syncData = new CompoundNBT();
+    public ClientboundBlockEntityDataPacket getUpdatePacket() {
+        CompoundTag syncData = new CompoundTag();
 
         // Both:
         if(this.summonSet != null) {
-            CompoundNBT summonSetNBT = new CompoundNBT();
+            CompoundTag summonSetNBT = new CompoundTag();
             this.summonSet.write(summonSetNBT);
             syncData.put("SummonSet", summonSetNBT);
         }
@@ -417,15 +417,15 @@ public class TileEntitySummoningPedestal extends TileEntityBase {
             syncData.putString("InventoryName", this.inventoryName);
         }
 
-        return new SUpdateTileEntityPacket(this.getBlockPos(), 1, syncData);
+        return new ClientboundBlockEntityDataPacket(this.getBlockPos(), 1, syncData);
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket packet) {
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket packet) {
         if(!this.getLevel().isClientSide)
             return;
 
-        CompoundNBT syncData = packet.getTag();
+        CompoundTag syncData = packet.getTag();
         if (syncData.contains("OwnerUUID"))
             this.ownerUUID = UUID.fromString(syncData.getString("OwnerUUID"));
         if (syncData.contains("InventoryName"))
@@ -447,7 +447,7 @@ public class TileEntitySummoningPedestal extends TileEntityBase {
     // ========================================
     /** Reads from saved NBT data. **/
     @Override
-    public void load(BlockState blockState, CompoundNBT nbtTagCompound) {
+    public void load(BlockState blockState, CompoundTag nbtTagCompound) {
         super.load(blockState, nbtTagCompound);
 
         if(nbtTagCompound.contains("OwnerUUID")) {
@@ -462,7 +462,7 @@ public class TileEntitySummoningPedestal extends TileEntityBase {
         }
 
         if(nbtTagCompound.contains("SummonSet")) {
-            CompoundNBT summonSetNBT = nbtTagCompound.getCompound("SummonSet");
+            CompoundTag summonSetNBT = nbtTagCompound.getCompound("SummonSet");
             SummonSet summonSet = new SummonSet(null);
             summonSet.read(summonSetNBT);
             this.summonSet = summonSet;
@@ -472,10 +472,10 @@ public class TileEntitySummoningPedestal extends TileEntityBase {
 		}
 
         if(nbtTagCompound.contains("MinionIDs")) {
-            ListNBT minionIDs = nbtTagCompound.getList("MinionIDs", 10);
+            ListTag minionIDs = nbtTagCompound.getList("MinionIDs", 10);
             this.loadMinionIDs = new String[minionIDs.size()];
             for(int i = 0; i < minionIDs.size(); i++) {
-                CompoundNBT minionID = minionIDs.getCompound(i);
+                CompoundTag minionID = minionIDs.getCompound(i);
                 if(minionID.contains("ID")) {
                     this.loadMinionIDs[i] = minionID.getString("ID");
                 }
@@ -491,7 +491,7 @@ public class TileEntitySummoningPedestal extends TileEntityBase {
 		}
 		if(nbtTagCompound.contains("Items")) {
 			NonNullList<ItemStack> itemStacks = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
-			ItemStackHelper.loadAllItems(nbtTagCompound, itemStacks); // Reads ItemStack into a List from "Items" tag.
+			ContainerHelper.loadAllItems(nbtTagCompound, itemStacks); // Reads ItemStack into a List from "Items" tag.
 
 			for(int i = 0; i < itemStacks.size(); ++i) {
 				if(i < this.getContainerSize()) {
@@ -510,7 +510,7 @@ public class TileEntitySummoningPedestal extends TileEntityBase {
 
     /** Writes to NBT data. **/
     @Override
-    public CompoundNBT save(CompoundNBT nbtTagCompound) {
+    public CompoundTag save(CompoundTag nbtTagCompound) {
         super.save(nbtTagCompound);
 
         if(this.ownerUUID == null) {
@@ -521,15 +521,15 @@ public class TileEntitySummoningPedestal extends TileEntityBase {
         }
 
         if(this.summonSet != null) {
-            CompoundNBT summonSetNBT = new CompoundNBT();
+            CompoundTag summonSetNBT = new CompoundTag();
             this.summonSet.write(summonSetNBT);
             nbtTagCompound.put("SummonSet", summonSetNBT);
         }
 
         if(this.minions.size() > 0) {
-            ListNBT minionIDs = new ListNBT();
+            ListTag minionIDs = new ListTag();
             for(LivingEntity minion : this.minions) {
-                CompoundNBT minionID = new CompoundNBT();
+                CompoundTag minionID = new CompoundTag();
                 minionID.putString("ID", minion.getUUID().toString());
                 minionIDs.add(minionID);
             }
@@ -539,7 +539,7 @@ public class TileEntitySummoningPedestal extends TileEntityBase {
         // Fuel:
 		nbtTagCompound.putInt("Fuel", this.summoningFuel);
 		nbtTagCompound.putInt("FuelMax", this.summoningFuelMax);
-		ItemStackHelper.saveAllItems(nbtTagCompound, this.itemStacks);
+		ContainerHelper.saveAllItems(nbtTagCompound, this.itemStacks);
 
         return nbtTagCompound;
     }

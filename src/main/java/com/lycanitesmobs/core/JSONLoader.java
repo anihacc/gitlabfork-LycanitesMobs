@@ -6,7 +6,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.info.ModInfo;
-import net.minecraft.util.JSONUtils;
+import net.minecraft.util.GsonHelper;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 
@@ -132,7 +132,7 @@ public abstract class JSONLoader {
 			JsonObject json;
 			BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 			try {
-				json = JSONUtils.fromJson(gson, reader, JsonObject.class, false);
+				json = GsonHelper.fromJson(gson, reader, JsonObject.class, false);
 			}
 			finally {
 				IOUtils.closeQuietly(reader);
@@ -174,7 +174,7 @@ public abstract class JSONLoader {
 				try {
 					try {
 						reader = Files.newBufferedReader(filePath);
-						JsonObject json = JSONUtils.fromJson(gson, reader, JsonObject.class, false);
+						JsonObject json = GsonHelper.fromJson(gson, reader, JsonObject.class, false);
 						boolean validJSON = true;
 						if(jsonType != null) {
 							if(!json.has("type")) {
@@ -223,7 +223,7 @@ public abstract class JSONLoader {
 			try {
 				try {
 					reader = Files.newBufferedReader(path);
-					JsonObject json = JSONUtils.fromJson(gson, reader, JsonObject.class, false);
+					JsonObject json = GsonHelper.fromJson(gson, reader, JsonObject.class, false);
 					return json;
 				}
 				catch (JsonParseException e) {

@@ -9,29 +9,29 @@ import com.lycanitesmobs.core.info.ItemConfig;
 import com.lycanitesmobs.core.info.ItemManager;
 import com.lycanitesmobs.core.item.equipment.ItemEquipment;
 import com.lycanitesmobs.core.network.MessagePlayerLeftClick;
-import net.minecraft.block.Block;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.entity.projectile.ArrowEntity;
-import net.minecraft.entity.projectile.ProjectileEntity;
-import net.minecraft.entity.projectile.ProjectileItemEntity;
+import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.entity.projectile.SnowballEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.EntityDamageSource;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.damagesource.EntityDamageSource;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
 import net.minecraftforge.event.entity.EntityLeaveWorldEvent;
@@ -61,11 +61,11 @@ public class GameEventListener {
     // ==================================================
 	@SubscribeEvent
 	public void onWorldLoading(WorldEvent.Load event) {
-		if(!(event.getWorld() instanceof World))
+		if(!(event.getWorld() instanceof Level))
 			return;
 
 		// ========== Extended World ==========
-		ExtendedWorld.getForWorld((World)event.getWorld());
+		ExtendedWorld.getForWorld((Level)event.getWorld());
 	}
 
 
@@ -78,7 +78,7 @@ public class GameEventListener {
             event.addCapability(new ResourceLocation(LycanitesMobs.MODID, "entity"), new CapabilityProviderEntity());
         }
 
-        if(event.getObject() instanceof PlayerEntity) {
+        if(event.getObject() instanceof Player) {
             event.addCapability(new ResourceLocation(LycanitesMobs.MODID, "player"), new CapabilityProviderPlayer());
         }
     }
@@ -148,8 +148,8 @@ public class GameEventListener {
             extendedEntity.onDeath();
 
 		// ========== Extended Player ==========
-		if(entity instanceof PlayerEntity) {
-			PlayerEntity player = (PlayerEntity)entity;
+		if(entity instanceof Player) {
+			Player player = (Player)entity;
             ExtendedPlayer extendedPlayer = ExtendedPlayer.getForPlayer(player);
             if(extendedPlayer != null)
 			    extendedPlayer.onDeath();
@@ -171,8 +171,8 @@ public class GameEventListener {
 			extendedEntity.onUpdate();
 
 		// ========== Extended Player ==========
-		if(entity instanceof PlayerEntity) {
-			PlayerEntity player = (PlayerEntity)entity;
+		if(entity instanceof Player) {
+			Player player = (Player)entity;
 			ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
 			if(playerExt != null)
 				playerExt.onUpdate();
@@ -185,7 +185,7 @@ public class GameEventListener {
 	// ==================================================
 	@SubscribeEvent
 	public void onPlayerLeftClickEmpty(PlayerInteractEvent.LeftClickEmpty event) {
-		PlayerEntity player = event.getPlayer();
+		Player player = event.getPlayer();
 		if(player == null)
 			return;
 
@@ -199,7 +199,7 @@ public class GameEventListener {
 
 	@SubscribeEvent
 	public void onPlayerLeftClickBlock(PlayerInteractEvent.LeftClickBlock event) {
-		PlayerEntity player = event.getPlayer();
+		Player player = event.getPlayer();
 		if (player == null || event.getSide().isClient())
 			return;
 
@@ -216,7 +216,7 @@ public class GameEventListener {
     // ==================================================
 	@SubscribeEvent
 	public void onEntityInteract(PlayerInteractEvent.EntityInteract event) {
-		PlayerEntity player = event.getPlayer();
+		Player player = event.getPlayer();
 		Entity entity = event.getTarget();
         if(player == null || !(entity instanceof LivingEntity))
 			return;
@@ -243,7 +243,7 @@ public class GameEventListener {
 		}
 
 		// Better Invisibility:
-		if(!event.getEntityLiving().hasEffect(Effects.INVISIBILITY)) {
+		if(!event.getEntityLiving().hasEffect(MobEffects.INVISIBILITY)) {
 			if(targetEntity.isInvisible()) {
 				if(event.isCancelable())
 					event.setCanceled(true);
@@ -253,7 +253,7 @@ public class GameEventListener {
 		}
 
 		// Can Be Targeted:
-		if(event.getEntityLiving() instanceof MobEntity && targetEntity instanceof BaseCreatureEntity) {
+		if(event.getEntityLiving() instanceof Mob && targetEntity instanceof BaseCreatureEntity) {
 			if(!((BaseCreatureEntity)targetEntity).canBeTargetedBy(event.getEntityLiving())) {
 				//event.getEntityLiving().setRevengeTarget(null);
 				if(event.isCancelable())
@@ -335,7 +335,7 @@ public class GameEventListener {
     // ==================================================
 	@SubscribeEvent
     public void onLivingDrops(LivingDropsEvent event) {
-		World world = event.getEntityLiving().getCommandSenderWorld();
+		Level world = event.getEntityLiving().getCommandSenderWorld();
 
 		// Seasonal Items:
         if(ItemConfig.seasonalItemDropChance > 0
@@ -373,11 +373,11 @@ public class GameEventListener {
     // ==================================================
 	@SubscribeEvent
     public void onBucketFill(FillBucketEvent event) {
-        World world = event.getWorld();
-        RayTraceResult target = event.getTarget();
-        if(target == null || !(target instanceof BlockRayTraceResult))
+        Level world = event.getWorld();
+        HitResult target = event.getTarget();
+        if(target == null || !(target instanceof BlockHitResult))
             return;
-        BlockPos pos = ((BlockRayTraceResult)target).getBlockPos();
+        BlockPos pos = ((BlockHitResult)target).getBlockPos();
         Block block = world.getBlockState(pos).getBlock();
         Item bucket = ObjectManager.buckets.get(block);
         if(bucket != null && world.getFluidState(pos).getAmount() == 0) {
@@ -402,12 +402,12 @@ public class GameEventListener {
 		}
 
 		if(event.getPlayer() != null && !event.getPlayer().isCreative()) {
-			if (event.getWorld() instanceof World) {
-				ExtendedWorld extendedWorld = ExtendedWorld.getForWorld((World) event.getWorld());
-				if (!(event.getState().getBlock() instanceof BlockFireBase) && extendedWorld.isBossNearby(Vector3d.atLowerCornerOf(event.getPos()))) {
+			if (event.getWorld() instanceof Level) {
+				ExtendedWorld extendedWorld = ExtendedWorld.getForWorld((Level) event.getWorld());
+				if (!(event.getState().getBlock() instanceof BlockFireBase) && extendedWorld.isBossNearby(Vec3.atLowerCornerOf(event.getPos()))) {
 					event.setCanceled(true);
 					event.setResult(Event.Result.DENY);
-					event.getPlayer().displayClientMessage(new TranslationTextComponent("boss.block.protection.break"), true);
+					event.getPlayer().displayClientMessage(new TranslatableComponent("boss.block.protection.break"), true);
 					return;
 				}
 			}
@@ -433,13 +433,13 @@ public class GameEventListener {
 			return;
 		}
 
-		if(event.getEntity() instanceof PlayerEntity && !((PlayerEntity)event.getEntity()).isCreative()) {
-			if (event.getWorld() instanceof World) {
-				ExtendedWorld extendedWorld = ExtendedWorld.getForWorld((World) event.getWorld());
-				if (extendedWorld.isBossNearby(Vector3d.atLowerCornerOf(event.getPos()))) {
+		if(event.getEntity() instanceof Player && !((Player)event.getEntity()).isCreative()) {
+			if (event.getWorld() instanceof Level) {
+				ExtendedWorld extendedWorld = ExtendedWorld.getForWorld((Level) event.getWorld());
+				if (extendedWorld.isBossNearby(Vec3.atLowerCornerOf(event.getPos()))) {
 					event.setCanceled(true);
 					event.setResult(Event.Result.DENY);
-					((PlayerEntity)event.getEntity()).displayClientMessage(new TranslationTextComponent("boss.block.protection.place"), true);
+					((Player)event.getEntity()).displayClientMessage(new TranslatableComponent("boss.block.protection.place"), true);
 					return;
 				}
 			}
@@ -454,9 +454,9 @@ public class GameEventListener {
 	public void onCheckSpawn(LivingSpawnEvent.CheckSpawn event) {
 		if(event.isSpawner()) {
 			LivingEntity entity = event.getEntityLiving();
-			if(entity instanceof BaseCreatureEntity && event.getWorld() instanceof World) {
+			if(entity instanceof BaseCreatureEntity && event.getWorld() instanceof Level) {
 				BaseCreatureEntity baseCreatureEntity = (BaseCreatureEntity)entity;
-				if(!baseCreatureEntity.checkSpawnGroupLimit((World) event.getWorld(), event.getSpawner().getPos(), 16)) {
+				if(!baseCreatureEntity.checkSpawnGroupLimit((Level) event.getWorld(), event.getSpawner().getPos(), 16)) {
 					event.setResult(Event.Result.DENY);
 				}
 			}
@@ -472,13 +472,13 @@ public class GameEventListener {
 		if(!ConfigExtra.INSTANCE.disableSneakDismount.get() || true) { // Disabled for now as cancelling this event doesn't work correctly for players atm.
 			return;
 		}
-		if(!(event.getEntityMounting() instanceof PlayerEntity)) {
+		if(!(event.getEntityMounting() instanceof Player)) {
 			return;
 		}
 
 		// Override Sneak to Dismount for Lycanites Mobs:
 		if (event.isDismounting() && event.getEntityBeingMounted() instanceof RideableCreatureEntity) {
-			ExtendedPlayer extendedPlayer = ExtendedPlayer.getForPlayer((PlayerEntity) event.getEntityMounting());
+			ExtendedPlayer extendedPlayer = ExtendedPlayer.getForPlayer((Player) event.getEntityMounting());
 			if (extendedPlayer == null) {
 				return;
 			}
@@ -493,22 +493,22 @@ public class GameEventListener {
 	@SubscribeEvent
 	public void onProjectileImpact(ProjectileImpactEvent event) {
 		Entity shooter = null;
-		if (!(event.getRayTraceResult() instanceof EntityRayTraceResult)) {
+		if (!(event.getRayTraceResult() instanceof EntityHitResult)) {
 			return;
 		}
-		EntityRayTraceResult entityRayTraceResult = (EntityRayTraceResult)event.getRayTraceResult();
+		EntityHitResult entityRayTraceResult = (EntityHitResult)event.getRayTraceResult();
 		Entity target = entityRayTraceResult.getEntity();
 		if (!(target instanceof BaseCreatureEntity)) {
 			return;
 		}
 		BaseCreatureEntity targetCreature = (BaseCreatureEntity)target;
 
-		if (event.getEntity() instanceof ProjectileEntity) {
-			ProjectileEntity projectileEntity = (ProjectileEntity)event.getEntity();
+		if (event.getEntity() instanceof Projectile) {
+			Projectile projectileEntity = (Projectile)event.getEntity();
 			shooter = projectileEntity.getOwner();
 		}
-		if (event.getEntity() instanceof ProjectileItemEntity) {
-			ProjectileItemEntity projectileItemEntity = (ProjectileItemEntity)event.getEntity();
+		if (event.getEntity() instanceof ThrowableItemProjectile) {
+			ThrowableItemProjectile projectileItemEntity = (ThrowableItemProjectile)event.getEntity();
 			shooter = projectileItemEntity.getOwner();
 		}
 

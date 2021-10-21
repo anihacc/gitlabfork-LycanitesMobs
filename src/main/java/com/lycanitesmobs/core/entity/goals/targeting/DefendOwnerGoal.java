@@ -4,12 +4,18 @@ import com.lycanitesmobs.api.Targeting;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import net.minecraft.entity.*;
-import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.TameableEntity;
+import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.world.entity.TamableAnimal;
 
 import java.util.EnumSet;
 
-import net.minecraft.entity.ai.goal.Goal.Flag;
+import net.minecraft.world.entity.ai.goal.Goal.Flag;
+
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.Pose;
 
 public class DefendOwnerGoal extends TargetingGoal {
 	// Properties:
@@ -81,8 +87,8 @@ public class DefendOwnerGoal extends TargetingGoal {
         }
 
         // LivingEntity Check:
-		if(target instanceof MobEntity) {
-			MobEntity mobEntity = (MobEntity)target;
+		if(target instanceof Mob) {
+			Mob mobEntity = (Mob)target;
 			if(!mobEntity.canAttackType(EntityType.PLAYER)) {
 				return false;
 			}
@@ -94,13 +100,13 @@ public class DefendOwnerGoal extends TargetingGoal {
 		}
 
         // Threat Check:
-        if(target instanceof IMob && !(target instanceof TameableEntity) && !(target instanceof BaseCreatureEntity)) {
+        if(target instanceof Enemy && !(target instanceof TamableAnimal) && !(target instanceof BaseCreatureEntity)) {
             return true;
         }
         else if(target instanceof BaseCreatureEntity && ((BaseCreatureEntity)target).isHostileTo(this.getOwner())) {
             return true;
         }
-        else if(target instanceof MobEntity && ((MobEntity)target).getTarget() == this.getOwner()) {
+        else if(target instanceof Mob && ((Mob)target).getTarget() == this.getOwner()) {
             return true;
         }
 		else if(target.getLastHurtByMob() == this.getOwner()) {

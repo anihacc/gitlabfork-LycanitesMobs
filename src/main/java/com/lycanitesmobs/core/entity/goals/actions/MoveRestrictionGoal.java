@@ -1,13 +1,13 @@
 package com.lycanitesmobs.core.entity.goals.actions;
 
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.EnumSet;
 
-import net.minecraft.entity.ai.goal.Goal.Flag;
+import net.minecraft.world.entity.ai.goal.Goal.Flag;
 
 public class MoveRestrictionGoal extends Goal {
 	// Targets:
@@ -45,7 +45,7 @@ public class MoveRestrictionGoal extends Goal {
         if(this.host.hasHome())
             return false;
         BlockPos chunkcoordinates = this.host.getRestrictCenter();
-        Vector3d vec3 = RandomPositionGenerator.findRandomTargetTowards(this.host, 16, 7, new Vector3d((double)chunkcoordinates.getX(), (double)chunkcoordinates.getY(), (double)chunkcoordinates.getZ()));
+        Vec3 vec3 = RandomPositionGenerator.findRandomTargetTowards(this.host, 16, 7, new Vec3((double)chunkcoordinates.getX(), (double)chunkcoordinates.getY(), (double)chunkcoordinates.getZ()));
         if(vec3 == null)
             return false;
         

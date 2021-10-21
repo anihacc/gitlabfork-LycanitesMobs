@@ -4,6 +4,8 @@ import com.lycanitesmobs.core.info.CreatureType;
 import com.lycanitesmobs.core.item.CreatureTypeItem;
 
 
+import net.minecraft.world.item.Item.Properties;
+
 public class CreatureSaddleItem extends CreatureTypeItem {
 
     public CreatureSaddleItem(Properties properties, CreatureType creatureType) {

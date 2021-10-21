@@ -7,12 +7,12 @@ import com.lycanitesmobs.core.config.ConfigAdmin;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.network.MessageEntityPerched;
 import com.lycanitesmobs.core.network.MessageEntityPickedUp;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.potion.Effect;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.World;
 
 import java.util.HashMap;
@@ -33,7 +33,7 @@ public class ExtendedEntity implements IExtendedEntity {
 
     // Safe Position:
     /** The last coordinates the entity was at where it wasn't inside an opaque block. (Helps prevent suffocation). **/
-    Vector3d lastSafePos;
+    Vec3 lastSafePos;
     private boolean playerAllowFlyingSnapshot;
     private boolean playerIsFlyingSnapshot;
 
@@ -154,10 +154,10 @@ public class ExtendedEntity implements IExtendedEntity {
 
         // Safe Position:
 		if (this.lastSafePos == null) {
-			this.lastSafePos = new Vector3d(this.entity.position().x(), this.entity.position().y(), this.entity.position().z());
+			this.lastSafePos = new Vec3(this.entity.position().x(), this.entity.position().y(), this.entity.position().z());
 		}
 		if (!this.entity.getCommandSenderWorld().getBlockState(this.entity.blockPosition()).getMaterial().isSolid()) {
-			this.lastSafePos = new Vector3d(Math.floor(this.entity.position().x()) + 0.5D, this.entity.blockPosition().getY(), Math.floor(this.entity.position().z()) + 0.5D);
+			this.lastSafePos = new Vec3(Math.floor(this.entity.position().x()) + 0.5D, this.entity.blockPosition().getY(), Math.floor(this.entity.position().z()) + 0.5D);
 		}
 
         // Fear Entity:
@@ -205,7 +205,7 @@ public class ExtendedEntity implements IExtendedEntity {
 					return;
 				}
 			}
-			Effect weight = ObjectManager.getEffect("weight");
+			MobEffect weight = ObjectManager.getEffect("weight");
 			if (weight != null) {
 				if (this.entity.hasEffect(weight)) {
 					this.setPickedUpByEntity(null);
@@ -224,8 +224,8 @@ public class ExtendedEntity implements IExtendedEntity {
 			this.entity.setPos(this.pickedUpByEntity.position().x() + pickupOffset[0], this.pickedUpByEntity.position().y() + pickupOffset[1], this.pickedUpByEntity.position().z() + pickupOffset[2]);
 			this.entity.setDeltaMovement(this.pickedUpByEntity.getDeltaMovement());
 			this.entity.fallDistance = 0;
-			if (!this.entity.getCommandSenderWorld().isClientSide && this.entity instanceof PlayerEntity) {
-				PlayerEntity player = (PlayerEntity) this.entity;
+			if (!this.entity.getCommandSenderWorld().isClientSide && this.entity instanceof Player) {
+				Player player = (Player) this.entity;
 				player.abilities.mayfly = true;
 				this.entity.noPhysics = true;
 			}
@@ -243,20 +243,20 @@ public class ExtendedEntity implements IExtendedEntity {
 		if(!this.entity.getCommandSenderWorld().isClientSide) {
 
             // Player Flying:
-			if(this.entity instanceof PlayerEntity) {
+			if(this.entity instanceof Player) {
 				if(pickedUpByEntity != null) {
-                    this.playerAllowFlyingSnapshot = ((PlayerEntity) this.entity).abilities.mayfly;
-                    this.playerIsFlyingSnapshot = ((PlayerEntity)this.entity).abilities.flying;
+                    this.playerAllowFlyingSnapshot = ((Player) this.entity).abilities.mayfly;
+                    this.playerIsFlyingSnapshot = ((Player)this.entity).abilities.flying;
                 }
 				else {
-                    ((PlayerEntity)this.entity).abilities.mayfly = this.playerAllowFlyingSnapshot;
-                    ((PlayerEntity)this.entity).abilities.flying = this.playerIsFlyingSnapshot;
+                    ((Player)this.entity).abilities.mayfly = this.playerAllowFlyingSnapshot;
+                    ((Player)this.entity).abilities.flying = this.playerIsFlyingSnapshot;
                     this.entity.noPhysics = false;
                 }
 			}
 
             // Teleport To Initial Pickup Position:
-            if(this.pickedUpByEntity != null && !(this.entity instanceof PlayerEntity)) {
+            if(this.pickedUpByEntity != null && !(this.entity instanceof Player)) {
                 double[] pickupOffset = this.getPickedUpOffset();
                 this.entity.teleportToWithTicket(this.pickedUpByEntity.position().x() + pickupOffset[0], this.pickedUpByEntity.position().y() + pickupOffset[1], this.pickedUpByEntity.position().z() + pickupOffset[2]);
             }
@@ -280,7 +280,7 @@ public class ExtendedEntity implements IExtendedEntity {
         if(this.pickedUpByEntity instanceof BaseCreatureEntity) {
             pickupOffset = ((BaseCreatureEntity) this.pickedUpByEntity).getPickupOffset(this.entity);
         }
-        if(CreatureManager.getInstance().config.disablePickupOffsets && this.entity instanceof PlayerEntity) {
+        if(CreatureManager.getInstance().config.disablePickupOffsets && this.entity instanceof Player) {
             return new double[] {0, 0, 0};
         }
         return pickupOffset;
@@ -337,7 +337,7 @@ public class ExtendedEntity implements IExtendedEntity {
 	 * Returns the xyz position that an entity should perch on this entity at.
 	 * @return The perch position.
 	 */
-	public Vector3d getPerchPosition() {
+	public Vec3 getPerchPosition() {
 		double entityWidth = this.entity.getDimensions(this.entity.getPose()).width;
 		double entityHeight = this.entity.getDimensions(this.entity.getPose()).height;
 
@@ -350,7 +350,7 @@ public class ExtendedEntity implements IExtendedEntity {
 			zPerchPos += distance * Math.cos(angle);
 		}
 
-		return new Vector3d(
+		return new Vec3(
 				xPerchPos,
 				this.entity.position().y() + entityHeight * 0.78D,
 				zPerchPos
@@ -363,7 +363,7 @@ public class ExtendedEntity implements IExtendedEntity {
 	public void updatedPerchedByEntity() {
 		Entity perchedByEntity = this.getPerchedByEntity();
 		if(perchedByEntity != null) {
-			Vector3d perchPosition = this.getPerchPosition();
+			Vec3 perchPosition = this.getPerchPosition();
 			perchedByEntity.setPos(perchPosition.x(), perchPosition.y(), perchPosition.z());
 			perchedByEntity.setDeltaMovement(this.entity.getDeltaMovement());
 			perchedByEntity.yRot = this.entity.yRot;
@@ -422,13 +422,13 @@ public class ExtendedEntity implements IExtendedEntity {
     // ==================================================
     // ========== Read ===========
     /** Reads a list of Creature Knowledge from a player's NBTTag. **/
-    public void readNBT(CompoundNBT nbtTagCompound) {
+    public void readNBT(CompoundTag nbtTagCompound) {
 
     }
 
     // ========== Write ==========
     /** Writes a list of Creature Knowledge to a player's NBTTag. **/
-    public void writeNBT(CompoundNBT nbtTagCompound) {
+    public void writeNBT(CompoundTag nbtTagCompound) {
 
     }
 }

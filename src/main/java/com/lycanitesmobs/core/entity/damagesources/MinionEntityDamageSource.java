@@ -1,9 +1,9 @@
 package com.lycanitesmobs.core.entity.damagesources;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.EntityDamageSource;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.damagesource.EntityDamageSource;
+import net.minecraft.network.chat.Component;
 
 public class MinionEntityDamageSource extends EntityDamageSource {
     EntityDamageSource minionDamageSource;
@@ -38,7 +38,7 @@ public class MinionEntityDamageSource extends EntityDamageSource {
     //                    Chat Message
     // ==================================================
     @Override
-    public ITextComponent getLocalizedDeathMessage(LivingEntity slainEntity) {
+    public Component getLocalizedDeathMessage(LivingEntity slainEntity) {
         return this.minionDamageSource.getLocalizedDeathMessage(slainEntity);
     }
 }

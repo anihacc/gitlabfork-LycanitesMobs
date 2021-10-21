@@ -2,36 +2,43 @@ package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.FlowingFluidBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.entity.*;
-import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.monster.SilverfishEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.DamageSource;
-import net.minecraft.world.GameRules;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.world.entity.monster.Silverfish;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.Level;
 
 import java.util.HashMap;
 import java.util.List;
 
-public class EntityVolcan extends TameableCreatureEntity implements IMob {
+import com.lycanitesmobs.core.entity.BaseCreatureEntity.COMMAND_PIORITIES;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.Pose;
+
+public class EntityVolcan extends TameableCreatureEntity implements Enemy {
 
 	public int blockMeltingRadius = 2;
 
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityVolcan(EntityType<? extends EntityVolcan> entityType, World world) {
+    public EntityVolcan(EntityType<? extends EntityVolcan> entityType, Level world) {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEFINED;
+        this.attribute = MobType.UNDEFINED;
         this.hasAttackSound = true;
         
         this.setupMob();
@@ -78,7 +85,7 @@ public class EntityVolcan extends TameableCreatureEntity implements IMob {
 					for (int h = -((int) Math.ceil(this.getDimensions(Pose.STANDING).height) + range); h <= Math.ceil(this.getDimensions(Pose.STANDING).height); h++) {
 						Block block = this.getCommandSenderWorld().getBlockState(this.blockPosition().offset(w, h, d)).getBlock();
 						if (block == Blocks.COBBLESTONE || block == Blocks.GRAVEL) {
-							BlockState blockState = Blocks.LAVA.defaultBlockState().setValue(FlowingFluidBlock.LEVEL, 5);
+							BlockState blockState = Blocks.LAVA.defaultBlockState().setValue(LiquidBlock.LEVEL, 5);
 							this.getCommandSenderWorld().setBlockAndUpdate(this.blockPosition().offset(w, h, d), blockState);
 						}
 						/*else if (block == Blocks.WATER || block == Blocks.FLOWING_WATER || block == Blocks.ICE || block == Blocks.SNOW) {
@@ -113,7 +120,7 @@ public class EntityVolcan extends TameableCreatureEntity implements IMob {
     		return false;
 
         // Silverfish Extermination:
-        if(target instanceof SilverfishEntity) {
+        if(target instanceof Silverfish) {
             target.remove();
         }
         
@@ -129,7 +136,7 @@ public class EntityVolcan extends TameableCreatureEntity implements IMob {
 
 	// ========== Get Interact Commands ==========
 	@Override
-	public HashMap<Integer, String> getInteractCommands(PlayerEntity player, ItemStack itemStack) {
+	public HashMap<Integer, String> getInteractCommands(Player player, ItemStack itemStack) {
 		HashMap<Integer, String> commands = new HashMap<>();
 		commands.putAll(super.getInteractCommands(player, itemStack));
 
@@ -144,7 +151,7 @@ public class EntityVolcan extends TameableCreatureEntity implements IMob {
 
 	// ========== Perform Command ==========
 	@Override
-	public boolean performCommand(String command, PlayerEntity player, ItemStack itemStack) {
+	public boolean performCommand(String command, Player player, ItemStack itemStack) {
 
 		// Water:
 		if(command.equals("Water")) {

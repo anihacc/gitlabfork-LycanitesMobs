@@ -2,20 +2,20 @@ package com.lycanitesmobs.core.entity.goals.actions;
 
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.Pose;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.fluid.FluidState;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.EnumSet;
 
-import net.minecraft.entity.ai.goal.Goal.Flag;
+import net.minecraft.world.entity.ai.goal.Goal.Flag;
 
 public class StayByWaterGoal extends Goal {
 	// Targets:
@@ -110,7 +110,7 @@ public class StayByWaterGoal extends Goal {
 	    					BlockPos searchPos = new BlockPos(searchX, searchY, searchZ);
 
 	    					// If the block is closer than the last valid location...
-	    					double searchDistance = this.host.distanceToSqr(Vector3d.atLowerCornerOf(searchPos));
+	    					double searchDistance = this.host.distanceToSqr(Vec3.atLowerCornerOf(searchPos));
     		    			if(!this.hasWaterPos || searchDistance < closestDistance) {
 		    					
     		    				// And it is a valid water position...
@@ -212,6 +212,6 @@ public class StayByWaterGoal extends Goal {
     public double getDistanceFromWater() {
         if(!this.hasWaterPos)
             return 0;
-    	return this.host.distanceToSqr(Vector3d.atLowerCornerOf(this.waterPos));
+    	return this.host.distanceToSqr(Vec3.atLowerCornerOf(this.waterPos));
     }
 }

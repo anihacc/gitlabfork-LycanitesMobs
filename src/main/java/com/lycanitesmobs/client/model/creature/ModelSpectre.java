@@ -7,9 +7,9 @@ import com.lycanitesmobs.client.renderer.CustomRenderStates;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureEffect;
 import com.lycanitesmobs.core.entity.creature.EntitySpectre;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -110,16 +110,16 @@ public class ModelSpectre extends ModelTemplateElemental {
 
 		else if(partName.contains("armleft")) {
 			this.rotate(
-					(float)Math.toDegrees(MathHelper.sin(loop * 0.034F) * 0.05F),
-					(float)Math.toDegrees(MathHelper.sin((loop + (loopOffset / 2)) * 0.1F) * 0.25F) - 10,
-					(float)-Math.toDegrees(MathHelper.cos((loop + (loopOffset / 2)) * 0.09F) * 0.1F)
+					(float)Math.toDegrees(Mth.sin(loop * 0.034F) * 0.05F),
+					(float)Math.toDegrees(Mth.sin((loop + (loopOffset / 2)) * 0.1F) * 0.25F) - 10,
+					(float)-Math.toDegrees(Mth.cos((loop + (loopOffset / 2)) * 0.09F) * 0.1F)
 			);
 		}
 		else if(partName.contains("armright")) {
 			this.rotate(
-					(float)Math.toDegrees(MathHelper.sin(loop * 0.034F) * 0.05F),
-					(float)-Math.toDegrees(MathHelper.sin((loop + (loopOffset / 2)) * 0.1F) * 0.25F) + 10,
-					(float)Math.toDegrees(MathHelper.cos((loop + (loopOffset / 2)) * 0.09F) * 0.1F)
+					(float)Math.toDegrees(Mth.sin(loop * 0.034F) * 0.05F),
+					(float)-Math.toDegrees(Mth.sin((loop + (loopOffset / 2)) * 0.1F) * 0.25F) + 10,
+					(float)Math.toDegrees(Mth.cos((loop + (loopOffset / 2)) * 0.09F) * 0.1F)
 			);
 		}
 

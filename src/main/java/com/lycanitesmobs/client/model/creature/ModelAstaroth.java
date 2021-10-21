@@ -2,8 +2,8 @@ package com.lycanitesmobs.client.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.template.ModelTemplateQuadruped;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -42,7 +42,7 @@ public class ModelAstaroth extends ModelTemplateQuadruped {
 
     	// Walking - Bobbing:
 		if(partName.equals("body")) {
-			float bob = MathHelper.cos(time * 0.6662F + (float) Math.PI) * 0.3F * distance;
+			float bob = Mth.cos(time * 0.6662F + (float) Math.PI) * 0.3F * distance;
 			if (bob < 0) {
 				bob += -bob * 2;
 			}
@@ -51,13 +51,13 @@ public class ModelAstaroth extends ModelTemplateQuadruped {
 
 		// Tail:
 		if(partName.equals("tail01") || partName.equals("tail03")) {
-			float rotX = (float)-Math.toDegrees(MathHelper.cos(loop * 0.1F) * 0.05F - 0.05F);
-			float rotY = (float)-Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F - 0.05F);
+			float rotX = (float)-Math.toDegrees(Mth.cos(loop * 0.1F) * 0.05F - 0.05F);
+			float rotY = (float)-Math.toDegrees(Mth.cos(loop * 0.09F) * 0.05F - 0.05F);
 			this.rotate(rotX, rotY, 0);
 		}
 		else if(partName.equals("tail02")) {
-			float rotX = (float)-Math.toDegrees(MathHelper.cos(loop * 0.1F) * 0.05F - 0.05F);
-			float rotY = (float)-Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F - 0.05F);
+			float rotX = (float)-Math.toDegrees(Mth.cos(loop * 0.1F) * 0.05F - 0.05F);
+			float rotY = (float)-Math.toDegrees(Mth.cos(loop * 0.09F) * 0.05F - 0.05F);
 			this.rotate(-rotX, rotY, 0);
 		}
 
@@ -65,19 +65,19 @@ public class ModelAstaroth extends ModelTemplateQuadruped {
 		else if(partName.equals("fingerleft")) {
 			this.rotate(
 					0,
-					(float)Math.toDegrees(MathHelper.cos(loop * 0.2F) * 0.2F - 0.2F),
+					(float)Math.toDegrees(Mth.cos(loop * 0.2F) * 0.2F - 0.2F),
 					0);
 		}
 		else if(partName.equals("fingerright")) {
 			this.rotate(
 					0,
-					(float)Math.toDegrees(MathHelper.cos((loop + 20) * 0.2F) * 0.2F - 0.2F),
+					(float)Math.toDegrees(Mth.cos((loop + 20) * 0.2F) * 0.2F - 0.2F),
 					0);
 		}
 		else if(partName.equals("fingertop")) {
 			this.rotate(
-					(float)Math.toDegrees(MathHelper.sin(loop * 0.2F) * 0.2F - 0.2F),
-					(float)Math.toDegrees(MathHelper.cos((loop + 40) * 0.2F) * 0.2F - 0.2F),
+					(float)Math.toDegrees(Mth.sin(loop * 0.2F) * 0.2F - 0.2F),
+					(float)Math.toDegrees(Mth.cos((loop + 40) * 0.2F) * 0.2F - 0.2F),
 					0);
 		}
     }

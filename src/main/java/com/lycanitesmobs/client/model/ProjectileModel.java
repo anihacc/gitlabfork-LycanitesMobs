@@ -4,18 +4,18 @@ import com.lycanitesmobs.client.renderer.CustomRenderStates;
 import com.lycanitesmobs.client.renderer.ProjectileModelRenderer;
 import com.lycanitesmobs.client.renderer.layer.LayerProjectileBase;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.client.renderer.entity.model.EntityModel;
-import net.minecraft.util.math.vector.Vector2f;
-import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.util.math.vector.Vector4f;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.world.phys.Vec2;
+import com.mojang.math.Vector3f;
+import com.mojang.math.Vector4f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class ProjectileModel extends EntityModel<BaseProjectileEntity> implements IAnimationModel {
-	public MatrixStack matrixStack;
+	public PoseStack matrixStack;
 
     public ProjectileModel() {
         this(1.0F);
@@ -30,7 +30,7 @@ public class ProjectileModel extends EntityModel<BaseProjectileEntity> implement
 	public void setupAnim(BaseProjectileEntity entity, float time, float distance, float loop, float lookY, float lookX) {}
 
 	@Override
-	public void renderToBuffer(MatrixStack matrixStack, IVertexBuilder iVertexBuilder, int i, int i1, float v, float v1, float v2, float v3) {}
+	public void renderToBuffer(PoseStack matrixStack, VertexConsumer iVertexBuilder, int i, int i1, float v, float v1, float v2, float v3) {}
 
 	/**
 	 * Called by the renderer to add custom layers to it.
@@ -70,7 +70,7 @@ public class ProjectileModel extends EntityModel<BaseProjectileEntity> implement
 	 * @param scale The base scale to render the model at, usually just 0.0625F which scales 1m unit in Blender to a 1m block unit in Minecraft.
 	 * @param brightness The brightness of the mob based on block location, etc.
 	 */
-	public void render(BaseProjectileEntity entity, MatrixStack matrixStack, IVertexBuilder vertexBuilder, LayerProjectileBase layer, float time, float distance, float loop, float lookY, float lookX, float scale, int brightness) {
+	public void render(BaseProjectileEntity entity, PoseStack matrixStack, VertexConsumer vertexBuilder, LayerProjectileBase layer, float time, float distance, float loop, float lookY, float lookX, float scale, int brightness) {
 		this.matrixStack = matrixStack;
 		float sizeScale = 1F;
 		if(entity != null) {
@@ -107,15 +107,15 @@ public class ProjectileModel extends EntityModel<BaseProjectileEntity> implement
     }
 
 	/** Returns the texture offset to be used for this part and layer. **/
-	public Vector2f getPartTextureOffset(String partName, BaseProjectileEntity entity, LayerProjectileBase layer, float loop) {
+	public Vec2 getPartTextureOffset(String partName, BaseProjectileEntity entity, LayerProjectileBase layer, float loop) {
 		if(layer == null || !(entity instanceof BaseProjectileEntity))
 			return this.getBaseTextureOffset(partName, entity, loop);
 		return layer.getTextureOffset(partName, entity, loop);
 	}
 
 	/** Returns the texture offset to be used for this part on the base layer (for scrolling, etc). **/
-	public Vector2f getBaseTextureOffset(String partName, BaseProjectileEntity entity, float loop) {
-		return new Vector2f(0, 0);
+	public Vec2 getBaseTextureOffset(String partName, BaseProjectileEntity entity, float loop) {
+		return new Vec2(0, 0);
 	}
 
 	/**

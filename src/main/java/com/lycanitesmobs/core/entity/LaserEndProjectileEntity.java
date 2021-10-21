@@ -1,13 +1,13 @@
 package com.lycanitesmobs.core.entity;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.level.Level;
 
 public class LaserEndProjectileEntity extends BaseProjectileEntity {
 	// Laser End:
@@ -21,25 +21,25 @@ public class LaserEndProjectileEntity extends BaseProjectileEntity {
 	private double projectileSpeed;
 
     // Datawatcher:
-    protected static final DataParameter<Float> POS_X = EntityDataManager.defineId(LaserEndProjectileEntity.class, DataSerializers.FLOAT);
-    protected static final DataParameter<Float> POS_Y = EntityDataManager.defineId(LaserEndProjectileEntity.class, DataSerializers.FLOAT);
-    protected static final DataParameter<Float> POS_Z = EntityDataManager.defineId(LaserEndProjectileEntity.class, DataSerializers.FLOAT);
+    protected static final EntityDataAccessor<Float> POS_X = SynchedEntityData.defineId(LaserEndProjectileEntity.class, EntityDataSerializers.FLOAT);
+    protected static final EntityDataAccessor<Float> POS_Y = SynchedEntityData.defineId(LaserEndProjectileEntity.class, EntityDataSerializers.FLOAT);
+    protected static final EntityDataAccessor<Float> POS_Z = SynchedEntityData.defineId(LaserEndProjectileEntity.class, EntityDataSerializers.FLOAT);
 	
     // ==================================================
  	//                   Constructors
  	// ==================================================
-    public LaserEndProjectileEntity(EntityType<? extends BaseProjectileEntity> entityType, World world) {
+    public LaserEndProjectileEntity(EntityType<? extends BaseProjectileEntity> entityType, Level world) {
         super(entityType, world);
         this.setStats();
     }
 
-    public LaserEndProjectileEntity(EntityType<? extends BaseProjectileEntity> entityType, World world, double par2, double par4, double par6, LaserProjectileEntity laser) {
+    public LaserEndProjectileEntity(EntityType<? extends BaseProjectileEntity> entityType, Level world, double par2, double par4, double par6, LaserProjectileEntity laser) {
         super(entityType, world, par2, par4, par6);
         this.laserEntity = laser;
         this.setStats();
     }
     
-    public LaserEndProjectileEntity(EntityType<? extends BaseProjectileEntity> entityType, World world, LivingEntity shooter, LaserProjectileEntity laser) {
+    public LaserEndProjectileEntity(EntityType<? extends BaseProjectileEntity> entityType, Level world, LivingEntity shooter, LaserProjectileEntity laser) {
         super(entityType, world, shooter);
         this.shootingEntity = shooter;
         this.laserEntity = laser;
@@ -144,7 +144,7 @@ public class LaserEndProjectileEntity extends BaseProjectileEntity {
  	//                     Impact
  	// ==================================================
     @Override
-    protected void onHit(RayTraceResult rayTraceResult) {}
+    protected void onHit(HitResult rayTraceResult) {}
     
     
     // ==================================================

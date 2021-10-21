@@ -1,8 +1,8 @@
 package com.lycanitesmobs.core.entity.damagesources;
 
 import com.lycanitesmobs.core.info.ElementInfo;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.EntityDamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.damagesource.EntityDamageSource;
 
 public class ElementDamageSource extends EntityDamageSource {
     private ElementInfo element;

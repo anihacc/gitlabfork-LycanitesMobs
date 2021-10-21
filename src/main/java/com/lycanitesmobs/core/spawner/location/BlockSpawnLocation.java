@@ -2,12 +2,12 @@ package com.lycanitesmobs.core.spawner.location;
 
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.core.helpers.JSONHelper;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3i;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Vec3i;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.fluids.IFluidBlock;
 
 import java.util.ArrayList;
@@ -35,7 +35,7 @@ public class BlockSpawnLocation extends SpawnLocation {
 	public int requiredBlockTypes = 0;
 
 	/** An offset relative to the spawn block to apply. **/
-	public Vector3i offset = new Vector3i(0, 0, 0);
+	public Vec3i offset = new Vec3i(0, 0, 0);
 
 
 	@Override
@@ -65,7 +65,7 @@ public class BlockSpawnLocation extends SpawnLocation {
 
     /** Returns a list of positions to spawn at. **/
     @Override
-    public List<BlockPos> getSpawnPositions(World world, PlayerEntity player, BlockPos triggerPos) {
+    public List<BlockPos> getSpawnPositions(Level world, Player player, BlockPos triggerPos) {
         List<BlockPos> spawnPositions = new ArrayList<>();
 		Map<Block, Integer> validBlocksFound = new HashMap<>();
 
@@ -141,7 +141,7 @@ public class BlockSpawnLocation extends SpawnLocation {
     }
 
 	/** Returns if the provided block position is valid. **/
-	public boolean isValidBlock(World world, BlockPos blockPos) {
+	public boolean isValidBlock(Level world, BlockPos blockPos) {
 		if (!this.surface || !this.underground) {
 			if(world.canSeeSkyFromBelowWater(blockPos)) {
 				if(!this.surface) {

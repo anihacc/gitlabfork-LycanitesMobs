@@ -1,10 +1,10 @@
 package com.lycanitesmobs.core.mobevent.effects;
 
 import com.google.gson.JsonObject;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 /** Mob Event Effects do various things during a mob event. **/
 public abstract class MobEventEffect {
@@ -51,7 +51,7 @@ public abstract class MobEventEffect {
 	}
 
 	/** Returns if this effect can activate on the given event update tick. **/
-	public boolean canActivate(World world, PlayerEntity player, BlockPos pos, int level, int ticks) {
+	public boolean canActivate(Level world, Player player, BlockPos pos, int level, int ticks) {
 		// Check Ticks:
 		if(this.eventTicksMin >= 0 && ticks < this.eventTicksMin) {
 			return false;
@@ -75,7 +75,7 @@ public abstract class MobEventEffect {
 	 * @param ticks The ticks that the event has been active for.
 	 * @param variant The subspecies to spawn mobs at, random if below 0.
 	 */
-	public void onUpdate(World world, PlayerEntity player, BlockPos pos, int level, int ticks, int variant) {
+	public void onUpdate(Level world, Player player, BlockPos pos, int level, int ticks, int variant) {
 
 	}
 
@@ -89,7 +89,7 @@ public abstract class MobEventEffect {
 	 * @param ticks The ticks that the event has been active for.
 	 * @return Returns true if effects should be played. This is used by classes that extend this class.
 	 */
-	public void onSpawn(LivingEntity entity, World world, PlayerEntity player, BlockPos pos, int level, int ticks) {
+	public void onSpawn(LivingEntity entity, Level world, Player player, BlockPos pos, int level, int ticks) {
 
 	}
 }

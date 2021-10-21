@@ -10,13 +10,16 @@ import com.lycanitesmobs.core.entity.goals.targeting.FindAttackTargetGoal;
 import net.minecraft.entity.*;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
+
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobType;
 
 public class EntityNecrovore extends TameableCreatureEntity {
-    public EntityNecrovore(EntityType<? extends EntityNecrovore> entityType, World world) {
+    public EntityNecrovore(EntityType<? extends EntityNecrovore> entityType, Level world) {
         super(entityType, world);
 
-        this.attribute = CreatureAttribute.UNDEAD;
+        this.attribute = MobType.UNDEAD;
         this.hasAttackSound = true;
         this.spreadFire = true;
 

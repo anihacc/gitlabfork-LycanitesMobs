@@ -18,32 +18,38 @@ import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.entity.*;
-import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.monster.ZombifiedPiglinEntity;
-import net.minecraft.entity.passive.IronGolemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.world.entity.monster.ZombifiedPiglin;
+import net.minecraft.world.entity.animal.IronGolem;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class EntityAsmodeus extends BaseCreatureEntity implements IMob, IGroupHeavy, IGroupBoss {
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.Pose;
+
+public class EntityAsmodeus extends BaseCreatureEntity implements Enemy, IGroupHeavy, IGroupBoss {
 
     // Data Manager:
-    protected static final DataParameter<Byte> ANIMATION_STATES = EntityDataManager.defineId(EntityAsmodeus.class, DataSerializers.BYTE);
+    protected static final EntityDataAccessor<Byte> ANIMATION_STATES = SynchedEntityData.defineId(EntityAsmodeus.class, EntityDataSerializers.BYTE);
     public enum ANIMATION_STATES_ID {
         SNAP_TO_ARENA((byte)1), COOLDOWN((byte)2);
         public final byte id;
@@ -84,11 +90,11 @@ public class EntityAsmodeus extends BaseCreatureEntity implements IMob, IGroupHe
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityAsmodeus(EntityType<? extends EntityAsmodeus> entityType, World world) {
+    public EntityAsmodeus(EntityType<? extends EntityAsmodeus> entityType, Level world) {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEFINED;
+        this.attribute = MobType.UNDEFINED;
         this.hasAttackSound = true;
         this.setAttackCooldownMax(30);
         this.hasJumpSound = true;
@@ -133,7 +139,7 @@ public class EntityAsmodeus extends BaseCreatureEntity implements IMob, IGroupHe
     // ========== Rendering Distance ==========
     /** Returns a larger bounding box for rendering this large entity. **/
     @OnlyIn(Dist.CLIENT)
-    public AxisAlignedBB getBoundingBoxForCulling() {
+    public AABB getBoundingBoxForCulling() {
         return this.getBoundingBox().inflate(200, 50, 200).move(0, -25, 0);
     }
 
@@ -419,9 +425,9 @@ public class EntityAsmodeus extends BaseCreatureEntity implements IMob, IGroupHe
     @Override
     public void attackRanged(Entity target, float range) {
         for (int i = 0; i < 5; i++) {
-            this.fireProjectile(EntityDevilGatling.class, target, range, 0, new Vector3d(0, -24, 0), 4f, 2f, 8F);
+            this.fireProjectile(EntityDevilGatling.class, target, range, 0, new Vec3(0, -24, 0), 4f, 2f, 8F);
         }
-        this.attackHitscan(target, target instanceof PlayerEntity ? 1 : 10);
+        this.attackHitscan(target, target instanceof Player ? 1 : 10);
     }
 
     // ========== Devilstars ==========
@@ -447,7 +453,7 @@ public class EntityAsmodeus extends BaseCreatureEntity implements IMob, IGroupHe
         double d0 = target.getX() - projectile.position().x();
         double d1 = target.getY() - projectile.position().y();
         double d2 = target.getZ() - projectile.position().z();
-        float f1 = MathHelper.sqrt(d0 * d0 + d2 * d2) * 0.1F;
+        float f1 = Mth.sqrt(d0 * d0 + d2 * d2) * 0.1F;
         float velocity = 1.2F;
         projectile.shoot(d0, d1 + (double) f1, d2, velocity, 0.0F);
         projectile.setProjectileScale(3f);
@@ -521,16 +527,16 @@ public class EntityAsmodeus extends BaseCreatureEntity implements IMob, IGroupHe
 
     @Override
     public boolean isVulnerableTo(Entity entity) {
-        if(entity instanceof ZombifiedPiglinEntity) {
+        if(entity instanceof ZombifiedPiglin) {
             entity.remove();
             return false;
         }
-        if(entity instanceof IronGolemEntity) {
+        if(entity instanceof IronGolem) {
             entity.remove();
             return false;
         }
-        if(entity instanceof PlayerEntity) {
-            PlayerEntity player = (PlayerEntity)entity;
+        if(entity instanceof Player) {
+            Player player = (Player)entity;
             if (!player.abilities.invulnerable && player.position().y() > this.position().y() + CreatureManager.getInstance().config.bossAntiFlight) {
                 return false;
             }
@@ -546,9 +552,9 @@ public class EntityAsmodeus extends BaseCreatureEntity implements IMob, IGroupHe
     /** Called when this entity has been attacked, uses a DamageSource and damage value. **/
     @Override
     public boolean hurt(DamageSource damageSrc, float damageAmount) {
-        if(this.playerTargets != null && damageSrc.getEntity() != null && damageSrc.getEntity() instanceof PlayerEntity) {
+        if(this.playerTargets != null && damageSrc.getEntity() != null && damageSrc.getEntity() instanceof Player) {
             if (!this.playerTargets.contains(damageSrc.getEntity()))
-                this.playerTargets.add((PlayerEntity)damageSrc.getEntity());
+                this.playerTargets.add((Player)damageSrc.getEntity());
         }
         return super.hurt(damageSrc, damageAmount);
     }
@@ -565,7 +571,7 @@ public class EntityAsmodeus extends BaseCreatureEntity implements IMob, IGroupHe
     // ==================================================
     // ========== Read ===========
     @Override
-    public void readAdditionalSaveData(CompoundNBT nbt) {
+    public void readAdditionalSaveData(CompoundTag nbt) {
         super.readAdditionalSaveData(nbt);
         if(nbt.contains("DevilstarStreamCharge")) {
             this.devilstarStreamCharge = nbt.getInt("DevilstarStreamCharge");
@@ -574,9 +580,9 @@ public class EntityAsmodeus extends BaseCreatureEntity implements IMob, IGroupHe
             this.devilstarStreamTime = nbt.getInt("DevilstarStreamTime");
         }
         if(nbt.contains("AstarothIDs")) {
-            ListNBT astarothIDs = nbt.getList("AstarothIDs", 10);
+            ListTag astarothIDs = nbt.getList("AstarothIDs", 10);
             for(int i = 0; i < astarothIDs.size(); i++) {
-                CompoundNBT astarothID = astarothIDs.getCompound(i);
+                CompoundTag astarothID = astarothIDs.getCompound(i);
                 if(astarothID.contains("ID")) {
                     Entity entity = this.getCommandSenderWorld().getEntity(astarothID.getInt("ID"));
                     if(entity != null && entity instanceof EntityAstaroth)
@@ -589,14 +595,14 @@ public class EntityAsmodeus extends BaseCreatureEntity implements IMob, IGroupHe
     // ========== Write ==========
     /** Used when saving this mob to a chunk. **/
     @Override
-    public void addAdditionalSaveData(CompoundNBT nbt) {
+    public void addAdditionalSaveData(CompoundTag nbt) {
         super.addAdditionalSaveData(nbt);
         nbt.putInt("DevilstarStreamCharge", this.devilstarStreamCharge);
         nbt.putInt("DevilstarStreamTime", this.devilstarStreamTime);
         if(this.getBattlePhase() > 0) {
-            ListNBT astarothIDs = new ListNBT();
+            ListTag astarothIDs = new ListTag();
             for(EntityAstaroth entityAstaroth : this.astarothMinions) {
-                CompoundNBT astarothID = new CompoundNBT();
+                CompoundTag astarothID = new CompoundTag();
                 astarothID.putInt("ID", entityAstaroth.getId());
                 astarothIDs.add(astarothID);
             }

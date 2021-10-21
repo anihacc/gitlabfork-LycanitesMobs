@@ -3,8 +3,8 @@ package com.lycanitesmobs.client.model.creature;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.CreatureObjModel;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -33,18 +33,18 @@ public class ModelRoc extends CreatureObjModel {
 
 		// Idle:
 		if(partName.equals("mouth")) {
-			this.rotate((float)-Math.toDegrees(MathHelper.cos(loop * 0.2F) * 0.05F), 0.0F, 0.0F);
+			this.rotate((float)-Math.toDegrees(Mth.cos(loop * 0.2F) * 0.05F), 0.0F, 0.0F);
 		}
 		if(entity != null && !entity.isInWater()) {
 			if (partName.equals("wingleft")) {
 				rotX = 20;
-				rotX -= Math.toDegrees(MathHelper.sin(loop * 0.4F) * 0.6F);
-				rotZ -= Math.toDegrees(MathHelper.sin(loop * 0.4F) * 0.6F);
+				rotX -= Math.toDegrees(Mth.sin(loop * 0.4F) * 0.6F);
+				rotZ -= Math.toDegrees(Mth.sin(loop * 0.4F) * 0.6F);
 			}
 			if (partName.equals("wingright")) {
 				rotX = 20;
-				rotX -= Math.toDegrees(MathHelper.sin(loop * 0.4F) * 0.6F);
-				rotZ -= Math.toDegrees(MathHelper.sin(loop * 0.4F + (float) Math.PI) * 0.6F);
+				rotX -= Math.toDegrees(Mth.sin(loop * 0.4F) * 0.6F);
+				rotZ -= Math.toDegrees(Mth.sin(loop * 0.4F + (float) Math.PI) * 0.6F);
 			}
 		}
 
@@ -52,7 +52,7 @@ public class ModelRoc extends CreatureObjModel {
 		if(entity instanceof BaseCreatureEntity && ((BaseCreatureEntity)entity).hasPickupEntity()) {
 			if (partName.contains("tail0")) {
 				rotX -= 5;
-				rotX -= Math.toDegrees(MathHelper.sin(loop * 0.2F) * 0.02F);
+				rotX -= Math.toDegrees(Mth.sin(loop * 0.2F) * 0.02F);
 			}
 			if (partName.equals("tailclaw")) {
 				rotX -= 25;
@@ -61,16 +61,16 @@ public class ModelRoc extends CreatureObjModel {
 		else {
 			if (partName.contains("tail0")) {
 				rotX += 10;
-				rotX -= Math.toDegrees(MathHelper.sin(loop * 0.1F) * 0.1F);
+				rotX -= Math.toDegrees(Mth.sin(loop * 0.1F) * 0.1F);
 			}
 			if (partName.equals("tailclaw")) {
-				rotX += Math.toDegrees(MathHelper.sin(loop * 0.1F) * 0.4F);
+				rotX += Math.toDegrees(Mth.sin(loop * 0.1F) * 0.4F);
 			}
 		}
 
 		// Body Bob:
 		if(partName.equals("body")) {
-			float bob = -MathHelper.sin(loop * 0.2F) * 0.1F;
+			float bob = -Mth.sin(loop * 0.2F) * 0.1F;
 			if (bob < 0)
 				bob = -bob;
 			posY += bob;

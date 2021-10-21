@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.entity.navigate;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,13 +10,13 @@ public class ArenaNode {
     /** A list of all nodes directly connected to this node. **/
     public List<ArenaNode> adjacentNodes = new ArrayList<ArenaNode>();
 
-    public World world;
+    public Level world;
     public BlockPos pos;
 
     // ==================================================
     //                    Constructor
     // ==================================================
-    public ArenaNode(World world, BlockPos pos) {
+    public ArenaNode(Level world, BlockPos pos) {
         this.world = world;
         this.pos = pos;
     }

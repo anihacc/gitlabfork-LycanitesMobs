@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.item;
 
 import com.lycanitesmobs.core.info.ModInfo;
-import net.minecraft.item.Item;
+import net.minecraft.world.item.Item;
 
 
 public class ItemMobToken extends BaseItem {

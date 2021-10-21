@@ -1,8 +1,8 @@
 package com.lycanitesmobs.core.entity.goals;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3i;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Vec3i;
 
 import java.util.Comparator;
 
@@ -41,8 +41,8 @@ public class TargetSorterNearest implements Comparator {
 
     public int compareDistanceSq(BlockPos targetA, BlockPos targetB) {
         BlockPos hostCoords = new BlockPos((int)this.host.position().x(), (int)this.host.position().y(), (int)this.host.position().z());
-        double distanceA = hostCoords.distSqr(new Vector3i(targetA.getX(), targetA.getY(), targetA.getZ()));
-        double distanceB = hostCoords.distSqr(new Vector3i(targetB.getX(), targetB.getY(), targetB.getZ()));
+        double distanceA = hostCoords.distSqr(new Vec3i(targetA.getX(), targetA.getY(), targetA.getZ()));
+        double distanceB = hostCoords.distSqr(new Vec3i(targetB.getX(), targetB.getY(), targetB.getZ()));
         return Double.compare(distanceA, distanceB);
     }
 }

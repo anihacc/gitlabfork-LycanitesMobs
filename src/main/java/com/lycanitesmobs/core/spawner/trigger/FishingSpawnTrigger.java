@@ -2,11 +2,11 @@ package com.lycanitesmobs.core.spawner.trigger;
 
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.core.spawner.Spawner;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 public class FishingSpawnTrigger extends SpawnTrigger {
 
@@ -27,7 +27,7 @@ public class FishingSpawnTrigger extends SpawnTrigger {
 
 
 	/** Called every time a player fishes up an item. **/
-	public void onFished(World world, PlayerEntity player, Entity hookEntity) {
+	public void onFished(Level world, Player player, Entity hookEntity) {
 		// Chance:
 		if(this.chance < 1 && player.getRandom().nextDouble() > this.chance) {
 			return;

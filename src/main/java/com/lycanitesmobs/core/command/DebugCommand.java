@@ -5,13 +5,13 @@ import com.lycanitesmobs.core.config.ConfigDebug;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.Commands;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DebugCommand {
-	public static ArgumentBuilder<CommandSource, ?> register() {
+	public static ArgumentBuilder<CommandSourceStack, ?> register() {
 		return Commands.literal("debug")
 				.then(Commands.literal("log").then(Commands.argument("category", StringArgumentType.string()).executes(DebugCommand::log)))
 				.then(Commands.literal("list").executes(DebugCommand::list))
@@ -30,7 +30,7 @@ public class DebugCommand {
 				.then(Commands.literal("overlay").executes(DebugCommand::overlay));
 	}
 
-	public static int log(final CommandContext<CommandSource> context) {
+	public static int log(final CommandContext<CommandSourceStack> context) {
 		if (!context.getSource().hasPermission(2)) {
 			return 0;
 		}
@@ -49,23 +49,23 @@ public class DebugCommand {
 		ConfigDebug.INSTANCE.enabled.set(enabledLogs);
 		ConfigDebug.INSTANCE.enabled.save();
 
-		context.getSource().sendSuccess(new TranslationTextComponent("lyc.command.debug.log").append(" " + category), true);
+		context.getSource().sendSuccess(new TranslatableComponent("lyc.command.debug.log").append(" " + category), true);
 		return 0;
 	}
 
-	public static int list(final CommandContext<CommandSource> context) {
+	public static int list(final CommandContext<CommandSourceStack> context) {
 		if (!context.getSource().hasPermission(2)) {
 			return 0;
 		}
-		context.getSource().sendSuccess(new TranslationTextComponent("lyc.command.debug.list"), true);
+		context.getSource().sendSuccess(new TranslatableComponent("lyc.command.debug.list"), true);
 		String[] debugCategories = new String[] {"jsonspawner", "mobspawns", "entity", "subspecies", "creature", "mobevents", "dungeon", "items", "equipment"};
 		for(String debugCategory : debugCategories) {
-			context.getSource().sendSuccess(new StringTextComponent(debugCategory), true);
+			context.getSource().sendSuccess(new TextComponent(debugCategory), true);
 		}
 		return 0;
 	}
 
-	public static int biomesfromtag(final CommandContext<CommandSource> context) {
+	public static int biomesfromtag(final CommandContext<CommandSourceStack> context) {
 		if (!context.getSource().hasPermission(2)) {
 			return 0;
 		}
@@ -79,23 +79,23 @@ public class DebugCommand {
 		if (biomeType == null) {
 			return 0;
 		}
-		for(RegistryKey<Biome> biomeKey : BiomeDictionary.getBiomes(biomeType)) {
-			context.getSource().sendSuccess(new StringTextComponent(biomeKey.location().toString()), true); // TODO Figure out how the hell to get a biome display name now...
+		for(ResourceKey<Biome> biomeKey : BiomeDictionary.getBiomes(biomeType)) {
+			context.getSource().sendSuccess(new TextComponent(biomeKey.location().toString()), true); // TODO Figure out how the hell to get a biome display name now...
 		}
 		return 0;
 	}
 
-	public static int listbiometags(final CommandContext<CommandSource> context) {
+	public static int listbiometags(final CommandContext<CommandSourceStack> context) {
 		if (!context.getSource().hasPermission(2)) {
 			return 0;
 		}
 		for(BiomeDictionary.Type biomeType : BiomeDictionary.Type.getAll()) {
-			context.getSource().sendSuccess(new StringTextComponent(biomeType.getName()), true);
+			context.getSource().sendSuccess(new TextComponent(biomeType.getName()), true);
 		}
 		return 0;
 	}
 
-	public static int listbiometagsforbiome(final CommandContext<CommandSource> context) {
+	public static int listbiometagsforbiome(final CommandContext<CommandSourceStack> context) {
 		if (!context.getSource().hasPermission(2)) {
 			return 0;
 		}
@@ -103,15 +103,15 @@ public class DebugCommand {
 		ResourceLocation biomeResourceLocation = new ResourceLocation(biomeId);
 		Biome biome = GameRegistry.findRegistry(Biome.class).getValue(biomeResourceLocation);
 		if (biome == null) {
-			context.getSource().sendSuccess(new StringTextComponent("Cannot find a biome with that id."), true);
+			context.getSource().sendSuccess(new TextComponent("Cannot find a biome with that id."), true);
 			return 0;
 		}
 		for (BiomeDictionary.Type biomeType : BiomeDictionary.Type.getAll()) {
-			for(RegistryKey<Biome> biomeKey : BiomeDictionary.getBiomes(biomeType)) {
+			for(ResourceKey<Biome> biomeKey : BiomeDictionary.getBiomes(biomeType)) {
 				if (biomeKey.location().toString().equals(biomeId)) {
-					context.getSource().sendSuccess(new StringTextComponent("Tags for: " + biomeId), true);
+					context.getSource().sendSuccess(new TextComponent("Tags for: " + biomeId), true);
 					for (BiomeDictionary.Type matchedBiomeType : BiomeDictionary.getTypes(biomeKey)) {
-						context.getSource().sendSuccess(new StringTextComponent(matchedBiomeType.getName()), true);
+						context.getSource().sendSuccess(new TextComponent(matchedBiomeType.getName()), true);
 					}
 					return 0;
 				}
@@ -120,13 +120,13 @@ public class DebugCommand {
 		return 0;
 	}
 
-	public static int overlay(final CommandContext<CommandSource> context) {
+	public static int overlay(final CommandContext<CommandSourceStack> context) {
 		if (!context.getSource().hasPermission(2)) {
 			return 0;
 		}
 		ConfigDebug.INSTANCE.creatureOverlay.set(!ConfigDebug.INSTANCE.creatureOverlay.get());
 		ConfigDebug.INSTANCE.creatureOverlay.save();
-		context.getSource().sendSuccess(new TranslationTextComponent("lyc.command.debug.overlay"), true);
+		context.getSource().sendSuccess(new TranslatableComponent("lyc.command.debug.overlay"), true);
 		return 0;
 	}
 }

@@ -5,14 +5,14 @@ import com.lycanitesmobs.core.EffectBase;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import com.lycanitesmobs.core.entity.goals.actions.abilities.StealthGoal;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.Pose;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.particles.IParticleData;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -21,11 +21,11 @@ public class EntityOstimien extends TameableCreatureEntity {
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityOstimien(EntityType<? extends EntityOstimien> entityType, World world) {
+    public EntityOstimien(EntityType<? extends EntityOstimien> entityType, Level world) {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.ARTHROPOD;
+        this.attribute = MobType.ARTHROPOD;
         this.hasAttackSound = true;
         this.setupMob();
     }
@@ -76,8 +76,8 @@ public class EntityOstimien extends TameableCreatureEntity {
     	if(this.getCommandSenderWorld().isClientSide) return false;
     	else {
 	    	if(this.hasAttackTarget()) {
-	    		if(this.getTarget() instanceof PlayerEntity) {
-	    			PlayerEntity playerTarget = (PlayerEntity)this.getTarget();
+	    		if(this.getTarget() instanceof Player) {
+	    			Player playerTarget = (Player)this.getTarget();
 	    			ItemStack itemstack = playerTarget.inventory.getSelected();
 	    			if(this.isTamingItem(itemstack))
 	    				return false;
@@ -101,7 +101,7 @@ public class EntityOstimien extends TameableCreatureEntity {
     @Override
     public void startStealth() {
     	if(this.getCommandSenderWorld().isClientSide) {
-            IParticleData particle = ParticleTypes.SMOKE;
+            ParticleOptions particle = ParticleTypes.SMOKE;
             double d0 = this.random.nextGaussian() * 0.02D;
             double d1 = this.random.nextGaussian() * 0.02D;
             double d2 = this.random.nextGaussian() * 0.02D;
@@ -139,7 +139,7 @@ public class EntityOstimien extends TameableCreatureEntity {
     // ==================================================
     @OnlyIn(Dist.CLIENT)
     @Override
-    public boolean isInvisibleTo(PlayerEntity player) {
+    public boolean isInvisibleTo(Player player) {
     	if(this.isTamed() && this.getOwner() == player)
     		return false;
         return this.isInvisible();

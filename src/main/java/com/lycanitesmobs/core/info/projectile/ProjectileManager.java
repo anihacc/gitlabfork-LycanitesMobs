@@ -9,11 +9,11 @@ import com.lycanitesmobs.core.StreamLoader;
 import com.lycanitesmobs.core.entity.*;
 import com.lycanitesmobs.core.entity.projectile.*;
 import com.lycanitesmobs.core.info.ModInfo;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityClassification;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -116,7 +116,7 @@ public class ProjectileManager extends JSONLoader {
 	 * @return The projectile's Entity Type.
 	 */
 	public EntityType createEntityType(String entityName, Class<? extends Entity> entityClass) {
-		EntityType.Builder entityTypeBuilder = EntityType.Builder.of(EntityFactory.getInstance(), EntityClassification.MISC);
+		EntityType.Builder entityTypeBuilder = EntityType.Builder.of(EntityFactory.getInstance(), MobCategory.MISC);
 		entityTypeBuilder.setTrackingRange(40);
 		entityTypeBuilder.setUpdateInterval(3);
 		entityTypeBuilder.setShouldReceiveVelocityUpdates(true);
@@ -124,7 +124,7 @@ public class ProjectileManager extends JSONLoader {
 		EntityType entityType = entityTypeBuilder.build(entityName);
 		entityType.setRegistryName(LycanitesMobs.MODID, entityName);
 		try {
-			EntityFactory.getInstance().addEntityType(entityType, entityClass.getConstructor(EntityType.class, World.class), entityName.toLowerCase());
+			EntityFactory.getInstance().addEntityType(entityType, entityClass.getConstructor(EntityType.class, Level.class), entityName.toLowerCase());
 		} catch (NoSuchMethodException e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
@@ -198,9 +198,9 @@ public class ProjectileManager extends JSONLoader {
 		this.addOldProjectile(name, entityClass);
 	}
 
-	public BaseProjectileEntity createOldProjectile(Class<? extends BaseProjectileEntity> projectileClass, World world, LivingEntity entity) {
+	public BaseProjectileEntity createOldProjectile(Class<? extends BaseProjectileEntity> projectileClass, Level world, LivingEntity entity) {
 		try {
-			return projectileClass.getConstructor(EntityType.class, World.class, LivingEntity.class).newInstance(this.oldProjectileTypes.get(projectileClass), world, entity);
+			return projectileClass.getConstructor(EntityType.class, Level.class, LivingEntity.class).newInstance(this.oldProjectileTypes.get(projectileClass), world, entity);
 		} catch (InstantiationException | InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
 			e.printStackTrace();
 			//throw new RuntimeException(e);
@@ -208,9 +208,9 @@ public class ProjectileManager extends JSONLoader {
 		}
 	}
 
-	public BaseProjectileEntity createOldProjectile(Class<? extends BaseProjectileEntity> projectileClass, World world, double x, double y, double z) {
+	public BaseProjectileEntity createOldProjectile(Class<? extends BaseProjectileEntity> projectileClass, Level world, double x, double y, double z) {
 		try {
-			return projectileClass.getConstructor(EntityType.class, World.class, double.class, double.class, double.class).newInstance(this.oldProjectileTypes.get(projectileClass), world, x, y, z);
+			return projectileClass.getConstructor(EntityType.class, Level.class, double.class, double.class, double.class).newInstance(this.oldProjectileTypes.get(projectileClass), world, x, y, z);
 		} catch (InstantiationException | InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
 			e.printStackTrace();
 			//throw new RuntimeException(e);

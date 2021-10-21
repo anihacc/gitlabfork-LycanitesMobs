@@ -3,11 +3,11 @@ package com.lycanitesmobs.core.info.projectile.behaviours;
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.helpers.JSONHelper;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import java.util.ArrayList;
@@ -30,7 +30,7 @@ public class ProjectileBehaviourRandomEffect extends ProjectileBehaviour {
 	}
 
 	@Override
-	public void onProjectileDamage(BaseProjectileEntity projectile, World world, LivingEntity target, float damage) {
+	public void onProjectileDamage(BaseProjectileEntity projectile, Level world, LivingEntity target, float damage) {
 		if(projectile.getOwner() == null || damage <= 0) {
 			return;
 		}
@@ -40,9 +40,9 @@ public class ProjectileBehaviourRandomEffect extends ProjectileBehaviour {
 		}
 
 		int randomIndex = world.random.nextInt(this.effects.size());
-		Effect effect = GameRegistry.findRegistry(Effect.class).getValue(new ResourceLocation(this.effects.get(randomIndex)));
+		MobEffect effect = GameRegistry.findRegistry(MobEffect.class).getValue(new ResourceLocation(this.effects.get(randomIndex)));
 		if(effect != null) {
-			target.addEffect(new EffectInstance(effect, this.duration, this.amplifier));
+			target.addEffect(new MobEffectInstance(effect, this.duration, this.amplifier));
 		}
 	}
 }

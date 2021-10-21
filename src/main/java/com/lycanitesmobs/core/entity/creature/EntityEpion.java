@@ -6,34 +6,34 @@ import com.lycanitesmobs.core.entity.RideableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.Pose;
-import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.Explosion;
-import net.minecraft.world.GameRules;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Explosion;
+import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class EntityEpion extends RideableCreatureEntity implements IMob {
+public class EntityEpion extends RideableCreatureEntity implements Enemy {
     
 	public boolean griefing = true;
 	
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityEpion(EntityType<? extends EntityEpion> entityType, World world) {
+    public EntityEpion(EntityType<? extends EntityEpion> entityType, Level world) {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEAD;
+        this.attribute = MobType.UNDEAD;
         this.hasAttackSound = false;
         this.flySoundSpeed = 20;
         
@@ -74,9 +74,9 @@ public class EntityEpion extends RideableCreatureEntity implements IMob {
 					explosionRadius = 3;
 				explosionRadius = Math.max(2, Math.round((float)explosionRadius * (float)this.sizeScale));
                 if(this.getCommandSenderWorld().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING) && this.griefing)
-	        	    this.getCommandSenderWorld().explode(this, this.position().x(), this.position().y(), this.position().z(), explosionRadius, Explosion.Mode.NONE);
+	        	    this.getCommandSenderWorld().explode(this, this.position().x(), this.position().y(), this.position().z(), explosionRadius, Explosion.BlockInteraction.NONE);
 				else
-					this.getCommandSenderWorld().explode(this, this.position().x(), this.position().y(), this.position().z(), explosionRadius, Explosion.Mode.BREAK);
+					this.getCommandSenderWorld().explode(this, this.position().x(), this.position().y(), this.position().z(), explosionRadius, Explosion.BlockInteraction.BREAK);
 	        	this.remove();
         	}
         }
@@ -103,7 +103,7 @@ public class EntityEpion extends RideableCreatureEntity implements IMob {
     // ========== Ranged Attack ==========
 	@Override
 	public void attackRanged(Entity target, float range) {
-		this.fireProjectile("bloodleech", target, range, 0, new Vector3d(0, 0, 0), 1.2f, 2f, 1F);
+		this.fireProjectile("bloodleech", target, range, 0, new Vec3(0, 0, 0), 1.2f, 2f, 1F);
 		super.attackRanged(target, range);
 	}
     
@@ -158,8 +158,8 @@ public class EntityEpion extends RideableCreatureEntity implements IMob {
 		if(this.getStamina() < this.getStaminaCost())
 			return;
 
-		if(rider instanceof PlayerEntity) {
-			PlayerEntity player = (PlayerEntity)rider;
+		if(rider instanceof Player) {
+			Player player = (Player)rider;
 			ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile("bloodleech");
 			if(projectileInfo != null) {
 				BaseProjectileEntity projectile = projectileInfo.createProjectile(this.getCommandSenderWorld(), player);
@@ -202,7 +202,7 @@ public class EntityEpion extends RideableCreatureEntity implements IMob {
 	// ========== Rendering Distance ==========
 	/** Returns a larger bounding box for rendering this large entity. **/
 	@OnlyIn(Dist.CLIENT)
-	public AxisAlignedBB getBoundingBoxForCulling() {
+	public AABB getBoundingBoxForCulling() {
 		return this.getBoundingBox().inflate(10, 10, 10).move(0, -5, 0);
 	}
 }

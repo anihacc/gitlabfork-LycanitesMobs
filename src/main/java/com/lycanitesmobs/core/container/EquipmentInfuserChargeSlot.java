@@ -1,10 +1,10 @@
 package com.lycanitesmobs.core.container;
 
 import com.lycanitesmobs.core.item.ChargeItem;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.DyeItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.DyeItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
 public class EquipmentInfuserChargeSlot extends BaseSlot {
 	public EquipmentInfuserContainer container;
@@ -55,12 +55,12 @@ public class EquipmentInfuserChargeSlot extends BaseSlot {
 	 * @param itemStack The ItemStack being inserted.
 	 */
 	@Override
-	public ItemStack onTake(PlayerEntity player, ItemStack itemStack) {
+	public ItemStack onTake(Player player, ItemStack itemStack) {
 		return super.onTake(player, itemStack);
 	}
 
 	@Override
-	public boolean mayPickup(PlayerEntity player) {
+	public boolean mayPickup(Player player) {
 		return true;
 	}
 }

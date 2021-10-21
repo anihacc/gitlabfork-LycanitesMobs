@@ -4,9 +4,9 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.core.spawner.Spawner;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -15,7 +15,7 @@ import java.util.List;
 public abstract class EntitySpawnTrigger extends SpawnTrigger {
 
 	/** A list of creature attributes that match this trigger. **/
-	public List<CreatureAttribute> creatureAttributes = new ArrayList<>();
+	public List<MobType> creatureAttributes = new ArrayList<>();
 
 	/** Determines if the entity types list is a blacklist or whitelist. **/
 	public String entityTypesListType = "whitelist";
@@ -39,22 +39,22 @@ public abstract class EntitySpawnTrigger extends SpawnTrigger {
 			JsonArray jsonArray = json.get("entityTypes").getAsJsonArray();
 			Iterator<JsonElement> jsonIterator = jsonArray.iterator();
 			while (jsonIterator.hasNext()) {
-				CreatureAttribute creatureAttribute = null;
+				MobType creatureAttribute = null;
 				String creatureAttributeName = jsonIterator.next().getAsString();
 				if("undead".equals(creatureAttributeName)) {
-					creatureAttribute = CreatureAttribute.UNDEAD;
+					creatureAttribute = MobType.UNDEAD;
 				}
 				else if("arthropod".equals(creatureAttributeName)) {
-					creatureAttribute = CreatureAttribute.ARTHROPOD;
+					creatureAttribute = MobType.ARTHROPOD;
 				}
 				else if("water".equals(creatureAttributeName)) {
-					creatureAttribute = CreatureAttribute.WATER;
+					creatureAttribute = MobType.WATER;
 				}
 				else if("illager".equals(creatureAttributeName)) {
-					creatureAttribute = CreatureAttribute.ILLAGER;
+					creatureAttribute = MobType.ILLAGER;
 				}
 				else if("undefined".equals(creatureAttributeName)) {
-					creatureAttribute = CreatureAttribute.UNDEFINED;
+					creatureAttribute = MobType.UNDEFINED;
 				}
 				if(creatureAttribute != null) {
 					this.creatureAttributes.add(creatureAttribute);

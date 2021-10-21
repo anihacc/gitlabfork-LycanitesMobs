@@ -1,9 +1,9 @@
 package com.lycanitesmobs.core.worldgen;
 
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.GenerationStage;
-import net.minecraft.world.gen.feature.IFeatureConfig;
-import net.minecraft.world.gen.placement.NoPlacementConfig;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.levelgen.GenerationStep;
+import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneDecoratorConfiguration;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -13,29 +13,29 @@ public class WorldGenerator {
 		WorldGenManager manager = WorldGenManager.getInstance();
 
 		// Chunk Spawner:
-		event.getGeneration().addFeature(GenerationStage.Decoration.TOP_LAYER_MODIFICATION.ordinal(),
-				() -> manager.chunkSpawnFeature.configured(IFeatureConfig.NONE).decorated(manager.alwaysPlacement.configured(NoPlacementConfig.INSTANCE)));
+		event.getGeneration().addFeature(GenerationStep.Decoration.TOP_LAYER_MODIFICATION.ordinal(),
+				() -> manager.chunkSpawnFeature.configured(FeatureConfiguration.NONE).decorated(manager.alwaysPlacement.configured(NoneDecoratorConfiguration.INSTANCE)));
 
 		// Dungeons:
-		event.getGeneration().addFeature(GenerationStage.Decoration.TOP_LAYER_MODIFICATION.ordinal(),
-				() -> manager.dungeonFeature.configured(IFeatureConfig.NONE).decorated(manager.alwaysPlacement.configured(NoPlacementConfig.INSTANCE)));
+		event.getGeneration().addFeature(GenerationStep.Decoration.TOP_LAYER_MODIFICATION.ordinal(),
+				() -> manager.dungeonFeature.configured(FeatureConfiguration.NONE).decorated(manager.alwaysPlacement.configured(NoneDecoratorConfiguration.INSTANCE)));
 
 		// Lakes:
-		if (event.getCategory() == Biome.Category.SWAMP || event.getCategory() == Biome.Category.MUSHROOM) {
-			event.getGeneration().addFeature(GenerationStage.Decoration.LAKES, manager.fluidConfiguredFeatures.get("poison_lake"));
-			event.getGeneration().addFeature(GenerationStage.Decoration.LAKES, manager.fluidConfiguredFeatures.get("poison_spring"));
+		if (event.getCategory() == Biome.BiomeCategory.SWAMP || event.getCategory() == Biome.BiomeCategory.MUSHROOM) {
+			event.getGeneration().addFeature(GenerationStep.Decoration.LAKES, manager.fluidConfiguredFeatures.get("poison_lake"));
+			event.getGeneration().addFeature(GenerationStep.Decoration.LAKES, manager.fluidConfiguredFeatures.get("poison_spring"));
 		}
-		else if (event.getCategory() == Biome.Category.DESERT || event.getCategory() == Biome.Category.MESA || event.getCategory() == Biome.Category.THEEND) {
-			event.getGeneration().addFeature(GenerationStage.Decoration.LAKES, manager.fluidConfiguredFeatures.get("acid_lake"));
-			event.getGeneration().addFeature(GenerationStage.Decoration.LAKES, manager.fluidConfiguredFeatures.get("acid_spring"));
+		else if (event.getCategory() == Biome.BiomeCategory.DESERT || event.getCategory() == Biome.BiomeCategory.MESA || event.getCategory() == Biome.BiomeCategory.THEEND) {
+			event.getGeneration().addFeature(GenerationStep.Decoration.LAKES, manager.fluidConfiguredFeatures.get("acid_lake"));
+			event.getGeneration().addFeature(GenerationStep.Decoration.LAKES, manager.fluidConfiguredFeatures.get("acid_spring"));
 		}
-		else if (event.getCategory() == Biome.Category.ICY || event.getCategory() == Biome.Category.EXTREME_HILLS) {
-			event.getGeneration().addFeature(GenerationStage.Decoration.LAKES, manager.fluidConfiguredFeatures.get("ooze_lake"));
-			event.getGeneration().addFeature(GenerationStage.Decoration.LAKES, manager.fluidConfiguredFeatures.get("ooze_spring"));
+		else if (event.getCategory() == Biome.BiomeCategory.ICY || event.getCategory() == Biome.BiomeCategory.EXTREME_HILLS) {
+			event.getGeneration().addFeature(GenerationStep.Decoration.LAKES, manager.fluidConfiguredFeatures.get("ooze_lake"));
+			event.getGeneration().addFeature(GenerationStep.Decoration.LAKES, manager.fluidConfiguredFeatures.get("ooze_spring"));
 		}
-		else if (event.getCategory() == Biome.Category.NETHER || event.getCategory() == Biome.Category.JUNGLE) {
-			event.getGeneration().addFeature(GenerationStage.Decoration.LAKES, manager.fluidConfiguredFeatures.get("moglava_lake"));
-			event.getGeneration().addFeature(GenerationStage.Decoration.LAKES, manager.fluidConfiguredFeatures.get("moglava_spring"));
+		else if (event.getCategory() == Biome.BiomeCategory.NETHER || event.getCategory() == Biome.BiomeCategory.JUNGLE) {
+			event.getGeneration().addFeature(GenerationStep.Decoration.LAKES, manager.fluidConfiguredFeatures.get("moglava_lake"));
+			event.getGeneration().addFeature(GenerationStep.Decoration.LAKES, manager.fluidConfiguredFeatures.get("moglava_spring"));
 		}
 	}
 }

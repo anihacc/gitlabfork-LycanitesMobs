@@ -3,24 +3,24 @@ package com.lycanitesmobs.core.entity.creature;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.FindAvoidTargetGoal;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.DamageSource;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.level.Level;
 
-public class EntityGorgomite extends BaseCreatureEntity implements IMob {
+public class EntityGorgomite extends BaseCreatureEntity implements Enemy {
 	private int swarmLimit = 5;
     
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityGorgomite(EntityType<? extends EntityGorgomite> entityType, World world) {
+    public EntityGorgomite(EntityType<? extends EntityGorgomite> entityType, Level world) {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.ARTHROPOD;
+        this.attribute = MobType.ARTHROPOD;
         this.hasAttackSound = true;
         this.setupMob();
     }
@@ -44,7 +44,7 @@ public class EntityGorgomite extends BaseCreatureEntity implements IMob {
 	// ========== Living Update ==========
 	@Override
     public void aiStep() {
-		if(!this.getCommandSenderWorld().isClientSide && this.hasAttackTarget() && this.getTarget() instanceof PlayerEntity && this.updateTick % 60 == 0) {
+		if(!this.getCommandSenderWorld().isClientSide && this.hasAttackTarget() && this.getTarget() instanceof Player && this.updateTick % 60 == 0) {
 			this.allyUpdate();
 		}
         

@@ -1,11 +1,11 @@
 package com.lycanitesmobs.core.entity.goals.actions;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.DoorBlock;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.DoorBlock;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.GameRules;
+import net.minecraft.world.level.GameRules;
 
 public class BreakDoorGoal extends DoorInteractGoal {
 	//Properties:
@@ -15,7 +15,7 @@ public class BreakDoorGoal extends DoorInteractGoal {
 	// ==================================================
  	//                    Constructor
  	// ==================================================
-    public BreakDoorGoal(MobEntity setHost) {
+    public BreakDoorGoal(Mob setHost) {
         super(setHost);
     }
 

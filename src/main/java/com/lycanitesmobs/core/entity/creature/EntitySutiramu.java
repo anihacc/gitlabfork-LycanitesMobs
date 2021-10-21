@@ -2,22 +2,22 @@ package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 
-public class EntitySutiramu extends TameableCreatureEntity implements IMob {
+public class EntitySutiramu extends TameableCreatureEntity implements Enemy {
 
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntitySutiramu(EntityType<? extends EntitySutiramu> entityType, World world) {
+    public EntitySutiramu(EntityType<? extends EntitySutiramu> entityType, Level world) {
         super(entityType, world);
 
         // Setup:
-        this.attribute = CreatureAttribute.ARTHROPOD;
+        this.attribute = MobType.ARTHROPOD;
         this.hasAttackSound = true;
 
         this.canGrow = false;
@@ -29,7 +29,7 @@ public class EntitySutiramu extends TameableCreatureEntity implements IMob {
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setTargetClass(PlayerEntity.class).setLongMemory(false));
+        this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setTargetClass(Player.class).setLongMemory(false));
         this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this));
     }
     

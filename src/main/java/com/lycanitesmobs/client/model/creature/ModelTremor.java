@@ -2,8 +2,8 @@ package com.lycanitesmobs.client.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.template.ModelTemplateElemental;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -41,7 +41,7 @@ public class ModelTremor extends ModelTemplateElemental {
 			if(partName.contains("right")) {
 				vibration = -vibration;
 			}
-			this.translate(MathHelper.cos(vibration) * 0.01f, MathHelper.cos(vibration) * 0.01f, MathHelper.cos(vibration) * 0.01f);
+			this.translate(Mth.cos(vibration) * 0.01f, Mth.cos(vibration) * 0.01f, Mth.cos(vibration) * 0.01f);
 		}
 
 		if(partName.contains("rib") && !partName.contains("07")) {

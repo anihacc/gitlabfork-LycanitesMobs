@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.spawner.trigger;
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.core.mobevent.MobEventPlayerServer;
 import com.lycanitesmobs.core.spawner.Spawner;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 
 /** Called when a Mob Event is active. **/
 public class MobEventSpawnTrigger extends SpawnTrigger {
@@ -33,7 +33,7 @@ public class MobEventSpawnTrigger extends SpawnTrigger {
 
 
 	/** Called every world tick when an event is active. **/
-	public void onTick(World world, MobEventPlayerServer mobEventPlayerServer) {
+	public void onTick(Level world, MobEventPlayerServer mobEventPlayerServer) {
 		if(mobEventPlayerServer == null) {
 			return;
 		}

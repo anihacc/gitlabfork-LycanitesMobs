@@ -11,8 +11,8 @@ import com.lycanitesmobs.core.info.Subspecies;
 import com.lycanitesmobs.core.info.Variant;
 import com.lycanitesmobs.core.network.MessageSummonSetSelection;
 import com.lycanitesmobs.core.pets.PetEntry;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.gui.IGuiEventListener;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.components.events.GuiEventListener;
 
 import javax.annotation.Nullable;
 import java.text.Collator;
@@ -167,7 +167,7 @@ public class CreatureList extends BaseList<BeastiaryScreen> {
 	}
 
 	@Override
-	protected void renderBackground(MatrixStack stack) {
+	protected void renderBackground(PoseStack stack) {
 		// Automatically Refresh:
 		if(this.listType == Type.PET || this.listType == Type.MOUNT ||this.listType == Type.FAMILIAR) {
 			if(this.screen.playerExt.selectedPet != null && this.releaseRefresh != this.screen.playerExt.selectedPet.releaseEntity) {
@@ -198,7 +198,7 @@ public class CreatureList extends BaseList<BeastiaryScreen> {
 		}
 
 		@Override
-		public void render(MatrixStack matrixStack, int index, int top, int left, int bottom, int right, int mouseX, int mouseY, boolean focus, float partialTicks) {
+		public void render(PoseStack matrixStack, int index, int top, int left, int bottom, int right, int mouseX, int mouseY, boolean focus, float partialTicks) {
 			// Knowledge Slot:
 			if(this.parentList.listType == Type.KNOWLEDGE || this.parentList.listType == Type.SUMMONABLE) {
 				if (this.creatureInfo == null) {
@@ -254,7 +254,7 @@ public class CreatureList extends BaseList<BeastiaryScreen> {
 		}
 
 		@Override
-		public List<? extends IGuiEventListener> children() {
+		public List<? extends GuiEventListener> children() {
 			return null;
 		}
 	}

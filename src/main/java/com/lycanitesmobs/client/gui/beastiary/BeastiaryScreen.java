@@ -10,17 +10,17 @@ import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.info.CreatureInfo;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 
 public abstract class BeastiaryScreen extends BaseScreen {
     public enum Page {
@@ -36,7 +36,7 @@ public abstract class BeastiaryScreen extends BaseScreen {
 
     public Minecraft mc;
 
-    public PlayerEntity player;
+    public Player player;
     public ExtendedPlayer playerExt;
     public LivingEntity creaturePreviewEntity;
     public float creaturePreviewTicks = 0;
@@ -70,8 +70,8 @@ public abstract class BeastiaryScreen extends BaseScreen {
      * Constructor
      * @param player The player to create the GUI instance for.
      */
-    public BeastiaryScreen(PlayerEntity player) {
-        super(new TranslationTextComponent("gui.beastiary.name"));
+    public BeastiaryScreen(Player player) {
+        super(new TranslatableComponent("gui.beastiary.name"));
         this.player = player;
         this.playerExt = ExtendedPlayer.getForPlayer(player);
         this.mc = Minecraft.getInstance();
@@ -151,26 +151,26 @@ public abstract class BeastiaryScreen extends BaseScreen {
         ButtonBase button;
 
         // Top Menu:
-        button = new ButtonBase(Page.INDEX.id, buttonX + (buttonWidthPadded * this.buttons.size()), menuY, buttonWidth, buttonHeight, new TranslationTextComponent("gui.beastiary.index.title"), this);
+        button = new ButtonBase(Page.INDEX.id, buttonX + (buttonWidthPadded * this.buttons.size()), menuY, buttonWidth, buttonHeight, new TranslatableComponent("gui.beastiary.index.title"), this);
         this.addButton(button);
-        button = new ButtonBase(Page.CREATURES.id, buttonX + (buttonWidthPadded * this.buttons.size()), menuY, buttonWidth, buttonHeight, new TranslationTextComponent("gui.beastiary.creatures"), this);
+        button = new ButtonBase(Page.CREATURES.id, buttonX + (buttonWidthPadded * this.buttons.size()), menuY, buttonWidth, buttonHeight, new TranslatableComponent("gui.beastiary.creatures"), this);
         this.addButton(button);
-        button = new ButtonBase(Page.PETS.id, buttonX + (buttonWidthPadded * this.buttons.size()), menuY, buttonWidth, buttonHeight, new TranslationTextComponent("gui.beastiary.pets"), this);
+        button = new ButtonBase(Page.PETS.id, buttonX + (buttonWidthPadded * this.buttons.size()), menuY, buttonWidth, buttonHeight, new TranslatableComponent("gui.beastiary.pets"), this);
         this.addButton(button);
-        button = new ButtonBase(Page.SUMMONING.id, buttonX + (buttonWidthPadded * this.buttons.size()), menuY, buttonWidth, buttonHeight, new TranslationTextComponent("gui.beastiary.summoning"), this);
+        button = new ButtonBase(Page.SUMMONING.id, buttonX + (buttonWidthPadded * this.buttons.size()), menuY, buttonWidth, buttonHeight, new TranslatableComponent("gui.beastiary.summoning"), this);
         this.addButton(button);
-        button = new ButtonBase(Page.ELEMENTS.id, buttonX + (buttonWidthPadded * this.buttons.size()), menuY, buttonWidth, buttonHeight, new TranslationTextComponent("gui.beastiary.elements"), this);
+        button = new ButtonBase(Page.ELEMENTS.id, buttonX + (buttonWidthPadded * this.buttons.size()), menuY, buttonWidth, buttonHeight, new TranslatableComponent("gui.beastiary.elements"), this);
         this.addButton(button);
     }
 
     @Override
-    public void renderBackground(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+    public void renderBackground(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         this.drawHelper.drawTexture(matrixStack, TextureManager.getTexture("GUIBeastiaryBackground"), this.windowX, this.windowY, this.zLevel, 1, 1, this.windowWidth, this.windowHeight);
     }
 
     @Override
-    public void renderForeground(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
-        ITextComponent title = new StringTextComponent("\u00A7l\u00A7n").append(this.getTitle());
+    public void renderForeground(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+        Component title = new TextComponent("\u00A7l\u00A7n").append(this.getTitle());
         float width = this.drawHelper.getStringWidth(title.getString());
         this.drawHelper.drawString(matrixStack, title.getString(), this.colRightCenterX - Math.round(width / 2), this.colRightY, 0xFFFFFF, true);
     }
@@ -213,8 +213,8 @@ public abstract class BeastiaryScreen extends BaseScreen {
      * Returns the title of this Beastiary Page.
      * @return The title text string to display.
      */
-    public ITextComponent getTitle() {
-        return new TranslationTextComponent("gui.beastiary.name");
+    public Component getTitle() {
+        return new TranslatableComponent("gui.beastiary.name");
     }
 
     /**
@@ -225,14 +225,14 @@ public abstract class BeastiaryScreen extends BaseScreen {
      * @param x The x position to draw from.
      * @param y The y position to draw from.
      */
-    public void drawLevel(MatrixStack matrixStack, CreatureInfo creatureInfo, ResourceLocation texture, int x, int y) {
+    public void drawLevel(PoseStack matrixStack, CreatureInfo creatureInfo, ResourceLocation texture, int x, int y) {
         int level = creatureInfo.summonCost;
         if(level <= 10) {
             this.drawHelper.drawBar(matrixStack, texture, x, y, 0, 9, 9, level, 10);
         }
     }
 
-    public void renderCreature(MatrixStack matrixStack, CreatureInfo creatureInfo, int x, int y, int mouseX, int mouseY, float partialTicks) {
+    public void renderCreature(PoseStack matrixStack, CreatureInfo creatureInfo, int x, int y, int mouseX, int mouseY, float partialTicks) {
         // Clear:
         if(creatureInfo == null) {
             this.creaturePreviewEntity = null;
@@ -319,7 +319,7 @@ public abstract class BeastiaryScreen extends BaseScreen {
             soundSuffix += "." + creatureInfo.getSubspecies(this.playerExt.selectedSubspecies).name;
         }
         SoundEvent soundEvent = ObjectManager.getSound(creatureInfo.getName() + soundSuffix + "_say");
-        this.player.getCommandSenderWorld().playSound(this.player, this.player.position().x(), this.player.position().y(), this.player.position().z(), soundEvent, SoundCategory.NEUTRAL, 1, 1);
+        this.player.getCommandSenderWorld().playSound(this.player, this.player.position().x(), this.player.position().y(), this.player.position().z(), soundEvent, SoundSource.NEUTRAL, 1, 1);
     }
 
     /**

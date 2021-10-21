@@ -9,19 +9,19 @@ import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import com.lycanitesmobs.core.item.BaseItem;
 import com.lycanitesmobs.core.pets.SummonSet;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.UseAction;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.level.Level;
 
 public class ItemStaffSummoning extends BaseItem {
 	protected float damageScale = 1.0F;
@@ -42,34 +42,34 @@ public class ItemStaffSummoning extends BaseItem {
 	// ==================================================
     public void damageItemCharged(ItemStack itemStack, LivingEntity entity, float power) {
 		ExtendedPlayer playerExt = null;
-		if(entity instanceof PlayerEntity) {
-			playerExt = ExtendedPlayer.getForPlayer((PlayerEntity)entity);
+		if(entity instanceof Player) {
+			playerExt = ExtendedPlayer.getForPlayer((Player)entity);
 		}
     	if(playerExt != null && playerExt.staffPortal != null) {
-            this.damageStaff(itemStack, playerExt.staffPortal.summonAmount, (ServerPlayerEntity)entity);
+            this.damageStaff(itemStack, playerExt.staffPortal.summonAmount, (ServerPlayer)entity);
     	}
     }
 
 	// ========== Prevent Swing ==========
 	@Override
 	public boolean onEntitySwing(ItemStack itemStack, LivingEntity entity) {
-		if(entity instanceof PlayerEntity) {
-			entity.startUsingItem(Hand.MAIN_HAND);
+		if(entity instanceof Player) {
+			entity.startUsingItem(InteractionHand.MAIN_HAND);
 			return true;
 		}
 		return super.onEntitySwing(itemStack, entity);
 	}
 
 	@Override
-	public boolean onLeftClickEntity(ItemStack itemStack, PlayerEntity player, Entity entity) {
+	public boolean onLeftClickEntity(ItemStack itemStack, Player player, Entity entity) {
 		return true;
 	}
 
 	// ========== Start ==========
 	@Override
-	public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
+	public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
 		if (!CreatureManager.getInstance().config.isSummoningAllowed(world)) {
-			return new ActionResult(ActionResultType.FAIL, player.getItemInHand(hand));
+			return new InteractionResultHolder(InteractionResult.FAIL, player.getItemInHand(hand));
 		}
 
 		ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
@@ -93,7 +93,7 @@ public class ItemStaffSummoning extends BaseItem {
 			}
 		}
 		player.startUsingItem(hand);
-		return new ActionResult(ActionResultType.SUCCESS, player.getItemInHand(hand));
+		return new InteractionResultHolder(InteractionResult.SUCCESS, player.getItemInHand(hand));
 	}
 
 	// ========== Using ==========
@@ -119,7 +119,7 @@ public class ItemStaffSummoning extends BaseItem {
 
 	// ========== Stop ==========
 	@Override
-	public void releaseUsing(ItemStack stack, World worldIn, LivingEntity entityLiving, int timeLeft) {
+	public void releaseUsing(ItemStack stack, Level worldIn, LivingEntity entityLiving, int timeLeft) {
 		int useTime = this.getUseDuration(stack) - timeLeft;
 		float power = (float)useTime / (float)this.getChargeTime(stack);
 
@@ -136,8 +136,8 @@ public class ItemStaffSummoning extends BaseItem {
 		}
 
 		ExtendedPlayer playerExt = null;
-		if(entityLiving instanceof PlayerEntity) {
-			playerExt = ExtendedPlayer.getForPlayer((PlayerEntity)entityLiving);
+		if(entityLiving instanceof Player) {
+			playerExt = ExtendedPlayer.getForPlayer((Player)entityLiving);
 		}
 		if(playerExt != null) {
 			playerExt.staffPortal = null;
@@ -146,8 +146,8 @@ public class ItemStaffSummoning extends BaseItem {
 
 	// ========== Animation ==========
 	@Override
-	public UseAction getUseAnimation(ItemStack itemStack) {
-		return UseAction.BOW;
+	public UseAnim getUseAnimation(ItemStack itemStack) {
+		return UseAnim.BOW;
 	}
 
 	// ========== Max Use Duration ==========
@@ -185,12 +185,12 @@ public class ItemStaffSummoning extends BaseItem {
     }
     
     // ========== Additional Costs ==========
-    public boolean getAdditionalCosts(PlayerEntity player) {
+    public boolean getAdditionalCosts(Player player) {
     	return true;
     }
     
     // ========== Minion Behaviour ==========
-    public void applyMinionBehaviour(TameableCreatureEntity minion, PlayerEntity player) {
+    public void applyMinionBehaviour(TameableCreatureEntity minion, Player player) {
     	SummonSet summonSet = ExtendedPlayer.getForPlayer(player).getSelectedSummonSet();
         summonSet.applyBehaviour(minion);
         minion.setSubspecies(summonSet.subspecies);
@@ -205,30 +205,30 @@ public class ItemStaffSummoning extends BaseItem {
 	//                      Attack
 	// ==================================================
     // ========== Rapid ==========
-    public boolean rapidAttack(ItemStack itemStack, World world, LivingEntity entity) {
+    public boolean rapidAttack(ItemStack itemStack, Level world, LivingEntity entity) {
     	return false;
     }
 
-    protected void damageStaff(ItemStack itemStack, int amountToDamage, ServerPlayerEntity entity) {
+    protected void damageStaff(ItemStack itemStack, int amountToDamage, ServerPlayer entity) {
         itemStack.hurt(amountToDamage, entity.getRandom(), entity);
         if (itemStack.getCount() == 0) {
-            if (entity.getItemInHand(Hand.MAIN_HAND).equals(itemStack)) {
-                entity.setItemInHand(Hand.MAIN_HAND, ItemStack.EMPTY);
-            } else if (entity.getItemInHand(Hand.OFF_HAND).equals(itemStack)) {
-                entity.setItemInHand(Hand.OFF_HAND, ItemStack.EMPTY);
+            if (entity.getItemInHand(InteractionHand.MAIN_HAND).equals(itemStack)) {
+                entity.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
+            } else if (entity.getItemInHand(InteractionHand.OFF_HAND).equals(itemStack)) {
+                entity.setItemInHand(InteractionHand.OFF_HAND, ItemStack.EMPTY);
             }
         }
     }
     
     // ========== Charged ==========
-    public boolean chargedAttack(ItemStack itemStack, World world, LivingEntity entity, float power) {
+    public boolean chargedAttack(ItemStack itemStack, Level world, LivingEntity entity, float power) {
     	ExtendedPlayer playerExt = null;
-    	if(entity instanceof PlayerEntity) {
-			playerExt = ExtendedPlayer.getForPlayer((PlayerEntity)entity);
+    	if(entity instanceof Player) {
+			playerExt = ExtendedPlayer.getForPlayer((Player)entity);
 		}
     	if(playerExt != null && playerExt.staffPortal != null) {
 			int successCount = playerExt.staffPortal.summonCreatures();
-            this.damageStaff(itemStack, successCount, (ServerPlayerEntity)entity);
+            this.damageStaff(itemStack, successCount, (ServerPlayer)entity);
 			return successCount > 0;
 		}
 		return false;

@@ -3,26 +3,26 @@ package com.lycanitesmobs.core.entity.creature;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.FindAttackTargetGoal;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.monster.IMob;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 
-public class EntitySylph extends TameableCreatureEntity implements IMob {
+public class EntitySylph extends TameableCreatureEntity implements Enemy {
 
 	public float fireDamageAbsorbed = 0;
 
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntitySylph(EntityType<? extends EntitySylph> entityType, World world) {
+    public EntitySylph(EntityType<? extends EntitySylph> entityType, Level world) {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEFINED;
+        this.attribute = MobType.UNDEFINED;
         this.hasAttackSound = false;
         this.setupMob();
 
@@ -57,7 +57,7 @@ public class EntitySylph extends TameableCreatureEntity implements IMob {
     public void attackRanged(Entity target, float range) {
     	int projectileCount = 10;
     	for(int i = 0; i < projectileCount; i++) {
-    		this.fireProjectile("aetherwave", target, range, (360 / projectileCount) * i, new Vector3d(0, 0, 0), 0.6f, 2f, 1F);
+    		this.fireProjectile("aetherwave", target, range, (360 / projectileCount) * i, new Vec3(0, 0, 0), 0.6f, 2f, 1F);
 		}
         super.attackRanged(target, range);
     }

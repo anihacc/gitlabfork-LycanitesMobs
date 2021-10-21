@@ -6,9 +6,9 @@ import com.lycanitesmobs.core.IProxy;
 import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.network.MessageScreenRequest;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 public class ClientProxy implements IProxy {
@@ -18,7 +18,7 @@ public class ClientProxy implements IProxy {
 	}
 
 	@Override
-	public World getWorld() {
+	public Level getWorld() {
 		return Minecraft.getInstance().level;
 	}
 
@@ -28,12 +28,12 @@ public class ClientProxy implements IProxy {
 	}
 
 	@Override
-	public PlayerEntity getClientPlayer() {
+	public Player getClientPlayer() {
 		return Minecraft.getInstance().player;
 	}
 
 	@Override
-	public void openScreen(int screenId, PlayerEntity player) {
+	public void openScreen(int screenId, Player player) {
 		ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
 		if (playerExt == null) {
 			return;

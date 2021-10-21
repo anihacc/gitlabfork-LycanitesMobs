@@ -2,24 +2,24 @@ package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.monster.IMob;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 
-public class EntityClink extends TameableCreatureEntity implements IMob {
+public class EntityClink extends TameableCreatureEntity implements Enemy {
     
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityClink(EntityType<? extends EntityClink> entityType, World world) {
+    public EntityClink(EntityType<? extends EntityClink> entityType, Level world) {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEFINED;
+        this.attribute = MobType.UNDEFINED;
         this.hasAttackSound = false;
         this.setupMob();
         
@@ -42,7 +42,7 @@ public class EntityClink extends TameableCreatureEntity implements IMob {
     // ========== Ranged Attack ==========
 	@Override
 	public void attackRanged(Entity target, float range) {
-		this.fireProjectile("throwingscythe", target, range, 0, new Vector3d(0, 0, 0), 1.2f, 2f, 1F);
+		this.fireProjectile("throwingscythe", target, range, 0, new Vec3(0, 0, 0), 1.2f, 2f, 1F);
 		this.nextAttackPhase();
 		super.attackRanged(target, range);
 	}

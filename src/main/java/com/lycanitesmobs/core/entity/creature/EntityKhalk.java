@@ -4,34 +4,34 @@ import com.lycanitesmobs.api.IGroupHeavy;
 import com.lycanitesmobs.core.entity.CustomItemEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.FlowingFluidBlock;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.Pose;
-import net.minecraft.entity.monster.IMob;
-import net.minecraft.pathfinding.PathNodeType;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.GameRules;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LiquidBlock;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class EntityKhalk extends TameableCreatureEntity implements IMob, IGroupHeavy {
+public class EntityKhalk extends TameableCreatureEntity implements Enemy, IGroupHeavy {
 
     public boolean lavaDeath = true;
 
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityKhalk(EntityType<? extends EntityKhalk> entityType, World world) {
+    public EntityKhalk(EntityType<? extends EntityKhalk> entityType, Level world) {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEFINED;
+        this.attribute = MobType.UNDEFINED;
         this.spawnsOnLand = true;
         this.spawnsInWater = true;
         this.isLavaCreature = true;
@@ -43,7 +43,7 @@ public class EntityKhalk extends TameableCreatureEntity implements IMob, IGroupH
         this.solidCollision = true;
         this.setupMob();
 
-        this.setPathfindingMalus(PathNodeType.LAVA, 0F);
+        this.setPathfindingMalus(BlockPathTypes.LAVA, 0F);
     }
 
     @Override
@@ -123,9 +123,9 @@ public class EntityKhalk extends TameableCreatureEntity implements IMob, IGroupH
 					for(int z = (int)this.position().z() - lavaWidth; z <= (int)this.position().z() + lavaWidth; z++) {
 						Block block = this.getCommandSenderWorld().getBlockState(new BlockPos(x, y, z)).getBlock();
 						if(block == Blocks.AIR) {
-							BlockState blockState = Blocks.LAVA.defaultBlockState().setValue(FlowingFluidBlock.LEVEL, 4);
+							BlockState blockState = Blocks.LAVA.defaultBlockState().setValue(LiquidBlock.LEVEL, 4);
 							if(x == (int)this.position().x() && y == (int)this.position().y() && z == (int)this.position().z())
-								blockState = blockState = Blocks.LAVA.defaultBlockState().setValue(FlowingFluidBlock.LEVEL, 5);
+								blockState = blockState = Blocks.LAVA.defaultBlockState().setValue(LiquidBlock.LEVEL, 5);
 							this.getCommandSenderWorld().setBlock(new BlockPos(x, y, z), blockState, 3);
 						}
 					}

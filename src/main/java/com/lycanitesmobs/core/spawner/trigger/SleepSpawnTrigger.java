@@ -2,10 +2,10 @@ package com.lycanitesmobs.core.spawner.trigger;
 
 import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.spawner.Spawner;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 public class SleepSpawnTrigger extends BlockSpawnTrigger {
 	/** Constructor **/
@@ -16,7 +16,7 @@ public class SleepSpawnTrigger extends BlockSpawnTrigger {
 
 
 	/** Called every time a player attempts to use a bed. **/
-	public boolean onSleep(World world, PlayerEntity player, BlockPos spawnPos, BlockState blockState) {
+	public boolean onSleep(Level world, Player player, BlockPos spawnPos, BlockState blockState) {
 		ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
 
 		// Chance:

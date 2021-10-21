@@ -2,8 +2,8 @@ package com.lycanitesmobs.core.network;
 
 import com.lycanitesmobs.client.ClientManager;
 import com.lycanitesmobs.core.entity.ExtendedPlayer;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkEvent;
 
@@ -29,7 +29,7 @@ public class MessagePlayerStats {
 		if(ctx.get().getDirection() != NetworkDirection.PLAY_TO_CLIENT)
 			return;
 
-		PlayerEntity player = ClientManager.getInstance().getClientPlayer();
+		Player player = ClientManager.getInstance().getClientPlayer();
 		ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
 		if(playerExt == null)
 			return;
@@ -42,7 +42,7 @@ public class MessagePlayerStats {
 	/**
 	 * Reads the message from bytes.
 	 */
-	public static MessagePlayerStats decode(PacketBuffer packet) {
+	public static MessagePlayerStats decode(FriendlyByteBuf packet) {
 		MessagePlayerStats message = new MessagePlayerStats();
 		message.spirit = packet.readInt();
 		message.summonFocus = packet.readInt();
@@ -53,7 +53,7 @@ public class MessagePlayerStats {
 	/**
 	 * Writes the message into bytes.
 	 */
-	public static void encode(MessagePlayerStats message, PacketBuffer packet) {
+	public static void encode(MessagePlayerStats message, FriendlyByteBuf packet) {
 		packet.writeInt(message.spirit);
 		packet.writeInt(message.summonFocus);
 		packet.writeInt(message.creatureStudyCooldown);

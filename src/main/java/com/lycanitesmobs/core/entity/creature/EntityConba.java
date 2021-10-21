@@ -6,21 +6,27 @@ import com.lycanitesmobs.core.entity.goals.actions.abilities.FireProjectilesGoal
 import com.lycanitesmobs.core.entity.goals.targeting.FindAvoidTargetGoal;
 import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.entity.*;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
-import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.monster.PillagerEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.npc.Villager;
+import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.world.entity.monster.Pillager;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.BaseComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
 
-public class EntityConba extends TameableCreatureEntity implements IMob {
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.Pose;
+
+public class EntityConba extends TameableCreatureEntity implements Enemy {
 	AttackMeleeGoal aiAttackMelee;
 	public boolean vespidInfection = false;
 	public int vespidInfectionTime = 0;
@@ -28,11 +34,11 @@ public class EntityConba extends TameableCreatureEntity implements IMob {
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityConba(EntityType<? extends EntityConba> entityType, World world) {
+    public EntityConba(EntityType<? extends EntityConba> entityType, Level world) {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEFINED;
+        this.attribute = MobType.UNDEFINED;
         this.hasAttackSound = true;
         this.setupMob();
     }
@@ -47,9 +53,9 @@ public class EntityConba extends TameableCreatureEntity implements IMob {
 
 		super.registerGoals();
 
-        this.targetSelector.addGoal(this.nextSpecialTargetIndex++, new FindAvoidTargetGoal(this).setTargetClass(PlayerEntity.class).setTameTargetting(false));
-        this.targetSelector.addGoal(this.nextSpecialTargetIndex++, new FindAvoidTargetGoal(this).setTargetClass(VillagerEntity.class));
-        this.targetSelector.addGoal(this.nextSpecialTargetIndex++, new FindAvoidTargetGoal(this).setTargetClass(PillagerEntity.class));
+        this.targetSelector.addGoal(this.nextSpecialTargetIndex++, new FindAvoidTargetGoal(this).setTargetClass(Player.class).setTameTargetting(false));
+        this.targetSelector.addGoal(this.nextSpecialTargetIndex++, new FindAvoidTargetGoal(this).setTargetClass(Villager.class));
+        this.targetSelector.addGoal(this.nextSpecialTargetIndex++, new FindAvoidTargetGoal(this).setTargetClass(Pillager.class));
     }
     
     
@@ -58,12 +64,12 @@ public class EntityConba extends TameableCreatureEntity implements IMob {
     // ==================================================
     /** Returns the species name of this entity. **/
 	@Override
-    public ITextComponent getSpeciesName() {
-		TextComponent infection = new StringTextComponent("");
+    public Component getSpeciesName() {
+		BaseComponent infection = new TextComponent("");
 		if(this.vespidInfection) {
 			String entityName = this.creatureInfo.getName();
 	    	if(entityName != null) {
-				infection = new TranslationTextComponent("entity." + this.creatureInfo.modInfo.modid + "." + entityName + ".infected");
+				infection = new TranslatableComponent("entity." + this.creatureInfo.modInfo.modid + "." + entityName + ".infected");
 				infection.append(" ");
 			}
 		}
@@ -148,7 +154,7 @@ public class EntityConba extends TameableCreatureEntity implements IMob {
     // ========== Ranged Attack ==========
 	@Override
 	public void attackRanged(Entity target, float range) {
-		this.fireProjectile("poop", target, range, 0, new Vector3d(0, 0, 0), 1.2f, 2f, 1F);
+		this.fireProjectile("poop", target, range, 0, new Vec3(0, 0, 0), 1.2f, 2f, 1F);
 		super.attackRanged(target, range);
 	}
     
@@ -220,7 +226,7 @@ public class EntityConba extends TameableCreatureEntity implements IMob {
    	// ========== Read ===========
     /** Used when loading this mob from a saved chunk. **/
     @Override
-    public void readAdditionalSaveData(CompoundNBT nbt) {
+    public void readAdditionalSaveData(CompoundTag nbt) {
     	super.readAdditionalSaveData(nbt);
         
         if(nbt.contains("VespidInfection")) {
@@ -234,7 +240,7 @@ public class EntityConba extends TameableCreatureEntity implements IMob {
     // ========== Write ==========
     /** Used when saving this mob to a chunk. **/
     @Override
-    public void addAdditionalSaveData(CompoundNBT nbt) {
+    public void addAdditionalSaveData(CompoundTag nbt) {
         super.addAdditionalSaveData(nbt);
     	nbt.putBoolean("VespidInfection", this.vespidInfection);
     	if(this.vespidInfection)

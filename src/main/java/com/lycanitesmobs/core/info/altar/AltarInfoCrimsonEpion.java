@@ -3,11 +3,11 @@ package com.lycanitesmobs.core.info.altar;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.info.AltarInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 public class AltarInfoCrimsonEpion extends AltarInfo {
 
@@ -24,7 +24,7 @@ public class AltarInfoCrimsonEpion extends AltarInfo {
     // ==================================================
     /** Called first when checking for a valid altar, this should be fairly lightweight such as just checking if the first block checked is valid, a more in depth check if then done after. **/
     @Override
-    public boolean quickCheck(Entity entity, World world, BlockPos pos) {
+    public boolean quickCheck(Entity entity, Level world, BlockPos pos) {
         if(world.getBlockState(pos).getBlock() != Blocks.DIAMOND_BLOCK)
             return false;
         return true;
@@ -32,7 +32,7 @@ public class AltarInfoCrimsonEpion extends AltarInfo {
 
     /** Called if the QuickCheck() is passed, this should check the entire altar structure and if true is returned, the altar will activate. **/
     @Override
-    public boolean fullCheck(Entity entity, World world, BlockPos pos) {
+    public boolean fullCheck(Entity entity, Level world, BlockPos pos) {
         if(!this.quickCheck(entity, world, pos))
             return false;
 
@@ -57,7 +57,7 @@ public class AltarInfoCrimsonEpion extends AltarInfo {
     }
 
 
-    private boolean checkRotationX(Block bodyBlock, Entity entity, World world, BlockPos pos) {
+    private boolean checkRotationX(Block bodyBlock, Entity entity, Level world, BlockPos pos) {
         // Left:
         if(world.getBlockState(pos.offset(-1, 2, 0)).getBlock() != bodyBlock)
             return false;
@@ -82,7 +82,7 @@ public class AltarInfoCrimsonEpion extends AltarInfo {
     }
 
 
-    private boolean checkRotationZ(Block bodyBlock, Entity entity, World world, BlockPos pos) {
+    private boolean checkRotationZ(Block bodyBlock, Entity entity, Level world, BlockPos pos) {
         // Left:
         if(world.getBlockState(pos.offset(0, 2, -1)).getBlock() != bodyBlock)
             return false;
@@ -112,7 +112,7 @@ public class AltarInfoCrimsonEpion extends AltarInfo {
     // ==================================================
     /** Called when this Altar should activate. This will typically destroy the Altar and summon a rare mob or activate an event such as a boss event. If false is returned then the activation did not work, this is the place to check for things like dimensions. **/
     @Override
-    public boolean activate(Entity entity, World world, BlockPos pos, int variant) {
+    public boolean activate(Entity entity, Level world, BlockPos pos, int variant) {
         if(world.isClientSide)
             return true;
 

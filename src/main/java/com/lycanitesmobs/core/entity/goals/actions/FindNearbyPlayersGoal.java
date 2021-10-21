@@ -2,9 +2,9 @@ package com.lycanitesmobs.core.entity.goals.actions;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.player.Player;
 
 public class FindNearbyPlayersGoal extends Goal {
 	BaseCreatureEntity host;
@@ -48,7 +48,7 @@ public class FindNearbyPlayersGoal extends Goal {
 		LivingEntity newTarget = null;
 		try {
 			this.host.playerTargets.clear();
-			for(PlayerEntity player : this.host.getCommandSenderWorld().players()) {
+			for(Player player : this.host.getCommandSenderWorld().players()) {
 				if(this.host.distanceTo(player) <= this.searchRange) {
 					this.host.playerTargets.add(player);
 				}

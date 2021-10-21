@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.item;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.info.CreatureType;
 import com.lycanitesmobs.core.item.BaseItem;
-import net.minecraft.item.Item;
+import net.minecraft.world.item.Item;
 
 import javax.annotation.Nullable;
 

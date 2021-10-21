@@ -6,22 +6,22 @@ import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.DefendEntitiesGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.DefendVillageGoal;
 import com.lycanitesmobs.core.info.CreatureManager;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
-import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.entity.passive.IronGolemEntity;
-import net.minecraft.util.DamageSource;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.npc.Villager;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.animal.IronGolem;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.level.Level;
 
 public class EntityAegis extends TameableCreatureEntity implements IFusable {
 
-    public EntityAegis(EntityType<? extends EntityAegis> entityType, World world) {
+    public EntityAegis(EntityType<? extends EntityAegis> entityType, Level world) {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEFINED;
+        this.attribute = MobType.UNDEFINED;
         this.hasAttackSound = true;
         
         this.setupMob();
@@ -34,7 +34,7 @@ public class EntityAegis extends TameableCreatureEntity implements IFusable {
         this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(true));
 
 		this.targetSelector.addGoal(this.nextSpecialTargetIndex++, new DefendVillageGoal(this));
-		this.targetSelector.addGoal(this.nextSpecialTargetIndex++, new DefendEntitiesGoal(this, VillagerEntity.class));
+		this.targetSelector.addGoal(this.nextSpecialTargetIndex++, new DefendEntitiesGoal(this, Villager.class));
     }
 
 	@Override
@@ -50,7 +50,7 @@ public class EntityAegis extends TameableCreatureEntity implements IFusable {
 
 	@Override
 	public boolean canBeTargetedBy(LivingEntity entity) {
-		if(entity instanceof IronGolemEntity || entity instanceof VillagerEntity) {
+		if(entity instanceof IronGolem || entity instanceof Villager) {
 			return false;
 		}
 		return super.canBeTargetedBy(entity);
@@ -92,7 +92,7 @@ public class EntityAegis extends TameableCreatureEntity implements IFusable {
 		if(this.getRandom().nextDouble() > 0.75D && this.getHealth() / this.getMaxHealth() > 0.25F)
 			this.setBlocking();
 		if(damageSrc.getEntity() != null) {
-			if(damageSrc.getEntity() instanceof MonsterEntity)
+			if(damageSrc.getEntity() instanceof Monster)
 				damage *= 0.5F;
 		}
 		super.onDamage(damageSrc, damage);

@@ -2,13 +2,13 @@ package com.lycanitesmobs.core.info.projectile.behaviours;
 
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.FlowingFluidBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class ProjectileBehaviourPlaceBlocks extends ProjectileBehaviour {
@@ -39,14 +39,14 @@ public class ProjectileBehaviourPlaceBlocks extends ProjectileBehaviour {
 	}
 
 	@Override
-	public void onProjectileImpact(BaseProjectileEntity projectile, World world, BlockPos pos) {
+	public void onProjectileImpact(BaseProjectileEntity projectile, Level world, BlockPos pos) {
 		Block block = GameRegistry.findRegistry(Block.class).getValue(new ResourceLocation(this.blockName));
 		if(block == null) {
 			return;
 		}
 		BlockState blockState = block.defaultBlockState();
-		if(block instanceof FlowingFluidBlock) {
-			blockState = blockState.setValue(FlowingFluidBlock.LEVEL, 8);
+		if(block instanceof LiquidBlock) {
+			blockState = blockState.setValue(LiquidBlock.LEVEL, 8);
 		}
 
 		pos = pos.above();

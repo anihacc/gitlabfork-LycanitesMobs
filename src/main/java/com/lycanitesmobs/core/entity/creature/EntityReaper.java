@@ -7,29 +7,29 @@ import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.FindAttackTargetGoal;
 import com.lycanitesmobs.core.info.ElementInfo;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.Pose;
-import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 
-public class EntityReaper extends TameableCreatureEntity implements IMob {
+public class EntityReaper extends TameableCreatureEntity implements Enemy {
     
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityReaper(EntityType<? extends EntityReaper> entityType, World world) {
+    public EntityReaper(EntityType<? extends EntityReaper> entityType, Level world) {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEAD;
+        this.attribute = MobType.UNDEAD;
         this.hasAttackSound = false;
         this.setupMob();
         
@@ -60,7 +60,7 @@ public class EntityReaper extends TameableCreatureEntity implements IMob {
 
     @Override
     public void attackRanged(Entity target, float range) {
-        this.fireProjectile("spectralbolt", target, range, 0, new Vector3d(0, 0, 0), 1.2f, 2f, 1F);
+        this.fireProjectile("spectralbolt", target, range, 0, new Vec3(0, 0, 0), 1.2f, 2f, 1F);
         super.attackRanged(target, range);
     }
 
@@ -94,7 +94,7 @@ public class EntityReaper extends TameableCreatureEntity implements IMob {
     @Override
     protected SoundEvent getAmbientSound() {
     	if(this.hasAttackTarget()) {
-    		if(this.getTarget() instanceof PlayerEntity)
+    		if(this.getTarget() instanceof Player)
     			if("jbams".equalsIgnoreCase((this.getTarget()).getName().toString())) // JonBams special sound!
     				return ObjectManager.getSound(this.creatureInfo.getName() + "_say_jon");
     	}

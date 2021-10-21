@@ -3,8 +3,8 @@ package com.lycanitesmobs.core.dungeon.definition;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.core.dungeon.instance.SectorInstance;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import java.util.ArrayList;

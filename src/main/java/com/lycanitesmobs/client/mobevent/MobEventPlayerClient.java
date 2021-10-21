@@ -8,16 +8,16 @@ import com.lycanitesmobs.client.gui.overlays.BaseOverlay;
 import com.lycanitesmobs.core.MobEventSound;
 import com.lycanitesmobs.core.mobevent.MobEvent;
 import com.lycanitesmobs.core.mobevent.MobEventPlayerServer;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.SimpleSound;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.Util;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.Util;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.opengl.GL11;
@@ -29,8 +29,8 @@ public class MobEventPlayerClient {
 
     // Properties:
     public int ticks = 0;
-    public World world;
-    public SimpleSound sound;
+    public Level world;
+    public SimpleSoundInstance sound;
 
     /** True if the started event was already running and show display as 'Event Extended' in chat. **/
     public boolean extended = false;
@@ -39,7 +39,7 @@ public class MobEventPlayerClient {
 	// ==================================================
     //                     Constructor
     // ==================================================
-	public MobEventPlayerClient(MobEvent mobEvent, World world) {
+	public MobEventPlayerClient(MobEvent mobEvent, Level world) {
 		this.mobEvent = mobEvent;
         this.world = world;
         if(!world.isClientSide)
@@ -50,15 +50,15 @@ public class MobEventPlayerClient {
     // ==================================================
     //                       Start
     // ==================================================
-	public void onStart(PlayerEntity player) {
+	public void onStart(Player player) {
 		if(!this.extended) {
 			this.ticks = 0;
 		}
-		ITextComponent eventMessage = new TranslationTextComponent("event." + (extended ? "extended" : "started") + ".prefix")
+		Component eventMessage = new TranslatableComponent("event." + (extended ? "extended" : "started") + ".prefix")
 				.append(" ")
 				.append(this.mobEvent.getTitle())
 				.append(" ")
-				.append(new TranslationTextComponent("event." + (extended ? "extended" : "started") + ".suffix"));
+				.append(new TranslatableComponent("event." + (extended ? "extended" : "started") + ".suffix"));
 		player.sendMessage(eventMessage, Util.NIL_UUID);
 
 		if(player.abilities.instabuild && !MobEventPlayerServer.testOnCreative && "world".equalsIgnoreCase(this.mobEvent.channel)) {
@@ -73,7 +73,7 @@ public class MobEventPlayerClient {
             LycanitesMobs.logWarning("MobEvent", "Sound missing for: " + this.mobEvent.getTitle());
             return;
         }
-        this.sound = new MobEventSound(ObjectManager.getSound("mobevent_" + this.mobEvent.title.toLowerCase()), SoundCategory.RECORDS, ClientManager.getInstance().getClientPlayer(), 1.0F, 1.0F);
+        this.sound = new MobEventSound(ObjectManager.getSound("mobevent_" + this.mobEvent.title.toLowerCase()), SoundSource.RECORDS, ClientManager.getInstance().getClientPlayer(), 1.0F, 1.0F);
         Minecraft.getInstance().getSoundManager().play(this.sound);
     }
 	
@@ -81,12 +81,12 @@ public class MobEventPlayerClient {
     // ==================================================
     //                      Finish
     // ==================================================
-	public void onFinish(PlayerEntity player) {
-		ITextComponent eventMessage = new TranslationTextComponent("event.finished.prefix")
+	public void onFinish(Player player) {
+		Component eventMessage = new TranslatableComponent("event.finished.prefix")
 				.append(" ")
 				.append(this.mobEvent.getTitle())
 				.append(" ")
-				.append(new TranslationTextComponent("event.finished.suffix"));
+				.append(new TranslatableComponent("event.finished.suffix"));
 		player.sendMessage(eventMessage, Util.NIL_UUID);
 	}
 
@@ -103,8 +103,8 @@ public class MobEventPlayerClient {
     //                       GUI
     // ==================================================
     @OnlyIn(Dist.CLIENT)
-    public void onGUIUpdate(MatrixStack matrixStack, BaseOverlay gui, int sWidth, int sHeight) {
-    	PlayerEntity player = ClientManager.getInstance().getClientPlayer();
+    public void onGUIUpdate(PoseStack matrixStack, BaseOverlay gui, int sWidth, int sHeight) {
+    	Player player = ClientManager.getInstance().getClientPlayer();
         if(player.abilities.instabuild && !MobEventPlayerServer.testOnCreative && "world".equalsIgnoreCase(this.mobEvent.channel)) {
 			return;
 		}

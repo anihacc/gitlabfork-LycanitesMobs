@@ -7,13 +7,13 @@ import com.google.gson.JsonObject;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.helpers.JSONHelper;
 import com.lycanitesmobs.core.spawner.condition.SpawnCondition;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -42,7 +42,7 @@ public class Subspecies {
     public List<SpawnCondition> spawnConditions = new ArrayList<>();
 
 	/** The offset relative to this subspecies width and height that riding entities should be offset by. **/
-	public Vector3d mountOffset = new Vector3d(0.0D, 1.0D, 0.0D);
+	public Vec3 mountOffset = new Vec3(0.0D, 1.0D, 0.0D);
 
 
     public static Subspecies createFromJSON(CreatureInfo creatureInfo, JsonObject json) {
@@ -135,11 +135,11 @@ public class Subspecies {
 	 * Gets the display name of this Subspecies.
 	 * @return The Subspecies title.
 	 */
-	public ITextComponent getTitle() {
+	public Component getTitle() {
 		if(this.name != null) {
-			return new TranslationTextComponent("subspecies." + this.name);
+			return new TranslatableComponent("subspecies." + this.name);
 		}
-		return new StringTextComponent("");
+		return new TextComponent("");
     }
 
 
@@ -149,7 +149,7 @@ public class Subspecies {
 	 */
 	public boolean canSpawn(LivingEntity entityLiving) {
 		if(entityLiving != null) {
-			World world = entityLiving.getCommandSenderWorld();
+			Level world = entityLiving.getCommandSenderWorld();
 
 			// Check Conditions:
 			for(SpawnCondition condition : this.spawnConditions) {

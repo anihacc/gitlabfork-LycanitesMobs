@@ -2,18 +2,18 @@ package com.lycanitesmobs.core.block.fluid;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.info.ElementInfo;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.block.FlowingFluidBlock;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.fluid.FlowingFluid;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.level.material.FlowingFluid;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -27,7 +27,7 @@ public class MoglavaFluidBlock extends BaseFluidBlock {
 	}
 
 	@Override
-	public boolean shouldSpreadLiquid(World world, BlockPos neighborBlockPos, BlockState blockState) {
+	public boolean shouldSpreadLiquid(Level world, BlockPos neighborBlockPos, BlockState blockState) {
 		BlockState neighborBlockState = world.getBlockState(neighborBlockPos);
 
         // Water Cobblestone:
@@ -40,7 +40,7 @@ public class MoglavaFluidBlock extends BaseFluidBlock {
 	}
 
 	@Override
-	public void entityInside(BlockState blockState, World world, BlockPos pos, Entity entity) {
+	public void entityInside(BlockState blockState, Level world, BlockPos pos, Entity entity) {
 		if(entity instanceof ItemEntity)
 			entity.hurt(DamageSource.LAVA, 10F);
 		super.entityInside(blockState, world, pos, entity);
@@ -48,7 +48,7 @@ public class MoglavaFluidBlock extends BaseFluidBlock {
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void animateTick(BlockState state, World world, BlockPos pos, Random random) {
+	public void animateTick(BlockState state, Level world, BlockPos pos, Random random) {
 		float f;
 		float f1;
 		float f2;

@@ -3,8 +3,8 @@ package com.lycanitesmobs.client.model.creature;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.CreatureObjModelOld;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -68,15 +68,15 @@ public class ModelConba extends CreatureObjModelOld {
     	
     	// Idle:
     	if(partName.equals("mouth")) {
-    		this.doRotate((float)-Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F - 0.05F), 0.0F, 0.0F);
+    		this.doRotate((float)-Math.toDegrees(Mth.cos(loop * 0.09F) * 0.05F - 0.05F), 0.0F, 0.0F);
     	}
     	
     	// Walking:
     	float walkSwing = 0.3F;
     	if(partName.equals("armright") || partName.equals("legleft"))
-    		rotX += Math.toDegrees(MathHelper.cos(time * 0.6662F + (float)Math.PI) * walkSwing * distance);
+    		rotX += Math.toDegrees(Mth.cos(time * 0.6662F + (float)Math.PI) * walkSwing * distance);
     	if(partName.equals("armleft") || partName.equals("legright"))
-    		rotX += Math.toDegrees(MathHelper.cos(time * 0.6662F) * walkSwing * distance);
+    		rotX += Math.toDegrees(Mth.cos(time * 0.6662F) * walkSwing * distance);
 				
 		// Attack:
 		if(entity instanceof BaseCreatureEntity && ((BaseCreatureEntity)entity).isAttackOnCooldown()) {

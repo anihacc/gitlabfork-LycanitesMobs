@@ -1,15 +1,15 @@
 package com.lycanitesmobs.core.item.equipment.features;
 
 import com.google.gson.JsonObject;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.BaseComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class EffectEquipmentFeature extends EquipmentFeature {
@@ -42,15 +42,15 @@ public class EffectEquipmentFeature extends EquipmentFeature {
 	}
 
 	@Override
-	public ITextComponent getDescription(ItemStack itemStack, int level) {
+	public Component getDescription(ItemStack itemStack, int level) {
 		if(!this.isActive(itemStack, level)) {
 			return null;
 		}
 
-		TextComponent description = (TextComponent) new TranslationTextComponent("equipment.feature." + this.featureType).append(" ").append(
+		BaseComponent description = (BaseComponent) new TranslatableComponent("equipment.feature." + this.featureType).append(" ").append(
 				this.getEffectTypeName());
 		if(this.effectStrength > 0) {
-			description.append(" ").append(new TranslationTextComponent("entity.level")).append(" " + this.effectStrength);
+			description.append(" ").append(new TranslatableComponent("entity.level")).append(" " + this.effectStrength);
 		}
 		if(!"self".equals(this.effectTarget) && this.effectDuration > 0) {
 			description.append(" " + ((float)this.effectDuration / 20) + "s");
@@ -62,14 +62,14 @@ public class EffectEquipmentFeature extends EquipmentFeature {
 	}
 
 	@Override
-	public ITextComponent getSummary(ItemStack itemStack, int level) {
+	public Component getSummary(ItemStack itemStack, int level) {
 		if(!this.isActive(itemStack, level)) {
 			return null;
 		}
 
-		TextComponent summary = this.getEffectTypeName();
+		BaseComponent summary = this.getEffectTypeName();
 		if(this.effectStrength > 0) {
-			summary.append(" ").append(new TranslationTextComponent("entity.level")).append(" " + this.effectStrength);
+			summary.append(" ").append(new TranslatableComponent("entity.level")).append(" " + this.effectStrength);
 		}
 		if(!"self".equals(this.effectTarget) && this.effectDuration > 0) {
 			summary.append(" " + ((float)this.effectDuration / 20) + "s");
@@ -80,15 +80,15 @@ public class EffectEquipmentFeature extends EquipmentFeature {
 		return summary;
 	}
 
-	public TextComponent getEffectTypeName() {
+	public BaseComponent getEffectTypeName() {
 		if("burning".equals(this.effectType)) {
-			return new TranslationTextComponent("effect.burning");
+			return new TranslatableComponent("effect.burning");
 		}
-		Effect effect = GameRegistry.findRegistry(Effect.class).getValue(new ResourceLocation(this.effectType));
+		MobEffect effect = GameRegistry.findRegistry(MobEffect.class).getValue(new ResourceLocation(this.effectType));
 		if(effect == null) {
-			return new StringTextComponent(this.effectType);
+			return new TextComponent(this.effectType);
 		}
-		return (TextComponent) effect.getDisplayName();
+		return (BaseComponent) effect.getDisplayName();
 	}
 
 	/**
@@ -114,9 +114,9 @@ public class EffectEquipmentFeature extends EquipmentFeature {
 		}
 
 		// Potion Effects:
-		Effect effect = GameRegistry.findRegistry(Effect.class).getValue(new ResourceLocation(this.effectType));
+		MobEffect effect = GameRegistry.findRegistry(MobEffect.class).getValue(new ResourceLocation(this.effectType));
 		if(effect != null && this.effectStrength > 0) {
-			effectTarget.addEffect(new EffectInstance(effect, this.effectDuration, this.effectStrength - 1));
+			effectTarget.addEffect(new MobEffectInstance(effect, this.effectDuration, this.effectStrength - 1));
 		}
 	}
 }

@@ -3,9 +3,9 @@ package com.lycanitesmobs.client.gui.beastiary.lists;
 import com.lycanitesmobs.client.gui.beastiary.BeastiaryScreen;
 import com.lycanitesmobs.client.gui.widgets.BaseListEntry;
 import com.lycanitesmobs.core.info.CreatureInfo;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.gui.IGuiEventListener;
-import net.minecraft.util.text.TranslationTextComponent;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.components.events.GuiEventListener;
+import net.minecraft.network.chat.TranslatableComponent;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -96,7 +96,7 @@ public class PetTypeList extends CreatureFilterList {
 	}
 
 	@Override
-	public void renderSlot(MatrixStack matrixStack, int index, int top, int left, int bottom, int right) {
+	public void renderSlot(PoseStack matrixStack, int index, int top, int left, int bottom, int right) {
 	}
 
 	/**
@@ -111,12 +111,12 @@ public class PetTypeList extends CreatureFilterList {
 		}
 
 		@Override
-		public void render(MatrixStack stack, int index, int top, int left, int bottom, int right, int mouseX, int mouseY, boolean focus, float partialTicks) {
-			this.parentList.screen.drawHelper.drawString(stack, new TranslationTextComponent(this.petTypeKey).getString(), left + 2 , top + 4, 0xFFFFFF);
+		public void render(PoseStack stack, int index, int top, int left, int bottom, int right, int mouseX, int mouseY, boolean focus, float partialTicks) {
+			this.parentList.screen.drawHelper.drawString(stack, new TranslatableComponent(this.petTypeKey).getString(), left + 2 , top + 4, 0xFFFFFF);
 		}
 
 		@Override
-		public List<? extends IGuiEventListener> children() {
+		public List<? extends GuiEventListener> children() {
 			return null;
 		}
 	}

@@ -4,14 +4,14 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.info.ObjectLists;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -27,15 +27,15 @@ public class EntityDevilGatling extends BaseProjectileEntity {
     // ==================================================
  	//                   Constructors
  	// ==================================================
-    public EntityDevilGatling(EntityType<? extends BaseProjectileEntity> entityType, World world) {
+    public EntityDevilGatling(EntityType<? extends BaseProjectileEntity> entityType, Level world) {
         super(entityType, world);
     }
 
-    public EntityDevilGatling(EntityType<? extends BaseProjectileEntity> entityType, World world, LivingEntity entityLivingBase) {
+    public EntityDevilGatling(EntityType<? extends BaseProjectileEntity> entityType, Level world, LivingEntity entityLivingBase) {
         super(entityType, world, entityLivingBase);
     }
 
-    public EntityDevilGatling(EntityType<? extends BaseProjectileEntity> entityType, World world, double x, double y, double z) {
+    public EntityDevilGatling(EntityType<? extends BaseProjectileEntity> entityType, Level world, double x, double y, double z) {
         super(entityType, world, x, y, z);
     }
     
@@ -83,10 +83,10 @@ public class EntityDevilGatling extends BaseProjectileEntity {
 
         // Remove Buffs:
         if(this.random.nextBoolean()) {
-            List<Effect> goodEffects = new ArrayList<>();
+            List<MobEffect> goodEffects = new ArrayList<>();
             for (Object potionEffectObj : target.getActiveEffects()) {
-                if (potionEffectObj instanceof EffectInstance) {
-                    Effect effect = ((EffectInstance) potionEffectObj).getEffect();
+                if (potionEffectObj instanceof MobEffectInstance) {
+                    MobEffect effect = ((MobEffectInstance) potionEffectObj).getEffect();
                     if (effect != null) {
                         if (ObjectLists.inEffectList("buffs", effect))
                             goodEffects.add(effect);
@@ -102,7 +102,7 @@ public class EntityDevilGatling extends BaseProjectileEntity {
         }
 
 		if(ObjectManager.getEffect("decay") != null) {
-			target.addEffect(new EffectInstance(ObjectManager.getEffect("decay"), this.getEffectDuration(60), 0));
+			target.addEffect(new MobEffectInstance(ObjectManager.getEffect("decay"), this.getEffectDuration(60), 0));
 		}
     }
     

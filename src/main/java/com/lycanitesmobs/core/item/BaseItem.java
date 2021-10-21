@@ -5,28 +5,37 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.info.ModInfo;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.item.UseAction;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.item.UseAnim;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
 import net.minecraft.util.text.*;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import net.minecraft.item.Item.Properties;
+import net.minecraft.world.item.Item.Properties;
+
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
 
 public class BaseItem extends Item {
 	public static int DESCRIPTION_WIDTH = 200;
@@ -49,21 +58,21 @@ public class BaseItem extends Item {
 	}
 
 	@Override
-	public ITextComponent getName(ItemStack stack) {
-		return new TranslationTextComponent(this.getDescriptionId(stack));
+	public Component getName(ItemStack stack) {
+		return new TranslatableComponent(this.getDescriptionId(stack));
 	}
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flag) {
-		ITextComponent description = this.getDescription(stack, worldIn, tooltip, flag);
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flag) {
+		Component description = this.getDescription(stack, worldIn, tooltip, flag);
     	if(!"".equalsIgnoreCase(description.getString())) {
 			tooltip.add(description);
     	}
     	super.appendHoverText(stack, worldIn, tooltip, flag);
     }
 
-    public ITextComponent getDescription(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flag) {
-    	return new TranslationTextComponent(this.getDescriptionId() + ".description").withStyle(TextFormatting.GREEN);
+    public Component getDescription(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flag) {
+    	return new TranslatableComponent(this.getDescriptionId() + ".description").withStyle(ChatFormatting.GREEN);
     }
 
 	@Override
@@ -72,21 +81,21 @@ public class BaseItem extends Item {
 	}
 
     @Override
-    public ActionResultType useOn(ItemUseContext context) {
+    public InteractionResult useOn(UseOnContext context) {
     	return super.useOn(context);
     }
 
     @Override
-    public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
+    public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
     	return super.use(world, player, hand);
     }
 
-	public boolean onLeftClickEntity(ItemStack stack, PlayerEntity player, Entity entity) {
+	public boolean onLeftClickEntity(ItemStack stack, Player player, Entity entity) {
 		return super.onLeftClickEntity(stack, player, entity);
 	}
 
 	@Override
-	public ActionResultType interactLivingEntity(ItemStack stack, PlayerEntity player, LivingEntity entity, Hand hand) {
+	public InteractionResult interactLivingEntity(ItemStack stack, Player player, LivingEntity entity, InteractionHand hand) {
     	return super.interactLivingEntity(stack, player, entity, hand);
 	}
 
@@ -96,12 +105,12 @@ public class BaseItem extends Item {
     }
 
     @Override
-    public void releaseUsing(ItemStack stack, World worldIn, LivingEntity entityLiving, int timeLeft) {
+    public void releaseUsing(ItemStack stack, Level worldIn, LivingEntity entityLiving, int timeLeft) {
     	super.releaseUsing(stack, worldIn, entityLiving, timeLeft);
     }
 
     @Override
-    public UseAction getUseAnimation(ItemStack itemStack) {
+    public UseAnim getUseAnimation(ItemStack itemStack) {
         return super.getUseAnimation(itemStack);
     }
 
@@ -116,18 +125,18 @@ public class BaseItem extends Item {
     }
 
 	/** Gets or creates an NBT Compound for the provided itemstack. **/
-	public CompoundNBT getTagCompound(ItemStack itemStack) {
+	public CompoundTag getTagCompound(ItemStack itemStack) {
 		if(itemStack.hasTag()) {
 			return itemStack.getTag();
 		}
-		return new CompoundNBT();
+		return new CompoundTag();
 	}
 
-    public void playSound(World world, double x, double y, double z, SoundEvent sound, SoundCategory category, float volume, float pitch) {
+    public void playSound(Level world, double x, double y, double z, SoundEvent sound, SoundSource category, float volume, float pitch) {
         world.playSound(null, x, y, z, sound, category, volume, pitch);
     }
 
-    public void playSound(World world, BlockPos pos, SoundEvent sound, SoundCategory category, float volume, float pitch) {
+    public void playSound(Level world, BlockPos pos, SoundEvent sound, SoundSource category, float volume, float pitch) {
         world.playSound(null, pos, sound, category, volume, pitch);
     }
 }

@@ -2,9 +2,9 @@ package com.lycanitesmobs.core.entity.goals.targeting;
 
 import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 
 public class FindParentGoal extends TargetingGoal {
 	// Targets:
@@ -95,7 +95,7 @@ public class FindParentGoal extends TargetingGoal {
     protected double getTargetDistance() {
     	if(this.targetDistance > -1)
     		return this.targetDistance;
-        ModifiableAttributeInstance attributeinstance = this.host.getAttribute(Attributes.FOLLOW_RANGE);
+        AttributeInstance attributeinstance = this.host.getAttribute(Attributes.FOLLOW_RANGE);
         return attributeinstance.getValue();
     }
     

@@ -3,8 +3,8 @@ package com.lycanitesmobs.client.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.CreatureObjModelOld;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -69,10 +69,10 @@ public class ModelConcapedeSegment extends CreatureObjModelOld {
     	// Walking:
     	float walkSwing = 0.6F;
     	if(partName.equals("frontrightleg") || partName.equals("backleftleg")) {
-    		rotation += Math.toDegrees(MathHelper.cos(time * 0.6662F + (float) Math.PI) * walkSwing * distance);
+    		rotation += Math.toDegrees(Mth.cos(time * 0.6662F + (float) Math.PI) * walkSwing * distance);
     	}
     	if(partName.equals("frontleftleg") || partName.equals("backrightleg")) {
-    		rotation += Math.toDegrees(MathHelper.cos(time * 0.6662F) * walkSwing * distance);
+    		rotation += Math.toDegrees(Mth.cos(time * 0.6662F) * walkSwing * distance);
     	}
 		
     	// Apply Animations:

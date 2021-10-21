@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.command;
 
-import net.minecraft.command.Commands;
+import net.minecraft.commands.Commands;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;

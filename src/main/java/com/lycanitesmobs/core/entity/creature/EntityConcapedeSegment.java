@@ -4,19 +4,19 @@ import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.FollowParentGoal;
 import com.lycanitesmobs.core.info.CreatureManager;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 
 import java.util.Iterator;
 import java.util.List;
@@ -33,11 +33,11 @@ public class EntityConcapedeSegment extends AgeableCreatureEntity {
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityConcapedeSegment(EntityType<? extends EntityConcapedeSegment> entityType, World world) {
+    public EntityConcapedeSegment(EntityType<? extends EntityConcapedeSegment> entityType, Level world) {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.ARTHROPOD;
+        this.attribute = MobType.ARTHROPOD;
         this.hasAttackSound = true;
         this.hasStepSound = false;
 
@@ -60,7 +60,7 @@ public class EntityConcapedeSegment extends AgeableCreatureEntity {
     // ========== Natural Spawn Check ==========
     /** Second stage checks for spawning, this check is ignored if there is a valid monster spawner nearby. **/
     @Override
-    public boolean environmentSpawnCheck(World world, BlockPos pos) {
+    public boolean environmentSpawnCheck(Level world, BlockPos pos) {
     	if(this.getNearbyEntities(EntityConcapedeHead.class, null, CreatureManager.getInstance().spawnConfig.spawnLimitRange).size() <= 0)
     		return false;
     	return super.environmentSpawnCheck(world, pos);
@@ -130,13 +130,13 @@ public class EntityConcapedeSegment extends AgeableCreatureEntity {
 				this.getLookControl().setLookAt(this.getParentTarget(), 360.0F, 360.0F);
 				this.lookAt(this.getParentTarget(), 360, 360);
 
-				Vector3d parentPos = this.getFacingPositionDouble(this.getParentTarget().getX(), this.getParentTarget().getY(), this.getParentTarget().getZ(), -0.65D, this.getParentTarget().yRot);
+				Vec3 parentPos = this.getFacingPositionDouble(this.getParentTarget().getX(), this.getParentTarget().getY(), this.getParentTarget().getZ(), -0.65D, this.getParentTarget().yRot);
 				double segmentPullThreshold = 0.15D;
 				double segmentDistance = Math.sqrt(this.distanceToSqr(parentPos));
 				if (segmentDistance > segmentPullThreshold) {
 					double dragAmount = segmentPullThreshold / 2;
-					Vector3d posVector = new Vector3d(this.getX(), this.getY(), this.getZ());
-					Vector3d dragPos = this.getFacingPositionDouble(parentPos.x, parentPos.y, parentPos.z, dragAmount, posVector.dot(parentPos));
+					Vec3 posVector = new Vec3(this.getX(), this.getY(), this.getZ());
+					Vec3 dragPos = this.getFacingPositionDouble(parentPos.x, parentPos.y, parentPos.z, dragAmount, posVector.dot(parentPos));
 					double distY = (parentPos.y - this.getY());
 					double dragY = this.getY() + (distY / 2);
 					this.setPos(dragPos.x, dragY, dragPos.z);
@@ -211,7 +211,7 @@ public class EntityConcapedeSegment extends AgeableCreatureEntity {
     
 	// ========== Can leash ==========
     @Override
-    public boolean canBeLeashed(PlayerEntity player) {
+    public boolean canBeLeashed(Player player) {
 	    return !this.hasParent();
     }
     
@@ -324,7 +324,7 @@ public class EntityConcapedeSegment extends AgeableCreatureEntity {
    	// ========== Read ===========
     /** Used when loading this mob from a saved chunk. **/
     @Override
-    public void readAdditionalSaveData(CompoundNBT nbt) {
+    public void readAdditionalSaveData(CompoundTag nbt) {
     	if(nbt.hasUUID("ParentUUID")) {
             this.parentUUID = nbt.getUUID("ParentUUID");
         }
@@ -334,7 +334,7 @@ public class EntityConcapedeSegment extends AgeableCreatureEntity {
     // ========== Write ==========
     /** Used when saving this mob to a chunk. **/
     @Override
-    public void addAdditionalSaveData(CompoundNBT nbt) {
+    public void addAdditionalSaveData(CompoundTag nbt) {
 		super.addAdditionalSaveData(nbt);
     	if(this.hasParent()) {
 			nbt.putUUID("ParentUUID", this.getParentTarget().getUUID());

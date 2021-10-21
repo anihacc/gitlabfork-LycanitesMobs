@@ -8,18 +8,18 @@ import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.item.summoningstaff.ItemStaffSummoning;
 import com.lycanitesmobs.core.pets.SummonSet;
 import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.Pose;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -36,7 +36,7 @@ public class PortalEntity extends BaseProjectileEntity {
     public int summonDuration = 60 * 20;
 	
 	// Properties:
-	public PlayerEntity shootingEntity;
+	public Player shootingEntity;
 	public EntityType summonType;
 	public CreatureInfo creatureInfo;
 	public ItemStaffSummoning portalItem;
@@ -44,17 +44,17 @@ public class PortalEntity extends BaseProjectileEntity {
     public TileEntitySummoningPedestal summoningPedestal;
 
     // Datawatcher:
-    protected static final DataParameter<Optional<UUID>> OWNER_UUID = EntityDataManager.defineId(PortalEntity.class, DataSerializers.OPTIONAL_UUID);
+    protected static final EntityDataAccessor<Optional<UUID>> OWNER_UUID = SynchedEntityData.defineId(PortalEntity.class, EntityDataSerializers.OPTIONAL_UUID);
 	
     // ==================================================
  	//                   Constructors
  	// ==================================================
-    public PortalEntity(EntityType<? extends PortalEntity> entityType, World world) {
+    public PortalEntity(EntityType<? extends PortalEntity> entityType, Level world) {
         super(entityType, world);
         this.setStats();
     }
 
-    public PortalEntity(EntityType<? extends PortalEntity> entityType, World world, PlayerEntity shooter, SummonSet summonSet, ItemStaffSummoning portalItem) {
+    public PortalEntity(EntityType<? extends PortalEntity> entityType, Level world, Player shooter, SummonSet summonSet, ItemStaffSummoning portalItem) {
         super(entityType, world, shooter);
         this.shootingEntity = shooter;
         this.summonType = summonSet.getCreatureType();
@@ -63,7 +63,7 @@ public class PortalEntity extends BaseProjectileEntity {
         this.setStats();
     }
 
-	public PortalEntity(EntityType<? extends PortalEntity> entityType, World world, PlayerEntity shooter, CreatureInfo creatureInfo, ItemStaffSummoning portalItem) {
+	public PortalEntity(EntityType<? extends PortalEntity> entityType, Level world, Player shooter, CreatureInfo creatureInfo, ItemStaffSummoning portalItem) {
 		super(entityType, world, shooter);
 		this.shootingEntity = shooter;
 		this.creatureInfo = creatureInfo;
@@ -72,7 +72,7 @@ public class PortalEntity extends BaseProjectileEntity {
 		this.setStats();
 	}
 
-    public PortalEntity(EntityType<? extends PortalEntity> entityType, World world, TileEntitySummoningPedestal summoningPedestal) {
+    public PortalEntity(EntityType<? extends PortalEntity> entityType, Level world, TileEntitySummoningPedestal summoningPedestal) {
         super(entityType, world);
         this.summoningPedestal = summoningPedestal;
         this.setStats();
@@ -291,13 +291,13 @@ public class PortalEntity extends BaseProjectileEntity {
     public void moveToTarget() {
     	if(this.shootingEntity != null && this.summoningPedestal == null) {
     		// Get Look Target
-	        Vector3d lookDirection = this.shootingEntity.getLookAngle();
+	        Vec3 lookDirection = this.shootingEntity.getLookAngle();
 			this.targetX = this.shootingEntity.position().x() + (lookDirection.x * this.portalRange);
 			this.targetY = this.shootingEntity.position().y() + (lookDirection.y * this.portalRange);
 			this.targetZ = this.shootingEntity.position().z() + (lookDirection.z * this.portalRange);
 	        
 			// Apply Raytrace to Look Target:
-			RayTraceResult target = Utilities.raytrace(this.getCommandSenderWorld(), this.shootingEntity.position().x(), this.shootingEntity.position().y(), this.shootingEntity.position().z(), this.targetX, this.targetY, this.targetZ, 1.0F, this, null);
+			HitResult target = Utilities.raytrace(this.getCommandSenderWorld(), this.shootingEntity.position().x(), this.shootingEntity.position().y(), this.shootingEntity.position().z(), this.targetX, this.targetY, this.targetZ, 1.0F, this, null);
 	        if(target != null) {
 				this.targetX = target.getLocation().x;
 				this.targetY = target.getLocation().y;
@@ -329,7 +329,7 @@ public class PortalEntity extends BaseProjectileEntity {
  	//                     Impact
  	// ==================================================
     @Override
-    protected void onHit(RayTraceResult movingObjectPos) {}
+    protected void onHit(HitResult movingObjectPos) {}
     
     
     // ==================================================

@@ -7,9 +7,9 @@ import com.lycanitesmobs.core.mobevent.trigger.AltarMobEventTrigger;
 import com.lycanitesmobs.core.worldgen.mobevents.AmalgalichStructureBuilder;
 import com.lycanitesmobs.core.worldgen.mobevents.AsmodeusStructureBuilder;
 import com.lycanitesmobs.core.worldgen.mobevents.RahovartStructureBuilder;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -120,17 +120,17 @@ public class AltarInfo {
     //                     Checking
     // ==================================================
     /** Called before all other checks to see if the player has permission to build in the area of this Altar using the BlockPlaceEvent. **/
-    public boolean checkBlockEvent(Entity entity, World world, BlockPos pos) {
+    public boolean checkBlockEvent(Entity entity, Level world, BlockPos pos) {
         return true;
     }
 
     /** Called first when checking for a valid altar, this should be fairly lightweight such as just checking if the first block checked is valid, a more in depth check if then done after. **/
-    public boolean quickCheck(Entity entity, World world, BlockPos pos) {
+    public boolean quickCheck(Entity entity, Level world, BlockPos pos) {
         return false;
     }
 
     /** Called if the QuickCheck() is passed, this should check the entire altar structure and if true is returned, the altar will activate. **/
-    public boolean fullCheck(Entity entity, World world, BlockPos pos) {
+    public boolean fullCheck(Entity entity, Level world, BlockPos pos) {
         return false;
     }
 
@@ -139,7 +139,7 @@ public class AltarInfo {
     //                     Activate
     // ==================================================
     /** Called when this Altar should activate. This will typically destroy the Altar and summon a rare mob or activate an event such as a boss event. If false is returned then the activation did not work, this is the place to check for things like dimensions. **/
-    public boolean activate(Entity entity, World world, BlockPos pos, int variant) {
+    public boolean activate(Entity entity, Level world, BlockPos pos, int variant) {
     	if(this.mobEventTrigger == null)
         	return false;
     	return this.mobEventTrigger.onActivate(entity, world, pos, variant);

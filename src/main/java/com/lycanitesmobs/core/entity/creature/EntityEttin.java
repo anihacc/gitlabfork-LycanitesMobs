@@ -3,26 +3,26 @@ package com.lycanitesmobs.core.entity.creature;
 import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import com.lycanitesmobs.core.entity.goals.actions.BreakDoorGoal;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.Pose;
-import net.minecraft.entity.monster.IMob;
-import net.minecraft.pathfinding.GroundPathNavigator;
-import net.minecraft.world.GameRules;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
+import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.Level;
 
-public class EntityEttin extends AgeableCreatureEntity implements IMob {
+public class EntityEttin extends AgeableCreatureEntity implements Enemy {
 	public boolean griefing = true;
     
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityEttin(EntityType<? extends EntityEttin> entityType, World world) {
+    public EntityEttin(EntityType<? extends EntityEttin> entityType, Level world) {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEFINED;
+        this.attribute = MobType.UNDEFINED;
         this.hasAttackSound = true;
 
         this.canGrow = true;
@@ -41,8 +41,8 @@ public class EntityEttin extends AgeableCreatureEntity implements IMob {
 		this.goalSelector.addGoal(this.nextDistractionGoalIndex++, new BreakDoorGoal(this));
         this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(false));
 
-		if(this.getNavigation() instanceof GroundPathNavigator) {
-			GroundPathNavigator pathNavigateGround = (GroundPathNavigator)this.getNavigation();
+		if(this.getNavigation() instanceof GroundPathNavigation) {
+			GroundPathNavigation pathNavigateGround = (GroundPathNavigation)this.getNavigation();
 			pathNavigateGround.setCanOpenDoors(true);
 		}
     }

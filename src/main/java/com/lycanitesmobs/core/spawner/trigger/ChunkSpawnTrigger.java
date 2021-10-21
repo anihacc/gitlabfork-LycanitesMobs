@@ -2,9 +2,9 @@ package com.lycanitesmobs.core.spawner.trigger;
 
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.core.spawner.Spawner;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.Level;
 
 public class ChunkSpawnTrigger extends SpawnTrigger {
 	/** Has a random chance of triggering after so many player ticks. **/
@@ -23,7 +23,7 @@ public class ChunkSpawnTrigger extends SpawnTrigger {
 
 
 	/** Called every time a new chunk is generated. **/
-	public boolean onChunkPopulate(World world, ChunkPos chunkPos) {
+	public boolean onChunkPopulate(Level world, ChunkPos chunkPos) {
 		// Chance:
 		if(this.chance < 1 && world.random.nextDouble() > this.chance) {
 			return false;

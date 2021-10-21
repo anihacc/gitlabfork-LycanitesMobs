@@ -4,17 +4,17 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.block.BlockBase;
 import com.lycanitesmobs.core.info.ItemManager;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.state.StateContainer;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -47,7 +47,7 @@ public class BlockPoopCloud extends BlockBase {
 	}
 
 	@Override
-	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 		builder.add(AGE);
 	}
 
@@ -75,13 +75,13 @@ public class BlockPoopCloud extends BlockBase {
 	//                Collision Effects
 	// ==================================================
     @Override
-	public void entityInside(BlockState blockState, World world, BlockPos pos, Entity entity) {
+	public void entityInside(BlockState blockState, Level world, BlockPos pos, Entity entity) {
 		super.entityInside(blockState, world, pos, entity);
 
 		if(entity instanceof LivingEntity) {
 			LivingEntity entityLiving = (LivingEntity)entity;
-			entityLiving.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 3 * 20, 0)); // Slowness
-			entityLiving.addEffect(new EffectInstance(Effects.CONFUSION, 3 * 20, 0)); // Nausea
+			entityLiving.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 3 * 20, 0)); // Slowness
+			entityLiving.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 3 * 20, 0)); // Nausea
 		}
 	}
     
@@ -91,12 +91,12 @@ public class BlockPoopCloud extends BlockBase {
 	// ==================================================
     @Override
 	@OnlyIn(Dist.CLIENT)
-	public void animateTick(BlockState state, World world, BlockPos pos, Random random) {
+	public void animateTick(BlockState state, Level world, BlockPos pos, Random random) {
 		double x = pos.getX();
 		double y = pos.getY();
 		double z = pos.getZ();
 		if(random.nextInt(24) == 0)
-			world.playLocalSound((double)((float)x + 0.5F), (double)((float)y + 0.5F), (double)((float)z + 0.5F), ObjectManager.getSound("poopcloud"), SoundCategory.BLOCKS, 0.5F + random.nextFloat(), random.nextFloat() * 0.7F + 0.3F, false);
+			world.playLocalSound((double)((float)x + 0.5F), (double)((float)y + 0.5F), (double)((float)z + 0.5F), ObjectManager.getSound("poopcloud"), SoundSource.BLOCKS, 0.5F + random.nextFloat(), random.nextFloat() * 0.7F + 0.3F, false);
 
 		if (random.nextInt(100) == 0) {
 			x += random.nextFloat();

@@ -10,12 +10,12 @@ import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import com.lycanitesmobs.core.mobevent.MobEventPlayerServer;
 import com.lycanitesmobs.core.mobevent.effects.StructureBuilder;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.Explosion;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Explosion;
+import net.minecraft.world.level.Level;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +27,7 @@ public class RahovartStructureBuilder extends StructureBuilder {
 	}
 
 	@Override
-	public void build(World world, PlayerEntity player, BlockPos pos, int level, int ticks, int variant) {
+	public void build(Level world, Player player, BlockPos pos, int level, int ticks, int variant) {
 		ExtendedWorld worldExt = ExtendedWorld.getForWorld(world);
 		int originX = pos.getX();
 		int originY = pos.getY();
@@ -66,7 +66,7 @@ public class RahovartStructureBuilder extends StructureBuilder {
 
 		// Explosions:
 		if(ticks >= 10 * 20 && ticks % 10 == 0) {
-			world.explode(null, originX - 20 + world.random.nextInt(40), originY + 25 + world.random.nextInt(10), originZ - 20 + world.random.nextInt(40), 2, Explosion.Mode.NONE);
+			world.explode(null, originX - 20 + world.random.nextInt(40), originY + 25 + world.random.nextInt(10), originZ - 20 + world.random.nextInt(40), 2, Explosion.BlockInteraction.NONE);
 		}
 
 		// Spawn Boss:
@@ -88,7 +88,7 @@ public class RahovartStructureBuilder extends StructureBuilder {
 	// ==================================================
 	//                     Arena Floor
 	// ==================================================
-	public void buildArenaFloor(World world, int originX, int originY, int originZ) {
+	public void buildArenaFloor(Level world, int originX, int originY, int originZ) {
 		double rubbleChance = 0.01D;
 		int radius = 60;
 		int height = 40;
@@ -127,7 +127,7 @@ public class RahovartStructureBuilder extends StructureBuilder {
 	// ==================================================
 	//                   Arena Obstacles
 	// ==================================================
-	public void buildObstacles(World world, int originX, int originY, int originZ) {
+	public void buildObstacles(Level world, int originX, int originY, int originZ) {
 		double angle = 0;
 		int radius = 50;
 		List<int[]> decorationCoords = new ArrayList<>();
@@ -145,7 +145,7 @@ public class RahovartStructureBuilder extends StructureBuilder {
 	}
 
 	/** Builds an actual pillar. **/
-	public int[] buildPillar(World world, int originX, int originY, int originZ) {
+	public int[] buildPillar(Level world, int originX, int originY, int originZ) {
 		int radiusMax = 5;
 		int height = 20 + Math.round(20 * world.random.nextFloat());
 		Block primaryBlock = ObjectManager.getBlock("demonstonebrick");
@@ -198,7 +198,7 @@ public class RahovartStructureBuilder extends StructureBuilder {
 	}
 
 	/** Adds decoration to a pillar. **/
-	public void buildDecoration(World world, int originX, int originY, int originZ) {
+	public void buildDecoration(Level world, int originX, int originY, int originZ) {
 		Block primaryBlock = Blocks.OBSIDIAN;
 		Block hazardBlock = ObjectManager.getBlock("hellfire");
 		world.setBlock(new BlockPos(originX, originY + 1, originZ), primaryBlock.defaultBlockState(), 2);

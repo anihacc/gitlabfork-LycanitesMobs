@@ -1,15 +1,15 @@
 package com.lycanitesmobs.core.entity.goals.actions.abilities;
 
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.EnumSet;
 
-import net.minecraft.entity.ai.goal.Goal.Flag;
+import net.minecraft.world.entity.ai.goal.Goal.Flag;
 
 public class PlaceBlockGoal extends Goal {
 	// Targets:
@@ -129,7 +129,7 @@ public class PlaceBlockGoal extends Goal {
         this.host.getLookControl().setLookAt(this.pos.getX(), this.pos.getY(), this.pos.getZ(), 30.0F, 30.0F);
         
         // Place Block:
-        if(Math.sqrt(this.host.distanceToSqr(new Vector3d(this.pos.getX(), this.pos.getY(), this.pos.getZ()))) <= this.range) {
+        if(Math.sqrt(this.host.distanceToSqr(new Vec3(this.pos.getX(), this.pos.getY(), this.pos.getZ()))) <= this.range) {
         	this.host.getCommandSenderWorld().setBlock(this.pos, this.blockState, 3);
 			this.host.onBlockPlaced(this.pos, this.blockState);
 			this.blockState = null;
@@ -137,7 +137,7 @@ public class PlaceBlockGoal extends Goal {
         }
         
         // Cancel If Too Far:
-        if(this.host.distanceToSqr(new Vector3d(this.pos.getX(), this.pos.getY(), this.pos.getZ())) >= this.maxDistance * this.maxDistance) {
+        if(this.host.distanceToSqr(new Vec3(this.pos.getX(), this.pos.getY(), this.pos.getZ())) >= this.maxDistance * this.maxDistance) {
             this.blockState = null;
             this.host.clearMovement();
         }

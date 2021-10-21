@@ -2,8 +2,8 @@ package com.lycanitesmobs.client.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.template.ModelTemplateBiped;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -38,7 +38,7 @@ public class ModelVentoraptor extends ModelTemplateBiped {
 		super.animatePart(partName, entity, time, distance, loop, lookY, lookX, scale);
 
 		if(partName.contains("claw")) {
-			float clawX = (float)Math.toDegrees(MathHelper.cos((loop + time) * 0.1F) * 0.2F);
+			float clawX = (float)Math.toDegrees(Mth.cos((loop + time) * 0.1F) * 0.2F);
 			this.rotate(clawX, 0, 0);
 		}
 	}

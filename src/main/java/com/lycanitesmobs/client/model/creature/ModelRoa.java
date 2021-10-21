@@ -5,9 +5,9 @@ import com.lycanitesmobs.client.model.template.ModelTemplateAquatic;
 import com.lycanitesmobs.client.renderer.CreatureRenderer;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
 import com.lycanitesmobs.client.renderer.layer.specific.LayerRoa;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.util.Mth;
 
 public class ModelRoa extends ModelTemplateAquatic {
 
@@ -76,7 +76,7 @@ public class ModelRoa extends ModelTemplateAquatic {
         // Effect:
         if(partName.contains("effect")) {
             rotY += loop * 30;
-            float effectScale = 1.05F + ((0.5F + (MathHelper.sin(loop / 4) / 2)) / 8);
+            float effectScale = 1.05F + ((0.5F + (Mth.sin(loop / 4) / 2)) / 8);
             this.scale(effectScale, effectScale, effectScale);
         }
 

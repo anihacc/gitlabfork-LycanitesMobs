@@ -1,8 +1,8 @@
 package com.lycanitesmobs.core;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 
 public class ServerProxy implements IProxy {
 	@Override
@@ -11,7 +11,7 @@ public class ServerProxy implements IProxy {
 	}
 
 	@Override
-	public World getWorld() {
+	public Level getWorld() {
 		return null;
 	}
 
@@ -21,10 +21,10 @@ public class ServerProxy implements IProxy {
 	}
 
 	@Override
-	public PlayerEntity getClientPlayer() {
+	public Player getClientPlayer() {
 		return null;
 	}
 
 	@Override
-	public void openScreen(int screenId, PlayerEntity player) {}
+	public void openScreen(int screenId, Player player) {}
 }

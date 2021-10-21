@@ -1,24 +1,24 @@
 package com.lycanitesmobs.core.entity.projectile;
 
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Level;
 
 public class EntityHellfireBarrierPart extends EntityHellfireWall {
 
     // ==================================================
  	//                   Constructors
  	// ==================================================
-    public EntityHellfireBarrierPart(EntityType<? extends BaseProjectileEntity> entityType, World world) {
+    public EntityHellfireBarrierPart(EntityType<? extends BaseProjectileEntity> entityType, Level world) {
         super(entityType, world);
     }
 
-    public EntityHellfireBarrierPart(EntityType<? extends BaseProjectileEntity> entityType, World world, LivingEntity par2LivingEntity) {
+    public EntityHellfireBarrierPart(EntityType<? extends BaseProjectileEntity> entityType, Level world, LivingEntity par2LivingEntity) {
         super(entityType, world, par2LivingEntity);
     }
 
-    public EntityHellfireBarrierPart(EntityType<? extends BaseProjectileEntity> entityType, World world, double par2, double par4, double par6) {
+    public EntityHellfireBarrierPart(EntityType<? extends BaseProjectileEntity> entityType, Level world, double par2, double par4, double par6) {
         super(entityType, world, par2, par4, par6);
     }
 

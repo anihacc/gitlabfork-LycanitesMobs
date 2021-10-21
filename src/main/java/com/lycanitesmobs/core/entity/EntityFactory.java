@@ -1,16 +1,16 @@
 package com.lycanitesmobs.core.entity;
 
 import com.lycanitesmobs.LycanitesMobs;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.Level;
 
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
 
-public class EntityFactory implements EntityType.IFactory<Entity> {
+public class EntityFactory implements EntityType.EntityFactory<Entity> {
 	public static EntityFactory INSTANCE;
 	/** Returns the main Entity Factory instance or creates it and returns it. **/
 	public static EntityFactory getInstance() {
@@ -43,7 +43,7 @@ public class EntityFactory implements EntityType.IFactory<Entity> {
 	 * @return The created entity or null if no entity could be created.
 	 */
 	@Override
-	public Entity create(EntityType entityType, World world) {
+	public Entity create(EntityType entityType, Level world) {
 		if(!this.entityTypeConstructorMap.containsKey(entityType)) {
 			LycanitesMobs.logWarning("", "Unable to find constructor for Entity Type: " + entityType);
 			return null;
@@ -60,13 +60,13 @@ public class EntityFactory implements EntityType.IFactory<Entity> {
 	}
 
 
-	public BiFunction<net.minecraftforge.fml.network.FMLPlayMessages.SpawnEntity, World, Entity> createOnClientFunction = this::createOnClient;
+	public BiFunction<net.minecraftforge.fml.network.FMLPlayMessages.SpawnEntity, Level, Entity> createOnClientFunction = this::createOnClient;
 	/**
 	 * Spawns an entity on the client side from a server packet.
 	 * @param spawnPacket The entity spawn packet.
 	 * @param world The world to spawn in.
 	 */
-	public Entity createOnClient(net.minecraftforge.fml.network.FMLPlayMessages.SpawnEntity spawnPacket, World world) {
+	public Entity createOnClient(net.minecraftforge.fml.network.FMLPlayMessages.SpawnEntity spawnPacket, Level world) {
 		LycanitesMobs.logDebug("", "Client factory called!");
 		return null;
 	}

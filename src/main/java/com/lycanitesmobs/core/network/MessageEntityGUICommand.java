@@ -1,10 +1,10 @@
 package com.lycanitesmobs.core.network;
 
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkEvent;
 
@@ -29,8 +29,8 @@ public class MessageEntityGUICommand {
 			return;
 
         ctx.get().enqueueWork(() -> {
-			PlayerEntity player = ctx.get().getSender();
-			World world = player.getCommandSenderWorld();
+			Player player = ctx.get().getSender();
+			Level world = player.getCommandSenderWorld();
 			Entity entity = world.getEntity(message.entityID);
 			if (entity instanceof TameableCreatureEntity) {
 				TameableCreatureEntity pet = (TameableCreatureEntity) entity;
@@ -42,7 +42,7 @@ public class MessageEntityGUICommand {
 	/**
 	 * Reads the message from bytes.
 	 */
-	public static MessageEntityGUICommand decode(PacketBuffer packet) {
+	public static MessageEntityGUICommand decode(FriendlyByteBuf packet) {
 		MessageEntityGUICommand message = new MessageEntityGUICommand();
 		message.entityID = packet.readInt();
 		message.guiCommandID = packet.readInt();
@@ -52,7 +52,7 @@ public class MessageEntityGUICommand {
 	/**
 	 * Writes the message into bytes.
 	 */
-	public static void encode(MessageEntityGUICommand message, PacketBuffer packet) {
+	public static void encode(MessageEntityGUICommand message, FriendlyByteBuf packet) {
 		packet.writeInt(message.entityID);
 		packet.writeInt(message.guiCommandID);
 	}

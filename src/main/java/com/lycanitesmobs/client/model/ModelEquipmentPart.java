@@ -3,9 +3,9 @@ package com.lycanitesmobs.client.model;
 import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.client.renderer.layer.LayerItem;
 import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Vector4f;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
+import com.mojang.math.Vector4f;
 
 public class ModelEquipmentPart extends ItemObjModel {
 	/**

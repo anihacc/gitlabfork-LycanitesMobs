@@ -19,10 +19,10 @@ import com.lycanitesmobs.core.item.special.ItemSoulkey;
 import com.lycanitesmobs.core.item.special.ItemSoulstone;
 import com.lycanitesmobs.core.item.summoningstaff.*;
 import net.minecraft.block.*;
-import net.minecraft.block.material.Material;
+import net.minecraft.world.level.material.Material;
 import net.minecraft.item.*;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.FluidAttributes;
@@ -35,6 +35,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
+
+import net.minecraft.world.item.BucketItem;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.LiquidBlock;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class ItemManager extends JSONLoader {
 	public static ItemManager INSTANCE;
@@ -55,11 +66,11 @@ public class ItemManager extends JSONLoader {
 	public ItemConfig config;
 
 	// Creative Tabs:
-	public final ItemGroup itemsGroup = new LMItemsGroup(LycanitesMobs.MODID + ".items");
-	public final ItemGroup blocksGroup = new LMBlocksGroup(LycanitesMobs.MODID + ".blocks");
-	public final ItemGroup creaturesGroups = new LMCreaturesGroup(LycanitesMobs.MODID + ".creatures");
-	public final ItemGroup chargesGroup = new LMChargesGroup(LycanitesMobs.MODID + ".charges");
-	public final ItemGroup equipmentPartsGroup = new LMEquipmentPartsGroup(LycanitesMobs.MODID + ".equipmentparts");
+	public final CreativeModeTab itemsGroup = new LMItemsGroup(LycanitesMobs.MODID + ".items");
+	public final CreativeModeTab blocksGroup = new LMBlocksGroup(LycanitesMobs.MODID + ".blocks");
+	public final CreativeModeTab creaturesGroups = new LMCreaturesGroup(LycanitesMobs.MODID + ".creatures");
+	public final CreativeModeTab chargesGroup = new LMChargesGroup(LycanitesMobs.MODID + ".charges");
+	public final CreativeModeTab equipmentPartsGroup = new LMEquipmentPartsGroup(LycanitesMobs.MODID + ".equipmentparts");
 
 
 	/** Returns the main Item Manager instance or creates it and returns it. **/
@@ -228,7 +239,7 @@ public class ItemManager extends JSONLoader {
 		ObjectManager.addDamageSource("acid", new DamageSource("acid"));
 	}
 
-	public void addFluid(String fluidName, int fluidColor, int density, int viscosity, int temperature, int luminosity, boolean multiply, Class<? extends BaseFluidBlock> blockClass, AbstractBlock.Properties blockProperties, String elementName, boolean destroyItems, boolean worldgen) {
+	public void addFluid(String fluidName, int fluidColor, int density, int viscosity, int temperature, int luminosity, boolean multiply, Class<? extends BaseFluidBlock> blockClass, BlockBehaviour.Properties blockProperties, String elementName, boolean destroyItems, boolean worldgen) {
 		ElementInfo element = ElementManager.getInstance().getElement(elementName);
 		Supplier<ForgeFlowingFluid> stillFluidSupplier = () -> ObjectManager.getFluid(fluidName);
 		Supplier<ForgeFlowingFluid> flowingFluidSupplier = () -> ObjectManager.getFluid(fluidName + "_flowing");
@@ -244,7 +255,7 @@ public class ItemManager extends JSONLoader {
 			fluidProperties.canMultiply();
 		}
 		fluidProperties.bucket(() -> ObjectManager.getItem(fluidName + "_bucket"));
-		fluidProperties.block(() -> (FlowingFluidBlock)ObjectManager.getBlock(fluidName));
+		fluidProperties.block(() -> (LiquidBlock)ObjectManager.getBlock(fluidName));
 
 		ObjectManager.addFluid(fluidName, new CustomFluid.Still(fluidProperties, fluidName));
 		ObjectManager.addFluid(fluidName + "_flowing", new CustomFluid.Flowing(fluidProperties, fluidName + "_flowing"));
@@ -254,7 +265,7 @@ public class ItemManager extends JSONLoader {
 		ObjectManager.addItem(fluidName + "_bucket", new BucketItem(stillFluidSupplier, bucketProperties).setRegistryName(LycanitesMobs.MODID, fluidName + "_bucket"));
 
 		try {
-			Constructor<? extends BaseFluidBlock> blockConstructor = blockClass.getDeclaredConstructor(Supplier.class, AbstractBlock.Properties.class, String.class, ElementInfo.class, boolean.class);
+			Constructor<? extends BaseFluidBlock> blockConstructor = blockClass.getDeclaredConstructor(Supplier.class, BlockBehaviour.Properties.class, String.class, ElementInfo.class, boolean.class);
 			BaseFluidBlock fluidBlock = blockConstructor.newInstance(stillFluidSupplier, blockProperties, fluidName, element, destroyItems);
 			ObjectManager.addBlock(fluidName, fluidBlock);
 			if (worldgen) {

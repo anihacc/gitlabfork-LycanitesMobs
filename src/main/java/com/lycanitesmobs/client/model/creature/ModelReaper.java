@@ -6,11 +6,11 @@ import com.lycanitesmobs.client.renderer.CreatureRenderer;
 import com.lycanitesmobs.client.renderer.CustomRenderStates;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureScrolling;
-import net.minecraft.util.math.vector.Vector4f;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector2f;
+import com.mojang.math.Vector4f;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.util.Mth;
+import net.minecraft.world.phys.Vec2;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -43,7 +43,7 @@ public class ModelReaper extends ModelTemplateBiped {
 	@Override
 	public void addCustomLayers(CreatureRenderer renderer) {
 		super.addCustomLayers(renderer);
-		renderer.addLayer(new LayerCreatureScrolling(renderer, "cape", false, CustomRenderStates.BLEND.SUB.id, true, new Vector2f(0, -1)));
+		renderer.addLayer(new LayerCreatureScrolling(renderer, "cape", false, CustomRenderStates.BLEND.SUB.id, true, new Vec2(0, -1)));
 	}
 
 
@@ -56,38 +56,38 @@ public class ModelReaper extends ModelTemplateBiped {
 
 		// Cloak and Cape:
 		if(partName.equals("cloak")) {
-			this.rotate((float)Math.toDegrees(MathHelper.cos(loop * 0.1F) * 0.05F), 0, 0);
+			this.rotate((float)Math.toDegrees(Mth.cos(loop * 0.1F) * 0.05F), 0, 0);
 		}
 		else if(partName.equals("cape")) {
-			this.rotate((float)Math.toDegrees(MathHelper.cos(loop * 0.2F) * 0.05F), 0, 0);
+			this.rotate((float)Math.toDegrees(Mth.cos(loop * 0.2F) * 0.05F), 0, 0);
 		}
 
 		// Claws:
 		else if(partName.equals("clawleft01") || partName.equals("clawright01")) {
-			this.rotate((float)Math.toDegrees(MathHelper.cos(loop * 0.2F) * 0.2F), 0, 0);
+			this.rotate((float)Math.toDegrees(Mth.cos(loop * 0.2F) * 0.2F), 0, 0);
 		}
 		else if(partName.equals("clawleft02") || partName.equals("clawright02")) {
-			this.rotate((float)Math.toDegrees(MathHelper.cos((loop + 20) * 0.2F) * 0.2F), 0, 0);
+			this.rotate((float)Math.toDegrees(Mth.cos((loop + 20) * 0.2F) * 0.2F), 0, 0);
 		}
 		else if(partName.equals("clawleft03") || partName.equals("clawright03")) {
-			this.rotate((float)Math.toDegrees(MathHelper.cos((loop + 40) * 0.2F) * 0.2F), 0, 0);
+			this.rotate((float)Math.toDegrees(Mth.cos((loop + 40) * 0.2F) * 0.2F), 0, 0);
 		}
 
 		// Skulls:
 		if(partName.equals("skull01")) {
-			this.rotate((float)Math.toDegrees(MathHelper.cos(loop * 0.2F) * 0.2F - 0.2F), 0, 0);
+			this.rotate((float)Math.toDegrees(Mth.cos(loop * 0.2F) * 0.2F - 0.2F), 0, 0);
 		}
 		else if(partName.equals("skull02")) {
-			this.rotate((float)Math.toDegrees(MathHelper.cos((loop + 20) * 0.2F) * 0.2F - 0.2F), 0, 0);
+			this.rotate((float)Math.toDegrees(Mth.cos((loop + 20) * 0.2F) * 0.2F - 0.2F), 0, 0);
 		}
 		else if(partName.equals("skull03")) {
-			this.rotate((float)Math.toDegrees(MathHelper.cos((loop + 40) * 0.2F) * 0.2F - 0.2F), 0, 0);
+			this.rotate((float)Math.toDegrees(Mth.cos((loop + 40) * 0.2F) * 0.2F - 0.2F), 0, 0);
 		}
 		else if(partName.equals("skull04")) {
-			this.rotate((float)Math.toDegrees(MathHelper.cos((loop + 60) * 0.2F) * 0.2F - 0.2F), 0, 0);
+			this.rotate((float)Math.toDegrees(Mth.cos((loop + 60) * 0.2F) * 0.2F - 0.2F), 0, 0);
 		}
 		else if(partName.equals("skull05")) {
-			this.rotate((float)Math.toDegrees(MathHelper.cos((loop + 80) * 0.2F) * 0.2F - 0.2F), 0, 0);
+			this.rotate((float)Math.toDegrees(Mth.cos((loop + 80) * 0.2F) * 0.2F - 0.2F), 0, 0);
 		}
 	}
 

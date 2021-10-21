@@ -5,35 +5,35 @@ import com.lycanitesmobs.client.ModelManager;
 import com.lycanitesmobs.client.model.EquipmentModel;
 import com.lycanitesmobs.client.renderer.layer.LayerItem;
 import com.lycanitesmobs.core.item.equipment.ItemEquipment;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.math.vector.Quaternion;
-import net.minecraft.util.math.vector.Vector3f;
+import com.mojang.math.Vector3f;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class EquipmentRenderer extends ItemStackTileEntityRenderer implements IItemModelRenderer {
+public class EquipmentRenderer extends BlockEntityWithoutLevelRenderer implements IItemModelRenderer {
 
 	@Override
-	public void renderByItem(ItemStack itemStack, ItemCameraTransforms.TransformType transformType, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, int brightness, int unknown) {
+	public void renderByItem(ItemStack itemStack, ItemTransforms.TransformType transformType, PoseStack matrixStack, MultiBufferSource renderTypeBuffer, int brightness, int unknown) {
 		if(!(itemStack.getItem() instanceof ItemEquipment)) {
 			return;
 		}
 
-		Hand hand = null;
+		InteractionHand hand = null;
 
 		// Position:
 		matrixStack.pushPose();
@@ -59,7 +59,7 @@ public class EquipmentRenderer extends ItemStackTileEntityRenderer implements II
 			RenderSystem.disableTexture();
 			RenderSystem.disableAlphaTest();
 			RenderSystem.disableBlend();
-			IVertexBuilder vertexBuilder = renderTypeBuffer.getBuffer(RenderType.lines());
+			VertexConsumer vertexBuilder = renderTypeBuffer.getBuffer(RenderType.lines());
 			double barX = -0.375D;
 			double barWidth = 0.825D;
 			double barFill = barWidth * manaNormal;
@@ -78,7 +78,7 @@ public class EquipmentRenderer extends ItemStackTileEntityRenderer implements II
 		}
 	}
 
-	protected void drawBar(IVertexBuilder vertexBuilder, int x, int y, int width, int height, int r, int g, int b, int a) {
+	protected void drawBar(VertexConsumer vertexBuilder, int x, int y, int width, int height, int r, int g, int b, int a) {
 		double z = 1D;
 		vertexBuilder.vertex(x + 0, (y + 0), z).color(r, g, b, a).endVertex();
 		vertexBuilder.vertex((x + 0), (y + height), z).color(r, g, b, a).endVertex();

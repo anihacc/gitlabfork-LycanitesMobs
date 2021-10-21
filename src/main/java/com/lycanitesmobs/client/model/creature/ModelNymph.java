@@ -7,10 +7,10 @@ import com.lycanitesmobs.client.renderer.CreatureRenderer;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureEffect;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import net.minecraft.util.math.vector.Vector4f;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.MathHelper;
+import com.mojang.math.Vector4f;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -68,23 +68,23 @@ public class ModelNymph extends ModelTemplateElemental {
 
 		// Idle:
 		if (partName.equals("wingleftbottom") || partName.equals("winglefttop")) {
-			this.rotate(0, 10 + (float)Math.toDegrees(MathHelper.sin(loop * 0.2F) * 0.4F), 0);
+			this.rotate(0, 10 + (float)Math.toDegrees(Mth.sin(loop * 0.2F) * 0.4F), 0);
 		}
 		else if (partName.equals("wingrightbottom") || partName.equals("wingrighttop")) {
-			this.rotate(0, -10 + (float)Math.toDegrees(MathHelper.sin(loop * 0.2F + (float)Math.PI) * 0.4F), 0);
+			this.rotate(0, -10 + (float)Math.toDegrees(Mth.sin(loop * 0.2F + (float)Math.PI) * 0.4F), 0);
 		}
 		else if(partName.equals("hairleft")) {
 			this.rotate(
-					-(float)Math.toDegrees(MathHelper.sin(loop * 0.067F) * 0.05F),
+					-(float)Math.toDegrees(Mth.sin(loop * 0.067F) * 0.05F),
 					0,
-					-(float)Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.1F)
+					-(float)Math.toDegrees(Mth.cos(loop * 0.09F) * 0.1F)
 			);
 		}
 		else if(partName.equals("hairright")) {
 			this.rotate(
-					(float)Math.toDegrees(MathHelper.sin(loop * 0.067F) * 0.05F),
+					(float)Math.toDegrees(Mth.sin(loop * 0.067F) * 0.05F),
 					0,
-					(float)Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.1F)
+					(float)Math.toDegrees(Mth.cos(loop * 0.09F) * 0.1F)
 			);
 		}
 	}

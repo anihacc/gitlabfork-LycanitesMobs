@@ -1,23 +1,23 @@
 package com.lycanitesmobs.core.entity.goals.actions;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.DoorBlock;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.pathfinding.Path;
-import net.minecraft.pathfinding.PathPoint;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.DoorBlock;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.level.pathfinder.Path;
+import net.minecraft.world.level.pathfinder.Node;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
 
 import java.util.EnumSet;
 
-import net.minecraft.entity.ai.goal.Goal.Flag;
+import net.minecraft.world.entity.ai.goal.Goal.Flag;
 
 public abstract class DoorInteractGoal extends Goal {
 	// Targets:
-    protected MobEntity host;
+    protected Mob host;
     protected BlockPos doorPosition;
     protected boolean doorInteract;
     private boolean hasStoppedDoorInteraction;
@@ -33,7 +33,7 @@ public abstract class DoorInteractGoal extends Goal {
 	// ==================================================
  	//                    Constructor
  	// ==================================================
-    public DoorInteractGoal(MobEntity setHost) {
+    public DoorInteractGoal(Mob setHost) {
         this.doorPosition = BlockPos.ZERO;
         this.host = setHost;
         this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
@@ -52,7 +52,7 @@ public abstract class DoorInteractGoal extends Goal {
 
         if(pathEntity != null && !pathEntity.isDone()) {
             for(int i = 0; i < Math.min(pathEntity.getNextNodeIndex() + 2, pathEntity.getNodeCount()); ++i) {
-                PathPoint pathpoint = pathEntity.getNode(i);
+                Node pathpoint = pathEntity.getNode(i);
                 this.entityPosX = pathpoint.x;
                 this.entityPosY = pathpoint.y + 1;
                 this.entityPosZ = pathpoint.z;
@@ -67,9 +67,9 @@ public abstract class DoorInteractGoal extends Goal {
                 }
             }
 
-            this.entityPosX = MathHelper.floor(this.host.position().x());
-            this.entityPosY = MathHelper.floor(this.host.position().y() + 1.0D);
-            this.entityPosZ = MathHelper.floor(this.host.position().z());
+            this.entityPosX = Mth.floor(this.host.position().x());
+            this.entityPosY = Mth.floor(this.host.position().y() + 1.0D);
+            this.entityPosZ = Mth.floor(this.host.position().z());
             BlockPos possibleDoorPos = new BlockPos(this.entityPosX, this.entityPosY, this.entityPosZ);
             if(this.isDoor(possibleDoorPos)) {
                 this.doorPosition = possibleDoorPos;

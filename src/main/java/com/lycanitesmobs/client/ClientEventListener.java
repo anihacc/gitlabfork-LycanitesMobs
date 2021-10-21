@@ -3,13 +3,13 @@ package com.lycanitesmobs.client;
 import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.info.ItemManager;
 import com.lycanitesmobs.core.item.special.ItemSoulgazer;
-import net.minecraft.block.material.Material;
+import net.minecraft.world.level.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
@@ -25,19 +25,19 @@ public class ClientEventListener {
         int sharpness = ItemManager.getInstance().getEquipmentSharpnessRepair(event.getItemStack());
         int mana = ItemManager.getInstance().getEquipmentManaRepair(event.getItemStack());
         if (sharpness > 0 || mana > 0) {
-            event.getToolTip().add(new TranslationTextComponent("equipment.item.repair").withStyle(TextFormatting.BLUE));
+            event.getToolTip().add(new TranslatableComponent("equipment.item.repair").withStyle(ChatFormatting.BLUE));
             if (sharpness > 0) {
-                event.getToolTip().add(new TranslationTextComponent("equipment.sharpness").append(" " + sharpness).withStyle(TextFormatting.BLUE));
+                event.getToolTip().add(new TranslatableComponent("equipment.sharpness").append(" " + sharpness).withStyle(ChatFormatting.BLUE));
             }
             if (mana > 0) {
-                event.getToolTip().add(new TranslationTextComponent("equipment.mana").append(" " + mana).withStyle(TextFormatting.BLUE));
+                event.getToolTip().add(new TranslatableComponent("equipment.mana").append(" " + mana).withStyle(ChatFormatting.BLUE));
             }
         }
 
         if (event.getItemStack().getItem() instanceof ItemSoulgazer) {
             ExtendedPlayer extendedPlayer = ExtendedPlayer.getForPlayer(event.getPlayer());
             if (extendedPlayer != null && extendedPlayer.creatureStudyCooldown > 0) {
-                event.getToolTip().add(new TranslationTextComponent("message.beastiary.study.cooldown").append(" " + String.format("%.0f", (float)extendedPlayer.creatureStudyCooldown / 20) + "s").withStyle(TextFormatting.BLUE));
+                event.getToolTip().add(new TranslatableComponent("message.beastiary.study.cooldown").append(" " + String.format("%.0f", (float)extendedPlayer.creatureStudyCooldown / 20) + "s").withStyle(ChatFormatting.BLUE));
             }
         }
     }
@@ -50,7 +50,7 @@ public class ClientEventListener {
         if (entityLiving == null) {
             return;
         }
-        if(entityLiving.isInLava() && (!entityLiving.isOnFire() || entityLiving.hasEffect(Effects.FIRE_RESISTANCE))) {
+        if(entityLiving.isInLava() && (!entityLiving.isOnFire() || entityLiving.hasEffect(MobEffects.FIRE_RESISTANCE))) {
             event.setDensity(0.5F);
             event.setCanceled(true);
         }
@@ -59,7 +59,7 @@ public class ClientEventListener {
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
     public void onBlockOverlay(RenderBlockOverlayEvent event) {
-        if(event.getBlockForOverlay().getMaterial() == Material.FIRE && (!event.getPlayer().isOnFire() || event.getPlayer().hasEffect(Effects.FIRE_RESISTANCE))) {
+        if(event.getBlockForOverlay().getMaterial() == Material.FIRE && (!event.getPlayer().isOnFire() || event.getPlayer().hasEffect(MobEffects.FIRE_RESISTANCE))) {
             event.setCanceled(true);
         }
     }

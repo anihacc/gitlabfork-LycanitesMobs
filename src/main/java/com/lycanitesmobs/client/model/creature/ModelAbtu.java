@@ -3,8 +3,8 @@ package com.lycanitesmobs.client.model.creature;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.CreatureObjModelOld;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -70,18 +70,18 @@ public class ModelAbtu extends CreatureObjModelOld {
     	
     	// Idle:
     	if(partName.equals("body")) {
-			rotY = (float)-Math.toDegrees(MathHelper.cos(loop * 0.2F) * 0.05F - 0.05F);
+			rotY = (float)-Math.toDegrees(Mth.cos(loop * 0.2F) * 0.05F - 0.05F);
 		}
     	if(partName.equals("mouth")) {
     		this.subCenterPart("mouth");
-    		this.doRotate(15F - (float)-Math.toDegrees(MathHelper.cos(loop * -0.1F) * 0.05F - 0.05F), 0.0F, 0.0F);
+    		this.doRotate(15F - (float)-Math.toDegrees(Mth.cos(loop * -0.1F) * 0.05F - 0.05F), 0.0F, 0.0F);
     		this.unsubCenterPart("mouth");
     	}
     	
     	// Walking:
     	if(entity == null || entity.isInWater()) {
 	    	if(partName.equals("body")) {
-				rotY += (float)-Math.toDegrees(MathHelper.cos(time * 0.1F) * 0.2F);
+				rotY += (float)-Math.toDegrees(Mth.cos(time * 0.1F) * 0.2F);
 			}
     	}
 		

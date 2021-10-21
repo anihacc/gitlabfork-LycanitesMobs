@@ -5,9 +5,9 @@ import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.pets.PetEntry;
 import com.lycanitesmobs.core.pets.PetManager;
 import com.lycanitesmobs.core.pets.SummonSet;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkEvent;
 
@@ -59,7 +59,7 @@ public class MessagePetEntry {
 		// Server Side:
         if(ctx.get().getDirection() == NetworkDirection.PLAY_TO_SERVER) {
 			ctx.get().enqueueWork(() -> {
-				PlayerEntity player = ctx.get().getSender();
+				Player player = ctx.get().getSender();
 				ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
 				PetManager petManager = playerExt.petManager;
 				PetEntry petEntry = petManager.getEntry(message.petEntryID);
@@ -75,7 +75,7 @@ public class MessagePetEntry {
         }
 
         // Client Side:
-		PlayerEntity player = ClientManager.getInstance().getClientPlayer();
+		Player player = ClientManager.getInstance().getClientPlayer();
 		ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
 		if(playerExt == null)
 			return;
@@ -107,7 +107,7 @@ public class MessagePetEntry {
 	/**
 	 * Reads the message from bytes.
 	 */
-	public static MessagePetEntry decode(PacketBuffer packet) {
+	public static MessagePetEntry decode(FriendlyByteBuf packet) {
 		MessagePetEntry message = new MessagePetEntry();
         message.petEntryID = packet.readUUID();
         message.petEntryType = packet.readUtf(512);
@@ -130,7 +130,7 @@ public class MessagePetEntry {
 	/**
 	 * Writes the message into bytes.
 	 */
-	public static void encode(MessagePetEntry message, PacketBuffer packet) {
+	public static void encode(MessagePetEntry message, FriendlyByteBuf packet) {
         packet.writeUUID(message.petEntryID);
         packet.writeUtf(message.petEntryType);
         packet.writeBoolean(message.spawningActive);

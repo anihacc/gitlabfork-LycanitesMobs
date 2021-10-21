@@ -3,27 +3,27 @@ package com.lycanitesmobs.core.entity.creature;
 import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import com.lycanitesmobs.core.entity.goals.actions.TemptGoal;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
-import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.npc.Villager;
+import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
-public class EntityKrake extends AgeableCreatureEntity implements IMob {
+public class EntityKrake extends AgeableCreatureEntity implements Enemy {
 
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityKrake(EntityType<? extends EntityKrake> entityType, World world) {
+    public EntityKrake(EntityType<? extends EntityKrake> entityType, Level world) {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEFINED;
+        this.attribute = MobType.UNDEFINED;
         this.spawnsOnLand = true;
         this.spawnsInWater = true;
         this.hasAttackSound = true;
@@ -46,7 +46,7 @@ public class EntityKrake extends AgeableCreatureEntity implements IMob {
         if(target == this.getLastHurtByMob() && this.getLastHurtByMobTimestamp() + (3 * 20) > this.tickCount) {
             return true;
         }
-        if(target instanceof PlayerEntity || target instanceof VillagerEntity) {
+        if(target instanceof Player || target instanceof Villager) {
             return target.isSprinting();
         }
         return true;
@@ -91,7 +91,7 @@ public class EntityKrake extends AgeableCreatureEntity implements IMob {
 
     // ========== Can leash ==========
     @Override
-    public boolean canBeLeashed(PlayerEntity player) {
+    public boolean canBeLeashed(Player player) {
         if(!this.hasAttackTarget())
             return true;
         return super.canBeLeashed(player);

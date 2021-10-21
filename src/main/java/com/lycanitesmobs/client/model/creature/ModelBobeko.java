@@ -3,8 +3,8 @@ package com.lycanitesmobs.client.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.template.ModelTemplateQuadruped;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -32,12 +32,12 @@ public class ModelBobeko extends ModelTemplateQuadruped {
 		float rotZ = 0F;
 
 		if(partName.equals("earleft")) {
-			rotZ -= Math.toDegrees(MathHelper.cos(loop * 0.18F) * 0.05F + 0.05F);
-			rotX -= Math.toDegrees(MathHelper.sin(loop * 0.067F) * 0.05F);
+			rotZ -= Math.toDegrees(Mth.cos(loop * 0.18F) * 0.05F + 0.05F);
+			rotX -= Math.toDegrees(Mth.sin(loop * 0.067F) * 0.05F);
 		}
 		if(partName.equals("earright")) {
-			rotZ += Math.toDegrees(MathHelper.cos(loop * 0.18F) * 0.05F + 0.05F);
-			rotX += Math.toDegrees(MathHelper.sin(loop * 0.067F) * 0.05F);
+			rotZ += Math.toDegrees(Mth.cos(loop * 0.18F) * 0.05F + 0.05F);
+			rotX += Math.toDegrees(Mth.sin(loop * 0.067F) * 0.05F);
 		}
 
 		// Apply Animations:

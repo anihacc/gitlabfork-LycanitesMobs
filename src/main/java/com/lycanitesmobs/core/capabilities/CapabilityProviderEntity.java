@@ -1,13 +1,13 @@
 package com.lycanitesmobs.core.capabilities;
 
 import com.lycanitesmobs.LycanitesMobs;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
 
-public class CapabilityProviderEntity implements ICapabilitySerializable<CompoundNBT> {
+public class CapabilityProviderEntity implements ICapabilitySerializable<CompoundTag> {
 	public LazyOptional<IExtendedEntity> instance;
 
 	@Override
@@ -21,12 +21,12 @@ public class CapabilityProviderEntity implements ICapabilitySerializable<Compoun
 	}
 
 	@Override
-	public CompoundNBT serializeNBT() {
-		return (CompoundNBT) LycanitesMobs.EXTENDED_ENTITY.getStorage().writeNBT(LycanitesMobs.EXTENDED_ENTITY, this.getCapability(LycanitesMobs.EXTENDED_ENTITY, null).orElse(null), null);
+	public CompoundTag serializeNBT() {
+		return (CompoundTag) LycanitesMobs.EXTENDED_ENTITY.getStorage().writeNBT(LycanitesMobs.EXTENDED_ENTITY, this.getCapability(LycanitesMobs.EXTENDED_ENTITY, null).orElse(null), null);
 	}
 
 	@Override
-	public void deserializeNBT(CompoundNBT nbt) {
+	public void deserializeNBT(CompoundTag nbt) {
 		LycanitesMobs.EXTENDED_ENTITY.getStorage().readNBT(LycanitesMobs.EXTENDED_ENTITY, this.getCapability(LycanitesMobs.EXTENDED_ENTITY, null).orElse(null), null, nbt);
 	}
 }

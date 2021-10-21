@@ -9,11 +9,11 @@ import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureEffect;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureScrolling;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import net.minecraft.util.math.vector.Vector4f;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector2f;
+import com.mojang.math.Vector4f;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.util.Mth;
+import net.minecraft.world.phys.Vec2;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -38,7 +38,7 @@ public class ModelSylph extends ModelTemplateElemental {
 	public void addCustomLayers(CreatureRenderer renderer) {
 		super.addCustomLayers(renderer);
 		renderer.addLayer(new LayerCreatureEffect(renderer, "hood", false, CustomRenderStates.BLEND.NORMAL.id, true));
-		renderer.addLayer(new LayerCreatureScrolling(renderer, "wing", true, CustomRenderStates.BLEND.ADD.id, true, new Vector2f(0, 1)));
+		renderer.addLayer(new LayerCreatureScrolling(renderer, "wing", true, CustomRenderStates.BLEND.ADD.id, true, new Vec2(0, 1)));
 	}
 
 	@Override
@@ -72,8 +72,8 @@ public class ModelSylph extends ModelTemplateElemental {
 			}
 			this.rotate(
 					0,
-					5 + (float)Math.toDegrees(MathHelper.sin(loop * 0.2F) * 0.4F),
-					4 + (float)Math.toDegrees(MathHelper.sin(loop * 0.2F) * 0.08F) + (attackAngle * this.getAttackProgress())
+					5 + (float)Math.toDegrees(Mth.sin(loop * 0.2F) * 0.4F),
+					4 + (float)Math.toDegrees(Mth.sin(loop * 0.2F) * 0.08F) + (attackAngle * this.getAttackProgress())
 			);
 		}
 		else if (partName.contains("wingright")) {
@@ -86,18 +86,18 @@ public class ModelSylph extends ModelTemplateElemental {
 			}
 			this.rotate(
 					0,
-					-5 + (float)Math.toDegrees(MathHelper.sin(loop * 0.2F + (float)Math.PI) * 0.4F),
-					-4 + (float)Math.toDegrees(MathHelper.sin(loop * 0.2F + (float)Math.PI) * 0.08F) + (attackAngle * this.getAttackProgress())
+					-5 + (float)Math.toDegrees(Mth.sin(loop * 0.2F + (float)Math.PI) * 0.4F),
+					-4 + (float)Math.toDegrees(Mth.sin(loop * 0.2F + (float)Math.PI) * 0.08F) + (attackAngle * this.getAttackProgress())
 			);
 		}
 
 		// Fingers:
 		else if(partName.contains("finger")) {
 			if(partName.contains("thumb")) {
-				this.rotate(-(float) Math.toDegrees(MathHelper.cos(loop * 0.2F) * 0.2F - 0.2F), 0, 0);
+				this.rotate(-(float) Math.toDegrees(Mth.cos(loop * 0.2F) * 0.2F - 0.2F), 0, 0);
 			}
 			else {
-				this.rotate((float) Math.toDegrees(MathHelper.cos(loop * 0.2F) * 0.2F - 0.2F), 0, 0);
+				this.rotate((float) Math.toDegrees(Mth.cos(loop * 0.2F) * 0.2F - 0.2F), 0, 0);
 			}
 		}
 	}

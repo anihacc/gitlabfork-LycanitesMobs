@@ -2,8 +2,8 @@ package com.lycanitesmobs.client.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.template.ModelTemplateInsect;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -39,7 +39,7 @@ public class ModelTrite extends ModelTemplateInsect {
 
 		// Walking Bob:
 		if(partName.equals("body")) {
-			float bob = MathHelper.cos(time * 0.6662F + (float) Math.PI) * 0.3F * distance;
+			float bob = Mth.cos(time * 0.6662F + (float) Math.PI) * 0.3F * distance;
 			if (bob < 0)
 				bob += -bob * 2;
 			translate(0, bob, 0);

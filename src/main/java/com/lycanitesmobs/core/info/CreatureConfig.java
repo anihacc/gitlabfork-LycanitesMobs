@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.info;
 import com.lycanitesmobs.core.config.ConfigCreatureSpawning;
 import com.lycanitesmobs.core.config.ConfigCreatures;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 import java.util.ArrayList;
@@ -246,7 +246,7 @@ public class CreatureConfig {
 		return this.globalDrops;
 	}
 
-	public boolean isSoulboundAllowed(World world) {
+	public boolean isSoulboundAllowed(Level world) {
 		if(this.soulboundDimensionList.length > 0) {
 			boolean inDimensionList = false;
 			for (String dimensionId : this.soulboundDimensionList) {
@@ -266,7 +266,7 @@ public class CreatureConfig {
 		return true;
 	}
 
-	public boolean isSummoningAllowed(World world) {
+	public boolean isSummoningAllowed(Level world) {
 		if(this.summonDimensionList.length > 0) {
 			boolean inDimensionList = false;
 			for (String dimensionId : this.summonDimensionList) {

@@ -4,8 +4,8 @@ package com.lycanitesmobs.client.model.creature;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.template.ModelTemplateBiped;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -32,24 +32,24 @@ public class ModelBalayang extends ModelTemplateBiped {
 			if (partName.equals("wingleft01")) {
 				float rotX = -40;
 				float rotY = 20.5F;
-				float rotZ = (float) Math.toDegrees(MathHelper.sin(loop * 0.4F * this.wingScale) * 0.6F);
+				float rotZ = (float) Math.toDegrees(Mth.sin(loop * 0.4F * this.wingScale) * 0.6F);
 				this.rotate(rotX, rotY, rotZ);
 				return;
 			}
 			if (partName.equals("wingright01")) {
 				float rotX = -40;
 				float rotY = -20.5F;
-				float rotZ = (float) Math.toDegrees(MathHelper.sin(loop * 0.4F * this.wingScale + (float) Math.PI) * 0.6F);
+				float rotZ = (float) Math.toDegrees(Mth.sin(loop * 0.4F * this.wingScale + (float) Math.PI) * 0.6F);
 				this.rotate(rotX, rotY, rotZ);
 				return;
 			}
 			if (partName.equals("wingleft02")) {
-				float rotZ = (float) Math.toDegrees(MathHelper.sin(loop * 0.4F * this.wingScale) * 0.15F);
+				float rotZ = (float) Math.toDegrees(Mth.sin(loop * 0.4F * this.wingScale) * 0.15F);
 				this.rotate(0, 0, rotZ);
 				return;
 			}
 			if (partName.equals("wingright02")) {
-				float rotZ = (float) Math.toDegrees(MathHelper.sin(loop * 0.4F * this.wingScale + (float) Math.PI) * 0.15F);
+				float rotZ = (float) Math.toDegrees(Mth.sin(loop * 0.4F * this.wingScale + (float) Math.PI) * 0.15F);
 				this.rotate(0, 0, rotZ);
 				return;
 			}

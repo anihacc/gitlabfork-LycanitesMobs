@@ -3,14 +3,20 @@ package com.lycanitesmobs.core.entity.creature;
 import com.lycanitesmobs.core.entity.RideableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import net.minecraft.entity.*;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 
 import java.util.List;
+
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.Pose;
 
 public class EntityFeradon extends RideableCreatureEntity {
 
@@ -20,11 +26,11 @@ public class EntityFeradon extends RideableCreatureEntity {
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityFeradon(EntityType<? extends EntityFeradon> entityType, World world) {
+    public EntityFeradon(EntityType<? extends EntityFeradon> entityType, Level world) {
         super(entityType, world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEFINED;
+        this.attribute = MobType.UNDEFINED;
         this.hasAttackSound = true;
         this.spreadFire = false;
 
@@ -40,7 +46,7 @@ public class EntityFeradon extends RideableCreatureEntity {
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setTargetClass(PlayerEntity.class).setLongMemory(false));
+        this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setTargetClass(Player.class).setLongMemory(false));
         this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this));
     }
 	
@@ -83,13 +89,13 @@ public class EntityFeradon extends RideableCreatureEntity {
             if(!possibleTargets.isEmpty()) {
                 for(LivingEntity possibleTarget : possibleTargets) {
                     boolean doDamage = true;
-                    if(this.getRider() instanceof PlayerEntity) {
-                        if(MinecraftForge.EVENT_BUS.post(new AttackEntityEvent((PlayerEntity)this.getRider(), possibleTarget))) {
+                    if(this.getRider() instanceof Player) {
+                        if(MinecraftForge.EVENT_BUS.post(new AttackEntityEvent((Player)this.getRider(), possibleTarget))) {
                             doDamage = false;
                         }
                     }
                     if(doDamage) {
-                        possibleTarget.addEffect(new EffectInstance(Effects.WEAKNESS, 10 * 20, 0));
+                        possibleTarget.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 10 * 20, 0));
                     }
                 }
             }
@@ -99,10 +105,10 @@ public class EntityFeradon extends RideableCreatureEntity {
 
     @Override
     public void riderEffects(LivingEntity rider) {
-        if(rider.hasEffect(Effects.WEAKNESS))
-            rider.removeEffect(Effects.WEAKNESS);
-        if(rider.hasEffect(Effects.DIG_SLOWDOWN))
-            rider.removeEffect(Effects.DIG_SLOWDOWN);
+        if(rider.hasEffect(MobEffects.WEAKNESS))
+            rider.removeEffect(MobEffects.WEAKNESS);
+        if(rider.hasEffect(MobEffects.DIG_SLOWDOWN))
+            rider.removeEffect(MobEffects.DIG_SLOWDOWN);
     }
 
 	

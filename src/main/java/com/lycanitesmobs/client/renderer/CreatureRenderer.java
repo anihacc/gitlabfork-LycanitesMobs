@@ -5,24 +5,24 @@ import com.lycanitesmobs.client.model.CreatureModel;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.info.CreatureManager;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.client.renderer.entity.layers.LayerRenderer;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.Pose;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.client.renderer.entity.layers.RenderLayer;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, CreatureModel> {
-    public CreatureRenderer(String entityID, EntityRendererManager renderManager, float shadowSize) {
+    public CreatureRenderer(String entityID, EntityRenderDispatcher renderManager, float shadowSize) {
     	super(renderManager, ModelManager.getInstance().getCreatureModel(CreatureManager.getInstance().getCreature(entityID), null), shadowSize);
 		if(this.model == null)
 			return;
@@ -38,7 +38,7 @@ public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, CreatureMo
 	 * @param brightness The brightness of the mob based on block location, etc.
 	 */
 	@Override
-	public void render(BaseCreatureEntity entity, float partialTicks, float yaw, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, int brightness) {
+	public void render(BaseCreatureEntity entity, float partialTicks, float yaw, PoseStack matrixStack, MultiBufferSource renderTypeBuffer, int brightness) {
 		// Get Model and Layers:
 		try {
 			this.layers.clear();
@@ -57,16 +57,16 @@ public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, CreatureMo
 		boolean shouldSit = entity.isPassenger() && (entity.getVehicle() != null && entity.getVehicle().shouldRiderSit());
 		this.model.riding = shouldSit;
 		this.model.young = entity.isBaby();
-		float renderYaw = MathHelper.clamp(yaw, entity.yBodyRotO, entity.yBodyRot);
-		float renderYawHead = MathHelper.clamp(yaw, entity.yHeadRotO, entity.yHeadRot);
+		float renderYaw = Mth.clamp(yaw, entity.yBodyRotO, entity.yBodyRot);
+		float renderYawHead = Mth.clamp(yaw, entity.yHeadRotO, entity.yHeadRot);
 
 		// Looking Yaw:
 		float lookYaw = renderYawHead - renderYaw;
 		if(shouldSit && entity.getVehicle() instanceof LivingEntity) {
 			LivingEntity livingentity = (LivingEntity)entity.getVehicle();
-			renderYaw = MathHelper.clamp(yaw, livingentity.yBodyRotO, livingentity.yBodyRot);
+			renderYaw = Mth.clamp(yaw, livingentity.yBodyRotO, livingentity.yBodyRot);
 			lookYaw = renderYawHead - renderYaw;
-			float renderYawMountOffset = MathHelper.wrapDegrees(lookYaw);
+			float renderYawMountOffset = Mth.wrapDegrees(lookYaw);
 			if (renderYawMountOffset < -85.0F) {
 				renderYawMountOffset = -85.0F;
 			}
@@ -85,7 +85,7 @@ public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, CreatureMo
 
 		// Looking Pitch:
 		matrixStack.pushPose();
-		float lookPitch = MathHelper.lerp(yaw, entity.xRotO, entity.xRot);
+		float lookPitch = Mth.lerp(yaw, entity.xRotO, entity.xRot);
 		if(entity.getPose() == Pose.SLEEPING) {
 			Direction direction = entity.getBedOrientation();
 			if (direction != null) {
@@ -103,7 +103,7 @@ public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, CreatureMo
 		float distance = 0.0F;
 		float time = 0.0F;
 		if (!shouldSit && entity.isAlive()) {
-			distance = MathHelper.lerp(yaw, entity.animationSpeedOld, entity.animationSpeed);
+			distance = Mth.lerp(yaw, entity.animationSpeedOld, entity.animationSpeed);
 			time = entity.animationPosition - entity.animationSpeed * (1.0F - yaw);
 			if (entity.isBaby()) {
 				time *= 3.0F;
@@ -127,7 +127,7 @@ public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, CreatureMo
 		// Render Model Layers:
 		this.getMainModel().generateAnimationFrames(entity, time, distance, loop, lookYaw, lookPitch, 1, brightness);
 		this.renderModel(entity, matrixStack, renderTypeBuffer, null, time, distance, loop, lookYaw, lookPitch, 1, brightness, fade, invisible, allyInvisible);
-		for(LayerRenderer<BaseCreatureEntity, CreatureModel> layer : this.layers) {
+		for(RenderLayer<BaseCreatureEntity, CreatureModel> layer : this.layers) {
 			if(!(layer instanceof LayerCreatureBase)) {
 				continue;
 			}
@@ -167,7 +167,7 @@ public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, CreatureMo
 	 * @param invisible If true, the entity has invisibility or some form of stealth.
 	 * @param allyInvisible If true, the entity has invisibility or some form of stealth but is allied to the player so should be translucent, etc.
 	 */
-	protected void renderModel(BaseCreatureEntity entity, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, LayerCreatureBase layer, float time, float distance, float loop, float lookY, float lookX, float scale, int brightness, int fade, boolean invisible, boolean allyInvisible) {
+	protected void renderModel(BaseCreatureEntity entity, PoseStack matrixStack, MultiBufferSource renderTypeBuffer, LayerCreatureBase layer, float time, float distance, float loop, float lookY, float lookX, float scale, int brightness, int fade, boolean invisible, boolean allyInvisible) {
 		ResourceLocation texture = this.getEntityTexture(entity, layer);
 		RenderType rendertype;
 		if (invisible && !allyInvisible) {

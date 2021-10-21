@@ -4,14 +4,14 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.LycanitesMobs;
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.item.Item;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.math.vector.Vector3i;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.item.Item;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.core.Vec3i;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -20,7 +20,7 @@ import java.util.*;
 
 public class JSONHelper {
 
-	public static Vector3i getVector3i(JsonObject json, String memberName) {
+	public static Vec3i getVector3i(JsonObject json, String memberName) {
 		if(json.has(memberName)) {
 			JsonArray jsonArray = json.get(memberName).getAsJsonArray();
 			Iterator<JsonElement> jsonIterator = jsonArray.iterator();
@@ -30,12 +30,12 @@ public class JSONHelper {
 				coords[i] = jsonIterator.next().getAsInt();
 				i++;
 			}
-			return new Vector3i(coords[0], coords[1], coords[2]);
+			return new Vec3i(coords[0], coords[1], coords[2]);
 		}
-		return new Vector3i(0, 0, 0);
+		return new Vec3i(0, 0, 0);
 	}
 
-	public static Vector3d getVector3d(JsonObject json, String memberName, Vector3d defaultVec) {
+	public static Vec3 getVector3d(JsonObject json, String memberName, Vec3 defaultVec) {
 		if(json.has(memberName)) {
 			JsonArray jsonArray = json.get(memberName).getAsJsonArray();
 			Iterator<JsonElement> jsonIterator = jsonArray.iterator();
@@ -45,7 +45,7 @@ public class JSONHelper {
 				coords[i] = jsonIterator.next().getAsDouble();
 				i++;
 			}
-			return new Vector3d(coords[0], coords[1], coords[2]);
+			return new Vec3(coords[0], coords[1], coords[2]);
 		}
 		return defaultVec;
 	}
@@ -186,8 +186,8 @@ public class JSONHelper {
 			List<Biome> selectedBiomes = new ArrayList<>();
 			if ("ALL".equalsIgnoreCase(biomeEntry)) {
 				for (BiomeDictionary.Type biomeType : BiomeDictionary.Type.getAll()) {
-					Set<RegistryKey<Biome>> selectedBiomesSet = BiomeDictionary.getBiomes(biomeType);
-					for (RegistryKey<Biome> selectedBiomesKey : selectedBiomesSet) {
+					Set<ResourceKey<Biome>> selectedBiomesSet = BiomeDictionary.getBiomes(biomeType);
+					for (ResourceKey<Biome> selectedBiomesKey : selectedBiomesSet) {
 						Biome biome = ForgeRegistries.BIOMES.getValue(selectedBiomesKey.location());
 						if(biome != null) {
 							selectedBiomes.add(biome);
@@ -203,8 +203,8 @@ public class JSONHelper {
 					LycanitesMobs.logWarning("", "[Spawning] Unknown biome type " + biomeEntry + " this will be ignored and treated as NONE.");
 				}
 				if (biomeType != null) {
-					Set<RegistryKey<Biome>> selectedBiomesSet = BiomeDictionary.getBiomes(biomeType);
-					for (RegistryKey<Biome> selectedBiomesKey : selectedBiomesSet) {
+					Set<ResourceKey<Biome>> selectedBiomesSet = BiomeDictionary.getBiomes(biomeType);
+					for (ResourceKey<Biome> selectedBiomesKey : selectedBiomesSet) {
 						Biome biome = ForgeRegistries.BIOMES.getValue(selectedBiomesKey.location());
 						if(biome != null) {
 							selectedBiomes.add(biome);
