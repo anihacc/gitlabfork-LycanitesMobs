@@ -58,6 +58,9 @@ public abstract class TargetingGoal extends Goal {
             if(this.shouldCheckSight() && !entity.isGlowing() && !this.host.canSee(entity)) {
                 return false;
             }
+            if(this.shouldCheckSight() && entity.distanceTo(TargetingGoal.this.host) > TargetingGoal.this.getTargetDistance() * entity.getVisibilityPercent(TargetingGoal.this.host)) {
+                return false;
+            }
             return true;
         };
 
