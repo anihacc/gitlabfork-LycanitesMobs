@@ -102,13 +102,15 @@ public class EntityJouste extends AgeableCreatureEntity {
 
 	@Override
 	public void setGrowingAge(int age) {
-		if(age == 0 && this.getAge() < 0)
-			if(this.getRandom().nextFloat() >= 0.9F) {
-				EntityJousteAlpha alpha = (EntityJousteAlpha)CreatureManager.getInstance().getCreature("joustealpha").createEntity(this.getCommandSenderWorld());
+		if(age == 0 && this.getAge() < 0) {
+			CreatureInfo alphaInfo = CreatureManager.getInstance().getCreature("joustealpha");
+			if (alphaInfo != null && this.getRandom().nextFloat() >= 0.9F) {
+				EntityJousteAlpha alpha = (EntityJousteAlpha) CreatureManager.getInstance().getCreature("joustealpha").createEntity(this.getCommandSenderWorld());
 				alpha.copyPosition(this);
 				this.getCommandSenderWorld().addFreshEntity(alpha);
 				this.remove();
 			}
+		}
         super.setGrowingAge(age);
     }
 }
