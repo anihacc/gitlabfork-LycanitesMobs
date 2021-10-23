@@ -1,7 +1,6 @@
 package com.lycanitesmobs.core.command;
 
 import com.lycanitesmobs.ExtendedWorld;
-import com.lycanitesmobs.client.localisation.LanguageManager;
 import com.lycanitesmobs.core.mobevent.MobEvent;
 import com.lycanitesmobs.core.mobevent.MobEventListener;
 import com.lycanitesmobs.core.mobevent.MobEventManager;
@@ -23,10 +22,10 @@ public class MobEventCommand {
 						.then(Commands.argument("mobevent", StringArgumentType.string())
 								.then(Commands.argument("level", IntegerArgumentType.integer())
 										.executes(MobEventCommand::start)
-											.then(Commands.argument("subspecies", IntegerArgumentType.integer())
-													.executes(MobEventCommand::startWorld))
-														.then(Commands.argument("world", IntegerArgumentType.integer())
-																.executes(MobEventCommand::startWorld))
+										.then(Commands.argument("subspecies", IntegerArgumentType.integer())
+												.executes(MobEventCommand::startSubspecies))
+													.then(Commands.argument("world", IntegerArgumentType.integer())
+															.executes(MobEventCommand::startWorld))
 				)))
 				.then(Commands.literal("random")
 							.then(Commands.argument("level", IntegerArgumentType.integer())
@@ -43,6 +42,45 @@ public class MobEventCommand {
 	}
 
 	public static int start(final CommandContext<CommandSource> context) {
+		if (!context.getSource().hasPermission(2)) {
+			return 0;
+		}
+		World world = context.getSource().getLevel();
+		String eventName = StringArgumentType.getString(context, "mobevent");
+		int level = Math.max(1, IntegerArgumentType.getInteger(context, "level"));
+
+		if(!MobEventManager.getInstance().mobEvents.containsKey(eventName)) {
+			context.getSource().sendSuccess(new TranslationTextComponent("lyc.command.mobevent.start.unknown"), true);
+			return 0;
+		}
+
+		ExtendedWorld extendedWorld = ExtendedWorld.getForWorld(world);
+		if(extendedWorld == null) {
+			return 0;
+		}
+
+		PlayerEntity player = null;
+		BlockPos pos = new BlockPos(0, 0, 0);
+
+		if(context.getSource().getEntity() instanceof PlayerEntity) {
+			player = (PlayerEntity)context.getSource().getEntity();
+			pos = new BlockPos(player.position());
+
+			// Check Conditions:
+			MobEvent mobEvent = MobEventManager.getInstance().getMobEvent(eventName);
+			if (!mobEvent.canStart(world, player)) {
+				context.getSource().sendSuccess(new TranslationTextComponent("lyc.command.mobevent.start.conditions"), true);
+				return 0;
+			}
+
+		}
+
+		extendedWorld.startMobEvent(eventName, player, pos, level, -1);
+		context.getSource().sendSuccess(new TranslationTextComponent("lyc.command.mobevent.start"), true);
+		return 0;
+	}
+
+	public static int startSubspecies(final CommandContext<CommandSource> context) {
 		if (!context.getSource().hasPermission(2)) {
 			return 0;
 		}
