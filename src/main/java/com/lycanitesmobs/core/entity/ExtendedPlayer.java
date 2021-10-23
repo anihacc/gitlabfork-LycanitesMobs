@@ -485,9 +485,11 @@ public class ExtendedPlayer implements IExtendedPlayer {
     //                      Utility
     // ==================================================
 	public void sendOverlayMessage(Component messageComponent) {
-		if(this.player.getCommandSenderWorld().isClientSide) return;
+		if(this.player.getCommandSenderWorld().isClientSide || !(this.player instanceof ServerPlayer)) {
+			return;
+		}
 		MessageOverlayMessage message = new MessageOverlayMessage(messageComponent);
-		LycanitesMobs.packetHandler.sendToServer(message);
+		LycanitesMobs.packetHandler.sendToPlayer(message, (ServerPlayer)this.player);
 	}
 
 

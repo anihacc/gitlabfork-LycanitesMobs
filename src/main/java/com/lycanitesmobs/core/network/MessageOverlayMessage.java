@@ -1,6 +1,5 @@
 package com.lycanitesmobs.core.network;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.fml.network.NetworkDirection;
@@ -21,10 +20,10 @@ public class MessageOverlayMessage {
 	 */
 	public static void handle(MessageOverlayMessage message, Supplier<NetworkEvent.Context> ctx) {
 		ctx.get().setPacketHandled(true);
-		if(ctx.get().getDirection() != NetworkDirection.PLAY_TO_SERVER)
+		if(ctx.get().getDirection() != NetworkDirection.PLAY_TO_CLIENT)
 			return;
 
-		Minecraft.getInstance().gui.setOverlayMessage(message.message, false);
+		net.minecraft.client.Minecraft.getInstance().gui.setOverlayMessage(message.message, false);
 	}
 	
 	/**

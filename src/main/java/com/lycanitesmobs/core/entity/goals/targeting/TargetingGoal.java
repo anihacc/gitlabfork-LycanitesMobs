@@ -55,7 +55,7 @@ public abstract class TargetingGoal extends Goal {
             if(!TargetingGoal.this.isEntityTargetable(entity, false)) {
                 return false;
             }
-            if(this.shouldCheckSight() && !entity.isGlowing() && !this.host.canSee(entity)) {
+            if(this.shouldCheckSight() && !entity.isCurrentlyGlowing() && !this.host.hasLineOfSight(entity)) {
                 return false;
             }
             return true;
@@ -71,7 +71,10 @@ public abstract class TargetingGoal extends Goal {
             if(!TargetingGoal.this.isAllyTarget(entity)) {
                 return false;
             }
-            if(this.shouldCheckSight() && !entity.isGlowing() && !this.host.canSee(entity)) {
+            if(this.shouldCheckSight() && !entity.isCurrentlyGlowing() && !this.host.hasLineOfSight(entity)) {
+                return false;
+            }
+            if(this.shouldCheckSight() && entity.distanceTo(this.host) > this.getTargetDistance() * this.host.getVisibilityPercent(entity)) {
                 return false;
             }
             return true;
@@ -111,7 +114,7 @@ public abstract class TargetingGoal extends Goal {
             return false;
         
         if(this.shouldCheckSight())
-            if(this.host.getSensing().canSee(this.getTarget()))
+            if(this.host.getSensing().hasLineOfSight(this.getTarget()))
                 this.cantSeeTime = 0;
             else if(++this.cantSeeTime > this.cantSeeTimeMax)
                 return false;
@@ -166,7 +169,7 @@ public abstract class TargetingGoal extends Goal {
     //               Get Possible Targets
     // ==================================================
     public <T extends LivingEntity> List<T> getPossibleTargets(Class <? extends T > clazz, double rangeX, double rangeY, double rangeZ) {
-        return this.host.getCommandSenderWorld().getEntitiesOfClass(clazz, this.host.getBoundingBox().inflate(rangeX, rangeY, rangeZ), this.targetSelector);
+        return (List<T>) this.host.getCommandSenderWorld().getEntitiesOfClass(clazz, this.host.getBoundingBox().inflate(rangeX, rangeY, rangeZ), this.targetSelector);
     }
     
     
@@ -249,7 +252,7 @@ public abstract class TargetingGoal extends Goal {
             return false;
         
         // Sight Check:
-        if(this.shouldCheckSight() && !checkTarget.hasEffect(MobEffects.GLOWING) && !this.host.getSensing().canSee(checkTarget)) // Glowing
+        if(this.shouldCheckSight() && !checkTarget.hasEffect(MobEffects.GLOWING) && !this.host.getSensing().hasLineOfSight(checkTarget)) // Glowing
             return false;
         
         // Nearby Check:
@@ -309,7 +312,7 @@ public abstract class TargetingGoal extends Goal {
         }
 
         // Sight Check:
-        return !this.shouldCheckSight() || this.host.getSensing().canSee(checkTarget);
+        return !this.shouldCheckSight() || this.host.getSensing().hasLineOfSight(checkTarget);
     }
     
     
