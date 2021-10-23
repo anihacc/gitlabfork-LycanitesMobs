@@ -7,17 +7,17 @@ import com.lycanitesmobs.core.entity.goals.targeting.CopyMasterAttackTargetGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.FindMasterGoal;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.world.entity.MobType;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
 
 public class EntityJouste extends AgeableCreatureEntity {
     public EntityJouste(EntityType<? extends EntityJouste> entityType, Level world) {
@@ -52,7 +52,7 @@ public class EntityJouste extends AgeableCreatureEntity {
                 EntityJousteAlpha alpha = (EntityJousteAlpha)CreatureManager.getInstance().getCreature("joustealpha").createEntity(this.getCommandSenderWorld());
                 alpha.copyPosition(this);
                 this.getCommandSenderWorld().addFreshEntity(alpha);
-                this.remove();
+                this.discard();
             }
         }
         super.onFirstSpawn();
@@ -102,13 +102,15 @@ public class EntityJouste extends AgeableCreatureEntity {
 
 	@Override
 	public void setGrowingAge(int age) {
-		if(age == 0 && this.getAge() < 0)
-			if(this.getRandom().nextFloat() >= 0.9F) {
-				EntityJousteAlpha alpha = (EntityJousteAlpha)CreatureManager.getInstance().getCreature("joustealpha").createEntity(this.getCommandSenderWorld());
+		if(age == 0 && this.getAge() < 0) {
+			CreatureInfo alphaInfo = CreatureManager.getInstance().getCreature("joustealpha");
+			if (alphaInfo != null && this.getRandom().nextFloat() >= 0.9F) {
+				EntityJousteAlpha alpha = (EntityJousteAlpha) CreatureManager.getInstance().getCreature("joustealpha").createEntity(this.getCommandSenderWorld());
 				alpha.copyPosition(this);
 				this.getCommandSenderWorld().addFreshEntity(alpha);
-				this.remove();
+				this.discard();
 			}
+		}
         super.setGrowingAge(age);
     }
 }
