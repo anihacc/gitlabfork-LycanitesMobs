@@ -157,12 +157,6 @@
             "minAmount": 2,
             "maxAmount": 6,
             "chance": 1
-        },
-        {
-            "item": "lycanitesmobs:wraithsigil",
-            "minAmount": 1,
-            "maxAmount": 1,
-            "chance": 1
         }
     ],
     "sizeScale": 1,
