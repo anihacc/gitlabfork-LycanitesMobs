@@ -102,7 +102,7 @@
             "chance": 1
         },
         {
-            "item": "lycanitesmobs:trickersterflarecharge",
+            "item": "lycanitesmobs:tricksterflarecharge",
             "minAmount": 1,
             "maxAmount": 3,
             "chance": 1
