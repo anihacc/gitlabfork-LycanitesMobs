@@ -4,8 +4,10 @@ import com.google.common.base.Predicate;
 import com.lycanitesmobs.api.IGroupBoss;
 import com.lycanitesmobs.client.AssetManager;
 import com.lycanitesmobs.core.config.ConfigBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.FearEntity;
 import com.lycanitesmobs.core.entity.ExtendedEntity;
+import com.lycanitesmobs.core.info.CreatureGroup;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.network.MessageEntityVelocity;
 import net.minecraft.entity.Entity;
@@ -13,6 +15,8 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
+import net.minecraft.entity.boss.EntityDragon;
+import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.MobEffects;
@@ -154,7 +158,7 @@ public class PotionEffects {
 		// Fear
 		PotionBase fear = ObjectManager.getEffect("fear");
 		if(fear != null && !entity.getEntityWorld().isRemote) {
-			if(!invulnerable && entity.isPotionActive(fear)) {
+			if(!invulnerable && !this.isBoss(entity) && entity.isPotionActive(fear)) {
 				ExtendedEntity extendedEntity = ExtendedEntity.getForEntity(entity);
 				if(extendedEntity != null) {
 					if(extendedEntity.fearEntity == null) {
@@ -583,5 +587,25 @@ public class PotionEffects {
 				return true;
 			return filterClass.isAssignableFrom(entity.getClass());
 		});
+	}
+
+	/**
+	 * Determines if the provided entity is considered a boss.
+	 * @param entity The entity to check.
+	 * @return True if the entity is a boss.
+	 */
+	public boolean isBoss(Entity entity) {
+		if (entity instanceof EntityDragon || entity instanceof EntityWither) {
+			return true;
+		}
+		if (entity instanceof BaseCreatureEntity) {
+			BaseCreatureEntity creature = (BaseCreatureEntity)entity;
+			return creature.isBoss();
+		}
+		CreatureGroup bossGroup = CreatureManager.getInstance().getCreatureGroup("boss");
+		if (bossGroup != null) {
+			return bossGroup.hasEntity(entity);
+		}
+		return false;
 	}
 }

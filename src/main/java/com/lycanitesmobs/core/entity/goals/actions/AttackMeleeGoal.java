@@ -262,7 +262,7 @@ public class AttackMeleeGoal extends EntityAIBase {
 	 * @return The time in ticks to wait before calculating a new chase path.
 	 */
 	public int getFailedPathFindingPenalty() {
-		if (this.attackTarget instanceof EntityPlayer) {
+		if (this.attackTarget instanceof EntityPlayer || this.host.isTamed()) {
 			return this.failedPathFindingPenaltyPlayerMax;
 		}
 		return this.failedPathFindingPenaltyMax;
