@@ -7,7 +7,7 @@ import com.lycanitesmobs.client.renderer.CustomRenderStates;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureEffect;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.core.entity.creature.EntityAsmodeus;
+import com.lycanitesmobs.core.entity.creature.Asmodeus;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.util.Mth;
@@ -179,8 +179,8 @@ public class ModelAsmodeus extends CreatureObjModelOld {
         }
 
         // Spinning Weapon:
-        if(entity instanceof EntityAsmodeus && partName.contains("weapon")) {
-            EntityAsmodeus entityAsmodeus = (EntityAsmodeus)entity;
+        if(entity instanceof Asmodeus && partName.contains("weapon")) {
+            Asmodeus entityAsmodeus = (Asmodeus)entity;
             if (entityAsmodeus.isAttackOnCooldown()) {
                 rotZ -= loop * 30;
             }

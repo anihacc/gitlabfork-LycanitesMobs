@@ -7,7 +7,7 @@ import com.lycanitesmobs.client.renderer.CreatureRenderer;
 import com.lycanitesmobs.client.renderer.CustomRenderStates;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureEffect;
-import com.lycanitesmobs.core.entity.creature.EntityAmalgalich;
+import com.lycanitesmobs.core.entity.creature.Amalgalich;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.util.Mth;
@@ -51,8 +51,8 @@ public class ModelAmalgalich extends CreatureObjModel {
 
 	@Override
 	public boolean canRenderPart(String partName, Entity entity, LayerCreatureBase layer, boolean trophy) {
-		if(layer != null && entity instanceof EntityAmalgalich) {
-			return ((EntityAmalgalich)entity).getConsumptionAnimation() > 0;
+		if(layer != null && entity instanceof Amalgalich) {
+			return ((Amalgalich)entity).getConsumptionAnimation() > 0;
 		}
 		return super.canRenderPart(partName, entity, layer, trophy);
 	}
@@ -71,8 +71,8 @@ public class ModelAmalgalich extends CreatureObjModel {
 		float rotZ = 0F;
 
 		// Consumption:
-		if(entity instanceof EntityAmalgalich && ((EntityAmalgalich)entity).getConsumptionAnimation() > 0) {
-			float consumptionScale = ((EntityAmalgalich)entity).getConsumptionAnimation();
+		if(entity instanceof Amalgalich && ((Amalgalich)entity).getConsumptionAnimation() > 0) {
+			float consumptionScale = ((Amalgalich)entity).getConsumptionAnimation();
 			if(consumptionScale == 1) {
 				loop *= 8 * consumptionScale;
 			}

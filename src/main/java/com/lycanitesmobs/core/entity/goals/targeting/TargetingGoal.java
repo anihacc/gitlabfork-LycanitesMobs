@@ -3,7 +3,6 @@ package com.lycanitesmobs.core.entity.goals.targeting;
 import com.google.common.base.Predicate;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.core.entity.creature.EntityVespidQueen;
 import com.lycanitesmobs.core.entity.goals.TargetSorterNearest;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;

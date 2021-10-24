@@ -4,7 +4,7 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
-import com.lycanitesmobs.core.entity.creature.EntityRahovart;
+import com.lycanitesmobs.core.entity.creature.Rahovart;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -72,7 +72,7 @@ public class EntityHellfireWave extends BaseProjectileEntity {
 
         // Time Update:
         if(this.time++ >= this.timeMax)
-            this.remove();
+            this.discard();
 
         // Populate:
         if(this.hellfireWalls == null) {
@@ -107,7 +107,7 @@ public class EntityHellfireWave extends BaseProjectileEntity {
                 );
                 this.hellfireWalls[row][col].projectileLife = 2 * 20;
                 if(!this.isAlive())
-                    this.hellfireWalls[row][col].remove();
+                    this.hellfireWalls[row][col].discard();
             }
         }
     }
@@ -128,7 +128,7 @@ public class EntityHellfireWave extends BaseProjectileEntity {
     public boolean canDamage(LivingEntity targetEntity) {
         LivingEntity owner = (LivingEntity) this.getShooter();
         if(owner == null) {
-            if(targetEntity instanceof EntityRahovart)
+            if(targetEntity instanceof Rahovart)
                 return false;
         }
         return super.canDamage(targetEntity);

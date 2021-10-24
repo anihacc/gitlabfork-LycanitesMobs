@@ -3,7 +3,7 @@ package com.lycanitesmobs.client.renderer.layer.specific;
 import com.lycanitesmobs.client.renderer.CreatureRenderer;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.core.entity.creature.EntityThresher;
+import com.lycanitesmobs.core.entity.creature.Thresher;
 import net.minecraft.resources.ResourceLocation;
 import com.mojang.math.Vector4f;
 import net.minecraftforge.api.distmarker.Dist;
@@ -25,8 +25,8 @@ public class LayerThresher extends LayerCreatureBase {
     // ==================================================
     @Override
     public boolean canRenderLayer(BaseCreatureEntity entity, float scale) {
-        if(entity instanceof EntityThresher) {
-            EntityThresher entityThresher = (EntityThresher)entity;
+        if(entity instanceof Thresher) {
+            Thresher entityThresher = (Thresher)entity;
             return entityThresher.canWhirlpool();
         }
         return false;

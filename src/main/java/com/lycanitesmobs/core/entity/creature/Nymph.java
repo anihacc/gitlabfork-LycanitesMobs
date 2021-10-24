@@ -1,0 +1,106 @@
+package com.lycanitesmobs.core.entity.creature;
+
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
+
+import java.util.List;
+
+public class Nymph extends TameableCreatureEntity {
+
+	public int healingRate = 20;
+
+    public Nymph(EntityType<? extends Nymph> entityType, Level world) {
+        super(entityType, world);
+
+        this.attribute = MobType.UNDEFINED;
+        this.hasAttackSound = false;
+
+		this.fleeHealthPercent = 1.0F;
+		this.isAggressiveByDefault = false;
+        this.setupMob();
+
+        this.maxUpStep = 1.0F;
+    }
+
+    @Override
+    protected void registerGoals() {
+        super.registerGoals();
+    }
+
+	@Override
+	public void loadCreatureFlags() {
+		this.healingRate = this.creatureInfo.getFlag("healingRate", this.healingRate);
+	}
+
+	private int farmingTick = 0;
+    @Override
+    public void aiStep() {
+        super.aiStep();
+
+		if(!this.getCommandSenderWorld().isClientSide) {
+			if(this.healingRate > 0 && !this.isPetType("familiar")) {
+				if (this.updateTick % this.healingRate == 0) {
+					List aoeTargets = this.getNearbyEntities(LivingEntity.class, null, 4);
+					for (Object entityObj : aoeTargets) {
+						LivingEntity target = (LivingEntity) entityObj;
+						if (target != this && !(target instanceof Nymph) && target != this.getTarget() && target != this.getAvoidTarget()) {
+							target.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 3 * 20, 0));
+						}
+					}
+				}
+			}
+
+			if(this.hasAvoidTarget()) {
+				if(this.updateTick % this.getRangedCooldown() == 0) {
+					this.attackRanged(this.getAvoidTarget(), this.distanceTo(this.getAvoidTarget()));
+				}
+			}
+			else if(this.hasAttackTarget()) {
+				if(this.updateTick % this.getRangedCooldown() == 0) {
+					this.attackRanged(this.getTarget(), this.distanceTo(this.getTarget()));
+				}
+			}
+		}
+
+        /*/ Particles:
+        if(this.getEntityWorld().isRemote)
+            for(int i = 0; i < 1; ++i) {
+                this.getEntityWorld().addParticle(ParticleTypes.BLOCK_CRACK,
+                        this.getPositionVec().getX() + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width,
+                        this.getPositionVec().getY() + this.rand.nextDouble() * (double) this.getSize(Pose.STANDING).height,
+                        this.getPositionVec().getZ() + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width,
+                        0.0D, 0.0D, 0.0D,
+                        Blocks.RED_FLOWER.getStateId(Blocks.RED_FLOWER.getStateFromMeta(2)));
+				this.getEntityWorld().addParticle(ParticleTypes.BLOCK_CRACK,
+						this.getPositionVec().getX() + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width,
+						this.getPositionVec().getY() + this.rand.nextDouble() * (double) this.getSize(Pose.STANDING).height,
+						this.getPositionVec().getZ() + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width,
+						0.0D, 0.0D, 0.0D,
+						Blocks.RED_FLOWER.getStateId(Blocks.RED_FLOWER.getStateFromMeta(8)));
+            }*/
+    }
+
+    @Override
+    public void attackRanged(Entity target, float range) {
+		this.fireProjectile("faebolt", target, range, 0, new Vec3(0, 0, 0), 0.75f, 1f, 1F);
+		super.attackRanged(target, range);
+    }
+
+    @Override
+    public boolean isFlying() { return true; }
+
+    public boolean petControlsEnabled() { return true; }
+
+
+	@Override
+	public int getNoBagSize() { return 0; }
+	@Override
+	public int getBagSize() { return this.creatureInfo.bagSize; }
+}
