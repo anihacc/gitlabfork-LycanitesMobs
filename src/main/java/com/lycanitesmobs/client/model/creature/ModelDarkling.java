@@ -2,7 +2,7 @@ package com.lycanitesmobs.client.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.template.ModelTemplateInsect;
-import com.lycanitesmobs.core.entity.creature.EntityDarkling;
+import com.lycanitesmobs.core.entity.creature.Darkling;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
@@ -41,8 +41,8 @@ public class ModelDarkling extends ModelTemplateInsect {
     	super.animatePart(partName, entity, time, distance, loop, lookY, lookX, scale);
 
         // Bobbing/Latching:
-        if(partName.equals("body") && entity instanceof EntityDarkling) {
-            if(((EntityDarkling)entity).hasLatchTarget()) {
+        if(partName.equals("body") && entity instanceof Darkling) {
+            if(((Darkling)entity).hasLatchTarget()) {
                 this.rotate(-90F, 0, 0);
             }
             else {

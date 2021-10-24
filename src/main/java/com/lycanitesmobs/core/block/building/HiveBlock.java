@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.block.building;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.block.BlockBase;
-import com.lycanitesmobs.core.entity.creature.EntityVespidQueen;
+import com.lycanitesmobs.core.entity.creature.VespidQueen;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.LivingEntity;
@@ -71,7 +71,7 @@ public class HiveBlock extends BlockBase {
         if(world.isClientSide || state.getValue(AGE) >= 8)
             return;
         double range = 32D;
-        if(!world.getEntitiesOfClass(EntityVespidQueen.class, new AABB(pos.getX() - range, pos.getY() - range, pos.getZ() - range, pos.getX() + range, pos.getY() + range, pos.getZ() + range)).isEmpty())
+        if(!world.getEntitiesOfClass(VespidQueen.class, new AABB(pos.getX() - range, pos.getY() - range, pos.getZ() - range, pos.getX() + range, pos.getY() + range, pos.getZ() + range)).isEmpty())
             return;
         super.tick(state, world, pos, random);
     }

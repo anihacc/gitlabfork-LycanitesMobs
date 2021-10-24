@@ -1,9 +1,8 @@
 package com.lycanitesmobs.client.renderer.layer;
 
 import com.lycanitesmobs.client.renderer.CreatureRenderer;
-import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.core.entity.creature.EntityYale;
+import com.lycanitesmobs.core.entity.creature.Yale;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.resources.ResourceLocation;
 import com.mojang.math.Vector4f;
@@ -33,9 +32,9 @@ public class LayerCreatureDye extends LayerCreatureBase {
     public boolean canRenderLayer(BaseCreatureEntity entity, float scale) {
         if(!super.canRenderLayer(entity, scale))
             return false;
-        if(!(entity instanceof EntityYale))
+        if(!(entity instanceof Yale))
             return true;
-        return ((EntityYale)entity).hasFur();
+        return ((Yale)entity).hasFur();
     }
 
     @Override

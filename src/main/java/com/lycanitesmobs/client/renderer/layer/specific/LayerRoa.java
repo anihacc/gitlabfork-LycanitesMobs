@@ -3,7 +3,7 @@ package com.lycanitesmobs.client.renderer.layer.specific;
 import com.lycanitesmobs.client.renderer.CreatureRenderer;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.core.entity.creature.EntityRoa;
+import com.lycanitesmobs.core.entity.creature.Roa;
 import net.minecraft.resources.ResourceLocation;
 import com.mojang.math.Vector4f;
 import net.minecraftforge.api.distmarker.Dist;
@@ -25,8 +25,8 @@ public class LayerRoa extends LayerCreatureBase {
     // ==================================================
     @Override
     public boolean canRenderLayer(BaseCreatureEntity entity, float scale) {
-        if(entity instanceof EntityRoa) {
-            EntityRoa entityRoa = (EntityRoa)entity;
+        if(entity instanceof Roa) {
+            Roa entityRoa = (Roa)entity;
             return entityRoa.canWhirlpool();
         }
         return false;

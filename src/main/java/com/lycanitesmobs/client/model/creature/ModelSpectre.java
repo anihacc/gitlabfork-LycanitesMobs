@@ -6,7 +6,7 @@ import com.lycanitesmobs.client.renderer.CreatureRenderer;
 import com.lycanitesmobs.client.renderer.CustomRenderStates;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureEffect;
-import com.lycanitesmobs.core.entity.creature.EntitySpectre;
+import com.lycanitesmobs.core.entity.creature.Spectre;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.util.Mth;
@@ -55,8 +55,8 @@ public class ModelSpectre extends ModelTemplateElemental {
 			return layer != null && "".equals(layer.name);
 		}
 		if("effect02".equals(partName) || "effect03".equals(partName)) {
-			if(entity instanceof EntitySpectre && layer != null && "".equals(layer.name)) {
-				return ((EntitySpectre)entity).canPull();
+			if(entity instanceof Spectre && layer != null && "".equals(layer.name)) {
+				return ((Spectre)entity).canPull();
 			}
 			return false;
 		}
@@ -73,8 +73,8 @@ public class ModelSpectre extends ModelTemplateElemental {
 
 		// Pulling:
 		boolean isPulling = false;
-		if(entity instanceof EntitySpectre) {
-			isPulling = ((EntitySpectre)entity).canPull();
+		if(entity instanceof Spectre) {
+			isPulling = ((Spectre)entity).canPull();
 		}
 
 		// Loop Offset:

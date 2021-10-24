@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.block.fluid;
 
-import com.lycanitesmobs.core.entity.creature.EntityVespid;
-import com.lycanitesmobs.core.entity.creature.EntityVespidQueen;
+import com.lycanitesmobs.core.entity.creature.Vespid;
+import com.lycanitesmobs.core.entity.creature.VespidQueen;
 import com.lycanitesmobs.core.info.ElementInfo;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
@@ -19,8 +19,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Random;
 import java.util.function.Supplier;
-
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class VeshoneyFluidBlock extends BaseFluidBlock {
     public VeshoneyFluidBlock(Supplier<? extends FlowingFluid> fluidSupplier, Properties properties, String name, ElementInfo element, boolean destroyItems) {
@@ -52,7 +50,7 @@ public class VeshoneyFluidBlock extends BaseFluidBlock {
             entity.clearFire();
 
         // Effects:
-        if(entity instanceof LivingEntity && !(entity instanceof EntityVespid) && !(entity instanceof EntityVespidQueen)) {
+        if(entity instanceof LivingEntity && !(entity instanceof Vespid) && !(entity instanceof VespidQueen)) {
             if (!(entity instanceof Player) || !((Player)entity).isCreative() || !entity.isSpectator()) {
                 entity.makeStuckInBlock(blockState, new Vec3(0.3D, 0.6D, 0.3D));
                 entity.setDeltaMovement(0, -0.02, 0);

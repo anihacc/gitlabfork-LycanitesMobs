@@ -5,7 +5,7 @@ import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.api.IGroupBoss;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
-import com.lycanitesmobs.core.entity.creature.EntityRahovart;
+import com.lycanitesmobs.core.entity.creature.Rahovart;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -91,7 +91,7 @@ public class EntityHellfireWall extends BaseProjectileEntity {
     public boolean canDamage(LivingEntity targetEntity) {
         Entity owner = this.getShooter();
         if(owner == null) {
-            if(targetEntity instanceof EntityRahovart)
+            if(targetEntity instanceof Rahovart)
                 return false;
         }
         return super.canDamage(targetEntity);
