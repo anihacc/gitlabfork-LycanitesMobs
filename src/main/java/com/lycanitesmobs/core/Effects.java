@@ -5,8 +5,10 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.api.IGroupBoss;
 import com.lycanitesmobs.core.config.ConfigExtra;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.ExtendedEntity;
 import com.lycanitesmobs.core.entity.FearEntity;
+import com.lycanitesmobs.core.info.CreatureGroup;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.network.MessageEntityVelocity;
 import net.minecraft.world.entity.Entity;
@@ -14,6 +16,8 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
+import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
@@ -581,5 +585,24 @@ public class Effects {
 				return true;
 			return filterClass.isAssignableFrom(entity.getClass());
 		});
+	}
+
+	/**
+	 * Determines if the provided entity is considered a boss.
+	 * @param entity The entity to check.
+	 * @return True if the entity is a boss.
+	 */
+	public boolean isBoss(Entity entity) {
+		if (entity instanceof EnderDragon || entity instanceof WitherBoss) {
+			return true;
+		}
+		if (entity instanceof BaseCreatureEntity creature) {
+			return creature.isBoss();
+		}
+		CreatureGroup bossGroup = CreatureManager.getInstance().getCreatureGroup("boss");
+		if (bossGroup != null) {
+			return bossGroup.hasEntity(entity);
+		}
+		return false;
 	}
 }

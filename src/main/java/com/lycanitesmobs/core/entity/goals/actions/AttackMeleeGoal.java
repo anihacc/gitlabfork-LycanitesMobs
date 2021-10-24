@@ -265,7 +265,7 @@ public class AttackMeleeGoal extends Goal {
 	 * @return The time in ticks to wait before calculating a new chase path.
 	 */
 	public int getFailedPathFindingPenalty() {
-		if (this.attackTarget instanceof Player) {
+		if (this.attackTarget instanceof Player || this.host.isTamed()) {
 			return this.failedPathFindingPenaltyPlayerMax;
 		}
 		return this.failedPathFindingPenaltyMax;
