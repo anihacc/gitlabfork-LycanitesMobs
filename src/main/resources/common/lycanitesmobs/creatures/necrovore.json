@@ -19,7 +19,7 @@
             "minecraft:the_end"
         ],
         "dimensionListType": "blacklist",
-        "ignoreBiome": true,
+        "ignoreBiome": false,
         "biomeTags": [
             "spooky"
         ],

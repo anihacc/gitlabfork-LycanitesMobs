@@ -1,5 +1,6 @@
 package com.lycanitesmobs.core.entity;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.damagesources.MinionEntityDamageSource;
 import com.lycanitesmobs.core.entity.goals.actions.BegGoal;
@@ -14,12 +15,8 @@ import com.lycanitesmobs.core.info.ElementInfo;
 import com.lycanitesmobs.core.item.ChargeItem;
 import com.lycanitesmobs.core.item.consumable.CreatureTreatItem;
 import com.lycanitesmobs.core.item.special.ItemSoulstone;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.decoration.LeashFenceKnotEntity;
-import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ThrowableProjectile;
 import net.minecraft.world.item.ItemStack;
@@ -565,7 +562,47 @@ public abstract class TameableCreatureEntity extends AgeableCreatureEntity {
     // ==================================================
     //                       Attacks
     // ==================================================
-    // ========== Can Attack ==========
+	@Override
+	public boolean doRangedDamage(Entity target, ThrowableProjectile projectile, float damage, boolean noPierce) {
+		float totalDamage = damage * ((float)this.creatureStats.getDamage() / 2);
+
+		// Owner Credit:
+		if (target instanceof Mob mobTarget) {
+			if (this.getOwner() instanceof Player && mobTarget.getHealth() > 0 && mobTarget.getHealth() - totalDamage <= 0) {
+				DamageSource creditSource = new MinionEntityDamageSource(this.getDamageSource(null), this.getOwner());
+				creditSource.bypassArmor().bypassMagic();
+				return target.hurt(creditSource, totalDamage);
+			}
+		}
+
+		return super.doRangedDamage(target, projectile, damage, noPierce);
+	}
+
+	@Override
+	public boolean attackEntityAsMob(Entity target, double damageScale) {
+		if(!this.isAlive())
+			return false;
+		if(target == null)
+			return false;
+		if(!this.hasLineOfSight(target))
+			return false;
+
+		float totalDamage = this.getAttackDamage(damageScale);
+
+		// Owner Credit:
+		if (target instanceof Mob mobTarget) {
+			if (this.getOwner() instanceof Player && mobTarget.getHealth() > 0 && mobTarget.getHealth() - totalDamage <= 0) {
+				DamageSource creditSource = new MinionEntityDamageSource(this.getDamageSource(null), this.getOwner());
+				creditSource.bypassArmor().bypassMagic();
+				return target.hurt(creditSource, totalDamage);
+			}
+		}
+
+		return super.attackEntityAsMob(target, damageScale);
+	}
+
+
+	// ========== Can Attack ==========
 	@Override
 	public boolean canAttackType(EntityType targetType) {
 		if(this.isPassive())
@@ -609,11 +646,11 @@ public abstract class TameableCreatureEntity extends AgeableCreatureEntity {
      */
     @Override
     public DamageSource getDamageSource(EntityDamageSource nestedDamageSource) {
-        if(this.isTamed() && this.getOwner() != null) {
-            if(nestedDamageSource == null)
-                nestedDamageSource = (EntityDamageSource)DamageSource.mobAttack(this);
-            return new MinionEntityDamageSource(nestedDamageSource, this.getOwner());
-        }
+//        if(this.isTamed() && this.getOwner() != null) {
+//            if(nestedDamageSource == null)
+//                nestedDamageSource = (EntityDamageSource)DamageSource.mobAttack(this);
+//            return new MinionEntityDamageSource(nestedDamageSource, this.getOwner());
+//        }
         return super.getDamageSource(nestedDamageSource);
     }
 	
@@ -799,7 +836,7 @@ public abstract class TameableCreatureEntity extends AgeableCreatureEntity {
 			return this.isTamed();
 		}
 
-		extendedPlayer.studyCreature(this, CreatureManager.getInstance().config.creatureTreatKnowledge, true);
+		extendedPlayer.studyCreature(this, CreatureManager.getInstance().config.creatureTreatKnowledge, true, true);
 
 		// Already Tamed:
 		if (this.isTamed()) {

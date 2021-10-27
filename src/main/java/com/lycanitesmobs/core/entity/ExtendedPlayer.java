@@ -364,9 +364,10 @@ public class ExtendedPlayer implements IExtendedPlayer {
 	 * @param entity The entity to study, this is checked to see if it is a valid target.
 	 * @param experience The amount of knowledge experience to gain.
 	 * @param useCooldown If true, the creature study cooldown will be checked and reset on studying.
+	 * @param alwaysShowMessage If true, a rank up status message is always displayed.
 	 * @return True if new knowledge was gained for the entity.
 	 */
-	public boolean studyCreature(LivingEntity entity, int experience, boolean useCooldown) {
+	public boolean studyCreature(LivingEntity entity, int experience, boolean useCooldown, boolean alwaysShowMessage) {
 		if (!(entity instanceof BaseCreatureEntity)) {
 			if (useCooldown && !this.player.getCommandSenderWorld().isClientSide()) {
 				this.sendOverlayMessage(new TranslatableComponent("message.beastiary.unknown"));
@@ -393,9 +394,18 @@ public class ExtendedPlayer implements IExtendedPlayer {
 					this.sendOverlayMessage(new TranslatableComponent("message.beastiary.study.full").append(" ").append(creature.creatureInfo.getTitle()));
 				}
 				else if (experience > 0) {
-					this.sendOverlayMessage(((BaseComponent)newKnowledge.getCreatureInfo().getTitle()).append(" ")
-							.append(new TranslatableComponent("message.beastiary.study"))
-							.append(" " + newKnowledge.experience + "/" + newKnowledge.getMaxExperience() + " (+ " + experience + ")"));
+					boolean showMessage = alwaysShowMessage;
+					if (!showMessage) {
+						float messageThreshold = ((float) newKnowledge.getMaxExperience() * 0.25F);
+						int fromExperience = Math.max(0, newKnowledge.experience - experience);
+						int wrappedExperience = fromExperience % (int)messageThreshold;
+						showMessage = wrappedExperience + experience >= messageThreshold;
+					}
+					if (showMessage) {
+						this.sendOverlayMessage(((BaseComponent) newKnowledge.getCreatureInfo().getTitle()).append(" ")
+								.append(new TranslatableComponent("message.beastiary.study"))
+								.append(" " + newKnowledge.experience + "/" + newKnowledge.getMaxExperience() + " (+ " + experience + ")"));
+					}
 				}
 			}
 			return true;

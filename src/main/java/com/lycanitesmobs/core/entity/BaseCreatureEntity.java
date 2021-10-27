@@ -12,6 +12,7 @@ import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.core.container.CreatureContainer;
 import com.lycanitesmobs.core.container.CreatureContainerProvider;
 import com.lycanitesmobs.core.entity.damagesources.ElementDamageSource;
+import com.lycanitesmobs.core.entity.damagesources.MinionEntityDamageSource;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.entity.navigate.CreatureMoveController;
@@ -28,6 +29,7 @@ import com.lycanitesmobs.core.pets.PetEntry;
 import com.lycanitesmobs.core.spawner.SpawnerEventListener;
 import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
 import com.mojang.math.Vector3f;
+import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.core.particles.ParticleTypes;
@@ -62,6 +64,7 @@ import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.ThrowableProjectile;
 import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.entity.vehicle.Minecart;
@@ -1707,7 +1710,7 @@ public abstract class BaseCreatureEntity extends PathfinderMob {
 					if(extendedPlayer != null) {
 						CreatureKnowledge creatureKnowledge = extendedPlayer.getBeastiary().getCreatureKnowledge(this.creatureInfo.getName());
 						if (creatureKnowledge == null || creatureKnowledge.rank < 1) {
-							extendedPlayer.studyCreature(this, CreatureManager.getInstance().config.creatureProximityKnowledge, false);
+							extendedPlayer.studyCreature(this, CreatureManager.getInstance().config.creatureProximityKnowledge, false, false);
 						}
 					}
 				}
@@ -2734,7 +2737,7 @@ public abstract class BaseCreatureEntity extends PathfinderMob {
 	}
 
 	public boolean shouldCreatureGroupFlee(LivingEntity target) {
-		if(this.isBoss() || this.isRareVariant()) {
+		if(this.isBoss() || this.isRareVariant() || this.isTamed()) {
 			return false;
 		}
 		boolean shouldFlee = false;
@@ -2782,7 +2785,7 @@ public abstract class BaseCreatureEntity extends PathfinderMob {
     		// Apply Melee Damage Effects If Not Blocked:
 			if(target instanceof LivingEntity) {
 				LivingEntity livingTarget = (LivingEntity)target;
-				if(!(livingTarget.isBlocking() && livingTarget.getUseItem().isShield(livingTarget))) {
+				if(!livingTarget.isBlocking()) {
 					// Spread Fire:
 					if (this.spreadFire && this.isOnFire() && this.random.nextFloat() < this.creatureStats.getEffect())
 						target.setSecondsOnFire(this.getEffectDuration(4) / 20);
@@ -2817,7 +2820,7 @@ public abstract class BaseCreatureEntity extends PathfinderMob {
 			// Apply Damage Effects If Not Blocked:
 			if(target instanceof LivingEntity) {
 				LivingEntity livingTarget = (LivingEntity)target;
-				if(!(livingTarget.isBlocking() && livingTarget.getUseItem().isShield(livingTarget))) {
+				if(!livingTarget.isBlocking()) {
 					// Element Effects:
 					if (this.creatureStats.getAmplifier() >= 0) {
 						this.applyDebuffs(livingTarget, 1, 1);
@@ -2992,10 +2995,10 @@ public abstract class BaseCreatureEntity extends PathfinderMob {
             return false;
 
         float damage = this.getAttackDamage(damageScale);
-        int knockbackModifier = 0;
 
 		// TODO Enchanted Weapon Damage and Knockback
-        //if(target instanceof LivingEntity) {
+		int enchantmentKnockback = 0;
+		//if(target instanceof LivingEntity) {
         	//damage += EnchantmentHelper.getModifierForCreature(this.getHeldItemMainhand(), this.getAttribute(Attributes.ATTACK_DAMAGE));
             //knockbackModifier += EnchantmentHelper.getKnockbackModifier(this, (LivingEntity)target);
         //}
@@ -3004,7 +3007,7 @@ public abstract class BaseCreatureEntity extends PathfinderMob {
 		boolean targetIsShielding = false;
 		if (target instanceof Player) {
 			Player targetPlayer = (Player)target;
-			targetIsShielding = targetPlayer.isBlocking() && targetPlayer.getUseItem().isShield(targetPlayer);
+			targetIsShielding = targetPlayer.isBlocking();
 		}
 
 		// Attempt The Attack:
@@ -3028,8 +3031,8 @@ public abstract class BaseCreatureEntity extends PathfinderMob {
 
         // After Successful Attack:
         if(attackSuccess) {
-            if(knockbackModifier > 0) {
-            	target.push((double)(-Mth.sin(this.getYRot() * (float)Math.PI / 180.0F) * (float)knockbackModifier * 0.5F), 0.1D, (double)(Mth.cos(this.getYRot() * (float)Math.PI / 180.0F) * (float)knockbackModifier * 0.5F));
+            if(enchantmentKnockback > 0) {
+            	target.push((double)(-Mth.sin(this.getYRot() * (float)Math.PI / 180.0F) * (float)enchantmentKnockback * 0.5F), 0.1D, (double)(Mth.cos(this.getYRot() * (float)Math.PI / 180.0F) * (float)enchantmentKnockback * 0.5F));
                 this.setDeltaMovement(this.getDeltaMovement().multiply(0.6D, 1, 0.6D));
             }
 
@@ -3051,6 +3054,34 @@ public abstract class BaseCreatureEntity extends PathfinderMob {
         
         return attackSuccess;
     }
+
+	/**
+	 * Based on isDamageSourceBlocked which is private because of course it is...
+	 * @param target The entity to check.
+	 * @param damageSource The damage source.
+	 * @return True if the damage can be blocked.
+	 */
+	public boolean canTargetBlockDamageSource(LivingEntity target, DamageSource damageSource) {
+		Entity entity = damageSource.getDirectEntity();
+		boolean arrowPierce = false;
+		if (entity instanceof AbstractArrow abstractArrowEntity) {
+			if (abstractArrowEntity.getPierceLevel() > 0) {
+				arrowPierce = true;
+			}
+		}
+		if (!damageSource.isBypassArmor() && target.isBlocking() && !arrowPierce) {
+			Vec3 vector3d2 = damageSource.getSourcePosition();
+			if (vector3d2 != null) {
+				Vec3 vector3d = target.getViewVector(1.0F);
+				Vec3 vector3d1 = vector3d2.vectorTo(target.position()).normalize();
+				vector3d1 = new Vec3(vector3d1.x, 0.0D, vector3d1.z);
+				if (vector3d1.dot(vector3d) < 0.0D) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
     
     // ========== Get Attack Damage ==========
     /** Returns how much attack damage this mob does. **/
@@ -3217,7 +3248,7 @@ public abstract class BaseCreatureEntity extends PathfinderMob {
                         //player.addStat(ObjectManager.getStat(this.creatureInfo.getName() + ".kill"), 1); TODO Player Stats
 						ExtendedPlayer extendedPlayer = ExtendedPlayer.getForPlayer(player);
 						if (extendedPlayer != null) {
-							extendedPlayer.studyCreature(this, CreatureManager.getInstance().config.creatureKillKnowledge, false);
+							extendedPlayer.studyCreature(this, CreatureManager.getInstance().config.creatureKillKnowledge, false, false);
 						}
                     }
                     catch(Exception e) {}

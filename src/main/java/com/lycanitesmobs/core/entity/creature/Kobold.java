@@ -78,7 +78,7 @@ public class Kobold extends TameableCreatureEntity implements Enemy {
 	            		for(int z = (int)this.position().z() - distance; z < (int)this.position().z() + distance; z++) {
                             BlockPos pos = new BlockPos(x, y, z);
 	            			Block searchBlock = this.getCommandSenderWorld().getBlockState(pos).getBlock();
-	                    	if(searchBlock != null && searchBlock != Blocks.AIR) {
+	                    	if(searchBlock != Blocks.AIR) {
 	                    		BlockPos possibleTarget = null;
 	                			if(ObjectLists.isName(searchBlock, targetName)) {
 	                				this.getCommandSenderWorld().destroyBlock(pos, true);
@@ -115,20 +115,13 @@ public class Kobold extends TameableCreatureEntity implements Enemy {
 
     @Override
 	public boolean canAttack(LivingEntity targetEntity) {
-    	if((targetEntity.getHealth() / targetEntity.getMaxHealth()) > 0.5F)
+    	if(!this.isTamed() && (targetEntity.getHealth() / targetEntity.getMaxHealth()) > 0.5F)
 			return false;
 		return super.canAttack(targetEntity);
 	}
-
-	@Override
-	public int getNoBagSize() { return 0; }
-	@Override
-	public int getBagSize() { return this.creatureInfo.bagSize; }
     
     @Override
     public boolean canPickupItems() {
     	return this.theivery;
     }
-
-    public boolean petControlsEnabled() { return true; }
 }

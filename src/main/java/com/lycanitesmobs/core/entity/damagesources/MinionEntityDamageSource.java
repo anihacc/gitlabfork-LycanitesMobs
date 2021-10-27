@@ -1,27 +1,21 @@
 package com.lycanitesmobs.core.entity.damagesources;
 
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.damagesource.EntityDamageSource;
 import net.minecraft.network.chat.Component;
 
 public class MinionEntityDamageSource extends EntityDamageSource {
-    EntityDamageSource minionDamageSource;
-    private Entity minionOwner;
-	
-    // ==================================================
-  	//                     Constructor
-  	// ==================================================
-	public MinionEntityDamageSource(EntityDamageSource minionDamageSource, Entity owner) {
+    protected DamageSource minionDamageSource;
+    protected final Entity minionOwner;
+
+	public MinionEntityDamageSource(DamageSource minionDamageSource, Entity owner) {
 		super(minionDamageSource.msgId, minionDamageSource.getEntity());
         this.minionDamageSource = minionDamageSource;
         this.minionOwner = owner;
 	}
 
-
-    // ==================================================
-    //                     Get Entity
-    // ==================================================
     // This Entity Caused The Damage:
     @Override
     public Entity getDirectEntity() {
@@ -34,9 +28,6 @@ public class MinionEntityDamageSource extends EntityDamageSource {
         return this.minionOwner;
     }
 
-    // ==================================================
-    //                    Chat Message
-    // ==================================================
     @Override
     public Component getLocalizedDeathMessage(LivingEntity slainEntity) {
         return this.minionDamageSource.getLocalizedDeathMessage(slainEntity);
