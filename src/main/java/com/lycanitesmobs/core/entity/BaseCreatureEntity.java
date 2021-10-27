@@ -3163,13 +3163,12 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
         	return false;
         if(!this.isVulnerableTo(damageSrc.getEntity()))
         	return false;
-        
+
+		if (this.dropsRequirePlayerDamage && damageSrc.getEntity() instanceof PlayerEntity) {
+			this.dropsRequirePlayerDamage = false;
+		}
         if(super.hurt(damageSrc, damageAmount)) {
         	this.onDamage(damageSrc, damageAmount);
-
-        	if (this.dropsRequirePlayerDamage && damageSrc.getEntity() instanceof PlayerEntity) {
-        		this.dropsRequirePlayerDamage = false;
-			}
 
             Entity entity = damageSrc.getDirectEntity();
             if(entity instanceof ThrowableEntity) {
