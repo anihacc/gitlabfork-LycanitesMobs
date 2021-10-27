@@ -17,12 +17,12 @@
 	],
 	"locations": [
 		{
-			"type": "random",
+			"type": "block",
 			"rangeMin": [0, 0, 0],
 			"rangeMax": [2, 2, 2],
 			"sorting": "near",
 			"limit": 1,
-			"blocks": ["minecraft:air", "minecraft:water"],
+			"blocks": ["minecraft:water"],
 			"listType": "whitelist",
 			"solidGround": false
 		}
