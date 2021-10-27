@@ -3165,13 +3165,12 @@ public abstract class BaseCreatureEntity extends PathfinderMob {
         	return false;
         if(!this.isVulnerableTo(damageSrc.getEntity()))
         	return false;
-        
+
+		if (this.dropsRequirePlayerDamage && damageSrc.getEntity() instanceof Player) {
+			this.dropsRequirePlayerDamage = false;
+		}
         if(super.hurt(damageSrc, damageAmount)) {
         	this.onDamage(damageSrc, damageAmount);
-
-        	if (this.dropsRequirePlayerDamage && damageSrc.getEntity() instanceof Player) {
-        		this.dropsRequirePlayerDamage = false;
-			}
 
             Entity entity = damageSrc.getDirectEntity();
             if(entity instanceof ThrowableProjectile) {
