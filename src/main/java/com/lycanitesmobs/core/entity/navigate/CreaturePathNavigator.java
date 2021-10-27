@@ -99,7 +99,7 @@ public class CreaturePathNavigator extends GroundPathNavigator {
     /** Trims path data from the end to the first sun covered block. Copied from GroundPathNavigator. **/
     @Override
     protected void trimPath() {
-        this.setAvoidSun(this.entityCreature.daylightBurns());
+        this.setAvoidSun(this.entityCreature.daylightBurns() && this.entityCreature.getCommandSenderWorld().isDay());
         super.trimPath();
     }
 

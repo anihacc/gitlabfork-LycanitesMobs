@@ -12,6 +12,7 @@ import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.core.container.CreatureContainer;
 import com.lycanitesmobs.core.container.CreatureContainerProvider;
 import com.lycanitesmobs.core.entity.damagesources.ElementDamageSource;
+import com.lycanitesmobs.core.entity.damagesources.MinionEntityDamageSource;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.entity.navigate.CreatureMoveController;
@@ -27,6 +28,7 @@ import com.lycanitesmobs.core.network.MessageCreature;
 import com.lycanitesmobs.core.pets.PetEntry;
 import com.lycanitesmobs.core.spawner.SpawnerEventListener;
 import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
+import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.WoodType;
@@ -44,6 +46,7 @@ import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.item.minecart.MinecartEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.entity.projectile.ThrowableEntity;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.DyeItem;
@@ -1704,7 +1707,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 					if(extendedPlayer != null) {
 						CreatureKnowledge creatureKnowledge = extendedPlayer.getBeastiary().getCreatureKnowledge(this.creatureInfo.getName());
 						if (creatureKnowledge == null || creatureKnowledge.rank < 1) {
-							extendedPlayer.studyCreature(this, CreatureManager.getInstance().config.creatureProximityKnowledge, false);
+							extendedPlayer.studyCreature(this, CreatureManager.getInstance().config.creatureProximityKnowledge, false, false);
 						}
 					}
 				}
@@ -2731,7 +2734,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	}
 
 	public boolean shouldCreatureGroupFlee(LivingEntity target) {
-		if(this.isBoss() || this.isRareVariant()) {
+		if(this.isBoss() || this.isRareVariant() || this.isTamed()) {
 			return false;
 		}
 		boolean shouldFlee = false;
@@ -2989,10 +2992,10 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
             return false;
 
         float damage = this.getAttackDamage(damageScale);
-        int i = 0;
 
 		// TODO Enchanted Weapon Damage and Knockback
-        //if(target instanceof LivingEntity) {
+		int enchantmentKnockback = 0;
+		//if(target instanceof LivingEntity) {
         	//damage += EnchantmentHelper.getModifierForCreature(this.getHeldItemMainhand(), this.getAttribute(Attributes.ATTACK_DAMAGE));
             //i += EnchantmentHelper.getKnockbackModifier(this, (LivingEntity)target);
         //}
@@ -3025,8 +3028,8 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
         // After Successful Attack:
         if(attackSuccess) {
-            if(i > 0) {
-            	target.push((double)(-MathHelper.sin(this.yRot * (float)Math.PI / 180.0F) * (float)i * 0.5F), 0.1D, (double)(MathHelper.cos(this.yRot * (float)Math.PI / 180.0F) * (float)i * 0.5F));
+            if(enchantmentKnockback > 0) {
+            	target.push((double)(-MathHelper.sin(this.yRot * (float)Math.PI / 180.0F) * (float)enchantmentKnockback * 0.5F), 0.1D, (double)(MathHelper.cos(this.yRot * (float)Math.PI / 180.0F) * (float)enchantmentKnockback * 0.5F));
                 this.setDeltaMovement(this.getDeltaMovement().multiply(0.6D, 1, 0.6D));
             }
 
@@ -3048,6 +3051,35 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
         
         return attackSuccess;
     }
+
+	/**
+	 * Based on isDamageSourceBlocked which is private because of course it is...
+	 * @param target The entity to check.
+	 * @param damageSource The damage source.
+	 * @return True if the damage can be blocked.
+	 */
+	public boolean canTargetBlockDamageSource(LivingEntity target, DamageSource damageSource) {
+		Entity entity = damageSource.getDirectEntity();
+		boolean arrowPierce = false;
+		if (entity instanceof AbstractArrowEntity) {
+			AbstractArrowEntity abstractarrowentity = (AbstractArrowEntity)entity;
+			if (abstractarrowentity.getPierceLevel() > 0) {
+				arrowPierce = true;
+			}
+		}
+		if (!damageSource.isBypassArmor() && target.isBlocking() && !arrowPierce) {
+			Vector3d vector3d2 = damageSource.getSourcePosition();
+			if (vector3d2 != null) {
+				Vector3d vector3d = target.getViewVector(1.0F);
+				Vector3d vector3d1 = vector3d2.vectorTo(target.position()).normalize();
+				vector3d1 = new Vector3d(vector3d1.x, 0.0D, vector3d1.z);
+				if (vector3d1.dot(vector3d) < 0.0D) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
     
     // ========== Get Attack Damage ==========
     /** Returns how much attack damage this mob does. **/
@@ -3214,7 +3246,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
                         //player.addStat(ObjectManager.getStat(this.creatureInfo.getName() + ".kill"), 1); TODO Player Stats
 						ExtendedPlayer extendedPlayer = ExtendedPlayer.getForPlayer(player);
 						if (extendedPlayer != null) {
-							extendedPlayer.studyCreature(this, CreatureManager.getInstance().config.creatureKillKnowledge, false);
+							extendedPlayer.studyCreature(this, CreatureManager.getInstance().config.creatureKillKnowledge, false, false);
 						}
                     }
                     catch(Exception e) {}

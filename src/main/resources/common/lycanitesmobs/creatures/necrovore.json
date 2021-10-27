@@ -19,9 +19,10 @@
             "minecraft:the_end"
         ],
         "dimensionListType": "blacklist",
-        "ignoreBiome": true,
+        "ignoreBiome": false,
         "biomeTags": [
-            "spooky"
+            "spooky",
+            "dead"
         ],
         "spawnWeight": 8,
         "dungeonWeight": 200,
