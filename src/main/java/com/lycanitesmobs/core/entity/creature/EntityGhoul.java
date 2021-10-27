@@ -16,10 +16,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class EntityGhoul extends AgeableCreatureEntity implements IMob {
-    
-    // ==================================================
- 	//                    Constructor
- 	// ==================================================
     public EntityGhoul(World world) {
         super(world);
         
@@ -33,7 +29,6 @@ public class EntityGhoul extends AgeableCreatureEntity implements IMob {
         this.setupMob();
     }
 
-    // ========== Init AI ==========
     @Override
     protected void initEntityAI() {
         this.tasks.addTask(this.nextTravelGoalIndex++, new MoveVillageGoal(this));
@@ -50,12 +45,7 @@ public class EntityGhoul extends AgeableCreatureEntity implements IMob {
             pathNavigateGround.setAvoidSun(true);
         }
     }
-    
-    
-    // ==================================================
-    //                      Attacks
-    // ==================================================
-    // ========== On Kill ==========
+
     @Override
     public void onKillEntity(EntityLivingBase entityLivingBase) {
         super.onKillEntity(entityLivingBase);
@@ -81,19 +71,7 @@ public class EntityGhoul extends AgeableCreatureEntity implements IMob {
             this.getEntityWorld().playEvent(null, 1016, entityzombievillager.getPosition(), 0);
         }
     }
-    // ==================================================
-    //                     Equipment
-    // ==================================================
-    @Override
-    public int getNoBagSize() { return 0; }
-    @Override
-    public int getBagSize() { return this.creatureInfo.bagSize; }
 
-
-
-    // ==================================================
-   	//                     Immunities
-   	// ==================================================
     @Override
     public boolean daylightBurns() { return !this.isChild(); }
 }

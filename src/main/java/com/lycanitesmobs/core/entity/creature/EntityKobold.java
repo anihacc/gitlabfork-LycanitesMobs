@@ -77,7 +77,7 @@ public class EntityKobold extends TameableCreatureEntity implements IMob {
 	            		for(int z = (int)this.posZ - distance; z < (int)this.posZ + distance; z++) {
                             BlockPos pos = new BlockPos(x, y, z);
 	            			Block searchBlock = this.getEntityWorld().getBlockState(pos).getBlock();
-	                    	if(searchBlock != null && searchBlock != Blocks.AIR) {
+	                    	if(searchBlock != Blocks.AIR) {
 	                    		BlockPos possibleTarget = null;
 	                			if(ObjectLists.isName(searchBlock, targetName)) {
 	                				this.getEntityWorld().destroyBlock(pos, true);
@@ -114,25 +114,13 @@ public class EntityKobold extends TameableCreatureEntity implements IMob {
 
     @Override
 	public boolean canAttackEntity(EntityLivingBase targetEntity) {
-    	if((targetEntity.getHealth() / targetEntity.getMaxHealth()) > 0.5F)
+    	if(!this.isTamed() && (targetEntity.getHealth() / targetEntity.getMaxHealth()) > 0.5F)
 			return false;
 		return super.canAttackEntity(targetEntity);
 	}
-
-	// ==================================================
-	//                     Equipment
-	// ==================================================
-	@Override
-	public int getNoBagSize() { return 0; }
-	@Override
-	public int getBagSize() { return this.creatureInfo.bagSize; }
-
-
 
 	@Override
     public boolean canPickupItems() {
     	return this.theivery;
     }
-
-    public boolean petControlsEnabled() { return true; }
 }

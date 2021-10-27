@@ -365,9 +365,10 @@ public class ExtendedPlayer implements IExtendedPlayer {
 	 * @param entity The entity to study, this is checked to see if it is a valid target.
 	 * @param experience The amount of knowledge experience to gain.
 	 * @param useCooldown If true, the creature study cooldown will be checked and reset on studying.
+	 * @param alwaysShowMessage If true, a rank up status message is always displayed.
 	 * @return True if new knowledge was gained for the entity.
 	 */
-	public boolean studyCreature(Entity entity, int experience, boolean useCooldown) {
+	public boolean studyCreature(Entity entity, int experience, boolean useCooldown, boolean alwaysShowMessage) {
 		if (!(entity instanceof BaseCreatureEntity)) {
 			if (useCooldown && !this.player.getEntityWorld().isRemote) {
 				this.player.sendStatusMessage(new TextComponentString(LanguageManager.translate("message.beastiary.unknown")), true);
@@ -394,9 +395,18 @@ public class ExtendedPlayer implements IExtendedPlayer {
 					player.sendStatusMessage(new TextComponentString(LanguageManager.translate("message.beastiary.study.full") + " " + creature.creatureInfo.getTitle()), true);
 				}
 				else if (experience > 0) {
-					player.sendStatusMessage(new TextComponentString(newKnowledge.getCreatureInfo().getTitle()
-							+ " " + LanguageManager.translate("message.beastiary.study")
-							+ " " + newKnowledge.experience + "/" + newKnowledge.getMaxExperience() + " (+ " + experience + ")"), true);
+					boolean showMessage = alwaysShowMessage;
+					if (!showMessage) {
+						float messageThreshold = ((float) newKnowledge.getMaxExperience() * 0.25F);
+						int fromExperience = Math.max(0, newKnowledge.experience - experience);
+						int wrappedExperience = fromExperience % (int)messageThreshold;
+						showMessage = wrappedExperience + experience >= messageThreshold;
+					}
+					if (showMessage) {
+						player.sendStatusMessage(new TextComponentString(newKnowledge.getCreatureInfo().getTitle()
+								+ " " + LanguageManager.translate("message.beastiary.study")
+								+ " " + newKnowledge.experience + "/" + newKnowledge.getMaxExperience() + " (+ " + experience + ")"), true);
+					}
 				}
 			}
 			return true;

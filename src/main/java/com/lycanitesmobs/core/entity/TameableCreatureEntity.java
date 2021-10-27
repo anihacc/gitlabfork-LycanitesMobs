@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.entity;
 
 import com.google.common.base.Optional;
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.client.AssetManager;
 import com.lycanitesmobs.client.localisation.LanguageManager;
@@ -17,10 +18,7 @@ import com.lycanitesmobs.core.info.ElementInfo;
 import com.lycanitesmobs.core.item.ChargeItem;
 import com.lycanitesmobs.core.item.consumable.CreatureTreatItem;
 import com.lycanitesmobs.core.item.special.ItemSoulstone;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.EnumCreatureType;
-import net.minecraft.entity.IEntityOwnable;
+import net.minecraft.entity.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.init.MobEffects;
@@ -563,6 +561,49 @@ public class TameableCreatureEntity extends AgeableCreatureEntity implements IEn
     // ==================================================
     //                       Attacks
     // ==================================================
+	@Override
+	public boolean doRangedDamage(Entity target, EntityThrowable projectile, float damage, boolean noPierce) {
+		float totalDamage = damage * ((float)this.creatureStats.getDamage() / 2);
+
+		// Owner Credit:
+		if (target instanceof EntityLiving) {
+			LycanitesMobs.logDebug("", "Living Target");
+			EntityLiving livingTarget = (EntityLiving) target;
+			if (this.getPlayerOwner() != null && livingTarget.getHealth() > 0 && livingTarget.getHealth() - totalDamage <= 0) {
+				LycanitesMobs.logDebug("", "Damage will kill and player owner!");
+				DamageSource creditSource = new MinionEntityDamageSource(this.getDamageSource(null), this.getPlayerOwner());
+				creditSource.setDamageBypassesArmor().setDamageIsAbsolute();
+				return target.attackEntityFrom(creditSource, totalDamage);
+			}
+		}
+
+		return super.doRangedDamage(target, projectile, damage, noPierce);
+	}
+
+	@Override
+	public boolean attackEntityAsMob(Entity target, double damageScale) {
+		if (!this.isEntityAlive())
+			return false;
+		if (target == null)
+			return false;
+		if (!this.canEntityBeSeen(target))
+			return false;
+
+		float damage = this.getAttackDamage(damageScale);
+
+		// Owner Credit:
+		if (target instanceof EntityLiving) {
+			EntityLiving livingTarget = (EntityLiving) target;
+			if (this.getPlayerOwner() != null && livingTarget.getHealth() > 0 && livingTarget.getHealth() - damage <= 0) {
+				DamageSource creditSource = new MinionEntityDamageSource(this.getDamageSource(null), this.getPlayerOwner());
+				creditSource.setDamageBypassesArmor().setDamageIsAbsolute();
+				return target.attackEntityFrom(creditSource, damage);
+			}
+		}
+
+		return super.attackEntityAsMob(target, damageScale);
+	}
+
     // ========== Can Attack ==========
 	@Override
 	public boolean canAttackClass(Class targetClass) {
@@ -607,11 +648,11 @@ public class TameableCreatureEntity extends AgeableCreatureEntity implements IEn
      */
     @Override
     public DamageSource getDamageSource(EntityDamageSource nestedDamageSource) {
-        if(this.isTamed() && this.getOwner() != null) {
-            if(nestedDamageSource == null)
-                nestedDamageSource = (EntityDamageSource)DamageSource.causeMobDamage(this);
-            return new MinionEntityDamageSource(nestedDamageSource, this.getOwner());
-        }
+//        if(this.isTamed() && this.getOwner() != null) {
+//            if(nestedDamageSource == null)
+//                nestedDamageSource = (EntityDamageSource)DamageSource.causeMobDamage(this);
+//            return new MinionEntityDamageSource(nestedDamageSource, this.getOwner());
+//        }
         return super.getDamageSource(nestedDamageSource);
     }
 	
@@ -793,7 +834,7 @@ public class TameableCreatureEntity extends AgeableCreatureEntity implements IEn
 			return this.isTamed();
 		}
 
-		extendedPlayer.studyCreature(this, CreatureManager.getInstance().config.creatureTreatKnowledge, false);
+		extendedPlayer.studyCreature(this, CreatureManager.getInstance().config.creatureTreatKnowledge, false, true);
 
 		// Already Tamed:
 		if (this.isTamed()) {

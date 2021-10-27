@@ -65,7 +65,7 @@ public class LycanitesMobs {
 	
 	public static final String modid = "lycanitesmobs";
 	public static final String name = "Lycanites Mobs";
-	public static final String versionNumber = "2.0.8.1";
+	public static final String versionNumber = "2.0.8.2";
 	public static final String versionMC = "1.12.2";
 	public static final String version = versionNumber + " - MC " + versionMC;
 	public static final String website = "https://lycanitesmobs.com";

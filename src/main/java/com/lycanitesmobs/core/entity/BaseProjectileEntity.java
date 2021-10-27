@@ -362,25 +362,16 @@ public class BaseProjectileEntity extends EntityThrowable {
 		if (!(targetEntity instanceof EntityLivingBase)) {
 			return false;
 		}
+
 		EntityLivingBase targetLiving = (EntityLivingBase)targetEntity;
-		if (!targetLiving.isActiveItemStackBlocking() || !targetLiving.getActiveItemStack().getItem().isShield(targetLiving.getActiveItemStack(), targetLiving)) {
-			return false;
+		if (targetLiving.isActiveItemStackBlocking()) {
+			Vec3d damagePostition = new Vec3d(this.posX, this.posY, this.posZ);
+			Vec3d viewVector = targetLiving.getLook(1.0F);
+			Vec3d subtractReverse = damagePostition.subtractReverse(new Vec3d(targetLiving.posX, targetLiving.posY, targetLiving.posZ)).normalize();
+			subtractReverse = new Vec3d(subtractReverse.x, 0.0D, subtractReverse.z);
+			return subtractReverse.dotProduct(viewVector) < 1.0D;
 		}
-
-		// Check Player Blocking Angle:
-		if (targetLiving instanceof EntityPlayer) {
-			LycanitesMobs.logDebug("", "Checking if player is blocking: " + targetLiving);
-			Vec3d targetViewVector = targetLiving.getLook(1.0F).normalize();
-			Vec3d distance = new Vec3d(this.posX - targetLiving.posX, (this.posY + this.getEyeHeight()) - (targetLiving.posY + targetLiving.getEyeHeight()), this.posZ - targetLiving.posZ);
-			double distanceStraight = distance.lengthVector();
-			distance = distance.normalize();
-			double lookDistance = targetViewVector.dotProduct(distance);
-			double lookRange = 1.5D;
-			double comparison = 1.0D - (lookRange / distanceStraight);
-			return lookDistance > comparison && targetLiving.canEntityBeSeen(this);
-		}
-
-		return true;
+		return false;
 	}
      
      //========== Do Damage Check ==========

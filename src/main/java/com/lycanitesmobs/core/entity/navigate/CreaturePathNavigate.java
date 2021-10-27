@@ -390,6 +390,10 @@ public class CreaturePathNavigate extends PathNavigate {
     /** Trims path data from the end to the first sun covered block. **/
     @Override
     protected void removeSunnyPath() {
+        if (!this.entityCreature.getEntityWorld().isDaytime()) {
+            return;
+        }
+
         super.removeSunnyPath();
 
         for(int i = 0; i < this.currentPath.getCurrentPathLength(); ++i) {

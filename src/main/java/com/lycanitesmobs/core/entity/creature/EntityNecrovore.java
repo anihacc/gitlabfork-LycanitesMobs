@@ -6,6 +6,7 @@ import com.lycanitesmobs.core.entity.goals.targeting.FindAttackTargetGoal;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.*;
 import net.minecraft.entity.passive.EntitySkeletonHorse;
+import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.world.World;
 
 public class EntityNecrovore extends TameableCreatureEntity {
@@ -28,7 +29,13 @@ public class EntityNecrovore extends TameableCreatureEntity {
         this.tasks.addTask(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setSpeed(1.5D));
 
         this.targetTasks.addTask(this.nextFindTargetIndex++, new FindAttackTargetGoal(this).addTargets(EntityZombie.class, EntityZombieVillager.class, EntityPigZombie.class, EntitySkeleton.class, EntitySkeletonHorse.class, EntityWitherSkeleton.class, EntityHusk.class, EntityStray.class, EntityZombieVillager.class));
-        this.targetTasks.addTask(this.nextFindTargetIndex++, new FindAttackTargetGoal(this).addTargets(EntityGeist.class));
+        this.targetTasks.addTask(this.nextFindTargetIndex++, new FindAttackTargetGoal(this).addTargets(EntityGeist.class, EntityGhoul.class, EntityCryptkeeper.class));
+
+        if(this.getNavigator() instanceof PathNavigateGround) {
+            PathNavigateGround pathNavigateGround = (PathNavigateGround)this.getNavigator();
+            pathNavigateGround.setBreakDoors(true);
+            pathNavigateGround.setAvoidSun(true);
+        }
     }
 
     @Override
