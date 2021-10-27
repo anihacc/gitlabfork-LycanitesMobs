@@ -1,7 +1,9 @@
 package com.lycanitesmobs.core.entity.navigate;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.creature.EntityTpumpkyn;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -78,7 +80,8 @@ public class CreaturePathNavigate extends PathNavigate {
     @Override
     public Path getPathToEntityLiving(Entity entity) {
         this.targetPosition = new BlockPos(entity);
-        return super.getPathToEntityLiving(entity);
+        Path path = super.getPathToEntityLiving(entity);
+        return path;
     }
 
 
