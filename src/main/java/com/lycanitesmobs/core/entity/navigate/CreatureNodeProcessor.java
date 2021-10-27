@@ -4,7 +4,7 @@ import com.google.common.collect.Sets;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.core.entity.creature.EntityZoataur;
+import com.lycanitesmobs.core.entity.creature.EntityBalayang;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -19,7 +19,6 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
-
 
 import java.util.EnumSet;
 import java.util.Set;
@@ -93,7 +92,7 @@ public class CreatureNodeProcessor extends NodeProcessor implements ICreatureNod
     public PathPoint getPathPointToCoords(double x, double y, double z) {
         // Flying/Strong Swimming:
         if(this.flying() || this.swimming()) {
-            return this.openPoint(MathHelper.floor(x - this.getWidth()), MathHelper.floor(y + 0.5D), MathHelper.floor(z - this.getWidth()));
+            return this.openPoint(MathHelper.floor(x), MathHelper.floor(y + 0.5D), MathHelper.floor(z));
         }
         return this.openPoint(MathHelper.floor(x), MathHelper.floor(y), MathHelper.floor(z));
     }
@@ -491,6 +490,9 @@ public class CreatureNodeProcessor extends NodeProcessor implements ICreatureNod
 
                     // Non-Solid:
 					if (!iblockstate.getMaterial().isSolid() && !iblockstate.getMaterial().isLiquid()) {
+                        if (!iblockstate.getMaterial().isSolid() && !iblockstate.getMaterial().isLiquid()) {
+                            return PathNodeType.OPEN;
+                        }
 						return PathNodeType.OPEN;
 					}
 

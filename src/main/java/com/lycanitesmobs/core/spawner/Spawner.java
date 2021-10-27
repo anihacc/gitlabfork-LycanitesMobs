@@ -400,7 +400,7 @@ public class Spawner {
     	// Get Amount of Mobs To Spawn:
     	int mobCount = this.mobCountMin;
     	if(this.mobCountMax > this.mobCountMin) {
-    		mobCount = world.rand.nextInt(this.mobCountMax - this.mobCountMin) + 1 + this.mobCountMin;
+    		mobCount = world.rand.nextInt(this.mobCountMax - this.mobCountMin) + this.mobCountMin;
 		}
     	if(player != null && this.mobCountPlayerScaling) {
     		List<EntityPlayer> nearbyPlayers = world.getPlayers(EntityPlayer.class, targetPlayer -> {

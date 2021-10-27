@@ -70,7 +70,8 @@ public class CreaturePathNavigate extends PathNavigate {
     @Override
     public Path getPathToPos(BlockPos pos) {
         this.targetPosition = this.getSuitableDestination(pos);
-        return super.getPathToPos(this.targetPosition);
+        Path path = super.getPathToPos(this.targetPosition);
+        return path;
     }
 
     /** Returns the path to the given EntityLiving. **/
@@ -196,7 +197,7 @@ public class CreaturePathNavigate extends PathNavigate {
         return block == Blocks.FLOWING_LAVA || block == Blocks.LAVA || block == ObjectManager.getBlock("purelava");
     }
 
-    /** Returns true if the block is a ooze block. **/
+    /** Returns true if the block is an ooze block. **/
     protected boolean isOozeBlock(Block block) {
         return block == ObjectManager.getBlock("ooze");
     }
@@ -221,7 +222,7 @@ public class CreaturePathNavigate extends PathNavigate {
         BlockPos resultPos = pos;
         for(resultPos = pos.down(); resultPos.getY() > 0 && !this.world.getBlockState(resultPos).getMaterial().isSolid(); resultPos = resultPos.down()) {}
         resultPos = resultPos.up();
-        if(resultPos.getY() == 0 && !this.world.getBlockState(resultPos).getMaterial().isSolid())
+        if(resultPos.getY() == 0 && !this.world.getBlockState(resultPos).isTopSolid())
             return pos;
         return resultPos;
     }
@@ -243,7 +244,14 @@ public class CreaturePathNavigate extends PathNavigate {
         // Flight/Swimming:
         if(this.entityCreature.isFlying() || this.entityCreature.isInWater()) {
             RayTraceResult raytraceresult = this.world.rayTraceBlocks(startVec, new Vec3d(endVec.x, endVec.y + (double)this.entity.height * 0.5D, endVec.z), false, true, false);
-            return raytraceresult == null || raytraceresult.typeOfHit == RayTraceResult.Type.MISS;
+            if (raytraceresult == null) {
+                return true;
+            }
+            if (raytraceresult.typeOfHit == RayTraceResult.Type.BLOCK) {
+                IBlockState hitState = this.world.getBlockState(raytraceresult.getBlockPos());
+                return !hitState.getMaterial().isSolid();
+            }
+            return raytraceresult.typeOfHit == RayTraceResult.Type.MISS;
         }
 
         int i = MathHelper.floor(startVec.x);

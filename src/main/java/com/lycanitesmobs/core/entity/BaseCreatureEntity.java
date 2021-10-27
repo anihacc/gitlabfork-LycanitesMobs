@@ -3478,13 +3478,12 @@ public abstract class BaseCreatureEntity extends EntityLiving {
         	return false;
         if(!this.isDamageEntityApplicable(damageSrc.getTrueSource()))
         	return false;
-        
+
+		if (this.dropsRequirePlayerDamage && damageSrc.getTrueSource() instanceof EntityPlayer) {
+			this.dropsRequirePlayerDamage = false;
+		}
         if(super.attackEntityFrom(damageSrc, damageAmount)) {
         	this.onDamage(damageSrc, damageAmount);
-
-			if (this.dropsRequirePlayerDamage && damageSrc.getTrueSource() instanceof EntityPlayer) {
-				this.dropsRequirePlayerDamage = false;
-			}
 
             Entity entity = damageSrc.getImmediateSource();
             if(entity instanceof EntityThrowable) {
