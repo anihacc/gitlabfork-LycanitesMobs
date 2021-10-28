@@ -2,6 +2,7 @@ package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
+import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
 import com.lycanitesmobs.core.entity.projectile.EntityHellShield;
 import com.lycanitesmobs.core.info.CreatureManager;
@@ -36,6 +37,7 @@ public class EntityAstaroth extends TameableCreatureEntity implements IMob {
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
+        this.tasks.addTask(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(false).setRange(1D).setMaxChaseDistance(8.0F));
         this.tasks.addTask(this.nextCombatGoalIndex++, new AttackRangedGoal(this).setSpeed(1.0D).setRange(40.0F).setMinChaseDistance(16.0F).setChaseTime(-1));
     }
 

@@ -567,7 +567,6 @@ public class TameableCreatureEntity extends AgeableCreatureEntity implements IEn
 
 		// Owner Credit:
 		if (target instanceof EntityLiving) {
-			LycanitesMobs.logDebug("", "Living Target");
 			EntityLiving livingTarget = (EntityLiving) target;
 			if (this.getPlayerOwner() != null && livingTarget.getHealth() > 0 && livingTarget.getHealth() - totalDamage <= 0) {
 				LycanitesMobs.logDebug("", "Damage will kill and player owner!");
