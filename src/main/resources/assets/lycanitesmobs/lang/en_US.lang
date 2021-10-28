@@ -2278,6 +2278,7 @@ boss.block.protection.break=The presence of a powerful being prevents you from d
 boss.damage.protection.range=That being is too powerful to be damaged from this range.
 #
 # ========== Event Names ==========
+mobevent.aberrant_assimilation.name=Aberrant Assimilation
 mobevent.amalgalich.name=Amalgalich
 mobevent.arachnophobia.name=Arachnophobia
 mobevent.asmodeus.name=Asmodeus

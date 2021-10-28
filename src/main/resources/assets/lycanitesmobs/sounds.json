@@ -1,4 +1,8 @@
 {
+    "mobevent.aberrant_assimilation": {
+        "category": "record",
+        "sounds": [{"name": "lycanitesmobs:mobevent/aberrant_assimilation", "stream": true}]
+    },
     "mobevent.amalgalich": {
         "category": "record",
         "sounds": [{"name": "lycanitesmobs:mobevent/amalgalich", "stream": true}]
@@ -3583,10 +3587,6 @@
     "projectile.venomshot": {
         "category": "ambient",
         "sounds": [{"name": "lycanitesmobs:projectile/venomshot", "stream": false}]
-    },
-    "projectile.vorebolt": {
-        "category": "ambient",
-        "sounds": [{"name": "lycanitesmobs:projectile/vorebolt", "stream": false}]
     },
     "projectile.waterjet": {
         "category": "ambient",
