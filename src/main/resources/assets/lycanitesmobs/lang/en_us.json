@@ -2135,6 +2135,7 @@
     "boss.damage.protection.range": "That being is too powerful to be damaged from this range.",
     "_comment": "",
     "_comment": "========== Event Names ==========",
+    "mobevent.aberrant_assimilation.name": "Aberrant Assimilation",
     "mobevent.amalgalich.name": "Amalgalich",
     "mobevent.arachnophobia.name": "Arachnophobia",
     "mobevent.asmodeus.name": "Asmodeus",
