@@ -1,16 +1,16 @@
 {
-	"name": "arachnophobia_spawner",
+	"name": "aberrant_assimilation_skyspawner",
 	"type": "spawner",
 	"enabled": true,
 	"loadDefault": true,
-	"mobCountMin": 5,
+	"mobCountMin": 3,
 	"ignoreDimensions": true,
 	"ignoreBiomes": true,
 	"ignoreLightLevel": true,
 	"ignoreGroupLimit": true,
 	"ignoreForgeCanSpawnEvent": true,
 	"forceNoDespawn": true,
-	"eventName": "arachnophobia",
+	"eventName": "aberrant_assimilation",
 	"conditions": [],
 	"triggers": [
 		{
@@ -26,21 +26,17 @@
 			"rangeMax": [32, 48, 32],
 			"sorting": "random",
 			"limit": 32,
-			"solidGround": true
+			"solidGround": false
 		}
 	],
 	"mobSpawns": [
 		{
-			"mobId": "lycanitesmobs:frostweaver",
+			"mobId": "lycanitesmobs:grigori",
 			"weight": 8
 		},
 		{
-			"mobId": "lycanitesmobs:sutiramu",
-			"weight": 8
-		},
-		{
-			"mobId": "lycanitesmobs:lycosa",
-			"weight": 8
+			"mobId": "lycanitesmobs:grell",
+			"weight": 2
 		}
 	]
 }
