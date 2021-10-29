@@ -277,19 +277,6 @@ public class Amalgalich extends BaseCreatureEntity implements Enemy, IGroupHeavy
         }
         return super.isVulnerableTo(entity);
     }
-    @Override
-    public int getNoBagSize() { return 0; }
-    @Override
-    public int getBagSize() { return this.creatureInfo.bagSize; }
-
-    @Override
-    public boolean hurt(DamageSource damageSrc, float damageAmount) {
-        if(this.playerTargets != null && damageSrc.getEntity() != null && damageSrc.getEntity() instanceof Player) {
-            if (!this.playerTargets.contains(damageSrc.getEntity()))
-                this.playerTargets.add((Player)damageSrc.getEntity());
-        }
-        return super.hurt(damageSrc, damageAmount);
-    }
 
     @Override
     public void readAdditionalSaveData(CompoundTag nbt) {

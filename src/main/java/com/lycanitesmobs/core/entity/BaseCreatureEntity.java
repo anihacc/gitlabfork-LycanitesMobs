@@ -1700,6 +1700,9 @@ public abstract class BaseCreatureEntity extends PathfinderMob {
 		}
 
 		// Boss Health Update:
+		if(this.updateTick % 5 == 0 && this.playerTargets.isEmpty()) {
+			this.heal(1);
+		}
 		if(this.bossInfo != null) {
 			this.bossInfo.setProgress(this.getHealth() / this.getMaxHealth());
 		}
@@ -3173,6 +3176,12 @@ public abstract class BaseCreatureEntity extends PathfinderMob {
 		}
         if(super.hurt(damageSrc, damageAmount)) {
         	this.onDamage(damageSrc, damageAmount);
+
+			if(this.isBoss() && this.playerTargets != null && damageSrc.getEntity() != null && damageSrc.getEntity() instanceof Player player) {
+				if (!this.playerTargets.contains(player)) {
+					this.playerTargets.add(player);
+				}
+			}
 
             Entity entity = damageSrc.getDirectEntity();
             if(entity instanceof ThrowableProjectile) {
