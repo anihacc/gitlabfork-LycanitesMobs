@@ -13,7 +13,12 @@
 	"ignoreLightLevel": true,
 	"ignoreGroupLimit": true,
 	"ignoreForgeCanSpawnEvent": true,
-	"conditions": [],
+	"conditions": [
+		{
+			"type": "world",
+			"dimensionIds": [0, 7]
+		}
+	],
 	"triggers": [
 		{
 			"type": "player",
