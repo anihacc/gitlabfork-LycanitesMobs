@@ -13,7 +13,15 @@
 	"ignoreLightLevel": true,
 	"ignoreGroupLimit": true,
 	"ignoreForgeCanSpawnEvent": true,
-	"conditions": [],
+	"conditions": [
+		{
+			"type": "world",
+			"dimensionIds": [
+				"minecraft:overworld",
+				"twilightforest:twilightforest"
+			]
+		}
+	],
 	"triggers": [
 		{
 			"type": "player",
