@@ -1774,6 +1774,17 @@ equipment.slot.axe=Axe
 equipment.slot.jewel=Jewel
 equipment.slot.pommel=Pommel
 #
+equipment.harvest.type.pickaxe=Pickaxe
+equipment.harvest.type.axe=Axe
+equipment.harvest.type.shovel=Shovel
+equipment.harvest.type.sword=Sword
+equipment.harvest.type.shears=Shears
+equipment.harvest.type.hoe=Hoe
+#
+equipment.harvest.shape.block=Block
+equipment.harvest.shape.random=Random
+equipment.harvest.shape.cross=Cross
+#
 item.woodenrod.name=Wooden Rod
 item.woodenhilt.name=Wooden Guard
 item.woodenpaxel.name=Wooden Paxel
