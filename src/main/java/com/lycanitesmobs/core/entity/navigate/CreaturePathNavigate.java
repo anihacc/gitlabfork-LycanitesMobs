@@ -1,9 +1,7 @@
 package com.lycanitesmobs.core.entity.navigate;
 
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.core.entity.creature.EntityTpumpkyn;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -401,36 +399,23 @@ public class CreaturePathNavigate extends PathNavigate {
     /** Trims path data from the end to the first sun covered block. **/
     @Override
     protected void removeSunnyPath() {
+        // Only seems to do something with cauldrons?
+        super.removeSunnyPath();
+
         if (!this.entityCreature.getEntityWorld().isDaytime()) {
             return;
         }
 
-        super.removeSunnyPath();
-
-        for(int i = 0; i < this.currentPath.getCurrentPathLength(); ++i) {
-            PathPoint pathpoint = this.currentPath.getPathPointFromIndex(i);
-            PathPoint pathpoint1 = i + 1 < this.currentPath.getCurrentPathLength() ? this.currentPath.getPathPointFromIndex(i + 1) : null;
-            IBlockState iblockstate = this.world.getBlockState(new BlockPos(pathpoint.x, pathpoint.y, pathpoint.z));
-            Block block = iblockstate.getBlock();
-
-            if (block == Blocks.CAULDRON) {
-                this.currentPath.setPoint(i, pathpoint.cloneMove(pathpoint.x, pathpoint.y + 1, pathpoint.z));
-
-                if(pathpoint1 != null && pathpoint.y >= pathpoint1.y) {
-                    this.currentPath.setPoint(i + 1, pathpoint1.cloneMove(pathpoint1.x, pathpoint.y + 1, pathpoint1.z));
-                }
-            }
-        }
-
-        if(this.entityCreature.daylightBurns()) {
-            if (this.world.canSeeSky(new BlockPos(MathHelper.floor(this.entity.posX), (int)(this.entity.getEntityBoundingBox().minY + 0.5D), MathHelper.floor(this.entity.posZ)))) {
+        if (this.entityCreature.daylightBurns()) {
+            // If the creature is exposed to the sun just path anywhere.
+            if (this.world.canSeeSky(this.entity.getPosition())) {
                 return;
             }
 
-            for(int j = 0; j < this.currentPath.getCurrentPathLength(); ++j) {
+            for (int j = 0; j < this.currentPath.getCurrentPathLength(); ++j) {
                 PathPoint pathpoint2 = this.currentPath.getPathPointFromIndex(j);
-
-                if(this.world.canSeeSky(new BlockPos(pathpoint2.x, pathpoint2.y, pathpoint2.z))) {
+                BlockPos pathPos = new BlockPos(pathpoint2.x, pathpoint2.y, pathpoint2.z);
+                if (this.world.getBlockState(pathPos).getBlock() != Blocks.WATER && this.world.getBlockState(pathPos.down()).getBlock() != Blocks.WATER && this.world.canSeeSky(pathPos)) {
                     this.currentPath.setCurrentPathLength(j - 1);
                     return;
                 }
