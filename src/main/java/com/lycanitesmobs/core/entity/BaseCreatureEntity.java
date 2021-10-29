@@ -1126,8 +1126,9 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
     public void createBossInfo(BossInfo.Color color, boolean darkenSky) {
 		TextComponent name = (TextComponent)this.getName();
-        if(this.isBossAlways())
-            name.append(" (Phase " + (this.getBattlePhase() + 1) + ")");
+        if(this.isBossAlways()) {
+			name.append(" (").append(new TranslationTextComponent("entity.phase")).append(" " + (this.getBattlePhase() + 1) + ")");
+		}
         this.bossInfo = (ServerBossInfo)(new ServerBossInfo(name, color, BossInfo.Overlay.PROGRESS)).setDarkenScreen(darkenSky);
     }
 
@@ -1145,8 +1146,9 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     public void refreshBossHealthName() {
         if(this.bossInfo != null) {
 			TextComponent name = (TextComponent)this.getTitle();
-			if(this.isBossAlways())
-				name.append(" (Phase " + (this.getBattlePhase() + 1) + ")");
+			if(this.isBossAlways()) {
+				name.append(" (").append(new TranslationTextComponent("entity.phase")).append(" " + (this.getBattlePhase() + 1) + ")");
+			}
             this.bossInfo.setName(name);
         }
     }

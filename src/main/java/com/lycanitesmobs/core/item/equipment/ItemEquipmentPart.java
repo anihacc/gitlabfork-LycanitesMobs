@@ -158,7 +158,7 @@ public class ItemEquipmentPart extends BaseItem {
 
 		// Base Stats:
 		descriptions.add(new StringTextComponent("-------------------"));
-		descriptions.add(new TranslationTextComponent("equipment.slottype").append(" " + this.slotType).withStyle(TextFormatting.GOLD));
+		descriptions.add(new TranslationTextComponent("equipment.slottype").append(" ").append(new TranslationTextComponent("equipment.slot." + this.slotType)).withStyle(TextFormatting.GOLD));
 		descriptions.add(new TranslationTextComponent("equipment.level").append(" " + level + "/" + this.levelMax).withStyle(TextFormatting.GOLD));
 		if(level < this.levelMax) {
 			descriptions.add(new TranslationTextComponent("entity.experience").append(": " + experience + "/" + experienceMax).withStyle(TextFormatting.GOLD));
