@@ -81,7 +81,7 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 		if(!this.isActive(itemStack, level)) {
 			return null;
 		}
-		String summary = LanguageManager.translate("equipment.harvest.shape." + this.harvestType);
+		String summary = LanguageManager.translate("equipment.harvest.type." + this.harvestType);
 		if(this.harvestRange.distanceSq(new Vec3i(0, 0, 0)) > 0) {
 			summary +=  " (" + LanguageManager.translate("equipment.harvest.shape." + this.harvestShape);
 			summary += " " + this.getHarvestRangeString(level);

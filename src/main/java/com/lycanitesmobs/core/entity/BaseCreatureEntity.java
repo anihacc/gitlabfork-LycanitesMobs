@@ -10,7 +10,6 @@ import com.lycanitesmobs.api.*;
 import com.lycanitesmobs.client.AssetManager;
 import com.lycanitesmobs.client.localisation.LanguageManager;
 import com.lycanitesmobs.core.container.CreatureContainer;
-import com.lycanitesmobs.core.entity.damagesources.MinionEntityDamageSource;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.entity.navigate.CreatureMoveHelper;
@@ -26,7 +25,6 @@ import com.lycanitesmobs.core.network.MessageCreature;
 import com.lycanitesmobs.core.pets.PetEntry;
 import com.lycanitesmobs.core.spawner.SpawnerEventListener;
 import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
-import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -1977,7 +1975,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
             if(brightness > 0.5F && this.rand.nextFloat() * 30.0F < (brightness - 0.4F) * 2.0F && this.getEntityWorld().canBlockSeeSky(this.getPosition())) {
                 boolean shouldBurn = true;
                 ItemStack helmet = this.inventory.getEquipmentStack("head");
-                if(helmet != null) {
+                if(!helmet.isEmpty()) {
                     if(helmet.isItemStackDamageable()) {
                     	helmet.setItemDamage(helmet.getItemDamage() + this.rand.nextInt(2));
                         if(helmet.getItemDamage() >= helmet.getMaxDamage()) {
