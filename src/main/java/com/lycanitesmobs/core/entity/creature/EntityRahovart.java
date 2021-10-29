@@ -645,32 +645,6 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
         return super.isVulnerableTo(entity);
     }
 
-
-    // ==================================================
-    //                    Taking Damage
-    // ==================================================
-    // ========== Attacked From ==========
-    /** Called when this entity has been attacked, uses a DamageSource and damage value. **/
-    @Override
-    public boolean hurt(DamageSource damageSrc, float damageAmount) {
-        if(this.playerTargets != null && damageSrc.getEntity() != null && damageSrc.getEntity() instanceof PlayerEntity) {
-            if (!this.playerTargets.contains(damageSrc.getEntity()))
-                this.playerTargets.add((PlayerEntity)damageSrc.getEntity());
-        }
-        return super.hurt(damageSrc, damageAmount);
-    }
-
-    // ==================================================
-    //                     Equipment
-    // ==================================================
-    @Override
-    public int getNoBagSize() { return 0; }
-    @Override
-    public int getBagSize() { return this.creatureInfo.bagSize; }
-    // ==================================================
-    //                       NBT
-    // ==================================================
-    // ========== Read ===========
     @Override
     public void readAdditionalSaveData(CompoundNBT nbt) {
         super.readAdditionalSaveData(nbt);
@@ -704,8 +678,6 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
         }
     }
 
-    // ========== Write ==========
-    /** Used when saving this mob to a chunk. **/
     @Override
     public void addAdditionalSaveData(CompoundNBT nbt) {
         super.addAdditionalSaveData(nbt);

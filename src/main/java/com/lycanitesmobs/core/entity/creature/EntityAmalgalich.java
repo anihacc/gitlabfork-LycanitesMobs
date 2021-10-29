@@ -108,10 +108,6 @@ public class EntityAmalgalich extends BaseCreatureEntity implements IMob, IGroup
         }
     }
 
-
-    // ==================================================
-    //                      Updates
-    // ==================================================
     @Override
     public void aiStep() {
         super.aiStep();
@@ -163,11 +159,7 @@ public class EntityAmalgalich extends BaseCreatureEntity implements IMob, IGroup
     public boolean isPushable() {
         return false;
     }
-    
-    
-	// ==================================================
-    //                      Attacks
-    // ==================================================
+
     @Override
     public boolean canAttack(LivingEntity target) {
     	if(target instanceof EntityBanshee || target instanceof EntityReaper || target instanceof EntityGeist)
@@ -211,11 +203,7 @@ public class EntityAmalgalich extends BaseCreatureEntity implements IMob, IGroup
 
         return super.extraAnimation01();
     }
-	
-	
-	// ==================================================
-   	//                     Minions
-   	// ==================================================
+
     @Override
     public boolean addMinion(LivingEntity minion) {
         boolean minionAdded = super.addMinion(minion);
@@ -262,12 +250,7 @@ public class EntityAmalgalich extends BaseCreatureEntity implements IMob, IGroup
             this.heal(25);
         }
     }
-    
-    
-    // ==================================================
-    //                    Immunities
-    // ==================================================
-    // ========== Damage ==========
+
     @Override
     public boolean isInvulnerableTo(DamageSource source) {
         if(this.isBlocking())
@@ -278,7 +261,6 @@ public class EntityAmalgalich extends BaseCreatureEntity implements IMob, IGroup
     @Override
     public boolean canBurn() { return false; }
 
-    // ========== Blocking ==========
     @Override
     public boolean isBlocking() {
         return super.isBlocking();
@@ -306,49 +288,17 @@ public class EntityAmalgalich extends BaseCreatureEntity implements IMob, IGroup
         }
         return super.isVulnerableTo(entity);
     }
-    // ==================================================
-    //                     Equipment
-    // ==================================================
-    @Override
-    public int getNoBagSize() { return 0; }
-    @Override
-    public int getBagSize() { return this.creatureInfo.bagSize; }
 
-    // ==================================================
-    //                    Taking Damage
-    // ==================================================
-    // ========== Attacked From ==========
-    /** Called when this entity has been attacked, uses a DamageSource and damage value. **/
-    @Override
-    public boolean hurt(DamageSource damageSrc, float damageAmount) {
-        if(this.playerTargets != null && damageSrc.getEntity() != null && damageSrc.getEntity() instanceof PlayerEntity) {
-            if (!this.playerTargets.contains(damageSrc.getEntity()))
-                this.playerTargets.add((PlayerEntity)damageSrc.getEntity());
-        }
-        return super.hurt(damageSrc, damageAmount);
-    }
-
-
-    // ==================================================
-    //                       NBT
-    // ==================================================
-    // ========== Read ===========
     @Override
     public void readAdditionalSaveData(CompoundNBT nbt) {
         super.readAdditionalSaveData(nbt);
     }
 
-    // ========== Write ==========
-    /** Used when saving this mob to a chunk. **/
     @Override
     public void addAdditionalSaveData(CompoundNBT nbt) {
         super.addAdditionalSaveData(nbt);
     }
 
-
-    // ==================================================
-    //                   Brightness
-    // ==================================================
     public float getBrightness() {
         return 1.0F;
     }
