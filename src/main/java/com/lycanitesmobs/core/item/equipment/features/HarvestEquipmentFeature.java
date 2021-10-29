@@ -89,11 +89,10 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 		if (!this.isActive(itemStack, level)) {
 			return null;
 		}
-		StringTextComponent summary = new StringTextComponent(this.harvestType);
+		TranslationTextComponent summary = new TranslationTextComponent("equipment.harvest.type." + this.harvestType);
 		if (this.harvestRange.distSqr(0, 0, 0, false) > 0) {
-			summary.append(" (" + this.harvestShape);
-			summary.append(" " + this.getHarvestRangeString(level));
-			summary.append(")");
+			summary.append(" (").append(new TranslationTextComponent("equipment.harvest.shape." + this.harvestShape));
+			summary.append(" " + this.getHarvestRangeString(level)).append(")");
 		}
 		return summary;
 	}
