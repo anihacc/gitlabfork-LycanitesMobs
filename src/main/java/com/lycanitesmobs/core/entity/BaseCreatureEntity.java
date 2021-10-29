@@ -1134,8 +1134,9 @@ public abstract class BaseCreatureEntity extends PathfinderMob {
 
     public void createBossInfo(BossEvent.BossBarColor color, boolean darkenSky) {
 		BaseComponent name = (BaseComponent)this.getName();
-        if(this.isBossAlways())
-            name.append(" (Phase " + (this.getBattlePhase() + 1) + ")");
+        if(this.isBossAlways()) {
+			name.append(" (").append(new TranslatableComponent("entity.phase")).append(" " + (this.getBattlePhase() + 1) + ")");
+		}
         this.bossInfo = (ServerBossEvent)(new ServerBossEvent(name, color, BossEvent.BossBarOverlay.PROGRESS)).setDarkenScreen(darkenSky);
     }
 
@@ -1153,8 +1154,9 @@ public abstract class BaseCreatureEntity extends PathfinderMob {
     public void refreshBossHealthName() {
         if(this.bossInfo != null) {
 			BaseComponent name = (BaseComponent)this.getTitle();
-			if(this.isBossAlways())
-				name.append(" (Phase " + (this.getBattlePhase() + 1) + ")");
+			if(this.isBossAlways()) {
+				name.append(" (").append(new TranslatableComponent("entity.phase")).append(" " + (this.getBattlePhase() + 1) + ")");
+			}
             this.bossInfo.setName(name);
         }
     }

@@ -2,55 +2,45 @@ package com.lycanitesmobs.core.item.equipment;
 
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
-import com.lycanitesmobs.client.ClientManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.core.entity.ExtendedEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.item.BaseItem;
 import com.lycanitesmobs.core.item.equipment.features.*;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.TamableAnimal;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.ContainerHelper;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.item.UseAnim;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.util.*;
 import net.minecraft.core.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.*;
-import net.minecraft.world.level.Level;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.ToolType;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.*;
-
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.BaseComponent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.Mth;
+import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.*;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.*;
 
 public class ItemEquipment extends BaseItem {
 	/** The maximum amount of parts that can be added to an Equipment Piece. **/
@@ -175,13 +165,6 @@ public class ItemEquipment extends BaseItem {
 			}
 		}
 		return featureSummaries;
-	}
-
-	@OnlyIn(Dist.CLIENT)
-	@Nullable
-	@Override
-	public net.minecraft.client.gui.Font getFontRenderer(ItemStack stack) {
-		return ClientManager.getInstance().getFontRenderer();
 	}
 
 	@Override
@@ -607,40 +590,21 @@ public class ItemEquipment extends BaseItem {
 	//                     Harvesting
 	// ==================================================
 	@Override
-	@Nonnull
-	public Set<ToolType> getToolTypes(ItemStack itemStack) {
-		Map<ToolType, Boolean> toolTypes = new HashMap<>();
+	public boolean canPerformAction(ItemStack itemStack, net.minecraftforge.common.ToolAction toolAction) {
 		if(this.getSharpness(itemStack) <= 0) {
-			return toolTypes.keySet();
+			return false;
 		}
 		for(EquipmentFeature equipmentFeature : this.getFeaturesByType(itemStack, "harvest")) {
 			HarvestEquipmentFeature harvestFeature = (HarvestEquipmentFeature)equipmentFeature;
-			ToolType toolType = harvestFeature.getToolType();
-			if(toolType != null) {
-				toolTypes.put(toolType, true);
+			if(harvestFeature.getToolActions().contains(toolAction)) {
+				return true;
 			}
 		}
-		return toolTypes.keySet();
+		return false;
 	}
 
 	@Override
-	public int getHarvestLevel(ItemStack itemStack, ToolType tool, @Nullable Player player, @Nullable BlockState blockState) {
-		if(this.getSharpness(itemStack) <= 0) {
-			return -1;
-		}
-
-		int harvestLevel = -1;
-		for(EquipmentFeature equipmentFeature : this.getFeaturesByType(itemStack, "harvest")) {
-			HarvestEquipmentFeature harvestFeature = (HarvestEquipmentFeature)equipmentFeature;
-			if(harvestLevel < harvestFeature.harvestLevel && tool == harvestFeature.getToolType()) {
-				harvestLevel = harvestFeature.harvestLevel;
-			}
-		}
-		return harvestLevel;
-	}
-
-	@Override
-	public boolean canHarvestBlock(ItemStack itemStack, BlockState blockState) {
+	public boolean isCorrectToolForDrops(ItemStack itemStack, BlockState blockState) {
 		if(this.getSharpness(itemStack) <= 0) {
 			return false;
 		}
@@ -755,7 +719,7 @@ public class ItemEquipment extends BaseItem {
 					double targetXDist = possibleTarget.position().x() - attacker.position().x();
 					double targetZDist = attacker.position().z() - possibleTarget.position().z();
 					double targetAngleAbsolute = 180 + Math.toDegrees(Math.atan2(targetXDist, targetZDist));
-					double targetAngle = Math.abs(targetAngleAbsolute - attacker.yRot);
+					double targetAngle = Math.abs(targetAngleAbsolute - attacker.getYRot());
 					if(targetAngle > 180) {
 						targetAngle = 180 - (targetAngle - 180);
 					}
@@ -787,7 +751,7 @@ public class ItemEquipment extends BaseItem {
 			if (knockback != 0 && attacker != null && target != null) {
 				double xDist = attacker.position().x() - target.position().x();
 				double zDist = attacker.position().z() - target.position().z();
-				double xzDist = Math.max(Mth.sqrt(xDist * xDist + zDist * zDist), 0.01D);
+				double xzDist = Math.max(Mth.sqrt((float)(xDist * xDist + zDist * zDist)), 0.01D);
 				double motionCap = 10;
 				if (target.getDeltaMovement().x() < motionCap && target.getDeltaMovement().x() > -motionCap && target.getDeltaMovement().z() < motionCap && target.getDeltaMovement().z() > -motionCap) {
 					target.push(

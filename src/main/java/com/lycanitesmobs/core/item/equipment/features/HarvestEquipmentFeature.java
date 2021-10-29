@@ -5,35 +5,36 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.core.helpers.JSONHelper;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.core.Direction;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.ToolType;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraftforge.common.ToolAction;
+import net.minecraftforge.common.ToolActions;
 
 import javax.annotation.Nullable;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class HarvestEquipmentFeature extends EquipmentFeature {
 	/** List of blocks by harvest type. These are checked after Materials are checked. **/
-	private static final Set<Block> SPADE_HARVEST = Sets.newHashSet(Blocks.CLAY, Blocks.DIRT, Blocks.FARMLAND, Blocks.GRASS_BLOCK, Blocks.GRAVEL, Blocks.MYCELIUM, Blocks.SAND, Blocks.SNOW, Blocks.SOUL_SAND, Blocks.GRASS_PATH, Blocks.GRAY_CONCRETE_POWDER);
+	private static final Set<Block> SPADE_HARVEST = Sets.newHashSet(Blocks.CLAY, Blocks.DIRT, Blocks.FARMLAND, Blocks.GRASS_BLOCK, Blocks.GRAVEL, Blocks.MYCELIUM, Blocks.SAND, Blocks.SNOW, Blocks.SOUL_SAND, Blocks.DIRT_PATH, Blocks.GRAY_CONCRETE_POWDER);
 	private static final Set<Block> PICKAXE_HARVEST = Sets.newHashSet(Blocks.ACTIVATOR_RAIL, Blocks.COAL_ORE, Blocks.COBBLESTONE, Blocks.DETECTOR_RAIL, Blocks.DIAMOND_BLOCK, Blocks.DIAMOND_ORE, Blocks.POWERED_RAIL, Blocks.GOLD_BLOCK, Blocks.GOLD_ORE, Blocks.ICE, Blocks.IRON_BLOCK, Blocks.IRON_ORE, Blocks.LAPIS_BLOCK, Blocks.LAPIS_ORE, Blocks.MOSSY_COBBLESTONE, Blocks.NETHERRACK, Blocks.PACKED_ICE, Blocks.RAIL, Blocks.REDSTONE_ORE, Blocks.SANDSTONE, Blocks.RED_SANDSTONE, Blocks.STONE, Blocks.STONE_SLAB, Blocks.STONE_BUTTON, Blocks.STONE_PRESSURE_PLATE);
 	private static final Set<Block> AXE_HARVEST = Sets.newHashSet(Blocks.OAK_PLANKS, Blocks.BOOKSHELF, Blocks.CHEST, Blocks.PUMPKIN, Blocks.MELON, Blocks.LADDER, Blocks.OAK_BUTTON, Blocks.OAK_PRESSURE_PLATE);
-	private static final Map<Block, BlockState> HOE_LOOKUP = Maps.newHashMap(ImmutableMap.of(Blocks.GRASS_BLOCK, Blocks.FARMLAND.defaultBlockState(), Blocks.GRASS_PATH, Blocks.FARMLAND.defaultBlockState(), Blocks.DIRT, Blocks.FARMLAND.defaultBlockState(), Blocks.COARSE_DIRT, Blocks.DIRT.defaultBlockState()));
+	private static final Map<Block, BlockState> HOE_LOOKUP = Maps.newHashMap(ImmutableMap.of(Blocks.GRASS_BLOCK, Blocks.FARMLAND.defaultBlockState(), Blocks.DIRT_PATH, Blocks.FARMLAND.defaultBlockState(), Blocks.DIRT, Blocks.FARMLAND.defaultBlockState(), Blocks.COARSE_DIRT, Blocks.DIRT.defaultBlockState()));
 
 	/** The type of tool to harvest as. Can be: pickaxe, axe, shovel, hoe, sword or shears. **/
 	public String harvestType;
@@ -114,9 +115,30 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 	 * Gets the Tool Type provided by this Harvest Feature.
 	 * @return The Tool Type of this feature, will return null if it's not a Pickaxe, Axe or Shovel.
 	 */
-	@Nullable
-	public ToolType getToolType() {
-		return ToolType.get(this.harvestType);
+	public Collection<ToolAction> getToolActions() {
+		List<ToolAction> toolActions = new ArrayList<>();
+
+		if (this.harvestType.equalsIgnoreCase("pickaxe")) {
+			return ToolActions.DEFAULT_PICKAXE_ACTIONS;
+		}
+		if (this.harvestType.equalsIgnoreCase("axe")) {
+			return ToolActions.DEFAULT_AXE_ACTIONS;
+		}
+		if (this.harvestType.equalsIgnoreCase("sword")) {
+			toolActions.add(ToolActions.SWORD_DIG);
+			return toolActions;
+		}
+		if (this.harvestType.equalsIgnoreCase("shovel")) {
+			return ToolActions.DEFAULT_SHOVEL_ACTIONS;
+		}
+		if (this.harvestType.equalsIgnoreCase("hoe")) {
+			return ToolActions.DEFAULT_HOE_ACTIONS;
+		}
+		if (this.harvestType.equalsIgnoreCase("shears")) {
+			return ToolActions.DEFAULT_SHEARS_ACTIONS;
+		}
+
+		return toolActions;
 	}
 
 	/**
@@ -127,6 +149,17 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 	public boolean canHarvestBlock(BlockState blockState) {
 		Block block = blockState.getBlock();
 		Material material = blockState.getMaterial();
+
+		// Tier (Harvest Level Check):
+		if (this.harvestLevel < 3 && blockState.is(BlockTags.NEEDS_DIAMOND_TOOL)) {
+			return false;
+		}
+		else if (this.harvestLevel < 2 && blockState.is(BlockTags.NEEDS_IRON_TOOL)) {
+			return false;
+		}
+		else if (this.harvestLevel < 1 && blockState.is(BlockTags.NEEDS_STONE_TOOL)) {
+			return false;
+		}
 
 		// Stone:
 		if (material == Material.METAL || material == Material.HEAVY_METAL || material == Material.STONE || PICKAXE_HARVEST.contains(block)) {
@@ -149,12 +182,12 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 		}
 
 		// Dirt:
-		if (material == Material.DIRT || material == Material.CLAY || material == Material.SAND || material == Material.GRASS || SPADE_HARVEST.contains(block)) {
+		if (material == Material.DIRT || material == Material.CLAY || material == Material.SAND || material == Material.GRASS || material == Material.SNOW || material == Material.TOP_SNOW || SPADE_HARVEST.contains(block)) {
 			return this.harvestType.equalsIgnoreCase("shovel");
 		}
 
 		// Growth:
-		if (material == Material.CORAL || material == Material.VEGETABLE) {
+		if (material == Material.MOSS || material == Material.VEGETABLE) {
 			return this.harvestType.equalsIgnoreCase("sword");
 		}
 
@@ -219,10 +252,10 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 		Direction facingH = livingEntity.getDirection();
 		Direction facingLat = facingH.getClockWise();
 		Direction facing = facingH;
-		if (livingEntity.xRot > 45) {
+		if (livingEntity.getXRot() > 45) {
 			facing = Direction.DOWN;
 		}
-		else if (livingEntity.xRot < -45) {
+		else if (livingEntity.getXRot() < -45) {
 			facing = Direction.UP;
 		}
 		Vec3i[][] selectionRanges = new Vec3i[3][2];

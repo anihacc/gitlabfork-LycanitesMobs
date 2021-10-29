@@ -3,7 +3,6 @@ package com.lycanitesmobs.core.item.equipment;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.lycanitesmobs.client.ClientManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.core.helpers.JSONHelper;
@@ -13,26 +12,22 @@ import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.item.BaseItem;
 import com.lycanitesmobs.core.item.ChargeItem;
 import com.lycanitesmobs.core.item.equipment.features.EquipmentFeature;
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.core.NonNullList;
-import net.minecraft.world.phys.Vec3;
-import net.minecraft.util.text.*;
-import net.minecraft.world.level.Level;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
-import javax.annotation.Nullable;
-import java.util.*;
-
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.BaseComponent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
+
+import javax.annotation.Nullable;
+import java.util.*;
 
 public class ItemEquipmentPart extends BaseItem {
 	/** The base amount of experience needed to level up, this is increased by the part's level scaled. **/
@@ -164,7 +159,7 @@ public class ItemEquipmentPart extends BaseItem {
 
 		// Base Stats:
 		descriptions.add(new TextComponent("-------------------"));
-		descriptions.add(new TranslatableComponent("equipment.slottype").append(" " + this.slotType).withStyle(ChatFormatting.GOLD));
+		descriptions.add(new TranslatableComponent("equipment.slottype").append(" ").append(new TranslatableComponent("equipment.slot." + this.slotType)).withStyle(ChatFormatting.GOLD));
 		descriptions.add(new TranslatableComponent("equipment.level").append(" " + level + "/" + this.levelMax).withStyle(ChatFormatting.GOLD));
 		if(level < this.levelMax) {
 			descriptions.add(new TranslatableComponent("entity.experience").append(": " + experience + "/" + experienceMax).withStyle(ChatFormatting.GOLD));
@@ -182,13 +177,6 @@ public class ItemEquipmentPart extends BaseItem {
 			}
 		}
 		return descriptions;
-	}
-
-	@OnlyIn(Dist.CLIENT)
-	@Nullable
-	@Override
-	public net.minecraft.client.gui.Font getFontRenderer(ItemStack stack) {
-		return ClientManager.getInstance().getFontRenderer();
 	}
 
 	/** Sets up this equipment part, this is called when the provided stack is dropped and needs to have its level randomized, etc. **/
