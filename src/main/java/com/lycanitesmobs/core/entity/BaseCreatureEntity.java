@@ -1848,6 +1848,9 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 		}
 
 		// Boss Health Update:
+		if(this.updateTick % 5 == 0 && this.playerTargets.isEmpty()) {
+			this.heal(1);
+		}
 		if(this.bossInfo != null) {
 			this.bossInfo.setPercent(this.getHealth() / this.getMaxHealth());
 		}
@@ -3484,6 +3487,12 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 		}
         if(super.attackEntityFrom(damageSrc, damageAmount)) {
         	this.onDamage(damageSrc, damageAmount);
+
+			if(this.isBoss() && this.playerTargets != null && damageSrc.getTrueSource() != null && damageSrc.getTrueSource() instanceof EntityPlayer) {
+				if (!this.playerTargets.contains(damageSrc.getTrueSource())) {
+					this.playerTargets.add((EntityPlayer) damageSrc.getTrueSource());
+				}
+			}
 
             Entity entity = damageSrc.getImmediateSource();
             if(entity instanceof EntityThrowable) {
