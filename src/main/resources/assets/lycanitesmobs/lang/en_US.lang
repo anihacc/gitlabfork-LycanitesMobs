@@ -5,6 +5,7 @@ entity.level=Lvl
 entity.health=HP
 entity.experience=XP
 entity.reputation=Taming
+entity.phase=Phase
 entity.summoningportal.name=Summoning Portal
 entity.fear.name=Feared
 #
@@ -391,10 +392,6 @@ equipment.feature.projectile.trigger.secondary=Secondary Use
 equipment.feature.projectile.pattern=Pattern:
 equipment.feature.projectile.pattern.spread=Spread
 equipment.feature.projectile.pattern.ring=Ring
-item.woodenrod.name=Wooden Rod
-item.woodenhilt.name=Wooden Hilt
-item.woodenpaxel.name=Wooden Paxel
-item.equipment.name=Crafted Equipment
 #
 #
 #
@@ -1768,6 +1765,14 @@ item.primefireember.description=Use to throw a small primefire ember. Can also b
 item.equipment.name=Crafted Equipment
 item.equipment.description=
 item.equipmentpart.description=This item can be used to create powerful equipment using an Equipment Forge or can be crafted into a useful resource.
+#
+equipment.slot.base=Base
+equipment.slot.head=Head
+equipment.slot.blade=Blade
+equipment.slot.pike=Pike
+equipment.slot.axe=Axe
+equipment.slot.jewel=Jewel
+equipment.slot.pommel=Pommel
 #
 item.woodenrod.name=Wooden Rod
 item.woodenhilt.name=Wooden Guard

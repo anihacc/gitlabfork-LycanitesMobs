@@ -166,7 +166,7 @@ public class ItemEquipmentPart extends ItemBase {
 		int experienceMax = this.getExperienceForNextLevel(itemStack);
 
 		// Base Stats:
-		String baseFeature = LanguageManager.translate("equipment.slottype") + " " + this.slotType;
+		String baseFeature = LanguageManager.translate("equipment.slottype") + " " + LanguageManager.translate("equipment.slot." + this.slotType);
 		baseFeature += "\n" + LanguageManager.translate("equipment.level") + " " + level + "/" + this.levelMax;
 		if(level < this.levelMax) {
 			baseFeature += "\n" + LanguageManager.translate("entity.experience") + ": " + experience + "/" + experienceMax;
