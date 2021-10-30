@@ -1700,7 +1700,7 @@ public abstract class BaseCreatureEntity extends PathfinderMob {
 		}
 
 		// Boss Health Update:
-		if(this.updateTick % 5 == 0 && this.playerTargets.isEmpty()) {
+		if(this.isBoss() && this.updateTick % 5 == 0 && this.playerTargets.isEmpty()) {
 			this.heal(1);
 		}
 		if(this.bossInfo != null) {
