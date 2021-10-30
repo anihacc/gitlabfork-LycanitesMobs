@@ -174,14 +174,6 @@ public class Ignibus extends RideableCreatureEntity implements IGroupHeavy {
     }
 
     @Override
-    public double getPassengersRidingOffset() {
-        if(this.onGround) {
-            return (double)this.getDimensions(Pose.STANDING).height * 0.52D;
-        }
-        return (double)this.getDimensions(Pose.STANDING).height * 0.54D;
-    }
-
-    @Override
     public void mountAbility(Entity rider) {
         if(this.getCommandSenderWorld().isClientSide)
             return;
