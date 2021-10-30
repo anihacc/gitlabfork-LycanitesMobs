@@ -634,7 +634,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
     	if(!"".equals(this.getAgeName()))
     		name += this.getAgeName() + " ";
     	if(!"".equals(this.getSubspeciesTitle()))
-    		name += this.getSubspeciesTitle() + " ";
+    		name += this.getSubspeciesTitle();
     	return name + this.getSpeciesName() + this.getLevelName();
     }
     

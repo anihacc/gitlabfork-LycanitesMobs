@@ -3,6 +3,7 @@ package com.lycanitesmobs.core.entity.creature;
 import com.lycanitesmobs.api.IGroupHeavy;
 import com.lycanitesmobs.core.entity.RapidFireProjectileEntity;
 import com.lycanitesmobs.core.entity.RideableCreatureEntity;
+import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
@@ -54,7 +55,7 @@ public class EntityIgnibus extends RideableCreatureEntity implements IGroupHeavy
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(this.nextCombatGoalIndex++, new AttackRangedGoal(this).setSpeed(0.75D).setStaminaTime(100).setRange(20.0F).setMinChaseDistance(10.0F));
+        this.tasks.addTask(this.nextCombatGoalIndex++, new AttackRangedGoal(this).setSpeed(0.75D).setStaminaTime(100).setRange(24.0F).setMinChaseDistance(10.0F));
     }
 
 
@@ -147,21 +148,6 @@ public class EntityIgnibus extends RideableCreatureEntity implements IGroupHeavy
 
     @Override
     public boolean isStrongSwimmer() { return false; }
-    
-    
-    // ==================================================
-    //                     Pet Control
-    // ==================================================
-    public boolean petControlsEnabled() { return true; }
-
-
-    // ==================================================
-    //                     Equipment
-    // ==================================================
-    @Override
-    public int getNoBagSize() { return 0; }
-    @Override
-    public int getBagSize() { return this.creatureInfo.bagSize; }
 
 
 
@@ -217,7 +203,7 @@ public class EntityIgnibus extends RideableCreatureEntity implements IGroupHeavy
             projectile.setProjectileScale(0.125f);
 
             // Y Offset:
-            projectile.posY -= this.height / 4;
+            projectile.posY -= this.height * 0.2F;
 
             // Accuracy:
             float accuracy = 4.0F * (this.getRNG().nextFloat() - 0.5F);
