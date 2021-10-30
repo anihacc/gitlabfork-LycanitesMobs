@@ -173,14 +173,6 @@ public class EntityIgnibus extends RideableCreatureEntity implements IGroupHeavy
     }
 
     @Override
-    public double getPassengersRidingOffset() {
-        if(this.onGround) {
-            return (double)this.getDimensions(Pose.STANDING).height * 0.52D;
-        }
-        return (double)this.getDimensions(Pose.STANDING).height * 0.54D;
-    }
-
-    @Override
     public void mountAbility(Entity rider) {
         if(this.getCommandSenderWorld().isClientSide)
             return;
@@ -198,7 +190,7 @@ public class EntityIgnibus extends RideableCreatureEntity implements IGroupHeavy
 
         if(rider instanceof PlayerEntity) {
             PlayerEntity player = (PlayerEntity)rider;
-            ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile("scorchfireball");
+            ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile("primeember");
             if(projectileInfo == null) {
                 return;
             }

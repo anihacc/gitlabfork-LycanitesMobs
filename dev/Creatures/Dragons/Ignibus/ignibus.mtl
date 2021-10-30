@@ -1,26 +1,12 @@
 # Blender MTL File: 'ignibus.blend'
-# Material Count: 2
+# Material Count: 1
 
 newmtl ignibus
-Ns 96.078431
+Ns 323.999994
 Ka 1.000000 1.000000 1.000000
-Kd 0.640000 0.640000 0.640000
+Kd 0.800000 0.800000 0.800000
 Ks 0.500000 0.500000 0.500000
 Ke 0.000000 0.000000 0.000000
 Ni 1.000000
-d 0.000000
-illum 0
-map_Kd ignibus.png
-map_d ignibus.png
-
-newmtl ignibus_ignibus
-Ns 96.078431
-Ka 1.000000 1.000000 1.000000
-Kd 0.640000 0.640000 0.640000
-Ks 0.500000 0.500000 0.500000
-Ke 0.000000 0.000000 0.000000
-Ni 1.000000
-d 0.000000
-illum 0
-map_Kd ignibus.png
-map_d ignibus.png
+d 1.000000
+illum 2

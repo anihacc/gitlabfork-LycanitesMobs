@@ -110,16 +110,16 @@ public class ModelTemplateDragon extends CreatureObjModel {
                 }
             }
             if(partName.equals("head")) {
-                rotX -= Math.toDegrees(flightLoop * 0.15F);
+                rotX -= Math.toDegrees(flightLoop * 0.05F);
             }
 
             if(partName.equals("legleftfront") || partName.equals("legrightfront")) {
-                rotX += 25;
-                rotX += Math.toDegrees(flightLoop * 0.1F);
+                rotX += 35;
+                rotX += Math.toDegrees(flightLoop * 0.05F);
             }
             if(partName.equals("legleftback") || partName.equals("legrightback")) {
-                rotX += 25;
-                rotX -= Math.toDegrees(flightLoop * 0.1F);
+                rotX += 35;
+                rotX -= Math.toDegrees(flightLoop * 0.05F);
             }
 
             if(this.foldWings) {
