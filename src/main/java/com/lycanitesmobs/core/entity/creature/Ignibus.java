@@ -112,7 +112,6 @@ public class Ignibus extends RideableCreatureEntity implements IGroupHeavy {
         return super.getWanderPosition(wanderPosition);
     }
 
-
     @Override
     public double getFlightOffset() {
         if(!this.wantsToLand) {
@@ -126,13 +125,6 @@ public class Ignibus extends RideableCreatureEntity implements IGroupHeavy {
 
     @Override
     public boolean isStrongSwimmer() { return false; }
-
-    public boolean petControlsEnabled() { return true; }
-
-    @Override
-    public int getNoBagSize() { return 0; }
-    @Override
-    public int getBagSize() { return this.creatureInfo.bagSize; }
 
     @Override
     public void attackRanged(Entity target, float range) {
