@@ -125,13 +125,6 @@ public class EntityIgnibus extends RideableCreatureEntity implements IGroupHeavy
     @Override
     public boolean isStrongSwimmer() { return false; }
 
-    public boolean petControlsEnabled() { return true; }
-
-    @Override
-    public int getNoBagSize() { return 0; }
-    @Override
-    public int getBagSize() { return this.creatureInfo.bagSize; }
-
     @Override
     public void attackRanged(Entity target, float range) {
         // Type:
