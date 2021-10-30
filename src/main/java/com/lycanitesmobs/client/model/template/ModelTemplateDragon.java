@@ -114,7 +114,7 @@ public class ModelTemplateDragon extends ModelCreatureObj {
                 }
             }
             if(partName.equals("head")) {
-                rotX -= Math.toDegrees(flightLoop * 0.15F);
+                rotX -= Math.toDegrees(flightLoop * 0.05F);
             }
 
             if(partName.equals("legleftfront") || partName.equals("legrightfront")) {

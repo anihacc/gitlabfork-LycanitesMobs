@@ -270,18 +270,6 @@ public class EntityIgnibus extends RideableCreatureEntity implements IGroupHeavy
 
 
     // ==================================================
-    //                      Movement
-    // ==================================================
-    @Override
-    public double getMountedYOffset() {
-        if(this.onGround) {
-            return (double)this.height * 0.52D;
-        }
-        return (double)this.height * 0.54D;
-    }
-
-
-    // ==================================================
     //                   Mount Ability
     // ==================================================
     @Override
