@@ -632,7 +632,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
     public String getFullName() {
 		String nameFormatting = LanguageManager.translate("entity.lycanitesmobs.creature.name.format");
 		String[] nameParts = nameFormatting.split("\\|");
-		if (nameParts.length < 4) {
+		if (nameParts.length < 4 || nameFormatting.equals("entity.lycanitesmobs.creature.name.format")) {
 			nameParts = new String[]{"age", "variant", "subspecies", "species", "level"};
 		}
 
