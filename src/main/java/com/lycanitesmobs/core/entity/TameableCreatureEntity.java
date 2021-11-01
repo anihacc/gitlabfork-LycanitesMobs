@@ -1,6 +1,5 @@
 package com.lycanitesmobs.core.entity;
 
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.damagesources.MinionEntityDamageSource;
 import com.lycanitesmobs.core.entity.goals.actions.BegGoal;
@@ -130,7 +129,7 @@ public abstract class TameableCreatureEntity extends AgeableCreatureEntity {
             if ("s".equalsIgnoreCase(ownerFormatted.substring(ownerFormatted.length() - 1)))
                 ownerSuffix = "' ";
         }
-		ownedName.append(ownerName).append(ownerSuffix).append(this.getTitle());
+		ownedName.append(ownerName).append(ownerSuffix).append(this.getFullName());
         if(customName) {
 			ownedName.append(")");
 		}

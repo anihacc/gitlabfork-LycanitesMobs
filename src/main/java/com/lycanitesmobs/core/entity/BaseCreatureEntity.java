@@ -12,7 +12,6 @@ import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.core.container.CreatureContainer;
 import com.lycanitesmobs.core.container.CreatureContainerProvider;
 import com.lycanitesmobs.core.entity.damagesources.ElementDamageSource;
-import com.lycanitesmobs.core.entity.damagesources.MinionEntityDamageSource;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.entity.navigate.CreatureMoveController;
@@ -28,7 +27,6 @@ import com.lycanitesmobs.core.network.MessageCreature;
 import com.lycanitesmobs.core.pets.PetEntry;
 import com.lycanitesmobs.core.spawner.SpawnerEventListener;
 import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
-import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.WoodType;
@@ -625,28 +623,58 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	}
     
     // ========== Name ==========
-    /** Returns the display name of this entity. Use this when displaying it's name. **/
+    /** Returns the display name of this entity. Use this when displaying its name. **/
     @Override
     public ITextComponent getName() {
-    	if(this.hasCustomName())
+    	if (this.hasCustomName())
     		return this.getCustomName();
     	else
-    		return this.getTitle();
+    		return this.getFullName();
     }
 
     /** Returns the display title of this entity. **/
-    public ITextComponent getTitle() {
+    public ITextComponent getFullName() {
+		String nameFormatting = new TranslationTextComponent("entity.lycanitesmobs.creature.name.format").getString();
+		String[] nameParts = nameFormatting.split("\\|");
+		if (nameParts.length < 4) {
+			nameParts = new String[]{"age", "variant", "subspecies", "species", "level"};
+		}
+
 		TextComponent name = new StringTextComponent("");
-
-    	if(!"".equals(this.getAgeName().getString())) {
-			name.append(this.getAgeName()).append(" ");
+		List<ITextComponent> nameComponents = new ArrayList<>();
+		for (String namePart : nameParts) {
+			switch (namePart) {
+				case "age":
+					nameComponents.add(this.getAgeName());
+					break;
+				case "variant":
+					nameComponents.add(this.getVariantName());
+					break;
+				case "subspecies":
+					nameComponents.add(this.getSubspeciesName());
+					break;
+				case "species":
+					nameComponents.add(this.getSpeciesName());
+					break;
+				case "level":
+					nameComponents.add(this.getLevelName());
+					break;
+			}
 		}
 
-    	if(!"".equals(this.getSubspeciesTitle().getString())) {
-			name.append(this.getSubspeciesTitle()).append(" ");
+		boolean first = true;
+		for (ITextComponent nameComponent : nameComponents) {
+			if (nameComponent.getString().isEmpty()) {
+				continue;
+			}
+			if (!first) {
+				name.append(" ");
+			}
+			first = false;
+			name.append(nameComponent);
 		}
 
-    	return name.append(this.getSpeciesName()).append(" ").append(this.getLevelName());
+    	return name;
     }
     
     /** Returns the species name of this entity. **/
@@ -654,19 +682,25 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     	return this.creatureInfo.getTitle();
     }
 
-    /** Returns the subpsecies title (translated name) of this entity, returns a blank string if this is a base species mob. **/
-    public ITextComponent getSubspeciesTitle() {
-		TextComponent subspeciesName = new StringTextComponent("");
+	/** Gets the name of this entity relative to its age, more useful for EntityCreatureAgeable. **/
+	public TextComponent getAgeName() {
+		return new StringTextComponent("");
+	}
+
+	/** Returns the variant name (translated) of this entity, returns a blank string if this is a base species mob. **/
+	public ITextComponent getVariantName() {
 		if(this.getVariant() != null) {
-			subspeciesName = this.getVariant().getTitle();
+			return this.getVariant().getTitle();
 		}
+		return new StringTextComponent("");
+	}
+
+    /** Returns the subspecies title (translated name) of this entity, returns a blank string if this is a base species mob. **/
+    public ITextComponent getSubspeciesName() {
 		if(this.getSubspecies() != null) {
-			if(this.getVariant() != null) {
-				subspeciesName.append(" ");
-			}
-			subspeciesName.append(this.getSubspecies().getTitle());
+			return this.getSubspecies().getTitle();
 		}
-		return subspeciesName;
+		return new StringTextComponent("");
     }
 
 	/** Returns a mobs level to append to the name if above level 1. **/
@@ -676,11 +710,6 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		}
 		return (TextComponent) new TranslationTextComponent("entity.level").append(" " + this.getMobLevel());
 	}
-
-    /** Gets the name of this entity relative to it's age, more useful for EntityCreatureAgeable. **/
-    public TextComponent getAgeName() {
-    	return new StringTextComponent("");
-    }
 
 
     // ==================================================
@@ -1145,7 +1174,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     /** Updates the boss name for the health bar. **/
     public void refreshBossHealthName() {
         if(this.bossInfo != null) {
-			TextComponent name = (TextComponent)this.getTitle();
+			TextComponent name = (TextComponent)this.getFullName();
 			if(this.isBossAlways()) {
 				name.append(" (").append(new TranslationTextComponent("entity.phase")).append(" " + (this.getBattlePhase() + 1) + ")");
 			}

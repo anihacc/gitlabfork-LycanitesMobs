@@ -17,6 +17,7 @@ import net.minecraft.entity.Pose;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -145,7 +146,10 @@ public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, CreatureMo
 			net.minecraftforge.client.event.RenderNameplateEvent renderNameplateEvent = new net.minecraftforge.client.event.RenderNameplateEvent(entity, entity.getDisplayName(), this, matrixStack, renderTypeBuffer, fade, time);
 			net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(renderNameplateEvent);
 			if (renderNameplateEvent.getResult() != net.minecraftforge.eventbus.api.Event.Result.DENY && (renderNameplateEvent.getResult() == net.minecraftforge.eventbus.api.Event.Result.ALLOW || this.shouldShowName(entity))) {
-				this.renderNameTag(entity, entity.getCustomName(), matrixStack, renderTypeBuffer, brightness);
+				ITextComponent entityName = entity.getName();
+				if (entityName != null) {
+					this.renderNameTag(entity, entityName, matrixStack, renderTypeBuffer, brightness);
+				}
 			}
 		}
     }
@@ -220,16 +224,16 @@ public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, CreatureMo
         if(!Minecraft.renderNames()) {
         	return false;
 		}
-    	if (!entity.hasCustomName()) {
-    		return false;
-		}
     	if(entity.isInvisibleTo(Minecraft.getInstance().player)) {
     		return false;
 		}
     	if(entity.getControllingPassenger() != null || entity.hasPerchTarget()) {
     		return false;
 		}
-    	
+
+		if (entity.hasCustomName()) {
+			return true;
+		}
     	if(entity.shouldShowName() && !entity.isTamed()) {
 			return true;
     	}
