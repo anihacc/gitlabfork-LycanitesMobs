@@ -641,7 +641,7 @@ public abstract class BaseCreatureEntity extends PathfinderMob {
 	public MutableComponent getFullName() {
 		String nameFormatting = new TranslatableComponent("entity.lycanitesmobs.creature.name.format").getString();
 		String[] nameParts = nameFormatting.split("\\|");
-		if (nameParts.length < 4) {
+		if (nameParts.length < 4 || nameFormatting.equals("entity.lycanitesmobs.creature.name.format")) {
 			nameParts = new String[]{"age", "variant", "subspecies", "species", "level"};
 		}
 
