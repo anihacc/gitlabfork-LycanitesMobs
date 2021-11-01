@@ -636,7 +636,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     public ITextComponent getFullName() {
 		String nameFormatting = new TranslationTextComponent("entity.lycanitesmobs.creature.name.format").getString();
 		String[] nameParts = nameFormatting.split("\\|");
-		if (nameParts.length < 4) {
+		if (nameParts.length < 4 || nameFormatting.equals("entity.lycanitesmobs.creature.name.format")) {
 			nameParts = new String[]{"age", "variant", "subspecies", "species", "level"};
 		}
 
