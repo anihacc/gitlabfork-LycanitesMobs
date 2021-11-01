@@ -750,6 +750,8 @@
     "block.lycanitesmobs.shadowstonebrick_wall": "Darkstone Brick Wall",
     "block.lycanitesmobs.shadowstonebrick_wall.description": "The caps between the bricks seem to suck in the light.",
     "_comment": "#############################",
+    "entity.lycanitesmobs.creature.name.format": "age|variant|subspecies|species|level",
+    "_comment": "#############################",
     "entity.lycanitesmobs.abaia": "Abaia",
     "entity.lycanitesmobs.abaia.description": "Aggressive eels that generate an electric current through their body.",
     "entity.lycanitesmobs.abaia.habitat": "These fish are catadromous meaning they are born in saltwater oceans and then migrate and mature in freshwater rivers before returning to saltwater again, some end up trapped in lakes and create a colony there also, so they can be found in most locations.",

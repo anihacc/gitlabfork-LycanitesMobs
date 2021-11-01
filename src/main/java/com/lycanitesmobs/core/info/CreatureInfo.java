@@ -8,6 +8,7 @@ import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.core.entity.*;
 import com.lycanitesmobs.core.helpers.JSONHelper;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -509,7 +510,7 @@ public class CreatureInfo {
 	 * Returns a translated title for this creature. Ex: Lurker
 	 * @return The display name of this creature.
 	 */
-	public Component getTitle() {
+	public MutableComponent getTitle() {
 		return new TranslatableComponent("entity." + this.getLocalisationKey());
 	}
 
@@ -518,7 +519,7 @@ public class CreatureInfo {
 	 * Returns a translated description of this creature.
 	 * @return The creature description.
 	 */
-	public Component getDescription() {
+	public MutableComponent getDescription() {
 		return new TranslatableComponent("entity." + this.getLocalisationKey() + ".description");
 	}
 
@@ -527,7 +528,7 @@ public class CreatureInfo {
 	 * Returns a translated description of this creature.
 	 * @return The creature description.
 	 */
-	public Component getHabitatDescription() {
+	public MutableComponent getHabitatDescription() {
 		return new TranslatableComponent("entity." + this.getLocalisationKey() + ".habitat");
 	}
 
@@ -536,7 +537,7 @@ public class CreatureInfo {
 	 * Returns a translated description of this creature.
 	 * @return The creature description.
 	 */
-	public Component getCombatDescription() {
+	public MutableComponent getCombatDescription() {
 		return new TranslatableComponent("entity." + this.getLocalisationKey() + ".combat");
 	}
 
@@ -545,7 +546,7 @@ public class CreatureInfo {
 	 * Returns a comma separated list of Elements used by this Creature.
 	 * @return The Elements used by this Creature.
 	 */
-	public Component getElementNames(Subspecies subspecies) {
+	public MutableComponent getElementNames(Subspecies subspecies) {
 		List<ElementInfo> elements = this.elements;
 		if(subspecies != null && !subspecies.elements.isEmpty()) {
 			elements = subspecies.elements;
@@ -570,7 +571,7 @@ public class CreatureInfo {
 	 * Returns a comma separated list of Diets used by this Creature.
 	 * @return The Diets used by this Creature.
 	 */
-	public Component getDietNames() {
+	public MutableComponent getDietNames() {
 		if(this.diets.isEmpty()) {
 			return new TranslatableComponent("common.none");
 		}
@@ -591,7 +592,7 @@ public class CreatureInfo {
 	 * Returns a comma separated list of Biomes native for this Creature.
 	 * @return The Biomes native for this Creature.
 	 */
-	public Component getBiomeNames() {
+	public MutableComponent getBiomeNames() {
 		List<String> biomeIds = new ArrayList<>();
 		if(this.creatureSpawn.biomesFromTags != null)
 			biomeIds.addAll(this.creatureSpawn.biomesFromTags);
@@ -617,7 +618,7 @@ public class CreatureInfo {
 	 * Returns a comma separated list of items dropped by this Creature.
 	 * @return The items dropped by this Creature.
 	 */
-	public Component getDropNames() {
+	public MutableComponent getDropNames() {
 		if(this.drops.isEmpty()) {
 			return new TextComponent("");
 		}

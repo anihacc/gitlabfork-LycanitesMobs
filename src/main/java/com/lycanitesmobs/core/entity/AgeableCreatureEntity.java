@@ -3,21 +3,23 @@ package com.lycanitesmobs.core.entity;
 import com.lycanitesmobs.core.entity.goals.actions.FollowParentGoal;
 import com.lycanitesmobs.core.entity.goals.actions.MateGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.FindParentGoal;
-import com.lycanitesmobs.core.info.*;
+import com.lycanitesmobs.core.info.CreatureInfo;
+import com.lycanitesmobs.core.info.CreatureManager;
+import com.lycanitesmobs.core.info.ItemDrop;
+import com.lycanitesmobs.core.info.Variant;
 import com.lycanitesmobs.core.item.ItemCustomSpawnEgg;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.network.chat.BaseComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.level.Level;
 
 import javax.annotation.Nonnull;
@@ -88,7 +90,7 @@ public abstract class AgeableCreatureEntity extends BaseCreatureEntity {
     
     // ========== Name ==========
     @Override
-    public BaseComponent getAgeName() {
+    public MutableComponent getAgeName() {
     	if(this.isBaby())
     		return new TranslatableComponent("entity.baby");
     	else
@@ -376,7 +378,7 @@ public abstract class AgeableCreatureEntity extends BaseCreatureEntity {
 			baby.setSubspecies(this.getSubspeciesIndex());
 			Variant babyVariant = this.getSubspecies().getChildVariant(this, this.getVariant(), partner.getVariant());
             baby.applyVariant(babyVariant != null ? babyVariant.index : 0);
-            baby.moveTo(this.position().x(), this.position().y(), this.position().z(), this.yRot, this.xRot);
+            baby.moveTo(this.position().x(), this.position().y(), this.position().z(), this.getYRot(), this.getXRot());
 
             for(int i = 0; i < 7; ++i) {
                 double d0 = this.random.nextGaussian() * 0.02D;

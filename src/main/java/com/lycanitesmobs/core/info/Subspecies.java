@@ -7,6 +7,7 @@ import com.google.gson.JsonObject;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.helpers.JSONHelper;
 import com.lycanitesmobs.core.spawner.condition.SpawnCondition;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.Vec3;
@@ -135,7 +136,7 @@ public class Subspecies {
 	 * Gets the display name of this Subspecies.
 	 * @return The Subspecies title.
 	 */
-	public Component getTitle() {
+	public MutableComponent getTitle() {
 		if(this.name != null) {
 			return new TranslatableComponent("subspecies." + this.name);
 		}

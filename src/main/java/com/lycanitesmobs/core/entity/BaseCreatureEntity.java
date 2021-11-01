@@ -12,7 +12,6 @@ import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.core.container.CreatureContainer;
 import com.lycanitesmobs.core.container.CreatureContainerProvider;
 import com.lycanitesmobs.core.entity.damagesources.ElementDamageSource;
-import com.lycanitesmobs.core.entity.damagesources.MinionEntityDamageSource;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.entity.navigate.CreatureMoveController;
@@ -29,16 +28,12 @@ import com.lycanitesmobs.core.pets.PetEntry;
 import com.lycanitesmobs.core.spawner.SpawnerEventListener;
 import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
 import com.mojang.math.Vector3f;
-import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.network.chat.BaseComponent;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.*;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -633,62 +628,83 @@ public abstract class BaseCreatureEntity extends PathfinderMob {
 	}
     
     // ========== Name ==========
-    /** Returns the display name of this entity. Use this when displaying it's name. **/
+    /** Returns the display name of this entity. Use this when displaying its name. **/
     @Override
     public Component getName() {
     	if(this.hasCustomName())
     		return this.getCustomName();
     	else
-    		return this.getTitle();
+    		return this.getFullName();
     }
 
-    /** Returns the display title of this entity. **/
-    public Component getTitle() {
-		BaseComponent name = new TextComponent("");
-
-    	if(!"".equals(this.getAgeName().getString())) {
-			name.append(this.getAgeName()).append(" ");
+	/** Returns the display title of this entity. **/
+	public MutableComponent getFullName() {
+		String nameFormatting = new TranslatableComponent("entity.lycanitesmobs.creature.name.format").getString();
+		String[] nameParts = nameFormatting.split("\\|");
+		if (nameParts.length < 4) {
+			nameParts = new String[]{"age", "variant", "subspecies", "species", "level"};
 		}
 
-    	if(!"".equals(this.getSubspeciesTitle().getString())) {
-			name.append(this.getSubspeciesTitle()).append(" ");
-		}
-
-    	return name.append(this.getSpeciesName()).append(" ").append(this.getLevelName());
-    }
-    
-    /** Returns the species name of this entity. **/
-    public Component getSpeciesName() {
-    	return this.creatureInfo.getTitle();
-    }
-
-    /** Returns the subpsecies title (translated name) of this entity, returns a blank string if this is a base species mob. **/
-    public Component getSubspeciesTitle() {
-		BaseComponent subspeciesName = new TextComponent("");
-		if(this.getVariant() != null) {
-			subspeciesName = this.getVariant().getTitle();
-		}
-		if(this.getSubspecies() != null) {
-			if(this.getVariant() != null) {
-				subspeciesName.append(" ");
+		MutableComponent name = new TextComponent("");
+		List<MutableComponent> nameComponents = new ArrayList<>();
+		for (String namePart : nameParts) {
+			switch (namePart) {
+				case "age" -> nameComponents.add(this.getAgeName());
+				case "variant" -> nameComponents.add(this.getVariantName());
+				case "subspecies" -> nameComponents.add(this.getSubspeciesName());
+				case "species" -> nameComponents.add(this.getSpeciesName());
+				case "level" -> nameComponents.add(this.getLevelName());
 			}
-			subspeciesName.append(this.getSubspecies().getTitle());
 		}
-		return subspeciesName;
-    }
+
+		boolean first = true;
+		for (MutableComponent nameComponent : nameComponents) {
+			if (nameComponent.getString().isEmpty()) {
+				continue;
+			}
+			if (!first) {
+				name.append(" ");
+			}
+			first = false;
+			name.append(nameComponent);
+		}
+
+		return name;
+	}
+
+	/** Returns the species name of this entity. **/
+	public MutableComponent getSpeciesName() {
+		return this.creatureInfo.getTitle();
+	}
+
+	/** Gets the name of this entity relative to its age, more useful for EntityCreatureAgeable. **/
+	public MutableComponent getAgeName() {
+		return new TextComponent("");
+	}
+
+	/** Returns the variant name (translated) of this entity, returns a blank string if this is a base species mob. **/
+	public MutableComponent getVariantName() {
+		if(this.getVariant() != null) {
+			return this.getVariant().getTitle();
+		}
+		return new TextComponent("");
+	}
+
+	/** Returns the subspecies title (translated name) of this entity, returns a blank string if this is a base species mob. **/
+	public MutableComponent getSubspeciesName() {
+		if(this.getSubspecies() != null) {
+			return this.getSubspecies().getTitle();
+		}
+		return new TextComponent("");
+	}
 
 	/** Returns a mobs level to append to the name if above level 1. **/
-	public BaseComponent getLevelName() {
+	public MutableComponent getLevelName() {
 		if(this.getMobLevel() < 2) {
 			return new TextComponent("");
 		}
-		return (BaseComponent) new TranslatableComponent("entity.level").append(" " + this.getMobLevel());
+		return new TranslatableComponent("entity.level").append(" " + this.getMobLevel());
 	}
-
-    /** Gets the name of this entity relative to it's age, more useful for EntityCreatureAgeable. **/
-    public BaseComponent getAgeName() {
-    	return new TextComponent("");
-    }
 
 
     // ==================================================
@@ -1153,7 +1169,7 @@ public abstract class BaseCreatureEntity extends PathfinderMob {
     /** Updates the boss name for the health bar. **/
     public void refreshBossHealthName() {
         if(this.bossInfo != null) {
-			BaseComponent name = (BaseComponent)this.getTitle();
+			BaseComponent name = (BaseComponent)this.getFullName();
 			if(this.isBossAlways()) {
 				name.append(" (").append(new TranslatableComponent("entity.phase")).append(" " + (this.getBattlePhase() + 1) + ")");
 			}

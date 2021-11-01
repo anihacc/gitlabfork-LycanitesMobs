@@ -5,6 +5,7 @@ import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import com.lycanitesmobs.core.entity.goals.actions.abilities.FireProjectilesGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.FindAvoidTargetGoal;
 import com.lycanitesmobs.core.info.CreatureManager;
+import net.minecraft.network.chat.*;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.monster.Pillager;
@@ -13,10 +14,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.BaseComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.level.Level;
 
 import net.minecraft.world.entity.Entity;
@@ -53,7 +50,7 @@ public class Conba extends TameableCreatureEntity implements Enemy {
     }
 
 	@Override
-    public Component getSpeciesName() {
+    public MutableComponent getSpeciesName() {
 		BaseComponent infection = new TextComponent("");
 		if(this.vespidInfection) {
 			String entityName = this.creatureInfo.getName();
