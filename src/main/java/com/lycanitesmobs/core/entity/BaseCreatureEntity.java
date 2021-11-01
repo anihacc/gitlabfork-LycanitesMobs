@@ -630,33 +630,74 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 
     /** Returns the full name of this entity. **/
     public String getFullName() {
-    	String name = "";
-    	if(!"".equals(this.getAgeName()))
-    		name += this.getAgeName() + " ";
-    	if(!"".equals(this.getSubspeciesTitle()))
-    		name += this.getSubspeciesTitle();
-    	return name + this.getSpeciesName() + this.getLevelName();
+		String nameFormatting = LanguageManager.translate("entity.lycanitesmobs.creature.name.format");
+		String[] nameParts = nameFormatting.split("\\|");
+		if (nameParts.length < 4) {
+			nameParts = new String[]{"age", "variant", "subspecies", "species", "level"};
+		}
+
+		StringBuilder name = new StringBuilder();
+		List<String> nameComponents = new ArrayList<>();
+		for (String namePart : nameParts) {
+			switch (namePart) {
+				case "age":
+					nameComponents.add(this.getAgeName());
+					break;
+				case "variant":
+					nameComponents.add(this.getVariantName());
+					break;
+				case "subspecies":
+					nameComponents.add(this.getSubspeciesName());
+					break;
+				case "species":
+					nameComponents.add(this.getSpeciesName());
+					break;
+				case "level":
+					nameComponents.add(this.getLevelName());
+					break;
+			}
+		}
+
+		boolean first = true;
+		for (String nameComponent : nameComponents) {
+			if (nameComponent.isEmpty()) {
+				continue;
+			}
+			if (!first) {
+				name.append(" ");
+			}
+			first = false;
+			name.append(nameComponent);
+		}
+
+		return name.toString();
     }
+
+	/** Gets the name of this entity relative to its age, more useful for EntityCreatureAgeable. **/
+	public String getAgeName() {
+		return "";
+	}
     
     /** Returns the species name of this entity. **/
     public String getSpeciesName() {
     	return this.creatureInfo.getTitle();
     }
 
-    /** Returns the subspecies title (translated name) of this entity, returns a blank string if this is a base species mob. **/
-    public String getSubspeciesTitle() {
-    	String subspeciesName = "";
-    	if(this.getVariant() != null) {
-			subspeciesName += this.getVariant().getTitle();
+	/** Returns the variant name (translated) of this entity, returns a blank string if this is a base species mob. **/
+	public String getVariantName() {
+		if(this.getVariant() != null) {
+			return this.getVariant().getTitle();
 		}
-    	if(this.getSubspecies() != null) {
-			if(this.getVariant() != null) {
-				subspeciesName += " ";
-			}
-			subspeciesName += this.getSubspecies().getTitle();
-    	}
-    	return subspeciesName;
-    }
+		return "";
+	}
+
+	/** Returns the subspecies title (translated name) of this entity, returns a blank string if this is a base species mob. **/
+	public String getSubspeciesName() {
+		if(this.getSubspecies() != null) {
+			return this.getSubspecies().getTitle();
+		}
+		return "";
+	}
 
 	/** Returns a mobs level to append to the name if above level 1. **/
 	public String getLevelName() {
@@ -665,11 +706,6 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 		}
 		return " " + LanguageManager.translate("entity.level") + " " + this.getLevel();
 	}
-
-    /** Gets the name of this entity relative to it's age, more useful for EntityCreatureAgeable. **/
-    public String getAgeName() {
-    	return "";
-    }
 
 
     // ==================================================

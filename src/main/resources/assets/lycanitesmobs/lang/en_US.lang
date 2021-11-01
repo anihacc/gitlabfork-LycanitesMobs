@@ -797,6 +797,8 @@ tile.ashenstonepolished.description=The primordial forces of earth and lava surg
 tile.ashenstonetile_stairs.name=Ashenstone Tile Stairs
 tile.ashenstonetile_stairs.description=The primordial forces of earth and lava surge through this stone.
 # ========================================================================
+entity.lycanitesmobs.creature.name.format=age|variant|subspecies|species|level
+# ========================================================================
 entity.abaia.name=Abaia
 entity.abaia.description=Aggressive eels that generate an electric current through their body.
 entity.abaia.habitat=These fish are catadromous meaning they are born in saltwater oceans and then migrate and mature in freshwater rivers before returning to saltwater again, some end up trapped in lakes and create a colony there also, so they can be found in most locations.
