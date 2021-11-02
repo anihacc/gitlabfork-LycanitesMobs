@@ -402,9 +402,9 @@ public class ExtendedPlayer implements IExtendedPlayer {
 						showMessage = wrappedExperience + experience >= messageThreshold;
 					}
 					if (showMessage) {
-						this.sendOverlayMessage(((BaseComponent) newKnowledge.getCreatureInfo().getTitle()).append(" ")
-								.append(new TranslatableComponent("message.beastiary.study"))
-								.append(" " + newKnowledge.experience + "/" + newKnowledge.getMaxExperience() + " (+ " + experience + ")"));
+						this.sendOverlayMessage(new TranslatableComponent("message.beastiary.study")
+								.append(" ").append(newKnowledge.getCreatureInfo().getTitle())
+								.append(" " + newKnowledge.experience + "/" + newKnowledge.getMaxExperience() + " (+" + experience + ")"));
 					}
 				}
 			}
