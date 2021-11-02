@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.spawner;
 
 import com.lycanitesmobs.ExtendedWorld;
-import com.lycanitesmobs.LycanitesMobs;
+import com.lycanitesmobs.core.info.BlockReference;
 import com.lycanitesmobs.core.spawner.trigger.*;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -11,7 +11,6 @@ import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.vector.Vector3d;
@@ -23,7 +22,8 @@ import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.entity.player.ItemFishedEvent;
 import net.minecraftforge.event.entity.player.PlayerSleepInBedEvent;
-import net.minecraftforge.event.world.*;
+import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.event.world.ExplosionEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.ArrayList;
@@ -497,52 +497,55 @@ public class SpawnerEventListener {
 	// ==================================================
 	//                  Lava Mix Event
 	// ==================================================
-	/** Used to keep track of where the mix event was last fired as it sometimes fires multiple times in which case extra triggers should be ignored adn this will also reduce spawns from cobblestone generators. **/
-	private BlockPos lastMixPos;
+	/** Stores a list of references to check for block updates resulting in a mix for. **/
+	private final List<BlockReference> mixingWatchList = new ArrayList<>();
 
 	/** This uses the block neighbor notify event with checks for lava and water mixing to spawn mobs. **/
 	@SubscribeEvent
 	public void onLavaMix(BlockEvent.NeighborNotifyEvent event) {
-		if(!(event.getWorld() instanceof World))
+		if(!(event.getWorld() instanceof World)) {
 			return;
-		boolean trigger = false;
+		}
 		World world = (World)event.getWorld();
+		BlockReference eventBlockReference = new BlockReference(world, event.getPos());
+
+		// Check for a Pending Mix:
+		if (this.mixingWatchList.contains(eventBlockReference)) {
+			BlockState pendingMixBlockState = event.getWorld().getBlockState(event.getPos());
+			if (pendingMixBlockState.getBlock() == Blocks.STONE || pendingMixBlockState.getBlock() == Blocks.OBSIDIAN) {
+				for (MixBlockSpawnTrigger spawnTrigger : this.mixBlockSpawnTriggers) {
+					spawnTrigger.onMix(world, event.getState(), event.getPos());
+				}
+			}
+			this.mixingWatchList.remove(eventBlockReference);
+			return;
+		}
 
 		// Only If Players Are Nearby (Big Performance Saving):
 		boolean playerNearby = false;
 		Vector3d posVec = Vector3d.atLowerCornerOf(event.getPos());
-		for(PlayerEntity playerEntity : world.players()) {
+		for (PlayerEntity playerEntity : world.players()) {
 			if(playerEntity.distanceToSqr(posVec) <= 20 * 20) {
 				playerNearby = true;
 				break;
 			}
 		}
-		if(!playerNearby) {
+		if (!playerNearby) {
 			return;
 		}
 
-		if(event.getState().getBlock() == Blocks.WATER) {
-			BlockState sideBlockState = event.getWorld().getBlockState(event.getPos().below());
-			if(sideBlockState.getBlock() == Blocks.LAVA && sideBlockState.getValue(FlowingFluidBlock.LEVEL) == 0) {
-				trigger = true;
+		BlockReference mixBlockReference = new BlockReference(world, event.getPos().below());
+		BlockState mixBlockState = mixBlockReference.getWorld().getBlockState(mixBlockReference.getPos());
+
+		if (event.getState().getBlock() == Blocks.WATER) {
+			if(mixBlockState.getBlock() == Blocks.LAVA && mixBlockState.getValue(FlowingFluidBlock.LEVEL) == 0 && !this.mixingWatchList.contains(mixBlockReference)) {
+				this.mixingWatchList.add(mixBlockReference);
 			}
 		}
 
-		else if(event.getState().getBlock() == Blocks.LAVA) {
-			BlockState sideBlockState = event.getWorld().getBlockState(event.getPos().below());
-			if(sideBlockState.getBlock() == Blocks.WATER && sideBlockState.getValue(FlowingFluidBlock.LEVEL) == 0) {
-				trigger = true;
-			}
-		}
-
-		if(trigger) {
-			if(this.lastMixPos != null && this.lastMixPos.equals(event.getPos())) {
-				return;
-			}
-			this.lastMixPos = event.getPos();
-
-			for(MixBlockSpawnTrigger spawnTrigger : this.mixBlockSpawnTriggers) {
-				spawnTrigger.onMix(world, event.getState(), event.getPos());
+		else if (event.getState().getBlock() == Blocks.LAVA) {
+			if(mixBlockState.getBlock() == Blocks.WATER && mixBlockState.getValue(FlowingFluidBlock.LEVEL) == 0 && !this.mixingWatchList.contains(mixBlockReference)) {
+				this.mixingWatchList.add(new BlockReference(world, event.getPos()));
 			}
 		}
 	}
