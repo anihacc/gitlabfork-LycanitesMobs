@@ -1,29 +1,30 @@
 package com.lycanitesmobs.core.spawner;
 
 import com.lycanitesmobs.ExtendedWorld;
-import com.lycanitesmobs.LycanitesMobs;
+import com.lycanitesmobs.core.info.BlockReference;
 import com.lycanitesmobs.core.spawner.trigger.*;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.LiquidBlock;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.core.BlockPos;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LiquidBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.entity.player.ItemFishedEvent;
 import net.minecraftforge.event.entity.player.PlayerSleepInBedEvent;
-import net.minecraftforge.event.world.*;
+import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.event.world.ExplosionEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.ArrayList;
@@ -299,8 +300,8 @@ public class SpawnerEventListener {
 	}
 
 	/** Called on World Tick, checks for any fresh chunks to spawn in. **/
-	public void checkFreshChunks(Level world) {
-		String dimensionId = world.dimension().location().toString();
+	public void checkFreshChunks(Level level) {
+		String dimensionId = level.dimension().location().toString();
 		if (!this.freshChunks.containsKey(dimensionId)) {
 			this.freshChunks.put(dimensionId, new ArrayList<>());
 			return;
@@ -309,7 +310,7 @@ public class SpawnerEventListener {
 		List<ChunkPos> freshChunks = new ArrayList<>(this.freshChunks.get(dimensionId));
 		for(ChunkPos chunkPos : freshChunks) {
 			// Check If Loaded:
-			if(!world.getChunkSource().isEntityTickingChunk(chunkPos)) {
+			if(level instanceof ServerLevel serverLevel && !serverLevel.isPositionEntityTicking(chunkPos)) {
 				continue;
 			}
 			this.freshChunks.get(dimensionId).remove(chunkPos);
@@ -317,7 +318,7 @@ public class SpawnerEventListener {
 			// Call Triggers:
 			//if (this.chunkSpawnTriggersActive) {}
 			for (ChunkSpawnTrigger spawnTrigger : this.chunkSpawnTriggers) {
-				if (spawnTrigger.onChunkPopulate(world, chunkPos)) {
+				if (spawnTrigger.onChunkPopulate(level, chunkPos)) {
 					//this.chunkSpawnTriggersActive = true;
 				}
 			}
@@ -342,7 +343,7 @@ public class SpawnerEventListener {
 			return;
 		}
 		Level world = (Level)event.getWorld();
-		if(player != null && (!testOnCreative && player.abilities.instabuild)) { // No Spawning for Creative Players
+		if(player != null && (!testOnCreative && player.getAbilities().instabuild)) { // No Spawning for Creative Players
 			return;
 		}
 		
@@ -376,7 +377,7 @@ public class SpawnerEventListener {
     }
 
 	public void onBlockBreak(Level world, BlockPos blockPos, BlockState blockState, Player player, int chain) {
-		if(player != null && (!testOnCreative && player.abilities.instabuild)) {
+		if(player != null && (!testOnCreative && player.getAbilities().instabuild)) {
 			return;
 		}
 
@@ -403,7 +404,7 @@ public class SpawnerEventListener {
 	}
 
 	public void onBlockPlace(Level world, BlockPos blockPos, BlockState blockState, Player player, int chain) {
-		if(player != null && (!testOnCreative && player.abilities.instabuild)) {
+		if(player != null && (!testOnCreative && player.getAbilities().instabuild)) {
 			return;
 		}
 
@@ -455,7 +456,7 @@ public class SpawnerEventListener {
 		Player player = event.getPlayer();
 		if(player == null || player.getCommandSenderWorld().isClientSide || event.isCanceled())
 			return;
-		if(!testOnCreative && player.abilities.instabuild) { // No Spawning for Creative Players
+		if(!testOnCreative && player.getAbilities().instabuild) { // No Spawning for Creative Players
 			return;
 		}
 
@@ -484,7 +485,7 @@ public class SpawnerEventListener {
 			player = (Player)explosion.getSourceMob();
 		}
 
-		if(player != null && (!testOnCreative && player.abilities.instabuild)) { // No Spawning for Creative Players
+		if(player != null && (!testOnCreative && player.getAbilities().instabuild)) { // No Spawning for Creative Players
 			return;
 		}
 
@@ -497,52 +498,54 @@ public class SpawnerEventListener {
 	// ==================================================
 	//                  Lava Mix Event
 	// ==================================================
-	/** Used to keep track of where the mix event was last fired as it sometimes fires multiple times in which case extra triggers should be ignored adn this will also reduce spawns from cobblestone generators. **/
-	private BlockPos lastMixPos;
+	/** Stores a list of references to check for block updates resulting in a mix for. **/
+	private final List<BlockReference> mixingWatchList = new ArrayList<>();
 
 	/** This uses the block neighbor notify event with checks for lava and water mixing to spawn mobs. **/
 	@SubscribeEvent
 	public void onLavaMix(BlockEvent.NeighborNotifyEvent event) {
-		if(!(event.getWorld() instanceof Level))
+		if(!(event.getWorld() instanceof Level level)) {
 			return;
-		boolean trigger = false;
-		Level world = (Level)event.getWorld();
+		}
+		BlockReference eventBlockReference = new BlockReference(level, event.getPos());
+
+		// Check for a Pending Mix:
+		if (this.mixingWatchList.contains(eventBlockReference)) {
+			BlockState pendingMixBlockState = event.getWorld().getBlockState(event.getPos());
+			if (pendingMixBlockState.getBlock() == Blocks.STONE || pendingMixBlockState.getBlock() == Blocks.OBSIDIAN) {
+				for (MixBlockSpawnTrigger spawnTrigger : this.mixBlockSpawnTriggers) {
+					spawnTrigger.onMix(level, event.getState(), event.getPos());
+				}
+			}
+			this.mixingWatchList.remove(eventBlockReference);
+			return;
+		}
 
 		// Only If Players Are Nearby (Big Performance Saving):
 		boolean playerNearby = false;
 		Vec3 posVec = Vec3.atLowerCornerOf(event.getPos());
-		for(Player playerEntity : world.players()) {
+		for (Player playerEntity : level.players()) {
 			if(playerEntity.distanceToSqr(posVec) <= 20 * 20) {
 				playerNearby = true;
 				break;
 			}
 		}
-		if(!playerNearby) {
+		if (!playerNearby) {
 			return;
 		}
 
-		if(event.getState().getBlock() == Blocks.WATER) {
-			BlockState sideBlockState = event.getWorld().getBlockState(event.getPos().below());
-			if(sideBlockState.getBlock() == Blocks.LAVA && sideBlockState.getValue(LiquidBlock.LEVEL) == 0) {
-				trigger = true;
+		BlockReference mixBlockReference = new BlockReference(level, event.getPos().below());
+		BlockState mixBlockState = mixBlockReference.getLevel().getBlockState(mixBlockReference.getPos());
+
+		if (event.getState().getBlock() == Blocks.WATER) {
+			if(mixBlockState.getBlock() == Blocks.LAVA && mixBlockState.getValue(LiquidBlock.LEVEL) == 0 && !this.mixingWatchList.contains(mixBlockReference)) {
+				this.mixingWatchList.add(mixBlockReference);
 			}
 		}
 
-		else if(event.getState().getBlock() == Blocks.LAVA) {
-			BlockState sideBlockState = event.getWorld().getBlockState(event.getPos().below());
-			if(sideBlockState.getBlock() == Blocks.WATER && sideBlockState.getValue(LiquidBlock.LEVEL) == 0) {
-				trigger = true;
-			}
-		}
-
-		if(trigger) {
-			if(this.lastMixPos != null && this.lastMixPos.equals(event.getPos())) {
-				return;
-			}
-			this.lastMixPos = event.getPos();
-
-			for(MixBlockSpawnTrigger spawnTrigger : this.mixBlockSpawnTriggers) {
-				spawnTrigger.onMix(world, event.getState(), event.getPos());
+		else if (event.getState().getBlock() == Blocks.LAVA) {
+			if(mixBlockState.getBlock() == Blocks.WATER && mixBlockState.getValue(LiquidBlock.LEVEL) == 0 && !this.mixingWatchList.contains(mixBlockReference)) {
+				this.mixingWatchList.add(new BlockReference(level, event.getPos()));
 			}
 		}
 	}
