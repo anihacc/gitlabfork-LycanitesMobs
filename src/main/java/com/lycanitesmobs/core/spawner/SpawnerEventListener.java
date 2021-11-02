@@ -466,7 +466,7 @@ public class SpawnerEventListener {
 		if(event.getWorld() == null) {
 			return;
 		}
-		World world = (World)event.getWorld();
+		World world = event.getWorld();
 		BlockReference eventBlockReference = new BlockReference(world, event.getPos());
 
 		// Check for a Pending Mix:

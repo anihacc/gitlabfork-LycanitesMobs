@@ -1,5 +1,6 @@
 package com.lycanitesmobs.core.entity;
 
+import com.lycanitesmobs.client.localisation.LanguageManager;
 import com.lycanitesmobs.core.entity.goals.actions.FollowParentGoal;
 import com.lycanitesmobs.core.entity.goals.actions.MateGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.FindParentGoal;
@@ -82,7 +83,7 @@ public abstract class AgeableCreatureEntity extends BaseCreatureEntity {
     @Override
     public String getAgeName() {
     	if(this.isChild())
-    		return "Baby";
+    		return LanguageManager.translate("entity.baby");
     	else
     		return "";
     }

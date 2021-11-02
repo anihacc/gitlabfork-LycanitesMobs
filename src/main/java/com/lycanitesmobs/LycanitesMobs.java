@@ -65,11 +65,10 @@ public class LycanitesMobs {
 	
 	public static final String modid = "lycanitesmobs";
 	public static final String name = "Lycanites Mobs";
-	public static final String versionNumber = "2.0.8.2";
+	public static final String versionNumber = "2.0.8.3";
 	public static final String versionMC = "1.12.2";
 	public static final String version = versionNumber + " - MC " + versionMC;
 	public static final String website = "https://lycanitesmobs.com";
-	public static final String websiteAPI = "https://api.lycanitesmobs.com";
 	public static final String serviceAPI = "https://service.lycanitesmobs.com/api/v1";
 	public static final String twitter = "https://twitter.com/Lycanite05";
 	public static final String patreon = "https://www.patreon.com/lycanite";
