@@ -403,9 +403,8 @@ public class ExtendedPlayer implements IExtendedPlayer {
 						showMessage = wrappedExperience + experience >= messageThreshold;
 					}
 					if (showMessage) {
-						player.sendStatusMessage(new TextComponentString(newKnowledge.getCreatureInfo().getTitle()
-								+ " " + LanguageManager.translate("message.beastiary.study")
-								+ " " + newKnowledge.experience + "/" + newKnowledge.getMaxExperience() + " (+ " + experience + ")"), true);
+						player.sendStatusMessage(new TextComponentString(" " + LanguageManager.translate("message.beastiary.study") + newKnowledge.getCreatureInfo().getTitle()
+								+ " " + newKnowledge.experience + "/" + newKnowledge.getMaxExperience() + " (+" + experience + ")"), true);
 					}
 				}
 			}
