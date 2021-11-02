@@ -11,19 +11,18 @@ import com.lycanitesmobs.core.pets.PetEntry;
 import com.lycanitesmobs.core.pets.PetManager;
 import com.lycanitesmobs.core.pets.PlayerFamiliars;
 import com.lycanitesmobs.core.pets.SummonSet;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.Util;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.Util;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.BaseComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -202,7 +201,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
 	public void onUpdate() {
 		this.timePlayed++;
         this.hasAttacked = false;
-		boolean creative = this.player.abilities.instabuild;
+		boolean creative = this.player.getAbilities().instabuild;
 
 		// Stats:
 		boolean sync = false;
