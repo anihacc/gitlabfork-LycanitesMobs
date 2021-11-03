@@ -2662,15 +2662,12 @@ public abstract class BaseCreatureEntity extends PathfinderMob {
 		}
 
         // Creatures:
-        if(targetEntity instanceof BaseCreatureEntity) {
-			BaseCreatureEntity targetCreature = (BaseCreatureEntity)targetEntity;
+        if(targetEntity instanceof BaseCreatureEntity targetCreature) {
 
-			/*/ Same Species, Same Owner (including no owners):
-			if(targetCreature.getClass() == this.getClass() && targetCreature.getOwner() == this.getOwner()) {
-				if(this.getAttackTarget() != targetCreature.getAttackTarget()) {
-					return false;
-				}
-			}*/
+			// Same Species, Same Owner (including no owners):
+			if(targetCreature.creatureInfo == this.creatureInfo && targetCreature.getOwner() == this.getOwner()) {
+				return false;
+			}
 
 			// Master:
             if(targetCreature.getMasterTarget() == this) {

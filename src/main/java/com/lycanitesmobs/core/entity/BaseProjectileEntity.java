@@ -503,8 +503,7 @@ public class BaseProjectileEntity extends ThrowableProjectile {
 	
 	//========== Can Destroy Block ==========
 	public boolean canDestroyBlock(BlockPos pos) {
-    	 return this.getCommandSenderWorld().getBlockState(pos).canBeReplaced(Fluids.WATER) && !this.getCommandSenderWorld().isEmptyBlock(pos.below());
-//    	 return this.getCommandSenderWorld().isEmptyBlock(pos) && this.getCommandSenderWorld().getBlockState(pos.below()).canOcclude();
+    	 return this.getCommandSenderWorld().getBlockState(pos).canBeReplaced(Fluids.WATER);
 	}
 	
 	//========== Place Block ==========

@@ -69,7 +69,7 @@ public abstract class AgeableCreatureEntity extends BaseCreatureEntity {
 	@Override
 	protected void registerGoals() {
 		// Greater Actions:
-		this.goalSelector.addGoal(this.nextDistractionGoalIndex++, new MateGoal(this).setMateDistance(5.0D));
+		this.goalSelector.addGoal(this.nextTravelGoalIndex++, new MateGoal(this).setMateDistance(5.0D));
 
 		super.registerGoals();
 

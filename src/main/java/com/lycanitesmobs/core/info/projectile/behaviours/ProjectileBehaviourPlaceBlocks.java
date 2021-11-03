@@ -2,14 +2,13 @@ package com.lycanitesmobs.core.info.projectile.behaviours;
 
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.LiquidBlock;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.LiquidBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.fmllegacy.common.registry.GameRegistry;
 
 public class ProjectileBehaviourPlaceBlocks extends ProjectileBehaviour {
 	/** The name of the block to place. **/
@@ -24,37 +23,46 @@ public class ProjectileBehaviourPlaceBlocks extends ProjectileBehaviour {
 	/** The height of blocks placed. **/
 	public int height = 1;
 
+	/** Whether the block must be placed on top of a solid block (use for fires, etc) **/
+	public boolean solidSurface = true;
+
 	@Override
 	public void loadFromJSON(JsonObject json) {
 		this.blockName = json.get("block").getAsString();
 
-		if(json.has("chance"))
+		if (json.has("chance"))
 			this.chance = json.get("chance").getAsDouble();
 
-		if(json.has("radius"))
+		if (json.has("radius"))
 			this.radius = json.get("radius").getAsInt();
 
-		if(json.has("height"))
+		if (json.has("height"))
 			this.height = json.get("height").getAsInt();
+
+		if (json.has("solidSurface"))
+			this.solidSurface = json.get("solidSurface").getAsBoolean();
 	}
 
 	@Override
 	public void onProjectileImpact(BaseProjectileEntity projectile, Level world, BlockPos pos) {
 		Block block = GameRegistry.findRegistry(Block.class).getValue(new ResourceLocation(this.blockName));
-		if(block == null) {
+		if (block == null) {
 			return;
 		}
 		BlockState blockState = block.defaultBlockState();
-		if(block instanceof LiquidBlock) {
+		if (block instanceof LiquidBlock) {
 			blockState = blockState.setValue(LiquidBlock.LEVEL, 8);
 		}
 
 		pos = pos.above();
-		for(int x = -this.radius + 1; x < this.radius; x++) {
-			for(int y = this.height - 1; y < this.height; y++) {
-				for(int z = -this.radius + 1; z < this.radius; z++) {
+		for (int x = -this.radius + 1; x < this.radius; x++) {
+			for (int y = this.height - 1; y < this.height; y++) {
+				for (int z = -this.radius + 1; z < this.radius; z++) {
 					BlockPos placePos = pos.offset(x, y, z);
-					if(projectile.canDestroyBlock(placePos) && (this.chance >= 1 || this.chance >= world.random.nextDouble())) {
+					if (this.solidSurface && !world.getBlockState(placePos.below()).getMaterial().isSolidBlocking()) {
+						continue;
+					}
+					if (projectile.canDestroyBlock(placePos) && (this.chance >= 1 || this.chance >= world.random.nextDouble())) {
 						world.setBlockAndUpdate(placePos, blockState);
 					}
 				}
