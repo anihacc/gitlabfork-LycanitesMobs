@@ -2946,8 +2946,6 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 	public boolean canAttackClass(Class targetClass) {
 		if(!CreatureManager.getInstance().config.mobsAttackVillagers && targetClass == EntityVillager.class)
 			return false;
-		if(targetClass == this.getClass())
-			return false;
 		return true;
 	}
 
@@ -2988,12 +2986,10 @@ public abstract class BaseCreatureEntity extends EntityLiving {
         if(targetEntity instanceof BaseCreatureEntity) {
 			BaseCreatureEntity targetCreature = (BaseCreatureEntity)targetEntity;
 
-			/*/ Same Species, Same Owner:
+			// Same Species, Same Owner:
 			if(targetCreature.getClass() == this.getClass() && targetCreature.getOwner() == this.getOwner()) {
-				if(this.getAttackTarget() != targetCreature.getAttackTarget()) {
-					return false;
-				}
-			}*/
+				return false;
+			}
 
 			// Master:
 			if(targetCreature.getMasterTarget() == this) {

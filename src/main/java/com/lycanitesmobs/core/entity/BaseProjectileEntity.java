@@ -441,7 +441,11 @@ public class BaseProjectileEntity extends EntityThrowable {
      
      //========== Can Destroy Block ==========
      public boolean canDestroyBlock(BlockPos pos) {
-    	 return this.getEntityWorld().isAirBlock(pos) && this.getEntityWorld().getBlockState(pos.down()).getMaterial().isSolid();
+		 if (this.getEntityWorld().isAirBlock(pos)) {
+			 return true;
+		 }
+		 IBlockState blockState = this.getEntityWorld().getBlockState(pos);
+    	 return !blockState.getMaterial().isSolid();
      }
      
      //========== Place Block ==========

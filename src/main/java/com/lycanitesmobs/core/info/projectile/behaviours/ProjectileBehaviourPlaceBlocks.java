@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.info.projectile.behaviours;
 
 import com.google.gson.JsonObject;
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDynamicLiquid;
@@ -26,6 +27,9 @@ public class ProjectileBehaviourPlaceBlocks extends ProjectileBehaviour {
 	/** The height of blocks placed. **/
 	public int height = 1;
 
+	/** Whether the block must be placed on top of a solid block (use for fires, etc) **/
+	public boolean solidSurface = true;
+
 	@Override
 	public void loadFromJSON(JsonObject json) {
 		this.blockName = json.get("block").getAsString();
@@ -38,6 +42,9 @@ public class ProjectileBehaviourPlaceBlocks extends ProjectileBehaviour {
 
 		if(json.has("height"))
 			this.height = json.get("height").getAsInt();
+
+		if(json.has("solidSurface"))
+			this.solidSurface = json.get("solidSurface").getAsBoolean();
 	}
 
 	@Override
@@ -63,7 +70,10 @@ public class ProjectileBehaviourPlaceBlocks extends ProjectileBehaviour {
 			for(int y = this.height - 1; y < this.height; y++) {
 				for(int z = -this.radius + 1; z < this.radius; z++) {
 					BlockPos placePos = pos.add(x, y, z);
-					if(projectile.canDestroyBlock(placePos) && (this.chance >= 1 || this.chance >= world.rand.nextDouble())) {
+					if (this.solidSurface && !world.getBlockState(placePos.down()).getMaterial().isSolid()) {
+						continue;
+					}
+					if (projectile.canDestroyBlock(placePos) && (this.chance >= 1 || this.chance >= world.rand.nextDouble())) {
 						world.setBlockState(placePos, blockState);
 					}
 				}

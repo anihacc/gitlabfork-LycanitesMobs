@@ -30,7 +30,10 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.scoreboard.Team;
-import net.minecraft.util.*;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntityDamageSource;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -400,7 +403,7 @@ public class TameableCreatureEntity extends AgeableCreatureEntity implements IEn
     	// Sit:
     	if(command.equals("Sit")) {
     		this.playTameSound();
-            this.setAttackTarget((EntityLivingBase)null);
+            this.setAttackTarget(null);
             this.clearMovement();
         	this.setSitting(!this.isSitting());
             this.isJumping = false;
@@ -622,15 +625,18 @@ public class TameableCreatureEntity extends AgeableCreatureEntity implements IEn
                 return false;
             if(!this.getEntityWorld().isRemote) {
                 boolean canPVP = this.getEntityWorld().getMinecraftServer().isPVPEnabled() && this.isPVP();
-                if(targetEntity instanceof EntityPlayer && !canPVP)
-                    return false;
+                if(targetEntity instanceof EntityPlayer && !canPVP) {
+					return false;
+				}
                 if(targetEntity instanceof TameableCreatureEntity) {
                     TameableCreatureEntity targetTameable = (TameableCreatureEntity)targetEntity;
                     if(targetTameable.isTamed()) {
-                        if(!canPVP)
-                            return false;
-                        if(targetTameable.getPlayerOwner() == this.getPlayerOwner())
-                            return false;
+                        if(!canPVP) {
+							return false;
+						}
+                        if(targetTameable.getPlayerOwner() == this.getPlayerOwner()) {
+							return false;
+						}
                     }
                 }
             }

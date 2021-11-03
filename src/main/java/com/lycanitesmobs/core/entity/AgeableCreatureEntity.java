@@ -68,7 +68,7 @@ public abstract class AgeableCreatureEntity extends BaseCreatureEntity {
 	@Override
 	protected void initEntityAI() {
 		// Greater Actions:
-		this.tasks.addTask(this.nextDistractionGoalIndex++, new MateGoal(this).setMateDistance(5.0D));
+		this.tasks.addTask(this.nextTravelGoalIndex++, new MateGoal(this).setMateDistance(5.0D));
 
 		super.initEntityAI();
 
