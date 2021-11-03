@@ -14,7 +14,6 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.TickEvent;
@@ -503,49 +502,24 @@ public class SpawnerEventListener {
 
 	/** This uses the block neighbor notify event with checks for lava and water mixing to spawn mobs. **/
 	@SubscribeEvent
-	public void onLavaMix(BlockEvent.NeighborNotifyEvent event) {
+	public void onLavaMix(BlockEvent.FluidPlaceBlockEvent event) {
 		if(!(event.getWorld() instanceof Level level)) {
 			return;
 		}
-		BlockReference eventBlockReference = new BlockReference(level, event.getPos());
 
-		// Check for a Pending Mix:
-		if (this.mixingWatchList.contains(eventBlockReference)) {
-			BlockState pendingMixBlockState = event.getWorld().getBlockState(event.getPos());
-			if (pendingMixBlockState.getBlock() == Blocks.STONE || pendingMixBlockState.getBlock() == Blocks.OBSIDIAN) {
+		if (event.getOriginalState().getBlock() == Blocks.WATER) {
+			if (event.getNewState().getBlock() == Blocks.STONE) {
 				for (MixBlockSpawnTrigger spawnTrigger : this.mixBlockSpawnTriggers) {
-					spawnTrigger.onMix(level, event.getState(), event.getPos());
+					spawnTrigger.onMix(level, event.getState(), event.getLiquidPos());
 				}
 			}
-			this.mixingWatchList.remove(eventBlockReference);
-			return;
 		}
 
-		// Only If Players Are Nearby (Big Performance Saving):
-		boolean playerNearby = false;
-		Vec3 posVec = Vec3.atLowerCornerOf(event.getPos());
-		for (Player playerEntity : level.players()) {
-			if(playerEntity.distanceToSqr(posVec) <= 20 * 20) {
-				playerNearby = true;
-				break;
-			}
-		}
-		if (!playerNearby) {
-			return;
-		}
-
-		BlockReference mixBlockReference = new BlockReference(level, event.getPos().below());
-		BlockState mixBlockState = mixBlockReference.getLevel().getBlockState(mixBlockReference.getPos());
-
-		if (event.getState().getBlock() == Blocks.WATER) {
-			if(mixBlockState.getBlock() == Blocks.LAVA && mixBlockState.getValue(LiquidBlock.LEVEL) == 0 && !this.mixingWatchList.contains(mixBlockReference)) {
-				this.mixingWatchList.add(mixBlockReference);
-			}
-		}
-
-		else if (event.getState().getBlock() == Blocks.LAVA) {
-			if(mixBlockState.getBlock() == Blocks.WATER && mixBlockState.getValue(LiquidBlock.LEVEL) == 0 && !this.mixingWatchList.contains(mixBlockReference)) {
-				this.mixingWatchList.add(new BlockReference(level, event.getPos()));
+		else if (event.getOriginalState().getBlock() == Blocks.LAVA) {
+			if (event.getNewState().getBlock() == Blocks.OBSIDIAN) {
+				for (MixBlockSpawnTrigger spawnTrigger : this.mixBlockSpawnTriggers) {
+					spawnTrigger.onMix(level, event.getState(), event.getLiquidPos());
+				}
 			}
 		}
 	}
