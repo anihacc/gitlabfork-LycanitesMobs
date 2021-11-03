@@ -507,7 +507,7 @@ public class SpawnerEventListener {
 		}
 		World world = (World)event.getWorld();
 
-		if (event.getOriginalState().getBlock() == Blocks.WATER || event.getOriginalState().getBlock() == Blocks.FLOWING_WATER) {
+		if (event.getOriginalState().getBlock() == Blocks.WATER) {
 			if (event.getNewState().getBlock() == Blocks.STONE) {
 				for (MixBlockSpawnTrigger spawnTrigger : this.mixBlockSpawnTriggers) {
 					spawnTrigger.onMix(world, event.getState(), event.getLiquidPos());
@@ -515,7 +515,7 @@ public class SpawnerEventListener {
 			}
 		}
 
-		else if (event.getOriginalState().getBlock() == Blocks.LAVA || event.getOriginalState().getBlock() == Blocks.FLOWING_LAVA) {
+		else if (event.getOriginalState().getBlock() == Blocks.LAVA) {
 			if (event.getNewState().getBlock() == Blocks.OBSIDIAN) {
 				for (MixBlockSpawnTrigger spawnTrigger : this.mixBlockSpawnTriggers) {
 					spawnTrigger.onMix(world, event.getState(), event.getLiquidPos());
