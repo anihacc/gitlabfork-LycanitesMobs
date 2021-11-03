@@ -3,7 +3,10 @@ package com.lycanitesmobs.core.entity;
 import com.lycanitesmobs.core.entity.goals.actions.FollowParentGoal;
 import com.lycanitesmobs.core.entity.goals.actions.MateGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.FindParentGoal;
-import com.lycanitesmobs.core.info.*;
+import com.lycanitesmobs.core.info.CreatureInfo;
+import com.lycanitesmobs.core.info.CreatureManager;
+import com.lycanitesmobs.core.info.ItemDrop;
+import com.lycanitesmobs.core.info.Variant;
 import com.lycanitesmobs.core.item.ItemCustomSpawnEgg;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Pose;
@@ -15,7 +18,6 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.IParticleData;
 import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
@@ -67,7 +69,7 @@ public abstract class AgeableCreatureEntity extends BaseCreatureEntity {
 	@Override
 	protected void registerGoals() {
 		// Greater Actions:
-		this.goalSelector.addGoal(this.nextDistractionGoalIndex++, new MateGoal(this).setMateDistance(5.0D));
+		this.goalSelector.addGoal(this.nextTravelGoalIndex++, new MateGoal(this).setMateDistance(5.0D));
 
 		super.registerGoals();
 

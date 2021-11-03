@@ -2637,8 +2637,6 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     /** Returns whether or not this mob is allowed to attack the given target class. **/
 	@Override
 	public boolean canAttackType(EntityType<?> entityType) {
-		if(entityType == this.getType())
-			return false;
 		return true;
 	}
 
@@ -2675,12 +2673,10 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
         if(targetEntity instanceof BaseCreatureEntity) {
 			BaseCreatureEntity targetCreature = (BaseCreatureEntity)targetEntity;
 
-			/*/ Same Species, Same Owner (including no owners):
-			if(targetCreature.getClass() == this.getClass() && targetCreature.getOwner() == this.getOwner()) {
-				if(this.getAttackTarget() != targetCreature.getAttackTarget()) {
-					return false;
-				}
-			}*/
+			// Same Species, Same Owner (including no owners):
+			if(targetCreature.creatureInfo == this.creatureInfo && targetCreature.getOwner() == this.getOwner()) {
+				return false;
+			}
 
 			// Master:
             if(targetCreature.getMasterTarget() == this) {

@@ -30,12 +30,17 @@ public class CopyOwnerAttackTargetGoal extends TargetingGoal {
     		return false;
     	if(this.host.isSitting())
     		return false;
-		if(!this.host.isAssisting())
+		if(!this.host.isAssisting() && !this.host.isAggressive())
 			return false;
     	if(this.host.getOwner() == null)
     		return false;
         if (!(this.host.getOwner() instanceof LivingEntity))
             return false;
+
+		if (this.host.isAggressive() && this.isValidTarget(this.target)) {
+			this.setTarget(this.target);
+			return true;
+		}
 
         LivingEntity owner = (LivingEntity)this.host.getOwner();
 		int lastAttackedTime = owner.getLastHurtMobTimestamp();
