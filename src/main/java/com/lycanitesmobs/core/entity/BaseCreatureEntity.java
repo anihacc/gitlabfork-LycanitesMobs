@@ -2673,8 +2673,8 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
         if(targetEntity instanceof BaseCreatureEntity) {
 			BaseCreatureEntity targetCreature = (BaseCreatureEntity)targetEntity;
 
-			// Same Species, Same Owner (including no owners):
-			if(targetCreature.creatureInfo == this.creatureInfo && targetCreature.getOwner() == this.getOwner()) {
+			// Same Species, Target Not Tamed: (Can't compare owners here)
+			if(targetCreature.creatureInfo == this.creatureInfo && !targetCreature.isTamed()) {
 				return false;
 			}
 
