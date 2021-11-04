@@ -1,10 +1,13 @@
 package com.lycanitesmobs.core.entity.creature;
 
+import com.lycanitesmobs.ObjectManager;
+import com.lycanitesmobs.PotionBase;
 import com.lycanitesmobs.core.entity.RideableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import com.lycanitesmobs.core.info.ElementInfo;
 import net.minecraft.entity.*;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
@@ -79,7 +82,8 @@ public class EntityWarg extends RideableCreatureEntity {
 
 				return true;
 			});
-            if(!possibleTargets.isEmpty()) {
+            PotionBase effect = ObjectManager.getEffect("paralysis");
+            if(!possibleTargets.isEmpty() && effect != null) {
                 for(EntityLivingBase possibleTarget : possibleTargets) {
                     boolean doDamage = true;
                     if(this.getRider() instanceof EntityPlayer) {
@@ -88,9 +92,7 @@ public class EntityWarg extends RideableCreatureEntity {
                         }
                     }
                     if(doDamage) {
-                        for(ElementInfo element : this.creatureInfo.elements) {
-							element.debuffEntity(possibleTarget, this.getEffectDuration(1), this.getEffectAmplifier(1));
-						}
+                        possibleTarget.addPotionEffect(new PotionEffect(effect, this.getEffectDuration(1), this.getEffectAmplifier(1)));
                     }
                 }
             }
