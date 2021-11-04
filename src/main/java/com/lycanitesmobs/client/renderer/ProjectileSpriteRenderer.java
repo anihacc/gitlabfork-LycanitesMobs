@@ -51,9 +51,9 @@ public class ProjectileSpriteRenderer extends EntityRenderer<BaseProjectileEntit
 		matrixStack.pushPose();
 		matrixStack.mulPose(this.entityRenderDispatcher.cameraOrientation());
 		matrixStack.mulPose(new Vector3f(0.0F, 1.0F, 0.0F).rotationDegrees(180.0F));
-		matrixStack.mulPose(new Vector3f(0, 0, 1).rotationDegrees(loop * entity.rollSpeed)); // Projectile Spinning
-		matrixStack.scale(scale, scale, scale); // Projectile Scaling
 		matrixStack.translate(0, entity.getTextureOffsetY(), 0); // translate
+		matrixStack.mulPose(new Vector3f(0, 0, 1).rotationDegrees(loop * entity.rollSpeed * 4)); // Projectile Spinning
+		matrixStack.scale(scale, scale, scale); // Projectile Scaling
 		ResourceLocation texture = this.getTextureLocation(entity);
 		RenderType rendertype = CustomRenderStates.getSpriteRenderType(texture);
 		this.renderSprite(entity, matrixStack, renderTypeBuffer, rendertype, entity.textureScale);

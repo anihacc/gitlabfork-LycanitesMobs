@@ -138,7 +138,7 @@ public class TileEntitySummoningPedestal extends TileEntityBase {
 			// Summoning Portal:
 			if (this.summoningPortal == null || !this.summoningPortal.isAlive()) {
 				this.summoningPortal = new PortalEntity((EntityType<? extends PortalEntity>) ProjectileManager.getInstance().oldProjectileTypes.get(PortalEntity.class), this.getLevel(), this);
-				this.summoningPortal.setProjectileScale(4);
+				this.summoningPortal.setProjectileScale(6);
 				this.getLevel().addFreshEntity(this.summoningPortal);
 			}
 

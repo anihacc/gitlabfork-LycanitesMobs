@@ -78,7 +78,7 @@ public class PortalEntity extends BaseProjectileEntity {
         this.setStats();
         this.setPos(
 				summoningPedestal.getBlockPos().getX() + 0.5D,
-				summoningPedestal.getBlockPos().getY() + 0.5D,
+				summoningPedestal.getBlockPos().getY() + 1.5D,
 				summoningPedestal.getBlockPos().getZ() + 0.5D
 		);
     }
@@ -360,6 +360,6 @@ public class PortalEntity extends BaseProjectileEntity {
 
     @Override
     public float getTextureOffsetY() {
-        return this.getDimensions(Pose.STANDING).height + 0.5F;
+        return 0.2F;
     }
 }
