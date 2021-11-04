@@ -2664,8 +2664,8 @@ public abstract class BaseCreatureEntity extends PathfinderMob {
         // Creatures:
         if(targetEntity instanceof BaseCreatureEntity targetCreature) {
 
-			// Same Species, Same Owner (including no owners):
-			if(targetCreature.creatureInfo == this.creatureInfo && targetCreature.getOwner() == this.getOwner()) {
+			// Same Species, Target Not Tamed: (Can't compare owners here)
+			if(targetCreature.creatureInfo == this.creatureInfo && !targetCreature.isTamed()) {
 				return false;
 			}
 
