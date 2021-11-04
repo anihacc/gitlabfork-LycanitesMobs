@@ -2986,8 +2986,8 @@ public abstract class BaseCreatureEntity extends EntityLiving {
         if(targetEntity instanceof BaseCreatureEntity) {
 			BaseCreatureEntity targetCreature = (BaseCreatureEntity)targetEntity;
 
-			// Same Species, Same Owner:
-			if(targetCreature.getClass() == this.getClass() && targetCreature.getOwner() == this.getOwner()) {
+			// Same Species, Target Not Tamed: (Can't compare owners here)
+			if(targetCreature.getClass() == this.getClass() && !targetCreature.isTamed()) {
 				return false;
 			}
 

@@ -618,11 +618,14 @@ public class TameableCreatureEntity extends AgeableCreatureEntity implements IEn
 	
 	@Override
 	public boolean canAttackEntity(EntityLivingBase targetEntity) {
-		if(this.isPassive())
+		if(this.isPassive()) {
 			return false;
+		}
+
 		if(this.isTamed()) {
-            if(this.getOwner() == targetEntity || this.getPlayerOwner() == targetEntity)
-                return false;
+            if(this.getOwner() == targetEntity || this.getPlayerOwner() == targetEntity) {
+				return false;
+			}
             if(!this.getEntityWorld().isRemote) {
                 boolean canPVP = this.getEntityWorld().getMinecraftServer().isPVPEnabled() && this.isPVP();
                 if(targetEntity instanceof EntityPlayer && !canPVP) {
@@ -642,6 +645,7 @@ public class TameableCreatureEntity extends AgeableCreatureEntity implements IEn
             }
             return true;
         }
+
 		return super.canAttackEntity(targetEntity);
 	}
 
