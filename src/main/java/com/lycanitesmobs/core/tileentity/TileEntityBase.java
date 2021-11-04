@@ -37,6 +37,9 @@ public abstract class TileEntityBase extends TileEntity implements ITickableTile
 
     @Override
     public boolean stillValid(PlayerEntity player) {
+        if (this.isRemoved()) {
+            return false;
+        }
         return this.getBlockPos().distSqr(player.blockPosition()) < 16F;
     }
 
