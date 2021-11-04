@@ -22,6 +22,9 @@ public abstract class TileEntityBase extends BlockEntity implements Container {
 
     @Override
     public boolean stillValid(Player player) {
+        if (this.isRemoved()) {
+            return false;
+        }
         return this.getBlockPos().distSqr(player.blockPosition()) < 16F;
     }
 
