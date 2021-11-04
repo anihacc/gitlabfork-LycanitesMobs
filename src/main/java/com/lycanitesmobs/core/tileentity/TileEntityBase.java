@@ -9,9 +9,12 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 
 public abstract class TileEntityBase extends TileEntity implements ITickable, IInventory {
+    protected boolean destroyed = false;
 
     /** Can be called by a block when broken to alert this TileEntity that it is being removed. **/
-    public void onRemove() {}
+    public void onRemove() {
+        this.destroyed = true;
+    }
 
     /** The main update called every tick. **/
     @Override
@@ -48,6 +51,9 @@ public abstract class TileEntityBase extends TileEntity implements ITickable, II
 
     @Override
     public boolean isUsableByPlayer(EntityPlayer player) {
+        if (this.destroyed) {
+            return false;
+        }
         return this.getPos().distanceSq(player.getPosition()) < 16F;
     }
 }

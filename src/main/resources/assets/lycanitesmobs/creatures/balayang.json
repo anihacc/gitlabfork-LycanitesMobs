@@ -83,7 +83,7 @@
         "frugivore"
     ],
     "peaceful": false,
-    "summonable": true,
+    "summonable": false,
     "tameable": true,
     "mountable": false,
     "perchable": false,

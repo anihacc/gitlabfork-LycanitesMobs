@@ -80,6 +80,7 @@ public class TileEntitySummoningPedestal extends TileEntityBase {
 		if(this.summoningPortal != null && !this.summoningPortal.isDead) {
 			this.summoningPortal.setDead();
 		}
+		super.onRemove();
 	}
 
 
