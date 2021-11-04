@@ -3605,9 +3605,11 @@ public abstract class BaseCreatureEntity extends EntityLiving {
                     try {
                         EntityPlayer player = (EntityPlayer) damageSource.getTrueSource();
                         player.addStat(ObjectManager.getStat(this.creatureInfo.getName() + ".kill"), 1);
-						ExtendedPlayer extendedPlayer = ExtendedPlayer.getForPlayer(player);
-						if (extendedPlayer != null) {
-							extendedPlayer.studyCreature(this, CreatureManager.getInstance().config.creatureKillKnowledge, false, false);
+						if (!this.isTamed()) {
+							ExtendedPlayer extendedPlayer = ExtendedPlayer.getForPlayer(player);
+							if (extendedPlayer != null) {
+								extendedPlayer.studyCreature(this, CreatureManager.getInstance().config.creatureKillKnowledge, false, false);
+							}
 						}
                     }
                     catch(Exception e) {}

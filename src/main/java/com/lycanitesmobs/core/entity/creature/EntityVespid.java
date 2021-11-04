@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.CreatureBuildTask;
 import com.lycanitesmobs.core.entity.CreatureRelationshipEntry;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
@@ -54,8 +55,8 @@ public class EntityVespid extends AgeableCreatureEntity implements IMob {
 
     @Override
     public boolean isPersistant() {
-    	if(this.hasMaster() && this.getEntityWorld().getDifficulty() != EnumDifficulty.PEACEFUL)
-    		return true;
+		if(this.getMasterTarget() instanceof BaseCreatureEntity)
+			return ((BaseCreatureEntity)this.getMasterTarget()).isPersistant();
     	return super.isPersistant();
     }
 
