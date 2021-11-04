@@ -78,7 +78,7 @@ public class PortalEntity extends BaseProjectileEntity {
         this.setStats();
         this.setPos(
 				summoningPedestal.getBlockPos().getX() + 0.5D,
-				summoningPedestal.getBlockPos().getY() + 3D,
+				summoningPedestal.getBlockPos().getY() + 0.5D,
 				summoningPedestal.getBlockPos().getZ() + 0.5D
 		);
     }
@@ -303,9 +303,9 @@ public class PortalEntity extends BaseProjectileEntity {
 				this.targetY = target.getLocation().y;
 				this.targetZ = target.getLocation().z;
 	        }
-	        
+
 	        this.targetY += 1.0D;
-			
+
 			// Update Position to Target:
 			this.setPos(this.targetX, this.targetY, this.targetZ);
         }
