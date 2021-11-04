@@ -2,13 +2,13 @@ package com.lycanitesmobs.core.info;
 
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.core.helpers.JSONHelper;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraftforge.fmllegacy.common.registry.GameRegistry;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,8 +1,11 @@
 package com.lycanitesmobs.core.entity.creature;
 
+import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.RideableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import com.lycanitesmobs.core.info.ElementInfo;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.MinecraftForge;
@@ -71,7 +74,8 @@ public class Warg extends RideableCreatureEntity {
 
 				return true;
 			});
-            if(!possibleTargets.isEmpty()) {
+            MobEffect effect = ObjectManager.getEffect("paralysis");
+            if(!possibleTargets.isEmpty() && effect != null) {
                 for(LivingEntity possibleTarget : possibleTargets) {
                     boolean doDamage = true;
                     if(this.getRider() instanceof Player) {
@@ -80,9 +84,7 @@ public class Warg extends RideableCreatureEntity {
                         }
                     }
                     if(doDamage) {
-                        for(ElementInfo element : this.creatureInfo.elements) {
-							element.debuffEntity(possibleTarget, this.getEffectDuration(1), this.getEffectAmplifier(1));
-						}
+                        possibleTarget.addEffect(new MobEffectInstance(effect, this.getEffectDuration(1), this.getEffectAmplifier(1)));
                     }
                 }
             }
