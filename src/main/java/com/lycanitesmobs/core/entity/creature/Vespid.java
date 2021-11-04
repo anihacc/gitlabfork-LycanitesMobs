@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.CreatureBuildTask;
 import com.lycanitesmobs.core.entity.CreatureRelationshipEntry;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
@@ -54,8 +55,9 @@ public class Vespid extends AgeableCreatureEntity implements Enemy {
 
     @Override
     public boolean isPersistant() {
-    	if(this.hasMaster() && this.getCommandSenderWorld().getDifficulty() != Difficulty.PEACEFUL)
-    		return true;
+		if(this.getMasterTarget() instanceof BaseCreatureEntity masterCreature) {
+			return masterCreature.isPersistant();
+		}
     	return super.isPersistant();
     }
 

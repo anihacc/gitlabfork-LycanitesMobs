@@ -3269,9 +3269,11 @@ public abstract class BaseCreatureEntity extends PathfinderMob {
                     try {
                         Player player = (Player) damageSource.getEntity();
                         //player.addStat(ObjectManager.getStat(this.creatureInfo.getName() + ".kill"), 1); TODO Player Stats
-						ExtendedPlayer extendedPlayer = ExtendedPlayer.getForPlayer(player);
-						if (extendedPlayer != null) {
-							extendedPlayer.studyCreature(this, CreatureManager.getInstance().config.creatureKillKnowledge, false, false);
+						if (!this.isTamed()) {
+							ExtendedPlayer extendedPlayer = ExtendedPlayer.getForPlayer(player);
+							if (extendedPlayer != null) {
+								extendedPlayer.studyCreature(this, CreatureManager.getInstance().config.creatureKillKnowledge, false, false);
+							}
 						}
                     }
                     catch(Exception e) {}
