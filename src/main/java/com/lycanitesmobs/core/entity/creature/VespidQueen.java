@@ -152,13 +152,6 @@ public class VespidQueen extends TameableCreatureEntity implements Enemy {
         return true;
     }
 
-	@Override
-	public boolean canAttackType(EntityType targetType) {
-		if(targetType == this.getType())
-			return true;
-		return super.canAttackType(targetType);
-	}
-
     @Override
     public boolean canAttack(LivingEntity targetEntity) {
     	if(targetEntity instanceof Conba)
@@ -170,6 +163,11 @@ public class VespidQueen extends TameableCreatureEntity implements Enemy {
     	}
 		return super.canAttack(targetEntity);
     }
+
+	@Override
+	public boolean canAttackOwnSpecies() {
+		return true;
+	}
 
     @Override
 	public boolean canBeTempted() {

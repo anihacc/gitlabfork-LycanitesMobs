@@ -79,18 +79,6 @@ public class MakaAlpha extends AgeableCreatureEntity {
     }
 
 	@Override
-	public int getNoBagSize() { return 0; }
-	@Override
-	public int getBagSize() { return this.creatureInfo.bagSize; }
-
-	@Override
-	public boolean canAttackType(EntityType targetType) {
-		if(targetType == this.getType())
-			return true;
-		return super.canAttackType(targetType);
-	}
-
-	@Override
     public boolean canAttack(LivingEntity target) {
 		if(target instanceof Maka)
 			return false;
@@ -98,6 +86,11 @@ public class MakaAlpha extends AgeableCreatureEntity {
     		return false;
     	return super.canAttack(target);
     }
+
+	@Override
+	public boolean canAttackOwnSpecies() {
+		return true;
+	}
 
     @Override
     public void setTarget(LivingEntity entity) {

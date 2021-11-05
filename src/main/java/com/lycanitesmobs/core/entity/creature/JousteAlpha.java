@@ -53,10 +53,8 @@ public class JousteAlpha extends AgeableCreatureEntity {
     }
 
 	@Override
-	public boolean canAttackType(EntityType targetType) {
-		if(targetType == this.getType())
-			return true;
-		return super.canAttackType(targetType);
+	public boolean canAttackOwnSpecies() {
+		return true;
 	}
 
     @Override
@@ -67,11 +65,6 @@ public class JousteAlpha extends AgeableCreatureEntity {
     	}
     	super.setTarget(entity);
     }
-
-    @Override
-    public int getNoBagSize() { return 0; }
-    @Override
-    public int getBagSize() { return this.creatureInfo.bagSize; }
 
     @Override
     public boolean isVulnerableTo(String type, DamageSource source, float damage) {
