@@ -2987,7 +2987,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 			BaseCreatureEntity targetCreature = (BaseCreatureEntity)targetEntity;
 
 			// Same Species, Target Not Tamed: (Can't compare owners here)
-			if(targetCreature.getClass() == this.getClass() && !targetCreature.isTamed()) {
+			if(!this.canAttackOwnSpecies() && targetCreature.getClass() == this.getClass() && !targetCreature.isTamed()) {
 				return false;
 			}
 
@@ -3010,6 +3010,14 @@ public abstract class BaseCreatureEntity extends EntityLiving {
         }
 
 		return true;
+	}
+
+	/**
+	 * Determines if this creature can attack other creatures that are the same species as it.
+	 * @return True if this creature can attack its own species (other conditions are checked elsewhere).
+	 */
+	public boolean canAttackOwnSpecies() {
+		return false;
 	}
 
 	/**

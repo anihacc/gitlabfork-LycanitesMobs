@@ -65,10 +65,8 @@ public class EntityJoustAlpha extends AgeableCreatureEntity {
    	//                      Attacks
    	// ==================================================
 	@Override
-	public boolean canAttackClass(Class targetClass) {
-		if(targetClass == this.getClass())
-			return true;
-		return super.canAttackClass(targetClass);
+	public boolean canAttackOwnSpecies() {
+		return true;
 	}
 
 	// ========== Set Attack Target ==========
