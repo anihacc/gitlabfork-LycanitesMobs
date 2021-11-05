@@ -157,13 +157,6 @@ public class EntityVespidQueen extends TameableCreatureEntity implements IMob {
         return true;
     }
 
-	@Override
-	public boolean canAttackType(EntityType targetType) {
-		if(targetType == this.getType())
-			return true;
-		return super.canAttackType(targetType);
-	}
-
     @Override
     public boolean canAttack(LivingEntity targetEntity) {
     	if(targetEntity instanceof EntityConba)
@@ -175,6 +168,11 @@ public class EntityVespidQueen extends TameableCreatureEntity implements IMob {
     	}
 		return super.canAttack(targetEntity);
     }
+
+	@Override
+	public boolean canAttackOwnSpecies() {
+		return true;
+	}
 
     @Override
 	public boolean canBeTempted() {

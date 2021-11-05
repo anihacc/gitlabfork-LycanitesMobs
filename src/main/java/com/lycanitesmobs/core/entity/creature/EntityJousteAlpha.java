@@ -67,10 +67,8 @@ public class EntityJousteAlpha extends AgeableCreatureEntity {
    	//                      Attacks
    	// ==================================================
 	@Override
-	public boolean canAttackType(EntityType targetType) {
-		if(targetType == this.getType())
-			return true;
-		return super.canAttackType(targetType);
+	public boolean canAttackOwnSpecies() {
+		return true;
 	}
 
 	// ========== Set Attack Target ==========
