@@ -238,7 +238,7 @@ public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, CreatureMo
 			return true;
     	}
     	
-    	return entity == this.entityRenderDispatcher.crosshairPickEntity;
+    	return false; //entity == this.entityRenderDispatcher.crosshairPickEntity;
     }
 
     /**
