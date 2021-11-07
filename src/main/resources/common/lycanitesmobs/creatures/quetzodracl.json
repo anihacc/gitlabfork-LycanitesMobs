@@ -4,7 +4,7 @@
     "groups": [
         "monster"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityQuetzodracl",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Quetzodracl",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelQuetzodracl",
     "loadDefault": true,
     "enabled": true,

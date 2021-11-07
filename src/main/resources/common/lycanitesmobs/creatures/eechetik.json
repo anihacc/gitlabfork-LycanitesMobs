@@ -4,7 +4,7 @@
     "groups": [
         "monster"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityEechetik",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Eechetik",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelEechetik",
     "loadDefault": true,
     "enabled": true,

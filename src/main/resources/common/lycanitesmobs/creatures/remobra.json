@@ -4,7 +4,7 @@
     "groups": [
         "opportunist"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityRemobra",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Remobra",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelRemobra",
     "loadDefault": true,
     "enabled": true,

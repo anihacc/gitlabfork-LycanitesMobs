@@ -4,7 +4,7 @@
     "groups": [
         "monster"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityNingen",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Ningen",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelNingen",
     "loadDefault": true,
     "enabled": true,

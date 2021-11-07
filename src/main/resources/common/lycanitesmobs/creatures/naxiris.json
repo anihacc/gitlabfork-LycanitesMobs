@@ -4,7 +4,7 @@
     "groups": [
         "monster"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityNaxiris",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Naxiris",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelNaxiris",
     "loadDefault": true,
     "enabled": true,

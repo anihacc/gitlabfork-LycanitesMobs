@@ -4,7 +4,7 @@
     "groups": [
         "predator"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityKathoga",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Kathoga",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelKathoga",
     "loadDefault": true,
     "enabled": true,

@@ -4,7 +4,7 @@
     "groups": [
         "monster"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityGeken",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Geken",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelGeken",
     "loadDefault": true,
     "enabled": true,

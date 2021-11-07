@@ -4,7 +4,7 @@
     "groups": [
         "monster"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntitySpectre",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Spectre",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelSpectre",
     "loadDefault": true,
     "enabled": true,

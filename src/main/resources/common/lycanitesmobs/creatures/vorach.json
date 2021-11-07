@@ -4,7 +4,7 @@
     "groups": [
         "monster"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityVorach",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Vorach",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelVorach",
     "loadDefault": true,
     "enabled": true,

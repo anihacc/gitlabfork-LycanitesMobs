@@ -5,7 +5,7 @@
         "critter",
         "hardy"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityBrucha",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Brucha",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelBrucha",
     "loadDefault": true,
     "enabled": true,

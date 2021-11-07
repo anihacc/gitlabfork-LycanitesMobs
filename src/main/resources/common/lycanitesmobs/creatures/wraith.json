@@ -4,7 +4,7 @@
     "groups": [
         "monster"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityWraith",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Wraith",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelWraith",
     "loadDefault": true,
     "enabled": true,

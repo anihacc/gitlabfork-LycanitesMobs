@@ -1,24 +1,22 @@
 package com.lycanitesmobs.core.block.effect;
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.block.BlockFireBase;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.Blocks;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.core.Direction;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -51,14 +49,14 @@ public class BlockFrostfire extends BlockFireBase {
     @Override
     public boolean canCatchFire(BlockGetter world, BlockPos pos, Direction face) {
         Block block = world.getBlockState(pos).getBlock();
-        if(block ==  Blocks.ICE || block == Blocks.PACKED_ICE)
+        if (block ==  Blocks.ICE || block == Blocks.PACKED_ICE)
             return true;
         return false;
     }
 
     @Override
     public boolean isBlockFireSource(BlockState state, LevelReader world, BlockPos pos, Direction side) {
-        if(state.getBlock() == Blocks.SNOW || state.getBlock() == Blocks.SNOW_BLOCK)
+        if(state.getBlock() == Blocks.PACKED_ICE || state.getBlock() == Blocks.SNOW_BLOCK)
             return true;
         return false;
     }

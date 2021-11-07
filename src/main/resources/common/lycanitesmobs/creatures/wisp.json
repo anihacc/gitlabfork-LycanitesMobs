@@ -4,7 +4,7 @@
     "groups": [
         "light"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityWisp",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Wisp",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelWisp",
     "loadDefault": true,
     "enabled": true,

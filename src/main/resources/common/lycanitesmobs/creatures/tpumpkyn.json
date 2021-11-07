@@ -4,7 +4,7 @@
     "groups": [
         "nature"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityTpumpkyn",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Tpumpkyn",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelTpumpkyn",
     "loadDefault": true,
     "enabled": true,

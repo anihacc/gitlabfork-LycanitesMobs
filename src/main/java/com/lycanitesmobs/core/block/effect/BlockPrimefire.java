@@ -3,27 +3,22 @@ package com.lycanitesmobs.core.block.effect;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.block.BlockFireBase;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.FireBlock;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.util.Direction;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.IWorldReader;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.FireBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Random;
-
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class BlockPrimefire extends BlockFireBase {
 

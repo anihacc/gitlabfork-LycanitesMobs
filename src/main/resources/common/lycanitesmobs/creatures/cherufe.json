@@ -4,7 +4,7 @@
     "groups": [
         "inferno"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityCherufe",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Cherufe",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelCherufe",
     "loadDefault": true,
     "enabled": true,

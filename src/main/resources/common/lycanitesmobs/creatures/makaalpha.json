@@ -4,7 +4,7 @@
     "groups": [
         "alpha"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityMakaAlpha",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.MakaAlpha",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelMakaAlpha",
     "loadDefault": true,
     "enabled": true,

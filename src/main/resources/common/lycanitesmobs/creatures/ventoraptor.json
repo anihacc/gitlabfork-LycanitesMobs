@@ -4,7 +4,7 @@
     "groups": [
         "predator"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityVentoraptor",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Ventoraptor",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelVentoraptor",
     "loadDefault": true,
     "enabled": true,

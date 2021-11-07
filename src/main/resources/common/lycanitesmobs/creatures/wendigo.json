@@ -5,7 +5,7 @@
         "monster",
         "frozen"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityWendigo",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Wendigo",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelWendigo",
     "loadDefault": true,
     "enabled": true,

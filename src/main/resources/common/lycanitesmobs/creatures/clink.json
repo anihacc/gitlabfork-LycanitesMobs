@@ -4,7 +4,7 @@
     "groups": [
         "monster"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityClink",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Clink",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelClink",
     "loadDefault": true,
     "enabled": true,

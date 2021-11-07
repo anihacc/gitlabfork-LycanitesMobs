@@ -4,7 +4,7 @@
     "groups": [
         "animal"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityArisaur",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Arisaur",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelArisaur",
     "loadDefault": true,
     "enabled": true,

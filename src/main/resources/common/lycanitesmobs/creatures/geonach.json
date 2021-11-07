@@ -4,7 +4,7 @@
     "groups": [
         "monster"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityGeonach",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Geonach",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelGeonach",
     "loadDefault": true,
     "enabled": true,

@@ -4,7 +4,7 @@
     "groups": [
         "opportunist"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityBalayang",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Balayang",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelBalayang",
     "loadDefault": true,
     "enabled": true,

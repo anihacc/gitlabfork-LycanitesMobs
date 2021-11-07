@@ -4,7 +4,7 @@
     "groups": [
         "predator"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityErepede",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Erepede",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelErepede",
     "loadDefault": true,
     "enabled": true,

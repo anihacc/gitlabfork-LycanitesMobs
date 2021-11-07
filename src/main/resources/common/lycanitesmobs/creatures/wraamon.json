@@ -4,7 +4,7 @@
     "groups": [
         "monster"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityWraamon",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Wraamon",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelWraamon",
     "loadDefault": true,
     "enabled": true,

@@ -4,7 +4,7 @@
     "groups": [
         "monster"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityXaphan",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Xaphan",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelXaphan",
     "loadDefault": true,
     "enabled": true,

@@ -4,7 +4,7 @@
     "groups": [
         "mystic"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityNymph",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Nymph",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelNymph",
     "loadDefault": true,
     "enabled": true,

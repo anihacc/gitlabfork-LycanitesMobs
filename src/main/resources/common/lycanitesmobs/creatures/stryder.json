@@ -4,7 +4,7 @@
     "groups": [
         "predator"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityStryder",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Stryder",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelStryder",
     "loadDefault": true,
     "enabled": true,

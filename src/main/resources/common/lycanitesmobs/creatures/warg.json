@@ -4,7 +4,7 @@
     "groups": [
         "predator"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityWarg",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Warg",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelWarg",
     "loadDefault": true,
     "enabled": true,

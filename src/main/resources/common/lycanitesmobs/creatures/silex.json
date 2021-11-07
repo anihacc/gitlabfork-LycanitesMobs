@@ -4,7 +4,7 @@
     "groups": [
         "animal"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntitySilex",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Silex",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelSilex",
     "loadDefault": true,
     "enabled": true,

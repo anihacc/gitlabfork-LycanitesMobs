@@ -4,7 +4,7 @@
     "groups": [
         "boss"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityAsmodeus",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Asmodeus",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelAsmodeus",
     "loadDefault": true,
     "enabled": true,

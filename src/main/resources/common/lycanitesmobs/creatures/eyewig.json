@@ -4,7 +4,7 @@
     "groups": [
         "monster"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityEyewig",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Eyewig",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelEyewig",
     "loadDefault": true,
     "enabled": true,

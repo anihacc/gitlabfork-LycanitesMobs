@@ -4,7 +4,7 @@
     "groups": [
         "nature"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntitySpriggan",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Spriggan",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelSpriggan",
     "loadDefault": true,
     "enabled": true,

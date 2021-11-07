@@ -4,7 +4,7 @@
     "groups": [
         "inferno"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityVolcan",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Volcan",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelVolcan",
     "loadDefault": true,
     "enabled": true,

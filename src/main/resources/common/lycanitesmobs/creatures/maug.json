@@ -4,7 +4,7 @@
     "groups": [
         "predator"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityMaug",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Maug",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelMaug",
     "loadDefault": true,
     "enabled": true,

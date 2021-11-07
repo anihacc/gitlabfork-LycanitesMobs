@@ -4,7 +4,7 @@
     "groups": [
         "predator"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityVespid",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Vespid",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelVespid",
     "loadDefault": true,
     "enabled": true,

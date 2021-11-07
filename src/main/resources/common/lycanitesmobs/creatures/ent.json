@@ -4,7 +4,7 @@
     "groups": [
         "nature"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityEnt",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Ent",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelEnt",
     "loadDefault": true,
     "enabled": true,

@@ -6,7 +6,7 @@
         "monster",
         "opportunist"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityKrake",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Krake",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelKrake",
     "loadDefault": true,
     "enabled": true,

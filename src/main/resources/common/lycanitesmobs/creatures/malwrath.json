@@ -4,7 +4,7 @@
     "groups": [
         "monster"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityMalwrath",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Malwrath",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelMalwrath",
     "loadDefault": true,
     "enabled": true,

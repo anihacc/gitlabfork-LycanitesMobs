@@ -4,7 +4,7 @@
     "groups": [
         "monster"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityAstaroth",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Astaroth",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelAstaroth",
     "loadDefault": true,
     "enabled": true,

@@ -4,7 +4,7 @@
     "groups": [
         "predator"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityAbaia",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Abaia",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelAbaia",
     "loadDefault": true,
     "enabled": true,

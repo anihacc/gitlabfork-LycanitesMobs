@@ -4,7 +4,7 @@
     "groups": [
         "trickster"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityPixen",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Pixen",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelPixen",
     "loadDefault": true,
     "enabled": true,

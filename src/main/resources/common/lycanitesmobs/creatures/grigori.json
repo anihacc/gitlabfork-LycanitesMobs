@@ -5,7 +5,7 @@
         "predator",
         "monster"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityGrigori",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Grigori",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelGrigori",
     "loadDefault": true,
     "enabled": true,

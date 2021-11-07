@@ -4,7 +4,7 @@
     "groups": [
         "monster"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityLacedon",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Lacedon",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelLacedon",
     "loadDefault": true,
     "enabled": true,

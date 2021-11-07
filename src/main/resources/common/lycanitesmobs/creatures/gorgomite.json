@@ -6,7 +6,7 @@
         "critter",
         "hardy"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityGorgomite",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Gorgomite",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelGorgomite",
     "loadDefault": true,
     "enabled": true,

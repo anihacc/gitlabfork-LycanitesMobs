@@ -4,7 +4,7 @@
     "groups": [
         "raider"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityCryptkeeper",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Cryptkeeper",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelCryptkeeper",
     "loadDefault": true,
     "enabled": true,

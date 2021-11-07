@@ -4,7 +4,7 @@
     "groups": [
         "frozen"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityFrostweaver",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Frostweaver",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelFrostweaver",
     "loadDefault": true,
     "enabled": true,

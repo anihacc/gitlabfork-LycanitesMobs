@@ -4,7 +4,7 @@
     "groups": [
         "opportunist"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityRoc",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Roc",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelRoc",
     "loadDefault": true,
     "enabled": true,

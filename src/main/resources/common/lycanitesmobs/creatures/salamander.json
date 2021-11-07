@@ -5,7 +5,7 @@
         "predator",
         "inferno"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntitySalamander",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Salamander",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelSalamander",
     "loadDefault": true,
     "enabled": true,

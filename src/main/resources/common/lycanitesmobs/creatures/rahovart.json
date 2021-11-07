@@ -4,7 +4,7 @@
     "groups": [
         "boss"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityRahovart",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Rahovart",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelRahovart",
     "loadDefault": true,
     "enabled": true,

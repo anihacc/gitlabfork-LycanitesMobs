@@ -4,7 +4,7 @@
     "groups": [
         "monster"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityApollyon",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Apollyon",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelApollyon",
     "loadDefault": true,
     "enabled": true,

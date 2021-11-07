@@ -4,7 +4,7 @@
     "groups": [
         "predator"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntitySutiramu",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Sutiramu",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelSutiramu",
     "loadDefault": true,
     "enabled": true,

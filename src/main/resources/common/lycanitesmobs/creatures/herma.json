@@ -4,7 +4,7 @@
     "groups": [
         "monster"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityHerma",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Herma",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelHerma",
     "loadDefault": true,
     "enabled": true,

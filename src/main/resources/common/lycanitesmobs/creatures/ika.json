@@ -4,7 +4,7 @@
     "groups": [
         "animal"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityIka",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Ika",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelIka",
     "loadDefault": true,
     "enabled": true,

@@ -4,7 +4,7 @@
     "groups": [
         "raider"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityWildkin",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Wildkin",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelWildkin",
     "loadDefault": true,
     "enabled": true,

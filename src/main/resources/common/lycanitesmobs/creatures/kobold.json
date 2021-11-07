@@ -4,7 +4,7 @@
     "groups": [
         "critter"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityKobold",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Kobold",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelKobold",
     "loadDefault": true,
     "enabled": true,

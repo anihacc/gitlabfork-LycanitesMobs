@@ -4,7 +4,7 @@
     "groups": [
         "inferno"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityIgnibus",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Ignibus",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelIgnibus",
     "loadDefault": true,
     "enabled": true,

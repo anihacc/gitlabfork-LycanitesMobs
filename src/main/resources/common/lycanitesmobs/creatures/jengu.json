@@ -4,7 +4,7 @@
     "groups": [
         "monster"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityJengu",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Jengu",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelJengu",
     "loadDefault": true,
     "enabled": true,

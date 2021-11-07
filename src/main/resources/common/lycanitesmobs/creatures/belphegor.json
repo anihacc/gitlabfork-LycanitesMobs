@@ -4,7 +4,7 @@
     "groups": [
         "monster"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityBelphegor",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Belphegor",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelBelphegor",
     "loadDefault": true,
     "enabled": true,

@@ -4,7 +4,7 @@
     "groups": [
         "monster"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityLycosa",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Lycosa",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelLycosa",
     "loadDefault": true,
     "enabled": true,

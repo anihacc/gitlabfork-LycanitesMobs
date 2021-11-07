@@ -4,7 +4,7 @@
     "groups": [
         "alpha"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityJousteAlpha",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.JousteAlpha",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelJousteAlpha",
     "loadDefault": true,
     "enabled": true,

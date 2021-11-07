@@ -4,7 +4,7 @@
     "groups": [
         "animal"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityYale",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Yale",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelYale",
     "loadDefault": true,
     "enabled": true,

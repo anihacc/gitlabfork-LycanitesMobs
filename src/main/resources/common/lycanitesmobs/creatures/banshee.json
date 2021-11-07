@@ -4,7 +4,7 @@
     "groups": [
         "monster"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityBanshee",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Banshee",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelBanshee",
     "loadDefault": true,
     "enabled": true,

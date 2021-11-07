@@ -4,7 +4,7 @@
     "groups": [
         "monster"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityTremor",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Tremor",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelTremor",
     "loadDefault": true,
     "enabled": true,

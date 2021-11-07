@@ -4,7 +4,7 @@
     "groups": [
         "predator"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityFeradon",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Feradon",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelFeradon",
     "loadDefault": true,
     "enabled": true,

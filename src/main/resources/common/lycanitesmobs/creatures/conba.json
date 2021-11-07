@@ -5,7 +5,7 @@
         "monster",
         "animal"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityConba",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Conba",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelConba",
     "loadDefault": true,
     "enabled": true,

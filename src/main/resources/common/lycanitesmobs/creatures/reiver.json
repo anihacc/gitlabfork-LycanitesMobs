@@ -4,7 +4,7 @@
     "groups": [
         "frozen"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityReiver",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Reiver",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelReiver",
     "loadDefault": true,
     "enabled": true,

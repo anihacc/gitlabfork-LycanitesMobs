@@ -4,7 +4,7 @@
     "groups": [
         "monster"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityZephyr",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Zephyr",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelZephyr",
     "loadDefault": true,
     "enabled": true,

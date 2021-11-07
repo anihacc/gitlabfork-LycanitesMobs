@@ -4,7 +4,7 @@
     "groups": [
         "predator"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityChupacabra",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Chupacabra",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelChupacabra",
     "loadDefault": true,
     "enabled": true,

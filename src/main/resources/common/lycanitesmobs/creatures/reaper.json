@@ -4,7 +4,7 @@
     "groups": [
         "monster"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityReaper",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Reaper",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelReaper",
     "loadDefault": true,
     "enabled": true,

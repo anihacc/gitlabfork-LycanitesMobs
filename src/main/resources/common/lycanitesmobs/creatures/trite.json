@@ -4,7 +4,7 @@
 	"groups": [
 		"monster"
 	],
-	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityTrite",
+	"entityClass": "com.lycanitesmobs.core.entity.creature.Trite",
 	"modelClass": "com.lycanitesmobs.client.model.creature.ModelTrite",
 	"loadDefault": true,
 	"enabled": true,

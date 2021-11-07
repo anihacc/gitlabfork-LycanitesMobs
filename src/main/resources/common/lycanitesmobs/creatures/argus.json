@@ -4,7 +4,7 @@
     "groups": [
         "monster"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityArgus",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Argus",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelArgus",
     "loadDefault": true,
     "enabled": true,

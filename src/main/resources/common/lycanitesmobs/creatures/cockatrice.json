@@ -4,7 +4,7 @@
     "groups": [
         "predator"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityCockatrice",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Cockatrice",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelCockatrice",
     "loadDefault": true,
     "enabled": true,

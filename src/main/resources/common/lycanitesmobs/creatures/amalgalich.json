@@ -4,7 +4,7 @@
     "groups": [
         "boss"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityAmalgalich",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Amalgalich",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelAmalgalich",
     "loadDefault": true,
     "enabled": true,

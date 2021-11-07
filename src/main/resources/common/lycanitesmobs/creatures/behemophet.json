@@ -4,7 +4,7 @@
     "groups": [
         "monster"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityBehemophet",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Behemophet",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelBehemophet",
     "loadDefault": true,
     "enabled": true,

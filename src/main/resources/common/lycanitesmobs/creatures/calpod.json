@@ -6,7 +6,7 @@
         "critter",
         "hardy"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityCalpod",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Calpod",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelCalpod",
     "loadDefault": true,
     "enabled": true,

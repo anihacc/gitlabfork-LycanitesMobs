@@ -4,7 +4,7 @@
     "groups": [
         "frozen"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityArix",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Arix",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelArix",
     "loadDefault": true,
     "enabled": true,

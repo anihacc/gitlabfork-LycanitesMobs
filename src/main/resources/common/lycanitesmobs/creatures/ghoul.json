@@ -4,7 +4,7 @@
     "groups": [
         "raider"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityGhoul",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Ghoul",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelGhoul",
     "loadDefault": true,
     "enabled": true,

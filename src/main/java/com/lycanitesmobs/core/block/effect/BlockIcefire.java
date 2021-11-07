@@ -1,12 +1,10 @@
 package com.lycanitesmobs.core.block.effect;
 
-import com.lycanitesmobs.ObjectManager;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 

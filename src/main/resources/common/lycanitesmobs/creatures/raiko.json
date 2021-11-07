@@ -4,7 +4,7 @@
     "groups": [
         "opportunist"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityRaiko",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Raiko",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelRaiko",
     "loadDefault": true,
     "enabled": true,

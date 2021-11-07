@@ -4,7 +4,7 @@
     "groups": [
         "raider"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityEttin",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Ettin",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelEttin",
     "loadDefault": true,
     "enabled": true,

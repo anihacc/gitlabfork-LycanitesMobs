@@ -4,7 +4,7 @@
     "groups": [
         "monster"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityVapula",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Vapula",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelVapula",
     "loadDefault": true,
     "enabled": true,

@@ -4,7 +4,7 @@
     "groups": [
         "animal"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityConcapedeSegment",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.ConcapedeSegment",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelConcapedeSegment",
     "loadDefault": true,
     "enabled": true,

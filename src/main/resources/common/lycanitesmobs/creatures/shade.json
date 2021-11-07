@@ -5,7 +5,7 @@
         "monster",
         "dark"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityShade",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Shade",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelShade",
     "loadDefault": true,
     "enabled": true,

@@ -4,7 +4,7 @@
     "groups": [
         "predator"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityRoa",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Roa",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelRoa",
     "loadDefault": true,
     "enabled": true,

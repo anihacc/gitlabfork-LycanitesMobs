@@ -4,7 +4,7 @@
     "groups": [
         "inferno"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityKhalk",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Khalk",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelKhalk",
     "loadDefault": true,
     "enabled": true,

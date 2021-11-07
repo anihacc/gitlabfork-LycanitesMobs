@@ -4,7 +4,7 @@
     "groups": [
         "inferno"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityCinder",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Cinder",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelCinder",
     "loadDefault": true,
     "enabled": true,

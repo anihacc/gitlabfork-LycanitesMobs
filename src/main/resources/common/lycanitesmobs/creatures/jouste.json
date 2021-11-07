@@ -5,7 +5,7 @@
         "animal",
         "hardy"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityJouste",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Jouste",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelJouste",
     "loadDefault": true,
     "enabled": true,

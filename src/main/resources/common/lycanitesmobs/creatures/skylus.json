@@ -4,7 +4,7 @@
     "groups": [
         "predator"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntitySkylus",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Skylus",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelSkylus",
     "loadDefault": true,
     "enabled": true,

@@ -4,7 +4,7 @@
     "groups": [
         "predator"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityBarghest",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Barghest",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelBarghest",
     "loadDefault": true,
     "enabled": true,

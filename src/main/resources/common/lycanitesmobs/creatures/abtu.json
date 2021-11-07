@@ -4,7 +4,7 @@
     "groups": [
         "predator"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityAbtu",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Abtu",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelAbtu",
     "loadDefault": true,
     "enabled": true,

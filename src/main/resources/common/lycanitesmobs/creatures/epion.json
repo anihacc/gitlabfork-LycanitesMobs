@@ -4,7 +4,7 @@
     "groups": [
         "monster"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityEpion",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Epion",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelEpion",
     "loadDefault": true,
     "enabled": true,

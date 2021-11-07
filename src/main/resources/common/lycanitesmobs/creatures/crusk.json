@@ -4,7 +4,7 @@
     "groups": [
         "predator"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityCrusk",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Crusk",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelCrusk",
     "loadDefault": true,
     "enabled": true,

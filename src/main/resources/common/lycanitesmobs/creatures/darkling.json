@@ -5,7 +5,7 @@
         "predator",
         "dark"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityDarkling",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Darkling",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelDarkling",
     "loadDefault": true,
     "enabled": true,

@@ -4,7 +4,7 @@
     "groups": [
         "nature"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityTriffid",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Triffid",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelTriffid",
     "loadDefault": true,
     "enabled": true,

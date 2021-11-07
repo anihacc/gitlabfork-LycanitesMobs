@@ -4,7 +4,7 @@
     "groups": [
         "monster"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityAglebemu",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Aglebemu",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelAglebemu",
     "loadDefault": true,
     "enabled": true,

@@ -4,7 +4,7 @@
     "groups": [
         "monster"
     ],
-    "entityClass": "com.lycanitesmobs.core.entity.creature.EntityRaidra",
+    "entityClass": "com.lycanitesmobs.core.entity.creature.Raidra",
     "modelClass": "com.lycanitesmobs.client.model.creature.ModelRaidra",
     "loadDefault": true,
     "enabled": true,
