@@ -4,10 +4,9 @@ package com.lycanitesmobs.core.info;
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.core.config.ConfigCreatureSubspecies;
 import com.lycanitesmobs.core.entity.CreatureStats;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.network.chat.BaseComponent;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 
 import java.util.HashMap;

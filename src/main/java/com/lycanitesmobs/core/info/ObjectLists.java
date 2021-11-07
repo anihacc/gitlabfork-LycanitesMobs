@@ -1,25 +1,19 @@
 package com.lycanitesmobs.core.info;
 
 import com.lycanitesmobs.ObjectManager;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.item.*;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraftforge.common.ToolType;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.*;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraftforge.common.ToolActions;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import net.minecraft.world.item.AxeItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.ShovelItem;
 
 public class ObjectLists {
 	// Maps:
@@ -278,7 +272,7 @@ public class ObjectLists {
 		if(itemStack.getItem() instanceof ShovelItem) {
 			return true;
 		}
-		if(itemStack.getHarvestLevel(ToolType.PICKAXE, null, null) != -1) {
+		if(itemStack.canPerformAction(ToolActions.PICKAXE_DIG)) {
 			return true;
 		}
 		return false;
@@ -292,7 +286,7 @@ public class ObjectLists {
 		if(itemStack.getItem() instanceof AxeItem) {
 			return true;
 		}
-		if(itemStack.getHarvestLevel(ToolType.AXE, null, null) != -1) {
+		if(itemStack.canPerformAction(ToolActions.AXE_DIG)) {
 			return true;
 		}
         return false;
@@ -306,7 +300,7 @@ public class ObjectLists {
 		if(itemStack.getItem() instanceof ShovelItem) {
 			return true;
 		}
-		if(itemStack.getHarvestLevel(ToolType.SHOVEL, null, null) != -1) {
+		if(itemStack.canPerformAction(ToolActions.SHOVEL_DIG)) {
 			return true;
 		}
 		return false;

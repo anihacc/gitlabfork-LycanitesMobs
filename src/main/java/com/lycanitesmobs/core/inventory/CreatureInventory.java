@@ -2,29 +2,23 @@ package com.lycanitesmobs.core.inventory;
 
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.RideableCreatureEntity;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.Container;
-import net.minecraft.world.ContainerHelper;
-import net.minecraft.item.*;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.Container;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.*;
+import net.minecraft.world.level.block.Blocks;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.ArmorMaterials;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 
 public class CreatureInventory implements Container {
 
@@ -60,10 +54,12 @@ public class CreatureInventory implements Container {
     public Map<String, Integer> equipmentTypeToSlot = new HashMap<>();
     public Map<Integer, String> equipmentSlotToType = new HashMap<>();
 
-    // ==================================================
-    //                    Data Parameters
-    // ==================================================
-    public static EntityDataAccessor<ItemStack> getEquipmentDataParameter(String type) {
+	/**
+	 * Gets the Data Accessor for the provided slot type.
+	 * @param type The slot type name to get an accessor for.
+	 * @return The data accessor to use.
+	 */
+    public static EntityDataAccessor<ItemStack> getEquipmentDataAccessor(String type) {
         if(type.equals("head"))
             return BaseCreatureEntity.EQUIPMENT_HEAD;
         if(type.equals("chest"))
@@ -80,13 +76,9 @@ public class CreatureInventory implements Container {
     /** Registers parameters to the provided datamanager. **/
     public static void registerData(SynchedEntityData dataManager) {
         for(String equipmentType : equipmentTypes)
-            dataManager.define(getEquipmentDataParameter(equipmentType), ItemStack.EMPTY);
+            dataManager.define(getEquipmentDataAccessor(equipmentType), ItemStack.EMPTY);
     }
 
-	
-	// ==================================================
-  	//                    Constructor
-  	// ==================================================
 	public CreatureInventory(String inventoryName, BaseCreatureEntity creature) {
 		this.inventoryName = inventoryName;
 		this.creature = creature;
@@ -101,17 +93,13 @@ public class CreatureInventory implements Container {
         this.equipmentSlotToType.put(this.nextEquipmentSlot, type);
         this.nextEquipmentSlot++;
     }
-	
-	
-	// ==================================================
-  	//                     Details
-  	// ==================================================
-    public String getName() {
-        return this.inventoryName + new TranslatableComponent("entity.level").getString() + " " + this.creature.getMobLevel();
-    }
 
+	/**
+	 * Gets the name component of this inventory.
+	 * @return The display name component.
+	 */
     public Component getDisplayName() {
-        return new TranslatableComponent(this.getName());
+        return new TranslatableComponent(this.inventoryName).append(new TranslatableComponent("entity.level")).append(" " + this.creature.getMobLevel());
     }
 
 	public boolean hasCustomName() {
@@ -185,10 +173,10 @@ public class CreatureInventory implements Container {
 		// Update Datawatcher:
         for(String type : this.equipmentSlotToType.values()) {
 			ItemStack itemStack = this.getEquipmentStack(type);
-            EntityDataAccessor<ItemStack> dataParameter = getEquipmentDataParameter(type);
-            if(dataParameter == null)
+            EntityDataAccessor<ItemStack> dataParameter = getEquipmentDataAccessor(type);
+            if (dataParameter == null)
                 continue;
-			if(itemStack == null)
+			if (itemStack == null)
                 this.creature.getEntityData().set(dataParameter, ItemStack.EMPTY);
             else
 			    this.creature.getEntityData().set(dataParameter, itemStack);
@@ -213,11 +201,7 @@ public class CreatureInventory implements Container {
     public void clearContent() {
 
     }
-	
-	
-	// ==================================================
-  	//                      Items
-  	// ==================================================
+
 	@Override
 	public ItemStack getItem(int slotID) {
 		if(slotID >= this.getContainerSize() || slotID < 0)
@@ -245,8 +229,7 @@ public class CreatureInventory implements Container {
         	itemStack = ItemStack.EMPTY;
 		this.inventoryContents.set(slotID, itemStack);
 	}
-	
-	// ========== Decrease Stack Size ==========
+
 	@Override
 	public ItemStack removeItem(int slot, int amount) {
     	if (this.creature.isDeadOrDying()) {
@@ -298,7 +281,6 @@ public class CreatureInventory implements Container {
 		return true;
 	}
 
-    // ========== Check Space ==========
 	public int getSpaceForStack(ItemStack itemStack) {
 		if(itemStack == null)
 			return 0;
@@ -323,8 +305,7 @@ public class CreatureInventory implements Container {
 
 		return Math.min(space, itemStack.getCount());
 	}
-	
-	// ========== Auto Insert Item Stack ==========
+
 	public ItemStack autoInsertStack(ItemStack itemStack) {
 		if(itemStack == null || itemStack.getCount() < 1 || this.creature.isDeadOrDying()) {
 			return ItemStack.EMPTY;
@@ -362,11 +343,7 @@ public class CreatureInventory implements Container {
 		}
 		return itemStack;
 	}
-	
-	
-	// ==================================================
-  	//                      Equipment
-  	// ==================================================
+
 	public void setAdvancedArmor(boolean advanced) {
 		this.basicArmor = !advanced;
 		if(advanced) {
@@ -379,8 +356,7 @@ public class CreatureInventory implements Container {
 	public boolean useAdvancedArmor() {
 		return !this.basicArmor;
 	}
-	
-	// ========== Type to Slot Mapping ==========
+
 	public int getSlotFromType(String type) {
 		if(this.equipmentTypeToSlot.containsKey(type))
 			return this.equipmentTypeToSlot.get(type) + this.getItemSlotsSize();
@@ -394,14 +370,13 @@ public class CreatureInventory implements Container {
 		else
 			return null;
 	}
-	
-	// ========== Get Equipment ==========
+
 	public ItemStack getEquipmentStack(String type) {
-		if(getEquipmentDataParameter(type) == null)
+		if(getEquipmentDataAccessor(type) == null)
 			return ItemStack.EMPTY;
 		if(this.creature.getCommandSenderWorld().isClientSide) {
 			try {
-				return this.creature.getEntityData().get(getEquipmentDataParameter(type));
+				return this.creature.getEntityData().get(getEquipmentDataAccessor(type));
 			}
 			catch(Exception e) {
 				return ItemStack.EMPTY;
@@ -410,19 +385,23 @@ public class CreatureInventory implements Container {
 		else
 			return this.getItem(this.getSlotFromType(type));
 	}
-	
-	// ========== Set Equipment ==========
+
 	public void setEquipmentStack(String type, ItemStack itemStack) {
 		if(!this.creature.getCommandSenderWorld().isClientSide && this.equipmentTypeToSlot.containsKey(type) && this.isEquipmentValidForSlot(type, itemStack))
 			this.setItem(this.getSlotFromType(type), itemStack);
 	}
+
 	public void setEquipmentStack(ItemStack itemStack) {
 		String type = this.getSlotForEquipment(itemStack);
 		if(type != null)
 			this.setEquipmentStack(type, itemStack);
 	}
-	
-	// ========== Get Slot for Equipment ==========
+
+	/**
+	 * Determines an appropriate equipment slot for the provided item stack.
+	 * @param itemStack The item stack to get a slot for.
+	 * @return The slot name or null if no slots are suitable.
+	 */
 	public String getSlotForEquipment(ItemStack itemStack) {
 		if(itemStack == null)
 			return null;
@@ -463,15 +442,24 @@ public class CreatureInventory implements Container {
 		
 		return null;
 	}
-	
-	// ========== Equipment Valid for Slot ==========
+
+	/**
+	 * Determines if the provided armor, saddle, etc item is valid for the provided equipment slot (not to be confused with the craftable equipment).
+	 * @param type The slot type to check.
+	 * @param itemStack The item stack to check.
+	 * @return True if the item stack can go in the provided slot.
+	 */
 	public boolean isEquipmentValidForSlot(String type, ItemStack itemStack) {
 		if(itemStack == null)
 			return true;
 		return type.equals(getSlotForEquipment(itemStack));
 	}
-	
-	// ========== Get Equipment Grade ==========
+
+	/**
+	 * Gets the equipment grade name that this inventory currently has, used for determining rendering textures, etc.
+	 * @param type
+	 * @return
+	 */
 	public String getEquipmentGrade(String type) {
     	ItemStack equipmentStack = this.getEquipmentStack(type);
     	if(equipmentStack == null)
@@ -499,8 +487,11 @@ public class CreatureInventory implements Container {
     		return "Diamond";
     	return null;
     }
-	
-	// ========== Get Armor Value ==========
+
+	/**
+	 * Gets the armor value that this inventory provides to its creature.
+	 * @return
+	 */
 	public int getArmorValue() {
 		String[] armorSlots = {"head", "chest", "legs", "feet"};
 		int totalArmor = 0;
@@ -515,11 +506,10 @@ public class CreatureInventory implements Container {
         }
         return totalArmor;
 	}
-	
-	
-	// ==================================================
-  	//                   Drop Inventory
-  	// ==================================================
+
+	/**
+	 * Drops all items from this inventory.
+	 */
 	public void dropInventory() {
 		for(int slotID = 0; slotID < this.inventoryContents.size(); slotID++) {
 			ItemStack itemStack = this.inventoryContents.get(slotID);
@@ -527,11 +517,7 @@ public class CreatureInventory implements Container {
 			this.setInventorySlotContentsNoUpdate(slotID, ItemStack.EMPTY);
 		}
 	}
-    
-    
-    // ==================================================
-    //                        NBT
-    // ==================================================
+
 	/**
 	 * Loads inventory from nbt data.
 	 * @param nbt The nbt data to load from.
