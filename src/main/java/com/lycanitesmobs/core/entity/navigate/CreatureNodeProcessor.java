@@ -2,30 +2,24 @@ package com.lycanitesmobs.core.entity.navigate;
 
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.LiquidBlock;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.tags.FluidTags;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.Pose;
-import net.minecraft.world.level.material.FluidState;
-import net.minecraft.pathfinding.*;
-import net.minecraft.tags.FluidTags;
-import net.minecraft.core.Direction;
-import net.minecraft.core.BlockPos;
-import net.minecraft.util.Mth;
-import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.PathNavigationRegion;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LiquidBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.pathfinder.*;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
-
-import net.minecraft.world.level.pathfinder.BlockPathTypes;
-import net.minecraft.world.level.pathfinder.Node;
-import net.minecraft.world.level.pathfinder.PathComputationType;
-import net.minecraft.world.level.pathfinder.Target;
-import net.minecraft.world.level.pathfinder.WalkNodeEvaluator;
 
 public class CreatureNodeProcessor extends WalkNodeEvaluator implements ICreatureNodeProcessor {
 

@@ -1,19 +1,19 @@
 package com.lycanitesmobs.core.entity.navigate;
 
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.LookControl;
 import net.minecraft.world.entity.ai.control.MoveControl;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.pathfinder.NodeEvaluator;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
-import net.minecraft.core.Direction;
-import net.minecraft.core.BlockPos;
-import net.minecraft.util.Mth;
+import net.minecraft.world.level.pathfinder.NodeEvaluator;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class CreatureMoveController extends MoveControl {
@@ -81,8 +81,8 @@ public class CreatureMoveController extends MoveControl {
             velocity = scaledSpeed / velocity;
             moveForward *= velocity;
             moveStrafe *= velocity;
-            float yawSin = Mth.sin(this.mob.yRot * 0.017453292F);
-            float yawCos = Mth.cos(this.mob.yRot * 0.017453292F);
+            float yawSin = Mth.sin(this.mob.getYRot() * 0.017453292F);
+            float yawCos = Mth.cos(this.mob.getYRot() * 0.017453292F);
             float moveX = moveForward * yawCos - moveStrafe * yawSin;
             moveZ = moveStrafe * yawCos + moveForward * yawSin;
             PathNavigation pathNavigator = this.mob.getNavigation();
@@ -111,14 +111,14 @@ public class CreatureMoveController extends MoveControl {
             }
 
             moveZ = (float)(Mth.atan2(distanceZ, distanceX) * 57.2957763671875D) - 90.0F;
-            this.mob.yRot = this.rotlerp(this.mob.yRot, moveZ, 90.0F);
+            this.mob.setYRot(this.rotlerp(this.mob.getYRot(), moveZ, 90.0F));
             this.mob.setSpeed((float)(this.speedModifier * this.mob.getAttribute(Attributes.MOVEMENT_SPEED).getValue()));
 
             // Jumping:
             BlockPos entityPos = this.mob.blockPosition();
             BlockState blockState = this.mob.level.getBlockState(entityPos);
             VoxelShape collisionShape = blockState.getCollisionShape(this.mob.level, entityPos);
-            double jumpRange = (double)Math.max(1.0F, this.mob.getDimensions(Pose.STANDING).width + 0.25F);
+            double jumpRange = Math.max(1.0F, this.mob.getDimensions(Pose.STANDING).width + 0.25F);
             if (distanceY > (double)this.mob.maxUpStep && distanceXZ < jumpRange || !collisionShape.isEmpty() && this.mob.position().y() < collisionShape.max(Direction.Axis.Y) + (double)entityPos.getY()) {
                 this.mob.getJumpControl().jump();
                 this.operation = MoveControl.Operation.JUMPING;
@@ -142,17 +142,17 @@ public class CreatureMoveController extends MoveControl {
             double y = this.wantedY - this.entityCreature.position().y();
             double z = this.wantedZ - this.entityCreature.position().z();
             double distance = x * x + y * y + z * z;
-            distance = Mth.sqrt(distance);
+            distance = Mth.sqrt((float) distance);
             y = y / distance;
             float f = (float)(Mth.atan2(z, x) * (180D / Math.PI)) - 90.0F;
-            this.entityCreature.yRot = this.rotlerp(this.entityCreature.yRot, f, 90.0F);
-            this.entityCreature.yBodyRot = this.entityCreature.yRot;
+            this.entityCreature.setYRot(this.rotlerp(this.entityCreature.getYRot(), f, 90.0F));
+            this.entityCreature.yBodyRot = this.entityCreature.getYRot();
             float f1 = (float)(this.speedModifier * this.entityCreature.getAttribute(Attributes.MOVEMENT_SPEED).getValue());
             this.entityCreature.setSpeed(this.entityCreature.getSpeed() + (f1 - this.entityCreature.getSpeed()) * 0.125F);
 
             double d4 = Math.sin((double)(this.entityCreature.tickCount + this.entityCreature.getId()) * 0.5D) * 0.05D;
-            double d5 = Math.cos((double)(this.entityCreature.yRot * 0.017453292F));
-            double d6 = Math.sin((double)(this.entityCreature.yRot * 0.017453292F));
+            double d5 = Math.cos((double)(this.entityCreature.getYRot() * 0.017453292F));
+            double d6 = Math.sin((double)(this.entityCreature.getYRot() * 0.017453292F));
             double motionX = d4 * d5;
             double motionZ = d4 * d6;
             d4 = Math.sin((double)(this.entityCreature.tickCount + this.entityCreature.getId()) * 0.75D) * 0.05D;
@@ -191,7 +191,7 @@ public class CreatureMoveController extends MoveControl {
 
             if (this.courseChangeCooldown-- <= 0) {
                 this.courseChangeCooldown += this.entityCreature.getRandom().nextInt(5) + 2;
-                distance = (double)Mth.sqrt(distance);
+                distance = Mth.sqrt((float) distance);
                 if(distance >= 1D) {
                     this.entityCreature.setSpeed((float)this.entityCreature.getAttribute(Attributes.MOVEMENT_SPEED).getValue());
                     double speed = (this.entityCreature.getSpeed() / 2.4D) * this.getSpeedModifier();
@@ -211,10 +211,14 @@ public class CreatureMoveController extends MoveControl {
             LivingEntity entitylivingbase = this.entityCreature.getTarget();
             double distanceX = entitylivingbase.position().x() - this.entityCreature.position().x();
             double distanceZ = entitylivingbase.position().z() - this.entityCreature.position().z();
-            this.entityCreature.yBodyRot = this.entityCreature.yRot = -((float)Mth.atan2(distanceX, distanceZ)) * (180F / (float)Math.PI);
+            float yRot = -((float)Mth.atan2(distanceX, distanceZ)) * (180F / (float)Math.PI);
+            this.entityCreature.yBodyRot = yRot;
+            this.entityCreature.setYRot(yRot);
         }
         else if(this.operation == MoveControl.Operation.MOVE_TO) {
-            this.entityCreature.yBodyRot = this.entityCreature.yRot = -((float)Mth.atan2(this.entityCreature.getDeltaMovement().x(), this.entityCreature.getDeltaMovement().z())) * (180F / (float)Math.PI);
+            float yRot = -((float)Mth.atan2(this.entityCreature.getDeltaMovement().x(), this.entityCreature.getDeltaMovement().z())) * (180F / (float)Math.PI);
+            this.entityCreature.yBodyRot = yRot;
+            this.entityCreature.setYRot(yRot);
         }
     }
 }

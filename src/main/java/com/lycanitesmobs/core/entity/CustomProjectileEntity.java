@@ -6,23 +6,21 @@ import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import com.lycanitesmobs.core.info.projectile.behaviours.ProjectileBehaviour;
 import com.lycanitesmobs.core.info.projectile.behaviours.ProjectileBehaviourLaser;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.client.particle.FallingDustParticle;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.DustParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.core.particles.BlockParticleOption;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.Tags;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,7 +81,7 @@ public class CustomProjectileEntity extends BaseProjectileEntity {
 	public CustomProjectileEntity(EntityType<? extends BaseProjectileEntity> entityType, Level world, LivingEntity entityLiving, ProjectileInfo projectileInfo) {
 		super(entityType, world, entityLiving);
 		if(projectileInfo != null)
-			this.shootFromRotation(entityLiving, entityLiving.xRot, entityLiving.yRot, 0.0F, (float)projectileInfo.velocity, 1.0F); // Shoot from Entity
+			this.shootFromRotation(entityLiving, entityLiving.getXRot(), entityLiving.getYRot(), 0.0F, (float)projectileInfo.velocity, 1.0F); // Shoot from Entity
 		this.modInfo = LycanitesMobs.modInfo;
 		this.setProjectileInfo(projectileInfo);
 	}
@@ -240,7 +238,7 @@ public class CustomProjectileEntity extends BaseProjectileEntity {
 			else if(this.getOwner() == null || this.getOwner().getId() != this.throwerId) {
 				Entity possibleThrower = this.getCommandSenderWorld().getEntity(this.throwerId);
 				if(possibleThrower instanceof LivingEntity) {
-					this.owner = (LivingEntity)possibleThrower;
+					this.owner = possibleThrower;
 				}
 				else {
 					this.owner = null;

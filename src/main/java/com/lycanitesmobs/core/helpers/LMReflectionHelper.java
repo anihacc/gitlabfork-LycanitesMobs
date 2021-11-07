@@ -1,12 +1,9 @@
 package com.lycanitesmobs.core.helpers;
 
 import com.lycanitesmobs.LycanitesMobs;
-import cpw.mods.modlauncher.api.INameMappingService;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.attributes.RangedAttribute;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;

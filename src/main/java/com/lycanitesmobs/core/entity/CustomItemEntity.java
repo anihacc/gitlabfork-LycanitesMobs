@@ -1,9 +1,9 @@
 package com.lycanitesmobs.core.entity;
 
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.level.Level;
 
 public class CustomItemEntity extends ItemEntity {
@@ -12,16 +12,16 @@ public class CustomItemEntity extends ItemEntity {
 	// ==================================================
    	//                     Constructor
    	// ==================================================
-	public CustomItemEntity(Level world) {
-		super(EntityType.ITEM, world);
+	public CustomItemEntity(Level level) {
+		super(EntityType.ITEM, level);
 	}
-	
-	public CustomItemEntity(Level world, double x, double y, double z) {
-        super(world, x, y, z);
+
+    public CustomItemEntity(Level level, double x, double y, double z, ItemStack itemStack) {
+        super(level, x, y, z, itemStack);
     }
 
-    public CustomItemEntity(Level world, double x, double y, double z, ItemStack itemStack) {
-        super(world, x, y, z, itemStack);
+    public CustomItemEntity(Level level, double x, double y, double z, ItemStack itemStack, double velX, double velY, double velZ) {
+        super(level, x, y, z, itemStack, velX, velY, velZ);
     }
     
 

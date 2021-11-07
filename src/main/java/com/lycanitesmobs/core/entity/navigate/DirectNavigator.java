@@ -1,11 +1,11 @@
 package com.lycanitesmobs.core.entity.navigate;
 
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.core.BlockPos;
-import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 
 public class DirectNavigator {
@@ -121,10 +121,11 @@ public class DirectNavigator {
 		this.host.setDeltaMovement(this.host.getDeltaMovement().add(motionX, motionY, motionZ));
 		
 		float fullAngle = (float)(Math.atan2(this.host.getDeltaMovement().z(), this.host.getDeltaMovement().x()) * 180.0D / Math.PI) - 90.0F;
-		float angle = Mth.wrapDegrees(fullAngle - this.host.yRot);
+		float angle = Mth.wrapDegrees(fullAngle - this.host.getYRot());
 		this.host.zza = 0.5F;
-		if(this.faceMovement && this.host.getTarget() != null && (this.host.getDeltaMovement().x() > 0.025F || this.host.getDeltaMovement().z() > 0.025F))
-			this.host.yRot += angle;
+		if(this.faceMovement && this.host.getTarget() != null && (this.host.getDeltaMovement().x() > 0.025F || this.host.getDeltaMovement().z() > 0.025F)) {
+			this.host.setYRot(this.host.getYRot() + angle);
+		}
 	}
 	
 	
@@ -153,10 +154,12 @@ public class DirectNavigator {
 		double distX = targetPosition.getX() - this.host.position().x();
 		double distZ = targetPosition.getZ() - this.host.position().z();
 		float fullAngle = (float)(Math.atan2(distZ, distX) * 180.0D / Math.PI);// - 90.0F;
-		float angle = Mth.wrapDegrees(fullAngle - this.host.yRot);
+		float angle = Mth.wrapDegrees(fullAngle - this.host.getYRot());
 		if(angle > 30.0F) angle = 30.0F;
 		if(angle < -30.0F) angle = -30.0F;
-		this.host.yBodyRot = this.host.yRot += angle;
+		float yRot = this.host.getYRot() + angle;
+		this.host.yBodyRot = yRot;
+		this.host.setYRot(yRot);
 	}
 
 	// ========== Rotate to Target ==========
@@ -164,7 +167,7 @@ public class DirectNavigator {
 		double distX = target.getX() - this.host.position().x();
 		double distZ = target.getZ() - this.host.position().z();
 		float fullAngle = (float)(Math.atan2(distZ, distX) * 180.0D / Math.PI) - 90.0F;
-		float angle = Mth.wrapDegrees(fullAngle - this.host.yRot);
-		this.host.yRot += angle; 
+		float angle = Mth.wrapDegrees(fullAngle - this.host.getYRot());
+		this.host.setYRot(this.host.getYRot() + angle);
     }
 }

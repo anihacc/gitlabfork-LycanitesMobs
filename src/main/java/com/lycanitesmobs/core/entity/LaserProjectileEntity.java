@@ -2,23 +2,23 @@ package com.lycanitesmobs.core.entity;
 
 import com.lycanitesmobs.Utilities;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.level.Level;
 
 import java.lang.reflect.Constructor;
 import java.util.HashSet;
@@ -162,8 +162,8 @@ public class LaserProjectileEntity extends BaseProjectileEntity {
 			double zPos = entityToFollow.position().z() + this.offsetZ;
     		if(entityToFollow instanceof BaseCreatureEntity) {
 				BaseCreatureEntity creatureToFollow = (BaseCreatureEntity)entityToFollow;
-				xPos = creatureToFollow.getFacingPosition(creatureToFollow, this.offsetX, creatureToFollow.yRot + 90F).getX();
-				zPos = creatureToFollow.getFacingPosition(creatureToFollow, this.offsetZ, creatureToFollow.yRot).getZ();
+				xPos = creatureToFollow.getFacingPosition(creatureToFollow, this.offsetX, creatureToFollow.getYRot() + 90F).getX();
+				zPos = creatureToFollow.getFacingPosition(creatureToFollow, this.offsetZ, creatureToFollow.getYRot()).getZ();
 			}
     		this.setPos(xPos, yPos, zPos);
     	}
@@ -227,7 +227,7 @@ public class LaserProjectileEntity extends BaseProjectileEntity {
             );
     	}
     	else if(this.isAlive()) {
-    		this.remove();
+    		this.discard();
     	}
     }
     

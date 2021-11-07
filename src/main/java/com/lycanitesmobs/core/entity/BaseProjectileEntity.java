@@ -1,47 +1,38 @@
 package com.lycanitesmobs.core.entity;
 
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.TallGrassBlock;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.entity.*;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.ThrowableProjectile;
-import net.minecraft.world.level.material.Fluids;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.util.math.*;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.ThrowableProjectile;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.player.AttackEntityEvent;
-import net.minecraftforge.fml.network.NetworkHooks;
-
-import javax.annotation.Nonnull;
-
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityDimensions;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Pose;
-import net.minecraft.world.phys.AABB;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.TallGrassBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.player.AttackEntityEvent;
+import net.minecraftforge.fmllegacy.network.NetworkHooks;
+
+import javax.annotation.Nonnull;
 
 public class BaseProjectileEntity extends ThrowableProjectile {
 	public String entityName = "projectile";
@@ -92,7 +83,7 @@ public class BaseProjectileEntity extends ThrowableProjectile {
     public BaseProjectileEntity(EntityType<? extends BaseProjectileEntity> entityType, Level world, LivingEntity entityLiving) {
 	   this(entityType, world);
 	   this.setPos(entityLiving.position().x(), entityLiving.position().y() + entityLiving.getEyeHeight(), entityLiving.position().z());
-	   this.shootFromRotation(entityLiving, entityLiving.xRot, entityLiving.yRot, 0.0F, 1.1F, 1.0F); // Shoot from entity
+	   this.shootFromRotation(entityLiving, entityLiving.getXRot(), entityLiving.getYRot(), 0.0F, 1.1F, 1.0F); // Shoot from entity
 	   this.setOwner(entityLiving);
 	   this.setup();
     }
@@ -180,15 +171,15 @@ public class BaseProjectileEntity extends ThrowableProjectile {
     	// Terrain Destruction
     	if(!this.getCommandSenderWorld().isClientSide || this.clientOnly) {
     		if(!this.waterProof && this.isInWater())
-    			this.remove();
+    			this.discard();
     		else if(!this.lavaProof && this.isInLava())
-    			this.remove();
+    			this.discard();
     	}
 
     	// Life Timeout:
 	   if(!this.getCommandSenderWorld().isClientSide || this.clientOnly) {
 		  if(this.projectileLife-- <= 0) {
-				this.remove();
+				this.discard();
 			}
 		}
 
@@ -397,7 +388,7 @@ public class BaseProjectileEntity extends ThrowableProjectile {
 		  boolean entityPierced = this.ripper && entityCollision;
 		  boolean blockPierced = this.pierceBlocks && blockCollision;
 		  if((!this.getCommandSenderWorld().isClientSide || this.clientOnly) && !entityPierced && !blockPierced) {
- 			  this.remove();
+ 			  this.discard();
 				if(this.getImpactSound() != null) {
 					this.playSound(this.getImpactSound(), 1.0F, 1.0F / (this.getCommandSenderWorld().random.nextFloat() * 0.4F + 0.8F));
 				}
@@ -428,7 +419,7 @@ public class BaseProjectileEntity extends ThrowableProjectile {
 			double lookDistance = targetViewVector.dot(distance);
 			double lookRange = 1.5D;
 			double comparison = 1.0D - (lookRange / distanceStraight);
-			return lookDistance > comparison && targetLiving.canSee(this);
+			return lookDistance > comparison && targetLiving.hasLineOfSight(this);
 		}
 
 		return true;
@@ -563,11 +554,6 @@ public class BaseProjectileEntity extends ThrowableProjectile {
 		return this.getType().getDimensions().scale(this.getProjectileScale());
 	}
 
-	@Override
-	public AABB getBoundingBox() {
-		return super.getBoundingBox();
-	}
-
 	public float getTextureOffsetY() {
 		return 0;
 	}
@@ -635,7 +621,7 @@ public class BaseProjectileEntity extends ThrowableProjectile {
 
     /** Returns the XYZ coordinate in front or behind the provided entity with the given distance and angle offset (in degrees), use a negative distance for behind. **/
     public double[] getFacingPosition(Entity entity, double distance, double angleOffset) {
-	   double angle = Math.toRadians(entity.yRot) + angleOffset;
+	   double angle = Math.toRadians(entity.getYRot()) + angleOffset;
 	   double xAmount = -Math.sin(angle);
 	   double zAmount = Math.cos(angle);
 	   double[] coords = new double[3];

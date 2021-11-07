@@ -2,16 +2,15 @@ package com.lycanitesmobs.core.entity;
 
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
-import net.minecraft.entity.Entity;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ThrowableProjectile;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.HitResult;
 
 public class RapidFireProjectileEntity extends BaseProjectileEntity {
 	// Properties:
@@ -119,7 +118,7 @@ public class RapidFireProjectileEntity extends BaseProjectileEntity {
 	    	rapidTime--;
     	}
     	else if(this.isAlive()) {
-    		this.remove();
+    		this.discard();
     	}
     }
 	

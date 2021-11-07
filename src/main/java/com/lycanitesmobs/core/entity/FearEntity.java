@@ -2,16 +2,16 @@ package com.lycanitesmobs.core.entity;
 
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.inventory.CreatureInventory;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.FlyingMob;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -81,7 +81,7 @@ public class FearEntity extends BaseCreatureEntity {
         
         // Clean Up:
         if(this.fearedEntity == null || !this.fearedEntity.isAlive() || !(this.fearedEntity instanceof LivingEntity)) {
-        	this.remove();
+        	this.discard();
         	return;
         }
 
@@ -94,8 +94,8 @@ public class FearEntity extends BaseCreatureEntity {
         
         // Set Rotation:
         if(this.hasPickupEntity() && !(this.getPickupEntity() instanceof Player)) {
-        	this.getPickupEntity().yRot = this.yRot;
-        	this.getPickupEntity().xRot = this.xRot;
+        	this.getPickupEntity().setYRot(this.getYRot());
+        	this.getPickupEntity().setXRot(this.getXRot());
         }
         
         // Follow Fear Target If Not Picked Up:
@@ -107,7 +107,7 @@ public class FearEntity extends BaseCreatureEntity {
 
         // Remove When Fear is Over:
         if(ObjectManager.getEffect("fear") == null || !fearedEntity.hasEffect(ObjectManager.getEffect("fear"))) {
-            this.remove();
+            this.discard();
             return;
         }
 
@@ -140,7 +140,7 @@ public class FearEntity extends BaseCreatureEntity {
         //this.setSize(feared.width, feared.height); TODO Entity Type Size
         this.noPhysics = feared.noPhysics;
         this.maxUpStep = feared.maxUpStep;
-		this.moveTo(feared.position().x(), feared.position().y(), feared.position().z(), feared.yRot, feared.xRot);
+		this.moveTo(feared.position().x(), feared.position().y(), feared.position().z(), feared.getYRot(), feared.getXRot());
 		
         if(!(feared instanceof Player)) {
 	        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(feared.getAttribute(Attributes.MOVEMENT_SPEED).getBaseValue());
@@ -173,7 +173,7 @@ public class FearEntity extends BaseCreatureEntity {
     		if(this.pickupEntity instanceof FlyingMob)
     			return true;
     		if(this.pickupEntity instanceof Player)
-    			return ((Player)this.pickupEntity).abilities.instabuild;
+    			return ((Player)this.pickupEntity).getAbilities().instabuild;
     	}
     	return false;
     }
@@ -215,7 +215,5 @@ public class FearEntity extends BaseCreatureEntity {
      
     // ========== Fly ==========
     /** Plays a flying sound, usually a wing flap, called randomly when flying. **/
-    public void playFlySound() {
-    	return;
-    }
+    public void playFlySound() {}
 }

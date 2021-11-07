@@ -7,13 +7,12 @@ import com.lycanitesmobs.core.config.ConfigAdmin;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.network.MessageEntityPerched;
 import com.lycanitesmobs.core.network.MessageEntityPickedUp;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.World;
 
 import java.util.HashMap;
 import java.util.List;
@@ -150,7 +149,7 @@ public class ExtendedEntity implements IExtendedEntity {
             this.forceRemoveChecked = true;
         }
         if (this.forceRemove && this.forceRemoveTicks-- <= 0)
-            this.entity.remove();
+            this.entity.discard();
 
         // Safe Position:
 		if (this.lastSafePos == null) {
@@ -226,7 +225,7 @@ public class ExtendedEntity implements IExtendedEntity {
 			this.entity.fallDistance = 0;
 			if (!this.entity.getCommandSenderWorld().isClientSide && this.entity instanceof Player) {
 				Player player = (Player) this.entity;
-				player.abilities.mayfly = true;
+				player.getAbilities().mayfly = true;
 				this.entity.noPhysics = true;
 			}
 		}
@@ -245,12 +244,12 @@ public class ExtendedEntity implements IExtendedEntity {
             // Player Flying:
 			if(this.entity instanceof Player) {
 				if(pickedUpByEntity != null) {
-                    this.playerAllowFlyingSnapshot = ((Player) this.entity).abilities.mayfly;
-                    this.playerIsFlyingSnapshot = ((Player)this.entity).abilities.flying;
+                    this.playerAllowFlyingSnapshot = ((Player) this.entity).getAbilities().mayfly;
+                    this.playerIsFlyingSnapshot = ((Player)this.entity).getAbilities().flying;
                 }
 				else {
-                    ((Player)this.entity).abilities.mayfly = this.playerAllowFlyingSnapshot;
-                    ((Player)this.entity).abilities.flying = this.playerIsFlyingSnapshot;
+                    ((Player)this.entity).getAbilities().mayfly = this.playerAllowFlyingSnapshot;
+                    ((Player)this.entity).getAbilities().flying = this.playerIsFlyingSnapshot;
                     this.entity.noPhysics = false;
                 }
 			}
@@ -341,7 +340,7 @@ public class ExtendedEntity implements IExtendedEntity {
 		double entityWidth = this.entity.getDimensions(this.entity.getPose()).width;
 		double entityHeight = this.entity.getDimensions(this.entity.getPose()).height;
 
-		double angle = Math.toRadians(this.entity.yRot) + 90;
+		double angle = Math.toRadians(this.entity.getYRot()) + 90;
 		double xPerchPos = this.entity.position().x();
 		double zPerchPos = this.entity.position().z();
 		double distance = entityWidth * 0.7D;
@@ -366,7 +365,7 @@ public class ExtendedEntity implements IExtendedEntity {
 			Vec3 perchPosition = this.getPerchPosition();
 			perchedByEntity.setPos(perchPosition.x(), perchPosition.y(), perchPosition.z());
 			perchedByEntity.setDeltaMovement(this.entity.getDeltaMovement());
-			perchedByEntity.yRot = this.entity.yRot;
+			perchedByEntity.setYRot(this.entity.getYRot());
 			perchedByEntity.noPhysics = true;
 		}
 	}

@@ -59,14 +59,14 @@ public class EntityFactory implements EntityType.EntityFactory<Entity> {
 		}
 	}
 
+	public BiFunction<net.minecraftforge.fmllegacy.network.FMLPlayMessages.SpawnEntity, Level, Entity> createOnClientFunction = this::createOnClient;
 
-	public BiFunction<net.minecraftforge.fml.network.FMLPlayMessages.SpawnEntity, Level, Entity> createOnClientFunction = this::createOnClient;
 	/**
 	 * Spawns an entity on the client side from a server packet.
 	 * @param spawnPacket The entity spawn packet.
 	 * @param world The world to spawn in.
 	 */
-	public Entity createOnClient(net.minecraftforge.fml.network.FMLPlayMessages.SpawnEntity spawnPacket, Level world) {
+	public Entity createOnClient(net.minecraftforge.fmllegacy.network.FMLPlayMessages.SpawnEntity spawnPacket, Level world) {
 		LycanitesMobs.logDebug("", "Client factory called!");
 		return null;
 	}

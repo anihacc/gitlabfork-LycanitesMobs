@@ -2,23 +2,18 @@ package com.lycanitesmobs.core.entity.projectile;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
+import net.minecraft.core.particles.DustParticleOptions;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.core.particles.DustParticleOptions;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class EntityHellShield extends BaseProjectileEntity {
-
-	// Properties:
 	public Entity shootingEntity;
 
-    // ==================================================
- 	//                   Constructors
- 	// ==================================================
     public EntityHellShield(EntityType<? extends BaseProjectileEntity> entityType, Level world) {
         super(entityType, world);
     }
@@ -30,8 +25,7 @@ public class EntityHellShield extends BaseProjectileEntity {
     public EntityHellShield(EntityType<? extends BaseProjectileEntity> entityType, Level world, double x, double y, double z) {
         super(entityType, world, x, y, z);
     }
-    
-    // ========== Setup Projectile ==========
+
     public void setup() {
     	this.entityName = "hellshield";
     	this.modInfo = LycanitesMobs.modInfo;
@@ -40,33 +34,19 @@ public class EntityHellShield extends BaseProjectileEntity {
         this.knockbackChance = 0D;
         this.noPhysics = true;
     }
-	
-    
-    // ==================================================
- 	//                   Update
- 	// ==================================================
+
     @Override
     public void tick() {
     	super.tick();
     	if(this.position().y() > this.getCommandSenderWorld().getMaxBuildHeight() + 20)
-    		this.remove();
+    		this.discard();
     }
-	
-    
-    // ==================================================
- 	//                   Movement
- 	// ==================================================
-    // ========== Gravity ==========
+
     @Override
     protected float getGravity() {
         return 0F;
     }
-    
-    
-    // ==================================================
- 	//                     Impact
- 	// ==================================================
-    //========== On Impact Particles/Sounds ==========
+
     @Override
     public void onImpactVisuals() {
     	for(int i = 0; i < 8; ++i)
@@ -78,19 +58,11 @@ public class EntityHellShield extends BaseProjectileEntity {
         return false;
     }
 
-
-    // ==================================================
- 	//                      Sounds
- 	// ==================================================
     @Override
     public SoundEvent getLaunchSound() {
     	return null;
     }
-    
-    
-    // ==================================================
-    //                   Brightness
-    // ==================================================
+
     public float getBrightness() {
         return 1.0F;
     }

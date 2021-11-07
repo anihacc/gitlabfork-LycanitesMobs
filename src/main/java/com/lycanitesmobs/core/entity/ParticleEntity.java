@@ -2,12 +2,12 @@ package com.lycanitesmobs.core.entity;
 
 import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.core.info.ModInfo;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.projectile.ThrowableProjectile;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.projectile.ThrowableProjectile;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.HitResult;
 
 public class ParticleEntity extends ThrowableProjectile {
 	// Particle:
@@ -45,7 +45,7 @@ public class ParticleEntity extends ThrowableProjectile {
         this.zo = this.position().z();
 
         if(this.particleAge++ >= this.particleAgeMax)
-            this.remove();
+            this.discard();
 
         /*this.motionY -= 0.04D * (double)this.particleGravity;
         this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
