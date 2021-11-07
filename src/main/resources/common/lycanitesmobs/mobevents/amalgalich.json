@@ -13,7 +13,7 @@
 		},
 		{
 			"type": "player",
-			"spawnDistanceMin": 5000
+			"spawnDistanceMin": 500
 		}
 	],
 	"levelBoostMax": 0,

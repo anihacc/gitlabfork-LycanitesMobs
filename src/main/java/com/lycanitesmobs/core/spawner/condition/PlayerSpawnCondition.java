@@ -180,7 +180,7 @@ public class PlayerSpawnCondition extends SpawnCondition {
 		}
 
 		// Check Spawn Distance:
-		double spawnDistance = Math.sqrt(player.position().distanceTo(new Vec3(world.getLevelData().getXSpawn(), world.getLevelData().getYSpawn(), world.getLevelData().getZSpawn())));
+		double spawnDistance = player.position().distanceTo(new Vec3(world.getLevelData().getXSpawn(), world.getLevelData().getYSpawn(), world.getLevelData().getZSpawn()));
 		if(this.spawnDistanceMin >= 0 && spawnDistance < this.spawnDistanceMin) {
 			return false;
 		}
@@ -190,7 +190,7 @@ public class PlayerSpawnCondition extends SpawnCondition {
 
 		// Check Specific Position:
 		if (this.position != null) {
-			double positionDistance = Math.sqrt(player.position().distanceTo(new Vec3(this.position.getX(), this.position.getY(), this.position.getZ())));
+			double positionDistance = player.position().distanceTo(new Vec3(this.position.getX(), this.position.getY(), this.position.getZ()));
 			if (this.positionDistanceMin >= 0 && positionDistance < this.positionDistanceMin) {
 				return false;
 			}
