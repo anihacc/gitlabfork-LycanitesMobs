@@ -8,11 +8,11 @@ import com.lycanitesmobs.client.renderer.layer.LayerCreatureSaddle;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Vector3f;
+import com.mojang.math.Vector4f;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec2;
-import com.mojang.math.Vector3f;
-import com.mojang.math.Vector4f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -26,11 +26,7 @@ public abstract class CreatureModel extends EntityModel<BaseCreatureEntity> impl
         this(1.0F);
     }
 
-	public CreatureModel(float shadowSize) {
-    	// Texture:
-    	this.texWidth = 128;
-		this.texHeight = 128;
-    }
+	public CreatureModel(float shadowSize) {}
 
     @Override
     public void setupAnim(BaseCreatureEntity entity, float time, float distance, float loop, float lookY, float lookX) {}

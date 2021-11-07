@@ -21,10 +21,7 @@ public class ProjectileModel extends EntityModel<BaseProjectileEntity> implement
         this(1.0F);
     }
     
-    public ProjectileModel(float shadowSize) {
-    	this.texWidth = 128;
-		this.texHeight = 128;
-    }
+    public ProjectileModel(float shadowSize) {}
 
 	@Override
 	public void setupAnim(BaseProjectileEntity entity, float time, float distance, float loop, float lookY, float lookX) {}
