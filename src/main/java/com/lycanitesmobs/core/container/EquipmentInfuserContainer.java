@@ -4,18 +4,16 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.item.ChargeItem;
 import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
 import com.lycanitesmobs.core.tileentity.EquipmentInfuserTileEntity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.inventory.MenuType;
-import net.minecraft.item.*;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.core.BlockPos;
-import net.minecraftforge.common.extensions.IForgeContainerType;
-
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraftforge.common.extensions.IForgeContainerType;
 
 public class EquipmentInfuserContainer extends BaseContainer {
 	public static final MenuType<EquipmentInfuserContainer> TYPE = (MenuType<EquipmentInfuserContainer>)IForgeContainerType.create(EquipmentInfuserContainer::new).setRegistryName(LycanitesMobs.MODID, "equipment_infuser");

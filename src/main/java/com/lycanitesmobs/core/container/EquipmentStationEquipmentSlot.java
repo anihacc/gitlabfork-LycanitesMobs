@@ -53,8 +53,8 @@ public class EquipmentStationEquipmentSlot extends BaseSlot {
 
 
 	@Override
-	public ItemStack onTake(Player player, ItemStack itemStack) {
-		return super.onTake(player, itemStack);
+	public void onTake(Player player, ItemStack itemStack) {
+		super.onTake(player, itemStack);
 	}
 
 

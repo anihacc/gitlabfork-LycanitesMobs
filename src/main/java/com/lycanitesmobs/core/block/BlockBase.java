@@ -2,23 +2,26 @@ package com.lycanitesmobs.core.block;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.info.ModInfo;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.state.properties.IntegerProperty;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraft.world.phys.shapes.Shapes;
-import net.minecraft.util.text.*;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.TickPriority;
-import net.minecraft.world.level.Level;
-import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -26,11 +29,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
-
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 
 public class BlockBase extends Block {
 	
@@ -91,11 +89,7 @@ public class BlockBase extends Block {
     public Component getDescription(ItemStack itemStack, @Nullable BlockGetter world) {
         return new TranslatableComponent(this.getDescriptionId() + ".description").withStyle(ChatFormatting.GREEN);
     }
-	
-	
-	// ==================================================
-	//                      Place
-	// ==================================================
+
 	@Override
 	public void onPlace(BlockState state, Level world, BlockPos pos, BlockState oldState, boolean isMoving) {
 		// Initial Block Ticking:
@@ -103,17 +97,11 @@ public class BlockBase extends Block {
 			world.getBlockTicks().scheduleTick(pos, this, this.tickRate(world));
 		}
 	}
-    
-    
-	// ==================================================
-	//                     Ticking
-	// ==================================================
-    // ========== Tick Rate ==========
+
     public int tickRate(LevelReader world) {
     	return this.tickRate;
     }
 
-    // ========== Tick Update ==========
     @Override
     public void tick(BlockState state, ServerLevel world, BlockPos pos, Random random) { //tick()
         if (world.isClientSide)
@@ -128,16 +116,11 @@ public class BlockBase extends Block {
             world.getBlockTicks().scheduleTick(pos, this, this.tickRate(world), TickPriority.LOW);
     }
 
-    // ========== Can Remove ==========
     /** Returns true if the block should be removed naturally (remove on tick). **/
     public boolean canRemove(Level world, BlockPos pos, BlockState state, Random random) {
         return true;
     }
-    
-    
-	// ==================================================
-	//                    Collision
-	// ==================================================
+
 	@Override
 	public VoxelShape getShape(BlockState blockState, BlockGetter world, BlockPos blockPos, CollisionContext selectionContext) {
     	if(this.noBreakCollision) {
@@ -150,14 +133,10 @@ public class BlockBase extends Block {
 	public VoxelShape getCollisionShape(BlockState blockState, BlockGetter world, BlockPos blockPos, CollisionContext selectionContext) {
 		return this.hasCollision ? blockState.getShape(world, blockPos) : Shapes.empty();
 	}
-    
-    
-	// ==================================================
-	//                Collision Effects
-	// ==================================================
+
 	@Override
-	public void stepOn(Level world, BlockPos pos, Entity entity) {
-		super.stepOn(world, pos, entity);
+	public void stepOn(Level world, BlockPos pos, BlockState blockState, Entity entity) {
+		super.stepOn(world, pos, blockState, entity);
 	}
 
     @Override

@@ -150,7 +150,7 @@ public class EquipmentForgeSlot extends BaseSlot {
 
 
 	@Override
-	public ItemStack onTake(Player player, ItemStack itemStack) {
+	public void onTake(Player player, ItemStack itemStack) {
 		Item item = itemStack.getItem();
 
 		// Equipment Part:
@@ -173,7 +173,7 @@ public class EquipmentForgeSlot extends BaseSlot {
 			this.containerForge.onEquipmentPartSlotChanged(this);
 		}
 
-		return super.onTake(player, itemStack);
+		super.onTake(player, itemStack);
 	}
 
 

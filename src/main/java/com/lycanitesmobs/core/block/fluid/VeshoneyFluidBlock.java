@@ -3,17 +3,17 @@ package com.lycanitesmobs.core.block.fluid;
 import com.lycanitesmobs.core.entity.creature.Vespid;
 import com.lycanitesmobs.core.entity.creature.VespidQueen;
 import com.lycanitesmobs.core.info.ElementInfo;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.material.FlowingFluid;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.FlowingFluid;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -70,7 +70,7 @@ public class VeshoneyFluidBlock extends BaseFluidBlock {
             f = (float)pos.getX() + random.nextFloat();
             f1 = (float)pos.getY() + random.nextFloat() * 0.5F;
             f2 = (float)pos.getZ() + random.nextFloat();
-            world.addParticle(ParticleTypes.RAIN, (double)f, (double)f1, (double)f2, 0.0D, 0.0D, 0.0D);
+            world.addParticle(ParticleTypes.RAIN, f, f1, f2, 0.0D, 0.0D, 0.0D);
         }
         super.animateTick(state, world, pos, random);
     }

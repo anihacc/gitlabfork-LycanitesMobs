@@ -16,9 +16,9 @@ public class EquipmentInfuserChargeSlot extends BaseSlot {
 	 * @param x The x display position.
 	 * @param y The y display position.
 	 */
-	public EquipmentInfuserChargeSlot(EquipmentInfuserContainer infuserContainer, int slotIndex, int x, int y) {
-		super(infuserContainer.equipmentInfuser, slotIndex, x, y);
-		this.container = infuserContainer;
+	public EquipmentInfuserChargeSlot(EquipmentInfuserContainer container, int slotIndex, int x, int y) {
+		super(container.equipmentInfuser, slotIndex, x, y);
+		this.container = container;
 	}
 
 	@Override
@@ -55,8 +55,8 @@ public class EquipmentInfuserChargeSlot extends BaseSlot {
 	 * @param itemStack The ItemStack being inserted.
 	 */
 	@Override
-	public ItemStack onTake(Player player, ItemStack itemStack) {
-		return super.onTake(player, itemStack);
+	public void onTake(Player player, ItemStack itemStack) {
+		super.onTake(player, itemStack);
 	}
 
 	@Override

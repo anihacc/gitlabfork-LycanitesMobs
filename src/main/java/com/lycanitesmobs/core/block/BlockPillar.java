@@ -1,30 +1,23 @@
 package com.lycanitesmobs.core.block;
 
 import com.lycanitesmobs.core.info.ModInfo;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.core.Direction;
-import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 
 public class BlockPillar extends BlockBase {
     public static EnumProperty<Direction.Axis> AXIS = BlockStateProperties.AXIS;
 
-	// ==================================================
-	//                   Constructor
-	// ==================================================
 	public BlockPillar(Block.Properties properties, ModInfo group, String name) {
 		super(properties, group, name);
-        this.registerDefaultState(this.defaultBlockState().setValue(AXIS, Direction.Axis.Y));
+		this.registerDefaultState(this.defaultBlockState().setValue(AXIS, Direction.Axis.Y));
 	}
 
-	// ==================================================
-	//                   Blockstate
-	// ==================================================
 	public BlockState rotate(BlockState state, Rotation rot) {
 		switch(rot) {
 			case COUNTERCLOCKWISE_90:

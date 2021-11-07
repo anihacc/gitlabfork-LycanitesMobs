@@ -1,9 +1,9 @@
 package com.lycanitesmobs.core.capabilities;
 
 import com.lycanitesmobs.core.entity.ExtendedPlayer;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.core.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 
 public class ExtendedPlayerStorage implements Capability.IStorage<IExtendedPlayer> {

@@ -1,11 +1,8 @@
 package com.lycanitesmobs.core.container;
 
 import com.lycanitesmobs.core.info.ItemManager;
-import com.lycanitesmobs.core.item.ChargeItem;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.item.DyeItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.item.Items;
 
 public class EquipmentStationRepairSlot extends BaseSlot {
 	public EquipmentStationContainer container;
@@ -56,8 +53,8 @@ public class EquipmentStationRepairSlot extends BaseSlot {
 	 * @param itemStack The ItemStack being inserted.
 	 */
 	@Override
-	public ItemStack onTake(Player player, ItemStack itemStack) {
-		return super.onTake(player, itemStack);
+	public void onTake(Player player, ItemStack itemStack) {
+		super.onTake(player, itemStack);
 	}
 
 	@Override
