@@ -5,30 +5,25 @@ import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.info.ObjectLists;
 import com.lycanitesmobs.core.item.BaseItem;
+import net.minecraft.Util;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.util.*;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.level.Level;
 
 import java.util.List;
 
-import net.minecraft.Util;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
-
 public class ItemWinterGiftLarge extends BaseItem {
 
-	// ==================================================
-	//                   Constructor
-	// ==================================================
     public ItemWinterGiftLarge(Item.Properties properties) {
         super(properties);
         this.modInfo = LycanitesMobs.modInfo;
@@ -36,15 +31,11 @@ public class ItemWinterGiftLarge extends BaseItem {
         this.setup();
         ObjectManager.addSound(this.itemName + "_bad", this.modInfo, "item." + this.itemName + ".bad");
     }
-    
-    
-    // ==================================================
- 	//                    Item Use
- 	// ==================================================
+
     @Override
     public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
         ItemStack itemStack = player.getItemInHand(hand);
-         if(!player.abilities.instabuild) {
+         if(!player.getAbilities().instabuild) {
              itemStack.setCount(Math.max(0, itemStack.getCount() - 1));
          }
          
@@ -54,11 +45,7 @@ public class ItemWinterGiftLarge extends BaseItem {
 
         return new InteractionResultHolder(InteractionResult.SUCCESS, itemStack);
      }
-    
-    
-    // ==================================================
-  	//                       Open
-  	// ==================================================
+
     public void open(ItemStack itemStack, Level world, Player player) {
         Component message = new TranslatableComponent("item.lycanitesmobs." + this.itemName + ".bad");
 		player.sendMessage(message, Util.NIL_UUID);
@@ -72,7 +59,7 @@ public class ItemWinterGiftLarge extends BaseItem {
         if(entityType != null) {
             Entity entity = entityType.create(world);
             if (entity != null) {
-                entity.moveTo(player.position().x(), player.position().y(), player.position().z(), player.yRot, player.xRot);
+                entity.moveTo(player.position().x(), player.position().y(), player.position().z(), player.getYRot(), player.getXRot());
 
                 // Themed Names:
                 if (entity instanceof BaseCreatureEntity) {

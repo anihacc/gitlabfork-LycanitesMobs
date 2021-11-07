@@ -4,13 +4,13 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.info.CreatureType;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.level.Level;
 
 public class ItemSoulstoneFilled extends ItemSoulstone {
@@ -41,7 +41,7 @@ public class ItemSoulstoneFilled extends ItemSoulstone {
                 creatureIndex = player.getRandom().nextInt(this.creatureType.tameableCreatures.size());
             }
             TameableCreatureEntity entity = (TameableCreatureEntity)this.creatureType.tameableCreatures.get(creatureIndex).createEntity(world);
-            entity.moveTo(player.getX(), player.getY(), player.getZ(), player.yRot, player.xRot);
+            entity.moveTo(player.getX(), player.getY(), player.getZ(), player.getYRot(), player.getXRot());
             world.addFreshEntity(entity);
             entity.setPlayerOwner(player);
             super.interactLivingEntity(itemStack, player, entity, hand);

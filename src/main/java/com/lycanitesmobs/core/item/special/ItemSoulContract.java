@@ -6,25 +6,23 @@ import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.item.BaseItem;
 import com.lycanitesmobs.core.pets.PetEntry;
-import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.ChatFormatting;
+import net.minecraft.Util;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.Util;
-import net.minecraft.network.chat.Component;
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.UUID;
-
-import net.minecraft.world.item.Item.Properties;
 
 public class ItemSoulContract extends BaseItem {
 
@@ -128,7 +126,7 @@ public class ItemSoulContract extends BaseItem {
 			nbt.putUUID("ownerUUID", player.getUUID());
 			nbt.putUUID("petEntryUUID", creatureEntity.getPetEntry().petEntryID);
 			itemStack.setTag(nbt);
-			player.inventory.setItem(player.inventory.selected, itemStack);
+			player.getInventory().setItem(player.getInventory().selected, itemStack);
 			player.sendMessage(new TranslatableComponent("message.soul_contract.bound").withStyle(ChatFormatting.GREEN), Util.NIL_UUID);
 		}
 
@@ -154,7 +152,7 @@ public class ItemSoulContract extends BaseItem {
 					nbt.remove("ownerUUID");
 					nbt.remove("petEntryUUID");
 					itemStack.setTag(nbt);
-					player.inventory.setItem(player.inventory.selected, itemStack);
+					player.getInventory().setItem(player.getInventory().selected, itemStack);
 					player.sendMessage(new TranslatableComponent("message.soul_contract.unbound").withStyle(ChatFormatting.LIGHT_PURPLE), Util.NIL_UUID);
 				}
 				return InteractionResult.SUCCESS;
@@ -201,7 +199,7 @@ public class ItemSoulContract extends BaseItem {
 		if (creatureEntity instanceof TameableCreatureEntity) {
 			((TameableCreatureEntity) creatureEntity).setPlayerOwner(player);
 		}
-		player.inventory.setItem(player.inventory.selected, ItemStack.EMPTY);
+		player.getInventory().setItem(player.getInventory().selected, ItemStack.EMPTY);
 
 		return InteractionResult.SUCCESS;
 	}

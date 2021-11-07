@@ -5,17 +5,17 @@ import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.BaseComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.BaseComponent;
-import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fmllegacy.common.registry.GameRegistry;
 
 public class SummonEquipmentFeature extends EquipmentFeature {
 	/** The id of the mob to summon. **/
@@ -127,7 +127,7 @@ public class SummonEquipmentFeature extends EquipmentFeature {
 			if (attacker.getRandom().nextDouble() <= this.summonChance) {
 				try {
 					Entity entity = entityType.create(attacker.getCommandSenderWorld());
-					entity.moveTo(attacker.blockPosition().getX(), attacker.blockPosition().getY(), attacker.blockPosition().getZ(), attacker.yRot, 0.0F);
+					entity.moveTo(attacker.blockPosition().getX(), attacker.blockPosition().getY(), attacker.blockPosition().getZ(), attacker.getYRot(), 0.0F);
 					if (entity instanceof BaseCreatureEntity) {
 						BaseCreatureEntity entityCreature = (BaseCreatureEntity) entity;
 						entityCreature.setMinion(true);
@@ -150,7 +150,7 @@ public class SummonEquipmentFeature extends EquipmentFeature {
 							randomAngle = -randomAngle;
 						}
 						BlockPos spawnPos = entityCreature.getFacingPosition(attacker, -1, randomAngle);
-						entity.moveTo(spawnPos.getX(), spawnPos.getY(), spawnPos.getZ(), attacker.yRot, 0.0F);
+						entity.moveTo(spawnPos.getX(), spawnPos.getY(), spawnPos.getZ(), attacker.getYRot(), 0.0F);
 						entityCreature.setTarget(target);
 						entity.getCommandSenderWorld().addFreshEntity(entity);
 						summonedCreatures++;

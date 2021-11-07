@@ -5,51 +5,45 @@ import com.lycanitesmobs.core.dispenser.SpawnEggDispenseBehaviour;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.CreatureType;
-import net.minecraft.block.*;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.level.block.entity.SpawnerBlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.util.*;
-import net.minecraft.util.math.*;
-import net.minecraft.util.text.*;
-import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.BaseSpawner;
-
-import javax.annotation.Nullable;
-import java.util.List;
-
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.BaseComponent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.BaseSpawner;
 import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.level.block.FenceBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.SpawnerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class ItemCustomSpawnEgg extends CreatureTypeItem {
 
@@ -143,7 +137,7 @@ public class ItemCustomSpawnEgg extends CreatureTypeItem {
             mobspawnerbaselogic.setEntityId(this.getCreatureInfo(itemStack).getEntityType());
             tileEntity.setChanged();
             world.sendBlockUpdated(pos, blockState, blockState, 3);
-            if (!player.abilities.instabuild) {
+            if (!player.getAbilities().instabuild) {
                 itemStack.setCount(Math.max(0, itemStack.getCount() - 1));
             }
 
@@ -162,7 +156,7 @@ public class ItemCustomSpawnEgg extends CreatureTypeItem {
 			if(itemStack.hasCustomHoverName()) {
 				entity.setCustomName(itemStack.getHoverName());
 			}
-			if(!player.abilities.instabuild) {
+			if(!player.getAbilities().instabuild) {
 				itemStack.setCount(Math.max(0, itemStack.getCount() - 1));
 			}
 		}
@@ -198,7 +192,7 @@ public class ItemCustomSpawnEgg extends CreatureTypeItem {
 					if (itemStack.hasCustomHoverName()) {
 						entity.setCustomName(itemStack.getHoverName());
 					}
-				if (!player.abilities.instabuild) {
+				if (!player.getAbilities().instabuild) {
 					itemStack.setCount(Math.max(0, itemStack.getCount() - 1));
 				}
 			}
@@ -244,15 +238,14 @@ public class ItemCustomSpawnEgg extends CreatureTypeItem {
 		LivingEntity entity = this.getCreatureInfo(itemStack).createEntity(world);
 		if(entity != null && world instanceof ServerLevelAccessor) {
 			entity.moveTo(x, y, z, Mth.wrapDegrees(world.random.nextFloat() * 360.0F), 0.0F);
-			entity.yHeadRot = entity.yRot;
-			entity.yBodyRot = entity.yRot;
+			entity.yHeadRot = entity.getYRot();
+			entity.yBodyRot = entity.getYRot();
 
 			if(itemStack.hasCustomHoverName()) {
 				entity.setCustomName(itemStack.getHoverName());
 			}
 
-			if(entity instanceof Mob) {
-				Mob mobEntity = (Mob)entity;
+			if(entity instanceof Mob mobEntity) {
 				mobEntity.finalizeSpawn((ServerLevelAccessor)world, world.getCurrentDifficultyAt(mobEntity.blockPosition()), MobSpawnType.SPAWN_EGG, null, null);
 				mobEntity.playAmbientSound();
 			}

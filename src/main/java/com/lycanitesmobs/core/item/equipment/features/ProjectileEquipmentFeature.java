@@ -6,17 +6,17 @@ import com.lycanitesmobs.core.entity.CustomProjectileEntity;
 import com.lycanitesmobs.core.entity.ExtendedEntity;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
+import net.minecraft.network.chat.BaseComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.phys.Vec3;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.BaseComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
 public class ProjectileEquipmentFeature extends EquipmentFeature {
 	/** The name of the projectile to spawn. **/
@@ -241,8 +241,8 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 		// Patterns:
 		if("spread".equals(this.projectilePattern)) {
 			for(int i = 0; i < this.count; i++) {
-				double yaw = shooter.yRot + (this.spreadX * shooter.getRandom().nextDouble()) - (this.spreadX / 2);
-				double pitch = shooter.xRot + (this.spreadY * shooter.getRandom().nextDouble()) - (this.spreadY / 2);
+				double yaw = shooter.getYRot() + (this.spreadX * shooter.getRandom().nextDouble()) - (this.spreadX / 2);
+				double pitch = shooter.getXRot() + (this.spreadY * shooter.getRandom().nextDouble()) - (this.spreadY / 2);
 				ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile(this.projectileName);
 				BaseProjectileEntity projectile = projectileInfo.createProjectile(world, shooter);
 				projectile.setPos(firePos.x, firePos.y, firePos.z);
@@ -256,13 +256,13 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 		else if("ring".equals(this.projectilePattern)) {
 			double angle = this.ringRange / this.count;
 			for(int i = 0; i < this.count; i++) {
-				double yaw = shooter.yRot + (angle * i) - (this.ringRange / 2);
+				double yaw = shooter.getYRot() + (angle * i) - (this.ringRange / 2);
 				ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile(this.projectileName);
 				BaseProjectileEntity projectile = projectileInfo.createProjectile(world, shooter);
 				projectile.setPos(firePos.x, firePos.y, firePos.z);
 				projectile.setBonusDamage(this.bonusDamage);
 				world.addFreshEntity(projectile);
-				projectile.shootFromRotation(shooter, shooter.xRot, (float)yaw - (float)offsetX, 0, (float)projectileInfo.velocity, 0);
+				projectile.shootFromRotation(shooter, shooter.getXRot(), (float)yaw - (float)offsetX, 0, (float)projectileInfo.velocity, 0);
 				projectile.setOwner(shooter);
 				mainProjectile = projectile;
 			}
@@ -271,15 +271,14 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 			ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile(this.projectileName);
 			mainProjectile = projectileInfo.createProjectile(world, shooter);
 			mainProjectile.setPos(firePos.x, firePos.y, firePos.z);
-			mainProjectile.shootFromRotation(shooter, shooter.xRot, shooter.yRot - (float)offsetX, 0, (float)projectileInfo.velocity, 0);
+			mainProjectile.shootFromRotation(shooter, shooter.getXRot(), shooter.getYRot() - (float)offsetX, 0, (float)projectileInfo.velocity, 0);
 			mainProjectile.setOwner(shooter);
 			mainProjectile.setBonusDamage(this.bonusDamage);
 			world.addFreshEntity(mainProjectile);
 		}
 
 		// Channeling:
-		if(this.count == 1 && mainProjectile instanceof CustomProjectileEntity) {
-			CustomProjectileEntity customProjectileEntity = (CustomProjectileEntity)mainProjectile;
+		if(this.count == 1 && mainProjectile instanceof CustomProjectileEntity customProjectileEntity) {
 			if(customProjectileEntity.shouldChannel()) {
 				this.channeledProjectile = customProjectileEntity;
 			}

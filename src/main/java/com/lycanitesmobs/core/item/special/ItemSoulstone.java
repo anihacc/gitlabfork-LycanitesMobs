@@ -1,24 +1,22 @@
 package com.lycanitesmobs.core.item.special;
 
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureType;
-import com.lycanitesmobs.core.item.BaseItem;
 import com.lycanitesmobs.core.item.CreatureTypeItem;
 import com.lycanitesmobs.core.pets.PetEntry;
+import net.minecraft.Util;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.Util;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
@@ -41,10 +39,10 @@ public class ItemSoulstone extends CreatureTypeItem {
 	public InteractionResult interactLivingEntity(ItemStack stack, Player player, LivingEntity entity, InteractionHand hand) {
     	if(this.applySoulstoneToEntity(player, entity)) {
 			// Consume Soulstone:
-			if (!player.abilities.instabuild)
+			if (!player.getAbilities().instabuild)
 				stack.setCount(Math.max(0, stack.getCount() - 1));
 			if (stack.getCount() <= 0)
-				player.inventory.setItem(player.inventory.selected, ItemStack.EMPTY);
+				player.getInventory().setItem(player.getInventory().selected, ItemStack.EMPTY);
 
 			return InteractionResult.SUCCESS;
 		}

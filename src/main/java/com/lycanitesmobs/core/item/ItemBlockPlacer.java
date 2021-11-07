@@ -2,15 +2,15 @@ package com.lycanitesmobs.core.item;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class ItemBlockPlacer extends BaseItem {
 	public String placedBlockName;
@@ -38,11 +38,11 @@ public class ItemBlockPlacer extends BaseItem {
 			if(player.mayUseItemAt(pos, context.getClickedFace(), itemStack)) {
 				try {
 					BlockState blockState = world.getBlockState(pos);
-					if(blockState.isAir(world, pos)) {
+					if(blockState.isAir()) {
 						world.playLocalSound((double)pos.getX() + 0.5D, (double)pos.getY() + 0.5D, (double)pos.getZ() + 0.5D, ObjectManager.getSound(this.placedBlockName), SoundSource.PLAYERS, 1.0F, player.getRandom().nextFloat() * 0.4F + 0.8F, false);
 						world.setBlockAndUpdate(pos, ObjectManager.getBlock(this.placedBlockName).defaultBlockState());
 					}
-					if(!player.abilities.instabuild)
+					if(!player.getAbilities().instabuild)
 						itemStack.setCount(Math.max(0, itemStack.getCount() - 1));
 					return InteractionResult.SUCCESS;
 				}

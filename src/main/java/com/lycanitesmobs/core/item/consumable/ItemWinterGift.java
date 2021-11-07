@@ -6,32 +6,27 @@ import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.CustomItemEntity;
 import com.lycanitesmobs.core.info.ObjectLists;
 import com.lycanitesmobs.core.item.BaseItem;
-import net.minecraft.world.level.block.Blocks;
+import net.minecraft.Util;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.util.*;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 
 import java.util.List;
 
-import net.minecraft.Util;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
-
 public class ItemWinterGift extends BaseItem {
 
-	// ==================================================
-	//                   Constructor
-	// ==================================================
     public ItemWinterGift(Item.Properties properties) {
 		super(properties);
         this.modInfo = LycanitesMobs.modInfo;
@@ -40,15 +35,11 @@ public class ItemWinterGift extends BaseItem {
 		ObjectManager.addSound(this.itemName + "_good", this.modInfo, "item." + this.itemName + ".good");
 		ObjectManager.addSound(this.itemName + "_bad", this.modInfo, "item." + this.itemName + ".bad");
     }
-    
-    
-    // ==================================================
- 	//                    Item Use
- 	// ==================================================
+
     @Override
      public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
         ItemStack itemStack = player.getItemInHand(hand);
-        if(!player.abilities.instabuild) {
+        if(!player.getAbilities().instabuild) {
             itemStack.setCount(Math.max(0, itemStack.getCount() - 1));
         }
 
@@ -61,11 +52,13 @@ public class ItemWinterGift extends BaseItem {
 
         return new InteractionResultHolder(InteractionResult.SUCCESS, itemStack);
      }
-    
-    
-    // ==================================================
-  	//                       Good
-  	// ==================================================
+
+	/**
+	 * Called when this item is performing is good or lucky action.
+	 * @param itemStack The opened item.
+	 * @param world The world the items is opened in.
+	 * @param player The player opening the item.
+	 */
     public void openGood(ItemStack itemStack, Level world, Player player) {
 		Component message = new TranslatableComponent("item.lycanitesmobs." + this.itemName + ".good");
 		player.sendMessage(message, Util.NIL_UUID);
@@ -81,11 +74,13 @@ public class ItemWinterGift extends BaseItem {
 		entityItem.setPickUpDelay(10);
 		world.addFreshEntity(entityItem);
     }
-    
-    
-    // ==================================================
-  	//                       Bad
-  	// ==================================================
+
+	/**
+	 * Called when this item is performing is bad or unlucky action.
+	 * @param itemStack The opened item.
+	 * @param world The world the items is opened in.
+	 * @param player The player opening the item.
+	 */
     public void openBad(ItemStack itemStack, Level world, Player player) {
 		Component message = new TranslatableComponent("item.lycanitesmobs." + this.itemName + ".bad");
 		player.sendMessage(message, Util.NIL_UUID);
@@ -99,7 +94,7 @@ public class ItemWinterGift extends BaseItem {
 		if(entityType != null) {
 			Entity entity = entityType.create(world);
             if(entity != null) {
-	            entity.moveTo(player.position().x(), player.position().y(), player.position().z(), player.yRot, player.xRot);
+	            entity.moveTo(player.position().x(), player.position().y(), player.position().z(), player.getYRot(), player.getXRot());
 
                 // Themed Names:
                 if (entity instanceof BaseCreatureEntity) {
@@ -124,10 +119,9 @@ public class ItemWinterGift extends BaseItem {
 		}
     }
 
-
-    // ==================================================
-    //                       Lists
-    // ==================================================
+	/**
+	 * Generates the lists of good and bad items. TODO Migrate to item tag lists instead.
+	 */
     public static void createObjectLists() {
         // Halloween Treats:
         ObjectLists.addItem("winter_gifts", Items.DIAMOND);

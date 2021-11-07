@@ -3,15 +3,15 @@ package com.lycanitesmobs.core.item.special;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.info.AltarInfo;
 import com.lycanitesmobs.core.item.BaseItem;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 
 import java.util.ArrayList;
@@ -73,10 +73,10 @@ public class ItemSoulkey extends BaseItem {
                         player.sendMessage(message, Util.NIL_UUID);
                         return InteractionResult.FAIL;
                     }
-                    if (!player.abilities.instabuild)
+                    if (!player.getAbilities().instabuild)
                         itemStack.setCount(Math.max(0, itemStack.getCount() - 1));
                     if (itemStack.getCount() <= 0)
-                        player.inventory.setItem(player.inventory.selected, ItemStack.EMPTY);
+                        player.getInventory().setItem(player.getInventory().selected, ItemStack.EMPTY);
                     Component message = new TranslatableComponent("message.soulkey.active");
                     player.sendMessage(message, Util.NIL_UUID);
                 }
