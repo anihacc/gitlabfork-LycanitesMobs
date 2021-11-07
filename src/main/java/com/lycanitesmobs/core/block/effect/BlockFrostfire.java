@@ -58,7 +58,7 @@ public class BlockFrostfire extends BlockFireBase {
 
     @Override
     public boolean isBlockFireSource(BlockState state, IWorldReader world, BlockPos pos, Direction side) {
-        if(state.getBlock() == Blocks.SNOW || state.getBlock() == Blocks.SNOW_BLOCK)
+        if(state.getBlock() == Blocks.PACKED_ICE || state.getBlock() == Blocks.SNOW_BLOCK)
             return true;
         return false;
     }
