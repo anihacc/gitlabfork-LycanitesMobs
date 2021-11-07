@@ -463,7 +463,7 @@ public abstract class RideableCreatureEntity extends TameableCreatureEntity {
 
 	public boolean isEntityPassenger(Entity targetEntity, Entity nestedRider) {
 		for(Entity entity : nestedRider.getPassengers()) {
-			if (entity.equals(entity)) {
+			if (entity.equals(targetEntity)) {
 				return true;
 			}
 

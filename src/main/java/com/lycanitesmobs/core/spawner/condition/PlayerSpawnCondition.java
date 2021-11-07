@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.spawner.condition;
 
 import com.google.gson.JsonObject;
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.helpers.JSONHelper;
 import net.minecraft.entity.player.PlayerEntity;
@@ -181,7 +182,7 @@ public class PlayerSpawnCondition extends SpawnCondition {
 		}
 
 		// Check Spawn Distance:
-		double spawnDistance = Math.sqrt(player.position().distanceTo(new Vector3d(world.getLevelData().getXSpawn(), world.getLevelData().getYSpawn(), world.getLevelData().getZSpawn())));
+		double spawnDistance = player.position().distanceTo(new Vector3d(world.getLevelData().getXSpawn(), world.getLevelData().getYSpawn(), world.getLevelData().getZSpawn()));
 		if(this.spawnDistanceMin >= 0 && spawnDistance < this.spawnDistanceMin) {
 			return false;
 		}
@@ -191,7 +192,7 @@ public class PlayerSpawnCondition extends SpawnCondition {
 
 		// Check Specific Position:
 		if (this.position != null) {
-			double positionDistance = Math.sqrt(player.position().distanceTo(new Vector3d(this.position.getX(), this.position.getY(), this.position.getZ())));
+			double positionDistance = player.position().distanceTo(new Vector3d(this.position.getX(), this.position.getY(), this.position.getZ()));
 			if (this.positionDistanceMin >= 0 && positionDistance < this.positionDistanceMin) {
 				return false;
 			}
