@@ -2,8 +2,8 @@ package com.lycanitesmobs.core.network;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.fmllegacy.network.NetworkDirection;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 
 import java.util.function.Supplier;
 

@@ -4,24 +4,19 @@ import com.google.common.collect.ImmutableSet;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.block.fluid.BaseFluidBlock;
 import com.lycanitesmobs.core.info.ItemManager;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.gen.feature.*;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.configurations.*;
 import net.minecraft.world.level.levelgen.placement.ChanceDecoratorConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.NoneDecoratorConfiguration;
 import net.minecraft.world.level.levelgen.placement.FeatureDecorator;
-import net.minecraft.world.level.levelgen.feature.configurations.RangeDecoratorConfiguration;
+import net.minecraft.world.level.material.Material;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
-import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.configurations.BlockStateConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.SpringConfiguration;
 
 public class WorldGenManager {
 	private static WorldGenManager INSTANCE;

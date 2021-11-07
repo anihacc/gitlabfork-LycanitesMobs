@@ -4,15 +4,12 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.ClientManager;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.CreatureRelationshipEntry;
-import com.lycanitesmobs.core.entity.ExtendedPlayer;
-import com.lycanitesmobs.core.entity.TameableCreatureEntity;
-import com.lycanitesmobs.core.info.CreatureKnowledge;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.fmllegacy.network.NetworkDirection;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 
 import java.util.function.Supplier;
 

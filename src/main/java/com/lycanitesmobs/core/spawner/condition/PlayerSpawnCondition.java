@@ -3,13 +3,12 @@ package com.lycanitesmobs.core.spawner.condition;
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.helpers.JSONHelper;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.phys.Vec3;
-import net.minecraft.util.math.vector.Vector3i;
-import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
 import java.util.List;

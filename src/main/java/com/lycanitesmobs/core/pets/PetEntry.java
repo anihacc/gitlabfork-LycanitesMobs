@@ -8,14 +8,14 @@ import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.Subspecies;
 import com.lycanitesmobs.core.info.Variant;
 import net.minecraft.ReportedException;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.level.Level;
 
 import java.util.UUID;
@@ -367,7 +367,7 @@ public class PetEntry {
             // Remove Entity If Spawned:
             if (this.entity != null) {
                 this.saveEntityNBT();
-                this.entity.remove();
+                this.entity.discard();
                 this.entity = null;
             }
 
@@ -423,7 +423,7 @@ public class PetEntry {
         this.loadEntityNBT();
 
         // Spawn Location:
-        this.entity.moveTo(this.host.position().x(), this.host.position().y(), this.host.position().z(), this.host.yRot, 0.0F);
+        this.entity.moveTo(this.host.position().x(), this.host.position().y(), this.host.position().z(), this.host.getYRot(), 0.0F);
 
         if (this.entity instanceof BaseCreatureEntity) {
             BaseCreatureEntity entityCreature = (BaseCreatureEntity)this.entity;
@@ -443,11 +443,11 @@ public class PetEntry {
                 randomAngle = -randomAngle;
             BlockPos spawnPos = entityCreature.getFacingPosition(this.host, -1, randomAngle);
             if (this.entity.getCommandSenderWorld().getBlockState(spawnPos).isValidSpawn(this.entity.getCommandSenderWorld(), spawnPos, this.entity.getType()))
-                this.entity.moveTo(spawnPos.getX(), spawnPos.getY(), spawnPos.getZ(), this.host.yRot, 0.0F);
+                this.entity.moveTo(spawnPos.getX(), spawnPos.getY(), spawnPos.getZ(), this.host.getYRot(), 0.0F);
             else {
                 spawnPos = entityCreature.getFacingPosition(this.host, -1, -randomAngle);
                 if (this.entity.getCommandSenderWorld().getBlockState(spawnPos).isValidSpawn(this.entity.getCommandSenderWorld(), spawnPos, this.entity.getType()))
-                    this.entity.moveTo(spawnPos.getX(), spawnPos.getY(), spawnPos.getZ(), this.host.yRot, 0.0F);
+                    this.entity.moveTo(spawnPos.getX(), spawnPos.getY(), spawnPos.getZ(), this.host.getYRot(), 0.0F);
             }
 
             // Temporary:
@@ -499,7 +499,7 @@ public class PetEntry {
             return;
         this.onDespawnEntity(this.entity);
         this.saveEntityNBT();
-        this.entity.remove();
+        this.entity.discard();
         this.entity = null;
     }
 

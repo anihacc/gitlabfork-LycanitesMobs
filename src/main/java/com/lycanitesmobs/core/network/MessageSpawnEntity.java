@@ -6,11 +6,11 @@ import com.lycanitesmobs.core.entity.CustomProjectileEntity;
 import com.lycanitesmobs.core.entity.EntityFactory;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.fmllegacy.network.NetworkDirection;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 
 import java.util.UUID;
 import java.util.function.Supplier;
@@ -19,8 +19,8 @@ public class MessageSpawnEntity {
 	public String entityTypeName = "";
     public int entityId = 0;
     public UUID uuid;
-    public float pitch;
-    public float yaw;
+    public float xRot;
+    public float yRot;
     public double x;
 	public double y;
 	public double z;
@@ -33,8 +33,8 @@ public class MessageSpawnEntity {
 			}
 			this.entityId = serverEntity.getId();
 			this.uuid = serverEntity.getUUID();
-			this.pitch = serverEntity.xRot;
-			this.yaw = serverEntity.yRot;
+			this.xRot = serverEntity.getXRot();
+			this.yRot = serverEntity.getYRot();
 			this.x = serverEntity.position().x();
 			this.y = serverEntity.position().y();
 			this.z = serverEntity.position().z();
@@ -61,8 +61,8 @@ public class MessageSpawnEntity {
 				return;
 			}
 			entity.setPos(message.x, message.y, message.z);
-			entity.xRot = message.pitch;
-			entity.yRot = message.yaw;
+			entity.setXRot(message.xRot);
+			entity.setYRot(message.yRot);
 			entity.setId(message.entityId);
 			entity.setUUID(message.uuid);
 
@@ -90,8 +90,8 @@ public class MessageSpawnEntity {
 		message.entityTypeName = packet.readUtf();
         message.entityId = packet.readInt();
         message.uuid = packet.readUUID();
-		message.pitch = packet.readFloat();
-		message.yaw = packet.readFloat();
+		message.xRot = packet.readFloat();
+		message.yRot = packet.readFloat();
 		message.x = packet.readDouble();
 		message.y = packet.readDouble();
 		message.z = packet.readDouble();
@@ -105,8 +105,8 @@ public class MessageSpawnEntity {
 		packet.writeUtf(message.entityTypeName);
         packet.writeInt(message.entityId);
 		packet.writeUUID(message.uuid);
-		packet.writeFloat(message.pitch);
-		packet.writeFloat(message.yaw);
+		packet.writeFloat(message.xRot);
+		packet.writeFloat(message.yRot);
 		packet.writeDouble(message.x);
 		packet.writeDouble(message.y);
 		packet.writeDouble(message.z);

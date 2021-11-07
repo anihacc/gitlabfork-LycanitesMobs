@@ -7,10 +7,10 @@ import com.lycanitesmobs.core.entity.EntityFactory;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.client.multiplayer.ClientPacketListener;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.Packet;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.phys.Vec3;
 
 import java.io.IOException;
@@ -20,8 +20,8 @@ public class EntitySpawnPacket implements Packet<ClientPacketListener> {
 	public String entityTypeName = "";
 	public int entityId = 0;
 	public UUID uuid;
-	public float pitch;
-	public float yaw;
+	public float xRot;
+	public float yRot;
 	public Vec3 pos;
 	public double y;
 	public double z;
@@ -33,29 +33,28 @@ public class EntitySpawnPacket implements Packet<ClientPacketListener> {
 			}
 			this.entityId = serverEntity.getId();
 			this.uuid = serverEntity.getUUID();
-			this.pitch = serverEntity.xRot;
-			this.yaw = serverEntity.yRot;
+			this.xRot = serverEntity.getXRot();
+			this.yRot = serverEntity.getYRot();
 			this.pos = serverEntity.position();
 		}
 	}
 
-	@Override
 	public void read(FriendlyByteBuf packet) throws IOException {
 		this.entityTypeName = packet.readUtf();
 		this.entityId = packet.readInt();
 		this.uuid = packet.readUUID();
-		this.pitch = packet.readFloat();
-		this.yaw = packet.readFloat();
+		this.xRot = packet.readFloat();
+		this.yRot = packet.readFloat();
 		this.pos = new Vec3(packet.readDouble(), packet.readDouble(), packet.readDouble());
 	}
 
 	@Override
-	public void write(FriendlyByteBuf packet) throws IOException {
+	public void write(FriendlyByteBuf packet) {
 		packet.writeUtf(this.entityTypeName);
 		packet.writeInt(this.entityId);
 		packet.writeUUID(this.uuid);
-		packet.writeFloat(this.pitch);
-		packet.writeFloat(this.yaw);
+		packet.writeFloat(this.xRot);
+		packet.writeFloat(this.yRot);
 		packet.writeDouble(this.pos.x());
 		packet.writeDouble(this.pos.y());
 		packet.writeDouble(this.pos.z());
@@ -74,8 +73,8 @@ public class EntitySpawnPacket implements Packet<ClientPacketListener> {
 			return;
 		}
 		entity.setPos(this.pos.x(), this.pos.y(), this.pos.z());
-		entity.xRot = this.pitch;
-		entity.yRot = this.yaw;
+		entity.setXRot(this.xRot);
+		entity.setYRot(this.yRot);
 		entity.setId(this.entityId);
 		entity.setUUID(this.uuid);
 

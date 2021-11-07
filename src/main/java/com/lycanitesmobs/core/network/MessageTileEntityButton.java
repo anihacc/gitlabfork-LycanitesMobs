@@ -1,12 +1,12 @@
 package com.lycanitesmobs.core.network;
 
 import com.lycanitesmobs.core.tileentity.TileEntityBase;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.core.BlockPos;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraftforge.fmllegacy.network.NetworkDirection;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 
 import java.util.function.Supplier;
 

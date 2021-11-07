@@ -1,14 +1,14 @@
 package com.lycanitesmobs.core.network;
 
 import com.lycanitesmobs.LycanitesMobs;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkRegistry;
-import net.minecraftforge.fml.network.simple.SimpleChannel;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.fmllegacy.network.NetworkDirection;
+import net.minecraftforge.fmllegacy.network.NetworkRegistry;
+import net.minecraftforge.fmllegacy.network.simple.SimpleChannel;
 
 public class PacketHandler {
 	private static final String PROTOCOL_VERSION = "1";

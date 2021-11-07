@@ -1,14 +1,14 @@
 package com.lycanitesmobs.core.network;
 
-import com.lycanitesmobs.client.ClientManager;
 import com.lycanitesmobs.LycanitesMobs;
+import com.lycanitesmobs.client.ClientManager;
 import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.pets.PetEntry;
 import com.lycanitesmobs.core.pets.PetManager;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.fmllegacy.network.NetworkDirection;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 
 import java.util.UUID;
 import java.util.function.Supplier;

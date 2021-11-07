@@ -1,11 +1,11 @@
 package com.lycanitesmobs.core.network;
 
 import com.lycanitesmobs.core.entity.ExtendedPlayer;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.fmllegacy.network.NetworkDirection;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 
 import java.util.function.Supplier;
 

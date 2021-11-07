@@ -1,12 +1,12 @@
 package com.lycanitesmobs.core.network;
 
 import com.lycanitesmobs.core.item.equipment.ItemEquipment;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.InteractionHand;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.fmllegacy.network.NetworkDirection;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 
 import java.util.function.Supplier;
 

@@ -2,13 +2,13 @@ package com.lycanitesmobs.core.spawner.trigger;
 
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.core.spawner.Spawner;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.LeavesBlock;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.core.BlockPos;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.LeavesBlock;
+import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
 
@@ -31,7 +31,7 @@ public class TreeBlockSpawnTrigger extends BlockSpawnTrigger {
 	}
 
 	public boolean isTreeLogBlock(Block block, Level world, BlockPos pos) {
-		if(this.isLog(world.getBlockState(pos))) {
+		if (this.isLog(world.getBlockState(pos))) {
 			int x = pos.getX();
 			int y = pos.getY();
 			int z = pos.getZ();
@@ -47,7 +47,7 @@ public class TreeBlockSpawnTrigger extends BlockSpawnTrigger {
 			}
 		}
 		String blockName = block.getRegistryName().toString();
-		if((blockName.contains("tree") || blockName.contains("traverse")) && blockName.contains("branch")) {
+		if ((blockName.contains("tree") || blockName.contains("traverse")) && blockName.contains("branch")) {
 			return true;
 		}
 		return false;
@@ -70,7 +70,7 @@ public class TreeBlockSpawnTrigger extends BlockSpawnTrigger {
 			}
 		}
 		String blockName = block.getRegistryName().toString();
-		if((blockName.contains("tree") || blockName.contains("traverse")) && blockName.contains("leaves")) {
+		if ((blockName.contains("tree") || blockName.contains("traverse")) && blockName.contains("leaves")) {
 			return true;
 		}
 		return false;
@@ -78,7 +78,7 @@ public class TreeBlockSpawnTrigger extends BlockSpawnTrigger {
 
 	public boolean isLog(BlockState blockState) {
 		Block block = blockState.getBlock();
-		if(block.is(BlockTags.LOGS)) {
+		if (BlockTags.LOGS.contains(block)) {
 			return true;
 		}
 		return false;
@@ -86,7 +86,7 @@ public class TreeBlockSpawnTrigger extends BlockSpawnTrigger {
 
 	public boolean isLeaves(BlockState blockState) {
 		Block block = blockState.getBlock();
-		if(block instanceof LeavesBlock || block.is(BlockTags.LEAVES)) {
+		if (block instanceof LeavesBlock || BlockTags.LEAVES.contains(block)) {
 			return true;
 		}
 		return false;

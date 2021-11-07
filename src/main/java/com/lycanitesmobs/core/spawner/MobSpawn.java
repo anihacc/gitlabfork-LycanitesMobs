@@ -9,17 +9,17 @@ import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ItemDrop;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.world.Difficulty;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fmllegacy.common.registry.GameRegistry;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -376,7 +376,7 @@ public class MobSpawn {
 			if(entity instanceof LivingEntity)
 				return (LivingEntity)entity;
 			else if(entity != null)
-				entity.remove();
+				entity.discard();
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -396,8 +396,7 @@ public class MobSpawn {
 			((Mob)entityLiving).setPersistenceRequired();
 		}
 
-		if(entityLiving instanceof BaseCreatureEntity) {
-			BaseCreatureEntity entityCreature = (BaseCreatureEntity)entityLiving;
+		if(entityLiving instanceof BaseCreatureEntity entityCreature) {
 			boolean firstSpawn = true;
 			if(this.mobSizeScale > -1) {
 				entityCreature.setSizeScale(this.mobSizeScale);
