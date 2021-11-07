@@ -4,10 +4,10 @@ import com.lycanitesmobs.client.gui.beastiary.lists.ElementDescriptionList;
 import com.lycanitesmobs.client.gui.beastiary.lists.ElementList;
 import com.lycanitesmobs.core.info.ElementInfo;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.entity.player.Player;
 
 public class ElementsBeastiaryScreen extends BeastiaryScreen {
 	public ElementInfo elementInfo;
@@ -23,11 +23,11 @@ public class ElementsBeastiaryScreen extends BeastiaryScreen {
 		super.initWidgets();
 
 		this.elementList = new ElementList(this, this.colLeftWidth, this.colLeftHeight, this.colLeftY,this.colLeftY + this.colLeftHeight, this.colLeftX);
-		this.children.add(this.elementList);
+		this.addRenderableWidget(this.elementList);
 
 		int descriptionListY = this.colRightY;
 		this.descriptionList = new ElementDescriptionList(this, this.colRightWidth, this.colRightHeight, descriptionListY, this.colRightY + this.colRightHeight, this.colRightX);
-		this.children.add(this.descriptionList);
+		this.addRenderableWidget(this.descriptionList);
 	}
 
 	@Override

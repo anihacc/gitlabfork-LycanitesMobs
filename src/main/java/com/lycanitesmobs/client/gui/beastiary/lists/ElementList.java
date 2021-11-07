@@ -7,6 +7,7 @@ import com.lycanitesmobs.core.info.ElementInfo;
 import com.lycanitesmobs.core.info.ElementManager;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.components.events.GuiEventListener;
+import net.minecraft.client.gui.narration.NarratableEntry;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -81,6 +82,11 @@ public class ElementList extends BaseList<ElementsBeastiaryScreen> {
 
 		@Override
 		public List<? extends GuiEventListener> children() {
+			return null;
+		}
+
+		@Override
+		public List<? extends NarratableEntry> narratables() {
 			return null;
 		}
 	}

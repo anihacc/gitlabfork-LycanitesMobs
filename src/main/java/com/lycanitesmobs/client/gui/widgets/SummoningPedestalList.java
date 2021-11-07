@@ -7,6 +7,7 @@ import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.components.events.GuiEventListener;
+import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -73,6 +74,11 @@ public class SummoningPedestalList extends BaseList<SummoningPedestalScreen> {
 		@Override
 		protected void onClicked() {
 			this.parentGUI.screen.selectMinion(this.minionName);
+		}
+
+		@Override
+		public List<? extends NarratableEntry> narratables() {
+			return null;
 		}
 	}
 }

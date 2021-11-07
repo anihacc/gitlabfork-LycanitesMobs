@@ -9,11 +9,11 @@ import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
 import com.lycanitesmobs.core.network.MessageTileEntityButton;
 import com.lycanitesmobs.core.tileentity.EquipmentInfuserTileEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import org.lwjgl.opengl.GL11;
 
 import java.util.List;
@@ -41,7 +41,7 @@ public class EquipmentInfuserScreen extends BaseContainerScreen<EquipmentInfuser
 	@Override
 	protected void renderBackground(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		this.getMinecraft().getTextureManager().bind(TextureManager.getTexture("GUIEquipmentForge"));
+		this.getMinecraft().getTextureManager().bindForSetup(TextureManager.getTexture("GUIEquipmentForge"));
 		this.imageWidth = 176;
 		this.imageHeight = 166;
 		int backX = (this.width - this.imageWidth) / 2;
@@ -58,7 +58,7 @@ public class EquipmentInfuserScreen extends BaseContainerScreen<EquipmentInfuser
 	 */
 	protected void drawSlots(PoseStack matrixStack, int backX, int backY) {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		this.getMinecraft().getTextureManager().bind(TextureManager.getTexture("GUIEquipmentForge"));
+		this.getMinecraft().getTextureManager().bindForSetup(TextureManager.getTexture("GUIEquipmentForge"));
 
 		BaseContainer container = this.getMenu();
 		List<Slot> forgeSlots = container.slots.subList(container.inventoryStart, container.inventoryFinish);
@@ -81,7 +81,7 @@ public class EquipmentInfuserScreen extends BaseContainerScreen<EquipmentInfuser
 
 	@Override
 	protected void renderForeground(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
-        this.drawHelper.drawString(matrixStack, this.inventory.getName().getString(), this.leftPos + 8, this.topPos + this.imageHeight - 96 + 2, 4210752);
+        this.drawHelper.drawString(matrixStack, this.playerInventoryTitle.getString(), this.leftPos + 8, this.topPos + this.imageHeight - 96 + 2, 4210752);
 		int backX = (this.width - this.imageWidth) / 2;
 		int backY = (this.height - this.imageHeight) / 2;
 		this.drawBars(matrixStack, backX, backY);

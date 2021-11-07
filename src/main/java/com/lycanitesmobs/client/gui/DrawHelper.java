@@ -1,19 +1,15 @@
 package com.lycanitesmobs.client.gui;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Font;
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.Tesselator;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import net.minecraft.util.FormattedCharSequence;
-import net.minecraft.resources.ResourceLocation;
+import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Matrix3f;
 import com.mojang.math.Matrix4f;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.TextComponent;
-import org.lwjgl.opengl.GL11;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FormattedCharSequence;
 
 import java.util.List;
 
@@ -137,12 +133,12 @@ public class DrawHelper {
 	public void drawTexture(PoseStack matrixStack, ResourceLocation texture, float x, float y, float z, float u, float v, float width, float height) {
 		this.preDraw();
 
-		this.getMinecraft().getTextureManager().bind(texture);
+		this.getMinecraft().getTextureManager().bindForSetup(texture);
 		Matrix3f normal = matrixStack.last().normal();
 		Matrix4f matrix = matrixStack.last().pose();
 		Tesselator tessellator = Tesselator.getInstance();
 		BufferBuilder buffer = tessellator.getBuilder();
-		buffer.begin(7, DefaultVertexFormat.POSITION_TEX);
+		buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
 		buffer.vertex(matrix, x, y + height, z).uv(0, v).endVertex();
 		buffer.vertex(matrix, x + width, y + height, z).uv(u, v).endVertex();
 		buffer.vertex(matrix, x + width, y, z).uv(u, 0).endVertex();
@@ -167,12 +163,12 @@ public class DrawHelper {
 	public void drawTextureTiled(PoseStack matrixStack, ResourceLocation texture, float x, float y, float z, float u, float v, float width, float height, float resolution) {
 		this.preDraw();
 
-		this.getMinecraft().getTextureManager().bind(texture);
+		this.getMinecraft().getTextureManager().bindForSetup(texture);
 		float scaleX = 0.00390625F * resolution;
 		float scaleY = scaleX;
 		Tesselator tessellator = Tesselator.getInstance();
 		BufferBuilder buffer = tessellator.getBuilder();
-		buffer.begin(GL11.GL_QUADS, DefaultVertexFormat.POSITION_TEX);
+		buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
 		buffer.vertex(x + 0, y + height, z)
 				.uv(((u + 0) * scaleX), (v + height) * scaleY).endVertex();
 		buffer.vertex(x + width, y + height, z)
@@ -214,16 +210,14 @@ public class DrawHelper {
 	}
 
 	public void preDraw() {
+		RenderSystem.setShader(GameRenderer::getPositionTexShader);
+		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 		RenderSystem.enableBlend();
-		RenderSystem.disableDepthTest();
-		RenderSystem.depthMask(false);
-		RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-		RenderSystem.disableAlphaTest();
+		RenderSystem.defaultBlendFunc();
+		RenderSystem.enableDepthTest();
 	}
 
 	public void postDraw() {
-		RenderSystem.enableAlphaTest();
 		RenderSystem.depthMask(true);
 		RenderSystem.enableDepthTest();
 		RenderSystem.disableBlend();
@@ -245,7 +239,7 @@ public class DrawHelper {
 		Matrix4f matrix = matrixStack.last().pose();
 		Tesselator tessellator = Tesselator.getInstance();
 		BufferBuilder buffer = tessellator.getBuilder();
-		buffer.begin(7, DefaultVertexFormat.POSITION_TEX);
+		buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
 		buffer.vertex(matrix, (float)(x), (float)(y + height), 0)
 				.uv(((float)u * scaleX), ((float)(v + height) * scaleY)).endVertex();
 		buffer.vertex(matrix, (float)(x + width), (float)(y + height), 0)

@@ -6,12 +6,13 @@ import com.lycanitesmobs.client.gui.widgets.BaseListEntry;
 import com.lycanitesmobs.core.info.ElementInfo;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.components.events.GuiEventListener;
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraftforge.fmllegacy.common.registry.GameRegistry;
 
 import java.util.List;
 
@@ -66,6 +67,11 @@ public class ElementDescriptionList extends BaseList {
 
 		@Override
 		public List<? extends GuiEventListener> children() {
+			return null;
+		}
+
+		@Override
+		public List<? extends NarratableEntry> narratables() {
 			return null;
 		}
 	}

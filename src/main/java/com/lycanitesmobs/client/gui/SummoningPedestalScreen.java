@@ -11,12 +11,12 @@ import com.lycanitesmobs.core.pets.SummonSet;
 import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.components.ObjectSelectionList;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.gui.components.ContainerObjectSelectionList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
 import org.lwjgl.opengl.GL11;
 
 public class SummoningPedestalScreen extends BaseContainerScreen<SummoningPedestalContainer> {
@@ -25,7 +25,7 @@ public class SummoningPedestalScreen extends BaseContainerScreen<SummoningPedest
     public TileEntitySummoningPedestal summoningPedestal;
     public SummonSet summonSet;
 
-    public ObjectSelectionList list;
+    public ContainerObjectSelectionList list;
 
     public int centerX;
     public int centerY;
@@ -55,7 +55,7 @@ public class SummoningPedestalScreen extends BaseContainerScreen<SummoningPedest
     public void init() {
         super.init();
 
-        this.buttons.clear();
+        this.clearWidgets();
         this.windowWidth = 256;
         this.windowHeight = 166;
         this.halfX = this.windowWidth / 2;
@@ -75,7 +75,7 @@ public class SummoningPedestalScreen extends BaseContainerScreen<SummoningPedest
         int buttonX = this.windowX + 6;
         int buttonY = this.windowY;
 
-        //this.addButton(new MainTab(TAB_BUTTON_ID, buttonX, buttonY - 24, this)); TODO New Tabs
+        //this.addRenderableWidget(new MainTab(TAB_BUTTON_ID, buttonX, buttonY - 24, this)); TODO New Tabs
 
         buttonX = this.centerX + buttonSpacing;
         int buttonXRight = buttonX + buttonWidth + buttonSpacing;
@@ -83,16 +83,16 @@ public class SummoningPedestalScreen extends BaseContainerScreen<SummoningPedest
 
         // Sitting and Following:
         buttonY += buttonHeight + (buttonSpacing * 2);
-        this.addButton(new ButtonBase(BaseCreatureEntity.GUI_COMMAND.SITTING.id, buttonX, buttonY, buttonWidth * 2, buttonHeight, new TranslatableComponent("..."), this));
+        this.addRenderableWidget(new ButtonBase(BaseCreatureEntity.GUI_COMMAND.SITTING.id, buttonX, buttonY, buttonWidth * 2, buttonHeight, new TranslatableComponent("..."), this));
 
         // Passive and Stance:
         buttonY += buttonHeight + (buttonSpacing * 2);
-        this.addButton(new ButtonBase(BaseCreatureEntity.GUI_COMMAND.PASSIVE.id, buttonX, buttonY, buttonWidth, buttonHeight, new TranslatableComponent("..."), this));
-        this.addButton(new ButtonBase(BaseCreatureEntity.GUI_COMMAND.STANCE.id, buttonXRight, buttonY, buttonWidth, buttonHeight, new TranslatableComponent("..."), this));
+        this.addRenderableWidget(new ButtonBase(BaseCreatureEntity.GUI_COMMAND.PASSIVE.id, buttonX, buttonY, buttonWidth, buttonHeight, new TranslatableComponent("..."), this));
+        this.addRenderableWidget(new ButtonBase(BaseCreatureEntity.GUI_COMMAND.STANCE.id, buttonXRight, buttonY, buttonWidth, buttonHeight, new TranslatableComponent("..."), this));
 
         // PVP:
         buttonY += buttonHeight + (buttonSpacing * 2);
-        this.addButton(new ButtonBase(BaseCreatureEntity.GUI_COMMAND.PVP.id, buttonX, buttonY, buttonWidth * 2, buttonHeight, new TranslatableComponent("..."), this));
+        this.addRenderableWidget(new ButtonBase(BaseCreatureEntity.GUI_COMMAND.PVP.id, buttonX, buttonY, buttonWidth * 2, buttonHeight, new TranslatableComponent("..."), this));
 
         // List:
         if(this.hasPets() && this.summoningPedestal.summonSet != null) {
@@ -104,13 +104,13 @@ public class SummoningPedestalScreen extends BaseContainerScreen<SummoningPedest
         int listBottom = listTop + listHeight;
         int listX = this.windowX + (buttonSpacing * 2);
         this.list = new SummoningPedestalList(this, this.playerExt, listWidth, listHeight, listTop, listBottom, listX);
-        this.children.add(this.list);
+        this.addRenderableWidget(this.list);
     }
 
     @Override
     protected void renderBackground(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         GL11.glColor4f(255, 255, 255, 1.0F);
-        Minecraft.getInstance().getTextureManager().bind(this.getTexture());
+        Minecraft.getInstance().getTextureManager().bindForSetup(this.getTexture());
 
         this.drawHelper.drawTexturedModalRect(matrixStack, this.windowX, this.windowY, 0, 0, this.windowWidth, this.windowHeight);
         this.drawHelper.drawTexturedModalRect(matrixStack, this.windowX + 40, this.windowY + this.windowHeight, 40, 224, this.windowWidth - 80, 29);
@@ -126,7 +126,7 @@ public class SummoningPedestalScreen extends BaseContainerScreen<SummoningPedest
 
     @Override
     public void renderWidgets(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
-        for(Object buttonObj : this.buttons) {
+        for(Object buttonObj : this.renderables) {
             if(buttonObj instanceof ButtonBase) {
                 ButtonBase button = (ButtonBase)buttonObj;
 
@@ -170,7 +170,7 @@ public class SummoningPedestalScreen extends BaseContainerScreen<SummoningPedest
     @Override
     protected void renderForeground(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         GL11.glColor4f(255, 255, 255, 1.0F);
-        Minecraft.getInstance().getTextureManager().bind(this.getTexture());
+        Minecraft.getInstance().getTextureManager().bindForSetup(this.getTexture());
 
         // No Pets:
         if (!this.hasPets()) {

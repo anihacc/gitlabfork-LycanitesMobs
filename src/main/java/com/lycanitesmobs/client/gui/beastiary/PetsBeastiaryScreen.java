@@ -10,13 +10,13 @@ import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.pets.PetEntry;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.gui.components.AbstractWidget;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.network.chat.Component;
+import net.minecraft.client.gui.components.Widget;
 import net.minecraft.network.chat.BaseComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.player.Player;
 
 public class PetsBeastiaryScreen extends BeastiaryScreen {
 	public CreatureFilterList petTypeList;
@@ -38,12 +38,12 @@ public class PetsBeastiaryScreen extends BeastiaryScreen {
 		int petTypeListHeight = Math.round((float)this.colLeftHeight * 0.225F);
 		int petTypeListY = this.colLeftY;
 		this.petTypeList = new PetTypeList(this, this.colLeftWidth, petTypeListHeight, petTypeListY, petTypeListY + petTypeListHeight, this.colLeftX);
-		this.children.add(this.petTypeList);
+		this.addRenderableWidget(this.petTypeList);
 
 		int petListHeight = Math.round((float)this.colLeftHeight * 0.7F);
 		int petListY = petTypeListY + petTypeListHeight + Math.round((float)this.colLeftHeight * 0.025F);
 		this.petList = new CreatureList(CreatureList.Type.PET, this, this.petTypeList, this.colLeftWidth, petListHeight, petListY, petListY + petListHeight, this.colLeftX);
-		this.children.add(this.petList);
+		this.addRenderableWidget(this.petList);
 
 		int buttonWidth = 80;
 		int buttonHeight = 20;
@@ -54,63 +54,63 @@ public class PetsBeastiaryScreen extends BeastiaryScreen {
 
 		// Actions:
 		ButtonBase button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.ACTIVE.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, new TranslatableComponent("gui.pet.active"), this);
-		this.addButton(button);
+		this.addRenderableWidget(button);
 
 		buttonX += buttonWidth + buttonSpacing;
 		button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.TELEPORT.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, new TranslatableComponent("gui.pet.teleport"), this);
-		this.addButton(button);
+		this.addRenderableWidget(button);
 
 		buttonX += buttonWidth + buttonSpacing;
 		button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.PVP.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, new TranslatableComponent("gui.pet.pvp"), this);
-		this.addButton(button);
+		this.addRenderableWidget(button);
 
 		buttonX += buttonWidth + buttonSpacing;
 		button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.RELEASE.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, new TranslatableComponent("gui.pet.release"), this);
-		this.addButton(button);
+		this.addRenderableWidget(button);
 
 		// Stance:
 		buttonX = this.colRightX + buttonMarginX;
 		buttonY += buttonHeight + 2;
 		button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.PASSIVE.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, new TranslatableComponent("gui.pet.passive"), this);
-		this.addButton(button);
+		this.addRenderableWidget(button);
 
 		buttonX += buttonWidth + buttonSpacing;
 		button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.DEFENSIVE.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, new TranslatableComponent("gui.pet.defensive"), this);
-		this.addButton(button);
+		this.addRenderableWidget(button);
 
 		buttonX += buttonWidth + buttonSpacing;
 		button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.ASSIST.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, new TranslatableComponent("gui.pet.assist"), this);
-		this.addButton(button);
+		this.addRenderableWidget(button);
 
 		buttonX += buttonWidth + buttonSpacing;
 		button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.AGGRESSIVE.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, new TranslatableComponent("gui.pet.aggressive"), this);
-		this.addButton(button);
+		this.addRenderableWidget(button);
 
 		// Movement:
 		buttonX = this.colRightX + buttonMarginX;
 		buttonY += buttonHeight + 2;
 		button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.FOLLOW.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, new TranslatableComponent("gui.pet.follow"), this);
-		this.addButton(button);
+		this.addRenderableWidget(button);
 
 		buttonX += buttonWidth + buttonSpacing;
 		button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.WANDER.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, new TranslatableComponent("gui.pet.wander"), this);
-		this.addButton(button);
+		this.addRenderableWidget(button);
 
 		buttonX += buttonWidth + buttonSpacing;
 		button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.SIT.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, new TranslatableComponent("gui.pet.sit"), this);
-		this.addButton(button);
+		this.addRenderableWidget(button);
 
 		// Release Confirmation:
 		buttonX = this.colRightX + Math.round((float)this.colRightWidth / 2) - (buttonWidth + buttonSpacing);
 		buttonY = this.colRightY + Math.round((float)this.colRightHeight / 2) - Math.round((float)buttonHeight / 2);
 		button = new ButtonBase(this.releaseConfirmId, buttonX, buttonY, buttonWidth, buttonHeight, new TranslatableComponent("common.yes"), this);
 		button.visible = false;
-		this.addButton(button);
+		this.addRenderableWidget(button);
 
 		buttonX += buttonSpacing;
 		button = new ButtonBase(this.releaseCancelId, buttonX + buttonWidth, buttonY, buttonWidth, buttonHeight, new TranslatableComponent("common.no"), this);
 		button.visible = false;
-		this.addButton(button);
+		this.addRenderableWidget(button);
 	}
 
 	@Override
@@ -135,7 +135,7 @@ public class PetsBeastiaryScreen extends BeastiaryScreen {
 		}
 
 		// Update Buttons:
-		for (AbstractWidget buttonWidget : this.buttons) {
+		for (Widget buttonWidget : this.renderables) {
 			if (!(buttonWidget instanceof ButtonBase))
 				continue;
 			ButtonBase button = (ButtonBase) buttonWidget;

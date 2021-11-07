@@ -58,16 +58,15 @@ public class BaseOverlay extends BaseGui {
             return;
         Player player = ClientManager.getInstance().getClientPlayer();
 
-		if(event.isCancelable() || event.getType() != ElementType.EXPERIENCE) {
+		if(event.isCancelable() || event.getType() != ElementType.BOSSINFO) {
 			return;
 		}
 		PoseStack matrixStack = event.getMatrixStack();
 
 		matrixStack.pushPose();
-		RenderSystem.disableLighting();
 		RenderSystem.enableBlend();
 		RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
 		int sWidth = Minecraft.getInstance().getWindow().getGuiScaledWidth(); // getMainWindow()
         int sHeight = Minecraft.getInstance().getWindow().getGuiScaledHeight();
@@ -89,12 +88,12 @@ public class BaseOverlay extends BaseGui {
 		
 		// ========== Summoning Focus Bar ==========
         ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
-		if(playerExt != null && !this.minecraft.player.abilities.instabuild && (
+		if(playerExt != null && !this.minecraft.player.getAbilities().instabuild && (
                 (this.minecraft.player.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof ItemStaffSummoning)
                 || (this.minecraft.player.getItemInHand(InteractionHand.OFF_HAND).getItem() instanceof ItemStaffSummoning)
                 )) {
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-			this.minecraft.getTextureManager().bind(TextureManager.getTexture("GUIInventoryCreature"));
+			this.minecraft.getTextureManager().bindForSetup(TextureManager.getTexture("GUIInventoryCreature"));
 			
 			int barYSpace = 10;
 			int barXSpace = -1;
@@ -139,7 +138,7 @@ public class BaseOverlay extends BaseGui {
             
             // Mount Ability Stamina Bar:
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-			this.minecraft.getTextureManager().bind(GUI_ICONS_LOCATION);
+			this.minecraft.getTextureManager().bindForSetup(GUI_ICONS_LOCATION);
             int staminaBarWidth = 182;
             int staminaBarHeight = 5;
             int staminaEnergyWidth = (int)((float)(staminaBarWidth + 1) * mountStamina);
@@ -189,7 +188,7 @@ public class BaseOverlay extends BaseGui {
 		}
 
 		matrixStack.popPose();
-		this.minecraft.getTextureManager().bind(GUI_ICONS_LOCATION);
+		this.minecraft.getTextureManager().bindForSetup(GUI_ICONS_LOCATION);
 	}
 
 
@@ -207,8 +206,7 @@ public class BaseOverlay extends BaseGui {
 		HitResult mouseOver = Minecraft.getInstance().hitResult;
 		if(mouseOver instanceof EntityHitResult) {
 			Entity mouseOverEntity = ((EntityHitResult)mouseOver).getEntity();
-			if(mouseOverEntity instanceof BaseCreatureEntity) {
-				BaseCreatureEntity mouseOverCreature = (BaseCreatureEntity)mouseOverEntity;
+			if(mouseOverEntity instanceof BaseCreatureEntity mouseOverCreature) {
 				event.getLeft().add("");
 				event.getLeft().add("Target Creature: " + mouseOverCreature.getName().getString());
 				event.getLeft().add("Distance To player: " + mouseOverCreature.distanceTo(Minecraft.getInstance().player));

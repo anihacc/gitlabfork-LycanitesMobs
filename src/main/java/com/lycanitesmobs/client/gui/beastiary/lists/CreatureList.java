@@ -13,6 +13,7 @@ import com.lycanitesmobs.core.network.MessageSummonSetSelection;
 import com.lycanitesmobs.core.pets.PetEntry;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.components.events.GuiEventListener;
+import net.minecraft.client.gui.narration.NarratableEntry;
 
 import javax.annotation.Nullable;
 import java.text.Collator;
@@ -255,6 +256,11 @@ public class CreatureList extends BaseList<BeastiaryScreen> {
 
 		@Override
 		public List<? extends GuiEventListener> children() {
+			return null;
+		}
+
+		@Override
+		public List<? extends NarratableEntry> narratables() {
 			return null;
 		}
 	}

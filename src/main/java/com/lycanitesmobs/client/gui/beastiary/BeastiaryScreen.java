@@ -11,16 +11,15 @@ import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 
 public abstract class BeastiaryScreen extends BaseScreen {
     public enum Page {
@@ -151,16 +150,16 @@ public abstract class BeastiaryScreen extends BaseScreen {
         ButtonBase button;
 
         // Top Menu:
-        button = new ButtonBase(Page.INDEX.id, buttonX + (buttonWidthPadded * this.buttons.size()), menuY, buttonWidth, buttonHeight, new TranslatableComponent("gui.beastiary.index.title"), this);
-        this.addButton(button);
-        button = new ButtonBase(Page.CREATURES.id, buttonX + (buttonWidthPadded * this.buttons.size()), menuY, buttonWidth, buttonHeight, new TranslatableComponent("gui.beastiary.creatures"), this);
-        this.addButton(button);
-        button = new ButtonBase(Page.PETS.id, buttonX + (buttonWidthPadded * this.buttons.size()), menuY, buttonWidth, buttonHeight, new TranslatableComponent("gui.beastiary.pets"), this);
-        this.addButton(button);
-        button = new ButtonBase(Page.SUMMONING.id, buttonX + (buttonWidthPadded * this.buttons.size()), menuY, buttonWidth, buttonHeight, new TranslatableComponent("gui.beastiary.summoning"), this);
-        this.addButton(button);
-        button = new ButtonBase(Page.ELEMENTS.id, buttonX + (buttonWidthPadded * this.buttons.size()), menuY, buttonWidth, buttonHeight, new TranslatableComponent("gui.beastiary.elements"), this);
-        this.addButton(button);
+        button = new ButtonBase(Page.INDEX.id, buttonX + (buttonWidthPadded * this.renderables.size()), menuY, buttonWidth, buttonHeight, new TranslatableComponent("gui.beastiary.index.title"), this);
+        this.addRenderableWidget(button);
+        button = new ButtonBase(Page.CREATURES.id, buttonX + (buttonWidthPadded * this.renderables.size()), menuY, buttonWidth, buttonHeight, new TranslatableComponent("gui.beastiary.creatures"), this);
+        this.addRenderableWidget(button);
+        button = new ButtonBase(Page.PETS.id, buttonX + (buttonWidthPadded * this.renderables.size()), menuY, buttonWidth, buttonHeight, new TranslatableComponent("gui.beastiary.pets"), this);
+        this.addRenderableWidget(button);
+        button = new ButtonBase(Page.SUMMONING.id, buttonX + (buttonWidthPadded * this.renderables.size()), menuY, buttonWidth, buttonHeight, new TranslatableComponent("gui.beastiary.summoning"), this);
+        this.addRenderableWidget(button);
+        button = new ButtonBase(Page.ELEMENTS.id, buttonX + (buttonWidthPadded * this.renderables.size()), menuY, buttonWidth, buttonHeight, new TranslatableComponent("gui.beastiary.elements"), this);
+        this.addRenderableWidget(button);
     }
 
     @Override

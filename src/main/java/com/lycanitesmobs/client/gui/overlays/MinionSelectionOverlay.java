@@ -9,8 +9,9 @@ import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.network.MessageSummonSetSelection;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.client.gui.components.Widget;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.entity.player.Player;
 import org.lwjgl.opengl.GL11;
 
 public class MinionSelectionOverlay extends BaseScreen {
@@ -63,23 +64,23 @@ public class MinionSelectionOverlay extends BaseScreen {
 
 		creatureInfo = this.playerExt.getSummonSet(1).getCreatureInfo();
 		button = new CreatureButton(1, buttonX, buttonY - Math.round(offset * 2), buttonWidth, buttonHeight, new TranslatableComponent("1"), 1, creatureInfo, this);
-		this.addButton(button);
+		this.addRenderableWidget(button);
 
 		creatureInfo = this.playerExt.getSummonSet(2).getCreatureInfo();
 		button = new CreatureButton(2, buttonX + Math.round(offset * 2), buttonY - Math.round(offset * 0.5F), buttonWidth, buttonHeight, new TranslatableComponent("2"), 2, creatureInfo, this);
-		this.addButton(button);
+		this.addRenderableWidget(button);
 
 		creatureInfo = this.playerExt.getSummonSet(3).getCreatureInfo();
 		button = new CreatureButton(3, buttonX + Math.round(offset), buttonY +  Math.round(offset * 1.75F), buttonWidth, buttonHeight, new TranslatableComponent("3"), 3, creatureInfo, this);
-		this.addButton(button);
+		this.addRenderableWidget(button);
 
 		creatureInfo = this.playerExt.getSummonSet(4).getCreatureInfo();
 		button = new CreatureButton(4, buttonX - Math.round(offset), buttonY +  Math.round(offset * 1.75F), buttonWidth, buttonHeight, new TranslatableComponent("4"), 4, creatureInfo, this);
-		this.addButton(button);
+		this.addRenderableWidget(button);
 
 		creatureInfo = this.playerExt.getSummonSet(5).getCreatureInfo();
 		button = new CreatureButton(5, buttonX - Math.round(offset * 2), buttonY - Math.round(offset * 0.5F), buttonWidth, buttonHeight, new TranslatableComponent("5"), 5, creatureInfo, this);
-		this.addButton(button);
+		this.addRenderableWidget(button);
 	}
 
 	@Override
@@ -87,9 +88,9 @@ public class MinionSelectionOverlay extends BaseScreen {
 
 	@Override
 	protected void renderWidgets(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
-		for(Object buttonObj : this.buttons) {
-			if(buttonObj instanceof ButtonBase) {
-				ButtonBase button = (ButtonBase)buttonObj;
+		for(Widget widget : this.renderables) {
+			if(widget instanceof ButtonBase) {
+				ButtonBase button = (ButtonBase)widget;
 				button.visible = this.playerExt.getSummonSet(button.buttonId).isUseable();
 				button.active = button.buttonId != this.playerExt.selectedSummonSet;
 			}

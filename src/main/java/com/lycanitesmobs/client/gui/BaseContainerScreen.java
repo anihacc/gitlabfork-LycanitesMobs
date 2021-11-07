@@ -17,18 +17,10 @@ public abstract class BaseContainerScreen<T extends AbstractContainerMenu> exten
     }
 
     @Override
-    public void init(Minecraft minecraft, int width, int height) {
-        this.drawHelper = new DrawHelper(minecraft, minecraft.font);
-        this.minecraft = minecraft;
-        super.init(minecraft, width, height);
-        this.initWidgets();
-    }
-
-    /**
-     * Secondary init method called by main init method.
-     */
     protected void init() {
+        this.drawHelper = new DrawHelper(this.minecraft, this.minecraft.font);
         super.init();
+        this.initWidgets();
     }
 
     /**
@@ -67,8 +59,8 @@ public abstract class BaseContainerScreen<T extends AbstractContainerMenu> exten
      * @param partialTicks Ticks for animation.
      */
     protected void renderWidgets(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
-        for(int i = 0; i < this.buttons.size(); ++i) {
-            this.buttons.get(i).render(matrixStack, mouseX, mouseY, partialTicks);
+        for(int i = 0; i < this.renderables.size(); ++i) {
+            this.renderables.get(i).render(matrixStack, mouseX, mouseY, partialTicks);
         }
     }
 

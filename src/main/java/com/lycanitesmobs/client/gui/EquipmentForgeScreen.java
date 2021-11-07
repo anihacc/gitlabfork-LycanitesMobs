@@ -8,10 +8,10 @@ import com.lycanitesmobs.core.container.EquipmentForgeSlot;
 import com.lycanitesmobs.core.network.MessageTileEntityButton;
 import com.lycanitesmobs.core.tileentity.TileEntityEquipmentForge;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.inventory.Slot;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.Slot;
 import org.lwjgl.opengl.GL11;
 
 import java.util.List;
@@ -52,13 +52,13 @@ public class EquipmentForgeScreen extends BaseContainerScreen<EquipmentForgeCont
 			buttonText = new TranslatableComponent("gui.equipmentforge.deconstruct").getString();
 		}
 		buttonY += buttonSpacing;
-		//this.addButton(new ButtonBase(1, buttonX + buttonSpacing, buttonY, buttonWidth, buttonHeight, buttonText, this));
+		//this.addRenderableWidget(new ButtonBase(1, buttonX + buttonSpacing, buttonY, buttonWidth, buttonHeight, buttonText, this));
 	}
 
 	@Override
 	protected void renderBackground(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		this.drawHelper.getMinecraft().getTextureManager().bind(TextureManager.getTexture("GUIEquipmentForge"));
+		this.drawHelper.getMinecraft().getTextureManager().bindForSetup(TextureManager.getTexture("GUIEquipmentForge"));
 		int backX = (this.width - this.imageWidth) / 2;
 		int backY = (this.height - this.imageHeight) / 2;
 		this.drawHelper.drawTexturedModalRect(matrixStack, backX, backY, 0, 0, this.imageWidth, this.imageHeight);
@@ -73,7 +73,7 @@ public class EquipmentForgeScreen extends BaseContainerScreen<EquipmentForgeCont
 	 */
 	protected void drawSlots(PoseStack matrixStack, int backX, int backY) {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		this.getMinecraft().getTextureManager().bind(TextureManager.getTexture("GUIEquipmentForge"));
+		this.getMinecraft().getTextureManager().bindForSetup(TextureManager.getTexture("GUIEquipmentForge"));
 
 		BaseContainer container = this.getMenu();
 		List<Slot> forgeSlots = container.slots.subList(container.inventoryStart, container.inventoryFinish);
@@ -120,7 +120,7 @@ public class EquipmentForgeScreen extends BaseContainerScreen<EquipmentForgeCont
 
 	@Override
 	protected void renderForeground(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
-        this.drawHelper.drawString(matrixStack, this.inventory.getName().getString(), this.leftPos + 8, this.topPos + this.imageHeight - 96 + 2, 4210752);
+        this.drawHelper.drawString(matrixStack, this.playerInventoryTitle.getString(), this.leftPos + 8, this.topPos + this.imageHeight - 96 + 2, 4210752);
     }
     
 	@Override

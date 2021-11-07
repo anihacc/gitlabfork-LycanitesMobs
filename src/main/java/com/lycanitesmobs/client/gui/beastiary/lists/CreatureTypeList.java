@@ -7,6 +7,7 @@ import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.CreatureType;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.components.events.GuiEventListener;
+import net.minecraft.client.gui.narration.NarratableEntry;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -85,6 +86,11 @@ public class CreatureTypeList extends CreatureFilterList {
 
 		@Override
 		public List<? extends GuiEventListener> children() {
+			return null;
+		}
+
+		@Override
+		public List<? extends NarratableEntry> narratables() {
 			return null;
 		}
 	}

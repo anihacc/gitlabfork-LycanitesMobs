@@ -12,11 +12,11 @@ import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.network.MessageSummonSetSelection;
 import com.lycanitesmobs.core.pets.SummonSet;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.gui.components.AbstractWidget;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.sounds.SoundSource;
+import net.minecraft.client.gui.components.Widget;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.player.Player;
 
 public class SummoningBeastiaryScreen extends BeastiaryScreen {
 	public CreatureList petList;
@@ -36,12 +36,12 @@ public class SummoningBeastiaryScreen extends BeastiaryScreen {
 		int petListHeight = this.colLeftHeight;
 		int petListY = this.colLeftY;
 		this.petList = new CreatureList(CreatureList.Type.SUMMONABLE, this, null, this.colLeftWidth, petListHeight, petListY, petListY + petListHeight, this.colLeftX);
-		this.children.add(this.petList);
+		this.addRenderableWidget(this.petList);
 
 		int subspeciesListHeight = 80;
 		int subspeciesListY = this.colRightY + 70;
 		this.subspeciesList = new SubspeciesList(this, true, 90, subspeciesListHeight, subspeciesListY, subspeciesListY + subspeciesListHeight, this.colRightX);
-		this.children.add(this.subspeciesList);
+		this.addRenderableWidget(this.subspeciesList);
 
 		int summoningSlots = this.playerExt.summonSetMax;
 		int buttonSpacing = 2;
@@ -57,7 +57,7 @@ public class SummoningBeastiaryScreen extends BeastiaryScreen {
 			CreatureInfo creatureInfo = this.playerExt.getSummonSet(i).getCreatureInfo();
 			buttonX += tabSpacing;
 			ButtonBase tabButton = new CreatureButton(this.summoningSlotIdStart + i, buttonX, buttonY, buttonWidth, buttonHeight, new TranslatableComponent(buttonText), i, creatureInfo, this);
-			this.addButton(tabButton);
+			this.addRenderableWidget(tabButton);
 			if(i == this.playerExt.selectedSummonSet) {
 				tabButton.active = false;
 			}
@@ -72,39 +72,39 @@ public class SummoningBeastiaryScreen extends BeastiaryScreen {
 
 		// Actions:
 		ButtonBase button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.PVP.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, new TranslatableComponent("gui.pet.pvp"), this);
-		this.addButton(button);
+		this.addRenderableWidget(button);
 
 		// Stance:
 		buttonX = this.colRightX + buttonMarginX;
 		buttonY += buttonHeight + 2;
 		button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.PASSIVE.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, new TranslatableComponent("gui.pet.passive"), this);
-		this.addButton(button);
+		this.addRenderableWidget(button);
 
 		buttonX += buttonWidth + buttonSpacing;
 		button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.DEFENSIVE.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, new TranslatableComponent("gui.pet.defensive"), this);
-		this.addButton(button);
+		this.addRenderableWidget(button);
 
 		buttonX += buttonWidth + buttonSpacing;
 		button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.ASSIST.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, new TranslatableComponent("gui.pet.assist"), this);
-		this.addButton(button);
+		this.addRenderableWidget(button);
 
 		buttonX += buttonWidth + buttonSpacing;
 		button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.AGGRESSIVE.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, new TranslatableComponent("gui.pet.aggressive"), this);
-		this.addButton(button);
+		this.addRenderableWidget(button);
 
 		// Movement:
 		buttonX = this.colRightX + buttonMarginX;
 		buttonY += buttonHeight + 2;
 		button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.FOLLOW.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, new TranslatableComponent("gui.pet.follow"), this);
-		this.addButton(button);
+		this.addRenderableWidget(button);
 
 		buttonX += buttonWidth + buttonSpacing;
 		button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.WANDER.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, new TranslatableComponent("gui.pet.wander"), this);
-		this.addButton(button);
+		this.addRenderableWidget(button);
 
 		buttonX += buttonWidth + buttonSpacing;
 		button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.SIT.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, new TranslatableComponent("gui.pet.sit"), this);
-		this.addButton(button);
+		this.addRenderableWidget(button);
 	}
 
 	@Override
@@ -124,7 +124,7 @@ public class SummoningBeastiaryScreen extends BeastiaryScreen {
 		this.subspeciesList.render(matrixStack, mouseX, mouseY, partialTicks);
 
 		// Update Buttons:
-		for(AbstractWidget buttonWidget : this.buttons) {
+		for(Widget buttonWidget : this.renderables) {
 			if(!(buttonWidget instanceof ButtonBase))
 				continue;
 			ButtonBase button = (ButtonBase)buttonWidget;

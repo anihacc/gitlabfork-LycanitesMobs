@@ -7,9 +7,9 @@ import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureKnowledge;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.components.events.GuiEventListener;
+import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
-import net.minecraft.util.text.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 
 import java.util.List;
@@ -65,6 +65,11 @@ public class CreatureDescriptionList extends BaseList {
 
 		@Override
 		public List<? extends GuiEventListener> children() {
+			return null;
+		}
+
+		@Override
+		public List<? extends NarratableEntry> narratables() {
 			return null;
 		}
 	}

@@ -27,7 +27,7 @@ public class InventorySnooperScreen extends InventoryScreen {
 				field.setAccessible(true);
 				Object object = field.get(this);
 				if(object instanceof List)
-					if(object == this.buttons)
+					if(object == this.renderables)
 						return field.getName();
 			}
 		} catch(Exception e) {}

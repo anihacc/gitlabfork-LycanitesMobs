@@ -11,10 +11,10 @@ import com.lycanitesmobs.core.inventory.CreatureInventory;
 import com.lycanitesmobs.core.network.MessageEntityGUICommand;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.inventory.Slot;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.Slot;
 import org.lwjgl.opengl.GL11;
 
 import java.util.List;
@@ -62,7 +62,7 @@ public class CreatureInventoryScreen extends BaseContainerScreen<CreatureContain
 		if(pet.isFollowing() && !pet.isSitting()) {
 			button.active = false;
 		}
-		this.addButton(button);
+		this.addRenderableWidget(button);
 
 		buttonText = new TranslatableComponent("gui.pet.wander").getString();
 		buttonY += buttonHeight + (buttonSpacing * 2);
@@ -70,7 +70,7 @@ public class CreatureInventoryScreen extends BaseContainerScreen<CreatureContain
 		if(!pet.isFollowing() && !pet.isSitting()) {
 			button.active = false;
 		}
-		this.addButton(button);
+		this.addRenderableWidget(button);
 
 		buttonText = new TranslatableComponent("gui.pet.sit").getString();
 		buttonY += buttonHeight + (buttonSpacing * 2);
@@ -78,7 +78,7 @@ public class CreatureInventoryScreen extends BaseContainerScreen<CreatureContain
 		if(!pet.isFollowing() && pet.isSitting()) {
 			button.active = false;
 		}
-		this.addButton(button);
+		this.addRenderableWidget(button);
 
 		buttonText = new TranslatableComponent("gui.pet.passive").getString();
 		buttonY += buttonHeight + (buttonSpacing * 2);
@@ -86,7 +86,7 @@ public class CreatureInventoryScreen extends BaseContainerScreen<CreatureContain
 		if(pet.isPassive()) {
 			button.active = false;
 		}
-		this.addButton(button);
+		this.addRenderableWidget(button);
 
 		buttonText = new TranslatableComponent("gui.pet.defensive").getString();
 		buttonY += buttonHeight + (buttonSpacing * 2);
@@ -94,7 +94,7 @@ public class CreatureInventoryScreen extends BaseContainerScreen<CreatureContain
 		if(!pet.isPassive() && !pet.isAssisting() && !pet.isAggressive()) {
 			button.active = false;
 		}
-		this.addButton(button);
+		this.addRenderableWidget(button);
 
 		buttonText = new TranslatableComponent("gui.pet.assist").getString();
 		buttonY += buttonHeight + (buttonSpacing * 2);
@@ -102,7 +102,7 @@ public class CreatureInventoryScreen extends BaseContainerScreen<CreatureContain
 		if(!pet.isPassive() && pet.isAssisting() && !pet.isAggressive()) {
 			button.active = false;
 		}
-		this.addButton(button);
+		this.addRenderableWidget(button);
 
 		buttonText = new TranslatableComponent("gui.pet.aggressive").getString();
 		buttonY += buttonHeight + (buttonSpacing * 2);
@@ -110,11 +110,11 @@ public class CreatureInventoryScreen extends BaseContainerScreen<CreatureContain
 		if(!pet.isPassive() && pet.isAggressive()) {
 			button.active = false;
 		}
-		this.addButton(button);
+		this.addRenderableWidget(button);
 
 		buttonText = new TranslatableComponent("gui.pet.pvp").append(": ").append(pet.isPVP() ? new TranslatableComponent("common.yes") : new TranslatableComponent("common.no")).getString();
 		buttonY += buttonHeight + (buttonSpacing * 2);
-		this.addButton(new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.PVP.id, buttonX + buttonSpacing, buttonY, buttonWidth, buttonHeight, new TranslatableComponent(buttonText), this));
+		this.addRenderableWidget(new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.PVP.id, buttonX + buttonSpacing, buttonY, buttonWidth, buttonHeight, new TranslatableComponent(buttonText), this));
 	}
 
 	@Override
@@ -123,7 +123,7 @@ public class CreatureInventoryScreen extends BaseContainerScreen<CreatureContain
 			this.onClose();
 		}
 
-        this.drawHelper.drawString(matrixStack, this.inventory.getName().getString(), this.leftPos + 8, this.topPos + this.imageHeight - 96 + 2, 4210752);
+        this.drawHelper.drawString(matrixStack, this.playerInventoryTitle.getString(), this.leftPos + 8, this.topPos + this.imageHeight - 96 + 2, 4210752);
 		int backX = (this.width - this.imageWidth) / 2;
 		int backY = (this.height - this.imageHeight) / 2;
 		this.drawBars(matrixStack, backX, backY);
@@ -160,7 +160,7 @@ public class CreatureInventoryScreen extends BaseContainerScreen<CreatureContain
 	@Override
 	protected void renderBackground(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.getMinecraft().getTextureManager().bind(TextureManager.getTexture("GUIInventoryCreature"));
+        this.getMinecraft().getTextureManager().bindForSetup(TextureManager.getTexture("GUIInventoryCreature"));
         this.imageWidth = 176;
         this.imageHeight = 166;
         int backX = (this.width - this.imageWidth) / 2;
@@ -173,7 +173,7 @@ public class CreatureInventoryScreen extends BaseContainerScreen<CreatureContain
 
 	protected void drawFrames(PoseStack matrixStack, int backX, int backY, int mouseX, int mouseY) {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.getMinecraft().getTextureManager().bind(TextureManager.getTexture("GUIInventoryCreature"));
+        this.getMinecraft().getTextureManager().bindForSetup(TextureManager.getTexture("GUIInventoryCreature"));
         
         // Status Frame:
         int statusWidth = 90;
@@ -192,7 +192,7 @@ public class CreatureInventoryScreen extends BaseContainerScreen<CreatureContain
 
 	protected void drawSlots(PoseStack matrixStack, int backX, int backY) {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.getMinecraft().getTextureManager().bind(TextureManager.getTexture("GUIInventoryCreature"));
+        this.getMinecraft().getTextureManager().bindForSetup(TextureManager.getTexture("GUIInventoryCreature"));
         
 		BaseContainer container = this.getMenu();
 		List<Slot> creatureSlots = container.slots.subList(container.specialStart, container.inventoryFinish + 1);

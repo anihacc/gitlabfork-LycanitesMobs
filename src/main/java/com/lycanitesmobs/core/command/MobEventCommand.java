@@ -1,7 +1,6 @@
 package com.lycanitesmobs.core.command;
 
 import com.lycanitesmobs.ExtendedWorld;
-import com.lycanitesmobs.client.localisation.LanguageManager;
 import com.lycanitesmobs.core.mobevent.MobEvent;
 import com.lycanitesmobs.core.mobevent.MobEventListener;
 import com.lycanitesmobs.core.mobevent.MobEventManager;

@@ -1,14 +1,14 @@
 package com.lycanitesmobs.client.gui;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Quaternion;
+import com.mojang.math.Vector3f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
-import net.minecraft.world.entity.LivingEntity;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.LivingEntity;
 
 public abstract class BaseGui extends GuiComponent {
     public BaseGui(Component screenName) {
@@ -30,15 +30,15 @@ public abstract class BaseGui extends GuiComponent {
         matrixStack.mulPose(Vector3f.YN.rotationDegrees(180.0F));
 
         float renderYawOffset = entity.yBodyRot;
-        float rotationYaw = entity.yRot;
-        float rotationPitch = entity.xRot;
+        float rotationYaw = entity.getYRot();
+        float rotationPitch = entity.getXRot();
         float prevRotationYawHead = entity.yHeadRotO;
         float rotationYawHead = entity.yHeadRot;
         entity.yBodyRot = lookXRot * 20.0F;
-        entity.yRot = lookXRot * 40.0F;
-        entity.xRot = -lookYRot * 20.0F;
-        entity.yHeadRot = entity.yRot;
-        entity.yHeadRotO = entity.yRot;
+        entity.setYRot(lookXRot * 40.0F);
+        entity.setXRot(-lookYRot * 20.0F);
+        entity.yHeadRot = entity.getYRot();
+        entity.yHeadRotO = entity.getYRot();
         entity.setOnGround(true);
 
         EntityRenderDispatcher renderManager = Minecraft.getInstance().getEntityRenderDispatcher();
@@ -50,8 +50,8 @@ public abstract class BaseGui extends GuiComponent {
         renderTypeBuffer.endBatch();
         renderManager.setRenderShadow(true);
         entity.yBodyRot = renderYawOffset;
-        entity.yRot = rotationYaw;
-        entity.xRot = rotationPitch;
+        entity.setYRot(rotationYaw);
+        entity.setXRot(rotationPitch);
         entity.yHeadRotO = prevRotationYawHead;
         entity.yHeadRot = rotationYawHead;
         matrixStack.popPose();

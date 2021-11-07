@@ -29,24 +29,24 @@ public class CreaturesBeastiaryScreen extends BeastiaryScreen {
 		super.initWidgets();
 
 		this.creatureTypeList = new CreatureTypeList(this, this.colLeftWidth, this.colLeftHeight, this.colLeftY,this.colLeftY + this.colLeftHeight, this.colLeftX);
-		this.children.add(this.creatureTypeList);
+		this.addRenderableWidget(this.creatureTypeList);
 
 		int selectionListsWidth = this.getScaledX(300F / 1920F);
 
 		int creatureListY = this.colRightY;
 		int creatureListHeight = Math.round((float)this.colRightHeight * 0.6f);
 		this.creatureList = new CreatureList(CreatureList.Type.KNOWLEDGE, this, this.creatureTypeList, selectionListsWidth, creatureListHeight, creatureListY,creatureListY + creatureListHeight, this.colRightX);
-		this.children.add(this.creatureList);
+		this.addRenderableWidget(this.creatureList);
 
 		int subspeciesListY = creatureListY + 2 + creatureListHeight;
 		int subspeciesListHeight = Math.round((float)this.colRightHeight * 0.4f) - 2;
 		this.subspeciesList = new SubspeciesList(this, false, selectionListsWidth, subspeciesListHeight, subspeciesListY,subspeciesListY + subspeciesListHeight, this.colRightX);
-		this.children.add(this.subspeciesList);
+		this.addRenderableWidget(this.subspeciesList);
 
 		int newLine = this.drawHelper.getWordWrappedHeight("AAAAAAAAAAAAAAAAAAAAAAAAAAAAA", this.colRightWidth - selectionListsWidth) + 2;
 		int descriptionListY = this.colRightY + (newLine * 3);
 		this.descriptionList = new CreatureDescriptionList(this, this.colRightWidth - selectionListsWidth, this.colRightHeight, descriptionListY, this.colRightY + this.colRightHeight, this.colRightX + selectionListsWidth + 2);
-		this.children.add(this.descriptionList);
+		this.addRenderableWidget(this.descriptionList);
 	}
 
 

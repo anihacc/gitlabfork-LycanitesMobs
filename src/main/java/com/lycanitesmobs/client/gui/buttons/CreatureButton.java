@@ -32,7 +32,7 @@ public class CreatureButton extends ButtonBase {
 
 		int buttonX = this.x;
 		int buttonY = this.y;
-		Minecraft.getInstance().getTextureManager().bind(TextureManager.getTexture("GUIInventoryCreature"));
+		Minecraft.getInstance().getTextureManager().bindForSetup(TextureManager.getTexture("GUIInventoryCreature"));
 		int stateVOffset = 0;
 		if(this.isHovered()) {
 			stateVOffset = 64;
@@ -43,7 +43,7 @@ public class CreatureButton extends ButtonBase {
 		}
 		this.drawHelper.drawTexturedModalRect(matrixStack, buttonX, buttonY, 193, 187 -stateVOffset, this.width, this.height);
 		if(this.creatureInfo != null) {
-			Minecraft.getInstance().getTextureManager().bind(creatureInfo.getIcon());
+			Minecraft.getInstance().getTextureManager().bindForSetup(creatureInfo.getIcon());
 			this.drawHelper.drawTexturedModalRect(matrixStack, buttonX + 8, buttonY + 8, 0, 0, 16, 16, 16);
 		}
 

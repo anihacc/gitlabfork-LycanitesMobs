@@ -2,19 +2,16 @@ package com.lycanitesmobs.client.gui.widgets;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.gui.DrawHelper;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.components.ObjectSelectionList;
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.Tesselator;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import net.minecraft.util.Mth;
+import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Matrix4f;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.ContainerObjectSelectionList;
+import net.minecraft.util.Mth;
 import org.lwjgl.opengl.GL11;
 
-public abstract class BaseList<S> extends ObjectSelectionList<BaseListEntry> {
+public abstract class BaseList<S> extends ContainerObjectSelectionList<BaseListEntry> {
 	public DrawHelper drawHelper;
 	public S screen;
 
@@ -74,35 +71,23 @@ public abstract class BaseList<S> extends ObjectSelectionList<BaseListEntry> {
 		int scissorHeight = scissorTop - scissorBottom;
 		GL11.glScissor(scissorX, scissorBottom, scissorWidth, scissorHeight); // Scissor starts at bottom right.
 
-		RenderSystem.disableLighting();
-		RenderSystem.disableFog();
 		RenderSystem.disableDepthTest();
-		RenderSystem.disableAlphaTest();
 		RenderSystem.disableTexture();
 		RenderSystem.enableBlend();
 		RenderSystem.depthMask(true);
 		RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ZERO, GlStateManager.DestFactor.ONE);
-		RenderSystem.shadeModel(7425);
-		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
 		Tesselator tessellator = Tesselator.getInstance();
 		BufferBuilder bufferbuilder = tessellator.getBuilder();
 		Matrix4f matrix = matrixStack.last().pose();
 
-		bufferbuilder.begin(7, DefaultVertexFormat.POSITION_COLOR);
+		bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
 		bufferbuilder.vertex(matrix, (float)this.x0, (float)this.y1, 0.0F).color(0, 0, 0, 64).endVertex();
 		bufferbuilder.vertex(matrix, (float)this.x1, (float)this.y1, 0.0F).color(0, 0, 0, 64).endVertex();
 		bufferbuilder.vertex(matrix, (float)this.x1, (float)this.y0, 0.0F).color(0, 0, 0, 64).endVertex();
 		bufferbuilder.vertex(matrix, (float)this.x0, (float)this.y0, 0.0F).color(0, 0, 0, 64).endVertex();
 		tessellator.end();
-
-		// Test Box:
-		/*bufferbuilder.begin(7, DefaultVertexFormats.POSITION_COLOR);
-		bufferbuilder.pos(0, 10000, 0.0F).color(32, 255, 32, 128).endVertex();
-		bufferbuilder.pos(10000, 10000, 0.0F).color(32, 255, 32, 128).endVertex();
-		bufferbuilder.pos(10000, 0, 0.0F).color(32, 255, 32, 128).endVertex();
-		bufferbuilder.pos(0, 0, 0.0F).color(32, 255, 32, 128).endVertex();
-		tessellator.draw();*/
 
 		// Render Entries:
 		RenderSystem.enableTexture();
@@ -122,24 +107,6 @@ public abstract class BaseList<S> extends ObjectSelectionList<BaseListEntry> {
 		// Draw Gradients:
 		RenderSystem.disableTexture();
 
-		/*if(this.getScrollAmount() > 0) {
-			bufferbuilder.begin(7, DefaultVertexFormats.POSITION_COLOR);
-			bufferbuilder.pos((float) this.x0, (float) (this.y0 + 4), 0.0F).color(0, 0, 0, 0).endVertex();
-			bufferbuilder.pos((float) this.x1, (float) (this.y0 + 4), 0.0F).color(0, 0, 0, 0).endVertex();
-			bufferbuilder.pos((float) this.x1, (float) this.y0, 0.0F).color(0, 0, 0, 255).endVertex();
-			bufferbuilder.pos((float) this.x0, (float) this.y0, 0.0F).color(0, 0, 0, 255).endVertex();
-			tessellator.draw();
-		}
-
-		if(this.getScrollAmount() < this.getMaxScroll()) {
-			bufferbuilder.begin(7, DefaultVertexFormats.POSITION_COLOR);
-			bufferbuilder.pos((float) this.x0, (float) this.y1, 0.0F).color(0, 0, 0, 255).endVertex();
-			bufferbuilder.pos((float) this.x1, (float) this.y1, 0.0F).color(0, 0, 0, 255).endVertex();
-			bufferbuilder.pos((float) this.x1, (float) (this.y1 - 4), 0.0F).color(0, 0, 0, 0).endVertex();
-			bufferbuilder.pos((float) this.x0, (float) (this.y1 - 4), 0.0F).color(0, 0, 0, 0).endVertex();
-			tessellator.draw();
-		}*/
-
 		// Draw Scrollbar:
 		int maxScroll = this.getMaxScroll();
 		if (maxScroll > 0) {
@@ -152,21 +119,21 @@ public abstract class BaseList<S> extends ObjectSelectionList<BaseListEntry> {
 			int scrollbarLeft = this.getScrollbarPosition();
 			int scrollbarRight = scrollbarLeft + this.getScrollbarWidth();
 
-			bufferbuilder.begin(7, DefaultVertexFormat.POSITION_TEX_COLOR);
+			bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
 			bufferbuilder.vertex(matrix, (float)scrollbarLeft, (float)this.y1, 0.0F).uv(0.0F, 1.0F).color(0, 0, 0, 255).endVertex();
 			bufferbuilder.vertex(matrix, (float)scrollbarRight, (float)this.y1, 0.0F).uv(1.0F, 1.0F).color(0, 0, 0, 255).endVertex();
 			bufferbuilder.vertex(matrix, (float)scrollbarRight, (float)this.y0, 0.0F).uv(1.0F, 0.0F).color(0, 0, 0, 255).endVertex();
 			bufferbuilder.vertex(matrix, (float)scrollbarLeft, (float)this.y0, 0.0F).uv(0.0F, 0.0F).color(0, 0, 0, 255).endVertex();
 			tessellator.end();
 
-			bufferbuilder.begin(7, DefaultVertexFormat.POSITION_TEX_COLOR);
+			bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
 			bufferbuilder.vertex(matrix, (float)scrollbarLeft, (float)(scrollY + contentMax), 0.0F).uv(0.0F, 1.0F).color(128, 128, 128, 255).endVertex();
 			bufferbuilder.vertex(matrix, (float)scrollbarRight, (float)(scrollY + contentMax), 0.0F).uv(1.0F, 1.0F).color(128, 128, 128, 255).endVertex();
 			bufferbuilder.vertex(matrix, (float)scrollbarRight, (float)scrollY, 0.0F).uv(1.0F, 0.0F).color(128, 128, 128, 255).endVertex();
 			bufferbuilder.vertex(matrix, (float)scrollbarLeft, (float)scrollY, 0.0F).uv(0.0F, 0.0F).color(128, 128, 128, 255).endVertex();
 			tessellator.end();
 
-			bufferbuilder.begin(7, DefaultVertexFormat.POSITION_TEX_COLOR);
+			bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
 			bufferbuilder.vertex(matrix, (float)scrollbarLeft, (float)(scrollY + contentMax - 1), 0.0F).uv(0.0F, 1.0F).color(192, 192, 192, 255).endVertex();
 			bufferbuilder.vertex(matrix, (float)(scrollbarRight - 1), (float)(scrollY + contentMax - 1), 0.0F).uv(1.0F, 1.0F).color(192, 192, 192, 255).endVertex();
 			bufferbuilder.vertex(matrix, (float)(scrollbarRight - 1), (float)scrollY, 0.0F).uv(1.0F, 0.0F).color(192, 192, 192, 255).endVertex();
@@ -175,8 +142,6 @@ public abstract class BaseList<S> extends ObjectSelectionList<BaseListEntry> {
 		}
 
 		RenderSystem.enableTexture();
-		RenderSystem.shadeModel(7424);
-		RenderSystem.enableAlphaTest();
 		RenderSystem.depthMask(true);
 		RenderSystem.enableDepthTest();
 		RenderSystem.disableBlend();

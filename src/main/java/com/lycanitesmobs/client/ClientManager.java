@@ -3,8 +3,6 @@ package com.lycanitesmobs.client;
 import com.lycanitesmobs.client.gui.*;
 import com.lycanitesmobs.client.gui.beastiary.SummoningBeastiaryScreen;
 import com.lycanitesmobs.client.gui.overlays.BaseOverlay;
-import com.lycanitesmobs.client.localisation.LanguageLoader;
-import com.lycanitesmobs.client.localisation.LanguageManager;
 import com.lycanitesmobs.client.renderer.RenderRegister;
 import com.lycanitesmobs.core.container.*;
 import com.lycanitesmobs.core.info.CreatureManager;
@@ -14,8 +12,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.server.packs.resources.ReloadableResourceManager;
-import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -36,13 +32,6 @@ public class ClientManager {
 	}
 
 	protected Font fontRenderer;
-
-	/**
-	 * Sets up the Language Manager used for additional language files.
-	 */
-	public void initLanguageManager() {
-		LanguageManager.getInstance();
-	}
 
 	/**
 	 * Registers all GUI Screens, etc used by this mod.

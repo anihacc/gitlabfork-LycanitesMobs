@@ -8,6 +8,7 @@ import com.lycanitesmobs.core.info.Subspecies;
 import com.lycanitesmobs.core.info.Variant;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.components.events.GuiEventListener;
+import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.BaseComponent;
@@ -156,6 +157,11 @@ public class SubspeciesList extends BaseList<BeastiaryScreen> {
 
 		@Override
 		public List<? extends GuiEventListener> children() {
+			return null;
+		}
+
+		@Override
+		public List<? extends NarratableEntry> narratables() {
 			return null;
 		}
 	}

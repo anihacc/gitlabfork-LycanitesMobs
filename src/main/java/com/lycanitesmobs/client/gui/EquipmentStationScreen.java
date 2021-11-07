@@ -6,15 +6,13 @@ import com.lycanitesmobs.core.container.BaseContainer;
 import com.lycanitesmobs.core.container.EquipmentStationContainer;
 import com.lycanitesmobs.core.container.EquipmentStationRepairSlot;
 import com.lycanitesmobs.core.item.equipment.ItemEquipment;
-import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
 import com.lycanitesmobs.core.network.MessageTileEntityButton;
 import com.lycanitesmobs.core.tileentity.EquipmentStationTileEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.network.chat.Component;
-import net.minecraft.util.text.TranslationTextComponent;
 import org.lwjgl.opengl.GL11;
 
 import java.util.List;
@@ -42,7 +40,7 @@ public class EquipmentStationScreen extends BaseContainerScreen<EquipmentStation
 	@Override
 	protected void renderBackground(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		this.getMinecraft().getTextureManager().bind(TextureManager.getTexture("GUIEquipmentForge"));
+		this.getMinecraft().getTextureManager().bindForSetup(TextureManager.getTexture("GUIEquipmentForge"));
 		this.imageWidth = 176;
 		this.imageHeight = 166;
 		int backX = (this.width - this.imageWidth) / 2;
@@ -59,7 +57,7 @@ public class EquipmentStationScreen extends BaseContainerScreen<EquipmentStation
 	 */
 	protected void drawSlots(PoseStack matrixStack, int backX, int backY) {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		this.getMinecraft().getTextureManager().bind(TextureManager.getTexture("GUIEquipmentForge"));
+		this.getMinecraft().getTextureManager().bindForSetup(TextureManager.getTexture("GUIEquipmentForge"));
 
 		BaseContainer container = this.getMenu();
 		List<Slot> forgeSlots = container.slots.subList(container.inventoryStart, container.inventoryFinish);
@@ -82,7 +80,7 @@ public class EquipmentStationScreen extends BaseContainerScreen<EquipmentStation
 
 	@Override
 	protected void renderForeground(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
-        this.drawHelper.drawString(matrixStack, this.inventory.getName().getString(), this.leftPos + 8, this.topPos + this.imageHeight - 96 + 2, 4210752);
+        this.drawHelper.drawString(matrixStack, this.playerInventoryTitle.getString(), this.leftPos + 8, this.topPos + this.imageHeight - 96 + 2, 4210752);
 		int backX = (this.width - this.imageWidth) / 2;
 		int backY = (this.height - this.imageHeight) / 2;
 		this.drawBars(matrixStack, backX, backY);
@@ -98,7 +96,7 @@ public class EquipmentStationScreen extends BaseContainerScreen<EquipmentStation
 		this.drawHelper.drawTexture(matrixStack, TextureManager.getTexture("GUIPetBarEmpty"), barX, barY, 0, 1, 1, barWidth, barHeight);
 		this.drawHelper.drawTexture(matrixStack, TextureManager.getTexture("GUIPetBarEmpty"), barX, barY, 0, 1, 1, barWidth, barHeight);
 		this.drawHelper.drawTexture(matrixStack, TextureManager.getTexture("GUIPetBarEmpty"), barX, manaBarY, 0, 1, 1, barWidth, barHeight);
-		this.getMinecraft().getTextureManager().bind(TextureManager.getTexture("GUIEquipmentForge"));
+		this.getMinecraft().getTextureManager().bindForSetup(TextureManager.getTexture("GUIEquipmentForge"));
 		this.drawHelper.drawTexturedModalRect(matrixStack, barX - 14, barY, 225, 158, 13, 10);
 		this.drawHelper.drawTexturedModalRect(matrixStack, barX - 14, manaBarY, 225, 170, 13, 10);
 		ItemStack partStack = this.equipmentStation.getItem(1);
