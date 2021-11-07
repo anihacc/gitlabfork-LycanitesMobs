@@ -2,16 +2,14 @@ package com.lycanitesmobs.core.entity.goals.targeting;
 
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
 
-import java.util.Iterator;
 import java.util.List;
 
 public class DefendVillageGoal extends FindAttackTargetGoal {
-	private final TargetingConditions villageSearchPredicate = (new TargetingConditions()).range(64.0D);
+	private final TargetingConditions villageSearchPredicate = (TargetingConditions.forNonCombat()).range(64.0D);
 
 	public DefendVillageGoal(BaseCreatureEntity setHost) {
 		super(setHost);
@@ -27,18 +25,11 @@ public class DefendVillageGoal extends FindAttackTargetGoal {
 		}
 
 		AABB villageSearchArea = this.host.getBoundingBox().inflate(10.0D, 8.0D, 10.0D);
-		List<LivingEntity> villagers = this.host.level.getNearbyEntities(Villager.class, this.villageSearchPredicate, this.host, villageSearchArea);
+		List<Villager> villagers = this.host.level.getNearbyEntities(Villager.class, this.villageSearchPredicate, this.host, villageSearchArea);
 		List<Player> players = this.host.level.getNearbyPlayers(this.villageSearchPredicate, this.host, villageSearchArea);
-		Iterator villagerIter = villagers.iterator();
-
-		while(villagerIter.hasNext()) {
-			LivingEntity livingEntity = (LivingEntity)villagerIter.next();
-			Villager villagerEntity = (Villager)livingEntity;
-			Iterator playerIter = players.iterator();
-
-			while(playerIter.hasNext()) {
-				Player playerEntity = (Player)playerIter.next();
-				int reputation = villagerEntity.getPlayerReputation(playerEntity);
+		for (Villager villager : villagers) {
+			for (Player playerEntity : players) {
+				int reputation = villager.getPlayerReputation(playerEntity);
 				if (reputation <= -100) {
 					this.target = playerEntity;
 				}

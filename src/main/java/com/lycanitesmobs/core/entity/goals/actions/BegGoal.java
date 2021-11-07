@@ -7,8 +7,6 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.EnumSet;
 
-import net.minecraft.world.entity.ai.goal.Goal.Flag;
-
 public class BegGoal extends Goal {
 	// Targets:
     private TameableCreatureEntity host;
@@ -88,7 +86,7 @@ public class BegGoal extends Goal {
  	//                    Got Beg Item
  	// ==================================================
     private boolean gotBegItem(Player player) {
-        ItemStack itemstack = player.inventory.getSelected();
+        ItemStack itemstack = player.getInventory().getSelected();
         if(itemstack.isEmpty())
         	return false;
         

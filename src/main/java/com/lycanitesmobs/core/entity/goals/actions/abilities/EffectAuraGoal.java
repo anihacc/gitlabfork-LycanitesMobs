@@ -4,11 +4,11 @@ import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.BaseGoal;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.EntityDamageSource;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.LivingEntity;
 
 import java.util.List;
 
@@ -222,7 +222,7 @@ public class EffectAuraGoal extends BaseGoal {
 				}
 				return false;
 			}
-			if(this.checkSight && !this.host.getSensing().canSee(entity)) {
+			if(this.checkSight && !this.host.getSensing().hasLineOfSight(entity)) {
 				return false;
 			}
 			return true;

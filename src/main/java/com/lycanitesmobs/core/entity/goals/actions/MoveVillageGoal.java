@@ -1,18 +1,16 @@
 package com.lycanitesmobs.core.entity.goals.actions;
 
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import net.minecraft.world.entity.ai.util.RandomPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.entity.ai.util.LandRandomPos;
 import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.EnumSet;
 import java.util.Random;
-
-import net.minecraft.world.entity.ai.goal.Goal.Flag;
 
 public class MoveVillageGoal extends Goal {
 	// Targets:
@@ -62,7 +60,7 @@ public class MoveVillageGoal extends Goal {
             if (!serverWorld.isCloseToVillage(blockPos, 6)) {
                 return false;
             } else {
-                Vec3 lvt_3_1_ = RandomPos.getLandPos(this.host, 15, 7, (p_220755_1_) -> {
+                Vec3 lvt_3_1_ = LandRandomPos.getPos(this.host, 15, 7, (p_220755_1_) -> {
                     return (double)(-serverWorld.getBlockFloorHeight(p_220755_1_));
                 });
                 this.blockPos = lvt_3_1_ == null ? null : new BlockPos(lvt_3_1_);
@@ -96,7 +94,7 @@ public class MoveVillageGoal extends Goal {
                 Vec3 lvt_5_1_ = lvt_2_1_.subtract(lvt_3_1_).normalize().scale(10.0D).add(lvt_3_1_);
                 BlockPos lvt_6_1_ = new BlockPos(lvt_5_1_);
                 lvt_6_1_ = this.host.level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, lvt_6_1_);
-                if (!lvt_1_1_.moveTo((double) lvt_6_1_.getX(), (double) lvt_6_1_.getY(), (double) lvt_6_1_.getZ(), 1.0D)) {
+                if (!lvt_1_1_.moveTo(lvt_6_1_.getX(), lvt_6_1_.getY(), lvt_6_1_.getZ(), 1.0D)) {
                     this.moveRandomly();
                 }
             }
@@ -107,6 +105,6 @@ public class MoveVillageGoal extends Goal {
     private void moveRandomly() {
         Random lvt_1_1_ = this.host.getRandom();
         BlockPos lvt_2_1_ = this.host.level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, this.host.blockPosition().offset(-8 + lvt_1_1_.nextInt(16), 0, -8 + lvt_1_1_.nextInt(16)));
-        this.host.getNavigation().moveTo((double)lvt_2_1_.getX(), (double)lvt_2_1_.getY(), (double)lvt_2_1_.getZ(), 1.0D);
+        this.host.getNavigation().moveTo(lvt_2_1_.getX(), lvt_2_1_.getY(), lvt_2_1_.getZ(), 1.0D);
     }
 }

@@ -15,7 +15,7 @@ public class WatchClosestGoal extends Goal {
     // Targets:
     private Mob host;
     protected Entity closestEntity;
-    private final TargetingConditions searchPredicate = (new TargetingConditions()).range(64.0D);
+    private final TargetingConditions searchPredicate = (TargetingConditions.forCombat()).range(64.0D);
 
     // Properties
     private Class watchedClass = LivingEntity.class;

@@ -5,16 +5,14 @@ import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.navigate.CreaturePathNavigator;
 import com.lycanitesmobs.core.info.ObjectLists;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
-import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.EnumSet;
-
-import net.minecraft.world.entity.ai.goal.Goal.Flag;
 
 public class TemptGoal extends Goal {
     // Targets:
@@ -184,7 +182,7 @@ public class TemptGoal extends Goal {
             if(this.host.distanceTo(this.player) < 36.0D) {
                 if(this.player.distanceToSqr(this.targetX, this.targetY, this.targetZ) > 0.010000000000000002D)
                     return false;
-                if(Math.abs((double)this.player.xRot - this.targetPitch) > 5.0D || Math.abs((double)this.player.yRot - this.targetYaw) > 5.0D)
+                if(Math.abs((double)this.player.getXRot() - this.targetPitch) > 5.0D || Math.abs((double)this.player.getYRot() - this.targetYaw) > 5.0D)
                     return false;
             }
             else {
@@ -193,8 +191,8 @@ public class TemptGoal extends Goal {
                 this.targetZ = this.player.position().z();
             }
 
-            this.targetPitch = (double)this.player.xRot;
-            this.targetYaw = (double)this.player.yRot;
+            this.targetPitch = this.player.getXRot();
+            this.targetYaw = this.player.getYRot();
         }
         return this.canUse();
     }
@@ -229,10 +227,9 @@ public class TemptGoal extends Goal {
         this.player = null;
         this.host.getNavigation().stop();
         this.retemptTime = this.retemptTimeMax;
-        if(this.host instanceof AgeableCreatureEntity) {
-            AgeableCreatureEntity ageable = (AgeableCreatureEntity)this.host;
+        if(this.host instanceof AgeableCreatureEntity ageable) {
             if(!ageable.isBaby() && !ageable.canBreed()) {
-                Math.max(this.retemptTime *= 10, 100);
+                this.retemptTime = Math.max(this.retemptTime * 10, 100); // TODO This wasn't doing anything before but has been fixed and will need to be looked at if rebreeding time is off!
             }
         }
         this.isRunning = false;

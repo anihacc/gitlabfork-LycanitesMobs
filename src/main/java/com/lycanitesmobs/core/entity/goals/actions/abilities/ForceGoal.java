@@ -1,13 +1,13 @@
 package com.lycanitesmobs.core.entity.goals.actions.abilities;
 
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
-import net.minecraft.util.Mth;
 
 public class ForceGoal extends Goal {
 	BaseCreatureEntity host;
@@ -164,7 +164,7 @@ public class ForceGoal extends Goal {
 			double xDist = this.host.position().x() - entity.position().x();
 			double yDist = this.host.position().y() - entity.position().y();
 			double zDist = this.host.position().z() - entity.position().z();
-			double xzDist = Math.max(Mth.sqrt(xDist * xDist + zDist * zDist), 0.01D);
+			double xzDist = Math.max(Mth.sqrt((float) (xDist * xDist + zDist * zDist)), 0.01D);
 			ServerPlayer player = null;
 			if (entity instanceof ServerPlayer) {
 				player = (ServerPlayer) entity;
@@ -189,8 +189,7 @@ public class ForceGoal extends Goal {
 		if(entity == this.host) {
 			return false;
 		}
-		if (entity instanceof Player) {
-			Player player = (Player) entity;
+		if (entity instanceof Player player) {
 			if (player.isCreative() || player.isSpectator()) {
 				return false;
 			}

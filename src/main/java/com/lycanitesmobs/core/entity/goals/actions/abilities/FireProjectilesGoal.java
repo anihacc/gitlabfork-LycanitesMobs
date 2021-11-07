@@ -1,20 +1,15 @@
 package com.lycanitesmobs.core.entity.goals.actions.abilities;
 
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.entity.goals.BaseGoal;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.EnumSet;
-
-import net.minecraft.world.entity.ai.goal.Goal.Flag;
-import net.minecraft.world.World;
 
 public class FireProjectilesGoal extends BaseGoal {
 	protected String projectileName;
@@ -199,7 +194,7 @@ public class FireProjectilesGoal extends BaseGoal {
 		// All Players Mode:
 		if(this.allPlayers) {
 			for (Player target : this.host.playerTargets) {
-				if(target.abilities.invulnerable || target.isSpectator())
+				if(target.getAbilities().invulnerable || target.isSpectator())
 					continue;
 				this.fireProjectile(target);
 			}

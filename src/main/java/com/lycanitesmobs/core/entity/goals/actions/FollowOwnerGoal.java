@@ -1,11 +1,10 @@
 package com.lycanitesmobs.core.entity.goals.actions;
 
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class FollowOwnerGoal extends FollowGoal {
 	// Targets:
@@ -114,7 +113,7 @@ public class FollowOwnerGoal extends FollowGoal {
 	        int k = Mth.floor(this.getTarget().position().z()) - 2;
 
             if(this.host.isFlying() || this.getTarget().isInWater()) {
-                this.host.moveTo(i, j + 1, k, this.host.yRot, this.host.xRot);
+                this.host.moveTo(i, j + 1, k, this.host.getYRot(), this.host.getXRot());
                 this.host.clearMovement();
                 return;
             }
@@ -122,7 +121,7 @@ public class FollowOwnerGoal extends FollowGoal {
 	        for(int x = -2; x <= 2; ++x) {
 	            for(int z = -2; z <= 2; ++z) {
 	                if(this.canTeleportTo(this.getTarget().blockPosition().offset(x, 0, z))) {
-                        this.host.moveTo((float)(i + x) + 0.5F, j, (float)(k + z) + 0.5F, this.host.yRot, this.host.xRot);
+                        this.host.moveTo((float)(i + x) + 0.5F, j, (float)(k + z) + 0.5F, this.host.getYRot(), this.host.getXRot());
 	                    this.host.clearMovement();
 	                    return;
 	                }

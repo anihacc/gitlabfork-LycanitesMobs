@@ -2,18 +2,16 @@ package com.lycanitesmobs.core.entity.goals.actions;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.level.pathfinder.Node;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.core.BlockPos;
-import net.minecraft.util.Mth;
+import net.minecraft.world.level.pathfinder.Path;
 
 import java.util.EnumSet;
-
-import net.minecraft.world.entity.ai.goal.Goal.Flag;
 
 public class AttackMeleeGoal extends Goal {
 	// Targets:
@@ -211,7 +209,7 @@ public class AttackMeleeGoal extends Goal {
         this.host.getLookControl().setLookAt(this.attackTarget, 30.0F, 30.0F);
 
 		// Path To Target:
-		if(this.longMemory || this.host.getSensing().canSee(this.attackTarget)) {
+		if(this.longMemory || this.host.getSensing().hasLineOfSight(this.attackTarget)) {
 			if(!this.host.useDirectNavigator() && --this.repathTime <= 0) {
 				this.repathTime = this.failedPathFindingPenalty + 4 + this.host.getRandom().nextInt(7);
 				if(this.host.isFlying()) {
@@ -252,10 +250,10 @@ public class AttackMeleeGoal extends Goal {
             double d0 = this.host.position().x() - this.attackTarget.position().x();
             double d1 = this.host.position().z() - this.attackTarget.position().z();
             float f = (float)(Math.atan2(d1, d0) * 180.0D / Math.PI) + 90.0F;
-            f = Mth.wrapDegrees(f - this.host.yRot);
+            f = Mth.wrapDegrees(f - this.host.getYRot());
             if(f < -30f) f = -30f;
             if(f > 30f) f = 30f;
-            this.host.yRot = this.host.yRot + f;
+            this.host.setYRot(this.host.getYRot() + f);
         }
     }
 

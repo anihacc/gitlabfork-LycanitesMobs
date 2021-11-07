@@ -2,14 +2,12 @@ package com.lycanitesmobs.core.entity.goals.actions;
 
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.RideableCreatureEntity;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.core.BlockPos;
 
 import java.util.EnumSet;
-
-import net.minecraft.world.entity.ai.goal.Goal.Flag;
 
 public class AttackRangedGoal extends Goal {
     // Targets:
@@ -192,7 +190,7 @@ public class AttackRangedGoal extends Goal {
     public void tick() {
     	boolean fixated = this.host.hasFixateTarget() && this.host.getFixateTarget() == this.attackTarget;
         double distance = this.host.distanceTo(this.attackTarget) - (this.attackTarget.getDimensions(this.attackTarget.getPose()).width / 2);
-        boolean hasSight = fixated || this.host.getSensing().canSee(this.attackTarget);
+        boolean hasSight = fixated || this.host.getSensing().hasLineOfSight(this.attackTarget);
         float flyingHeightOffset = this.flyingHeight;
         
         if(hasSight && this.chaseTimeMax >= 0 && !fixated)
