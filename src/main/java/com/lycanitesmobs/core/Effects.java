@@ -11,19 +11,19 @@ import com.lycanitesmobs.core.entity.FearEntity;
 import com.lycanitesmobs.core.info.CreatureGroup;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.network.MessageEntityVelocity;
+import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.util.Mth;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
@@ -215,7 +215,7 @@ public class Effects {
 					for(Object entityObj : aoeTargets) {
 						LivingEntity target = (LivingEntity)entityObj;
 						if(target != entity && !entity.isAlliedTo(target)) {
-							if(target instanceof Player && !entity.canSee(target)) {
+							if(target instanceof Player && !entity.hasLineOfSight(target)) {
 								continue;
 							}
 							int amplifier = entity.getEffect(plague).getAmplifier();
@@ -359,7 +359,7 @@ public class Effects {
 		boolean invulnerable = false;
 		if(entity instanceof Player) {
 			Player player = (Player)entity;
-			invulnerable = player.abilities.invulnerable;
+			invulnerable = player.getAbilities().invulnerable;
 		}
 		if(invulnerable) {
 			return;
@@ -494,7 +494,7 @@ public class Effects {
 				double knockback = target.getEffect(repulsion).getAmplifier() + 2;
 				double xDist = attacker.position().x() - target.position().x();
 				double zDist = attacker.position().z() - target.position().z();
-				double xzDist = Math.max(Mth.sqrt(xDist * xDist + zDist * zDist), 0.01D);
+				double xzDist = Math.max(Mth.sqrt((float) (xDist * xDist + zDist * zDist)), 0.01D);
 				double motionCap = 10;
 				double xVel = xDist / xzDist * knockback;
 				double zVel = zDist / xzDist * knockback;
@@ -580,7 +580,7 @@ public class Effects {
 	// ==================================================
 	/** Get entities that are near the provided entity. **/
 	public <T extends Entity> List<T> getNearbyEntities(Entity searchEntity, Class <? extends T > clazz, final Class filterClass, double range) {
-		return searchEntity.getCommandSenderWorld().getEntitiesOfClass(clazz, searchEntity.getBoundingBox().inflate(range, range, range), (Predicate<Entity>) entity -> {
+		return (List<T>) searchEntity.getCommandSenderWorld().getEntitiesOfClass(clazz, searchEntity.getBoundingBox().inflate(range, range, range), (Predicate<Entity>) entity -> {
 			if(filterClass == null)
 				return true;
 			return filterClass.isAssignableFrom(entity.getClass());

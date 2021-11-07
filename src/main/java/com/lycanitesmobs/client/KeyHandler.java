@@ -1,25 +1,25 @@
 package com.lycanitesmobs.client;
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.client.gui.overlays.MinionSelectionOverlay;
 import com.lycanitesmobs.client.gui.beastiary.CreaturesBeastiaryScreen;
 import com.lycanitesmobs.client.gui.beastiary.IndexBeastiaryScreen;
 import com.lycanitesmobs.client.gui.beastiary.PetsBeastiaryScreen;
 import com.lycanitesmobs.client.gui.beastiary.SummoningBeastiaryScreen;
 import com.lycanitesmobs.client.gui.buttons.TabManager;
+import com.lycanitesmobs.client.gui.overlays.MinionSelectionOverlay;
 import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.network.MessagePlayerAttack;
 import com.lycanitesmobs.core.network.MessagePlayerControl;
+import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
-import net.minecraft.client.KeyMapping;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fmlclient.registry.ClientRegistry;
 import org.lwjgl.glfw.GLFW;
 
 public class KeyHandler {

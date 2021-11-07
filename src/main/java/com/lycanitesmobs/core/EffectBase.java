@@ -6,39 +6,30 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.RenderProperties;
+import net.minecraftforge.common.extensions.IForgeMobEffect;
 
-public class EffectBase extends MobEffect {
+public class EffectBase extends MobEffect implements IForgeMobEffect {
 	public String name;
-	
-	// ==================================================
-	//                    Constructor
-	// ==================================================
+
 	public EffectBase(String name, boolean badEffect, int color) {
 		super(badEffect ? MobEffectCategory.HARMFUL : MobEffectCategory.BENEFICIAL, color);
 		this.name = name;
 		this.setRegistryName(LycanitesMobs.MODID, name);
 		TextureManager.addTexture("effect." + name, LycanitesMobs.modInfo, "textures/mob_effect/" + name + ".png");
 	}
-	
-	
-	// ==================================================
-	//                    Effects
-	// ==================================================
+
 	@Override
 	public boolean isInstantenous() {
         return false;
     }
-	
-	
-	// ==================================================
-	//                    Visuals
-	// ==================================================
+
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void renderInventoryEffect(MobEffectInstance effect, EffectRenderingInventoryScreen<?> gui, PoseStack mStack, int x, int y, float z) {
@@ -47,8 +38,8 @@ public class EffectBase extends MobEffect {
 			return;
 		}
 
-		Minecraft.getInstance().getTextureManager().bind(texture);
-		gui.blit(mStack, x + 6, y + 7, 0, 0, 18, 18, 18, 18);
+		Minecraft.getInstance().getTextureManager().bindForSetup(texture);
+		GuiComponent.blit(mStack, x + 6, y + 7, 0, 0, 18, 18, 18, 18);
 		super.renderInventoryEffect(effect, gui, mStack, x, y, z);
 	}
 
@@ -60,7 +51,7 @@ public class EffectBase extends MobEffect {
 			return;
 		}
 
-		Minecraft.getInstance().getTextureManager().bind(texture);
-		gui.blit(mStack, x + 3, y + 3, 0, 0, 18, 18, 18, 18);
+		Minecraft.getInstance().getTextureManager().bindForSetup(texture);
+		GuiComponent.blit(mStack, x + 3, y + 3, 0, 0, 18, 18, 18, 18);
 	}
 }

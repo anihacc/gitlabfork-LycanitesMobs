@@ -1,12 +1,10 @@
 package com.lycanitesmobs.core;
 
 import com.lycanitesmobs.LycanitesMobs;
-import net.minecraft.stats.StatFormatter;
-import net.minecraft.stats.Stat;
-import net.minecraft.stats.StatType;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.SimpleRegistry;
+import net.minecraft.stats.Stat;
+import net.minecraft.stats.StatFormatter;
+import net.minecraft.stats.StatType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 

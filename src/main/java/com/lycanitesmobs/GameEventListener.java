@@ -6,32 +6,27 @@ import com.lycanitesmobs.core.capabilities.CapabilityProviderPlayer;
 import com.lycanitesmobs.core.config.ConfigExtra;
 import com.lycanitesmobs.core.entity.*;
 import com.lycanitesmobs.core.info.ItemConfig;
-import com.lycanitesmobs.core.info.ItemManager;
 import com.lycanitesmobs.core.item.equipment.ItemEquipment;
 import com.lycanitesmobs.core.network.MessagePlayerLeftClick;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.block.BlockState;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.damagesource.EntityDamageSource;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
-import net.minecraft.entity.projectile.SnowballEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.damagesource.EntityDamageSource;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.world.level.Level;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
 import net.minecraftforge.event.entity.EntityLeaveWorldEvent;
@@ -110,7 +105,7 @@ public class GameEventListener {
                 LycanitesMobs.logDebug("ForceRemoveEntity", "Forced entity removal, checking: " + event.getEntity().getName());
                 for(String forceRemoveID : ExtendedEntity.FORCE_REMOVE_ENTITY_IDS) {
                     if(forceRemoveID.equalsIgnoreCase(event.getEntity().getType().getRegistryName().toString())) {
-                        event.getEntity().remove();
+                        event.getEntity().discard();
                         break;
                     }
                 }
@@ -452,11 +447,10 @@ public class GameEventListener {
 	// ==================================================
 	@SubscribeEvent
 	public void onCheckSpawn(LivingSpawnEvent.CheckSpawn event) {
-		if(event.isSpawner()) {
+		if (event.isSpawner() && event.getSpawner() != null && event.getSpawner().getSpawnerBlockEntity() != null) {
 			LivingEntity entity = event.getEntityLiving();
-			if(entity instanceof BaseCreatureEntity && event.getWorld() instanceof Level) {
-				BaseCreatureEntity baseCreatureEntity = (BaseCreatureEntity)entity;
-				if(!baseCreatureEntity.checkSpawnGroupLimit((Level) event.getWorld(), event.getSpawner().getPos(), 16)) {
+			if (entity instanceof BaseCreatureEntity baseCreatureEntity && event.getWorld() instanceof Level) {
+				if (!baseCreatureEntity.checkSpawnGroupLimit((Level) event.getWorld(), event.getSpawner().getSpawnerBlockEntity().getBlockPos(), 16)) {
 					event.setResult(Event.Result.DENY);
 				}
 			}
