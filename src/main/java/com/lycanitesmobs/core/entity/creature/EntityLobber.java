@@ -96,8 +96,6 @@ public class EntityLobber extends BaseCreatureEntity implements IMob {
                         Block block = this.getEntityWorld().getBlockState(this.getPosition().add(w, h, d)).getBlock();
                         if(block == Blocks.OBSIDIAN || block == Blocks.COBBLESTONE || block == Blocks.DIRT || block == Blocks.GRAVEL || block == Blocks.SAND) {
 							IBlockState blockState = Blocks.FLOWING_LAVA.getStateFromMeta(11);
-                            if(block == Blocks.OBSIDIAN)
-                                blockState = Blocks.LAVA.getDefaultState();
                             this.getEntityWorld().setBlockState(this.getPosition().add(w, h, d), blockState);
                         }
                     }
