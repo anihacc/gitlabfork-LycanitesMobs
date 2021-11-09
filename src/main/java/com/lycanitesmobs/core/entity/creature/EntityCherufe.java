@@ -100,8 +100,6 @@ public class EntityCherufe extends BaseCreatureEntity implements IMob {
                         Block block = this.getCommandSenderWorld().getBlockState(this.blockPosition().offset(w, h, d)).getBlock();
                         if(block == Blocks.OBSIDIAN || block == Blocks.COBBLESTONE || block == Blocks.DIRT || block == Blocks.GRAVEL || block == Blocks.SAND) {
 							BlockState blockState = Blocks.LAVA.defaultBlockState().setValue(FlowingFluidBlock.LEVEL, 5);
-                            if(block == Blocks.OBSIDIAN)
-                                blockState = Blocks.LAVA.defaultBlockState();
                             this.getCommandSenderWorld().setBlockAndUpdate(this.blockPosition().offset(w, h, d), blockState);
                         }
                     }
