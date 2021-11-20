@@ -1,10 +1,13 @@
 package com.lycanitesmobs.core.network;
 
 import com.lycanitesmobs.client.ClientManager;
+import com.lycanitesmobs.core.item.equipment.ItemEquipment;
 import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.fmllegacy.network.NetworkDirection;
 import net.minecraftforge.fmllegacy.network.NetworkEvent;
@@ -39,17 +42,20 @@ public class MessageSummoningPedestalStats {
 		if(ctx.get().getDirection() != NetworkDirection.PLAY_TO_CLIENT)
 			return;
 
-		Player player = ClientManager.getInstance().getClientPlayer();
-        BlockEntity tileEntity = player.getCommandSenderWorld().getBlockEntity(new BlockPos(message.x, message.y, message.z));
-        TileEntitySummoningPedestal summoningPedestal = null;
-        if(tileEntity instanceof TileEntitySummoningPedestal)
-            summoningPedestal = (TileEntitySummoningPedestal)tileEntity;
-        if(summoningPedestal == null)
-            return;
-        summoningPedestal.capacity = message.capacity;
-        summoningPedestal.summonProgress = message.progress;
-        summoningPedestal.summoningFuel = message.fuel;
-        summoningPedestal.summoningFuelMax = message.fuelMax;
+		ctx.get().enqueueWork(() -> {
+			Player player = ClientManager.getInstance().getClientPlayer();
+
+			BlockEntity tileEntity = player.getCommandSenderWorld().getBlockEntity(new BlockPos(message.x, message.y, message.z));
+			TileEntitySummoningPedestal summoningPedestal = null;
+			if(tileEntity instanceof TileEntitySummoningPedestal)
+				summoningPedestal = (TileEntitySummoningPedestal)tileEntity;
+			if(summoningPedestal == null)
+				return;
+			summoningPedestal.capacity = message.capacity;
+			summoningPedestal.summonProgress = message.progress;
+			summoningPedestal.summoningFuel = message.fuel;
+			summoningPedestal.summoningFuelMax = message.fuelMax;
+		});
 	}
 	
 	/**
