@@ -29,19 +29,16 @@ public class MessagePlayerLeftClick implements IMessage, IMessageHandler<Message
 	public IMessage onMessage(final MessagePlayerLeftClick message, final MessageContext ctx) {
 		if(ctx.side != Side.SERVER) return null;
         IThreadListener mainThread = (WorldServer)ctx.getServerHandler().player.getEntityWorld();
-        mainThread.addScheduledTask(new Runnable() {
-            @Override
-            public void run() {
-                EntityPlayer player = ctx.getServerHandler().player;
+        mainThread.addScheduledTask(() -> {
+			EntityPlayer player = ctx.getServerHandler().player;
 
-				// Equipment:
-				EnumHand activeHand = player.getActiveHand();
-				ItemStack activeStack = player.getHeldItem(activeHand);
-				if(activeStack.getItem() instanceof ItemEquipment) {
-					((ItemEquipment)activeStack.getItem()).onItemLeftClick(player.getEntityWorld(), player, activeHand);
-				}
+			// Equipment:
+			EnumHand activeHand = player.getActiveHand();
+			ItemStack activeStack = player.getHeldItem(activeHand);
+			if(activeStack.getItem() instanceof ItemEquipment) {
+				((ItemEquipment)activeStack.getItem()).onItemLeftClick(player.getEntityWorld(), player, activeHand);
 			}
-        });
+		});
 		return null;
 	}
 	
