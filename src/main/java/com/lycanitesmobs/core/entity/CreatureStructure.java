@@ -222,6 +222,9 @@ public class CreatureStructure {
 		if (targetBlock == Blocks.AIR) {
 			return true;
 		}
+		if (this.owner.getCommandSenderWorld().getBlockEntity(pos) != null) {
+			return false;
+		}
 		if (targetState.getMaterial() == Material.WATER || targetState.getMaterial() == Material.LAVA) {
 			return true;
 		}
