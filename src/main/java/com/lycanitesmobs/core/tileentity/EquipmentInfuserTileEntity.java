@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.tileentity;
 
 import com.lycanitesmobs.ObjectManager;
+import com.lycanitesmobs.core.entity.CustomItemEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.inventory.IInventory;
@@ -29,7 +30,11 @@ public class EquipmentInfuserTileEntity extends TileEntityBase {
 
 	@Override
 	public void setRemoved() {
-		// TODO Drop parts or piece.
+		for (ItemStack itemStack : this.itemStacks) {
+			CustomItemEntity entityItem = new CustomItemEntity(this.getLevel(), this.getBlockPos().getX(), this.getBlockPos().getY() + 0.5D, this.getBlockPos().getZ(), itemStack);
+			this.getLevel().addFreshEntity(entityItem);
+		}
+		this.clearContent();
 		super.setRemoved();
 	}
 
@@ -118,7 +123,7 @@ public class EquipmentInfuserTileEntity extends TileEntityBase {
 
 	@Override
 	public void clearContent() {
-
+		this.itemStacks.clear();
 	}
 
 	@Override
