@@ -196,7 +196,7 @@ public class CreatureInfo {
 		}
 		catch(Exception e) {
 			LycanitesMobs.logError("[Creature] Unable to find the Java Entity Class: " + json.get("entityClass").getAsString() + " for " + this.getName());
-			throw new RuntimeException("Creature config loading error, clear your creatures config if updating from an older version of the mod. Missing Class: " + json.get("entityClass").getAsString() + " Creature: " + this.getName());
+			throw new RuntimeException("Creature config loading error, clear your config if updating from an older version of the mod. Missing Class: " + json.get("entityClass").getAsString() + " Creature: " + this.getName());
 		}
 
 		// Enabled:
