@@ -1,8 +1,11 @@
 package com.lycanitesmobs;
 
+import com.lycanitesmobs.core.config.ConfigBase;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
@@ -10,9 +13,13 @@ import net.minecraft.world.IWorldEventListener;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class WorldEventListener implements IWorldEventListener {
 	protected GameEventListener gameEventListener;
+	protected List<Entity> customBlockProtectionEntities = new ArrayList<>();
+	protected String[] customProtectionEntityIds;
 
 	public WorldEventListener(GameEventListener gameEventListener) {
 		this.gameEventListener = gameEventListener;
@@ -54,8 +61,28 @@ public class WorldEventListener implements IWorldEventListener {
 	}
 
 	@Override
-	public void onEntityAdded(Entity entityIn) {
-
+	public void onEntityAdded(Entity entity) {
+		// Custom Entity Block Protection:
+		if (this.customProtectionEntityIds == null) {
+			ConfigBase config = ConfigBase.getConfig(LycanitesMobs.modInfo, "general");
+			this.customProtectionEntityIds = config.getStringList("Block Protection", "Custom Entity Block Protection", new String[] {}, "A list of entities to prevent players from placing or destroying block near, takes a list of entity ids.");
+		}
+		if (this.customProtectionEntityIds.length > 0) {
+			ExtendedWorld extendedWorld = ExtendedWorld.getForWorld(entity.getEntityWorld());
+			if (extendedWorld != null) {
+				ResourceLocation entityResourceLocation = EntityList.getKey(entity);
+				if (entityResourceLocation != null) {
+					String entityId = entityResourceLocation.toString();
+					for (String customProtectedEntityId : this.customProtectionEntityIds) {
+						if (customProtectedEntityId.equals(entityId)) {
+							extendedWorld.bossUpdate(entity);
+							customBlockProtectionEntities.add(entity);
+							break;
+						}
+					}
+				}
+			}
+		}
 	}
 
 	@Override
