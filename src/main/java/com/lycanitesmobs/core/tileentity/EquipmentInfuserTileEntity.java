@@ -3,6 +3,7 @@ package com.lycanitesmobs.core.tileentity;
 import com.lycanitesmobs.client.gui.EquipmentInfuserScreen;
 import com.lycanitesmobs.client.localisation.LanguageManager;
 import com.lycanitesmobs.core.container.EquipmentInfuserContainer;
+import com.lycanitesmobs.core.entity.EntityItemCustom;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
@@ -37,7 +38,11 @@ public class EquipmentInfuserTileEntity extends TileEntityBase {
 
 	@Override
 	public void onRemove() {
-		// TODO Drop items.
+		for (ItemStack itemStack : this.itemStacks) {
+			EntityItemCustom entityItem = new EntityItemCustom(this.getWorld(), this.getPos().getX(), this.getPos().getY() + 0.5D, this.getPos().getZ(), itemStack);
+			this.getWorld().spawnEntity(entityItem);
+		}
+		this.clear();
 		super.onRemove();
 	}
 
@@ -141,7 +146,7 @@ public class EquipmentInfuserTileEntity extends TileEntityBase {
 
 	@Override
 	public void clear() {
-
+		this.itemStacks.clear();
 	}
 
 	@Override

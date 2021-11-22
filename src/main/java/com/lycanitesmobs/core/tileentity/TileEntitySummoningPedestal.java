@@ -2,6 +2,7 @@ package com.lycanitesmobs.core.tileentity;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.block.BlockSummoningPedestal;
+import com.lycanitesmobs.core.entity.EntityItemCustom;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.PortalEntity;
 import com.lycanitesmobs.core.network.MessageSummoningPedestalStats;
@@ -80,6 +81,11 @@ public class TileEntitySummoningPedestal extends TileEntityBase {
 		if(this.summoningPortal != null && !this.summoningPortal.isDead) {
 			this.summoningPortal.setDead();
 		}
+		for (ItemStack itemStack : this.itemStacks) {
+			EntityItemCustom entityItem = new EntityItemCustom(this.getWorld(), this.getPos().getX(), this.getPos().getY() + 0.5D, this.getPos().getZ(), itemStack);
+			this.getWorld().spawnEntity(entityItem);
+		}
+		this.clear();
 		super.onRemove();
 	}
 
@@ -368,7 +374,7 @@ public class TileEntitySummoningPedestal extends TileEntityBase {
 
 	@Override
 	public void clear() {
-
+		this.itemStacks.clear();
 	}
 
 	@Override
