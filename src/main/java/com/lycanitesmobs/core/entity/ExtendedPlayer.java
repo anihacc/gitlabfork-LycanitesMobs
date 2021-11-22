@@ -384,6 +384,9 @@ public class ExtendedPlayer implements IExtendedPlayer {
 		}
 
 		BaseCreatureEntity creature = (BaseCreatureEntity)entity;
+		if (creature.isTamed()) {
+			return false;
+		}
 		experience = creature.scaleKnowledgeExperience(experience);
 		CreatureKnowledge newKnowledge = this.beastiary.addCreatureKnowledge(creature, experience);
 		if (newKnowledge != null) {
