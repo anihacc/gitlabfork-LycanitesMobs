@@ -33,6 +33,9 @@ public class TileEntityEquipmentForge extends TileEntityBase {
 	@Override
 	public void setRemoved() {
 		for (ItemStack itemStack : this.itemStacks) {
+			if (itemStack.getItem() instanceof ItemEquipment) {
+				continue;
+			}
 			CustomItemEntity entityItem = new CustomItemEntity(this.getLevel(), this.getBlockPos().getX(), this.getBlockPos().getY() + 0.5D, this.getBlockPos().getZ(), itemStack);
 			this.getLevel().addFreshEntity(entityItem);
 		}
