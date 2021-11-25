@@ -1,18 +1,21 @@
 package com.lycanitesmobs.core.tileentity;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.Container;
+import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
 
-public abstract class TileEntityBase extends BlockEntity implements Container {
+public abstract class TileEntityBase extends BlockEntity implements WorldlyContainer {
     /**
      * Constructor
      */
@@ -90,5 +93,20 @@ public abstract class TileEntityBase extends BlockEntity implements Container {
     @Override
     public CompoundTag save(CompoundTag nbtTagCompound) {
         return super.save(nbtTagCompound);
+    }
+
+    @Override
+    public int[] getSlotsForFace(Direction direction) {
+        return new int[] {};
+    }
+
+    @Override
+    public boolean canPlaceItemThroughFace(int index, ItemStack itemStack, @Nullable Direction direction) {
+        return false;
+    }
+
+    @Override
+    public boolean canTakeItemThroughFace(int index, ItemStack itemStack, Direction direction) {
+        return false;
     }
 }

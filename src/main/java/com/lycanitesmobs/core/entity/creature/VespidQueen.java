@@ -73,8 +73,8 @@ public class VespidQueen extends TameableCreatureEntity implements Enemy {
         	return;
 		}
 
-		if (this.updateTick % 20 == 0) {
-
+		if (this.updateTick > 0 && this.updateTick % 20 == 0) {
+			// Hive Structure:
 			if (!this.hasHome()) {
 				this.creatureStructure.setOrigin(this.blockPosition());
 			}
@@ -86,11 +86,13 @@ public class VespidQueen extends TameableCreatureEntity implements Enemy {
 				this.setHome(this.creatureStructure.getOrigin().getX(), this.creatureStructure.getOrigin().getY(), this.creatureStructure.getOrigin().getZ(), 8F);
 			}
 
+			// Spawn Babies:
 			if(structureStarted && this.creatureStructure.getFinalPhaseBuildTaskSize() <= 10 && this.updateTick % 60 == 0) {
 				this.allyUpdate();
 			}
 		}
-        
+
+		// Don't Keep Infected Conbas Targeted:
         if(this.getTarget() instanceof Conba) {
         	if(((Conba)this.getTarget()).vespidInfection) {
         		this.setTarget(null);
