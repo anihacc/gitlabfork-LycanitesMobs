@@ -74,8 +74,7 @@ public class EntityVespidQueen extends TameableCreatureEntity implements IMob {
         	return;
 		}
 
-		if (this.updateTick % 20 == 0) {
-
+		if (this.updateTick > 0 && this.updateTick % 20 == 0) {
 			// Hive Structure:
 			if (!this.hasHome()) {
 				this.creatureStructure.setOrigin(this.blockPosition());

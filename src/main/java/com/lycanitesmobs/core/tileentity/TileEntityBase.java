@@ -4,16 +4,19 @@ import com.lycanitesmobs.LycanitesMobs;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.Direction;
 
 import javax.annotation.Nullable;
 
-public abstract class TileEntityBase extends TileEntity implements ITickableTileEntity, IInventory {
+public abstract class TileEntityBase extends TileEntity implements ITickableTileEntity, ISidedInventory {
     /**
      * Constructor
      */
@@ -105,5 +108,20 @@ public abstract class TileEntityBase extends TileEntity implements ITickableTile
     @Override
     public CompoundNBT save(CompoundNBT nbtTagCompound) {
         return super.save(nbtTagCompound);
+    }
+
+    @Override
+    public int[] getSlotsForFace(Direction side) {
+        return new int[] {};
+    }
+
+    @Override
+    public boolean canPlaceItemThroughFace(int index, ItemStack itemStackIn, @Nullable Direction direction) {
+        return false;
+    }
+
+    @Override
+    public boolean canTakeItemThroughFace(int index, ItemStack stack, Direction direction) {
+        return false;
     }
 }
