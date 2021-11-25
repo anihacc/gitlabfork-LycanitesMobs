@@ -28,6 +28,9 @@ public class TileEntityEquipmentForge extends TileEntityBase {
 	@Override
 	public void onRemove() {
 		for (ItemStack itemStack : this.itemStacks) {
+			if (itemStack.getItem() instanceof ItemEquipment) {
+				continue;
+			}
 			EntityItemCustom entityItem = new EntityItemCustom(this.getWorld(), this.getPos().getX(), this.getPos().getY() + 0.5D, this.getPos().getZ(), itemStack);
 			this.getWorld().spawnEntity(entityItem);
 		}
