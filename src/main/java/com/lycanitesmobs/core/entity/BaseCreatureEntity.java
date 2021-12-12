@@ -4117,6 +4117,9 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 				return false;
 			}
 		}
+		if(entity instanceof BaseCreatureEntity && ((BaseCreatureEntity)entity).hasPickupEntity()) {
+			return false;
+		}
 		if(CreatureManager.getInstance().creatureGroups.containsKey("boss") && CreatureManager.getInstance().creatureGroups.get("boss").hasEntity(entity))
 			return false;
         boolean heavyTarget = entity instanceof IGroupHeavy || entity.height >= 4 || entity.width >= 4;

@@ -425,12 +425,9 @@ public class GameEventListener {
         if(ItemConfig.seasonalItemDropChance > 0
             && (Utilities.isHalloween() || Utilities.isYuletide() || Utilities.isNewYear())) {
             boolean noSeaonalDrop = false;
-            boolean alwaysDrop = false;
             if(event.getEntityLiving() instanceof BaseCreatureEntity) {
                 if (((BaseCreatureEntity) event.getEntityLiving()).isMinion())
                     noSeaonalDrop = true;
-                if (((BaseCreatureEntity) event.getEntityLiving()).getSubspecies() != null)
-                    alwaysDrop = true;
             }
 
             Item seasonalItem = null;
@@ -442,7 +439,7 @@ public class GameEventListener {
                     seasonalItem = ObjectManager.getItem("wintergiftlarge");
             }
 
-            if(seasonalItem != null && !noSeaonalDrop && (alwaysDrop || event.getEntityLiving().getRNG().nextFloat() < ItemConfig.seasonalItemDropChance)) {
+            if(seasonalItem != null && !noSeaonalDrop && event.getEntityLiving().getRNG().nextFloat() < ItemConfig.seasonalItemDropChance) {
                 ItemStack dropStack = new ItemStack(seasonalItem, 1);
                 EntityItemCustom entityItem = new EntityItemCustom(world, event.getEntityLiving().posX, event.getEntityLiving().posY, event.getEntityLiving().posZ, dropStack);
                 entityItem.setPickupDelay(10);

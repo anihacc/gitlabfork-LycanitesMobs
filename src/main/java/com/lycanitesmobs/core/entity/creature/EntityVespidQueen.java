@@ -15,6 +15,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumDifficulty;
@@ -23,6 +24,7 @@ import net.minecraft.world.World;
 public class EntityVespidQueen extends TameableCreatureEntity implements IMob {
 	public final CreatureStructure creatureStructure;
 	protected int swarmLimit = 10;
+	protected BlockPos hivePos = null;
 
     public EntityVespidQueen(World world) {
         super(world);
@@ -71,6 +73,10 @@ public class EntityVespidQueen extends TameableCreatureEntity implements IMob {
         super.onLivingUpdate();
         if (this.getEntityWorld().isRemote) {
         	return;
+		}
+
+		if (this.hivePos != null) {
+			this.setHomePosition(this.hivePos.getX(), this.hivePos.getY(), this.hivePos.getZ());
 		}
 
 		if (this.updateTick > 0 && this.updateTick % 20 == 0) {
@@ -212,4 +218,23 @@ public class EntityVespidQueen extends TameableCreatureEntity implements IMob {
     	if(type.equals("inWall")) return false;
     	return super.isDamageTypeApplicable(type, source, damage);
     }
+
+	// Hack to force hive position as the home position is being lost due to some 1.12.2 thing.
+	@Override
+	public void readEntityFromNBT(NBTTagCompound nbtTagCompound) {
+		super.readEntityFromNBT((nbtTagCompound));
+
+		if(nbtTagCompound.hasKey("HiveX") && nbtTagCompound.hasKey("HiveY") && nbtTagCompound.hasKey("HiveZ")) {
+			this.hivePos = new BlockPos(nbtTagCompound.getInteger("HiveX"), nbtTagCompound.getInteger("HiveY"), nbtTagCompound.getInteger("HiveZ"));
+		}
+	}
+
+	@Override
+	public void writeEntityToNBT(NBTTagCompound nbtTagCompound) {
+		if (this.hivePos != null) {
+			nbtTagCompound.setInteger("HiveX", this.hivePos.getX());
+			nbtTagCompound.setInteger("HiveY", this.hivePos.getY());
+			nbtTagCompound.setInteger("HiveZ", this.hivePos.getZ());
+		}
+	}
 }

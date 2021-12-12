@@ -19,7 +19,7 @@ import java.util.List;
 public class WorldEventListener implements IWorldEventListener {
 	protected GameEventListener gameEventListener;
 	protected List<Entity> customBlockProtectionEntities = new ArrayList<>();
-	protected String[] customProtectionEntityIds;
+	protected String[] customProtectionEntityEntries;
 
 	public WorldEventListener(GameEventListener gameEventListener) {
 		this.gameEventListener = gameEventListener;
@@ -63,19 +63,26 @@ public class WorldEventListener implements IWorldEventListener {
 	@Override
 	public void onEntityAdded(Entity entity) {
 		// Custom Entity Block Protection:
-		if (this.customProtectionEntityIds == null) {
+		if (this.customProtectionEntityEntries == null) {
 			ConfigBase config = ConfigBase.getConfig(LycanitesMobs.modInfo, "general");
-			this.customProtectionEntityIds = config.getStringList("Block Protection", "Custom Entity Block Protection", new String[] {}, "A list of entities to prevent players from placing or destroying block near, takes a list of entity ids.");
+			this.customProtectionEntityEntries = config.getStringList("Block Protection", "Custom Entity Block Protection", new String[] {}, "A list of entities to prevent players from placing or destroying block near, takes a list of entity ids.");
 		}
-		if (this.customProtectionEntityIds.length > 0) {
+		if (this.customProtectionEntityEntries.length > 0) {
 			ExtendedWorld extendedWorld = ExtendedWorld.getForWorld(entity.getEntityWorld());
 			if (extendedWorld != null) {
 				ResourceLocation entityResourceLocation = EntityList.getKey(entity);
 				if (entityResourceLocation != null) {
 					String entityId = entityResourceLocation.toString();
-					for (String customProtectedEntityId : this.customProtectionEntityIds) {
+					for (String customProtectedEntityEntry : this.customProtectionEntityEntries) {
+						String[] customProtectedEntityEntryParts = customProtectedEntityEntry.split(";");
+						if (customProtectedEntityEntryParts.length < 2) {
+							continue;
+						}
+						String customProtectedEntityId = customProtectedEntityEntryParts[0];
+						int customProtectedEntityRange = Integer.parseInt(customProtectedEntityEntryParts[1]);
 						if (customProtectedEntityId.equals(entityId)) {
 							extendedWorld.bossUpdate(entity);
+							extendedWorld.overrideBossRange(entity, customProtectedEntityRange);
 							customBlockProtectionEntities.add(entity);
 							break;
 						}

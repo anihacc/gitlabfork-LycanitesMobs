@@ -174,8 +174,10 @@ public class AltarInfoCelestialGeonach extends AltarInfo {
         for (int xTarget = x - size; xTarget <= x + size; xTarget++) {
             for (int zTarget = z - size; zTarget <= z + size; zTarget++) {
                 for (int yTarget = y - size; yTarget <= y + size; yTarget++) {
-                    if (y > 0)
-                        world.setBlockToAir(new BlockPos(xTarget, yTarget, zTarget));
+                    BlockPos clearPos = new BlockPos(xTarget, yTarget, zTarget);
+                    if (y > 0 && world.getTileEntity(clearPos) == null) {
+                        world.setBlockToAir(clearPos);
+                    }
                 }
             }
         }
