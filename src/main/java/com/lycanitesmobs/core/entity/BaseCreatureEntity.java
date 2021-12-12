@@ -3946,6 +3946,9 @@ public abstract class BaseCreatureEntity extends PathfinderMob {
 		if(entity instanceof Player && ((Player)entity).isCreative()) {
 			return false;
 		}
+		if(entity instanceof BaseCreatureEntity && ((BaseCreatureEntity)entity).hasPickupEntity()) {
+			return false;
+		}
 		if(entity.isSpectator()) {
 			return false;
 		}

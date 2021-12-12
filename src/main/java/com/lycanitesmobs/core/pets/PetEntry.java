@@ -246,6 +246,9 @@ public class PetEntry {
     //                       Name
     // ==================================================
     public Component getDisplayName() {
+        if (this.summonSet == null || this.summonSet.getCreatureInfo() == null) {
+            return new TextComponent("");
+        }
         Component displayName = this.summonSet.getCreatureInfo().getTitle();
         if (this.entityName != null && !"".equals(this.entityName)) {
             displayName = new TextComponent(this.entityName + " (")
