@@ -3958,6 +3958,9 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		if(entity instanceof PlayerEntity && ((PlayerEntity)entity).isCreative()) {
 			return false;
 		}
+		if(entity instanceof BaseCreatureEntity && ((BaseCreatureEntity)entity).hasPickupEntity()) {
+			return false;
+		}
 		if(entity.isSpectator()) {
 			return false;
 		}
