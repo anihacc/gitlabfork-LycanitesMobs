@@ -153,27 +153,13 @@ public class AltarInfoUmberLobber extends AltarInfo {
         if(checkDimensions && !entityLobber.isNativeDimension(world))
             return false;
 
-        // Destroy Altar:
+        // Clear Spawn Area:
         int size = 4;
         for (int xTarget = x - size; xTarget <= x + size; xTarget++) {
             for (int zTarget = z - size; zTarget <= z + size; zTarget++) {
                 for (int yTarget = y - size; yTarget <= y + size; yTarget++) {
-                    if (y > 0)
-                        world.setBlockToAir(new BlockPos(xTarget, yTarget, zTarget));
-                }
-            }
-        }
-
-        // Offset:
-        if(entity != null)
-            pos = this.getFacingPosition(pos, 10, entity.rotationYaw);
-
-        // Clear Spawn Area:
-        for (int xTarget = x - size; xTarget <= x + size; xTarget++) {
-            for (int zTarget = z - size; zTarget <= z + size; zTarget++) {
-                for (int yTarget = y - size; yTarget <= y + size; yTarget++) {
                     BlockPos clearPos = new BlockPos(xTarget, yTarget, zTarget);
-                    if (y > 0 && world.getTileEntity(clearPos) == null) {
+                    if (yTarget > 0 && world.getTileEntity(clearPos) == null) {
                         world.setBlockToAir(clearPos);
                     }
                 }
@@ -186,7 +172,6 @@ public class AltarInfoUmberLobber extends AltarInfo {
         entityLobber.applyVariant(3);
         entityLobber.setLocationAndAngles(x, y - 2, z, 0, 0);
         world.spawnEntity(entityLobber);
-        entityLobber.destroyArea(x, y, z, 10000, false, 2);
 
         return true;
     }

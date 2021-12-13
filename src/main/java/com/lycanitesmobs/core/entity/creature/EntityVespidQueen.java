@@ -89,6 +89,7 @@ public class EntityVespidQueen extends TameableCreatureEntity implements IMob {
 				this.creatureStructure.refreshBuildTasks();
 			}
 			if (structureStarted && !this.hasHome()) {
+				this.hivePos = this.creatureStructure.getOrigin();
 				this.setHome(this.creatureStructure.getOrigin().getX(), this.creatureStructure.getOrigin().getY(), this.creatureStructure.getOrigin().getZ(), 8F);
 			}
 
