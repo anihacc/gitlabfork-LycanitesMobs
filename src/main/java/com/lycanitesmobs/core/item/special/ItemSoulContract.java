@@ -66,7 +66,7 @@ public class ItemSoulContract extends ItemBase {
 				return;
 			}
 			tooltip.add(LanguageManager.translate("item.lycanitesmobs.soul_contract.bound") + " " + petEntry.getDisplayName());
-			tooltip.add(LanguageManager.translate("item.lycanitesmobs.soul_contract.owner") + " " + owner.getDisplayName());
+			tooltip.add(LanguageManager.translate("item.lycanitesmobs.soul_contract.owner") + " " + owner.getDisplayName().getFormattedText());
 		}
 	}
 

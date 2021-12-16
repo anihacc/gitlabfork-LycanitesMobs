@@ -2764,14 +2764,20 @@ public abstract class BaseCreatureEntity extends EntityLiving {
     	this.homePosition = new BlockPos(x, y, z);
     }
 
-    /** Sets the distance this mob is allowed to stray from it's home. -1 will turn off the home restriction. **/
-    public void setHomeDistanceMax(float newDist) { this.homeDistanceMax = newDist; }
+    /** Sets the distance this mob is allowed to stray from its home. -1 will turn off the home restriction. **/
+    public void setHomeDistanceMax(float distance) {
+		this.homeDistanceMax = distance;
+	}
 
     /** Returns the home position in BlockPos. **/
-    public BlockPos getHomePosition() { return this.homePosition; }
+    public BlockPos getHomePosition() {
+		return this.homePosition;
+	}
 
-    /** Gets the distance this mob is allowed to stray from it's home. -1 is used to unlimited distance. **/
-    public float getHomeDistanceMax() { return this.homeDistanceMax; }
+    /** Gets the distance this mob is allowed to stray from its home. -1 is used to unlimited distance. **/
+    public float getHomeDistanceMax() {
+		return this.homeDistanceMax;
+	}
 
     /** Clears the current home position. **/
     public void detachHome() {
@@ -4692,9 +4698,13 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 	 * @param blockPos The position the block was placed at.
 	 * @param blockState The block state that was placed.
 	 */
-	public void onBlockPlaced(BlockPos blockPos, IBlockState blockState) {
+	public void onBlockPlaced(BlockPos blockPos, IBlockState blockState) {}
 
-	}
+	/**
+	 * Called by Creature Strucutres when a build task is completed.
+	 * @param buildTask The completed build task.
+	 */
+	public void onBuildTaskComplete(CreatureBuildTask buildTask) {}
     
     
     // ==================================================

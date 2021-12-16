@@ -1,15 +1,14 @@
 package com.lycanitesmobs.core.entity.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.dungeon.DungeonManager;
-import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
-import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.core.entity.CreatureStructure;
-import com.lycanitesmobs.core.entity.TameableCreatureEntity;
+import com.lycanitesmobs.core.entity.*;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import com.lycanitesmobs.core.entity.goals.actions.StayByHomeGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.FindAttackTargetGoal;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.item.consumable.CreatureTreatItem;
+import jdk.nashorn.internal.ir.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
@@ -24,7 +23,6 @@ import net.minecraft.world.World;
 public class EntityVespidQueen extends TameableCreatureEntity implements IMob {
 	public final CreatureStructure creatureStructure;
 	protected int swarmLimit = 10;
-	protected BlockPos hivePos = null;
 
     public EntityVespidQueen(World world) {
         super(world);
@@ -75,26 +73,17 @@ public class EntityVespidQueen extends TameableCreatureEntity implements IMob {
         	return;
 		}
 
-		if (this.hivePos != null) {
-			this.setHomePosition(this.hivePos.getX(), this.hivePos.getY(), this.hivePos.getZ());
-		}
-
 		if (this.updateTick > 0 && this.updateTick % 20 == 0) {
 			// Hive Structure:
 			if (!this.hasHome()) {
 				this.creatureStructure.setOrigin(this.getPosition());
 			}
-			boolean structureStarted = this.creatureStructure.isPhaseComplete(0);
-			if (!structureStarted || this.updateTick % 200 == 0) {
+			if (!this.creatureStructure.isPhaseComplete(0) || this.updateTick % 200 == 0) {
 				this.creatureStructure.refreshBuildTasks();
-			}
-			if (structureStarted && !this.hasHome()) {
-				this.hivePos = this.creatureStructure.getOrigin();
-				this.setHome(this.creatureStructure.getOrigin().getX(), this.creatureStructure.getOrigin().getY(), this.creatureStructure.getOrigin().getZ(), 8F);
 			}
 
 			// Spawn Babies:
-			if(structureStarted && this.creatureStructure.getFinalPhaseBuildTaskSize() <= 10 && this.updateTick % 60 == 0) {
+			if(this.hasHome() && this.creatureStructure.getFinalPhaseBuildTaskSize() <= 10 && this.updateTick % 60 == 0) {
 				this.allyUpdate();
 			}
 		}
@@ -106,6 +95,14 @@ public class EntityVespidQueen extends TameableCreatureEntity implements IMob {
         	}
         }
     }
+
+	@Override
+	public void onBuildTaskComplete(CreatureBuildTask buildTask) {
+		super.onBuildTaskComplete(buildTask);
+		if (!this.hasHome()) {
+			this.setHome(this.creatureStructure.getOrigin().getX(), this.creatureStructure.getOrigin().getY(), this.creatureStructure.getOrigin().getZ(), 8F);
+		}
+	}
 
 	@Override
 	public void setHomePosition(int x, int y, int z) {
@@ -219,23 +216,4 @@ public class EntityVespidQueen extends TameableCreatureEntity implements IMob {
     	if(type.equals("inWall")) return false;
     	return super.isDamageTypeApplicable(type, source, damage);
     }
-
-	// Hack to force hive position as the home position is being lost due to some 1.12.2 thing.
-	@Override
-	public void readEntityFromNBT(NBTTagCompound nbtTagCompound) {
-		super.readEntityFromNBT((nbtTagCompound));
-
-		if(nbtTagCompound.hasKey("HiveX") && nbtTagCompound.hasKey("HiveY") && nbtTagCompound.hasKey("HiveZ")) {
-			this.hivePos = new BlockPos(nbtTagCompound.getInteger("HiveX"), nbtTagCompound.getInteger("HiveY"), nbtTagCompound.getInteger("HiveZ"));
-		}
-	}
-
-	@Override
-	public void writeEntityToNBT(NBTTagCompound nbtTagCompound) {
-		if (this.hivePos != null) {
-			nbtTagCompound.setInteger("HiveX", this.hivePos.getX());
-			nbtTagCompound.setInteger("HiveY", this.hivePos.getY());
-			nbtTagCompound.setInteger("HiveZ", this.hivePos.getZ());
-		}
-	}
 }

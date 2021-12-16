@@ -59,10 +59,10 @@
 		},
 		{
 			"featureType": "harvest",
-			"harvestType": "pickaxe",
+			"harvestType": "shovel",
 			"levelMin": 3,
 			"harvestSpeed": 8,
-			"harvestShape": "shovel",
+			"harvestShape": "block",
 			"harvestRange": [1, 2, 8],
 			"harvestRangeLevelMultiplier": 1
 		},

@@ -272,6 +272,7 @@ public class CreatureStructure {
 				continue;
 			}
 			this.buildTasks.get(phase).remove(buildTask);
+			this.owner.onBuildTaskComplete(buildTask);
 		}
 	}
 

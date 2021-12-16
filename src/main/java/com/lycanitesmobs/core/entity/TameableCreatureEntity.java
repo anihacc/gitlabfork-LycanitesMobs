@@ -1006,6 +1006,9 @@ public class TameableCreatureEntity extends AgeableCreatureEntity implements IEn
     }
 
     public void setSitting(boolean set) {
+		if (!this.isTamed()) {
+			return;
+		}
     	if(!this.petControlsEnabled())
     		set = false;
         byte tamedStatus = this.getByteFromDataManager(TAMED);
