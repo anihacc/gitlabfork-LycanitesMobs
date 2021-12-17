@@ -237,7 +237,8 @@ public class BaseProjectileEntity extends EntityThrowable {
 						// Deal Damage:
 						if (this.getThrower() instanceof BaseCreatureEntity) {
 							BaseCreatureEntity creatureThrower = (BaseCreatureEntity) this.getThrower();
-							attackSuccess = creatureThrower.doRangedDamage(target, this, damage, this.isBlockedByEntity(target));
+							boolean blocked = this.isBlockedByEntity(target);
+							attackSuccess = creatureThrower.doRangedDamage(target, this, damage, blocked);
 						}
 						else {
 							double pierceDamage = this.pierce;
@@ -366,10 +367,12 @@ public class BaseProjectileEntity extends EntityThrowable {
 		EntityLivingBase targetLiving = (EntityLivingBase)targetEntity;
 		if (targetLiving.isActiveItemStackBlocking()) {
 			Vec3d damagePostition = new Vec3d(this.posX, this.posY, this.posZ);
-			Vec3d viewVector = targetLiving.getLook(1.0F);
-			Vec3d subtractReverse = damagePostition.subtractReverse(new Vec3d(targetLiving.posX, targetLiving.posY, targetLiving.posZ)).normalize();
-			subtractReverse = new Vec3d(subtractReverse.x, 0.0D, subtractReverse.z);
-			return subtractReverse.dotProduct(viewVector) < 1.0D;
+			Vec3d targetLookAngle = targetLiving.getLook(1.0F);
+			Vec3d damageDirection = damagePostition.subtractReverse(new Vec3d(targetLiving.posX, targetLiving.posY, targetLiving.posZ)).normalize();
+			damageDirection = new Vec3d(damageDirection.x, 0.0D, damageDirection.z);
+			if (damageDirection.dotProduct(targetLookAngle) < 0.5D) {
+				return true;
+			}
 		}
 		return false;
 	}

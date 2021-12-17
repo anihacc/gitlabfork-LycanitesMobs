@@ -1,5 +1,6 @@
 package com.lycanitesmobs.core.entity;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.dungeon.definition.DungeonTheme;
 import com.lycanitesmobs.core.dungeon.definition.ThemeBlock;
 import net.minecraft.block.Block;
@@ -144,7 +145,7 @@ public class CreatureStructure {
 						if (y == radius - pitLayer && Math.abs(x) < (radius - pitLayer) && Math.abs(z) < (radius - pitLayer)) {
 							IBlockState blockState = this.dungeonTheme.getPit('1', this.owner.getRNG());
 							if (this.owner.getEntityWorld().getBlockState(blockPos).getBlock() != blockState.getBlock()) {
-								this.createBuildTask(blockState, blockPos, 2);
+								this.createBuildTask(blockState, blockPos, 1);
 							}
 						}
 					}
@@ -152,7 +153,7 @@ public class CreatureStructure {
 						if (y == -radius + pitLayer && Math.abs(x) < (radius - pitLayer) && Math.abs(z) < (radius - pitLayer)) {
 							IBlockState blockState = this.dungeonTheme.getPit('1', this.owner.getRNG());
 							if (this.owner.getEntityWorld().getBlockState(blockPos).getBlock() != blockState.getBlock()) {
-								this.createBuildTask(blockState, blockPos, 2);
+								this.createBuildTask(blockState, blockPos, 1);
 							}
 						}
 					}
@@ -174,7 +175,7 @@ public class CreatureStructure {
 
 						IBlockState blockState = this.dungeonTheme.getPit('2', this.owner.getRNG());
 						if (this.owner.getEntityWorld().getBlockState(blockPos).getBlock() != blockState.getBlock()) {
-							this.createBuildTask(blockState, blockPos, 3);
+							this.createBuildTask(blockState, blockPos, 2);
 						}
 					}
 				}

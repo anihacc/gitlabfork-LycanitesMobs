@@ -107,6 +107,11 @@ public class GameEventListener {
 		event.getWorld().addEventListener(this.worldEventListener);
 	}
 
+	@SubscribeEvent
+	public void onWorldUnloading(WorldEvent.Unload event) {
+		ExtendedWorld.loadedExtWorlds.remove(event.getWorld());
+	}
+
 
     // ==================================================
     //                Attach Capabilities
@@ -212,6 +217,9 @@ public class GameEventListener {
 		ExtendedEntity extendedEntity = ExtendedEntity.getForEntity((EntityLivingBase)entity);
 		if (extendedEntity != null) {
 			extendedEntity.onEntityRemoved();
+		}
+		if (entity instanceof EntityPlayer) {
+			ExtendedPlayer.clientExtendedPlayers.remove((EntityPlayer)entity);
 		}
 	}
 
