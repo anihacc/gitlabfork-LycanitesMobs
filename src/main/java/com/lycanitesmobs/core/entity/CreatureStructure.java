@@ -9,18 +9,14 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fluids.IFluidBlock;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class CreatureStructure {
 	protected BaseCreatureEntity owner;
 	protected DungeonTheme dungeonTheme;
-	protected Map<Integer, List<CreatureBuildTask>> buildTasks = new HashMap<>();
+	protected Map<Integer, Map<BlockPos, CreatureBuildTask>> buildTasks = new HashMap<>();
 	protected BlockPos origin;
 
 	protected BlockPos startPos;
@@ -52,21 +48,11 @@ public class CreatureStructure {
 	}
 
 	/**
-	 * Updates structure maintenance, checking for any parts that need to be build, etc.
+	 * Updates structure maintenance, checking for any parts that need to be built, etc.
 	 */
 	public void refreshBuildTasks() {
 		this.buildTasks.clear();
 		int radius = 8;
-
-		// Check if started:
-		if (!this.isPhaseComplete(0)) {
-			this.createBuildTask(
-				this.dungeonTheme.getCeiling(null, '1', this.owner.getRNG()),
-				this.startPos,
-				0
-			);
-			return;
-		}
 
 		// A simple box for now. TODO Try to use Dungeon Sector?
 		for (int x = -radius; x <= radius; x++) {
@@ -85,7 +71,7 @@ public class CreatureStructure {
 						continue;
 					}
 
-					IBlockState blockState = null;
+					IBlockState blockState;
 
 					// Entrance Spaces:
 					if (Math.abs(y) <= 1 && (Math.abs(x) <= 1 || Math.abs(z) <= 1)) {
@@ -94,13 +80,7 @@ public class CreatureStructure {
 
 					// Inside Air:
 					else if (Math.abs(x) < radius && Math.abs(y) < radius && Math.abs(z) < radius) {
-						if (Math.abs(x) < (radius / 4) + 1 && y < -(radius / 2) + 1 && Math.abs(z) < (radius / 4) + 1) {
-							continue;
-						}
-						IBlockState targetState = this.owner.getEntityWorld().getBlockState(blockPos);
-						if (targetState.getBlock() != Blocks.AIR && !(targetState.getBlock() instanceof IFluidBlock)) {
-							blockState = Blocks.AIR.getDefaultState();
-						}
+						blockState = Blocks.AIR.getDefaultState();
 					}
 
 					// Ceiling:
@@ -119,9 +99,7 @@ public class CreatureStructure {
 					}
 
 					// Create Build Task If Different:
-					if (blockState != null && this.owner.getEntityWorld().getBlockState(blockPos).getBlock() != blockState.getBlock()) {
-						this.createBuildTask(blockState, blockPos, 1);
-					}
+					this.createBuildTask(blockState, blockPos, 1);
 				}
 			}
 		}
@@ -144,17 +122,13 @@ public class CreatureStructure {
 					for (int pitLayer = 1; pitLayer <= (radius / 2); pitLayer++) {
 						if (y == radius - pitLayer && Math.abs(x) < (radius - pitLayer) && Math.abs(z) < (radius - pitLayer)) {
 							IBlockState blockState = this.dungeonTheme.getPit('1', this.owner.getRNG());
-							if (this.owner.getEntityWorld().getBlockState(blockPos).getBlock() != blockState.getBlock()) {
-								this.createBuildTask(blockState, blockPos, 1);
-							}
+							this.createBuildTask(blockState, blockPos, 1);
 						}
 					}
 					for (int pitLayer = 1; pitLayer <= (radius / 2); pitLayer++) {
 						if (y == -radius + pitLayer && Math.abs(x) < (radius - pitLayer) && Math.abs(z) < (radius - pitLayer)) {
 							IBlockState blockState = this.dungeonTheme.getPit('1', this.owner.getRNG());
-							if (this.owner.getEntityWorld().getBlockState(blockPos).getBlock() != blockState.getBlock()) {
-								this.createBuildTask(blockState, blockPos, 1);
-							}
+							this.createBuildTask(blockState, blockPos, 1);
 						}
 					}
 				}
@@ -174,9 +148,7 @@ public class CreatureStructure {
 						}
 
 						IBlockState blockState = this.dungeonTheme.getPit('2', this.owner.getRNG());
-						if (this.owner.getEntityWorld().getBlockState(blockPos).getBlock() != blockState.getBlock()) {
-							this.createBuildTask(blockState, blockPos, 2);
-						}
+						this.createBuildTask(blockState, blockPos, 2);
 					}
 				}
 			}
@@ -191,27 +163,21 @@ public class CreatureStructure {
 	 * @param blockPos The position to place at.
 	 */
 	public void createBuildTask(IBlockState blockState, BlockPos blockPos, int phase) {
+		// Check for Completion:
+		IBlockState targetBlockState = this.owner.getEntityWorld().getBlockState(blockPos);
+		if (blockState == targetBlockState) {
+			for (Map<BlockPos, CreatureBuildTask> phasedBuildTasks : this.buildTasks.values()) {
+				phasedBuildTasks.remove(blockPos);
+			}
+			return;
+		}
+
+		// Create Build Task:
+		CreatureBuildTask buildTask = new CreatureBuildTask(blockState, blockPos, phase);
 		if (!this.buildTasks.containsKey(phase)) {
-			this.buildTasks.put(phase, new ArrayList<>());
+			this.buildTasks.put(phase, new HashMap<>());
 		}
-
-		// Remove Existing Tasks Using Same Block Position:
-		for (int checkPhase = 0; checkPhase < this.buildTasks.size(); checkPhase++) {
-			if (!this.buildTasks.containsKey(checkPhase)) {
-				continue;
-			}
-			List<CreatureBuildTask> removeTasks = new ArrayList<>();
-			for (CreatureBuildTask creatureBuildTask : this.buildTasks.get(checkPhase)) {
-				if (creatureBuildTask.pos.equals(blockPos)) {
-					removeTasks.add(creatureBuildTask);
-				}
-			}
-			for (CreatureBuildTask creatureBuildTask : removeTasks) {
-				this.buildTasks.get(checkPhase).remove(creatureBuildTask);
-			}
-		}
-
-		this.buildTasks.get(phase).add(new CreatureBuildTask(blockState, blockPos, phase));
+		this.buildTasks.get(phase).put(blockPos, buildTask);
 	}
 
 	/**
@@ -228,18 +194,7 @@ public class CreatureStructure {
 		if (this.owner.getEntityWorld().getTileEntity(pos) != null) {
 			return false;
 		}
-		if (targetState.getMaterial() == Material.WATER || targetState.getMaterial() == Material.LAVA) {
-			return true;
-		}
-		if (targetState.getMaterial() == Material.PLANTS
-				|| targetState.getMaterial() == Material.GROUND
-				|| targetState.getMaterial() == Material.GRASS
-				|| targetState.getMaterial() == Material.LEAVES
-				|| targetState.getMaterial() == Material.WOOD
-		) {
-			return true;
-		}
-		return false;
+		return true;
 	}
 
 	@Nullable
@@ -247,18 +202,15 @@ public class CreatureStructure {
 		if (this.buildTasks.isEmpty()) {
 			return null;
 		}
-		for (int phase = 0; phase < this.buildTasks.size(); phase++) {
-			if (!this.buildTasks.containsKey(phase) || this.buildTasks.get(phase).isEmpty()) {
+		for (int phase : this.buildTasks.keySet()) {
+			if (this.buildTasks.get(phase).isEmpty()) {
 				continue;
 			}
-			CreatureBuildTask buildTask = null;
-			if (buildTasks.get(phase).size() == 1) {
-				buildTask = buildTasks.get(phase).get(0);
+			CreatureBuildTask[] phasedBuildTasks = this.buildTasks.get(phase).values().toArray(new CreatureBuildTask[0]);
+			if (phasedBuildTasks.length == 1) {
+				return phasedBuildTasks[0];
 			}
-			else {
-				buildTask = this.buildTasks.get(phase).get(builder.getRNG().nextInt(buildTasks.get(phase).size()));
-			}
-			return buildTask;
+			return phasedBuildTasks[builder.getRNG().nextInt(phasedBuildTasks.length)];
 		}
 		return null;
 	}
@@ -268,11 +220,11 @@ public class CreatureStructure {
 	 * @param buildTask The build task to complete.
 	 */
 	public void completeBuildTask(CreatureBuildTask buildTask) {
-		for (int phase = 0; phase < this.buildTasks.size(); phase++) {
-			if (!this.buildTasks.containsKey(phase) || this.buildTasks.get(phase).isEmpty()) {
+		for (int phase : this.buildTasks.keySet()) {
+			if (this.buildTasks.get(phase).isEmpty()) {
 				continue;
 			}
-			this.buildTasks.get(phase).remove(buildTask);
+			this.buildTasks.get(phase).remove(buildTask.pos);
 			this.owner.onBuildTaskComplete(buildTask);
 		}
 	}

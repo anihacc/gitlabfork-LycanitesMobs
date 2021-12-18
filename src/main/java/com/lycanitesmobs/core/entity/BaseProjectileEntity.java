@@ -237,7 +237,7 @@ public class BaseProjectileEntity extends EntityThrowable {
 						// Deal Damage:
 						if (this.getThrower() instanceof BaseCreatureEntity) {
 							BaseCreatureEntity creatureThrower = (BaseCreatureEntity) this.getThrower();
-							boolean blocked = this.isBlockedByEntity(target);
+							boolean blocked = this.isBlockedByEntity(target, rayTraceResult.hitVec);
 							attackSuccess = creatureThrower.doRangedDamage(target, this, damage, blocked);
 						}
 						else {
@@ -359,22 +359,13 @@ public class BaseProjectileEntity extends EntityThrowable {
 	 * @param targetEntity The entity to check.
 	 * @return True if this projectile is being blocked by the entity.
 	 */
-	public boolean isBlockedByEntity(Entity targetEntity) {
+	public boolean isBlockedByEntity(Entity targetEntity, Vec3d damagePostition) {
 		if (!(targetEntity instanceof EntityLivingBase)) {
 			return false;
 		}
 
 		EntityLivingBase targetLiving = (EntityLivingBase)targetEntity;
-		if (targetLiving.isActiveItemStackBlocking()) {
-			Vec3d damagePostition = new Vec3d(this.posX, this.posY, this.posZ);
-			Vec3d targetLookAngle = targetLiving.getLook(1.0F);
-			Vec3d damageDirection = damagePostition.subtractReverse(new Vec3d(targetLiving.posX, targetLiving.posY, targetLiving.posZ)).normalize();
-			damageDirection = new Vec3d(damageDirection.x, 0.0D, damageDirection.z);
-			if (damageDirection.dotProduct(targetLookAngle) < 0.5D) {
-				return true;
-			}
-		}
-		return false;
+		return targetLiving.isActiveItemStackBlocking();
 	}
      
      //========== Do Damage Check ==========

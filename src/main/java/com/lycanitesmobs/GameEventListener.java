@@ -10,6 +10,7 @@ import com.lycanitesmobs.core.info.ItemManager;
 import com.lycanitesmobs.core.item.ItemBase;
 import com.lycanitesmobs.core.item.equipment.ItemEquipment;
 import com.lycanitesmobs.core.network.MessagePlayerLeftClick;
+import com.lycanitesmobs.core.spawner.SpawnerEventListener;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.entity.Entity;
@@ -220,6 +221,7 @@ public class GameEventListener {
 		}
 		if (entity instanceof EntityPlayer) {
 			ExtendedPlayer.clientExtendedPlayers.remove((EntityPlayer)entity);
+			SpawnerEventListener.getInstance().playerUpdateTicks.remove((EntityPlayer)entity);
 		}
 	}
 

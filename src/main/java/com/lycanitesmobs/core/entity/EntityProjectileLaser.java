@@ -456,7 +456,7 @@ public class EntityProjectileLaser extends BaseProjectileEntity {
 		// Deal Damage:
 		if(this.getThrower() instanceof BaseCreatureEntity) {
 			BaseCreatureEntity creatureThrower = (BaseCreatureEntity)this.getThrower();
-			attackSuccess = creatureThrower.doRangedDamage(target, this, damage, this.isBlockedByEntity(target));
+			attackSuccess = creatureThrower.doRangedDamage(target, this, damage, this.isBlockedByEntity(target, this.getPositionVector()));
 		}
         else {
 			double pierceDamage = 1;
