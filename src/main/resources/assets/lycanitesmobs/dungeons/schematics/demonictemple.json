@@ -83,12 +83,9 @@
 			"dungeonBoss": true,
 			"mobDrops": [
 				{
-					"item": "lycanitesmobs:hellfirescepter",
-					"amountMultiplier": false
-				},
-				{
 					"item": "lycanitesmobs:soulstone_demon",
-					"amountMultiplier": false
+					"amountMultiplier": false,
+					"bonusAmount": false
 				}
 			]
 		},
@@ -112,7 +109,8 @@
 				},
 				{
 					"item": "lycanitesmobs:soulstone_demon",
-					"amountMultiplier": false
+					"amountMultiplier": false,
+					"bonusAmount": false
 				}
 			]
 		},
@@ -129,17 +127,14 @@
 			"dungeonBoss": true,
 			"mobDrops": [
 				{
-					"item": "lycanitesmobs:demoniclightningscepter",
-					"amountMultiplier": false
-				},
-				{
 					"item": "minecraft:diamond",
 					"minAmount": 50,
 					"amountMultiplier": false
 				},
 				{
 					"item": "lycanitesmobs:soulstone_demon",
-					"amountMultiplier": false
+					"amountMultiplier": false,
+					"bonusAmount": false
 				}
 			]
 		},
@@ -156,17 +151,14 @@
 			"dungeonBoss": true,
 			"mobDrops": [
 				{
-					"item": "lycanitesmobs:demoniclightningscepter",
-					"amountMultiplier": false
-				},
-				{
 					"item": "minecraft:diamond",
 					"minAmount": 50,
 					"amountMultiplier": false
 				},
 				{
 					"item": "lycanitesmobs:soulstone_demon",
-					"amountMultiplier": false
+					"amountMultiplier": false,
+					"bonusAmount": false
 				}
 			]
 		}

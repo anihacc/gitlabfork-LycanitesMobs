@@ -96,7 +96,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
 
         // Client Side:
         if(player.getEntityWorld() != null && player.getEntityWorld().isRemote) {
-            if(clientExtendedPlayers.containsKey(player)) {
+            if(clientExtendedPlayers.containsKey(player) && clientExtendedPlayers.get(player) != null) {
                 ExtendedPlayer extendedPlayer = clientExtendedPlayers.get(player);
                 extendedPlayer.setPlayer(player);
                 return extendedPlayer;

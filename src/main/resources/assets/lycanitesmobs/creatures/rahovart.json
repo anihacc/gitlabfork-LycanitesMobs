@@ -79,6 +79,7 @@
     "mountable": false,
     "summonCost": 2,
     "dungeonLevel": 1,
+    "bossNearbyRange": 60,
     "drops": [
         {
             "item": "minecraft:blaze_powder",

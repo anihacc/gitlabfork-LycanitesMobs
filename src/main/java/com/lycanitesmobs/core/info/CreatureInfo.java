@@ -130,17 +130,17 @@ public class CreatureInfo {
 	/** If true, this mob can be used as a mount. The entity must have mount AI for this. **/
 	public boolean mountable = false;
 
-	/** If true, this mob can perch on it's owner's shoulder. The entity must have pet AI for this. **/
+	/** If true, this mob can perch on its owner's shoulder. The entity must have pet AI for this. **/
 	public boolean perchable = false;
 
 	/** How many charges this creature normally costs to summon. **/
 	public int summonCost = 1;
 
-	/** The Dungeon Level of this mob, for Lycanites Dungeons this affects what floor the mob appears on, but this is also used by other mods such as Doomlike Dungeons to assess difficulty. Default: -1 (All levels). **/
+	/** The Dungeon Level of this mob, for Lycanite's Dungeons this affects what floor the mob appears on, but this is also used by other mods such as Doomlike Dungeons to assess difficulty. Default: -1 (All levels). **/
 	public int dungeonLevel = -1;
 
 	/** The range (in blocks) that players must be to be considered within range of this entity as a boss, used for block place/break boss protection. **/
-	public int bossNearbyRange = 60;
+	public int bossNearbyRange = 30;
 
 
 	// Items:

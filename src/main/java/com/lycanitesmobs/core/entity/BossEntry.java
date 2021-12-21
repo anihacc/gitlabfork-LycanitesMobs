@@ -8,7 +8,7 @@ public class BossEntry {
     public UUID uuid;
     public Entity entity;
     public long lastUpdated = -1;
-    public int nearbyRange = 60;
+    public int nearbyRange = 30;
 
     /**
      * Updates this boss entry with the provided entity.
@@ -20,7 +20,10 @@ public class BossEntry {
         this.lastUpdated = entity.getEntityWorld().getTotalWorldTime();
         if(entity instanceof BaseCreatureEntity) {
             BaseCreatureEntity creatureEntity = (BaseCreatureEntity)entity;
-            if(creatureEntity.creatureInfo != null) {
+            if (creatureEntity.spawnedWithBlockProtection > 0) {
+                this.nearbyRange = creatureEntity.spawnedWithBlockProtection;
+            }
+            else if( creatureEntity.creatureInfo != null) {
                 this.nearbyRange = creatureEntity.creatureInfo.bossNearbyRange;
             }
         }

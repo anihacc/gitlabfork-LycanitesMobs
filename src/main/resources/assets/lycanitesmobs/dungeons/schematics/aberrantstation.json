@@ -117,7 +117,8 @@
 				},
 				{
 					"item": "lycanitesmobs:soulstone_beast",
-					"amountMultiplier": false
+					"amountMultiplier": false,
+					"bonusAmount": false
 				}
 			]
 		},
@@ -144,7 +145,8 @@
 				},
 				{
 					"item": "lycanitesmobs:soulstone_aberration",
-					"amountMultiplier": false
+					"amountMultiplier": false,
+					"bonusAmount": false
 				}
 			]
 		},
@@ -162,12 +164,9 @@
 			"dungeonBoss": true,
 			"mobDrops": [
 				{
-					"item": "lycanitesmobs:bloodleechscepter",
-					"amountMultiplier": false
-				},
-				{
 					"item": "lycanitesmobs:soulstone_beast",
-					"amountMultiplier": false
+					"amountMultiplier": false,
+					"bonusAmount": false
 				},
 				{
 					"item": "lycanitesmobs:chaosorbcharge",
@@ -200,7 +199,8 @@
 				},
 				{
 					"item": "lycanitesmobs:soulstone_aberration",
-					"amountMultiplier": false
+					"amountMultiplier": false,
+					"bonusAmount": false
 				}
 			]
 		}

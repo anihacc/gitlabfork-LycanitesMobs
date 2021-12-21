@@ -93,7 +93,8 @@
 				},
 				{
 					"item": "lycanitesmobs:soulstone_worm",
-					"amountMultiplier": false
+					"amountMultiplier": false,
+					"bonusAmount": false
 				}
 			]
 		},
@@ -117,7 +118,8 @@
 				},
 				{
 					"item": "lycanitesmobs:soulstone_anthronian",
-					"amountMultiplier": false
+					"amountMultiplier": false,
+					"bonusAmount": false
 				}
 			]
 		},
@@ -141,7 +143,8 @@
 				},
 				{
 					"item": "lycanitesmobs:soulstone_elemental",
-					"amountMultiplier": false
+					"amountMultiplier": false,
+					"bonusAmount": false
 				},
 				{
 					"item": "minecraft:diamond",
@@ -178,7 +181,8 @@
 				},
 				{
 					"item": "lycanitesmobs:soulstone_dragon",
-					"amountMultiplier": false
+					"amountMultiplier": false,
+					"bonusAmount": false
 				}
 			]
 		}

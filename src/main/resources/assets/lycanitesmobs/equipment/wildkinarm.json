@@ -1,7 +1,7 @@
 {
 	"itemName": "wildkinarm",
 	"loadDefault": true,
-	"slotType": "head",
+	"slotType": "pike",
 	"dropMobId": "lycanitesmobs:wildkin",
 	"dropChance": 0.2,
 	"levelMin": 1,

@@ -13,4 +13,8 @@ public class CreatureBuildTask {
 		this.pos = pos;
 		this.phase = phase;
 	}
+
+	public String toString() {
+		return "Creature Build Task - BlockState: " + this.blockState + " Pos: " + this.pos;
+	}
 }

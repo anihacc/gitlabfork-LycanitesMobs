@@ -1,6 +1,8 @@
 package com.lycanitesmobs.core.entity;
 
 import com.lycanitesmobs.LycanitesMobs;
+import com.lycanitesmobs.core.block.building.BlockPropolis;
+import com.lycanitesmobs.core.block.building.BlockVeswax;
 import com.lycanitesmobs.core.dungeon.definition.DungeonTheme;
 import com.lycanitesmobs.core.dungeon.definition.ThemeBlock;
 import net.minecraft.block.Block;
@@ -9,6 +11,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fluids.IFluidBlock;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -148,11 +151,17 @@ public class CreatureStructure {
 						}
 
 						IBlockState blockState = this.dungeonTheme.getPit('2', this.owner.getRNG());
-						this.createBuildTask(blockState, blockPos, 2);
+						this.createBuildTask(blockState, blockPos, 1);
 					}
 				}
 			}
 		}
+
+//		for (int phase : this.buildTasks.keySet()) {
+//			for (CreatureBuildTask creatureBuildTask : this.buildTasks.get(phase).values()) {
+//				LycanitesMobs.logDebug("", creatureBuildTask.toString());
+//			}
+//		}
 	}
 
 	/**
@@ -165,7 +174,7 @@ public class CreatureStructure {
 	public void createBuildTask(IBlockState blockState, BlockPos blockPos, int phase) {
 		// Check for Completion:
 		IBlockState targetBlockState = this.owner.getEntityWorld().getBlockState(blockPos);
-		if (blockState == targetBlockState) {
+		if (blockState == targetBlockState || (!(blockState.getBlock() instanceof IFluidBlock) && blockState.getBlock() == targetBlockState.getBlock())) {
 			for (Map<BlockPos, CreatureBuildTask> phasedBuildTasks : this.buildTasks.values()) {
 				phasedBuildTasks.remove(blockPos);
 			}
@@ -256,6 +265,30 @@ public class CreatureStructure {
 	 */
 	public int getFinalPhaseBuildTaskSize() {
 		return this.getBuildTaskSize(this.buildTasks.size() -1);
+	}
+
+	/**
+	 * Called when the owner is removed, removes all pit blocks.
+	 */
+	public void removePitBLocks() {
+		int radius = 10;
+		for (int x = -radius; x <= radius; x++) {
+			for (int y = -radius; y <= radius; y++) {
+				for (int z = -radius; z <= radius; z++) {
+					BlockPos blockPos = this.getOrigin().add(x, y, z);
+					IBlockState blockState = this.owner.getEntityWorld().getBlockState(blockPos);
+					if (blockState.getBlock() instanceof BlockPropolis || blockState.getBlock() instanceof BlockVeswax) {
+						continue;
+					}
+					if (blockState.getBlock() == this.dungeonTheme.getPit('1', this.owner.getRNG()).getBlock()) {
+						this.owner.getEntityWorld().setBlockToAir(blockPos);
+					}
+					else if (blockState.getBlock() == this.dungeonTheme.getPit('2', this.owner.getRNG()).getBlock()) {
+						this.owner.getEntityWorld().setBlockToAir(blockPos);
+					}
+				}
+			}
+		}
 	}
 
 	/**

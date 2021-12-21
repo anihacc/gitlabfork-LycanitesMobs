@@ -457,7 +457,7 @@ public class PotionEffects {
 		// Fear
 		PotionBase fear = ObjectManager.getEffect("fear");
 		if(fear != null) {
-			if(event.getEntityLiving().isPotionActive(fear)) {
+			if(!this.isBoss(event.getEntityLiving()) && event.getEntityLiving().isPotionActive(fear)) {
 				if("inWall".equals(event.getSource().damageType)) {
 					event.setAmount(0);
 					event.setCanceled(true);

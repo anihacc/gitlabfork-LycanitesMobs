@@ -106,6 +106,8 @@ public abstract class BaseCreatureEntity extends EntityLiving {
     public PetEntry petEntry;
     /** If true, this mob will be treated as if it was spawned from an Altar, this is typically called directly by AltarInfo or by events triggered by AltarInfo. **/
     public boolean altarSummoned = false;
+	/** If true, this mob was spawned with a block protection range added. **/
+	public int spawnedWithBlockProtection = 0;
     /** If true, this mob will show a boss health bar, regardless of other properties, unless overridden by a subclass. **/
     public boolean forceBossHealthBar = false;
 	/** The Summoning Pedestal that summoned this creature, null if not summoned via a pedestal. **/
@@ -2097,7 +2099,9 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 
         // Boss:
         this.getBossInfo();
-        if(this.isBossAlways()) {
+
+		// Block Protection:
+        if(this.isBossAlways() || this.spawnedWithBlockProtection > 0) {
         	ExtendedWorld extendedWorld = ExtendedWorld.getForWorld(this.getEntityWorld());
         	extendedWorld.bossUpdate(this);
 		}
@@ -5118,6 +5122,9 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 		if(nbtTagCompound.hasKey("SpawnedAsBoss")) {
 			this.spawnedAsBoss = nbtTagCompound.getBoolean("SpawnedAsBoss");
 		}
+		if(nbtTagCompound.hasKey("SpawnedWithBlockProtection")) {
+			this.spawnedWithBlockProtection = nbtTagCompound.getInteger("SpawnedWithBlockProtection");
+		}
     	
         super.readEntityFromNBT(nbtTagCompound);
 
@@ -5192,7 +5199,8 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 		nbtTagCompound.setInteger("MobLevel", this.getLevel());
 		nbtTagCompound.setInteger("Experience", this.getExperience());
 		nbtTagCompound.setBoolean("SpawnedAsBoss", this.spawnedAsBoss);
-    	
+		nbtTagCompound.setInteger("SpawnedWithBlockProtection", this.spawnedWithBlockProtection);
+
     	if(this.hasHome()) {
     		BlockPos homePos = this.getHomePosition();
     		nbtTagCompound.setInteger("HomeX", homePos.getX());

@@ -216,4 +216,12 @@ public class EntityVespidQueen extends TameableCreatureEntity implements IMob {
     	if(type.equals("inWall")) return false;
     	return super.isDamageTypeApplicable(type, source, damage);
     }
+
+	@Override
+	public void setDead() {
+		if (this.creatureStructure != null) {
+			this.creatureStructure.removePitBLocks();
+		}
+		super.setDead();
+	}
 }

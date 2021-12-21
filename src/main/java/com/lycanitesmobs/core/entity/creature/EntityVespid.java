@@ -65,14 +65,24 @@ public class EntityVespid extends AgeableCreatureEntity implements IMob {
         super.onLivingUpdate();
 
 		// Building AI:
-		if(!this.getEntityWorld().isRemote && this.hiveBuilding && this.getMasterTarget() instanceof EntityVespidQueen && this.aiPlaceBlock.blockState == null) {
-			EntityVespidQueen queen = (EntityVespidQueen)this.getMasterTarget();
-			this.creatureBuildTask = queen.creatureStructure.takeBuildTask(this);
-			if (this.creatureBuildTask != null) {
-				this.aiPlaceBlock.setBlockPlacement(this.creatureBuildTask.blockState, this.creatureBuildTask.pos);
+		if(!this.getEntityWorld().isRemote && this.hiveBuilding) {
+			if (this.getMasterTarget() instanceof EntityVespidQueen) {
+				if (this.getMasterTarget().isDead && this.aiPlaceBlock.blockState != null) {
+					this.aiPlaceBlock.resetTask();
+				}
+				else if (this.aiPlaceBlock.blockState == null) {
+					EntityVespidQueen queen = (EntityVespidQueen) this.getMasterTarget();
+					this.creatureBuildTask = queen.creatureStructure.takeBuildTask(this);
+					if (this.creatureBuildTask != null) {
+						this.aiPlaceBlock.setBlockPlacement(this.creatureBuildTask.blockState, this.creatureBuildTask.pos);
+					}
+				}
+			}
+			else if (this.aiPlaceBlock.blockState != null) {
+				this.aiPlaceBlock.resetTask();
 			}
 		}
-        
+
         // Don't Keep Infected Conbas Targeted:
         if(!this.getEntityWorld().isRemote && this.getAttackTarget() instanceof EntityConba) {
         	if(((EntityConba)this.getAttackTarget()).vespidInfection) {
