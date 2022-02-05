@@ -5,6 +5,7 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.animation.ModelPartAnimation;
 import com.lycanitesmobs.client.obj.ObjObject;
 import com.lycanitesmobs.client.obj.TessellatorModel;
+import com.lycanitesmobs.client.obj.VBOModel;
 import com.lycanitesmobs.client.renderer.IItemModelRenderer;
 import com.lycanitesmobs.client.renderer.layer.LayerItem;
 import com.lycanitesmobs.core.info.CreatureManager;
@@ -64,7 +65,7 @@ public abstract class ModelItemBase implements IAnimationModel {
 	// ==================================================
 	public ModelItemBase initModel(String name, ModInfo groupInfo, String path) {
 		// Load Obj Model:
-		this.wavefrontObject = new TessellatorModel(new ResourceLocation(groupInfo.modid, "models/" + path + ".obj"));
+		this.wavefrontObject = new VBOModel(new ResourceLocation(groupInfo.modid, "models/" + path + ".obj"));
 		this.wavefrontParts = this.wavefrontObject.objObjects;
 		if(this.wavefrontParts.isEmpty())
 			LycanitesMobs.logWarning("", "Unable to load any parts for the " + name + " model!");
