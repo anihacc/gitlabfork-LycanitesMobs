@@ -7,6 +7,7 @@ import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.client.obj.ObjObject;
 import com.lycanitesmobs.client.obj.TessellatorModel;
+import com.lycanitesmobs.client.obj.VBOModel;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
@@ -94,7 +95,7 @@ public class ModelObjOld extends ModelCustom {
 			return this;
 		}
 
-		this.wavefrontObject = new TessellatorModel(new ResourceLocation(groupInfo.modid, "models/" + path + ".obj"));
+		this.wavefrontObject = new VBOModel(new ResourceLocation(groupInfo.modid, "models/" + path + ".obj"));
         this.wavefrontParts = this.wavefrontObject.objObjects;
         if(this.wavefrontParts.isEmpty())
             LycanitesMobs.logWarning("", "Unable to load any parts for the " + name + " model!");
