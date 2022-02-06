@@ -110,6 +110,14 @@
             "minAmount": 5,
             "maxAmount": 10,
             "chance": 1
+        },
+        {
+            "item": "lycanitesmobs:soulstone_demon",
+            "minAmount": 1,
+            "maxAmount": 1,
+            "chance": 1,
+            "variant": 3,
+            "bonusAmount": false
         }
     ],
     "sizeScale": 1,

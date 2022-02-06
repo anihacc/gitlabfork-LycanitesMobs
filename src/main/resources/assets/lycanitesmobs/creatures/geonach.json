@@ -125,7 +125,8 @@
             "minAmount": 1,
             "maxAmount": 1,
             "chance": 1,
-            "variant": 3
+            "variant": 3,
+            "bonusAmount": false
         }
     ],
     "sizeScale": 1,

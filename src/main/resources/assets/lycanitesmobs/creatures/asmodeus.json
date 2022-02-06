@@ -154,13 +154,15 @@
             "item": "lycanitesmobs:soulstone_demon",
             "minAmount": 1,
             "maxAmount": 3,
-            "chance": 1
+            "chance": 1,
+            "bonusAmount": false
         },
         {
             "item": "lycanitesmobs:soulstone_aberration",
             "minAmount": 1,
             "maxAmount": 3,
-            "chance": 1
+            "chance": 1,
+            "bonusAmount": false
         },
         {
             "item": "lycanitesmobs:wraithsigil",

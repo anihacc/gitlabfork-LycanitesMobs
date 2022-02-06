@@ -145,7 +145,8 @@
             "item": "lycanitesmobs:soulstone_demon",
             "minAmount": 2,
             "maxAmount": 6,
-            "chance": 1
+            "chance": 1,
+            "bonusAmount": false
         },
         {
             "item": "lycanitesmobs:wraithsigil",
