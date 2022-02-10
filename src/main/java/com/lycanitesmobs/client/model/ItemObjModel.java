@@ -304,7 +304,7 @@ public abstract class ItemObjModel implements IAnimationModel {
 		if(layer != null) {
 			return layer.getPartColor(partName, itemStack, loop);
 		}
-		return new Vector4f(1, 1, 1, 1);
+		return CustomRenderStates.WHITE;
 	}
 
 	/** Returns the texture offset to be used for this part and layer. **/
@@ -313,29 +313,41 @@ public abstract class ItemObjModel implements IAnimationModel {
 			return layer.getTextureOffset(partName, itemStack, loop);
 		}
 
-		return new Vector2f(0, 0);
+		return Vector2f.ZERO;
 	}
 
 	@Override
 	public void doRotate(float rotX, float rotY, float rotZ) {
-		this.matrixStack.mulPose(new Vector3f(1F, 0F, 0F).rotationDegrees(rotX));
-		this.matrixStack.mulPose(new Vector3f(0F, 1F, 0F).rotationDegrees(rotY));
-		this.matrixStack.mulPose(new Vector3f(0F, 0F, 1F).rotationDegrees(rotZ));
+		if (rotX != 0.0F) {
+			this.matrixStack.mulPose(Vector3f.XP.rotationDegrees(rotX));
+		}
+		if (rotY != 0.0F) {
+			this.matrixStack.mulPose(Vector3f.YP.rotationDegrees(rotY));
+		}
+		if (rotZ != 0.0F) {
+			this.matrixStack.mulPose(Vector3f.ZP.rotationDegrees(rotZ));
+		}
 	}
 
 	@Override
 	public void doAngle(float rotation, float angleX, float angleY, float angleZ) {
-		this.matrixStack.mulPose(new Vector3f(angleX, angleY, angleZ).rotationDegrees(rotation));
+		if (rotation != 0.0F && (angleX != 0.0F || angleY != 0.0F || angleZ != 0.0F)) {
+			this.matrixStack.mulPose(new Vector3f(angleX, angleY, angleZ).rotationDegrees(rotation));
+		}
 	}
 
 	@Override
 	public void doTranslate(float posX, float posY, float posZ) {
-		this.matrixStack.translate(posX, posY, posZ); // TODO Translation?
+		if (posX != 0.0F || posY != 0.0F || posZ != 0.0F) {
+			this.matrixStack.translate(posX, posY, posZ); // TODO Translation?
+		}
 	}
 
 	@Override
 	public void doScale(float scaleX, float scaleY, float scaleZ) {
-		this.matrixStack.scale(scaleX, scaleY, scaleZ); // TODO Scaling?
+		if (scaleX != 1.0F || scaleY != 1.0F || scaleZ != 1.0F) {
+			this.matrixStack.scale(scaleX, scaleY, scaleZ); // TODO Scaling?
+		}
 	}
 
 	@Override

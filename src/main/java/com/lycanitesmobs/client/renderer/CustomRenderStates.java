@@ -9,6 +9,8 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.client.renderer.vertex.VertexFormatElement;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.vector.Vector4f;
+
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
@@ -22,6 +24,7 @@ public class CustomRenderStates extends RenderState {
 			DefaultVertexFormats.ELEMENT_UV0,
 			DefaultVertexFormats.ELEMENT_NORMAL,
 			DefaultVertexFormats.ELEMENT_PADDING));
+	public static final Vector4f WHITE = new Vector4f(1.0F, 1.0F, 1.0F, 1.0F);
 
 	public enum BLEND {
 		NORMAL(0), ADD(1), SUB(2);
