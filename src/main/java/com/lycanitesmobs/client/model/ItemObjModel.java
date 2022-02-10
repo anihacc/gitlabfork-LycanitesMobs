@@ -5,6 +5,7 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.animation.ModelPartAnimation;
 import com.lycanitesmobs.client.obj.ObjModel;
 import com.lycanitesmobs.client.obj.ObjPart;
+import com.lycanitesmobs.client.obj.VBOObjModel;
 import com.lycanitesmobs.client.renderer.CustomRenderStates;
 import com.lycanitesmobs.client.renderer.IItemModelRenderer;
 import com.lycanitesmobs.client.renderer.layer.LayerItem;
@@ -69,7 +70,7 @@ public abstract class ItemObjModel implements IAnimationModel {
 	 */
 	public ItemObjModel initModel(String name, ModInfo groupInfo, String path) {
 		// Load Obj Model:
-		this.objModel = new ObjModel(new ResourceLocation(groupInfo.modid, "models/" + path + ".obj"));
+		this.objModel = new VBOObjModel(new ResourceLocation(groupInfo.modid, "models/" + path + ".obj"));
 		this.objParts = this.objModel.objParts;
 		if(this.objParts.isEmpty())
 			LycanitesMobs.logWarning("", "Unable to load any parts for the " + name + " model!");

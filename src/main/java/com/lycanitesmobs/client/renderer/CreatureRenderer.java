@@ -2,6 +2,7 @@ package com.lycanitesmobs.client.renderer;
 
 import com.lycanitesmobs.client.ModelManager;
 import com.lycanitesmobs.client.model.CreatureModel;
+import com.lycanitesmobs.client.obj.VBOObjModel;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.info.CreatureManager;
@@ -141,6 +142,8 @@ public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, CreatureMo
 		this.getMainModel().clearAnimationFrames();
 		matrixStack.popPose();
 
+		VBOBatcher.getInstance().endBatches();
+
 		// Render Name Tag
 		if (!invisible) {
 			net.minecraftforge.client.event.RenderNameplateEvent renderNameplateEvent = new net.minecraftforge.client.event.RenderNameplateEvent(entity, entity.getDisplayName(), this, matrixStack, renderTypeBuffer, fade, time);
@@ -185,10 +188,15 @@ public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, CreatureMo
 		else {
 			rendertype = CustomRenderStates.getObjRenderType(texture, this.getMainModel().getBlending(entity, layer), this.getMainModel().getGlow(entity, layer));
 		}
+		VBOObjModel.renderType = rendertype;
+		VBOObjModel.tex = texture;
 
 		// Render Model
 		// TODO allyInvisible lower color alpha
 		this.getMainModel().render(entity, matrixStack, renderTypeBuffer.getBuffer(rendertype), layer, time, distance, loop, lookY, lookX, 1, brightness, fade);
+
+		VBOObjModel.tex = null;
+		VBOObjModel.renderType = null;
     }
 
 	/**

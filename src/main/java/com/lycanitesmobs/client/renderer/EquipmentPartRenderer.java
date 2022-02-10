@@ -3,6 +3,7 @@ package com.lycanitesmobs.client.renderer;
 import com.lycanitesmobs.client.ModelManager;
 import com.lycanitesmobs.client.model.AnimationPart;
 import com.lycanitesmobs.client.model.ItemObjModel;
+import com.lycanitesmobs.client.obj.VBOObjModel;
 import com.lycanitesmobs.client.renderer.layer.LayerItem;
 import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
 import com.mojang.blaze3d.matrix.MatrixStack;
@@ -65,6 +66,8 @@ public class EquipmentPartRenderer extends ItemStackTileEntityRenderer implement
 		//this.renderModel(itemObjModel, itemStack, hand, matrixStack, renderTypeBuffer, new LayerItemDye(this, "dye"),null, loop, brightness);
 		itemObjModel.clearAnimationFrames();
 		matrixStack.popPose();
+
+		VBOBatcher.getInstance().endBatches();
 	}
 
 	/**
@@ -84,7 +87,11 @@ public class EquipmentPartRenderer extends ItemStackTileEntityRenderer implement
 //		if(layer instanceof LayerItemDye) {
 //			renderType = CustomRenderStates.getObjColorOnlyRenderType(texture, model.getBlending(itemStack, layer), model.getGlow(itemStack, layer));
 //		}
+		VBOObjModel.renderType = renderType;
+		VBOObjModel.tex = texture;
 		model.render(itemStack, hand, matrixStack, renderTypeBuffer.getBuffer(renderType), this, offsetObjPart, layer, loop, brightness);
+		VBOObjModel.tex = null;
+		VBOObjModel.renderType = null;
 	}
 
 	@Override

@@ -17,6 +17,11 @@ import java.util.List;
 public class CustomRenderStates extends RenderState {
 	public static VertexFormat POS_COL_TEX_LIGHT_FADE_NORMAL;
 	public static VertexFormat POS_COL_TEX_NORMAL;
+	public static final VertexFormat POS_TEX_NORMAL = new VertexFormat(ImmutableList.of(
+			DefaultVertexFormats.ELEMENT_POSITION,
+			DefaultVertexFormats.ELEMENT_UV0,
+			DefaultVertexFormats.ELEMENT_NORMAL,
+			DefaultVertexFormats.ELEMENT_PADDING));
 
 	public enum BLEND {
 		NORMAL(0), ADD(1), SUB(2);

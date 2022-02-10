@@ -5,6 +5,7 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.ModelManager;
 import com.lycanitesmobs.client.model.ProjectileModel;
 import com.lycanitesmobs.client.model.ProjectileObjModel;
+import com.lycanitesmobs.client.obj.VBOObjModel;
 import com.lycanitesmobs.client.renderer.layer.LayerProjectileBase;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
@@ -97,6 +98,8 @@ public class ProjectileModelRenderer extends EntityRenderer<BaseProjectileEntity
 					this.renderModel(entity, matrixStack, renderTypeBuffer, layerCreatureBase, time, distance, loop, lookYaw, lookPitch, scale, brightness, invisible, allyInvisible);
 				}
 				this.getModel().clearAnimationFrames();
+
+				VBOBatcher.getInstance().endBatches();
 			}
 		}
 		catch (Exception exception) {
@@ -135,7 +138,11 @@ public class ProjectileModelRenderer extends EntityRenderer<BaseProjectileEntity
 		else {
 			rendertype = CustomRenderStates.getObjRenderType(texture, this.getModel().getBlending(entity, layer), this.getModel().getGlow(entity, layer));
 		}
+		VBOObjModel.renderType = rendertype;
+		VBOObjModel.tex = texture;
 		this.getModel().render(entity, matrixStack, renderTypeBuffer.getBuffer(rendertype), layer, time, distance, loop, lookY, lookX, 1, brightness);
+		VBOObjModel.tex = null;
+		VBOObjModel.renderType = null;
 	}
 
 	@Override
