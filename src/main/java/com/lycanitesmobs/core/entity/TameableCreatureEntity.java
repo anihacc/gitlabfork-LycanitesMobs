@@ -52,6 +52,7 @@ public class TameableCreatureEntity extends AgeableCreatureEntity implements IEn
 
     // Owner:
 	public UUID ownerUUID;
+	public boolean fromSummoningPedestal = false;
 
     // Datawatcher:
     protected static final DataParameter<Byte> TAMED = EntityDataManager.createKey(BaseCreatureEntity.class, DataSerializers.BYTE);
@@ -572,8 +573,7 @@ public class TameableCreatureEntity extends AgeableCreatureEntity implements IEn
 		if (target instanceof EntityLiving) {
 			EntityLiving livingTarget = (EntityLiving) target;
 			if (this.getPlayerOwner() != null && livingTarget.getHealth() > 0 && livingTarget.getHealth() - totalDamage <= 0) {
-				LycanitesMobs.logDebug("", "Damage will kill and player owner!");
-				DamageSource creditSource = new MinionEntityDamageSource(this.getDamageSource(null), this.getPlayerOwner());
+				DamageSource creditSource = this.getDamageSource(null, true);
 				creditSource.setDamageBypassesArmor().setDamageIsAbsolute();
 				return target.attackEntityFrom(creditSource, totalDamage);
 			}
@@ -597,7 +597,7 @@ public class TameableCreatureEntity extends AgeableCreatureEntity implements IEn
 		if (target instanceof EntityLiving) {
 			EntityLiving livingTarget = (EntityLiving) target;
 			if (this.getPlayerOwner() != null && livingTarget.getHealth() > 0 && livingTarget.getHealth() - damage <= 0) {
-				DamageSource creditSource = new MinionEntityDamageSource(this.getDamageSource(null), this.getPlayerOwner());
+				DamageSource creditSource = this.getDamageSource(null, true);
 				creditSource.setDamageBypassesArmor().setDamageIsAbsolute();
 				return target.attackEntityFrom(creditSource, damage);
 			}
@@ -656,13 +656,13 @@ public class TameableCreatureEntity extends AgeableCreatureEntity implements IEn
      * @return
      */
     @Override
-    public DamageSource getDamageSource(EntityDamageSource nestedDamageSource) {
-//        if(this.isTamed() && this.getOwner() != null) {
-//            if(nestedDamageSource == null)
-//                nestedDamageSource = (EntityDamageSource)DamageSource.causeMobDamage(this);
-//            return new MinionEntityDamageSource(nestedDamageSource, this.getOwner());
-//        }
-        return super.getDamageSource(nestedDamageSource);
+    public DamageSource getDamageSource(EntityDamageSource nestedDamageSource, boolean playerCredit) {
+        if(this.isTamed() && this.getOwner() != null) {
+            if(nestedDamageSource == null)
+                nestedDamageSource = (EntityDamageSource)DamageSource.causeMobDamage(this);
+            return new MinionEntityDamageSource(nestedDamageSource, this.getOwner(), playerCredit);
+        }
+        return super.getDamageSource(nestedDamageSource, playerCredit);
     }
 	
     // ========== Attacked From ==========
@@ -1293,6 +1293,10 @@ public class TameableCreatureEntity extends AgeableCreatureEntity implements IEn
 			this.setOwnerId(null);
         }
         
+        if(nbtTagCompound.hasKey("FromSummoningPedestal")) {
+	        this.fromSummoningPedestal = nbtTagCompound.getBoolean("FromSummoningPedestal");
+        }
+
         if(nbtTagCompound.hasKey("Sitting")) {
 	        this.setSitting(nbtTagCompound.getBoolean("Sitting"));
         }
@@ -1347,6 +1351,7 @@ public class TameableCreatureEntity extends AgeableCreatureEntity implements IEn
         if(this.getOwnerId() != null) {
             nbtTagCompound.setUniqueId("OwnerId", this.getOwnerId());
         }
+        nbtTagCompound.setBoolean("FromSummoningPedestal", this.fromSummoningPedestal);
         nbtTagCompound.setBoolean("Sitting", this.isSitting());
         nbtTagCompound.setBoolean("Following", this.isFollowing());
         nbtTagCompound.setBoolean("Passive", this.isPassive());

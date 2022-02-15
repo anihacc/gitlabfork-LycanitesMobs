@@ -235,15 +235,17 @@ public class RandomSpawnLocation extends BlockSpawnLocation {
 	public boolean posHasGround(World world, BlockPos pos) {
 		if(pos == null || pos.getY() == 0)
 			return false;
-		IBlockState possibleGroundBlock = world.getBlockState(pos.down());
+		IBlockState possibleGroundBlockState = world.getBlockState(pos.down());
 		try {
-			if(possibleGroundBlock.isNormalCube())
+			if(possibleGroundBlockState.isNormalCube())
 				return true;
 		} catch(Exception e) {}
 		try {
-			if (possibleGroundBlock.isSideSolid(world, pos.down(), EnumFacing.UP))
+			if (possibleGroundBlockState.getBlock() == Blocks.SNOW_LAYER)
 				return true;
-			if (possibleGroundBlock.isSideSolid(world, pos.down(), EnumFacing.DOWN))
+			if (possibleGroundBlockState.isSideSolid(world, pos.down(), EnumFacing.UP))
+				return true;
+			if (possibleGroundBlockState.isSideSolid(world, pos.down(), EnumFacing.DOWN))
 				return true;
 		} catch(Exception e) {}
 		return false;

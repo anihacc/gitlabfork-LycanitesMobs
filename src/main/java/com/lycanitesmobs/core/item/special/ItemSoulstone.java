@@ -97,8 +97,6 @@ public class ItemSoulstone extends ItemBase {
 			// Consume Soulstone:
 			if (!player.capabilities.isCreativeMode)
 				itemStack.setCount(Math.max(0, itemStack.getCount() - 1));
-			if (itemStack.getCount() <= 0)
-				player.inventory.setInventorySlotContents(player.inventory.currentItem, ItemStack.EMPTY);
 		}
 
     	return true;

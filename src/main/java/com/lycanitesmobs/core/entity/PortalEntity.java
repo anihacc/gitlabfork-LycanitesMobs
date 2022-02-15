@@ -177,16 +177,15 @@ public class PortalEntity extends BaseProjectileEntity {
         if(this.getEntityWorld().isRemote) {
             for(int i = 0; i < 32; ++i) {
                 double angle = Math.toRadians(this.rand.nextFloat() * 360);
-                float distance = this.rand.nextFloat() * 2;
+                float distance = this.rand.nextFloat() * 0.5F;
                 double x = distance * Math.cos(angle) + Math.sin(angle);
                 double z = distance * Math.sin(angle) - Math.cos(angle);
                 this.getEntityWorld().spawnParticle(EnumParticleTypes.PORTAL,
                         this.posX + x,
-                        this.posY + (4.0F * this.rand.nextFloat()) - 2.0F,
+                        this.posY + (6.0F * this.rand.nextFloat()) - 2.0F,
                         this.posZ + z,
-                        0.0D, 0.0D, 0.0D);
+                        (this.rand.nextFloat() - 0.5D) * 4, 0.0D, (this.rand.nextFloat() - 0.5D) * 4);
             }
-            return;
         }
     }
     

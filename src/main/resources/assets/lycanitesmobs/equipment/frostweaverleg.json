@@ -1,6 +1,6 @@
 {
 	"itemName": "frostweaverleg",
-	"loadDefault": false,
+	"loadDefault": true,
 	"slotType": "blade",
 	"dropMobId": "lycanitesmobs:frostweaver",
 	"dropChance": 0.05,

@@ -69,7 +69,7 @@ public class ProjectileBehaviourSummon extends ProjectileBehaviour {
 		if(projectile == null || projectile.getEntityWorld().isRemote) {
 			return;
 		}
-		if (!CreatureManager.getInstance().config.isSummoningAllowed(world)) {
+		if (projectile.getThrower() instanceof EntityPlayer && !CreatureManager.getInstance().config.isSummoningAllowed(world)) {
 			return;
 		}
 		Class entityClass = null;

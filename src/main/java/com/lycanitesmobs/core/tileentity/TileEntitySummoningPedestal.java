@@ -68,7 +68,7 @@ public class TileEntitySummoningPedestal extends TileEntityBase {
 
 	public TileEntitySummoningPedestal() {
 		super();
-		this.summoningFuelMax = LycanitesMobs.config.getInt("Player", "Summoning Pedestal Redstone Time", this.summoningFuelMax, "How much summoning time (in ticks) 1 redstone dust provides. 20 ticks = 1 second, default is 12000 (10 minutes).");
+		this.summoningFuelAmount = LycanitesMobs.config.getInt("Player", "Summoning Pedestal Redstone Time", this.summoningFuelAmount, "How much summoning time (in ticks) 1 redstone dust provides. 20 ticks = 1 second, default is 12000 (10 minutes).");
 	}
 
 
@@ -137,13 +137,6 @@ public class TileEntitySummoningPedestal extends TileEntityBase {
 				this.summonSet.following = false;
 			}
 
-			// Summoning Portal:
-			if (this.summoningPortal == null || this.summoningPortal.isDead) {
-				this.summoningPortal = new PortalEntity(this.getWorld(), this);
-				this.summoningPortal.setProjectileScale(4);
-				this.getWorld().spawnEntity(this.summoningPortal);
-			}
-
 			// Update Minions:
 			if (this.updateTick % 100 == 0) {
 				this.capacity = 0;
@@ -163,7 +156,7 @@ public class TileEntitySummoningPedestal extends TileEntityBase {
 
 			// Try To Summon:
 			else {
-				if(this.summoningFuel <= 0) {
+				if (this.summoningFuel <= 0) {
 					ItemStack fuelStack = this.getStackInSlot(0);
 					if(!fuelStack.isEmpty()) {
 						int refuel = this.summoningFuelAmount;
@@ -179,6 +172,13 @@ public class TileEntitySummoningPedestal extends TileEntityBase {
 				if (this.summoningFuel > 0) {
 					this.summoningFuel--;
 
+					// Spawn Missing Summoning Portal:
+					if (this.summoningPortal == null || this.summoningPortal.isDead) {
+						this.summoningPortal = new PortalEntity(this.getWorld(), this);
+						this.summoningPortal.setProjectileScale(4);
+						this.getWorld().spawnEntity(this.summoningPortal);
+					}
+
 					// Summon Minions:
 					if (this.summonProgress++ >= this.summonProgressMax) {
 						this.summoningPortal.summonCreatures();
@@ -187,6 +187,10 @@ public class TileEntitySummoningPedestal extends TileEntityBase {
 					}
 				}
 			}
+		}
+
+		if (this.summoningFuel <= 0 && this.summoningPortal != null && !this.summoningPortal.isDead) {
+			this.summoningPortal.setDead();
 		}
 
 		// Block State:
@@ -267,6 +271,7 @@ public class TileEntitySummoningPedestal extends TileEntityBase {
 	// ========== Minion Behaviour ==========
 	/** Applies the minion behaviour to the summoned player owned minion. **/
 	public void applyMinionBehaviour(TameableCreatureEntity minion) {
+		minion.fromSummoningPedestal = true;
 		if(this.summonSet != null) {
 			this.summonSet.applyBehaviour(minion);
 			minion.setSubspecies(this.summonSet.subspecies);

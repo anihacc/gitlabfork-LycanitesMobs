@@ -10,6 +10,7 @@ import com.lycanitesmobs.api.*;
 import com.lycanitesmobs.client.AssetManager;
 import com.lycanitesmobs.client.localisation.LanguageManager;
 import com.lycanitesmobs.core.container.CreatureContainer;
+import com.lycanitesmobs.core.entity.damagesources.MinionEntityDamageSource;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.entity.navigate.CreatureMoveHelper;
@@ -3230,16 +3231,16 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 
 		boolean success;
 		if(damage <= pierceDamage) {
-			success = target.attackEntityFrom(this.getDamageSource((EntityDamageSource) DamageSource.causeThrownDamage(projectile, this).setDamageBypassesArmor()).setDamageIsAbsolute(), damage);
+			success = target.attackEntityFrom(this.getDamageSource((EntityDamageSource) DamageSource.causeThrownDamage(projectile, this).setDamageBypassesArmor(), false).setDamageIsAbsolute(), damage);
 		}
 		else {
 			int hurtResistantTimeBefore = target.hurtResistantTime;
 			if (pierceDamage > 0) {
-				target.attackEntityFrom(this.getDamageSource((EntityDamageSource) DamageSource.causeThrownDamage(projectile, this).setDamageBypassesArmor()).setDamageIsAbsolute(), (float) pierceDamage);
+				target.attackEntityFrom(this.getDamageSource((EntityDamageSource) DamageSource.causeThrownDamage(projectile, this).setDamageBypassesArmor(), false).setDamageIsAbsolute(), (float) pierceDamage);
 			}
 			target.hurtResistantTime = hurtResistantTimeBefore;
 			damage -= pierceDamage;
-			success = target.attackEntityFrom(this.getDamageSource((EntityDamageSource)DamageSource.causeThrownDamage(projectile, this)), damage);
+			success = target.attackEntityFrom(this.getDamageSource((EntityDamageSource)DamageSource.causeThrownDamage(projectile, this), false), damage);
 		}
 
 		// Element Effects:
@@ -3391,16 +3392,16 @@ public abstract class BaseCreatureEntity extends EntityLiving {
         	pierceDamage = 0;
 		}
         if(damage <= pierceDamage) {
-			attackSuccess = target.attackEntityFrom(this.getDamageSource(null).setDamageBypassesArmor().setDamageIsAbsolute(), damage);
+			attackSuccess = target.attackEntityFrom(this.getDamageSource(null, false).setDamageBypassesArmor().setDamageIsAbsolute(), damage);
 		}
         else {
 			if(pierceDamage > 0) {
 				int hurtResistantTimeBefore = target.hurtResistantTime;
-				target.attackEntityFrom(this.getDamageSource(null).setDamageBypassesArmor().setDamageIsAbsolute(), (float) pierceDamage);
+				target.attackEntityFrom(this.getDamageSource(null, false).setDamageBypassesArmor().setDamageIsAbsolute(), (float) pierceDamage);
 				target.hurtResistantTime = hurtResistantTimeBefore;
 				damage -= pierceDamage;
 			}
-        	attackSuccess = target.attackEntityFrom(this.getDamageSource(null), damage);
+        	attackSuccess = target.attackEntityFrom(this.getDamageSource(null, false), damage);
         }
 
         // After Successful Attack:
@@ -3465,9 +3466,10 @@ public abstract class BaseCreatureEntity extends EntityLiving {
     /**
      * Returns the damage source to be used by this mob when dealing damage.
      * @param nestedDamageSource This can be null or can be a passed damage source for all kinds of use, mainly for minion damage sources. This will override the damage source for EntityBase+Ageable.
+	 * @param playerCredit If true, player credit will be given to the damage source (used by tameable creatures), this treats the damage as player damage instead.
      * @return The damage source to use.
      */
-     public DamageSource getDamageSource(EntityDamageSource nestedDamageSource) {
+     public DamageSource getDamageSource(EntityDamageSource nestedDamageSource, boolean playerCredit) {
          if(nestedDamageSource != null)
              return nestedDamageSource;
         return DamageSource.causeMobDamage(this);
@@ -3533,7 +3535,18 @@ public abstract class BaseCreatureEntity extends EntityLiving {
         	return false;
 
 		if (this.dropsRequirePlayerDamage && damageSrc.getTrueSource() instanceof EntityPlayer) {
-			this.dropsRequirePlayerDamage = false;
+			if (damageSrc instanceof MinionEntityDamageSource) {
+				MinionEntityDamageSource minionEntityDamageSource = (MinionEntityDamageSource)damageSrc;
+				if (minionEntityDamageSource.getMinion() instanceof TameableCreatureEntity) {
+					TameableCreatureEntity tameableCreatureEntity = (TameableCreatureEntity)minionEntityDamageSource.getMinion();
+					if (!tameableCreatureEntity.fromSummoningPedestal) { // Only count as player damage from pets or minions not from a Summoning Pedestal.
+						this.dropsRequirePlayerDamage = false;
+					}
+				}
+			}
+			else {
+				this.dropsRequirePlayerDamage = false;
+			}
 		}
         if(super.attackEntityFrom(damageSrc, damageAmount)) {
         	this.onDamage(damageSrc, damageAmount);
@@ -3641,7 +3654,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 
     @Override
 	protected int getExperiencePoints(EntityPlayer player) {
-    	if(this.isTamed() || this.isMinion()) {
+    	if(this.isTamed() || this.isMinion() || this.dropsRequirePlayerDamage) {
     		return 0;
 		}
     	return super.getExperiencePoints(player);

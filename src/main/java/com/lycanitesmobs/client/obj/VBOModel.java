@@ -13,19 +13,16 @@ import net.minecraft.util.ResourceLocation;
 public class VBOModel extends TessellatorModel
 {
 
-    public VBOModel(ResourceLocation resourceLocation)
-    {
+    public VBOModel(ResourceLocation resourceLocation) {
         super(resourceLocation);
     }
 
     @Override
-    public void renderGroupImpl(ObjObject obj, Vector4f color, Vector2f textureOffset, VertexFormat vertexFormat)
-    {
+    public void renderGroupImpl(ObjObject obj, Vector4f color, Vector2f textureOffset, VertexFormat vertexFormat) {
         GlStateManager.color(color.x, color.y, color.z, color.w);
 
         boolean hasTextureOffset = textureOffset.x != 0.0F || textureOffset.y != 0.0F; 
-        if (hasTextureOffset)
-        {
+        if (hasTextureOffset) {
             GlStateManager.matrixMode(GL11.GL_TEXTURE);
             GlStateManager.pushMatrix();
             GlStateManager.translate(textureOffset.x * 0.01D, -textureOffset.y * 0.01D, 0.0D);
@@ -47,8 +44,7 @@ public class VBOModel extends TessellatorModel
         GL11.glDisableClientState(GL11.GL_NORMAL_ARRAY);
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
 
-        if (hasTextureOffset)
-        {
+        if (hasTextureOffset) {
             GlStateManager.matrixMode(GL11.GL_TEXTURE);
             GlStateManager.popMatrix();
             GlStateManager.matrixMode(GL11.GL_MODELVIEW);

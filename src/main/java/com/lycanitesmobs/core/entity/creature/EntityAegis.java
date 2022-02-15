@@ -34,6 +34,7 @@ public class EntityAegis extends TameableCreatureEntity implements IFusable {
 
 		this.targetTasks.addTask(this.nextSpecialTargetIndex++, new DefendVillageGoal(this));
 		this.targetTasks.addTask(this.nextSpecialTargetIndex++, new DefendEntitiesGoal(this, EntityVillager.class));
+		this.targetTasks.addTask(this.nextSpecialTargetIndex++, new DefendEntitiesGoal(this, EntityIronGolem.class));
     }
 
 	@Override

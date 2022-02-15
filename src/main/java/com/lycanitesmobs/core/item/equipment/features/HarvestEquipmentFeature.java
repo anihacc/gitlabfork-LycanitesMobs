@@ -139,8 +139,13 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 			return this.harvestType.equalsIgnoreCase("sword") || this.harvestType.equalsIgnoreCase("shears");
 		}
 
+		// Wool:
+		if(material == Material.CLOTH) {
+			return this.harvestType.equalsIgnoreCase("shears");
+		}
+
 		// Dirt:
-		if(material == Material.GROUND || material == Material.SAND || material == Material.GRASS || SPADE_HARVEST.contains(block)) {
+		if(material == Material.GROUND || material == Material.SAND || material == Material.GRASS || material == Material.SNOW || material == Material.CRAFTED_SNOW || SPADE_HARVEST.contains(block)) {
 			return this.harvestType.equalsIgnoreCase("shovel");
 		}
 

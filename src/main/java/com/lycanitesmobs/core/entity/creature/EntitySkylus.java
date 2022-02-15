@@ -72,8 +72,8 @@ public class EntitySkylus extends TameableCreatureEntity implements IMob {
     @Override
     public float getAISpeedModifier() {
     	if(this.getHealth() > (this.getMaxHealth() / 2)) // Slower with shell.
-    		return 1.0F;
-    	return 2.0F;
+    		return 0.5F;
+    	return 1.0F;
     }
 	
     // Pathing Weight:

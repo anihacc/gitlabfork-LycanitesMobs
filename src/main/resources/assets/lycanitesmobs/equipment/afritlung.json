@@ -1,6 +1,6 @@
 {
 	"itemName": "afritlung",
-	"loadDefault": false,
+	"loadDefault": true,
 	"slotType": "jewel",
 	"dropMobId": "lycanitesmobs:afrit",
 	"dropChance": 0.05,

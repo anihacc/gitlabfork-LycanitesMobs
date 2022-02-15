@@ -16,6 +16,8 @@ import net.minecraft.block.BlockLiquid;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityBoat;
+import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.entity.projectile.EntityThrowable;
@@ -456,6 +458,23 @@ public class GameEventListener {
                 world.spawnEntity(entityItem);
             }
         }
+	}
+
+
+
+	// ==================================================
+	//                 Mount Entity Event
+	// ==================================================
+	@SubscribeEvent
+	public void onMountEntity(EntityMountEvent event) {
+		if (event.isMounting() && event.getEntityBeingMounted() instanceof EntityBoat && event.getEntityBeingMounted() instanceof EntityMinecart) {
+			if (event.getEntityMounting() instanceof BaseCreatureEntity) {
+				BaseCreatureEntity creatureEntity = (BaseCreatureEntity)event.getEntityMounting();
+				if (creatureEntity.isBoss() || creatureEntity.width >= 2 || creatureEntity.height >= 2) {
+					event.setCanceled(true);
+				}
+			}
+		}
 	}
 	
 	

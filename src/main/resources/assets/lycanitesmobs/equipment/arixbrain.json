@@ -1,6 +1,6 @@
 {
 	"itemName": "arixbrain",
-	"loadDefault": false,
+	"loadDefault": true,
 	"slotType": "jewel",
 	"dropMobId": "lycanitesmobs:arix",
 	"dropChance": 0.05,

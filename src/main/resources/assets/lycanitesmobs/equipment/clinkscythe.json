@@ -84,7 +84,7 @@
 			"featureType": "projectile",
 			"levelMin": 2,
 			"projectileName": "throwingscythe",
-			"projectileTrigger": "secondary",
+			"projectileTrigger": "primary",
 			"projectilePattern": "simple",
 			"cooldown": 10,
 			"count": 1
