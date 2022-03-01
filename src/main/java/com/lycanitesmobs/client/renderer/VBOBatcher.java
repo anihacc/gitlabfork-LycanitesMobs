@@ -1,7 +1,7 @@
 package com.lycanitesmobs.client.renderer;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -13,7 +13,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.renderer.vertex.VertexBuffer;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Matrix4f;
@@ -24,14 +23,15 @@ public class VBOBatcher {
 
 	public static class VBODrawCommand {
 
-		private final VertexBuffer vbo;
+		private final int vbo;
+		private final int vertexCount;
 		private final VertexFormat format;
 		private final Matrix4f matrix;
 		private final ResourceLocation texLocation;
-		private float red;
-		private float green;
-		private float blue;
-		private float alpha;
+		private float red = 1.0F;
+		private float green = 1.0F;
+		private float blue = 1.0F;
+		private float alpha = 1.0F;
 		private float textureOffsetX;
 		private float textureOffsetY;
 		private float overlayOffsetX;
@@ -39,8 +39,9 @@ public class VBOBatcher {
 		private float lightOffsetX;
 		private float lightOffsetY;
 
-		public VBODrawCommand(VertexBuffer vbo, VertexFormat format, Matrix4f matrix, ResourceLocation texLocation) {
+		public VBODrawCommand(int vbo, int vertexCount, VertexFormat format, Matrix4f matrix, ResourceLocation texLocation) {
 			this.vbo = vbo;
+			this.vertexCount = vertexCount;
 			this.format = format;
 			this.matrix = matrix;
 			this.texLocation = texLocation;
@@ -59,7 +60,7 @@ public class VBOBatcher {
 		}
 
 		public VBODrawCommand setTextureOffset(Vector2f textureOffset) {
-			return setTextureOffset(textureOffset.x, textureOffset.y);
+			return setTextureOffset(textureOffset.x * 0.01F, -textureOffset.y * 0.01F);
 		}
 
 		public VBODrawCommand setTextureOffset(float textureOffsetX, float textureOffsetY) {
@@ -88,11 +89,10 @@ public class VBOBatcher {
 			return this;
 		}
 
-		@SuppressWarnings("deprecation")
 		public void draw() {
 			Minecraft.getInstance().getTextureManager().bind(texLocation);
 
-			RenderSystem.color4f(red, green, blue, alpha);
+			RenderSystem.color4f(correctedColor(red), correctedColor(green), correctedColor(blue), correctedColor(alpha));
 			if (textureOffsetX != 0.0F || textureOffsetY != 0.0F) {
 				RenderSystem.matrixMode(GL21.GL_TEXTURE);
 				RenderSystem.pushMatrix();
@@ -102,11 +102,16 @@ public class VBOBatcher {
 			RenderSystem.glMultiTexCoord2f(GL21.GL_TEXTURE1, overlayOffsetX, overlayOffsetY);
 			RenderSystem.glMultiTexCoord2f(GL21.GL_TEXTURE2, lightOffsetX, lightOffsetY);
 
-			vbo.bind();
+			RenderSystem.pushMatrix();
+			RenderSystem.multMatrix(matrix);
+			RenderSystem.glBindBuffer(GL21.GL_ARRAY_BUFFER, () -> vbo);
 			format.setupBufferState(0);
-			vbo.draw(matrix, GL21.GL_TRIANGLES);
+
+			RenderSystem.drawArrays(GL21.GL_TRIANGLES, 0, vertexCount);
+
 			format.clearBufferState();
-			VertexBuffer.unbind();
+			RenderSystem.glBindBuffer(GL21.GL_ARRAY_BUFFER, () -> 0);
+			RenderSystem.popMatrix();
 
 			if (textureOffsetX != 0.0F || textureOffsetY != 0.0F) {
 				RenderSystem.matrixMode(GL21.GL_TEXTURE);
@@ -115,21 +120,29 @@ public class VBOBatcher {
 			}
 		}
 
+		private static float correctedColor(float f) {
+			return ((int) (f * 255.0F) & 0xFF) / 255.0F;
+		}
+
 	}
 
 	private static final VBOBatcher INSTANCE = new VBOBatcher();
-	private final Map<RenderType, List<VBODrawCommand>> batchedDrawCommands = new HashMap<>();
+	private final Map<RenderType, List<VBODrawCommand>> batchedDrawCommands = new LinkedHashMap<>();
 
 	public static VBOBatcher getInstance() {
 		return INSTANCE;
 	}
 
 	public void queue(RenderType renderType, VBODrawCommand drawCommand) {
-		batchedDrawCommands.computeIfAbsent(renderType, k -> new ArrayList<>()).add(drawCommand);
+		batchedDrawCommands.computeIfAbsent(renderType, k -> new LinkedList<>()).add(drawCommand);
 	}
 
 	public void endBatches() {
 		batchedDrawCommands.forEach((renderType, drawCommands) -> {
+			if (drawCommands.isEmpty()) {
+				return;
+			}
+
 			renderType.setupRenderState();
 			RenderSystem.enableTexture();
 
@@ -140,6 +153,8 @@ public class VBOBatcher {
 			renderType.clearRenderState();
 			drawCommands.clear();
 		});
+
+		batchedDrawCommands.clear();
 	}
 
 }

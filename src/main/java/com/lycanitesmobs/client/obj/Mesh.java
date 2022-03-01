@@ -6,7 +6,6 @@ import com.lycanitesmobs.client.renderer.CustomRenderStates;
 
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.VertexBuffer;
 import net.minecraft.util.math.vector.Vector3f;
 
 public class Mesh {
@@ -14,10 +13,10 @@ public class Mesh {
 	public int[] indices;
 	public Vertex[] vertices;
 	public Vector3f[] normals;
-	private VertexBuffer vbo;
+	private int vbo = -1;
 
-	public VertexBuffer getVbo() {
-		if (this.vbo == null) {
+	public int getVbo() {
+		if (this.vbo == -1) {
 			if (this.normals == null) {
 				this.normals = new Vector3f[this.indices.length];
 				for (int i = 0; i < this.normals.length / 3; i++) {
@@ -40,14 +39,15 @@ public class Mesh {
 				Vector3f normal = this.normals[i];
 				bufferBuilder.vertex(vertex.getPos().x(), vertex.getPos().y(), vertex.getPos().z());
 				bufferBuilder.uv(vertex.getTexCoords().x, 1.0F - vertex.getTexCoords().y);
-				bufferBuilder.uv2(0, 0);
 				bufferBuilder.normal(normal.x(), normal.y(), normal.z());
 				bufferBuilder.endVertex();
 			}
 			bufferBuilder.end();
 
-			this.vbo = new VertexBuffer(CustomRenderStates.POS_TEX_NORMAL);
-			this.vbo.upload(bufferBuilder);
+			this.vbo = GL21.glGenBuffers();
+			GL21.glBindBuffer(GL21.GL_ARRAY_BUFFER, vbo);
+			GL21.glBufferData(GL21.GL_ARRAY_BUFFER, bufferBuilder.popNextBuffer().getSecond(), GL21.GL_STATIC_DRAW);
+			GL21.glBindBuffer(GL21.GL_ARRAY_BUFFER, 0);
 		}
 
 		return this.vbo;
@@ -70,8 +70,10 @@ public class Mesh {
 	}
 
 	public void delete() {
-		this.vbo.close();
-		this.vbo = null;
+		if (vbo != -1) {
+			GL21.glDeleteBuffers(vbo);
+			vbo = -1;
+		}
 	}
 
 }

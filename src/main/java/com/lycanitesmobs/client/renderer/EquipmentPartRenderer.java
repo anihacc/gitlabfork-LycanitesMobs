@@ -83,14 +83,17 @@ public class EquipmentPartRenderer extends ItemStackTileEntityRenderer implement
 	 */
 	protected void renderModel(ItemObjModel model, ItemStack itemStack, Hand hand, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, LayerItem layer, AnimationPart offsetObjPart, float loop, int brightness) {
 		ResourceLocation texture = model.getTexture(itemStack, layer);
-		RenderType renderType = CustomRenderStates.getObjRenderType(texture, model.getBlending(itemStack, layer), model.getGlow(itemStack, layer));
+		RenderType renderType = CustomRenderStates.getObjVBORenderType(model.getBlending(itemStack, layer), model.getGlow(itemStack, layer));
 //		if(layer instanceof LayerItemDye) {
 //			renderType = CustomRenderStates.getObjColorOnlyRenderType(texture, model.getBlending(itemStack, layer), model.getGlow(itemStack, layer));
 //		}
+
 		VBOObjModel.renderType = renderType;
+		VBOObjModel.renderNormal = true;
 		VBOObjModel.tex = texture;
-		model.render(itemStack, hand, matrixStack, renderTypeBuffer.getBuffer(renderType), this, offsetObjPart, layer, loop, brightness);
+		model.render(itemStack, hand, matrixStack, null, this, offsetObjPart, layer, loop, brightness);
 		VBOObjModel.tex = null;
+		VBOObjModel.renderNormal = false;
 		VBOObjModel.renderType = null;
 	}
 

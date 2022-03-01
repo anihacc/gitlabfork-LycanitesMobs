@@ -125,23 +125,21 @@ public class ProjectileModelRenderer extends EntityRenderer<BaseProjectileEntity
 	 */
 	protected void renderModel(BaseProjectileEntity entity, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, LayerProjectileBase layer, float time, float distance, float loop, float lookY, float lookX, float scale, int brightness, boolean invisible, boolean allyInvisible) {
 		ResourceLocation texture = this.getEntityTexture(entity, layer);
-		if(texture == null) {
-			return;
+
+		// Render Model
+		// TODO allyInvisible lower color alpha
+		if (!invisible || allyInvisible) {
+			VBOObjModel.renderType = CustomRenderStates.getObjVBORenderType(this.getModel().getBlending(entity, layer), this.getModel().getGlow(entity, layer));
+			VBOObjModel.renderNormal = true;
 		}
-		RenderType rendertype;
-		if (allyInvisible) {
-			rendertype = RenderType.entityTranslucent(texture);
+		if (entity.isGlowing()) {
+			VBOObjModel.renderOutline = true;
 		}
-		else if (invisible) {
-			rendertype = RenderType.outline(texture);
-		}
-		else {
-			rendertype = CustomRenderStates.getObjRenderType(texture, this.getModel().getBlending(entity, layer), this.getModel().getGlow(entity, layer));
-		}
-		VBOObjModel.renderType = rendertype;
 		VBOObjModel.tex = texture;
-		this.getModel().render(entity, matrixStack, renderTypeBuffer.getBuffer(rendertype), layer, time, distance, loop, lookY, lookX, 1, brightness);
+		this.getModel().render(entity, matrixStack, null, layer, time, distance, loop, lookY, lookX, 1, brightness);
 		VBOObjModel.tex = null;
+		VBOObjModel.renderOutline = false;
+		VBOObjModel.renderNormal = false;
 		VBOObjModel.renderType = null;
 	}
 
