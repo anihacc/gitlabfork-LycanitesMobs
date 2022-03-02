@@ -5,6 +5,7 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.ModelManager;
 import com.lycanitesmobs.client.model.ProjectileModel;
 import com.lycanitesmobs.client.model.ProjectileObjModel;
+import com.lycanitesmobs.client.obj.VBOObjModel;
 import com.lycanitesmobs.client.renderer.layer.LayerProjectileBase;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
@@ -97,6 +98,8 @@ public class ProjectileModelRenderer extends EntityRenderer<BaseProjectileEntity
 					this.renderModel(entity, matrixStack, renderTypeBuffer, layerCreatureBase, time, distance, loop, lookYaw, lookPitch, scale, brightness, invisible, allyInvisible);
 				}
 				this.getModel().clearAnimationFrames();
+
+				VBOBatcher.getInstance().endBatches();
 			}
 		}
 		catch (Exception exception) {
@@ -122,20 +125,22 @@ public class ProjectileModelRenderer extends EntityRenderer<BaseProjectileEntity
 	 */
 	protected void renderModel(BaseProjectileEntity entity, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, LayerProjectileBase layer, float time, float distance, float loop, float lookY, float lookX, float scale, int brightness, boolean invisible, boolean allyInvisible) {
 		ResourceLocation texture = this.getEntityTexture(entity, layer);
-		if(texture == null) {
-			return;
+
+		// Render Model
+		// TODO allyInvisible lower color alpha
+		if (!invisible || allyInvisible) {
+			VBOObjModel.renderType = CustomRenderStates.getObjVBORenderType(this.getModel().getBlending(entity, layer), this.getModel().getGlow(entity, layer));
+			VBOObjModel.renderNormal = true;
 		}
-		RenderType rendertype;
-		if (allyInvisible) {
-			rendertype = RenderType.entityTranslucent(texture);
+		if (entity.isGlowing()) {
+			VBOObjModel.renderOutline = true;
 		}
-		else if (invisible) {
-			rendertype = RenderType.outline(texture);
-		}
-		else {
-			rendertype = CustomRenderStates.getObjRenderType(texture, this.getModel().getBlending(entity, layer), this.getModel().getGlow(entity, layer));
-		}
-		this.getModel().render(entity, matrixStack, renderTypeBuffer.getBuffer(rendertype), layer, time, distance, loop, lookY, lookX, 1, brightness);
+		VBOObjModel.tex = texture;
+		this.getModel().render(entity, matrixStack, null, layer, time, distance, loop, lookY, lookX, 1, brightness);
+		VBOObjModel.tex = null;
+		VBOObjModel.renderOutline = false;
+		VBOObjModel.renderNormal = false;
+		VBOObjModel.renderType = null;
 	}
 
 	@Override

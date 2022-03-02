@@ -4,6 +4,7 @@ import com.google.gson.*;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.obj.ObjModel;
 import com.lycanitesmobs.client.obj.ObjPart;
+import com.lycanitesmobs.client.obj.VBOObjModel;
 import com.lycanitesmobs.client.renderer.ProjectileModelRenderer;
 import com.lycanitesmobs.client.renderer.layer.LayerProjectileBase;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
@@ -82,7 +83,7 @@ public class ProjectileObjModel extends ProjectileModel {
 		}
 
         // Load Obj Model:
-        this.wavefrontObject = new ObjModel(new ResourceLocation(modInfo.modid, "models/" + path + ".obj"));
+        this.wavefrontObject = new VBOObjModel(new ResourceLocation(modInfo.modid, "models/" + path + ".obj"));
         this.objParts = this.wavefrontObject.objParts;
         if(this.objParts.isEmpty())
             LycanitesMobs.logWarning("", "Unable to load any parts for the " + name + " model!");

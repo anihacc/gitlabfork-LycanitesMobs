@@ -9,14 +9,22 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.client.renderer.vertex.VertexFormatElement;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.vector.Vector4f;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CustomRenderStates extends RenderState {
+	public static final Vector4f WHITE = new Vector4f(1.0F, 1.0F, 1.0F, 1.0F);
+
 	public static VertexFormat POS_COL_TEX_LIGHT_FADE_NORMAL;
 	public static VertexFormat POS_COL_TEX_NORMAL;
+	public static final VertexFormat POS_TEX_NORMAL = new VertexFormat(ImmutableList.of(
+			DefaultVertexFormats.ELEMENT_POSITION,
+			DefaultVertexFormats.ELEMENT_UV0,
+			DefaultVertexFormats.ELEMENT_NORMAL,
+			DefaultVertexFormats.ELEMENT_PADDING));
 
 	public enum BLEND {
 		NORMAL(0), ADD(1), SUB(2);
@@ -41,8 +49,36 @@ public class CustomRenderStates extends RenderState {
 		RenderSystem.defaultBlendFunc();
 	});
 
+	private static final RenderType[] OBJ_RENDER_TYPES = new RenderType[BLEND.values().length * 2];
+	static {
+		for (BLEND blend : BLEND.values()) {
+			for (int glow = 0; glow < 2; glow++) {
+				OBJ_RENDER_TYPES[blend.id * 2 + glow] = RenderType.create("lm_obj_" + blend.toString() + (glow == 1 ? "_glow" : ""), POS_TEX_NORMAL, GL11.GL_TRIANGLES, 256, true, false, RenderType.State.builder()
+						.setTransparencyState(blend == BLEND.ADD ? ADDITIVE_TRANSPARENCY : (blend == BLEND.SUB ? SUBTRACTIVE_TRANSPARENCY : TRANSLUCENT_TRANSPARENCY))
+						.setDiffuseLightingState(glow == 1 ? NO_DIFFUSE_LIGHTING : DIFFUSE_LIGHTING)
+						.setAlphaState(DEFAULT_ALPHA)
+						.setCullState(NO_CULL)
+						.setLightmapState(LIGHTMAP)
+						.setOverlayState(OVERLAY)
+						.createCompositeState(false));
+			}
+		}
+	}
+	public static final RenderType OBJ_OUTLINE_RENDER_TYPE = RenderType.create("lm_obj_outline_no_cull", POS_TEX_NORMAL, GL11.GL_TRIANGLES, 256, true, false, RenderType.State.builder()
+			.setAlphaState(DEFAULT_ALPHA)
+			.setDepthTestState(NO_DEPTH_TEST)
+			.setCullState(NO_CULL)
+			.setFogState(NO_FOG)
+			.setOutputState(OUTLINE_TARGET)
+			.setTexturingState(OUTLINE_TEXTURING)
+			.createCompositeState(false));
+
 	public CustomRenderStates(String p_i225973_1_, Runnable p_i225973_2_, Runnable p_i225973_3_) {
 		super(p_i225973_1_, p_i225973_2_, p_i225973_3_);
+	}
+
+	public static RenderType getObjVBORenderType(int blending, boolean glow) {
+		return OBJ_RENDER_TYPES[(blending << 1) | (glow ? 1 : 0)];
 	}
 
 	public static RenderType getObjRenderType(ResourceLocation texture, int blending, boolean glow) {

@@ -3,6 +3,7 @@ package com.lycanitesmobs.client.renderer;
 import com.lycanitesmobs.client.ModelManager;
 import com.lycanitesmobs.client.model.AnimationPart;
 import com.lycanitesmobs.client.model.ItemObjModel;
+import com.lycanitesmobs.client.obj.VBOObjModel;
 import com.lycanitesmobs.client.renderer.layer.LayerItem;
 import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
 import com.mojang.blaze3d.matrix.MatrixStack;
@@ -65,6 +66,8 @@ public class EquipmentPartRenderer extends ItemStackTileEntityRenderer implement
 		//this.renderModel(itemObjModel, itemStack, hand, matrixStack, renderTypeBuffer, new LayerItemDye(this, "dye"),null, loop, brightness);
 		itemObjModel.clearAnimationFrames();
 		matrixStack.popPose();
+
+		VBOBatcher.getInstance().endBatches();
 	}
 
 	/**
@@ -80,11 +83,18 @@ public class EquipmentPartRenderer extends ItemStackTileEntityRenderer implement
 	 */
 	protected void renderModel(ItemObjModel model, ItemStack itemStack, Hand hand, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, LayerItem layer, AnimationPart offsetObjPart, float loop, int brightness) {
 		ResourceLocation texture = model.getTexture(itemStack, layer);
-		RenderType renderType = CustomRenderStates.getObjRenderType(texture, model.getBlending(itemStack, layer), model.getGlow(itemStack, layer));
+		RenderType renderType = CustomRenderStates.getObjVBORenderType(model.getBlending(itemStack, layer), model.getGlow(itemStack, layer));
 //		if(layer instanceof LayerItemDye) {
 //			renderType = CustomRenderStates.getObjColorOnlyRenderType(texture, model.getBlending(itemStack, layer), model.getGlow(itemStack, layer));
 //		}
-		model.render(itemStack, hand, matrixStack, renderTypeBuffer.getBuffer(renderType), this, offsetObjPart, layer, loop, brightness);
+
+		VBOObjModel.renderType = renderType;
+		VBOObjModel.renderNormal = true;
+		VBOObjModel.tex = texture;
+		model.render(itemStack, hand, matrixStack, null, this, offsetObjPart, layer, loop, brightness);
+		VBOObjModel.tex = null;
+		VBOObjModel.renderNormal = false;
+		VBOObjModel.renderType = null;
 	}
 
 	@Override
