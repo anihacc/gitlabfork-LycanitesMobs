@@ -96,7 +96,7 @@ public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, CreatureMo
 		}
 
 		// Animation Ticks:
-		float loop = this.getBob(entity, partialTicks % 1.0F) * 0.25F;
+		float loop = this.getBob(entity, partialTicks % 1.0F);
 		this.setupRotations(entity, matrixStack, loop, renderYaw, yaw);
 		matrixStack.scale(-1.0F, -1.0F, 1.0F);
 		this.scale(entity, matrixStack, yaw);
@@ -268,7 +268,7 @@ public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, CreatureMo
 	 */
 	@Override
 	protected float getBob(BaseCreatureEntity creatureEntity, float particalTicks) {
-		creatureEntity.renderTick++;
-		return creatureEntity.renderTick + particalTicks;
+		creatureEntity.renderTick += Minecraft.getInstance().getDeltaFrameTime();
+		return creatureEntity.renderTick;
 	}
 }

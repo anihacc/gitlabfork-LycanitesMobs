@@ -164,7 +164,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     protected int growingAge;
 
 	/** A client side tick count that increases each render tick, used for smooth animation loops per entity. **/
-	public int renderTick = 0;
+	public float renderTick = 0;
 
 	// Boss Health:
 	public static int BOSS_DAMAGE_LIMIT = 50;
