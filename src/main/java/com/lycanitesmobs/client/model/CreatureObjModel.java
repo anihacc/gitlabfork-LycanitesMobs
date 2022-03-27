@@ -4,6 +4,7 @@ import com.google.gson.*;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.obj.ObjModel;
 import com.lycanitesmobs.client.obj.ObjPart;
+import com.lycanitesmobs.client.obj.VBOObjModel;
 import com.lycanitesmobs.client.renderer.CreatureRenderer;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
@@ -113,7 +114,7 @@ public class CreatureObjModel extends CreatureModel {
 		}
 
         // Load Obj Model:
-        this.objModel = new ObjModel(new ResourceLocation(modInfo.modid, "models/" + path + ".obj"));
+        this.objModel = new VBOObjModel(new ResourceLocation(modInfo.modid, "models/" + path + ".obj"));
         this.objParts = this.objModel.objParts;
         if(this.objParts.isEmpty())
 			LycanitesMobs.logWarning("", "Unable to load model obj for: " + name + "");

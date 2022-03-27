@@ -3,6 +3,7 @@ package com.lycanitesmobs.client.model;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.obj.ObjModel;
 import com.lycanitesmobs.client.obj.ObjPart;
+import com.lycanitesmobs.client.obj.VBOObjModel;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.info.CreatureInfo;
@@ -83,7 +84,7 @@ public class CreatureObjModelOld extends CreatureModel {
 			return this;
 		}
 
-		this.objModel = new ObjModel(new ResourceLocation(modInfo.modid, "models/" + path + ".obj"));
+		this.objModel = new VBOObjModel(new ResourceLocation(modInfo.modid, "models/" + path + ".obj"));
         this.wavefrontParts = this.objModel.objParts;
         if(this.wavefrontParts.isEmpty())
 			LycanitesMobs.logWarning("", "Unable to load (old format) model obj for: " + name + "");

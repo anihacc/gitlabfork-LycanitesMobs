@@ -2,13 +2,13 @@ package com.lycanitesmobs.client.renderer;
 
 import com.lycanitesmobs.client.ModelManager;
 import com.lycanitesmobs.client.model.CreatureModel;
+import com.lycanitesmobs.client.obj.VBOObjModel;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
@@ -141,6 +141,8 @@ public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, CreatureMo
 		this.getMainModel().clearAnimationFrames();
 		matrixStack.popPose();
 
+		VBOBatcher.getInstance().endBatches();
+
 		// Render Name Tag
 		if (!invisible) {
 			net.minecraftforge.client.event.RenderNameplateEvent renderNameplateEvent = new net.minecraftforge.client.event.RenderNameplateEvent(entity, entity.getDisplayName(), this, matrixStack, renderTypeBuffer, fade, time);
@@ -173,22 +175,22 @@ public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, CreatureMo
 	 */
 	protected void renderModel(BaseCreatureEntity entity, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, LayerCreatureBase layer, float time, float distance, float loop, float lookY, float lookX, float scale, int brightness, int fade, boolean invisible, boolean allyInvisible) {
 		ResourceLocation texture = this.getEntityTexture(entity, layer);
-		RenderType rendertype;
-		if (invisible && !allyInvisible) {
-			if (entity.isGlowing()) {
-				rendertype = CustomRenderStates.getObjOutlineRenderType(texture);
-			}
-			else {
-				return;
-			}
-		}
-		else {
-			rendertype = CustomRenderStates.getObjRenderType(texture, this.getMainModel().getBlending(entity, layer), this.getMainModel().getGlow(entity, layer));
-		}
 
 		// Render Model
 		// TODO allyInvisible lower color alpha
-		this.getMainModel().render(entity, matrixStack, renderTypeBuffer.getBuffer(rendertype), layer, time, distance, loop, lookY, lookX, 1, brightness, fade);
+		if (!invisible || allyInvisible) {
+			VBOObjModel.renderType = CustomRenderStates.getObjVBORenderType(this.getMainModel().getBlending(entity, layer), this.getMainModel().getGlow(entity, layer));
+			VBOObjModel.renderNormal = true;
+		}
+		if (entity.isGlowing()) {
+			VBOObjModel.renderOutline = true;
+		}
+		VBOObjModel.tex = texture;
+		this.getMainModel().render(entity, matrixStack, null, layer, time, distance, loop, lookY, lookX, 1, brightness, fade);
+		VBOObjModel.tex = null;
+		VBOObjModel.renderOutline = false;
+		VBOObjModel.renderNormal = false;
+		VBOObjModel.renderType = null;
     }
 
 	/**
