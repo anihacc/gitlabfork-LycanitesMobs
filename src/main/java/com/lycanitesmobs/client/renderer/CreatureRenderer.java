@@ -96,7 +96,7 @@ public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, CreatureMo
 		}
 
 		// Animation Ticks:
-		float loop = this.getBob(entity, partialTicks % 1.0F); // partialTicks is increased when turning for some reason
+		float loop = this.getBob(entity, partialTicks % 1.0F) * 0.25F;
 		this.setupRotations(entity, matrixStack, loop, renderYaw, yaw);
 		matrixStack.scale(-1.0F, -1.0F, 1.0F);
 		this.scale(entity, matrixStack, yaw);
@@ -258,5 +258,17 @@ public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, CreatureMo
 		}
 
 		return par1 + par3 * f3;
+	}
+
+	/**
+	 * Overidden for smoother animations based on the new Schism renderers.
+	 * @param creatureEntity The creature entity to get ticks for.
+	 * @param particalTicks The tick delta per render frame.
+	 * @return An incremental render tick for animation loops, should only be called once per render frame.
+	 */
+	@Override
+	protected float getBob(BaseCreatureEntity creatureEntity, float particalTicks) {
+		creatureEntity.renderTick++;
+		return creatureEntity.renderTick + particalTicks;
 	}
 }

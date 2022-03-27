@@ -163,6 +163,9 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     /** The gorwing age of this mob. **/
     protected int growingAge;
 
+	/** A client side tick count that increases each render tick, used for smooth animation loops per entity. **/
+	public int renderTick = 0;
+
 	// Boss Health:
 	public static int BOSS_DAMAGE_LIMIT = 50;
 	/** How much damage this creature has taken over the latest second. **/
