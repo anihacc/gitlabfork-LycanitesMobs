@@ -12,6 +12,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 
@@ -189,9 +190,9 @@ public abstract class AgeableCreatureEntity extends BaseCreatureEntity {
   	// ==================================================
     // ========== Get Interact Commands ==========
     @Override
-    public HashMap<Integer, String> getInteractCommands(EntityPlayer player, ItemStack itemStack) {
+    public HashMap<Integer, String> getInteractCommands(EntityPlayer player, EnumHand hand, ItemStack itemStack) {
     	HashMap<Integer, String> commands = new HashMap<Integer, String>();
-    	commands.putAll(super.getInteractCommands(player, itemStack));
+    	commands.putAll(super.getInteractCommands(player, hand, itemStack));
     	
     	// Item Commands:
     	if(itemStack != null) {
@@ -210,7 +211,7 @@ public abstract class AgeableCreatureEntity extends BaseCreatureEntity {
     
     // ========== Perform Command ==========
     @Override
-    public boolean performCommand(String command, EntityPlayer player, ItemStack itemStack) {
+    public boolean performCommand(String command, EntityPlayer player, EnumHand hand, ItemStack itemStack) {
     	
     	// Spawn Baby:
     	if(command.equals("Spawn Baby") && !this.getEntityWorld().isRemote) {
@@ -227,7 +228,7 @@ public abstract class AgeableCreatureEntity extends BaseCreatureEntity {
 						if (itemStack.hasDisplayName()) {
 							baby.setCustomNameTag(itemStack.getDisplayName());
 						}
-						this.consumePlayersItem(player, itemStack);
+						this.consumePlayersItem(player, hand, itemStack);
 					}
 				}
 			}
@@ -237,12 +238,12 @@ public abstract class AgeableCreatureEntity extends BaseCreatureEntity {
     	// Breed:
     	if(command.equals("Breed")) {
     		if(this.breed()) {
-				this.consumePlayersItem(player, itemStack);
+				this.consumePlayersItem(player, hand, itemStack);
 				return true;
 			}
     	}
 
-		return super.performCommand(command, player, itemStack);
+		return super.performCommand(command, player, hand, itemStack);
     }
 	
 	

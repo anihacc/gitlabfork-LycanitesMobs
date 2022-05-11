@@ -14,6 +14,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 
@@ -129,9 +130,9 @@ public class EntityVolcan extends TameableCreatureEntity implements IMob {
 
 	// ========== Get Interact Commands ==========
 	@Override
-	public HashMap<Integer, String> getInteractCommands(EntityPlayer player, ItemStack itemStack) {
+	public HashMap<Integer, String> getInteractCommands(EntityPlayer player, EnumHand hand, ItemStack itemStack) {
 		HashMap<Integer, String> commands = new HashMap<>();
-		commands.putAll(super.getInteractCommands(player, itemStack));
+		commands.putAll(super.getInteractCommands(player, hand, itemStack));
 
 		if(itemStack != null) {
 			// Water:
@@ -144,15 +145,15 @@ public class EntityVolcan extends TameableCreatureEntity implements IMob {
 
 	// ========== Perform Command ==========
 	@Override
-	public boolean performCommand(String command, EntityPlayer player, ItemStack itemStack) {
+	public boolean performCommand(String command, EntityPlayer player, EnumHand hand, ItemStack itemStack) {
 
 		// Water:
 		if(command.equals("Water")) {
-			this.replacePlayersItem(player, itemStack, new ItemStack(Items.LAVA_BUCKET));
+			this.replacePlayersItem(player, hand, itemStack, new ItemStack(Items.LAVA_BUCKET));
 			return true;
 		}
 
-		return super.performCommand(command, player, itemStack);
+		return super.performCommand(command, player, hand, itemStack);
 	}
     
     

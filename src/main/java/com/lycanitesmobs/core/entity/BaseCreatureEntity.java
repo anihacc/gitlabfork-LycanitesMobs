@@ -4456,14 +4456,14 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 		if(this.hasPerchTarget()) {
 			return false;
 		}
-	    if(this.assessInteractCommand(getInteractCommands(player, player.getHeldItem(hand)), player, player.getHeldItem(hand)))
+	    if(this.assessInteractCommand(getInteractCommands(player, hand, player.getHeldItem(hand)), player, hand, player.getHeldItem(hand)))
 	    	return true;
 	    return super.processInteract(player, hand);
     }
 
     // ========== Assess Interact Command ==========
     /** Performs the best possible command and returns true or false if there isn't one. **/
-    public boolean assessInteractCommand(HashMap<Integer, String> commands, EntityPlayer player, ItemStack itemStack) {
+    public boolean assessInteractCommand(HashMap<Integer, String> commands, EntityPlayer player, EnumHand hand, ItemStack itemStack) {
     	if(commands.isEmpty())
     		return false;
     	int priority = 100;
@@ -4472,13 +4472,13 @@ public abstract class BaseCreatureEntity extends EntityLiving {
     			priority = testPriority;
     	if(!commands.containsKey(priority))
     		return false;
-    	performCommand(commands.get(priority), player, itemStack);
+    	performCommand(commands.get(priority), player, hand, itemStack);
     	return true;
     }
     
     // ========== Get Interact Commands ==========
     /** Gets a map of all possible interact events with the key being the priority, lower is better. **/
-    public HashMap<Integer, String> getInteractCommands(EntityPlayer player, ItemStack itemStack) {
+    public HashMap<Integer, String> getInteractCommands(EntityPlayer player, EnumHand hand, ItemStack itemStack) {
     	HashMap<Integer, String> commands = new HashMap<>();
     	
     	// Item Commands:
@@ -4506,12 +4506,12 @@ public abstract class BaseCreatureEntity extends EntityLiving {
     
     // ========== Perform Command ==========
     /** Performs the given interact command. Could be used outside of the interact method if needed. **/
-    public boolean performCommand(String command, EntityPlayer player, ItemStack itemStack) {
+    public boolean performCommand(String command, EntityPlayer player, EnumHand hand, ItemStack itemStack) {
     	
     	// Leash:
     	if("Leash".equals(command)) {
     		this.setLeashHolder(player, true);
-    		this.consumePlayersItem(player, itemStack);
+    		this.consumePlayersItem(player, hand, itemStack);
 			return true;
     	}
     	
@@ -4523,7 +4523,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
     		int colorID = 15 - itemStack.getItemDamage();
             if(colorID != this.getColor()) {
                 this.setColor(colorID);
-        		this.consumePlayersItem(player, itemStack);
+        		this.consumePlayersItem(player, hand, itemStack);
 				return true;
             }
     	}
@@ -4554,33 +4554,31 @@ public abstract class BaseCreatureEntity extends EntityLiving {
     
     // ========== Consume Player's Item ==========
     /** Consumes 1 item from the the item stack currently held by the specified player. **/
-    public void consumePlayersItem(EntityPlayer player, ItemStack itemStack) {
-    	consumePlayersItem(player, itemStack, 1);
+    public void consumePlayersItem(EntityPlayer player, EnumHand hand, ItemStack itemStack) {
+        consumePlayersItem(player, hand, itemStack, 1);
     }
     /** Consumes the specified amount from the item stack currently held by the specified player. **/
-    public void consumePlayersItem(EntityPlayer player, ItemStack itemStack, int amount) {
-    	if(!player.capabilities.isCreativeMode)
-            itemStack.setCount(Math.max(0, itemStack.getCount() - amount));
-        if(itemStack.getCount() <= 0)
-        	player.inventory.setInventorySlotContents(player.inventory.currentItem, ItemStack.EMPTY);
+    public void consumePlayersItem(EntityPlayer player, EnumHand hand, ItemStack itemStack, int amount) {
+        if(!player.capabilities.isCreativeMode)
+            itemStack.shrink(amount);
     }
 
     // ========== Replace Player's Item ==========
     /** Replaces 1 of the specified itemstack with a new itemstack. **/
-    public void replacePlayersItem(EntityPlayer player, ItemStack itemStack, ItemStack newStack) {
-    	replacePlayersItem(player, itemStack, 1, newStack);
+    public void replacePlayersItem(EntityPlayer player, EnumHand hand, ItemStack itemStack, ItemStack newStack) {
+        replacePlayersItem(player, hand, itemStack, 1, newStack);
     }
     /** Replaces the specified itemstack and amount with a new itemstack. **/
-    public void replacePlayersItem(EntityPlayer player, ItemStack itemStack, int amount, ItemStack newStack) {
-    	if(!player.capabilities.isCreativeMode)
-            itemStack.setCount(Math.max(0, itemStack.getCount() - amount));
-    	
-        if(itemStack.getCount() <= 0)
-    		 player.inventory.setInventorySlotContents(player.inventory.currentItem, newStack);
-         
-    	 else if(!player.inventory.addItemStackToInventory(newStack))
-        	 player.dropItem(newStack, false);
-    	
+    public void replacePlayersItem(EntityPlayer player, EnumHand hand, ItemStack itemStack, int amount, ItemStack newStack) {
+        if(!player.capabilities.isCreativeMode)
+            itemStack.shrink(amount);
+
+        if(itemStack.isEmpty())
+            player.setHeldItem(hand, newStack);
+
+        else if(!player.addItemStackToInventory(newStack))
+            player.dropItem(newStack, false);
+
     }
     
     // ========== Perform GUI Command ==========

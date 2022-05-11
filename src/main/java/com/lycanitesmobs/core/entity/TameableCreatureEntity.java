@@ -32,6 +32,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.text.TextComponentString;
@@ -285,9 +286,9 @@ public class TameableCreatureEntity extends AgeableCreatureEntity implements IEn
     // ==================================================
     // ========== Get Interact Commands ==========
     @Override
-    public HashMap<Integer, String> getInteractCommands(EntityPlayer player, ItemStack itemStack) {
+    public HashMap<Integer, String> getInteractCommands(EntityPlayer player, EnumHand hand, ItemStack itemStack) {
     	HashMap<Integer, String> commands = new HashMap<>();
-    	commands.putAll(super.getInteractCommands(player, itemStack));
+    	commands.putAll(super.getInteractCommands(player, hand, itemStack));
 
 		// Perch:
 		if(this.canPerch(player) && !player.isSneaking() && !this.getEntityWorld().isRemote)
@@ -340,7 +341,7 @@ public class TameableCreatureEntity extends AgeableCreatureEntity implements IEn
     
     // ========== Perform Command ==========
     @Override
-    public boolean performCommand(String command, EntityPlayer player, ItemStack itemStack) {
+    public boolean performCommand(String command, EntityPlayer player, EnumHand hand, ItemStack itemStack) {
     	
     	// Open GUI:
     	if(command.equals("GUI")) {
@@ -352,7 +353,7 @@ public class TameableCreatureEntity extends AgeableCreatureEntity implements IEn
     	// Tame:
     	if(command.equals("Tame")) {
     		this.tame(player);
-    		this.consumePlayersItem(player, itemStack);
+    		this.consumePlayersItem(player, hand, itemStack);
 			return true;
     	}
     	
@@ -373,14 +374,14 @@ public class TameableCreatureEntity extends AgeableCreatureEntity implements IEn
                 for(int i = 0; i < 25; i++)
                 	this.getEntityWorld().spawnParticle(particle, this.posX + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, this.posY + 0.5D + (double)(this.rand.nextFloat() * this.height), this.posZ + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, d0, d1, d2);
             }
-    		this.consumePlayersItem(player, itemStack);
+    		this.consumePlayersItem(player, hand, itemStack);
 			return true;
     	}
 
 		// Charge Experience:
 		if(command.equals("Charge")) {
 			this.addExperience(this.getExperienceFromChargeItem(itemStack));
-			this.consumePlayersItem(player, itemStack);
+			this.consumePlayersItem(player, hand, itemStack);
 			return true;
 		}
     	
@@ -392,7 +393,7 @@ public class TameableCreatureEntity extends AgeableCreatureEntity implements IEn
     		ItemStack equipStack = itemStack.copy();
     		equipStack.setCount(1);
     		this.inventory.setEquipmentStack(equipStack.copy());
-    		this.consumePlayersItem(player, itemStack);
+    		this.consumePlayersItem(player, hand, itemStack);
 			return true;
     	}
 
@@ -418,7 +419,7 @@ public class TameableCreatureEntity extends AgeableCreatureEntity implements IEn
 			return true;
 		}
     	
-    	return super.performCommand(command, player, itemStack);
+    	return super.performCommand(command, player, hand, itemStack);
     }
     
     // ========== Can Name Tag ==========

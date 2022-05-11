@@ -15,6 +15,7 @@ import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -128,9 +129,9 @@ public class EntityBobeko extends AgeableCreatureEntity {
   	// ==================================================
     // ========== Get Interact Commands ==========
     @Override
-    public HashMap<Integer, String> getInteractCommands(EntityPlayer player, ItemStack itemStack) {
+    public HashMap<Integer, String> getInteractCommands(EntityPlayer player, EnumHand hand, ItemStack itemStack) {
     	HashMap<Integer, String> commands = new HashMap<>();
-    	commands.putAll(super.getInteractCommands(player, itemStack));
+    	commands.putAll(super.getInteractCommands(player, hand, itemStack));
     	
     	if(itemStack != null) {
     		// Milk:
@@ -143,14 +144,14 @@ public class EntityBobeko extends AgeableCreatureEntity {
     
     // ========== Perform Command ==========
     @Override
-    public boolean performCommand(String command, EntityPlayer player, ItemStack itemStack) {
+    public boolean performCommand(String command, EntityPlayer player, EnumHand hand, ItemStack itemStack) {
     	
     	// Milk:
     	if(command.equals("Milk")) {
-    		this.replacePlayersItem(player, itemStack, new ItemStack(Items.MILK_BUCKET));
+    		this.replacePlayersItem(player, hand, itemStack, new ItemStack(Items.MILK_BUCKET));
     		return true;
     	}
     	
-    	return super.performCommand(command, player, itemStack);
+    	return super.performCommand(command, player, hand, itemStack);
     }
 }

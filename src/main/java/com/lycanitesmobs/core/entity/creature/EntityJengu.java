@@ -10,6 +10,7 @@ import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -125,9 +126,9 @@ public class EntityJengu extends TameableCreatureEntity implements IMob, IFusabl
     // ==================================================
     // ========== Get Interact Commands ==========
     @Override
-    public HashMap<Integer, String> getInteractCommands(EntityPlayer player, ItemStack itemStack) {
+    public HashMap<Integer, String> getInteractCommands(EntityPlayer player, EnumHand hand, ItemStack itemStack) {
         HashMap<Integer, String> commands = new HashMap<>();
-        commands.putAll(super.getInteractCommands(player, itemStack));
+        commands.putAll(super.getInteractCommands(player, hand, itemStack));
 
         if(itemStack != null) {
             // Water:
@@ -140,15 +141,15 @@ public class EntityJengu extends TameableCreatureEntity implements IMob, IFusabl
 
     // ========== Perform Command ==========
     @Override
-    public boolean performCommand(String command, EntityPlayer player, ItemStack itemStack) {
+    public boolean performCommand(String command, EntityPlayer player, EnumHand hand, ItemStack itemStack) {
 
         // Water:
         if(command.equals("Water")) {
-            this.replacePlayersItem(player, itemStack, new ItemStack(Items.WATER_BUCKET));
+            this.replacePlayersItem(player, hand, itemStack, new ItemStack(Items.WATER_BUCKET));
             return true;
         }
 
-        return super.performCommand(command, player, itemStack);
+        return super.performCommand(command, player, hand, itemStack);
     }
 
 
