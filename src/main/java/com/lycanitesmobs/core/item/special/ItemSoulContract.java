@@ -113,7 +113,6 @@ public class ItemSoulContract extends ItemBase {
 			nbt.setUniqueId("ownerUUID", player.getUniqueID());
 			nbt.setUniqueId("petEntryUUID", tameableCreatureEntity.getPetEntry().petEntryID);
 			itemStack.setTagCompound(nbt);
-			player.inventory.setInventorySlotContents(player.inventory.currentItem, itemStack);
 			player.sendMessage(new TextComponentString(LanguageManager.translate("message.soul_contract.bound")));
 		}
 
@@ -139,7 +138,6 @@ public class ItemSoulContract extends ItemBase {
 					nbt.removeTag("ownerUUID");
 					nbt.removeTag("petEntryUUID");
 					itemStack.setTagCompound(nbt);
-					player.inventory.setInventorySlotContents(player.inventory.currentItem, itemStack);
 					player.sendMessage(new TextComponentString(LanguageManager.translate("message.soul_contract.unbound")));
 				}
 				return true;
