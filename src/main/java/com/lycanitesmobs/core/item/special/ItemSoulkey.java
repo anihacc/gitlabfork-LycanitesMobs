@@ -79,9 +79,7 @@ public class ItemSoulkey extends ItemBase {
                         return EnumActionResult.FAIL;
                     }
                     if (!player.capabilities.isCreativeMode)
-                        itemStack.setCount(Math.max(0, itemStack.getCount() - 1));
-                    if (itemStack.getCount() <= 0)
-                        player.inventory.setInventorySlotContents(player.inventory.currentItem, ItemStack.EMPTY);
+                        itemStack.shrink(1);
                     String message = LanguageManager.translate("message.soulkey.active");
                     player.sendMessage(new TextComponentString(message));
                 }
