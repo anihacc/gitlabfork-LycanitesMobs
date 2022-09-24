@@ -37,12 +37,10 @@ public class Mesh {
 			for (int i = 0; i < this.indices.length; i++) {
 				Vertex vertex = this.vertices[this.indices[i]];
 				Vector3f normal = this.normals[i];
-				if (normal != null) {
-					bufferBuilder.vertex(vertex.getPos().x(), vertex.getPos().y(), vertex.getPos().z());
-					bufferBuilder.uv(vertex.getTexCoords().x, 1.0F - vertex.getTexCoords().y);
-					bufferBuilder.normal(normal.x(), normal.y(), normal.z());
-					bufferBuilder.endVertex();
-				}
+				bufferBuilder.vertex(vertex.getPos().x(), vertex.getPos().y(), vertex.getPos().z());
+				bufferBuilder.uv(vertex.getTexCoords().x, 1.0F - vertex.getTexCoords().y);
+				bufferBuilder.normal(normal.x(), normal.y(), normal.z());
+				bufferBuilder.endVertex();
 			}
 			bufferBuilder.end();
 

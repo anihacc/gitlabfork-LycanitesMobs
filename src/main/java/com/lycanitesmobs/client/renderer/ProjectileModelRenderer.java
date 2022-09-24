@@ -125,6 +125,9 @@ public class ProjectileModelRenderer extends EntityRenderer<BaseProjectileEntity
 	 */
 	protected void renderModel(BaseProjectileEntity entity, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, LayerProjectileBase layer, float time, float distance, float loop, float lookY, float lookX, float scale, int brightness, boolean invisible, boolean allyInvisible) {
 		ResourceLocation texture = this.getEntityTexture(entity, layer);
+		if (texture == null) {
+			return;
+		}
 
 		// Render Model
 		// TODO allyInvisible lower color alpha
