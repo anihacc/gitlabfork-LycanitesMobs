@@ -14,6 +14,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.resources.ResourceLocation;
@@ -30,15 +31,15 @@ public class ProjectileModelRenderer extends EntityRenderer<BaseProjectileEntity
 	protected final List<RenderLayer<BaseProjectileEntity, ProjectileModel>> renderLayers = Lists.newArrayList(); // TODO Layers for projectiles.
 
 
-	public ProjectileModelRenderer(EntityRenderDispatcher renderManager, ProjectileInfo projectileInfo) {
-		super(renderManager);
+	public ProjectileModelRenderer(EntityRendererProvider.Context context, ProjectileInfo projectileInfo) {
+		super(context);
 		this.renderModel = ModelManager.getInstance().getProjectileModel(projectileInfo);
 		this.defaultModel = this.renderModel;
 		this.renderModel.addCustomLayers(this);
 	}
 
-    public ProjectileModelRenderer(EntityRenderDispatcher renderManager, String projectileName) {
-    	super(renderManager);
+    public ProjectileModelRenderer(EntityRendererProvider.Context context, String projectileName) {
+    	super(context);
 		ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile(projectileName);
 		if(projectileInfo != null) {
 			this.renderModel = ModelManager.getInstance().getProjectileModel(projectileInfo);
@@ -69,7 +70,7 @@ public class ProjectileModelRenderer extends EntityRenderer<BaseProjectileEntity
 		try {
 			matrixStack.translate(0, -0.25F, 0); // translate
 			matrixStack.scale(0.25F, 0.25F, 0.25F); // scale
-			matrixStack.mulPose(new Vector3f(0.0F, 1.0F, 0.0F).rotationDegrees(entity.yRot)); // rotate
+			matrixStack.mulPose(new Vector3f(0.0F, 1.0F, 0.0F).rotationDegrees(entity.getYRot())); // rotate
 
 			if(this.getModel() == null) {
 				LycanitesMobs.logWarning("", "Missing Projectile Model: " + entity);

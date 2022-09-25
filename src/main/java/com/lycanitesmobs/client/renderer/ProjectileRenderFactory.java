@@ -6,9 +6,11 @@ import com.lycanitesmobs.core.entity.CustomProjectileEntity;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 
-public class ProjectileRenderFactory<T extends BaseProjectileEntity> implements IRenderFactory {
+public class ProjectileRenderFactory implements EntityRendererProvider<BaseProjectileEntity>
+{
 	protected ProjectileInfo projectileInfo;
 
     protected String oldProjectileName;
@@ -27,11 +29,11 @@ public class ProjectileRenderFactory<T extends BaseProjectileEntity> implements 
 	}
 
     @Override
-    public EntityRenderer<? super T> createRenderFor(EntityRenderDispatcher manager) {
+    public EntityRenderer<BaseProjectileEntity> create(Context context) {
 		// Old Projectile Obj Models:
 		if(this.oldModel) {
 			try {
-				return new ProjectileModelRenderer(manager, this.oldProjectileName);
+				return new ProjectileModelRenderer(context, this.oldProjectileName);
 			}
 			catch(Exception e) {
 				LycanitesMobs.logWarning("", "An exception occurred when creating an old projectile renderer:");
@@ -41,20 +43,20 @@ public class ProjectileRenderFactory<T extends BaseProjectileEntity> implements 
 
 		// Old Projectile Item Sprite Models:
 		if(this.oldProjectileClass != null) {
-			return new ProjectileSpriteRenderer(manager, this.oldProjectileClass);
+			return new ProjectileSpriteRenderer(context, this.oldProjectileClass);
 		}
 
 		// New JSON Projectile:
 		if(this.projectileInfo != null && this.projectileInfo.modelClassName != null) {
 			try {
-				return new ProjectileModelRenderer(manager, this.projectileInfo);
+				return new ProjectileModelRenderer(context, this.projectileInfo);
 			}
 			catch(Exception e) {
 				LycanitesMobs.logWarning("", "An exception occurred when creating a projectile renderer:");
 				e.printStackTrace();
 			}
 		}
-		return new ProjectileSpriteRenderer(manager, CustomProjectileEntity.class);
+		return new ProjectileSpriteRenderer(context, CustomProjectileEntity.class);
     }
 
 }

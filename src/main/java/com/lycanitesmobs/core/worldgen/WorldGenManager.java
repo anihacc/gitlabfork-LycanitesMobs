@@ -46,12 +46,12 @@ public class WorldGenManager {
 			SpringConfiguration springConfig = new SpringConfiguration(fluidBlock.getFluid().defaultFluidState(), true, 4, 1, ImmutableSet.of(Blocks.STONE, Blocks.GRANITE, Blocks.DIORITE, Blocks.ANDESITE));
 
 			if (fluidBlock.defaultBlockState().getMaterial() == Material.WATER) {
-				lakeFeature = Feature.LAKE.configured(new BlockStateConfiguration(fluidBlock.defaultBlockState())).decorated(FeatureDecorator.WATER_LAKE.configured(new ChanceDecoratorConfiguration(40)));
-				springFeature = Feature.SPRING.configured(springConfig).decorated(FeatureDecorator.RANGE_BIASED.configured(new RangeDecoratorConfiguration(8, 8, 256))).squared().count(20);
+				lakeFeature = Feature.LAKE.configured(new BlockStateConfiguration(fluidBlock.defaultBlockState())).decorated(FeatureDecorator.LAVA_LAKE.configured(new ChanceDecoratorConfiguration(40)));
+				springFeature = Feature.SPRING.configured(springConfig).decorated(FeatureDecorator.RANGE.configured(new RangeDecoratorConfiguration(8, 8, 256))).squared().count(20);
 			}
 			else {
 				lakeFeature = Feature.LAKE.configured(new BlockStateConfiguration(fluidBlock.defaultBlockState())).decorated(FeatureDecorator.LAVA_LAKE.configured(new ChanceDecoratorConfiguration(40)));
-				springFeature = Feature.SPRING.configured(springConfig).decorated(FeatureDecorator.RANGE_VERY_BIASED.configured(new RangeDecoratorConfiguration(8, 16, 256))).squared().count(20);
+				springFeature = Feature.SPRING.configured(springConfig).decorated(FeatureDecorator.RANGE.configured(new RangeDecoratorConfiguration(8, 16, 256))).squared().count(20);
 			}
 
 			fluidConfiguredFeatures.put(fluidName + "_lake", lakeFeature);
