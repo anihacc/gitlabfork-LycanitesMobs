@@ -27,6 +27,10 @@ public class ProjectileBehaviourRandomEffect extends ProjectileBehaviour {
 	public void loadFromJSON(JsonObject json) {
 		if(json.has("effects"))
 			this.effects = JSONHelper.getJsonStrings(json.get("effects").getAsJsonArray());
+		if(json.has("effectDuration"))
+			this.duration = json.get("effectDuration").getAsInt();
+		if(json.has("effectAmplifier"))
+			this.amplifier = json.get("effectAmplifier").getAsInt();
 	}
 
 	@Override
