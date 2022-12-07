@@ -9,6 +9,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -137,9 +138,9 @@ public class EntityXaphan extends TameableCreatureEntity implements IMob {
     // ==================================================
     // ========== Get Interact Commands ==========
     @Override
-    public HashMap<Integer, String> getInteractCommands(EntityPlayer player, ItemStack itemStack) {
+    public HashMap<Integer, String> getInteractCommands(EntityPlayer player, EnumHand hand, ItemStack itemStack) {
         HashMap<Integer, String> commands = new HashMap<>();
-        commands.putAll(super.getInteractCommands(player, itemStack));
+        commands.putAll(super.getInteractCommands(player, hand, itemStack));
 
         if(itemStack != null) {
             // Water:

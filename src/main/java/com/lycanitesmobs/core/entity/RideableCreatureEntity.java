@@ -15,6 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -402,9 +403,9 @@ public class RideableCreatureEntity extends TameableCreatureEntity {
   	// ==================================================
     // ========== Get Interact Commands ==========
     @Override
-    public HashMap<Integer, String> getInteractCommands(EntityPlayer player, ItemStack itemStack) {
+    public HashMap<Integer, String> getInteractCommands(EntityPlayer player, EnumHand hand, ItemStack itemStack) {
     	HashMap<Integer, String> commands = new HashMap<Integer, String>();
-    	commands.putAll(super.getInteractCommands(player, itemStack));
+    	commands.putAll(super.getInteractCommands(player, hand, itemStack));
     	
     	// Mount:
         boolean mountingAllowed = CreatureManager.getInstance().config.mountingEnabled;
@@ -418,7 +419,7 @@ public class RideableCreatureEntity extends TameableCreatureEntity {
     
     // ========== Perform Command ==========
     @Override
-    public boolean performCommand(String command, EntityPlayer player, ItemStack itemStack) {
+    public boolean performCommand(String command, EntityPlayer player, EnumHand hand, ItemStack itemStack) {
     	
     	// Mount:
     	if(command.equals("Mount")) {
@@ -429,7 +430,7 @@ public class RideableCreatureEntity extends TameableCreatureEntity {
             return true;
     	}
     	
-    	return super.performCommand(command, player, itemStack);
+    	return super.performCommand(command, player, hand, itemStack);
     }
     
     
