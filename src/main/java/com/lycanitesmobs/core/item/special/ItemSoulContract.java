@@ -135,8 +135,12 @@ public class ItemSoulContract extends ItemBase {
 			if (petEntryUUID.equals(tameableCreatureEntity.getPetEntry().petEntryID)) {
 				if (!player.getEntityWorld().isRemote) {
 					NBTTagCompound nbt = this.getTagCompound(itemStack);
-					nbt.removeTag("ownerUUID");
-					nbt.removeTag("petEntryUUID");
+					//nbt.removeTag("ownerUUID");//Tags set as setUniqueId can not be directly removed, as they are actually <tag>Most and <tag>Least
+					//nbt.removeTag("petEntryUUID");
+					nbt.removeTag("ownerUUIDMost");
+					nbt.removeTag("ownerUUIDLeast");
+					nbt.removeTag("petEntryUUIDMost");
+					nbt.removeTag("petEntryUUIDLeast");
 					itemStack.setTagCompound(nbt);
 					player.sendMessage(new TextComponentString(LanguageManager.translate("message.soul_contract.unbound")));
 				}
@@ -182,7 +186,7 @@ public class ItemSoulContract extends ItemBase {
 			player.sendMessage(new TextComponentString(LanguageManager.translate("message.soul_contract.transferred")));
 		}
 		tameableCreatureEntity.setPlayerOwner(player);
-		player.inventory.setInventorySlotContents(player.inventory.currentItem, ItemStack.EMPTY);
+		itemStack.shrink(1);
 
 		return true;
 	}

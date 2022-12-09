@@ -14,6 +14,7 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -34,6 +35,8 @@ public class BlockFireBase extends BlockBase {
     public static final PropertyBool WEST = PropertyBool.create("west");
     public static final PropertyBool UPPER = PropertyBool.create("up");
 
+    //Same as MAGIC, but allows for compatibility with cold-resistance affecting mods
+    public static final DamageSource COLD_FIRE = (new DamageSource("cold_fire")).setDamageBypassesArmor().setMagicDamage();
     public boolean dieInRain = true;
     public boolean triggerTNT = true;
     public boolean tickRandomly = true;

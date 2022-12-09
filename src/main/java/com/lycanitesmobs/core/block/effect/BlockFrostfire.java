@@ -136,7 +136,7 @@ public class BlockFrostfire extends BlockFireBase {
             entityLiving.addPotionEffect(effectSlowness);
         }
 
-        entity.attackEntityFrom(DamageSource.MAGIC, 2);
+        entity.attackEntityFrom(BlockFireBase.COLD_FIRE, 2);
     }
 
 
