@@ -279,8 +279,6 @@ public class BlockBase extends Block {
 
     @Override
     public Boolean isEntityInsideMaterial(IBlockAccess world, BlockPos blockpos, IBlockState blockState, Entity entity, double yToTest, Material materialIn, boolean testingHead) {
-        if(this.noEntityCollision && world instanceof World)
-            this.onEntityCollidedWithBlock((World)world, blockpos, blockState, entity);
         return super.isEntityInsideMaterial(world, blockpos, blockState, entity, yToTest, materialIn, testingHead);
     }
 
