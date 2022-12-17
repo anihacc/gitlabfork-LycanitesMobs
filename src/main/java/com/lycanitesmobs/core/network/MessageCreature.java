@@ -32,6 +32,7 @@ public class MessageCreature implements IMessage, IMessageHandler<MessageCreatur
 	public IMessage onMessage(MessageCreature message, MessageContext ctx) {
 		if(ctx.side != Side.CLIENT) return null;
 		EntityPlayer player = LycanitesMobs.proxy.getClientPlayer();
+		if(player == null) return null;
 		World world = player.getEntityWorld();
 		Entity entity = world.getEntityByID(message.entityID);
 		if (!(entity instanceof BaseCreatureEntity)) {
