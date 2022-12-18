@@ -3,6 +3,10 @@ package com.lycanitesmobs.core.entity.goals.targeting;
 import com.google.common.base.Predicate;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.creature.EntityBanshee;
+import com.lycanitesmobs.core.entity.creature.EntityGrue;
+import com.lycanitesmobs.core.entity.creature.EntityKrake;
+import com.lycanitesmobs.core.entity.creature.EntityReaper;
 import com.lycanitesmobs.core.entity.goals.TargetSorterNearest;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -49,7 +53,7 @@ public abstract class TargetingGoal extends EntityAIBase {
             if(entity == null) {
                 return false;
             }
-            if(entity.getDistance(TargetingGoal.this.host) > TargetingGoal.this.getTargetDistance()) {
+            if(entity.getDistance(TargetingGoal.this.host) > TargetingGoal.this.getTargetDistance() * (entity.isSneaking() ? 0.800000011920929D : 1.0D)) {
                 return false;
             }
             if(!TargetingGoal.this.isEntityTargetable(entity, false)) {
@@ -57,6 +61,21 @@ public abstract class TargetingGoal extends EntityAIBase {
             }
             if(this.shouldCheckSight() && !entity.isGlowing() && !this.host.canEntityBeSeen(entity)) {
                 return false;
+            }
+            //TODO: Expand into config defined attribute for eyesight
+            if(this.shouldCheckSight() && !entity.isGlowing() && entity.isInvisible() &&
+                    !(this.host instanceof EntityKrake) &&
+                    !(this.host instanceof EntityGrue) &&
+                    !(this.host instanceof EntityBanshee) &&
+                    !(this.host instanceof EntityReaper)) {
+                if(!(entity instanceof EntityPlayer)) return false;
+                double d0 = TargetingGoal.this.getTargetDistance();
+                if(entity.isSneaking()) d0 *= 0.800000011920929D;
+                float f = ((EntityPlayer)entity).getArmorVisibility();
+                if(f < 0.1F) f = 0.1F;
+                d0 *= (double)(0.7F * f);
+
+                if(entity.getDistance(TargetingGoal.this.host) > d0) return false;
             }
             return true;
         };
