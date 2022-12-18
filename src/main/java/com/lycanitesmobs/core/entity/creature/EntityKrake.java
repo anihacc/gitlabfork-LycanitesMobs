@@ -26,6 +26,7 @@ public class EntityKrake extends AgeableCreatureEntity implements IMob {
         this.spawnsOnLand = true;
         this.spawnsInWater = true;
         this.hasAttackSound = true;
+        this.trueSight = true;
 
         this.babySpawnChance = 0.1D;
         this.canGrow = true;

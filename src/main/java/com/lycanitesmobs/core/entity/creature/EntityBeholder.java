@@ -35,6 +35,7 @@ public class EntityBeholder extends RideableCreatureEntity {
         // Setup:
         this.attribute = EnumCreatureAttribute.UNDEFINED;
         this.hasAttackSound = false;
+        this.trueSight = true;
         
         this.setAttackCooldownMax(20);
 		this.solidCollision = true;

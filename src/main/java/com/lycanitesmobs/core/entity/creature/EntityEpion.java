@@ -32,6 +32,7 @@ public class EntityEpion extends RideableCreatureEntity implements IMob {
         this.attribute = EnumCreatureAttribute.UNDEAD;
         this.hasAttackSound = false;
         this.flySoundSpeed = 20;
+		this.trueSight = true;
         
         this.setupMob();
 

@@ -44,6 +44,7 @@ public class EntityAmalgalich extends BaseCreatureEntity implements IMob, IGroup
         this.hasAttackSound = true;
         this.setAttackCooldownMax(30);
         this.hasJumpSound = false;
+        this.trueSight = true;
         this.entityCollisionReduction = 1.0F;
         this.setupMob();
         this.hitAreaWidthScale = 2F;

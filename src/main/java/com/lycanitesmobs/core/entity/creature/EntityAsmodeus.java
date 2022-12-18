@@ -95,6 +95,7 @@ public class EntityAsmodeus extends BaseCreatureEntity implements IMob, IGroupHe
         this.setAttackCooldownMax(30);
         this.hasJumpSound = true;
         this.solidCollision = true;
+        this.trueSight = true;
         this.entityCollisionReduction = 1.0F;
         this.setupMob();
         this.hitAreaWidthScale = 2F;

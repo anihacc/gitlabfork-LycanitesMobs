@@ -33,6 +33,7 @@ public class EntitySerpix extends TameableCreatureEntity implements IGroupHeavy 
         this.spawnsOnLand = true;
         this.spawnsInWater = true;
         this.hasAttackSound = false;
+        this.trueSight = true;
         this.babySpawnChance = 0.25D;
         this.growthTime = -120000;
         this.setupMob();

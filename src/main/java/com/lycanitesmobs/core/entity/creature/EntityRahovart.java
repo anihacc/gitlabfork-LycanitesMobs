@@ -76,6 +76,7 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
         this.hasAttackSound = false;
         this.setAttackCooldownMax(40);
         this.solidCollision = true;
+        this.trueSight = true;
         this.entityCollisionReduction = 1.0F;
         this.setupMob();
         this.hitAreaWidthScale = 2F;

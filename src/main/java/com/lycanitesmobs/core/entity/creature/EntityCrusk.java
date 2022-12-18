@@ -25,6 +25,7 @@ public class EntityCrusk extends TameableCreatureEntity implements IGroupHeavy {
         this.hasAttackSound = true;
         this.babySpawnChance = 0.25D;
         this.growthTime = -120000;
+        this.trueSight = true;
         this.setupMob();
         this.hitAreaWidthScale = 1.5F;
     }

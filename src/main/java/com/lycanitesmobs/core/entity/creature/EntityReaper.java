@@ -26,6 +26,7 @@ public class EntityReaper extends TameableCreatureEntity implements IMob {
         // Setup:
         this.attribute = EnumCreatureAttribute.UNDEAD;
         this.hasAttackSound = false;
+        this.trueSight = true;
         this.setupMob();
         
         // No Block Collision:

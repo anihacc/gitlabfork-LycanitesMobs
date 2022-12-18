@@ -31,6 +31,7 @@ public class EntityJoust extends AgeableCreatureEntity {
         this.babySpawnChance = 0.1D;
         this.canGrow = true;
         this.attackCooldownMax = 10;
+        this.trueSight = true;
         this.setupMob();
     }
 

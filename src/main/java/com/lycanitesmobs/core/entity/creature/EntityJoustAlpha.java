@@ -28,6 +28,7 @@ public class EntityJoustAlpha extends AgeableCreatureEntity {
         this.attribute = EnumCreatureAttribute.UNDEFINED;
         this.hasAttackSound = true;
         this.attackCooldownMax = 10;
+		this.trueSight = true;
         this.setupMob();
     }
 

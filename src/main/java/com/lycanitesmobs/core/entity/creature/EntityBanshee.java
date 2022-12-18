@@ -23,6 +23,7 @@ public class EntityBanshee extends TameableCreatureEntity implements IMob {
         this.attribute = EnumCreatureAttribute.UNDEFINED;
         this.hasAttackSound = true;
         this.spawnsInWater = true;
+        this.trueSight = true;
         this.setupMob();
 
 		// No Block Collision:

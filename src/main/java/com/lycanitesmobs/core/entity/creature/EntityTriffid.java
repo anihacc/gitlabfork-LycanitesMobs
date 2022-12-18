@@ -27,6 +27,7 @@ public class EntityTriffid extends TameableCreatureEntity implements IMob {
         this.spawnsUnderground = false;
         this.hasAttackSound = true;
         this.spreadFire = true;
+        this.trueSight = true;
 
         this.canGrow = true;
         this.babySpawnChance = 0.1D;

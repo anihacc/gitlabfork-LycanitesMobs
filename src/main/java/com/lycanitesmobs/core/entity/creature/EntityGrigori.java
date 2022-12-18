@@ -21,6 +21,7 @@ public class EntityGrigori extends TameableCreatureEntity implements IMob {
         // Setup:
 		this.attribute = EnumCreatureAttribute.UNDEFINED;
         this.hasAttackSound = true;
+        this.trueSight = true;
         this.setupMob();
 
         this.stepHeight = 1.0F;

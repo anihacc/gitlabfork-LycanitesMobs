@@ -24,6 +24,7 @@ public class EntityLurker extends TameableCreatureEntity {
         // Setup:
         this.attribute = EnumCreatureAttribute.ARTHROPOD;
         this.hasAttackSound = true;
+        this.trueSight = true;
         this.setupMob();
     }
 

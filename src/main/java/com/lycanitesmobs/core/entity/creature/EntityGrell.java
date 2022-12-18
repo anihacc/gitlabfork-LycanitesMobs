@@ -28,6 +28,7 @@ public class EntityGrell extends RideableCreatureEntity {
         // Setup:
         this.attribute = EnumCreatureAttribute.UNDEAD;
         this.hasAttackSound = false;
+        this.trueSight = true;
 
         this.setupMob();
 

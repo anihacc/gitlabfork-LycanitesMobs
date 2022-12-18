@@ -188,6 +188,8 @@ public abstract class BaseCreatureEntity extends EntityLiving {
     public EntityLivingBase pickupEntity;
     /** If true, this entity will have a solid collision box allowing other entities to stand on top of it as well as blocking player movement based on mass more effectively. **/
     public boolean solidCollision = false;
+	/** If true, this entity can see through invisiblity and sneaking **/
+	public boolean trueSight = false;
 
 
 	// Positions:
