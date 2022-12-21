@@ -3558,7 +3558,7 @@
     },
     "projectile.arcanelaser": {
         "category": "ambient",
-        "sounds": [{"name": "lycanitesmobs:projectile/arcanelaser", "stream": true}]
+        "sounds": [{"name": "lycanitesmobs:projectile/arcanelaser", "stream": false, "volume": 0.25}]
     },
     "projectile.quill": {
         "category": "ambient",
