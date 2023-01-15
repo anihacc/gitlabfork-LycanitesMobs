@@ -46,6 +46,7 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerAboutToStartEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -258,6 +259,16 @@ public class LycanitesMobs {
 			}
 		}*/
     }
+
+	@Mod.EventHandler
+	public void serverLoad(FMLServerAboutToStartEvent event) {
+		// Reload creatures, spawners, mob events and dungeons because
+		// items/blocks/biomes from other mods might not be registered earlier
+		CreatureManager.getInstance().reload();
+		SpawnerManager.getInstance().reload();
+		MobEventManager.getInstance().reload();
+		DungeonManager.getInstance().reload();
+	}
 
 
 	/**
