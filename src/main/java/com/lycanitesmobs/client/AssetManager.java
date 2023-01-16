@@ -19,9 +19,11 @@ import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.client.model.IModel;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.registries.ForgeRegistry;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
@@ -58,6 +60,9 @@ public class AssetManager {
 	
 	// ========== Sound ==========
 	public static void addSound(String name, ModInfo modInfo, String path) {
+		if (((ForgeRegistry<SoundEvent>) ForgeRegistries.SOUND_EVENTS).isLocked()) {
+			return;
+		}
 		name = name.toLowerCase();
         ResourceLocation resourceLocation = new ResourceLocation(modInfo.modid, path);
         SoundEvent soundEvent = new SoundEvent(resourceLocation);
