@@ -509,10 +509,10 @@ public class ExtendedWorld extends WorldSavedData {
 	public void readFromNBT(NBTTagCompound nbtTagCompound) {
 		// Events:
 		if(nbtTagCompound.hasKey("WorldEventStartTargetTime"))  {
-			this.worldEventStartTargetTime = nbtTagCompound.getInteger("WorldEventStartTargetTime");
+			this.worldEventStartTargetTime = nbtTagCompound.getLong("WorldEventStartTargetTime");
 		}
         if(nbtTagCompound.hasKey("WorldEventLastStartedTime"))  {
-            this.worldEventLastStartedTime = nbtTagCompound.getInteger("WorldEventLastStartedTime");
+            this.worldEventLastStartedTime = nbtTagCompound.getLong("WorldEventLastStartedTime");
         }
 		if(nbtTagCompound.hasKey("WorldEventName"))  {
 			this.worldEventName = nbtTagCompound.getString("WorldEventName");
