@@ -47,6 +47,8 @@ public class DungeonTheme {
 	/** A list of dangerous blocks to to fill pits with. Required. **/
 	public List<ThemeBlock> pitBlocks = new ArrayList<>();
 
+	public List<ThemeBlock> airBlocks = new ArrayList<>();
+
 
     /** Loads this Dungeon Theme from the provided JSON data. **/
 	public void loadFromJSON(JsonObject json) {
@@ -123,6 +125,18 @@ public class DungeonTheme {
 				themeBlock.loadFromJSON(jsonElement.getAsJsonObject());
 				this.pitBlocks.add(themeBlock);
 			}
+		}
+
+		if (json.has("airBlocks")) {
+			for (JsonElement jsonElement : json.get("airBlocks").getAsJsonArray()) {
+				ThemeBlock themeBlock = new ThemeBlock();
+				themeBlock.loadFromJSON(jsonElement.getAsJsonObject());
+				this.airBlocks.add(themeBlock);
+			}
+		} else {
+			ThemeBlock themeBlock = new ThemeBlock();
+			themeBlock.block = Blocks.AIR;
+			this.airBlocks.add(themeBlock);
 		}
 	}
 
@@ -201,6 +215,11 @@ public class DungeonTheme {
 	 */
 	public IBlockState getPit(char patternChar, Random random) {
 		return this.getBlockState(null, patternChar, random, this.pitBlocks);
+	}
+
+
+	public IBlockState getAir(char patternChar, Random random) {
+		return this.getBlockState(null, patternChar, random, this.airBlocks);
 	}
 
 

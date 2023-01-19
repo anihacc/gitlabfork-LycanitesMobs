@@ -69,6 +69,8 @@ public class SectorInstance {
 	/** The random pit block for this sector instance to use. **/
 	public IBlockState pitBlock;
 
+	public IBlockState airBlock;
+
 	/** How many chunks this sector has been built into. When this equals the total chunks this sector occupies it is considered fully built. **/
 	public int chunksBuilt = 0;
 
@@ -130,6 +132,7 @@ public class SectorInstance {
 		this.torchBlock = this.theme.getTorch('B', random);
 		this.stairBlock = this.theme.getStairs('B', random);
 		this.pitBlock = this.theme.getPit('B', random);
+		this.airBlock = this.theme.getAir('B', random);
 
 		// Create Child Connectors:
 		BlockPos boundsMin = this.getRoomBoundsMin();
@@ -692,7 +695,7 @@ public class SectorInstance {
 		for(int x = startX; x <= stopX; x++) {
 			for(int y = startY; y <= stopY; y++) {
 				for(int z = startZ; z <= stopZ; z++) {
-					this.placeBlock(world, chunkPos, new BlockPos(x, y, z), Blocks.AIR.getDefaultState(), EnumFacing.SOUTH, random);
+					this.placeBlock(world, chunkPos, new BlockPos(x, y, z), this.airBlock, EnumFacing.SOUTH, random);
 				}
 			}
 		}
