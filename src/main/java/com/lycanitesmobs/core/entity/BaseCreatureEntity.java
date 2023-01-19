@@ -838,6 +838,15 @@ public abstract class BaseCreatureEntity extends EntityLiving {
         return this.creatureInfo.creatureSpawn.spawnGroupMax;
     }
 
+	@Override
+	public boolean isNotColliding() {
+		if (this.spawnsInWater) {
+			return this.world.checkNoEntityCollision(this.getEntityBoundingBox(), this)
+					&& this.world.getCollisionBoxes(this, this.getEntityBoundingBox()).isEmpty();
+		}
+		return super.isNotColliding();
+	}
+
 	// ========== Vanilla Spawn Check ==========
     /** Performs checks when spawned by a vanilla spawner or possibly another modded spawner if they use the vanilla checks. **/
     public boolean checkSpawnVanilla(World world, BlockPos pos) {
