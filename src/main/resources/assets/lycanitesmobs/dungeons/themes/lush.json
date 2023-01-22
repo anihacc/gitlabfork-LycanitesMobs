@@ -52,6 +52,12 @@
 			"weight": 8
 		}
 	],
+	"airBlocks": [
+		{
+			"blockId": "minecraft:air",
+			"weight": 8
+		}
+	],
 	"torchBlocks": [],
 	"stairBlocks": [
 		{
