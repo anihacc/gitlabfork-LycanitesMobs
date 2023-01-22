@@ -1,36 +1,44 @@
 {
   "result": {
     "item": "lycanitesmobs:streamstone",
-    "count": 9
+    "count": 8
   },
   "ingredients": [
     {
-      "item": "minecraft:lapis",
-      "data": 1
+      "item": "minecraft:stone",
+      "data": 0
     },
     {
-      "item": "minecraft:cobblestone"
+      "item": "minecraft:stone",
+      "data": 0
     },
     {
-      "item": "minecraft:cobblestone"
+      "item": "minecraft:stone",
+      "data": 0
     },
     {
-      "item": "minecraft:cobblestone"
+      "item": "minecraft:stone",
+      "data": 0
     },
     {
-      "item": "minecraft:cobblestone"
+      "item": "minecraft:dye",
+      "data": 4
     },
     {
-      "item": "minecraft:cobblestone"
+      "item": "minecraft:stone",
+      "data": 0
     },
     {
-      "item": "minecraft:cobblestone"
+      "item": "minecraft:stone",
+      "data": 0
     },
     {
-      "item": "minecraft:cobblestone"
+      "item": "minecraft:stone",
+      "data": 0
     },
     {
-      "item": "minecraft:cobblestone"
+      "item": "minecraft:stone",
+      "data": 0
     }
   ],
   "type": "forge:ore_shapeless"
