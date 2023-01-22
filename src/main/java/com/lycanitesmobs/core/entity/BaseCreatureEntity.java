@@ -3439,6 +3439,8 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 					this.world.setEntityState(targetPlayer, (byte)30);
 				}
 			}
+
+			this.applyEnchantments(this, target);
         }
         
         return attackSuccess;
