@@ -716,7 +716,6 @@ public class SectorInstance {
 		int startX = Math.min(startPos.getX(), stopPos.getX());
 		int stopX = Math.max(startPos.getX(), stopPos.getX());
 		int startY = Math.min(startPos.getY(), stopPos.getY());
-		int stopY = Math.max(startPos.getY(), stopPos.getY());
 		int startZ = Math.min(startPos.getZ(), stopPos.getZ());
 		int stopZ = Math.max(startPos.getZ(), stopPos.getZ());
 
@@ -812,7 +811,6 @@ public class SectorInstance {
 		BlockPos stopPos = this.getRoomBoundsMax();
 		int startX = Math.min(startPos.getX(), stopPos.getX());
 		int stopX = Math.max(startPos.getX(), stopPos.getX());
-		int startY = Math.min(startPos.getY(), stopPos.getY());
 		int stopY = Math.max(startPos.getY(), stopPos.getY());
 		int startZ = Math.min(startPos.getZ(), stopPos.getZ());
 		int stopZ = Math.max(startPos.getZ(), stopPos.getZ());
