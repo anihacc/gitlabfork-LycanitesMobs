@@ -692,10 +692,11 @@ public class SectorInstance {
 			startY = Math.max(1, startPos.getY() - (this.getRoomSize().getY() * 2));
 		}
 
+		final BlockPos.MutableBlockPos buildPos = new BlockPos.MutableBlockPos();
 		for(int x = startX; x <= stopX; x++) {
 			for(int y = startY; y <= stopY; y++) {
 				for(int z = startZ; z <= stopZ; z++) {
-					this.placeBlock(world, chunkPos, new BlockPos(x, y, z), this.airBlock, EnumFacing.SOUTH, random);
+					this.placeBlock(world, chunkPos, buildPos.setPos(x, y, z), this.airBlock, EnumFacing.SOUTH, random);
 				}
 			}
 		}
@@ -719,6 +720,7 @@ public class SectorInstance {
 		int startZ = Math.min(startPos.getZ(), stopPos.getZ());
 		int stopZ = Math.max(startPos.getZ(), stopPos.getZ());
 
+		final BlockPos.MutableBlockPos buildPos = new BlockPos.MutableBlockPos();
 		for(int layerIndex : this.dungeonSector.floor.layers.keySet()) {
 			int y = startY + layerIndex;
 			if(y <= 0 || y >= world.getHeight()) {
@@ -729,7 +731,7 @@ public class SectorInstance {
 				List<Character> row = layer.getRow(x - startX, stopX - startX);
 				for(int z = startZ; z <= stopZ; z++) {
 					char buildChar = layer.getColumn(x - startX, stopX - startX, z - startZ, stopZ - startZ, row);
-					BlockPos buildPos = new BlockPos(x, y, z);
+					buildPos.setPos(x, y, z);
 					IBlockState blockState = this.theme.getFloor(this, buildChar, random);
 					if(blockState.getBlock() != Blocks.AIR)
 						this.placeBlock(world, chunkPos, buildPos, blockState, EnumFacing.UP, random);
@@ -762,6 +764,7 @@ public class SectorInstance {
 			startY = Math.max(1, startPos.getY() - (size.getY() * 2));
 		}
 
+		final BlockPos.MutableBlockPos buildPos = new BlockPos.MutableBlockPos();
 		for(int layerIndex : this.dungeonSector.wall.layers.keySet()) {
 			SectorLayer layer = this.dungeonSector.wall.layers.get(layerIndex);
 			for(int y = startY; y <= stopY; y++) {
@@ -780,8 +783,8 @@ public class SectorInstance {
 					char buildChar = layer.getColumn(progressY, fullY, x - startX, stopX - startX, row);
 					IBlockState blockState = this.theme.getWall(this, buildChar, random);
 					if(blockState.getBlock() != Blocks.AIR) {
-						this.placeBlock(world, chunkPos, new BlockPos(x, y, startZ + layerIndex), blockState, EnumFacing.SOUTH, random);
-						this.placeBlock(world, chunkPos, new BlockPos(x, y, stopZ - layerIndex), blockState, EnumFacing.NORTH, random);
+						this.placeBlock(world, chunkPos, buildPos.setPos(x, y, startZ + layerIndex), blockState, EnumFacing.SOUTH, random);
+						this.placeBlock(world, chunkPos, buildPos.setPos(x, y, stopZ - layerIndex), blockState, EnumFacing.NORTH, random);
 					}
 				}
 
@@ -790,8 +793,8 @@ public class SectorInstance {
 					char buildChar = layer.getColumn(progressY, fullY, z - startZ, stopZ - startZ, row);
 					IBlockState blockState = this.theme.getWall(this, buildChar, random);
 					if(blockState.getBlock() != Blocks.AIR) {
-						this.placeBlock(world, chunkPos, new BlockPos(startX + layerIndex, y, z), blockState, EnumFacing.EAST, random);
-						this.placeBlock(world, chunkPos, new BlockPos(stopX - layerIndex, y, z), blockState, EnumFacing.WEST, random);
+						this.placeBlock(world, chunkPos, buildPos.setPos(startX + layerIndex, y, z), blockState, EnumFacing.EAST, random);
+						this.placeBlock(world, chunkPos, buildPos.setPos(stopX - layerIndex, y, z), blockState, EnumFacing.WEST, random);
 					}
 				}
 			}
@@ -815,6 +818,7 @@ public class SectorInstance {
 		int startZ = Math.min(startPos.getZ(), stopPos.getZ());
 		int stopZ = Math.max(startPos.getZ(), stopPos.getZ());
 
+		final BlockPos.MutableBlockPos buildPos = new BlockPos.MutableBlockPos();
 		for(int layerIndex : this.dungeonSector.ceiling.layers.keySet()) {
 			int y = stopY + layerIndex;
 			if(y <= 0 || y >= world.getHeight()) {
@@ -825,7 +829,7 @@ public class SectorInstance {
 				List<Character> row = layer.getRow(x - startX, stopX - startX);
 				for(int z = startZ; z <= stopZ; z++) {
 					char buildChar = layer.getColumn(x - startX, stopX - startX, z - startZ, stopZ - startZ, row);
-					BlockPos buildPos = new BlockPos(x, y, z);
+					buildPos.setPos(x, y, z);
 					IBlockState blockState = this.theme.getCeiling(this, buildChar, random);
 					if(blockState.getBlock() != Blocks.AIR)
 						this.placeBlock(world, chunkPos, buildPos, blockState, EnumFacing.DOWN, random);
@@ -876,6 +880,7 @@ public class SectorInstance {
 		IBlockState floorBlockState = this.theme.getFloor(this, 'B', random);
 		IBlockState stairsBlockState = this.stairBlock;
 
+		final BlockPos.MutableBlockPos buildPos = new BlockPos.MutableBlockPos();
 		for(int y = startY; y >= stopY; y--) {
 			for(int x = startX; x <= stopX; x++) {
 				for(int z = startZ; z <= stopZ; z++) {
@@ -923,7 +928,7 @@ public class SectorInstance {
 						}
 					}
 
-					BlockPos buildPos = new BlockPos(x, y, z);
+					buildPos.setPos(x, y, z);
 					this.placeBlock(world, chunkPos, buildPos, blockState, EnumFacing.UP, random);
 				}
 			}
