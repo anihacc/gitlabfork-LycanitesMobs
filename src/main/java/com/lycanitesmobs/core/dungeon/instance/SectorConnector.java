@@ -1,8 +1,8 @@
 package com.lycanitesmobs.core.dungeon.instance;
 
-import com.lycanitesmobs.LycanitesMobs;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumFacing.Axis;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Vec3i;
@@ -116,7 +116,6 @@ public class SectorConnector {
 		}
 		int entranceHeight = 2;
 		int entranceRadius = 1;
-		int entranceClearance = 1;
 		int startX = this.position.getX();
 		int stopX = this.position.getX();
 		int startY = Math.max(1, this.position.getY() + 1);
@@ -125,14 +124,20 @@ public class SectorConnector {
 		int stopZ = this.position.getZ();
 
 		// Calculate Rotation:
-		if(this.facing == EnumFacing.SOUTH || this.facing == EnumFacing.NORTH) {
+		if(this.facing.getAxis() == Axis.Z) {
 			startX -= entranceRadius;
 			stopX += entranceRadius;
 			if(size.getX() % 2 != 0) {
 				startX -= 1;
 			}
-			startZ -= entranceClearance * 2;
-			stopZ += entranceClearance * 2;
+			if(this.facing == EnumFacing.SOUTH) {
+				startZ -= 2;
+				stopZ += 1;
+			}
+			else {
+				startZ -= 1;
+				stopZ += 2;
+			}
 		}
 		else {
 			startZ -= entranceRadius;
@@ -140,8 +145,14 @@ public class SectorConnector {
 			if(size.getZ() % 2 != 0) {
 				startZ -= 1;
 			}
-			startX -= entranceClearance * 2;
-			stopX += entranceClearance * 2;
+			if(this.facing == EnumFacing.EAST) {
+				startX -= 2;
+				stopX += 1;
+			}
+			else {
+				startX -= 1;
+				stopX += 2;
+			}
 		}
 
 		// Build Entrance:
