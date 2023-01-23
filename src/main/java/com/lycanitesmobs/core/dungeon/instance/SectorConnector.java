@@ -160,7 +160,7 @@ public class SectorConnector {
 		for(int x = startX; x <= stopX; x++) {
 			for(int y = startY; y <= stopY; y++) {
 				for(int z = startZ; z <= stopZ; z++) {
-					sectorInstance.placeBlock(world, chunkPos, buildPos.setPos(x, y, z), Blocks.AIR.getDefaultState(), this.facing, random);
+					sectorInstance.placeBlock(world, chunkPos, buildPos.setPos(x, y, z), sectorInstance.airBlock, this.facing, random);
 				}
 			}
 		}
