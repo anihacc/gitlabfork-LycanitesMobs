@@ -691,7 +691,10 @@ public class SectorInstance {
 		for(int x = startX; x <= stopX; x++) {
 			for(int y = startY; y <= stopY; y++) {
 				for(int z = startZ; z <= stopZ; z++) {
-					this.placeBlock(world, chunkPos, buildPos.setPos(x, y, z), this.airBlock, EnumFacing.SOUTH, random);
+					buildPos.setPos(x, y, z);
+					IBlockState blockState = this.airBlock;
+					if(blockState != null)
+						this.placeBlock(world, chunkPos, buildPos, blockState, EnumFacing.SOUTH, random);
 				}
 			}
 		}
@@ -728,7 +731,7 @@ public class SectorInstance {
 					char buildChar = layer.getColumn(x - startX, stopX - startX, z - startZ, stopZ - startZ, row);
 					buildPos.setPos(x, y, z);
 					IBlockState blockState = this.theme.getFloor(this, buildChar, random);
-					if(blockState.getBlock() != Blocks.AIR)
+					if(blockState != null)
 						this.placeBlock(world, chunkPos, buildPos, blockState, EnumFacing.UP, random);
 				}
 			}
@@ -777,7 +780,7 @@ public class SectorInstance {
 				for(int x = startX; x <= stopX; x++) {
 					char buildChar = layer.getColumn(progressY, fullY, x - startX, stopX - startX, row);
 					IBlockState blockState = this.theme.getWall(this, buildChar, random);
-					if(blockState.getBlock() != Blocks.AIR) {
+					if(blockState != null) {
 						this.placeBlock(world, chunkPos, buildPos.setPos(x, y, startZ + layerIndex), blockState, EnumFacing.SOUTH, random);
 						this.placeBlock(world, chunkPos, buildPos.setPos(x, y, stopZ - layerIndex), blockState, EnumFacing.NORTH, random);
 					}
@@ -787,7 +790,7 @@ public class SectorInstance {
 				for(int z = startZ; z <= stopZ; z++) {
 					char buildChar = layer.getColumn(progressY, fullY, z - startZ, stopZ - startZ, row);
 					IBlockState blockState = this.theme.getWall(this, buildChar, random);
-					if(blockState.getBlock() != Blocks.AIR) {
+					if(blockState != null) {
 						this.placeBlock(world, chunkPos, buildPos.setPos(startX + layerIndex, y, z), blockState, EnumFacing.EAST, random);
 						this.placeBlock(world, chunkPos, buildPos.setPos(stopX - layerIndex, y, z), blockState, EnumFacing.WEST, random);
 					}
@@ -826,7 +829,7 @@ public class SectorInstance {
 					char buildChar = layer.getColumn(x - startX, stopX - startX, z - startZ, stopZ - startZ, row);
 					buildPos.setPos(x, y, z);
 					IBlockState blockState = this.theme.getCeiling(this, buildChar, random);
-					if(blockState.getBlock() != Blocks.AIR)
+					if(blockState != null)
 						this.placeBlock(world, chunkPos, buildPos, blockState, EnumFacing.DOWN, random);
 				}
 			}

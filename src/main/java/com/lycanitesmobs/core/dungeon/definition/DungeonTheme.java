@@ -234,7 +234,7 @@ public class DungeonTheme {
 	public IBlockState getBlockState(SectorInstance sectorInstance, char patternChar, Random random, List<ThemeBlock> blockList) {
 		// Nothing:
 		if(patternChar == '0') {
-			return Blocks.AIR.getDefaultState();
+			return null;
 		}
 
 		// Sector Instantiated:
@@ -277,7 +277,7 @@ public class DungeonTheme {
 
 		// List Check:
 		if(blockList.isEmpty()) {
-			return Blocks.AIR.getDefaultState();
+			return null;
 		}
 		if(blockList.size() == 1) {
 			return blockList.get(0).getBlockState();
