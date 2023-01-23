@@ -167,7 +167,7 @@ public class SectorConnector {
 					if(world.getBlockState(buildPos).getBlock() == Blocks.CHEST)
 						continue;
 
-					IBlockState blockState = sectorInstance.airBlock;
+					IBlockState blockState = sectorInstance.getAirBlockForPos(buildPos);
 					if(blockState != null)
 						sectorInstance.placeBlock(world, chunkPos, buildPos, blockState, this.facing, random);
 				}

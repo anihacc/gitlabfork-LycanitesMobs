@@ -49,6 +49,8 @@ public class DungeonTheme {
 
 	public List<ThemeBlock> airBlocks = new ArrayList<>();
 
+	public boolean fillEntranceAndAboveWithAir = true;
+
 
     /** Loads this Dungeon Theme from the provided JSON data. **/
 	public void loadFromJSON(JsonObject json) {
@@ -137,6 +139,10 @@ public class DungeonTheme {
 			ThemeBlock themeBlock = new ThemeBlock();
 			themeBlock.block = Blocks.AIR;
 			this.airBlocks.add(themeBlock);
+		}
+
+		if (json.has("fillEntranceAndAboveWithAir")) {
+			this.fillEntranceAndAboveWithAir = json.get("fillEntranceAndAboveWithAir").getAsBoolean();
 		}
 	}
 

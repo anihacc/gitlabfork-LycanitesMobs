@@ -692,7 +692,7 @@ public class SectorInstance {
 			for(int y = startY; y <= stopY; y++) {
 				for(int z = startZ; z <= stopZ; z++) {
 					buildPos.setPos(x, y, z);
-					IBlockState blockState = this.airBlock;
+					IBlockState blockState = this.getAirBlockForPos(buildPos);
 					if(blockState != null)
 						this.placeBlock(world, chunkPos, buildPos, blockState, EnumFacing.SOUTH, random);
 				}
@@ -882,7 +882,7 @@ public class SectorInstance {
 		for(int y = startY; y >= stopY; y--) {
 			for(int x = startX; x <= stopX; x++) {
 				for(int z = startZ; z <= stopZ; z++) {
-					IBlockState blockState = this.airBlock;
+					IBlockState blockState = this.getAirBlockForPos(buildPos);
 
 					// Center:
 					if(x == centerX && z == centerZ) {
@@ -983,5 +983,12 @@ public class SectorInstance {
 			size = " Occupies: " + this.getOccupiedSize();
 		}
 		return "Sector Instance Type: " + (this.dungeonSector == null ? "Unset" : this.dungeonSector.type) + " Parent Connector Pos: " + (this.parentConnector == null ? "Unset" : this.parentConnector.position) + size + bounds;
+	}
+
+	public IBlockState getAirBlockForPos(BlockPos pos) {
+		if (this.theme.fillEntranceAndAboveWithAir && pos.getY() > this.layout.dungeonInstance.originPos.getY()) {
+			return Blocks.AIR.getDefaultState();
+		}
+		return this.airBlock;
 	}
 }
