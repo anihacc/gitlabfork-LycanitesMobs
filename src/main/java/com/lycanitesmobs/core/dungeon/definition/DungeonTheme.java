@@ -258,6 +258,11 @@ public class DungeonTheme {
 			else if (patternChar == 'P') {
 				return sectorInstance.pitBlock;
 			}
+
+			// Air:
+			else if (patternChar == 'A') {
+				return sectorInstance.airBlock;
+			}
 		}
 
 		// Chest:
