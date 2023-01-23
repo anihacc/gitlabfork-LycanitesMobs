@@ -882,7 +882,7 @@ public class SectorInstance {
 		for(int y = startY; y >= stopY; y--) {
 			for(int x = startX; x <= stopX; x++) {
 				for(int z = startZ; z <= stopZ; z++) {
-					IBlockState blockState = Blocks.AIR.getDefaultState();
+					IBlockState blockState = this.airBlock;
 
 					// Center:
 					if(x == centerX && z == centerZ) {
