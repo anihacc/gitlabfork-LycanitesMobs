@@ -1,5 +1,6 @@
 package com.lycanitesmobs.core.dungeon.instance;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumFacing.Axis;
@@ -160,7 +161,15 @@ public class SectorConnector {
 		for(int x = startX; x <= stopX; x++) {
 			for(int y = startY; y <= stopY; y++) {
 				for(int z = startZ; z <= stopZ; z++) {
-					sectorInstance.placeBlock(world, chunkPos, buildPos.setPos(x, y, z), sectorInstance.airBlock, this.facing, random);
+					buildPos.setPos(x, y, z);
+
+					// Don't Clear Chests:
+					if(world.getBlockState(buildPos).getBlock() == Blocks.CHEST)
+						continue;
+
+					IBlockState blockState = sectorInstance.airBlock;
+					if(blockState != null)
+						sectorInstance.placeBlock(world, chunkPos, buildPos, blockState, this.facing, random);
 				}
 			}
 		}

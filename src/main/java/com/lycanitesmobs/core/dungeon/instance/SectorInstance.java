@@ -573,11 +573,6 @@ public class SectorInstance {
 			return;
 		}
 
-		// Don't Clear Chests:
-		if(blockState.getBlock() == Blocks.AIR && world.getBlockState(blockPos).getBlock() == Blocks.CHEST) {
-			return;
-		}
-
 
 		// Block State and Flags:
 		int flags = 3;
