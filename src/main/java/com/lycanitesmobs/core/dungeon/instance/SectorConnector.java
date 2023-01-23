@@ -163,8 +163,8 @@ public class SectorConnector {
 				for(int z = startZ; z <= stopZ; z++) {
 					buildPos.setPos(x, y, z);
 
-					// Don't Clear Chests:
-					if(world.getBlockState(buildPos).getBlock() == Blocks.CHEST)
+					// Don't Clear Tile Entities:
+					if(world.getTileEntity(buildPos) != null)
 						continue;
 
 					IBlockState blockState = sectorInstance.getAirBlockForPos(buildPos);
