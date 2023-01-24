@@ -100,6 +100,9 @@ public class DungeonInstance {
 		}
 		this.random = new Random(this.seed);
 
+		// Calculate Actual Position:
+		this.originPos = this.schematic.placer.calculatePosition(world, originPos, random);
+
 		// Generate Layout:
 		LycanitesMobs.logDebug("Dungeon", "Starting Dungeon Instance Generation For " + this);
 		if(this.layout == null) {

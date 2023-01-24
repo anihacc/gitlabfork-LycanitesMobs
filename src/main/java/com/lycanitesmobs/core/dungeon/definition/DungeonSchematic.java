@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.dungeon.DungeonManager;
+import com.lycanitesmobs.core.dungeon.definition.DungeonPlacer.RandomPlacer;
 import com.lycanitesmobs.core.helpers.JSONHelper;
 import com.lycanitesmobs.core.info.ItemDrop;
 import com.lycanitesmobs.core.spawner.MobSpawn;
@@ -76,6 +77,9 @@ public class DungeonSchematic {
 
 	/** A list of item drops to add to loot chests. **/
 	public List<ItemDrop> loot = new ArrayList<>();
+
+	/** The placer that calculates the actual position of the dungeon. Optional. **/
+	public DungeonPlacer placer = new RandomPlacer();
 
 
     /** Loads this Dungeon Theme from the provided JSON data. **/
@@ -227,6 +231,10 @@ public class DungeonSchematic {
 					this.loot.add(itemDrop);
 				}
 			}
+		}
+
+		if (json.has("placer")) {
+			this.placer = DungeonPlacer.createFromJson(json.get("placer").getAsJsonObject());
 		}
 	}
 

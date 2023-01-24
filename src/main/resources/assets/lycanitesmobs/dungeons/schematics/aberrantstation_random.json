@@ -1,15 +1,17 @@
 {
-	"name": "ashenmausoleum",
+	"name": "aberrantstation_random",
 	"loadDefault": true,
-	"sectorCountMin": 10,
-	"sectorCountMax": 20,
+	"sectorCountMin": 20,
+	"sectorCountMax": 30,
 	"corridorToCorridorChance": 0.1,
-	"roomToRoomChance": 0.9,
+	"roomToRoomChance": 0.8,
 	"conditions": [
 		{
 			"type": "world",
-			"dimensionIds": [-1],
-			"dimensionListType": "whitelist"
+			"dimensionIds": [1, -1],
+			"dimensionListType": "whitelist",
+			"biomeTags": ["nether", "end"],
+			"biomeTagListType": "whitelist"
 		}
 	],
 	"placer": {
@@ -17,7 +19,7 @@
 		"minY": 64,
 		"maxY": 80
 	},
-	"themes": ["ashen"],
+	"themes": ["aberrant"],
 	"entrances": ["entrancebasic"],
 	"rooms": ["roombasic", "roombasicloot", "roombasicmob", "roombasicpit", "roomdiamondpit"],
 	"corridors": ["corridorbasic", "corridorbasicdark", "corridorbasicloot", "corridorbasicmob"],
@@ -52,131 +54,147 @@
 	],
 	"mobSpawns": [
 		{
-			"mobId": "lycanitesmobs:cinder",
+			"mobId": "lycanitesmobs:trite",
+			"weight": 14
+		},
+		{
+			"mobId": "lycanitesmobs:spectre",
 			"weight": 8
 		},
 		{
-			"mobId": "lycanitesmobs:afrit",
-			"weight": 8
-		},
-		{
-			"mobId": "lycanitesmobs:salamander",
+			"mobId": "lycanitesmobs:wraamon",
 			"weight": 4,
-			"dungeonLevelMin": 3
+			"dungeonLevelMin": 1
 		},
 		{
-			"mobId": "lycanitesmobs:volcan",
+			"mobId": "lycanitesmobs:chupacabra",
 			"weight": 4,
 			"dungeonLevelMin": 2
 		},
 		{
-			"mobId": "lycanitesmobs:gorger",
-			"weight": 4,
+			"mobId": "lycanitesmobs:darkling",
+			"weight": 14,
 			"dungeonLevelMin": 3
 		},
 		{
-			"modId": "lycanitesmobs:lobber",
-			"weight": 2,
+			"mobId": "lycanitesmobs:grigori",
+			"weight": 14,
 			"dungeonLevelMin": 3
 		},
 		{
-			"mobId": "lycanitesmobs:gorger",
+			"mobId": "lycanitesmobs:astaroth",
 			"weight": 1,
-			"variant": 0,
-			"mobNameTag": "Mantle Gorger",
-			"mobSizeScale": 3,
+			"dungeonLevelMin": 4
+		},
+		{
+			"mobId": "lycanitesmobs:trite",
+			"weight": 14,
+			"subspecies": 1,
+			"dungeonLevelMin": 4
+		},
+		{
+			"mobId": "lycanitesmobs:grell",
+			"weight": 4,
+			"dungeonLevelMin": 5
+		},
+		{
+			"mobId": "lycanitesmobs:beholder",
+			"weight": 1,
+			"dungeonLevelMin": 5
+		},
+		{
+			"mobId": "lycanitesmobs:wraamon",
+			"weight": 1,
+			"variant": 1,
+			"mobNameTag": "Experiment 69R",
+			"mobSizeScale": 6,
 			"naturalDespawn": "false",
 			"mobLevel": 100,
 			"spawnAsBoss": true,
-			"dungeonLevelMin": 0,
+			"dungeonLevelMin": "0",
 			"dungeonLevelMax": 2,
 			"dungeonBoss": true,
 			"mobDrops": [
 				{
-					"item": "lycanitesmobs:magmacharge",
+					"item": "minecraft:diamond",
+					"minAmount": 3,
 					"amountMultiplier": false
 				},
 				{
-					"item": "lycanitesmobs:soulstone_worm",
+					"item": "lycanitesmobs:soulstone_beast",
 					"amountMultiplier": false,
 					"bonusAmount": false
 				}
 			]
 		},
 		{
-			"mobId": "lycanitesmobs:lobber",
+			"mobId": "lycanitesmobs:astaroth",
+			"weight": 1,
+			"mobNameTag": "Arachnotron",
+			"mobSizeScale": 1.8,
+			"naturalDespawn": "false",
+			"mobLevel": 125,
+			"spawnAsBoss": true,
+			"dungeonLevelMin": 3,
+			"dungeonLevelMax": 3,
+			"dungeonBoss": true,
+			"mobDrops": [
+				{
+					"item": "lycanitesmobs:astarothclaw",
+					"amountMultiplier": false
+				},
+				{
+					"item": "minecraft:diamond",
+					"minAmount": 10,
+					"amountMultiplier": false
+				},
+				{
+					"item": "lycanitesmobs:soulstone_aberration",
+					"amountMultiplier": false,
+					"bonusAmount": false
+				}
+			]
+		},
+		{
+			"mobId": "lycanitesmobs:chupacabra",
 			"weight": 1,
 			"variant": 3,
-			"mobNameTag": "Molten Titan",
-			"mobSizeScale": 3,
+			"mobNameTag": "Anarchical Hound",
+			"mobSizeScale": 2,
 			"naturalDespawn": "false",
-			"mobLevel": 1,
+			"mobLevel": 5,
 			"spawnAsBoss": true,
-			"dungeonLevelMin": 3,
+			"dungeonLevelMin": 4,
 			"dungeonLevelMax": 4,
 			"dungeonBoss": true,
 			"mobDrops": [
 				{
-					"item": "minecraft:diamond",
-					"minAmount": 10,
-					"amountMultiplier": false
-				},
-				{
-					"item": "lycanitesmobs:soulstone_anthronian",
-					"amountMultiplier": false,
-					"bonusAmount": false
-				}
-			]
-		},
-		{
-			"mobId": "lycanitesmobs:volcan",
-			"weight": 1,
-			"variant": 1,
-			"mobNameTag": "Prime Lava Soul",
-			"mobSizeScale": 3.5,
-			"naturalDespawn": "false",
-			"mobLevel": 50,
-			"spawnAsBoss": true,
-			"dungeonLevelMin": 3,
-			"dungeonLevelMax": 4,
-			"dungeonBoss": true,
-			"mobDrops": [
-				{
-					"item": "lycanitesmobs:embercharge",
-					"minAmount": 50,
-					"amountMultiplier": false
-				},
-				{
-					"item": "lycanitesmobs:soulstone_elemental",
+					"item": "lycanitesmobs:soulstone_beast",
 					"amountMultiplier": false,
 					"bonusAmount": false
 				},
 				{
-					"item": "minecraft:diamond",
+					"item": "lycanitesmobs:chaosorbcharge",
+					"amountMultiplier": false,
 					"minAmount": 10,
-					"amountMultiplier": false
+					"maxAmount": 20
 				}
 			]
 		},
 		{
-			"mobId": "lycanitesmobs:ignibus",
+			"mobId": "lycanitesmobs:astaroth",
 			"weight": 1,
-			"variant": 1,
-			"mobSizeScale": 1.1,
-			"mobNameTag": "The Tyrant Dragon",
+			"subspecies": 1,
+			"mobNameTag": "Asakku",
+			"mobSizeScale": 2.5,
 			"naturalDespawn": "false",
-			"mobLevel": 10,
+			"mobLevel": 250,
 			"spawnAsBoss": true,
 			"dungeonLevelMin": 5,
 			"dungeonBoss": true,
 			"mobDrops": [
 				{
-					"item": "lycanitesmobs:primeembercharge",
-					"minAmount": 50,
-					"amountMultiplier": false
-				},
-				{
-					"item": "lycanitesmobs:equipmentpart_cherufecore",
+					"item": "lycanitesmobs:astarothclaw",
 					"amountMultiplier": false
 				},
 				{
@@ -185,7 +203,7 @@
 					"amountMultiplier": false
 				},
 				{
-					"item": "lycanitesmobs:soulstone_dragon",
+					"item": "lycanitesmobs:soulstone_aberration",
 					"amountMultiplier": false,
 					"bonusAmount": false
 				}

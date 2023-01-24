@@ -14,6 +14,10 @@
 			"biomeTagListType": "whitelist"
 		}
 	],
+	"placer": {
+		"type": "random",
+		"materials": ["air", "wood", "leaves", "plants", "vine", "snow", "cactus"]
+	},
 	"themes": ["desert"],
 	"entrances": ["entrancebasic"],
 	"rooms": ["roombasic", "roombasicloot", "roombasicmob", "roombasicpit", "roomdiamondpit"],

@@ -12,6 +12,11 @@
 			"dimensionListType": "whitelist"
 		}
 	],
+	"placer": {
+		"type": "random",
+		"minY": 64,
+		"maxY": 80
+	},
 	"themes": ["demonic"],
 	"entrances": ["entrancebasic"],
 	"rooms": ["roombasic", "roombasicloot", "roombasicmob", "roombasicpit", "roomdiamondpit"],

@@ -8,12 +8,16 @@
 	"conditions": [
 		{
 			"type": "world",
-			"dimensionIds": [0, 1, -1],
+			"dimensionIds": [0],
 			"dimensionListType": "whitelist",
-			"biomeTags": ["spooky", "mountain", "cold", "nether", "end"],
+			"biomeTags": ["spooky", "mountain", "cold"],
 			"biomeTagListType": "whitelist"
 		}
 	],
+	"placer": {
+		"type": "surface",
+		"materials": ["air", "wood", "leaves", "plants", "vine", "snow", "cactus"]
+	},
 	"themes": ["aberrant"],
 	"entrances": ["entrancebasic"],
 	"rooms": ["roombasic", "roombasicloot", "roombasicmob", "roombasicpit", "roomdiamondpit"],
