@@ -19,7 +19,6 @@ import com.lycanitesmobs.core.network.MessageSummonSetSelection;
 import com.lycanitesmobs.core.spawner.SpawnerEventListener;
 import com.lycanitesmobs.core.spawner.SpawnerManager;
 import com.lycanitesmobs.core.worldgen.WorldGeneratorDungeon;
-import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
@@ -34,13 +33,9 @@ import net.minecraftforge.common.DimensionManager;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
-public class CommandMain extends CommandBase {
+public class CommandMain implements ICommand {
 	
 	private List aliases;
 	
@@ -78,91 +73,8 @@ public class CommandMain extends CommandBase {
 	}
 
 	@Override
-	public List<String> getTabCompletions(MinecraftServer server, ICommandSender commandSender, String[] args, BlockPos pos) {
-		if (args.length == 1) {
-			return getListOfStringsMatchingLastWord(args, "debug", "spawner", "dungeon", "player", "creature", "equipment", "beastiary", "mobevent");
-		} else if (args.length > 1) {
-			if ("debug".equalsIgnoreCase(args[0])) {
-				if (args.length == 2) {
-					return getListOfStringsMatchingLastWord(args, LycanitesMobs.config.config.getCategory("debug").keySet());
-				} else if (args.length == 3) {
-					return getListOfStringsMatchingLastWord(args, Boolean.toString(false), Boolean.toString(true));
-				}
-			} else if ("spawner".equalsIgnoreCase(args[0])) {
-				if (args.length == 2) {
-					return getListOfStringsMatchingLastWord(args, "reload", "creative", "test");
-				} else if (args.length > 2) {
-					if ("test".equalsIgnoreCase(args[1])) {
-						if (args.length == 3) {
-							return getListOfStringsMatchingLastWord(args, SpawnerManager.getInstance().spawners.keySet());
-						} else if (args.length == 4) {
-							return getListOfStringsMatchingLastWord(args, IntStream.rangeClosed(1, 9).mapToObj(Integer::toString).collect(Collectors.toList()));
-						}
-					}
-				}
-			} else if ("dungeon".equalsIgnoreCase(args[0])) {
-				if (args.length == 2) {
-					return getListOfStringsMatchingLastWord(args, "reload", "enable", "disable", "locate");
-				}
-			} else if ("player".equalsIgnoreCase(args[0])) {
-				if (args.length == 2) {
-					return getListOfStringsMatchingLastWord(args, "spirit", "focus");
-				}
-			} else if ("creature".equalsIgnoreCase(args[0])) {
-				if (args.length == 2) {
-					return getListOfStringsMatchingLastWord(args, "reload");
-				}
-			} else if ("equipment".equalsIgnoreCase(args[0])) {
-				if (args.length == 2) {
-					return getListOfStringsMatchingLastWord(args, "reload");
-				}
-			} else if ("beastiary".equalsIgnoreCase(args[0])) {
-				if (args.length == 2) {
-					return getListOfStringsMatchingLastWord(args, "add", "complete", "clear", "packet");
-				} else if (args.length > 2) {
-					if ("add".equalsIgnoreCase(args[1])) {
-						if (args.length == 3) {
-							return getListOfStringsMatchingLastWord(args, CreatureManager.getInstance().creatures.keySet());
-						} else if (args.length == 4) {
-							return getListOfStringsMatchingLastWord(args, IntStream.rangeClosed(1, 3).mapToObj(Integer::toString).collect(Collectors.toList()));
-						}
-					} else if ("complete".equalsIgnoreCase(args[1])) {
-						if (args.length == 3) {
-							return getListOfStringsMatchingLastWord(args, IntStream.rangeClosed(1, 3).mapToObj(Integer::toString).collect(Collectors.toList()));
-						}
-					}
-				}
-			} else if ("mobevent".equalsIgnoreCase(args[0])) {
-				if (args.length == 2) {
-					return getListOfStringsMatchingLastWord(args, "reload", "creative", "start", "random", "stop", "list", "enable", "disable");
-				} else if (args.length > 2) {
-					if ("start".equalsIgnoreCase(args[1])) {
-						if (args.length == 3) {
-							return getListOfStringsMatchingLastWord(args, MobEventManager.getInstance().mobEvents.keySet());
-						} else if (args.length == 4) {
-							return getListOfStringsMatchingLastWord(args, Arrays.stream(DimensionManager.getIDs()).mapToInt(Integer::intValue).mapToObj(Integer::toString).collect(Collectors.toList()));
-						}
-					} else if ("random".equalsIgnoreCase(args[1])) {
-						if (args.length == 3) {
-							return getListOfStringsMatchingLastWord(args, Arrays.stream(DimensionManager.getIDs()).mapToInt(Integer::intValue).mapToObj(Integer::toString).collect(Collectors.toList()));
-						}
-					} else if ("stop".equalsIgnoreCase(args[1])) {
-						if (args.length == 3) {
-							return getListOfStringsMatchingLastWord(args, Arrays.stream(DimensionManager.getIDs()).mapToInt(Integer::intValue).mapToObj(Integer::toString).collect(Collectors.toList()));
-						}
-					} else if ("enable".equalsIgnoreCase(args[1])) {
-						if (args.length == 3) {
-							return getListOfStringsMatchingLastWord(args, "all", "random");
-						}
-					} else if ("disable".equalsIgnoreCase(args[1])) {
-						if (args.length == 3) {
-							return getListOfStringsMatchingLastWord(args, "all", "random");
-						}
-					}
-				}
-			}
-		}
-		return Collections.emptyList();
+	public List getTabCompletions(MinecraftServer server, ICommandSender commandSender, String[] args, BlockPos pos) {
+		return null;
 	}
 
 	@Override
