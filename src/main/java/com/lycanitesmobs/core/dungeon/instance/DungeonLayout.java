@@ -83,7 +83,7 @@ public class DungeonLayout {
 		}
 
 		// Tower Levels:
-		if(random.nextDouble() <= WorldGeneratorDungeon.TOWER_CHANCE) {
+		if(this.dungeonInstance.schematic.canGenerateAsTower && random.nextDouble() <= WorldGeneratorDungeon.TOWER_CHANCE) {
 			exitSector = entranceSector;
 			level = 1;
 			while (level <= 10) {

@@ -81,6 +81,8 @@ public class DungeonSchematic {
 	/** The placer that calculates the actual position of the dungeon. Optional. **/
 	public DungeonPlacer placer = new RandomPlacer();
 
+	public boolean canGenerateAsTower = true;
+
 
     /** Loads this Dungeon Theme from the provided JSON data. **/
 	public void loadFromJSON(JsonObject json) {
@@ -235,6 +237,10 @@ public class DungeonSchematic {
 
 		if (json.has("placer")) {
 			this.placer = DungeonPlacer.createFromJson(json.get("placer").getAsJsonObject());
+		}
+
+		if (json.has("canGenerateAsTower")) {
+			this.canGenerateAsTower = json.get("canGenerateAsTower").getAsBoolean();
 		}
 	}
 
