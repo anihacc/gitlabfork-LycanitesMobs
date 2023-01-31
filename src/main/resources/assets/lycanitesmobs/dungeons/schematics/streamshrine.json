@@ -30,6 +30,7 @@
       "cactus"
     ]
   },
+  "canGenerateAsTower": false,
   "themes": [
     "stream"
   ],
