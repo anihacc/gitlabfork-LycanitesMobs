@@ -65,8 +65,8 @@ public class Utilities {
 		RayTraceResult blockResult = raytraceBlocks(world, start, end, stopOnLiquid, ignoreBlockWithoutBoundingBox);
 		RayTraceResult entityResult = raytraceEntities(world, start, end, rayWidth, entityPredicate);
 
-		if (blockResult != null) {
-			if (entityResult != null) {
+		if (blockResult != null && blockResult.typeOfHit != Type.MISS) {
+			if (entityResult != null && entityResult.typeOfHit != Type.MISS) {
 				if (start.squareDistanceTo(blockResult.hitVec) <= start.squareDistanceTo(entityResult.hitVec)) {
 					return blockResult;
 				} else {
@@ -75,7 +75,7 @@ public class Utilities {
 			} else {
 				return blockResult;
 			}
-		} else if (entityResult != null) {
+		} else if (entityResult != null && entityResult.typeOfHit != Type.MISS) {
 			return entityResult;
 		}
 
@@ -86,7 +86,7 @@ public class Utilities {
 			boolean ignoreBlockWithoutBoundingBox) {
 		RayTraceResult result = world.rayTraceBlocks(start, end, stopOnLiquid, ignoreBlockWithoutBoundingBox, false);
 		if (result == null || result.typeOfHit == Type.MISS) {
-			return null;
+			return new RayTraceResult(Type.MISS, end, null, new BlockPos(end));
 		}
 		return result;
 	}
@@ -123,7 +123,7 @@ public class Utilities {
 		}
 
 		if (closestHitEntity == null || closestHitLocation == null) {
-			return null;
+			return new RayTraceResult(Type.MISS, end, null, new BlockPos(end));
 		}
 
 		return new RayTraceResult(closestHitEntity, closestHitLocation);
