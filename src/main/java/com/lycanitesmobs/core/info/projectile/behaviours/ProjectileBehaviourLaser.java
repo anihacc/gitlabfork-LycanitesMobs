@@ -15,8 +15,6 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-import java.util.HashSet;
-
 public class ProjectileBehaviourLaser extends ProjectileBehaviour {
 	/** The aiming speed of the laser. **/
 	public double speed = 1;
@@ -108,15 +106,12 @@ public class ProjectileBehaviourLaser extends ProjectileBehaviour {
 		}
 
 		// Raytracing:
-		HashSet<Entity> excludedEntities = new HashSet<>();
-		excludedEntities.add(projectile);
-		if(projectile.getThrower() != null) {
-			excludedEntities.add(projectile.getThrower());
-			if(projectile.getThrower().getControllingPassenger() != null) {
-				excludedEntities.add(projectile.getThrower().getControllingPassenger());
-			}
-		}
-		RayTraceResult rayTraceResult = Utilities.raytrace(projectile.getEntityWorld(), projectile.getPositionVector().x, projectile.getPositionVector().y, projectile.getPositionVector().z, targetX, targetY, targetZ, this.width, excludedEntities);
+		RayTraceResult rayTraceResult = Utilities.raytrace(projectile.getEntityWorld(), projectile.getPositionVector(),
+				new Vec3d(targetX, targetY, targetZ), false, true, this.width,
+				projectile.getThrower() != null
+						? Utilities.collidableExlcuding(projectile, projectile.getThrower(),
+								projectile.getThrower().getControllingPassenger())
+						: Utilities.collidableExlcuding(projectile));
 
 		// Update Laser End Position:
 		Entity entityHit = null;

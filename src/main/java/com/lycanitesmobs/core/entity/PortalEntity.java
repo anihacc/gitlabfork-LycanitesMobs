@@ -272,7 +272,9 @@ public class PortalEntity extends BaseProjectileEntity {
 			this.targetZ = this.shootingEntity.posZ + (lookDirection.z * this.portalRange);
 	        
 			// Apply Raytrace to Look Target:
-			RayTraceResult target = Utilities.raytrace(this.getEntityWorld(), this.shootingEntity.posX, this.shootingEntity.posY, this.shootingEntity.posZ, this.targetX, this.targetY, this.targetZ, 1.0F, null);
+			RayTraceResult target = Utilities.raytraceBlocks(this.getEntityWorld(),
+					this.shootingEntity.getPositionVector(), new Vec3d(this.targetX, this.targetY, this.targetZ), false,
+					true);
 	        if(target != null && target.hitVec != null) {
 				this.targetX = target.hitVec.x;
 				this.targetY = target.hitVec.y;

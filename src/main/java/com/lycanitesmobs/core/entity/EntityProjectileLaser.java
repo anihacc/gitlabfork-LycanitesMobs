@@ -17,7 +17,6 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import java.lang.reflect.Constructor;
-import java.util.HashSet;
 
 public class EntityProjectileLaser extends BaseProjectileEntity {
 	// Properties:
@@ -273,13 +272,9 @@ public class EntityProjectileLaser extends BaseProjectileEntity {
 			}
 			
 			// Raytracing:
-			HashSet<Entity> excludedEntities = new HashSet<>();
-			excludedEntities.add(this);
-			if(this.shootingEntity != null)
-				excludedEntities.add(this.shootingEntity);
-			if(this.followEntity != null)
-				excludedEntities.add(this.followEntity);
-			RayTraceResult target = Utilities.raytrace(this.getEntityWorld(), this.posX, this.posY, this.posZ, this.targetX, this.targetY, this.targetZ, this.laserWidth, excludedEntities);
+			RayTraceResult target = Utilities.raytrace(this.getEntityWorld(), this.getPositionVector(),
+					new Vec3d(this.targetX, this.targetY, this.targetZ), false, true, this.laserWidth,
+					Utilities.collidableExlcuding(this, this.shootingEntity, this.followEntity));
 			
 			// Update Laser End Position:
 			double newTargetX = this.targetX;

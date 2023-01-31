@@ -3,10 +3,13 @@ package com.lycanitesmobs;
 import com.lycanitesmobs.core.config.ConfigBase;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.world.World;
 import org.apache.commons.io.FilenameUtils;
 
@@ -15,6 +18,10 @@ import java.net.URL;
 import java.nio.file.*;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
+import javax.annotation.Nullable;
 
 public class Utilities {
     
@@ -53,102 +60,123 @@ public class Utilities {
   	//                      Raytrace
   	// ==================================================
 	// ========== Raytrace All ==========
-    public static RayTraceResult raytrace(World world, double x, double y, double z, double tx, double ty, double tz, float borderSize, HashSet<Entity> excluded) {
-		Vec3d startVec = new Vec3d(x, y, z);
-        Vec3d lookVec = new Vec3d(tx - x, ty - y, tz - z);
-        Vec3d endVec = new Vec3d(tx, ty, tz);
-		float minX = (float)(x < tx ? x : tx);
-		float minY = (float)(y < ty ? y : ty);
-		float minZ = (float)(z < tz ? z : tz);
-		float maxX = (float)(x > tx ? x : tx);
-		float maxY = (float)(y > ty ? y : ty);
-		float maxZ = (float)(z > tz ? z : tz);
+	public static RayTraceResult raytrace(World world, Vec3d start, Vec3d end, boolean stopOnLiquid,
+			boolean ignoreBlockWithoutBoundingBox, float rayWidth, @Nullable Predicate<Entity> entityPredicate) {
+		RayTraceResult blockResult = raytraceBlocks(world, start, end, stopOnLiquid, ignoreBlockWithoutBoundingBox);
+		RayTraceResult entityResult = raytraceEntities(world, start, end, rayWidth, entityPredicate);
 
-		// Get Block Collision:
-        RayTraceResult collision = world.rayTraceBlocks(startVec, endVec, false);
-		startVec = new Vec3d(x, y, z);
-		endVec = new Vec3d(tx, ty, tz);
-		float maxDistance = (float)endVec.distanceTo(startVec);
-		if(collision != null)
-			maxDistance = (float)collision.hitVec.distanceTo(startVec);
-
-		// Get Entity Collision:
-		if(excluded != null) {
-			AxisAlignedBB bb = new AxisAlignedBB(minX, minY, minZ, maxX, maxY, maxZ).expand(borderSize, borderSize, borderSize);
-			List<Entity> allEntities = world.getEntitiesWithinAABBExcludingEntity(null, bb);
-			Entity closestHitEntity = null;
-			float closestHit = Float.POSITIVE_INFINITY;
-			float currentHit;
-			AxisAlignedBB entityBb;
-            RayTraceResult intercept;
-			for(Entity ent : allEntities) {
-				if(ent.canBeCollidedWith() && !excluded.contains(ent)) {
-					float entBorder = ent.getCollisionBorderSize();
-					entityBb = ent.getEntityBoundingBox();
-					if(entityBb != null) {
-						entityBb = entityBb.expand(entBorder, entBorder, entBorder);
-						intercept = entityBb.calculateIntercept(startVec, endVec);
-						if(intercept != null) {
-							currentHit = (float) intercept.hitVec.distanceTo(startVec);
-							if(currentHit < closestHit || currentHit == 0) {
-								closestHit = currentHit;
-								closestHitEntity = ent;
-							}
-						}
-					}
+		if (blockResult != null) {
+			if (entityResult != null) {
+				if (start.squareDistanceTo(blockResult.hitVec) <= start.squareDistanceTo(entityResult.hitVec)) {
+					return blockResult;
+				} else {
+					return entityResult;
 				}
+			} else {
+				return blockResult;
 			}
-			if(closestHitEntity != null)
-				collision = new RayTraceResult(closestHitEntity);
+		} else if (entityResult != null) {
+			return entityResult;
 		}
-		
-		return collision;
-    }
 
-    public static RayTraceResult raytraceEntities(World world, double x, double y, double z, double tx, double ty, double tz, float borderSize, HashSet<Entity> excluded) {
-        Vec3d startVec = new Vec3d(x, y, z);
-        Vec3d lookVec = new Vec3d(tx - x, ty - y, tz - z);
-        Vec3d endVec = new Vec3d(tx, ty, tz);
-		float minX = (float)(x < tx ? x : tx);
-		float minY = (float)(y < ty ? y : ty);
-		float minZ = (float)(z < tz ? z : tz);
-		float maxX = (float)(x > tx ? x : tx);
-		float maxY = (float)(y > ty ? y : ty);
-		float maxZ = (float)(z > tz ? z : tz);
+		return new RayTraceResult(Type.MISS, end, null, new BlockPos(end));
+	}
 
-		// Get Entities and Raytrace Blocks:
-		AxisAlignedBB bb = new AxisAlignedBB(minX, minY, minZ, maxX, maxY, maxZ).expand(borderSize, borderSize, borderSize);
-		List<Entity> allEntities = world.getEntitiesWithinAABBExcludingEntity(
-				null, bb);
-        RayTraceResult collision = world.rayTraceBlocks(startVec, endVec, false);
+	public static RayTraceResult raytraceBlocks(World world, Vec3d start, Vec3d end, boolean stopOnLiquid,
+			boolean ignoreBlockWithoutBoundingBox) {
+		RayTraceResult result = world.rayTraceBlocks(start, end, stopOnLiquid, ignoreBlockWithoutBoundingBox, false);
+		if (result == null || result.typeOfHit == Type.MISS) {
+			return null;
+		}
+		return result;
+	}
 
-		// Get Entity Collision:
+	public static <T extends Entity> RayTraceResult raytraceEntities(World world, Vec3d start, Vec3d end,
+			float rayWidth, @Nullable Predicate<Entity> predicate) {
+		AxisAlignedBB aabb = new AxisAlignedBB(start, end);
+		if (rayWidth != 0.0F) {
+			aabb = aabb.grow(rayWidth);
+		}
+		List<Entity> possibleEntities = world.getEntitiesWithinAABB(Entity.class, aabb,
+				predicate != null ? predicate::test : null);
+
 		Entity closestHitEntity = null;
-		float closestHit = Float.POSITIVE_INFINITY;
-		float currentHit = 0.0f;
-		AxisAlignedBB entityBb;
-        RayTraceResult intercept;
-		for(Entity ent : allEntities) {
-			if(ent.canBeCollidedWith() && !excluded.contains(ent)) {
-				float entBorder = ent.getCollisionBorderSize();
-				entityBb = ent.getEntityBoundingBox();
-				if(entityBb != null) {
-					entityBb = entityBb.expand(entBorder, entBorder, entBorder);
-					intercept = entityBb.calculateIntercept(startVec, endVec);
-					if(intercept != null) {
-						currentHit = (float) intercept.hitVec.distanceTo(startVec);
-						if(currentHit < closestHit || currentHit == 0) {
-							closestHit = currentHit;
-							closestHitEntity = ent;
-						}
-					}
-				}
+		Vec3d closestHitLocation = null;
+		double closestHitDistSqr = Double.POSITIVE_INFINITY;
+		for (Entity entity : possibleEntities) {
+			AxisAlignedBB entityAabb = entity.getEntityBoundingBox();
+			if (rayWidth + entity.getCollisionBorderSize() != 0.0F) {
+				entityAabb = entityAabb.grow(rayWidth + entity.getCollisionBorderSize());
+			}
+
+			RayTraceResult currentHit = entityAabb.calculateIntercept(start, end);
+			if (currentHit == null) {
+				continue;
+			}
+
+			double currentHitDistSqr = start.squareDistanceTo(currentHit.hitVec);
+			if (currentHitDistSqr < closestHitDistSqr) {
+				closestHitEntity = entity;
+				closestHitLocation = currentHit.hitVec;
+				closestHitDistSqr = currentHitDistSqr;
 			}
 		}
-		if(closestHitEntity != null)
-			collision = new RayTraceResult(closestHitEntity);
-		return collision;
-    }
+
+		if (closestHitEntity == null || closestHitLocation == null) {
+			return null;
+		}
+
+		return new RayTraceResult(closestHitEntity, closestHitLocation);
+	}
+
+	public static Predicate<Entity> collidable() {
+		return entity -> EntitySelectors.NOT_SPECTATING.test(entity) && entity.canBeCollidedWith();
+	}
+
+	public static Predicate<Entity> collidableExlcuding(Entity entityToIgnore) {
+		if (entityToIgnore == null)
+			return collidable();
+		return entity -> EntitySelectors.NOT_SPECTATING.test(entity) && entity.canBeCollidedWith()
+				&& entity != entityToIgnore;
+	}
+
+	public static Predicate<Entity> collidableExlcuding(Entity entityToIgnore1, Entity entityToIgnore2) {
+		if (entityToIgnore1 == null)
+			return collidableExlcuding(entityToIgnore2);
+		if (entityToIgnore2 == null)
+			return collidableExlcuding(entityToIgnore1);
+		return entity -> EntitySelectors.NOT_SPECTATING.test(entity) && entity.canBeCollidedWith()
+				&& entity != entityToIgnore1 && entity != entityToIgnore2;
+	}
+
+	public static Predicate<Entity> collidableExlcuding(Entity entityToIgnore1, Entity entityToIgnore2,
+			Entity entityToIgnore3) {
+		if (entityToIgnore1 == null)
+			return collidableExlcuding(entityToIgnore2, entityToIgnore3);
+		if (entityToIgnore2 == null)
+			return collidableExlcuding(entityToIgnore1, entityToIgnore3);
+		if (entityToIgnore3 == null)
+			return collidableExlcuding(entityToIgnore1, entityToIgnore2);
+		return entity -> EntitySelectors.NOT_SPECTATING.test(entity) && entity.canBeCollidedWith()
+				&& entity != entityToIgnore1 && entity != entityToIgnore2 && entity != entityToIgnore3;
+	}
+
+	public static Predicate<Entity> collidableExlcuding(Entity... entities) {
+		if (entities.length >= 0 && entities.length < 4) {
+			if (entities.length == 0) {
+				return collidable();
+			} else if (entities.length == 1) {
+				return collidableExlcuding(entities[0]);
+			} else if (entities.length == 2) {
+				return collidableExlcuding(entities[0], entities[1]);
+			} else if (entities.length == 3) {
+				return collidableExlcuding(entities[0], entities[1], entities[2]);
+			}
+		}
+		Set<Entity> entitySet = Arrays.stream(entities).filter(Objects::nonNull).collect(Collectors.toSet());
+		return entity -> EntitySelectors.NOT_SPECTATING.test(entity) && entity.canBeCollidedWith()
+				&& !entitySet.contains(entity);
+	}
 	
 	
 	// ==================================================
