@@ -145,6 +145,8 @@ public class CommandMain extends CommandBase {
 							return getListOfStringsMatchingLastWord(args, IntStream.rangeClosed(1, 5).mapToObj(Integer::toString).collect(Collectors.toList()));
 						} else if (args.length == 6) {
 							return getListOfStringsMatchingLastWord(args, IntStream.of(-1).mapToObj(Integer::toString).collect(Collectors.toList()));
+						} else if (args.length == 7) {
+							return getListOfStringsMatchingLastWord(args, Boolean.toString(false), Boolean.toString(true));
 						}
 					} else if ("random".equalsIgnoreCase(args[1])) {
 						if (args.length == 3) {
@@ -536,8 +538,12 @@ public class CommandMain extends CommandBase {
 					}
 
 					// Check Conditions:
+					boolean forced = false;
+					if (args.length >= 7) {
+						forced = Boolean.parseBoolean(args[6]);
+					}
 					MobEvent mobEvent = MobEventManager.getInstance().getMobEvent(mobEventName);
-					if (!mobEvent.canStart(world, player)) {
+					if (!forced && !mobEvent.canStart(world, player)) {
 						reply = LanguageManager.translate("lyc.command.mobevent.start.conditions");
 						commandSender.sendMessage(new TextComponentString(reply));
 						return;
