@@ -141,6 +141,10 @@ public class CommandMain extends CommandBase {
 							return getListOfStringsMatchingLastWord(args, MobEventManager.getInstance().mobEvents.keySet());
 						} else if (args.length == 4) {
 							return getListOfStringsMatchingLastWord(args, Arrays.stream(DimensionManager.getIDs()).mapToInt(Integer::intValue).mapToObj(Integer::toString).collect(Collectors.toList()));
+						} else if (args.length == 5) {
+							return getListOfStringsMatchingLastWord(args, IntStream.rangeClosed(1, 5).mapToObj(Integer::toString).collect(Collectors.toList()));
+						} else if (args.length == 6) {
+							return getListOfStringsMatchingLastWord(args, IntStream.of(-1).mapToObj(Integer::toString).collect(Collectors.toList()));
 						}
 					} else if ("random".equalsIgnoreCase(args[1])) {
 						if (args.length == 3) {
