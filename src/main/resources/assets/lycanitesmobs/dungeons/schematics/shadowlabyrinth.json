@@ -15,7 +15,7 @@
 		}
 	],
 	"placer": {
-		"type": "random",
+		"type": "surface",
 		"materials": ["air", "wood", "leaves", "plants", "vine", "snow", "cactus"]
 	},
 	"themes": ["shadow"],
