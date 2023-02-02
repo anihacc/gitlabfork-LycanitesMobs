@@ -93,7 +93,7 @@ public class Utilities {
 
 	public static <T extends Entity> RayTraceResult raytraceEntities(World world, Vec3d start, Vec3d end,
 			float rayWidth, @Nullable Predicate<Entity> predicate) {
-		AxisAlignedBB aabb = new AxisAlignedBB(start, end);
+		AxisAlignedBB aabb = new AxisAlignedBB(start.x, start.y, start.z, end.x, end.y, end.z);
 		if (rayWidth != 0.0F) {
 			aabb = aabb.grow(rayWidth);
 		}
