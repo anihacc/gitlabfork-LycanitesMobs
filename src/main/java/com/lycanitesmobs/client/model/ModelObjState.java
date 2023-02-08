@@ -1,13 +1,9 @@
 package com.lycanitesmobs.client.model;
 
-import net.minecraft.entity.Entity;
-
 import java.util.HashMap;
 import java.util.Map;
 
 public class ModelObjState {
-    /** The entity that this model state is for. **/
-    public Entity entity;
 
     // Attack Animation:
     /** The current progress on an attack animation, increases to 1.0 and then decreases back down to 0.0. **/
@@ -22,13 +18,6 @@ public class ModelObjState {
     /** Additional state data. **/
     protected Map<String, Boolean> additionalBooleans = new HashMap<>();
     protected Map<String, Float> additionalFloats = new HashMap<>();
-
-    // ==================================================
-    //                    Constructor
-    // ==================================================
-    public ModelObjState(Entity entity) {
-        this.entity = entity;
-    }
 
 
     // ==================================================

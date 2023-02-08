@@ -447,7 +447,7 @@ public class ModelCreatureObj extends ModelCustom implements IAnimationModel {
 		if (entity == null) {
 			return null;
 		}
-		return this.modelStates.computeIfAbsent(entity, ModelObjState::new);
+		return this.modelStates.computeIfAbsent(entity, k -> new ModelObjState());
 	}
     
     
