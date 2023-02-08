@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.WeakHashMap;
 
 @SideOnly(Side.CLIENT)
 public class ModelCreatureObj extends ModelCustom implements IAnimationModel {
@@ -86,7 +87,7 @@ public class ModelCreatureObj extends ModelCustom implements IAnimationModel {
 	/** The animation data for this model. **/
 	protected ModelAnimation animation;
     /** A list of models states that hold unique render/animation data for a specific entity INSTANCE. **/
-    protected Map<Entity, ModelObjState> modelStates = new HashMap<>();
+    private final Map<Entity, ModelObjState> modelStates = new WeakHashMap<>();
     /** The current model state for the entity that is being animated and rendered. **/
     protected ModelObjState currentModelState;
 
@@ -305,6 +306,7 @@ public class ModelCreatureObj extends ModelCustom implements IAnimationModel {
 		if(animate) {
 			this.clearAnimationFrames();
 		}
+		this.currentModelState = null;
     }
 
 	/** Called just before a layer is rendered. **/
@@ -441,20 +443,12 @@ public class ModelCreatureObj extends ModelCustom implements IAnimationModel {
     }
 
     /** Returns an existing or new model state for the given entity. **/
-    public ModelObjState getModelState(Entity entity) {
-        if(entity == null)
-            return null;
-        if(this.modelStates.containsKey(entity)) {
-            if(entity.isDead) {
-                this.modelStates.remove(entity);
-                return null;
-            }
-            return this.modelStates.get(entity);
-        }
-        ModelObjState modelState = new ModelObjState(entity);
-        this.modelStates.put(entity, modelState);
-        return modelState;
-    }
+	public ModelObjState getModelState(Entity entity) {
+		if (entity == null) {
+			return null;
+		}
+		return this.modelStates.computeIfAbsent(entity, ModelObjState::new);
+	}
     
     
     // ==================================================
