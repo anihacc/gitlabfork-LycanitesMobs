@@ -1,8 +1,6 @@
 package com.lycanitesmobs.core.spawner;
 
 import com.lycanitesmobs.ExtendedWorld;
-import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.info.BlockReference;
 import com.lycanitesmobs.core.spawner.trigger.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -12,11 +10,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.entity.player.ItemFishedEvent;
 import net.minecraftforge.event.entity.player.PlayerSleepInBedEvent;
@@ -26,11 +22,13 @@ import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
 import net.minecraftforge.event.world.ExplosionEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
+import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.WeakHashMap;
 
 public class SpawnerEventListener {
     protected static SpawnerEventListener INSTANCE;
@@ -207,21 +205,20 @@ public class SpawnerEventListener {
 	// ==================================================
 	//               Entity Update Event
 	// ==================================================
-	public Map<EntityPlayer, Long> playerUpdateTicks = new HashMap<>();
+	private final Map<EntityPlayer, Long> playerUpdateTicks = new WeakHashMap<>();
 	
 	/** This uses the player update events to update Tick Spawn Triggers. **/
 	@SubscribeEvent
-	public void onEntityUpdate(LivingUpdateEvent event) {
-		EntityLivingBase entity = event.getEntityLiving();
-		if(entity == null || !(entity instanceof EntityPlayer) || entity.getEntityWorld() == null || entity.getEntityWorld().isRemote || event.isCanceled())
+	public void onPlayerTickEvent(PlayerTickEvent event) {
+		if(event.phase != Phase.START)
+			return;
+		
+		EntityPlayer player = (EntityPlayer)event.player;
+		if(player.world.isRemote)
 			return;
 		
 		// ========== Spawn Near Players ==========
-		EntityPlayer player = (EntityPlayer)entity;
-		
-		if(!playerUpdateTicks.containsKey(player))
-			playerUpdateTicks.put(player, (long)0);
-		long entityUpdateTick = playerUpdateTicks.get(player);
+		long entityUpdateTick = playerUpdateTicks.compute(player, (k, v) -> v != null ? v + 1 : 1) - 1;
 		
 		// Custom Mob Spawning:
 		int tickOffset = 0;
@@ -229,8 +226,6 @@ public class SpawnerEventListener {
 			spawnTrigger.onTick(player, entityUpdateTick - tickOffset);
 			tickOffset += 105;
 		}
-
-		playerUpdateTicks.put(player, entityUpdateTick + 1);
 	}
 	
 	
