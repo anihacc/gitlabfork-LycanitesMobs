@@ -6,7 +6,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 
-public class ExtendedEntityStorage implements Capability.IStorage<IExtendedEntity> {
+public class ExtendedEntityStorage implements Capability.IStorage<ExtendedEntity> {
 
     // ==================================================
     //                        NBT
@@ -14,7 +14,7 @@ public class ExtendedEntityStorage implements Capability.IStorage<IExtendedEntit
     // ========== Read ===========
     /** Reads a list of Creature Knowledge from a player's NBTTag. **/
     @Override
-    public void readNBT(Capability<IExtendedEntity> capability, IExtendedEntity instance, EnumFacing facing, NBTBase nbt) {
+    public void readNBT(Capability<ExtendedEntity> capability, ExtendedEntity instance, EnumFacing facing, NBTBase nbt) {
         if(!(instance instanceof ExtendedEntity) || !(nbt instanceof NBTTagCompound))
             return;
         ExtendedEntity extendedEntity = (ExtendedEntity)instance;
@@ -25,7 +25,7 @@ public class ExtendedEntityStorage implements Capability.IStorage<IExtendedEntit
     // ========== Write ==========
     /** Writes a list of Creature Knowledge to a player's NBTTag. **/
     @Override
-    public NBTBase writeNBT(Capability<IExtendedEntity> capability, IExtendedEntity instance, EnumFacing facing) {
+    public NBTBase writeNBT(Capability<ExtendedEntity> capability, ExtendedEntity instance, EnumFacing facing) {
         if(!(instance instanceof ExtendedEntity))
             return null;
         ExtendedEntity extendedEntity = (ExtendedEntity)instance;

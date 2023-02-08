@@ -3,8 +3,6 @@ package com.lycanitesmobs;
 import com.lycanitesmobs.core.VersionChecker;
 import com.lycanitesmobs.core.capabilities.ExtendedEntityStorage;
 import com.lycanitesmobs.core.capabilities.ExtendedPlayerStorage;
-import com.lycanitesmobs.core.capabilities.IExtendedEntity;
-import com.lycanitesmobs.core.capabilities.IExtendedPlayer;
 import com.lycanitesmobs.core.command.CommandMain;
 import com.lycanitesmobs.core.compatibility.Thaumcraft;
 import com.lycanitesmobs.core.config.ConfigBase;
@@ -21,7 +19,6 @@ import com.lycanitesmobs.core.item.consumable.ItemWinterGift;
 import com.lycanitesmobs.core.item.equipment.EquipmentPartManager;
 import com.lycanitesmobs.core.mobevent.MobEventListener;
 import com.lycanitesmobs.core.mobevent.MobEventManager;
-import com.lycanitesmobs.core.mods.DLDungeons;
 import com.lycanitesmobs.core.network.PacketHandler;
 import com.lycanitesmobs.core.pets.PlayerFamiliars;
 import com.lycanitesmobs.core.spawner.SpawnerEventListener;
@@ -89,10 +86,10 @@ public class LycanitesMobs {
 	public static CommonProxy proxy;
 
     // Capabilities:
-    @CapabilityInject(IExtendedEntity.class)
-    public static final Capability<IExtendedEntity> EXTENDED_ENTITY = null;
-    @CapabilityInject(IExtendedPlayer.class)
-    public static final Capability<IExtendedPlayer> EXTENDED_PLAYER = null;
+    @CapabilityInject(ExtendedEntity.class)
+    public static final Capability<ExtendedEntity> EXTENDED_ENTITY = null;
+    @CapabilityInject(ExtendedPlayer.class)
+    public static final Capability<ExtendedPlayer> EXTENDED_PLAYER = null;
 	
 	// Creative Tabs:
     public static final CreativeTabs itemsTab = new CreativeTabItems(CreativeTabs.getNextID(), modid + ".items");
@@ -190,8 +187,8 @@ public class LycanitesMobs {
 		ObjectManager.addSpecialEntity("hitarea", EntityHitArea.class);
 
 		// Creatures:
-		CapabilityManager.INSTANCE.register(IExtendedPlayer.class, new ExtendedPlayerStorage(), ExtendedPlayer.class);
-		CapabilityManager.INSTANCE.register(IExtendedEntity.class, new ExtendedEntityStorage(), ExtendedEntity.class);
+		CapabilityManager.INSTANCE.register(ExtendedPlayer.class, new ExtendedPlayerStorage(), ExtendedPlayer::new);
+		CapabilityManager.INSTANCE.register(ExtendedEntity.class, new ExtendedEntityStorage(), ExtendedEntity::new);
 		CreatureManager.getInstance().startup(modInfo);
 
 		// Projectiles:

@@ -2,7 +2,6 @@ package com.lycanitesmobs.core.entity;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.core.capabilities.IExtendedEntity;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.network.MessageEntityPerched;
 import com.lycanitesmobs.core.network.MessageEntityPickedUp;
@@ -17,8 +16,7 @@ import javax.vecmath.Vector3d;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ExtendedEntity implements IExtendedEntity {
-    public static Map<Entity, ExtendedEntity> clientExtendedEntities = new HashMap<>();
+public class ExtendedEntity {
     public static String[] FORCE_REMOVE_ENTITY_IDS;
     public static int FORCE_REMOVE_ENTITY_TICKS = 40;
 
@@ -58,36 +56,14 @@ public class ExtendedEntity implements IExtendedEntity {
     //                   Get for Entity
     // ==================================================
 	public static ExtendedEntity getForEntity(EntityLivingBase entity) {
-		if(entity == null) {
-			//LycanitesMobs.logWarning("", "Tried to access an ExtendedEntity from a null Entity.");
+		if (entity == null) {
 			return null;
 		}
-
-        // Client Side:
-        if(entity.getEntityWorld() != null && entity.getEntityWorld().isRemote) {
-            if(clientExtendedEntities.containsKey(entity)) {
-                ExtendedEntity extendedEntity = clientExtendedEntities.get(entity);
-                extendedEntity.setEntity(entity);
-                return extendedEntity;
-            }
-            ExtendedEntity extendedEntity = new ExtendedEntity();
-            extendedEntity.setEntity(entity);
-            clientExtendedEntities.put(entity, extendedEntity);
-        }
-
-        // Server Side:
-        IExtendedEntity iExtendedEntity = null;
-        try {
-            iExtendedEntity = entity.getCapability(LycanitesMobs.EXTENDED_ENTITY, null);
-        }
-        catch(Exception e) {}
-        if(iExtendedEntity == null || !(iExtendedEntity instanceof ExtendedEntity)) {
-			return null;
+		ExtendedEntity extendedEntity = entity.getCapability(LycanitesMobs.EXTENDED_ENTITY, null);
+		if (extendedEntity.entity != entity) {
+			extendedEntity.setEntity(entity);
 		}
-        ExtendedEntity extendedEntity = (ExtendedEntity)iExtendedEntity;
-        if(extendedEntity.getEntity() != entity)
-            extendedEntity.setEntity(entity);
-        return extendedEntity;
+		return extendedEntity;
 	}
 	
 	
@@ -412,14 +388,6 @@ public class ExtendedEntity implements IExtendedEntity {
 			this.projectileCooldownsPrimary.put(projectileName, cooldown);
 		}
 		this.projectileCooldownsSecondary.put(projectileName, cooldown);
-	}
-
-
-	// ==================================================
-	//                       Remove
-	// ==================================================
-	public void onEntityRemoved() {
-		clientExtendedEntities.remove(this.entity);
 	}
 
 

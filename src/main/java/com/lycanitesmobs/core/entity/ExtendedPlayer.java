@@ -3,7 +3,6 @@ package com.lycanitesmobs.core.entity;
 import com.lycanitesmobs.GuiHandler;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.VersionChecker;
-import com.lycanitesmobs.core.capabilities.IExtendedPlayer;
 import com.lycanitesmobs.core.info.*;
 import com.lycanitesmobs.core.item.equipment.ItemEquipment;
 import com.lycanitesmobs.core.item.temp.ItemStaffSummoning;
@@ -27,9 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class ExtendedPlayer implements IExtendedPlayer {
-    public static Map<EntityPlayer, ExtendedPlayer> clientExtendedPlayers = new HashMap<>();
-	public static Map<UUID, NBTTagCompound> backupNBTTags = new HashMap<>();
+public class ExtendedPlayer {
 	
 	// Player Info and Containers:
 	public EntityPlayer player;
@@ -89,32 +86,14 @@ public class ExtendedPlayer implements IExtendedPlayer {
     //                   Get for Player
     // ==================================================
 	public static ExtendedPlayer getForPlayer(EntityPlayer player) {
-		if(player == null) {
-			//LycanitesMobs.logWarning("", "Tried to access an ExtendedPlayer from a null EntityPlayer.");
+		if (player == null) {
 			return null;
 		}
-
-        // Client Side:
-        if(player.getEntityWorld() != null && player.getEntityWorld().isRemote) {
-            if(clientExtendedPlayers.containsKey(player) && clientExtendedPlayers.get(player) != null) {
-                ExtendedPlayer extendedPlayer = clientExtendedPlayers.get(player);
-                extendedPlayer.setPlayer(player);
-                return extendedPlayer;
-            }
-            ExtendedPlayer extendedPlayer = new ExtendedPlayer();
-            extendedPlayer.setPlayer(player);
-            clientExtendedPlayers.put(player, extendedPlayer);
-            LycanitesMobs.packetHandler.sendToServer(new MessageSyncRequest());
-        }
-
-        // Server Side:
-        IExtendedPlayer iExtendedPlayer = player.getCapability(LycanitesMobs.EXTENDED_PLAYER, null);
-        if(!(iExtendedPlayer instanceof ExtendedPlayer))
-            return null;
-        ExtendedPlayer extendedPlayer = (ExtendedPlayer)iExtendedPlayer;
-        if(extendedPlayer.getPlayer() != player)
-            extendedPlayer.setPlayer(player);
-        return extendedPlayer;
+		ExtendedPlayer extendedPlayer = player.getCapability(LycanitesMobs.EXTENDED_PLAYER, null);
+		if (extendedPlayer.player != player) {
+			extendedPlayer.setPlayer(player);
+		}
+		return extendedPlayer;
 	}
 
 
@@ -134,25 +113,10 @@ public class ExtendedPlayer implements IExtendedPlayer {
 	// ==================================================
     //                    Player Entity
     // ==================================================
-    /** Called when the player entity is being cloned, backups all data so that it can be loaded into a new ExtendedPlayer for the clone. **/
-    public void backupPlayer() {
-        if(this.player != null && !this.player.getEntityWorld().isRemote) {
-            NBTTagCompound nbtTagCompound = new NBTTagCompound();
-            this.writeNBT(nbtTagCompound);
-            backupNBTTags.put(this.player.getUniqueID(), nbtTagCompound);
-        }
-    }
-
     /** Initially sets the player entity and loads any backup data, if the entity is being cloned from another call backupPlayer() instead so that the clone's ExtendedPlayer can load it. **/
 	public void setPlayer(EntityPlayer player) {
         this.player = player;
         this.petManager.host = player;
-        if(this.player.getEntityWorld().isRemote)
-            return;
-        if(backupNBTTags.containsKey(this.player.getUniqueID())) {
-            this.readNBT(backupNBTTags.get(this.player.getUniqueID()));
-            backupNBTTags.remove(this.player.getUniqueID());
-        }
 	}
 
     public EntityPlayer getPlayer() {

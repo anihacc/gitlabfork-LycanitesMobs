@@ -94,7 +94,7 @@ public class WorldEventListener implements IWorldEventListener {
 
 	@Override
 	public void onEntityRemoved(Entity entity) {
-		this.gameEventListener.onEntityLeaveWorld(entity);
+
 	}
 
 	@Override

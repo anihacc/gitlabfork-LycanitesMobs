@@ -2,8 +2,6 @@ package com.lycanitesmobs;
 
 import com.lycanitesmobs.client.localisation.LanguageManager;
 import com.lycanitesmobs.core.block.BlockFireBase;
-import com.lycanitesmobs.core.capabilities.IExtendedEntity;
-import com.lycanitesmobs.core.capabilities.IExtendedPlayer;
 import com.lycanitesmobs.core.entity.*;
 import com.lycanitesmobs.core.info.ItemConfig;
 import com.lycanitesmobs.core.info.ItemManager;
@@ -122,7 +120,7 @@ public class GameEventListener {
     public void onAttachCapabilities(AttachCapabilitiesEvent<Entity> event) {
         if(event.getObject() instanceof EntityLivingBase) {
             event.addCapability(new ResourceLocation(LycanitesMobs.modid, "IExtendedEntity"), new ICapabilitySerializable<NBTTagCompound>() {
-                IExtendedEntity instance = LycanitesMobs.EXTENDED_ENTITY.getDefaultInstance();
+                private final ExtendedEntity instance = LycanitesMobs.EXTENDED_ENTITY.getDefaultInstance();
 
                 @Override
                 public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
@@ -148,7 +146,7 @@ public class GameEventListener {
 
         if(event.getObject() instanceof EntityPlayer) {
             event.addCapability(new ResourceLocation(LycanitesMobs.modid, "IExtendedPlayer"), new ICapabilitySerializable<NBTTagCompound>() {
-                IExtendedPlayer instance = LycanitesMobs.EXTENDED_PLAYER.getDefaultInstance();
+                private final ExtendedPlayer instance = LycanitesMobs.EXTENDED_PLAYER.getDefaultInstance();
 
                 @Override
                 public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
@@ -177,12 +175,14 @@ public class GameEventListener {
     // ==================================================
     //                    Player Clone
     // ==================================================
-    @SubscribeEvent
-    public void onPlayerClone(PlayerEvent.Clone event) {
-        ExtendedPlayer extendedPlayer = ExtendedPlayer.getForPlayer(event.getOriginal());
-        if(extendedPlayer != null)
-            extendedPlayer.backupPlayer();
-    }
+	@SubscribeEvent
+	public void onPlayerClone(PlayerEvent.Clone event) {
+		ExtendedPlayer extendedPlayerOld = ExtendedPlayer.getForPlayer(event.getOriginal());
+		ExtendedPlayer extendedPlayerNew = ExtendedPlayer.getForPlayer(event.getEntityPlayer());
+		NBTTagCompound nbt = new NBTTagCompound();
+		extendedPlayerOld.writeNBT(nbt);
+		extendedPlayerNew.readNBT(nbt);
+	}
 
 
 	// ==================================================
@@ -205,24 +205,6 @@ public class GameEventListener {
                 }
             }
         }
-	}
-
-
-	// ==================================================
-	//                Entity Leave World
-	//           Uses 1.12.2 WorldEventListener
-	// ==================================================
-	public void onEntityLeaveWorld(Entity entity) {
-		if (!(entity instanceof EntityLivingBase)) {
-			return;
-		}
-		ExtendedEntity extendedEntity = ExtendedEntity.getForEntity((EntityLivingBase)entity);
-		if (extendedEntity != null) {
-			extendedEntity.onEntityRemoved();
-		}
-		if (entity instanceof EntityPlayer) {
-			ExtendedPlayer.clientExtendedPlayers.remove((EntityPlayer)entity);
-		}
 	}
 
 
