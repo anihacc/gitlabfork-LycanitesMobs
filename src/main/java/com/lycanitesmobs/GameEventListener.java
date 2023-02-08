@@ -109,7 +109,7 @@ public class GameEventListener {
 
 	@SubscribeEvent
 	public void onWorldUnloading(WorldEvent.Unload event) {
-		ExtendedWorld.loadedExtWorlds.remove(event.getWorld());
+		ExtendedWorld.remove(event.getWorld());
 	}
 
 

@@ -22,8 +22,8 @@ import net.minecraft.world.storage.WorldSavedData;
 import java.util.*;
 
 public class ExtendedWorld extends WorldSavedData {
-	public static String EXT_PROP_NAME = "LycanitesMobs";
-	public static Map<World, ExtendedWorld> loadedExtWorlds = new HashMap<>();
+	private static final String EXT_PROP_NAME = "LycanitesMobs";
+	private static final Map<World, ExtendedWorld> loadedExtWorlds = new HashMap<>();
 
     /** The world INSTANCE to work with. **/
 	public World world;
@@ -56,33 +56,27 @@ public class ExtendedWorld extends WorldSavedData {
     //                   Get for World
     // ==================================================
 	public static ExtendedWorld getForWorld(World world) {
-		if(world == null) {
-			//LycanitesMobs.logWarning("", "Tried to access an ExtendedWorld from a null World.");
+		if (world == null) {
 			return null;
 		}
-        ExtendedWorld worldExt;
-		
-		// Already Loaded:
-		if(loadedExtWorlds.containsKey(world)) {
-            worldExt = loadedExtWorlds.get(world);
-            return worldExt;
-        }
+		return loadedExtWorlds.computeIfAbsent(world, k -> {
+			ExtendedWorld worldExt;
+			WorldSavedData worldSavedData = world.getPerWorldStorage().getOrLoadData(ExtendedWorld.class,
+					EXT_PROP_NAME);
+			if (worldSavedData != null) {
+				worldExt = (ExtendedWorld) worldSavedData;
+				worldExt.world = world;
+				worldExt.init();
+			} else {
+				worldExt = new ExtendedWorld(world);
+				world.getPerWorldStorage().setData(EXT_PROP_NAME, worldExt);
+			}
+			return worldExt;
+		});
+	}
 
-        if (world.MAX_ENTITY_RADIUS < 25)
-            world.MAX_ENTITY_RADIUS = 25;
-		WorldSavedData worldSavedData = world.getPerWorldStorage().getOrLoadData(ExtendedWorld.class, EXT_PROP_NAME);
-		if(worldSavedData != null) {
-			worldExt = (ExtendedWorld)worldSavedData;
-			worldExt.world = world;
-			worldExt.init();
-		}
-		else {
-			worldExt = new ExtendedWorld(world);
-			world.getPerWorldStorage().setData(EXT_PROP_NAME, worldExt);
-		}
-
-		loadedExtWorlds.put(world, worldExt);
-		return worldExt;
+	public static void remove(World world) {
+		loadedExtWorlds.remove(world);
 	}
 	
 	
