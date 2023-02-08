@@ -106,6 +106,14 @@ public class SectorInstance {
 		this.parentConnector = parentConnector;
 	}
 
+	private int stairOffset() {
+		int offset = -(this.getRoomSize().getY() * 2);
+		if (this.parentConnector.position.getY() > 62) {
+			offset += -(this.parentConnector.position.getY() - 62);
+		}
+		return offset;
+	}
+
 
 	/**
 	 * Initialises this Sector Instance. Must be connected to a parent connector.
@@ -209,7 +217,7 @@ public class SectorInstance {
 		if("stairs".equalsIgnoreCase(this.dungeonSector.type)) {
 
 			// Lower Exit:
-			int y = this.parentConnector.position.getY() - (size.getY() * 2);
+			int y = this.parentConnector.position.getY() + stairOffset();
 			if(y > 0) {
 				BlockPos blockPos = new BlockPos(centerX, y, boundsMax.getZ() + 1);
 				if (this.parentConnector.facing == EnumFacing.EAST) {
@@ -503,7 +511,7 @@ public class SectorInstance {
 	public BlockPos getOccupiedBoundsMin() {
 		BlockPos occupiedBoundsMin = this.getBoundsMin(this.getOccupiedSize());
 		if("stairs".equals(this.dungeonSector.type)) {
-			occupiedBoundsMin = occupiedBoundsMin.subtract(new Vec3i(0, this.getRoomSize().getY() * 2, 0));
+			occupiedBoundsMin = occupiedBoundsMin.add(0, stairOffset(), 0);
 		}
 		return occupiedBoundsMin;
 	}
@@ -542,7 +550,6 @@ public class SectorInstance {
 	 */
 	public BlockPos getCenter() {
 		BlockPos startPos = this.getRoomBoundsMin();
-		BlockPos stopPos = this.getRoomBoundsMax();
 
 		Vec3i size = this.getRoomSize();
 		int centerX = startPos.getX() + Math.round((float)size.getX() / 2);
@@ -650,7 +657,7 @@ public class SectorInstance {
 		this.buildCeiling(world, chunkPos, random);
 		if("stairs".equalsIgnoreCase(this.dungeonSector.type)) {
 			this.buildStairs(world, chunkPos, random);
-			this.buildFloor(world, chunkPos, random, -(this.getRoomSize().getY() * 2));
+			this.buildFloor(world, chunkPos, random, stairOffset());
 		}
 		if("tower".equalsIgnoreCase(this.dungeonSector.type)) {
 			this.buildStairs(world, chunkPos, random);
@@ -684,7 +691,7 @@ public class SectorInstance {
 		int stopZ = Math.max(startPos.getZ(), stopPos.getZ());
 
 		if("stairs".equalsIgnoreCase(this.dungeonSector.type)) {
-			startY = Math.max(1, startPos.getY() - (this.getRoomSize().getY() * 2));
+			startY = Math.max(1, startPos.getY() + stairOffset());
 		}
 
 		final BlockPos.MutableBlockPos buildPos = new BlockPos.MutableBlockPos();
@@ -750,7 +757,6 @@ public class SectorInstance {
 		BlockPos startPos = this.getRoomBoundsMin();
 		BlockPos stopPos = this.getRoomBoundsMax();
 
-		Vec3i size = this.getRoomSize();
 		int startX = Math.min(startPos.getX(), stopPos.getX());
 		int stopX = Math.max(startPos.getX(), stopPos.getX());
 		int startY = Math.min(startPos.getY() + 1, stopPos.getY());
@@ -759,7 +765,7 @@ public class SectorInstance {
 		int stopZ = Math.max(startPos.getZ(), stopPos.getZ());
 
 		if("stairs".equalsIgnoreCase(this.dungeonSector.type)) {
-			startY = Math.max(1, startPos.getY() - (size.getY() * 2));
+			startY = Math.max(1, startPos.getY() + stairOffset());
 		}
 
 		final BlockPos.MutableBlockPos buildPos = new BlockPos.MutableBlockPos();
@@ -865,7 +871,7 @@ public class SectorInstance {
 
 		int stairsHeight = this.parentConnector.parentSector.getOccupiedSize().getY() - 1;
 		if(this.dungeonSector.type.equalsIgnoreCase("stairs")) {
-			stairsHeight = size.getY() * 2;
+			stairsHeight = -stairOffset();
 		}
 		int startX = centerX - 1;
 		int stopX = centerX + 1;
