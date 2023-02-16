@@ -1,7 +1,6 @@
 package com.lycanitesmobs.core.network;
 
 import com.lycanitesmobs.core.entity.ExtendedEntity;
-import com.lycanitesmobs.LycanitesMobs;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -9,11 +8,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.relauncher.Side;
 
-public class MessageEntityPickedUp implements IMessage, IMessageHandler<MessageEntityPickedUp, IMessage> {
+public class MessageEntityPickedUp implements IMessage {
 	public int pickedUpEntityID;
 	public int pickedUpByEntityID;
 	
@@ -34,20 +31,16 @@ public class MessageEntityPickedUp implements IMessage, IMessageHandler<MessageE
 	/**
 	 * Called when this message is received.
 	 */
-	@Override
-	public IMessage onMessage(MessageEntityPickedUp message, MessageContext ctx) {
-		if(ctx.side != Side.CLIENT) return null;
-		EntityPlayer player = LycanitesMobs.proxy.getClientPlayer();
+	public static void onMessage(MessageEntityPickedUp message, MessageContext ctx, EntityPlayer player) {
 		World world = player.getEntityWorld();
 		Entity pickedUpEntity = world.getEntityByID(message.pickedUpEntityID);
 		Entity pickedUpByEntity = message.pickedUpByEntityID != 0 ? world.getEntityByID(message.pickedUpByEntityID) : null;
 
-        if(!(pickedUpEntity instanceof EntityLivingBase))
-            return null;
-		ExtendedEntity pickedUpEntityExt = ExtendedEntity.getForEntity((EntityLivingBase)pickedUpEntity);
-		if(pickedUpEntityExt != null)
+		if (!(pickedUpEntity instanceof EntityLivingBase))
+			return;
+		ExtendedEntity pickedUpEntityExt = ExtendedEntity.getForEntity((EntityLivingBase) pickedUpEntity);
+		if (pickedUpEntityExt != null)
 			pickedUpEntityExt.setPickedUpByEntity(pickedUpByEntity);
-		return null;
 	}
 	
 	

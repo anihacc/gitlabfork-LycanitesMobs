@@ -1,20 +1,15 @@
 package com.lycanitesmobs.core.network;
 
 import com.lycanitesmobs.ExtendedWorld;
-import com.lycanitesmobs.LycanitesMobs;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.IThreadListener;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.relauncher.Side;
 
-public class MessageMobEvent implements IMessage, IMessageHandler<MessageMobEvent, IMessage> {
+public class MessageMobEvent implements IMessage {
 	public String mobEventName;
 	public BlockPos pos;
 	public int level = 1;
@@ -39,25 +34,15 @@ public class MessageMobEvent implements IMessage, IMessageHandler<MessageMobEven
 	/**
 	 * Called when this message is received.
 	 */
-	@Override
-	public IMessage onMessage(final MessageMobEvent message, final MessageContext ctx) {
-		if(ctx.side != Side.CLIENT) return null;
-        IThreadListener mainThread = Minecraft.getMinecraft();
-        mainThread.addScheduledTask(new Runnable() {
-            @Override
-            public void run() {
-                EntityPlayer player = LycanitesMobs.proxy.getClientPlayer();
-                World world = player.getEntityWorld();
-                ExtendedWorld worldExt = ExtendedWorld.getForWorld(world);
+	public static void onMessage(MessageMobEvent message, MessageContext ctx, EntityPlayer player) {
+		World world = player.getEntityWorld();
+		ExtendedWorld worldExt = ExtendedWorld.getForWorld(world);
 
-                if ("".equals(message.mobEventName))
-                    worldExt.stopMobEvent(message.mobEventName);
-                else {
-                    worldExt.startMobEvent(message.mobEventName, null, message.pos, message.level, message.subspecies);
-                }
-            }
-        });
-		return null;
+		if ("".equals(message.mobEventName)) {
+			worldExt.stopMobEvent(message.mobEventName);
+		} else {
+			worldExt.startMobEvent(message.mobEventName, null, message.pos, message.level, message.subspecies);
+		}
 	}
 	
 	

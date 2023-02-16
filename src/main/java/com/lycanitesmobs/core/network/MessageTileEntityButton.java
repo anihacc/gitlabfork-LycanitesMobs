@@ -2,18 +2,15 @@ package com.lycanitesmobs.core.network;
 
 import com.lycanitesmobs.core.tileentity.TileEntityBase;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IThreadListener;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.relauncher.Side;
 
-public class MessageTileEntityButton implements IMessage, IMessageHandler<MessageTileEntityButton, IMessage> {
+public class MessageTileEntityButton implements IMessage {
 	public byte buttonId;
 	public BlockPos tileEntityPos;
 
@@ -34,23 +31,16 @@ public class MessageTileEntityButton implements IMessage, IMessageHandler<Messag
 	/**
 	 * Called when this message is received.
 	 */
-	@Override
-	public IMessage onMessage(final MessageTileEntityButton message, final MessageContext ctx) {
-		if(ctx.side != Side.SERVER)
-			return null;
-		World world = ctx.getServerHandler().player.getEntityWorld();
-		if(world == null)
-			return null;
-        IThreadListener mainThread = (WorldServer)world;
-        mainThread.addScheduledTask(() -> {
-			TileEntity tileEntity = world.getTileEntity(message.tileEntityPos);
-			if(!(tileEntity instanceof TileEntityBase)) {
-				return;
-			}
-			TileEntityBase tileEntityBase = (TileEntityBase)tileEntity;
-			tileEntityBase.onGuiButton(message.buttonId);
-		});
-		return null;
+	public static void onMessage(MessageTileEntityButton message, MessageContext ctx, EntityPlayer player) {
+		World world = player.getEntityWorld();
+		if (world == null)
+			return;
+		TileEntity tileEntity = world.getTileEntity(message.tileEntityPos);
+		if (!(tileEntity instanceof TileEntityBase)) {
+			return;
+		}
+		TileEntityBase tileEntityBase = (TileEntityBase) tileEntity;
+		tileEntityBase.onGuiButton(message.buttonId);
 	}
 	
 	

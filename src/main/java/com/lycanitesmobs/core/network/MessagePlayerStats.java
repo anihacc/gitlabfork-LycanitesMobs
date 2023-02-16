@@ -1,16 +1,13 @@
 package com.lycanitesmobs.core.network;
 
-import com.lycanitesmobs.LycanitesMobs;
 import io.netty.buffer.ByteBuf;
 import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.relauncher.Side;
 
-public class MessagePlayerStats implements IMessage, IMessageHandler<MessagePlayerStats, IMessage> {
+public class MessagePlayerStats implements IMessage {
 	public int spirit;
 	public int summonFocus;
 	public int creatureStudyCooldown;
@@ -32,17 +29,14 @@ public class MessagePlayerStats implements IMessage, IMessageHandler<MessagePlay
 	/**
 	 * Called when this message is received.
 	 */
-	@Override
-	public IMessage onMessage(MessagePlayerStats message, MessageContext ctx) {
-		if(ctx.side != Side.CLIENT) return null;
-		EntityPlayer player = LycanitesMobs.proxy.getClientPlayer();
+	public static void onMessage(MessagePlayerStats message, MessageContext ctx, EntityPlayer player) {
 		ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
-		if(playerExt == null) return null;
+		if (playerExt == null)
+			return;
 
 		playerExt.spirit = message.spirit;
 		playerExt.summonFocus = message.summonFocus;
 		playerExt.creatureStudyCooldown = message.creatureStudyCooldown;
-		return null;
 	}
 	
 	

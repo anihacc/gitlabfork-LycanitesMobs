@@ -6,15 +6,11 @@ import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IThreadListener;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.relauncher.Side;
 
-public class MessageSummoningPedestalSummonSet implements IMessage, IMessageHandler<MessageSummoningPedestalSummonSet, IMessage> {
+public class MessageSummoningPedestalSummonSet implements IMessage {
 	public String summonType;
 	public int subpsecies;
 	public int variant;
@@ -45,25 +41,17 @@ public class MessageSummoningPedestalSummonSet implements IMessage, IMessageHand
 	/**
 	 * Called when this message is received.
 	 */
-	@Override
-	public IMessage onMessage(final MessageSummoningPedestalSummonSet message, final MessageContext ctx) {
-        // Server Side:
-        if(ctx.side != Side.SERVER)
-            return null;
-        IThreadListener mainThread = (WorldServer) ctx.getServerHandler().player.getEntityWorld();
-        mainThread.addScheduledTask(() -> {
-			EntityPlayer player = ctx.getServerHandler().player;
-			TileEntity tileEntity = player.getEntityWorld().getTileEntity(new BlockPos(message.x, message.y, message.z));
-			TileEntitySummoningPedestal summoningPedestal = null;
-			if(tileEntity instanceof TileEntitySummoningPedestal)
-				summoningPedestal = (TileEntitySummoningPedestal)tileEntity;
-			if(summoningPedestal == null)
-				return;
-			if(summoningPedestal.summonSet == null)
-				summoningPedestal.summonSet = new SummonSet(null);
-			summoningPedestal.summonSet.readFromPacket(message.summonType, message.subpsecies, message.variant, message.behaviour);
-		});
-        return null;
+	public static void onMessage(MessageSummoningPedestalSummonSet message, MessageContext ctx, EntityPlayer player) {
+		// Server Side:
+		TileEntity tileEntity = player.getEntityWorld().getTileEntity(new BlockPos(message.x, message.y, message.z));
+		TileEntitySummoningPedestal summoningPedestal = null;
+		if (tileEntity instanceof TileEntitySummoningPedestal)
+			summoningPedestal = (TileEntitySummoningPedestal) tileEntity;
+		if (summoningPedestal == null)
+			return;
+		if (summoningPedestal.summonSet == null)
+			summoningPedestal.summonSet = new SummonSet(null);
+		summoningPedestal.summonSet.readFromPacket(message.summonType, message.subpsecies, message.variant, message.behaviour);
 	}
 	
 	

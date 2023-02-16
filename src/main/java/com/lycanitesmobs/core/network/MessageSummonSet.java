@@ -1,19 +1,15 @@
 package com.lycanitesmobs.core.network;
 
 import com.lycanitesmobs.core.entity.ExtendedPlayer;
-import com.lycanitesmobs.LycanitesMobs;
 import io.netty.buffer.ByteBuf;
 import com.lycanitesmobs.core.pets.SummonSet;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.IThreadListener;
-import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 
-public class MessageSummonSet implements IMessage, IMessageHandler<MessageSummonSet, IMessage> {
+public class MessageSummonSet implements IMessage {
 	public byte summonSetID;
 	public int subpsecies;
 	public int variant;
@@ -40,29 +36,22 @@ public class MessageSummonSet implements IMessage, IMessageHandler<MessageSummon
 	/**
 	 * Called when this message is received.
 	 */
-	@Override
-	public IMessage onMessage(final MessageSummonSet message, final MessageContext ctx) {
-        // Server Side:
-        if(ctx.side == Side.SERVER) {
-            IThreadListener mainThread = (WorldServer) ctx.getServerHandler().player.getEntityWorld();
-            mainThread.addScheduledTask(() -> {
-				EntityPlayer player = ctx.getServerHandler().player;
-				ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
+	public static void onMessage(MessageSummonSet message, MessageContext ctx, EntityPlayer player) {
+		if (ctx.side == Side.SERVER) {
+			// Server Side:
+			ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
 
-				SummonSet summonSet = playerExt.getSummonSet(message.summonSetID);
-				summonSet.readFromPacket(message.summonType, message.subpsecies, message.variant, message.behaviour);
-			});
-            return null;
-        }
+			SummonSet summonSet = playerExt.getSummonSet(message.summonSetID);
+			summonSet.readFromPacket(message.summonType, message.subpsecies, message.variant, message.behaviour);
+		} else {
+			// Client Side:
+			ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
+			if (playerExt == null)
+				return;
 
-        // Client Side:
-        EntityPlayer player = LycanitesMobs.proxy.getClientPlayer();
-        ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
-        if(playerExt == null) return null;
-
-		SummonSet summonSet = playerExt.getSummonSet(message.summonSetID);
-		summonSet.readFromPacket(message.summonType, message.subpsecies, message.variant, message.behaviour);
-		return null;
+			SummonSet summonSet = playerExt.getSummonSet(message.summonSetID);
+			summonSet.readFromPacket(message.summonType, message.subpsecies, message.variant, message.behaviour);
+		}
 	}
 	
 	

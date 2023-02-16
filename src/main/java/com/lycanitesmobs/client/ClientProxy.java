@@ -46,6 +46,7 @@ import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -214,4 +215,15 @@ public class ClientProxy extends CommonProxy {
 
         ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName(), "inventory"));
     }
+
+	// ========== Message Handling ==========
+	@Override
+	public EntityPlayer getPlayer(MessageContext ctx) {
+		if (ctx.side == Side.CLIENT) {
+			return Minecraft.getMinecraft().player;
+		} else {
+			return ctx.getServerHandler().player;
+		}
+	}
+
 }

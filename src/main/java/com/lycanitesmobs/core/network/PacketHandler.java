@@ -1,9 +1,16 @@
 package com.lycanitesmobs.core.network;
 
+import org.apache.logging.log4j.util.TriConsumer;
+
 import com.lycanitesmobs.LycanitesMobs;
+
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -19,38 +26,61 @@ public class PacketHandler {
 	 */
 	public void init() {
 		int messageID = 0;
-		
+
 		// Server to Client:
-		this.network.registerMessage(MessageBeastiary.class, MessageBeastiary.class, messageID++, Side.CLIENT);
-		this.network.registerMessage(MessageCreature.class, MessageCreature.class, messageID++, Side.CLIENT);
-		this.network.registerMessage(MessageCreatureKnowledge.class, MessageCreatureKnowledge.class, messageID++, Side.CLIENT);
-		this.network.registerMessage(MessagePlayerStats.class, MessagePlayerStats.class, messageID++, Side.CLIENT);
-        this.network.registerMessage(MessagePetEntry.class, MessagePetEntry.class, messageID++, Side.CLIENT);
-		this.network.registerMessage(MessagePetEntryRemove.class, MessagePetEntryRemove.class, messageID++, Side.CLIENT);
-		this.network.registerMessage(MessageSummonSet.class, MessageSummonSet.class, messageID++, Side.CLIENT);
-		this.network.registerMessage(MessageSummonSetSelection.class, MessageSummonSetSelection.class, messageID++, Side.CLIENT);
-		this.network.registerMessage(MessageEntityPickedUp.class, MessageEntityPickedUp.class, messageID++, Side.CLIENT);
-		this.network.registerMessage(MessageEntityPerched.class, MessageEntityPerched.class, messageID++, Side.CLIENT);
-		this.network.registerMessage(MessageWorldEvent.class, MessageWorldEvent.class, messageID++, Side.CLIENT);
-		this.network.registerMessage(MessageMobEvent.class, MessageMobEvent.class, messageID++, Side.CLIENT);
-		this.network.registerMessage(MessageSummoningPedestalStats.class, MessageSummoningPedestalStats.class, messageID++, Side.CLIENT);
-		this.network.registerMessage(MessageEntityVelocity.class, MessageEntityVelocity.class, messageID++, Side.CLIENT);
+		this.network.registerMessage(clientHandler(MessageBeastiary::onMessage), MessageBeastiary.class, messageID++, Side.CLIENT);
+		this.network.registerMessage(clientHandler(MessageCreature::onMessage), MessageCreature.class, messageID++, Side.CLIENT);
+		this.network.registerMessage(clientHandler(MessageCreatureKnowledge::onMessage), MessageCreatureKnowledge.class, messageID++, Side.CLIENT);
+		this.network.registerMessage(clientHandler(MessagePlayerStats::onMessage), MessagePlayerStats.class, messageID++, Side.CLIENT);
+		this.network.registerMessage(clientHandler(MessagePetEntry::onMessage), MessagePetEntry.class, messageID++, Side.CLIENT);
+		this.network.registerMessage(clientHandler(MessagePetEntryRemove::onMessage), MessagePetEntryRemove.class, messageID++, Side.CLIENT);
+		this.network.registerMessage(clientHandler(MessageSummonSet::onMessage), MessageSummonSet.class, messageID++, Side.CLIENT);
+		this.network.registerMessage(clientHandler(MessageSummonSetSelection::onMessage), MessageSummonSetSelection.class, messageID++, Side.CLIENT);
+		this.network.registerMessage(clientHandler(MessageEntityPickedUp::onMessage), MessageEntityPickedUp.class, messageID++, Side.CLIENT);
+		this.network.registerMessage(clientHandler(MessageEntityPerched::onMessage), MessageEntityPerched.class, messageID++, Side.CLIENT);
+		this.network.registerMessage(clientHandler(MessageWorldEvent::onMessage), MessageWorldEvent.class, messageID++, Side.CLIENT);
+		this.network.registerMessage(clientHandler(MessageMobEvent::onMessage), MessageMobEvent.class, messageID++, Side.CLIENT);
+		this.network.registerMessage(clientHandler(MessageSummoningPedestalStats::onMessage), MessageSummoningPedestalStats.class, messageID++, Side.CLIENT);
+		this.network.registerMessage(clientHandler(MessageEntityVelocity::onMessage), MessageEntityVelocity.class, messageID++, Side.CLIENT);
 
 		// Client to Server:
-		this.network.registerMessage(MessageEntityGUICommand.class, MessageEntityGUICommand.class, messageID++, Side.SERVER);
-		this.network.registerMessage(MessageSyncRequest.class, MessageSyncRequest.class, messageID++, Side.SERVER);
-		this.network.registerMessage(MessageGUIRequest.class, MessageGUIRequest.class, messageID++, Side.SERVER);
-		this.network.registerMessage(MessagePlayerControl.class, MessagePlayerControl.class, messageID++, Side.SERVER);
-		this.network.registerMessage(MessagePlayerLeftClick.class, MessagePlayerLeftClick.class, messageID++, Side.SERVER);
-        this.network.registerMessage(MessagePlayerAttack.class, MessagePlayerAttack.class, messageID++, Side.SERVER);
-        this.network.registerMessage(MessagePetEntry.class, MessagePetEntry.class, messageID++, Side.SERVER);
-		this.network.registerMessage(MessagePetEntryRemove.class, MessagePetEntryRemove.class, messageID++, Side.SERVER);
-		this.network.registerMessage(MessageSummonSet.class, MessageSummonSet.class, messageID++, Side.SERVER);
-		this.network.registerMessage(MessageSummonSetSelection.class, MessageSummonSetSelection.class, messageID++, Side.SERVER);
-        this.network.registerMessage(MessageSummoningPedestalSummonSet.class, MessageSummoningPedestalSummonSet.class, messageID++, Side.SERVER);
-		this.network.registerMessage(MessageTileEntityButton.class, MessageTileEntityButton.class, messageID++, Side.SERVER);
+		this.network.registerMessage(serverHandler(MessageEntityGUICommand::onMessage), MessageEntityGUICommand.class, messageID++, Side.SERVER);
+		this.network.registerMessage(serverHandler(MessageSyncRequest::onMessage), MessageSyncRequest.class, messageID++, Side.SERVER);
+		this.network.registerMessage(serverHandler(MessageGUIRequest::onMessage), MessageGUIRequest.class, messageID++, Side.SERVER);
+		this.network.registerMessage(serverHandler(MessagePlayerControl::onMessage), MessagePlayerControl.class, messageID++, Side.SERVER);
+		this.network.registerMessage(serverHandler(MessagePlayerLeftClick::onMessage), MessagePlayerLeftClick.class, messageID++, Side.SERVER);
+		this.network.registerMessage(serverHandler(MessagePlayerAttack::onMessage), MessagePlayerAttack.class, messageID++, Side.SERVER);
+		this.network.registerMessage(serverHandler(MessagePetEntry::onMessage), MessagePetEntry.class, messageID++, Side.SERVER);
+		this.network.registerMessage(serverHandler(MessagePetEntryRemove::onMessage), MessagePetEntryRemove.class, messageID++, Side.SERVER);
+		this.network.registerMessage(serverHandler(MessageSummonSet::onMessage), MessageSummonSet.class, messageID++, Side.SERVER);
+		this.network.registerMessage(serverHandler(MessageSummonSetSelection::onMessage), MessageSummonSetSelection.class, messageID++, Side.SERVER);
+		this.network.registerMessage(serverHandler(MessageSummoningPedestalSummonSet::onMessage), MessageSummoningPedestalSummonSet.class, messageID++, Side.SERVER);
+		this.network.registerMessage(serverHandler(MessageTileEntityButton::onMessage), MessageTileEntityButton.class, messageID++, Side.SERVER);
 	}
-	
+
+	private <REQ extends IMessage, REPLY extends IMessage> IMessageHandler<REQ, REPLY> clientHandler(
+			TriConsumer<REQ, MessageContext, EntityPlayer> c) {
+		return (message, ctx) -> {
+			if (ctx.side == Side.CLIENT) {
+				FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
+					c.accept(message, ctx, LycanitesMobs.proxy.getPlayer(ctx));
+				});
+			}
+			return null;
+		};
+	}
+
+	private <REQ extends IMessage, REPLY extends IMessage> IMessageHandler<REQ, REPLY> serverHandler(
+			TriConsumer<REQ, MessageContext, EntityPlayer> c) {
+		return (message, ctx) -> {
+			if (ctx.side == Side.SERVER) {
+				FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
+					c.accept(message, ctx, LycanitesMobs.proxy.getPlayer(ctx));
+				});
+			}
+			return null;
+		};
+	}
 	
 	// ==================================================
 	//                    Send To All

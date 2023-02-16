@@ -5,15 +5,11 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.IThreadListener;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.relauncher.Side;
 
-public class MessageEntityGUICommand implements IMessage, IMessageHandler<MessageEntityGUICommand, IMessage> {
+public class MessageEntityGUICommand implements IMessage {
 	int entityID;
 	public byte guiCommandID;
 	
@@ -34,20 +30,13 @@ public class MessageEntityGUICommand implements IMessage, IMessageHandler<Messag
 	/**
 	 * Called when this message is received.
 	 */
-	@Override
-	public IMessage onMessage(final MessageEntityGUICommand message, final MessageContext ctx) {
-		if(ctx.side != Side.SERVER) return null;
-        IThreadListener mainThread = (WorldServer)ctx.getServerHandler().player.getEntityWorld();
-        mainThread.addScheduledTask(() -> {
-			EntityPlayer player = ctx.getServerHandler().player;
-			World world = player.getEntityWorld();
-			Entity entity = world.getEntityByID(message.entityID);
-			if (entity instanceof TameableCreatureEntity) {
-				TameableCreatureEntity pet = (TameableCreatureEntity) entity;
-				pet.performGUICommand(player, message.guiCommandID);
-			}
-		});
-		return null;
+	public static void onMessage(MessageEntityGUICommand message, MessageContext ctx, EntityPlayer player) {
+		World world = player.getEntityWorld();
+		Entity entity = world.getEntityByID(message.entityID);
+		if (entity instanceof TameableCreatureEntity) {
+			TameableCreatureEntity pet = (TameableCreatureEntity) entity;
+			pet.performGUICommand(player, message.guiCommandID);
+		}
 	}
 	
 	

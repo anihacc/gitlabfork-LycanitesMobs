@@ -1,18 +1,14 @@
 package com.lycanitesmobs.core.network;
 
-import com.lycanitesmobs.LycanitesMobs;
 import io.netty.buffer.ByteBuf;
 import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.IThreadListener;
-import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 
-public class MessageSummonSetSelection implements IMessage, IMessageHandler<MessageSummonSetSelection, IMessage> {
+public class MessageSummonSetSelection implements IMessage {
 	public byte summonSetID;
 	
 	
@@ -31,28 +27,18 @@ public class MessageSummonSetSelection implements IMessage, IMessageHandler<Mess
 	/**
 	 * Called when this message is received.
 	 */
-	@Override
-	public IMessage onMessage(final MessageSummonSetSelection message, final MessageContext ctx) {
-        // Server Side:
-        if(ctx.side == Side.SERVER) {
-            IThreadListener mainThread = (WorldServer) ctx.getServerHandler().player.getEntityWorld();
-            mainThread.addScheduledTask(new Runnable() {
-                @Override
-                public void run() {
-                    EntityPlayer player = ctx.getServerHandler().player;
-                    ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
-                    playerExt.setSelectedSummonSet(message.summonSetID);
-                }
-            });
-            return null;
-        }
-
-        // Client Side:
-        EntityPlayer player = LycanitesMobs.proxy.getClientPlayer();
-        ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
-        if(playerExt == null) return null;
-        playerExt.setSelectedSummonSet(message.summonSetID);
-		return null;
+	public static void onMessage(MessageSummonSetSelection message, MessageContext ctx, EntityPlayer player) {
+		if (ctx.side == Side.SERVER) {
+			// Server Side:
+			ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
+			playerExt.setSelectedSummonSet(message.summonSetID);
+		} else {
+			// Client Side:
+			ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
+			if (playerExt == null)
+				return;
+			playerExt.setSelectedSummonSet(message.summonSetID);
+		}
 	}
 	
 	

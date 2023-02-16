@@ -2,23 +2,19 @@ package com.lycanitesmobs.core.network;
 
 import io.netty.buffer.ByteBuf;
 import com.lycanitesmobs.core.entity.ExtendedPlayer;
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.pets.PetEntry;
 import com.lycanitesmobs.core.pets.PetManager;
 import com.lycanitesmobs.core.pets.SummonSet;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.IThreadListener;
-import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.UUID;
 
-public class MessagePetEntry implements IMessage, IMessageHandler<MessagePetEntry, IMessage> {
+public class MessagePetEntry implements IMessage {
     public UUID petEntryID;
     public String petEntryType;
     public boolean spawningActive;
@@ -66,55 +62,48 @@ public class MessagePetEntry implements IMessage, IMessageHandler<MessagePetEntr
 	/**
 	 * Called when this message is received.
 	 */
-	@Override
-	public IMessage onMessage(final MessagePetEntry message, final MessageContext ctx) {
-        // Server Side:
-        if(ctx.side == Side.SERVER) {
-            IThreadListener mainThread = (WorldServer) ctx.getServerHandler().player.getEntityWorld();
-            mainThread.addScheduledTask(() -> {
-				EntityPlayer player = ctx.getServerHandler().player;
-				ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
-				PetManager petManager = playerExt.petManager;
-				PetEntry petEntry = petManager.getEntry(message.petEntryID);
-				if(petEntry == null)
-					return;
-				petEntry.setSpawningActive(message.spawningActive);
-				petEntry.teleportEntity = message.teleportEntity;
-				SummonSet summonSet = petEntry.summonSet;
-				summonSet.readFromPacket(message.summonType, message.subspecies, message.variant, message.behaviour);
-				petEntry.onBehaviourUpdate();
-			});
-            return null;
-        }
-
-        // Client Side:
-		EntityPlayer player = LycanitesMobs.proxy.getClientPlayer();
-		ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
-		if(playerExt == null) return null;
-        PetManager petManager = playerExt.petManager;
-        PetEntry petEntry = petManager.getEntry(message.petEntryID);
-        if(petEntry == null) {
-            petEntry = new PetEntry(message.petEntryID, message.petEntryType, player, this.summonType);
-            petManager.addEntry(petEntry);
-        }
-        petEntry.setSpawningActive(message.spawningActive);
-        petEntry.teleportEntity = message.teleportEntity;
-        petEntry.subspeciesIndex = message.subspecies;
-        petEntry.variantIndex = message.variant;
-		SummonSet summonSet = petEntry.summonSet;
-		summonSet.readFromPacket(message.summonType, message.subspecies, message.variant, message.behaviour);
-        Entity entity = null;
-        if(message.petEntryEntityID != -1) {
-			entity = player.getEntityWorld().getEntityByID(message.petEntryEntityID);
+	public static void onMessage(MessagePetEntry message, MessageContext ctx, EntityPlayer player) {
+		if (ctx.side == Side.SERVER) {
+			// Server Side:
+			ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
+			PetManager petManager = playerExt.petManager;
+			PetEntry petEntry = petManager.getEntry(message.petEntryID);
+			if (petEntry == null)
+				return;
+			petEntry.setSpawningActive(message.spawningActive);
+			petEntry.teleportEntity = message.teleportEntity;
+			SummonSet summonSet = petEntry.summonSet;
+			summonSet.readFromPacket(message.summonType, message.subspecies, message.variant, message.behaviour);
+			petEntry.onBehaviourUpdate();
+		} else {
+			// Client Side:
+			ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
+			if (playerExt == null)
+				return;
+			PetManager petManager = playerExt.petManager;
+			PetEntry petEntry = petManager.getEntry(message.petEntryID);
+			if (petEntry == null) {
+				petEntry = new PetEntry(message.petEntryID, message.petEntryType, player, message.summonType);
+				petManager.addEntry(petEntry);
+			}
+			petEntry.setSpawningActive(message.spawningActive);
+			petEntry.teleportEntity = message.teleportEntity;
+			petEntry.subspeciesIndex = message.subspecies;
+			petEntry.variantIndex = message.variant;
+			SummonSet summonSet = petEntry.summonSet;
+			summonSet.readFromPacket(message.summonType, message.subspecies, message.variant, message.behaviour);
+			Entity entity = null;
+			if (message.petEntryEntityID != -1) {
+				entity = player.getEntityWorld().getEntityByID(message.petEntryEntityID);
+			}
+			petEntry.entity = entity;
+			petEntry.entityName = message.petEntryEntityName;
+			petEntry.respawnTime = message.respawnTime;
+			petEntry.respawnTimeMax = message.respawnTimeMax;
+			petEntry.entityLevel = message.entityLevel;
+			petEntry.entityExperience = message.entityExperience;
+			petEntry.isRespawning = message.isRespawning;
 		}
-        petEntry.entity = entity;
-        petEntry.entityName = message.petEntryEntityName;
-        petEntry.respawnTime = message.respawnTime;
-        petEntry.respawnTimeMax = message.respawnTimeMax;
-        petEntry.entityLevel = message.entityLevel;
-        petEntry.entityExperience = message.entityExperience;
-        petEntry.isRespawning = message.isRespawning;
-		return null;
 	}
 	
 	

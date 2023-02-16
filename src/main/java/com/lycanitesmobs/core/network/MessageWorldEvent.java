@@ -1,18 +1,15 @@
 package com.lycanitesmobs.core.network;
 
 import com.lycanitesmobs.ExtendedWorld;
-import com.lycanitesmobs.LycanitesMobs;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.relauncher.Side;
 
-public class MessageWorldEvent implements IMessage, IMessageHandler<MessageWorldEvent, IMessage> {
+public class MessageWorldEvent implements IMessage {
 	public String mobEventName;
 	public BlockPos pos;
 	public int level = 1;
@@ -37,19 +34,15 @@ public class MessageWorldEvent implements IMessage, IMessageHandler<MessageWorld
 	/**
 	 * Called when this message is received.
 	 */
-	@Override
-	public IMessage onMessage(MessageWorldEvent message, MessageContext ctx) {
-		if(ctx.side != Side.CLIENT) return null;
-		EntityPlayer player = LycanitesMobs.proxy.getClientPlayer();
+	public static void onMessage(MessageWorldEvent message, MessageContext ctx, EntityPlayer player) {
 		World world = player.getEntityWorld();
-        ExtendedWorld worldExt = ExtendedWorld.getForWorld(world);
-		
-		if("".equals(message.mobEventName))
-            worldExt.stopWorldEvent();
-		else {
-            worldExt.startMobEvent(message.mobEventName, null, message.pos, message.level, message.subspecies);
+		ExtendedWorld worldExt = ExtendedWorld.getForWorld(world);
+
+		if ("".equals(message.mobEventName)) {
+			worldExt.stopWorldEvent();
+		} else {
+			worldExt.startMobEvent(message.mobEventName, null, message.pos, message.level, message.subspecies);
 		}
-		return null;
 	}
 	
 	

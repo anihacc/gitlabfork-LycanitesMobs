@@ -1,19 +1,15 @@
 package com.lycanitesmobs.core.network;
 
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IThreadListener;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.relauncher.Side;
 
-public class MessageSummoningPedestalStats implements IMessage, IMessageHandler<MessageSummoningPedestalStats, IMessage> {
+public class MessageSummoningPedestalStats implements IMessage {
 	public int capacity;
 	public int progress;
 	public int fuel;
@@ -44,28 +40,18 @@ public class MessageSummoningPedestalStats implements IMessage, IMessageHandler<
 	/**
 	 * Called when this message is received.
 	 */
-	@Override
-	public IMessage onMessage(MessageSummoningPedestalStats message, MessageContext ctx) {
-		if(ctx.side == Side.SERVER)
-			return null;
-
-		EntityPlayer player = LycanitesMobs.proxy.getClientPlayer();
-		IThreadListener mainThread = net.minecraft.client.Minecraft.getMinecraft();
-		mainThread.addScheduledTask(() -> {
-			TileEntity tileEntity = player.getEntityWorld().getTileEntity(new BlockPos(message.x, message.y, message.z));
-			TileEntitySummoningPedestal summoningPedestal = null;
-			if(tileEntity instanceof TileEntitySummoningPedestal) {
-				summoningPedestal = (TileEntitySummoningPedestal) tileEntity;
-			}
-			if(summoningPedestal != null) {
-				summoningPedestal.capacity = message.capacity;
-				summoningPedestal.summonProgress = message.progress;
-				summoningPedestal.summoningFuel = message.fuel;
-				summoningPedestal.summoningFuelMax = message.fuelMax;
-			}
-		});
-
-		return null;
+	public static void onMessage(MessageSummoningPedestalStats message, MessageContext ctx, EntityPlayer player) {
+		TileEntity tileEntity = player.getEntityWorld().getTileEntity(new BlockPos(message.x, message.y, message.z));
+		TileEntitySummoningPedestal summoningPedestal = null;
+		if (tileEntity instanceof TileEntitySummoningPedestal) {
+			summoningPedestal = (TileEntitySummoningPedestal) tileEntity;
+		}
+		if (summoningPedestal != null) {
+			summoningPedestal.capacity = message.capacity;
+			summoningPedestal.summonProgress = message.progress;
+			summoningPedestal.summoningFuel = message.fuel;
+			summoningPedestal.summoningFuelMax = message.fuelMax;
+		}
 	}
 	
 	

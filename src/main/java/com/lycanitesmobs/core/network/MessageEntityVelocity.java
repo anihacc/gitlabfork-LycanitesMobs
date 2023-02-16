@@ -1,23 +1,14 @@
 package com.lycanitesmobs.core.network;
 
-import com.lycanitesmobs.LycanitesMobs;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.network.Packet;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.network.play.INetHandlerPlayClient;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.io.IOException;
-
-public class MessageEntityVelocity implements IMessage, IMessageHandler<MessageEntityVelocity, IMessage> {
+public class MessageEntityVelocity implements IMessage {
     public int entityID;
     public int motionX;
     public int motionY;
@@ -68,19 +59,12 @@ public class MessageEntityVelocity implements IMessage, IMessageHandler<MessageE
 	/**
 	 * Called when this message is received.
 	 */
-	@Override
-	public IMessage onMessage(MessageEntityVelocity message, MessageContext ctx) {
-		if(ctx.side != Side.CLIENT)
-			return null;
-
-		EntityPlayer player = LycanitesMobs.proxy.getClientPlayer();
+	public static void onMessage(MessageEntityVelocity message, MessageContext ctx, EntityPlayer player) {
 		World world = player.getEntityWorld();
 		Entity entity = world.getEntityByID(message.entityID);
-		entity.motionX += (double)message.motionX / 8000.0D;
-		entity.motionY += (double)message.motionY / 8000.0D;
-		entity.motionZ += (double)message.motionZ / 8000.0D;
-
-		return null;
+		entity.motionX += (double) message.motionX / 8000.0D;
+		entity.motionY += (double) message.motionY / 8000.0D;
+		entity.motionZ += (double) message.motionZ / 8000.0D;
 	}
 
 

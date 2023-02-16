@@ -4,15 +4,10 @@ import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.LycanitesMobs;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.IThreadListener;
-import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.relauncher.Side;
 
-public class MessageSyncRequest implements IMessage, IMessageHandler<MessageSyncRequest, IMessage> {
+public class MessageSyncRequest implements IMessage {
 
 	// ==================================================
 	//                    Constructors
@@ -26,18 +21,10 @@ public class MessageSyncRequest implements IMessage, IMessageHandler<MessageSync
 	/**
 	 * Called when this message is received.
 	 */
-	@Override
-	public IMessage onMessage(final MessageSyncRequest message, final MessageContext ctx) {
-		if(ctx.side != Side.SERVER)
-			return null;
-        IThreadListener mainThread = (WorldServer)ctx.getServerHandler().player.getEntityWorld();
-        mainThread.addScheduledTask(() -> {
-			EntityPlayer player = ctx.getServerHandler().player;
-			ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
-			playerExt.needsFullSync = true;
-			LycanitesMobs.logDebug("Packets", "Requested full player sync.");
-		});
-		return null;
+	public static void onMessage(MessageSyncRequest message, MessageContext ctx, EntityPlayer player) {
+		ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
+		playerExt.needsFullSync = true;
+		LycanitesMobs.logDebug("Packets", "Requested full player sync.");
 	}
 	
 	
@@ -49,7 +36,7 @@ public class MessageSyncRequest implements IMessage, IMessageHandler<MessageSync
 	 */
 	@Override
 	public void fromBytes(ByteBuf buf) {
-		PacketBuffer packet = new PacketBuffer(buf);
+
 	}
 	
 	
@@ -61,7 +48,7 @@ public class MessageSyncRequest implements IMessage, IMessageHandler<MessageSync
 	 */
 	@Override
 	public void toBytes(ByteBuf buf) {
-		PacketBuffer packet = new PacketBuffer(buf);
+
 	}
 	
 }

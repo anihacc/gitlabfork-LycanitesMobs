@@ -5,14 +5,10 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.IThreadListener;
-import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.relauncher.Side;
 
-public class MessagePlayerAttack implements IMessage, IMessageHandler<MessagePlayerAttack, IMessage> {
+public class MessagePlayerAttack implements IMessage {
     public int attackEntityID = 0;
 
 	// ==================================================
@@ -31,20 +27,10 @@ public class MessagePlayerAttack implements IMessage, IMessageHandler<MessagePla
 	/**
 	 * Called when this message is received.
 	 */
-	@Override
-	public IMessage onMessage(final MessagePlayerAttack message, final MessageContext ctx) {
-		if(ctx.side != Side.SERVER) return null;
-        IThreadListener mainThread = (WorldServer)ctx.getServerHandler().player.getEntityWorld();
-        mainThread.addScheduledTask(new Runnable() {
-            @Override
-            public void run() {
-                EntityPlayer player = ctx.getServerHandler().player;
-                ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
-                if(message.attackEntityID != 0)
-                    playerExt.meleeAttack(player.getEntityWorld().getEntityByID(message.attackEntityID));
-            }
-        });
-		return null;
+	public static void onMessage(MessagePlayerAttack message, MessageContext ctx, EntityPlayer player) {
+		ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
+		if (message.attackEntityID != 0)
+			playerExt.meleeAttack(player.getEntityWorld().getEntityByID(message.attackEntityID));
 	}
 	
 	

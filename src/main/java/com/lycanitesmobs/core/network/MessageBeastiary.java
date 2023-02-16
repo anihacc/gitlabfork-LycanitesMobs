@@ -8,11 +8,9 @@ import com.lycanitesmobs.core.info.CreatureKnowledge;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.relauncher.Side;
 
-public class MessageBeastiary implements IMessage, IMessageHandler<MessageBeastiary, IMessage> {
+public class MessageBeastiary implements IMessage {
 	public int entryAmount = 0;
 	public String[] creatureNames;
 	public int[] ranks;
@@ -46,21 +44,17 @@ public class MessageBeastiary implements IMessage, IMessageHandler<MessageBeasti
 	/**
 	 * Called when this message is received.
 	 */
-	@Override
-	public IMessage onMessage(MessageBeastiary message, MessageContext ctx) {
-		if(ctx.side != Side.CLIENT)
-			return null;
+	public static void onMessage(MessageBeastiary message, MessageContext ctx, EntityPlayer player) {
 		LycanitesMobs.logDebug("Packets", "Received Beastiary packet from server.");
-		EntityPlayer player = LycanitesMobs.proxy.getClientPlayer();
 		ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
-		if(playerExt == null) {
+		if (playerExt == null) {
 			LycanitesMobs.logDebug("Packets", "Unable to find extended player for client player: " + player);
-			return null;
+			return;
 		}
 		LycanitesMobs.logDebug("Packets", "Beastiary packet is valid.");
 
 		playerExt.getBeastiary().creatureKnowledgeList.clear();
-		for(int i = 0; i < message.entryAmount; i++) {
+		for (int i = 0; i < message.entryAmount; i++) {
 			String creatureName = message.creatureNames[i];
 			int rank = message.ranks[i];
 			int experience = message.experience[i];
@@ -68,7 +62,6 @@ public class MessageBeastiary implements IMessage, IMessageHandler<MessageBeasti
 			playerExt.getBeastiary().creatureKnowledgeList.put(creatureKnowledge.creatureName, creatureKnowledge);
 		}
 		LycanitesMobs.logDebug("Packets", "Added " + message.entryAmount + " entries from the Beastairy Packet.");
-		return null;
 	}
 	
 	

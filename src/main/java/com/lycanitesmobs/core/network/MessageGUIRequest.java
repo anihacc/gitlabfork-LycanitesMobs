@@ -4,14 +4,10 @@ import io.netty.buffer.ByteBuf;
 import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.IThreadListener;
-import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.relauncher.Side;
 
-public class MessageGUIRequest implements IMessage, IMessageHandler<MessageGUIRequest, IMessage> {
+public class MessageGUIRequest implements IMessage {
 	public byte guiID;
 	
 	
@@ -30,16 +26,9 @@ public class MessageGUIRequest implements IMessage, IMessageHandler<MessageGUIRe
 	/**
 	 * Called when this message is received.
 	 */
-	@Override
-	public IMessage onMessage(final MessageGUIRequest message, final MessageContext ctx) {
-		if(ctx.side != Side.SERVER) return null;
-        IThreadListener mainThread = (WorldServer)ctx.getServerHandler().player.getEntityWorld();
-        mainThread.addScheduledTask(() -> {
-			EntityPlayer player = ctx.getServerHandler().player;
-			ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
-			playerExt.requestGUI(message.guiID);
-		});
-		return null;
+	public static void onMessage(MessageGUIRequest message, MessageContext ctx, EntityPlayer player) {
+		ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
+		playerExt.requestGUI(message.guiID);
 	}
 	
 	

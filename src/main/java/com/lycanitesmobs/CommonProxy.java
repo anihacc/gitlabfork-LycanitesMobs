@@ -6,6 +6,7 @@ import com.lycanitesmobs.core.info.Subspecies;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -51,4 +52,10 @@ public class CommonProxy {
 	public net.minecraft.client.gui.FontRenderer getFontRenderer() {
 		return null;
 	}
+
+	// ========== Message Handling ==========
+	public EntityPlayer getPlayer(MessageContext ctx) {
+		return ctx.getServerHandler().player;
+	}
+
 }

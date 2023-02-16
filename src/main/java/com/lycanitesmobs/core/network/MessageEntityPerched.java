@@ -1,6 +1,5 @@
 package com.lycanitesmobs.core.network;
 
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.ExtendedEntity;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
@@ -9,11 +8,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.relauncher.Side;
 
-public class MessageEntityPerched implements IMessage, IMessageHandler<MessageEntityPerched, IMessage> {
+public class MessageEntityPerched implements IMessage {
 	public int perchedOnEntityID;
 	public int perchedByEntityID;
 	
@@ -34,20 +31,16 @@ public class MessageEntityPerched implements IMessage, IMessageHandler<MessageEn
 	/**
 	 * Called when this message is received.
 	 */
-	@Override
-	public IMessage onMessage(MessageEntityPerched message, MessageContext ctx) {
-		if(ctx.side != Side.CLIENT) return null;
-		EntityPlayer player = LycanitesMobs.proxy.getClientPlayer();
+	public static void onMessage(MessageEntityPerched message, MessageContext ctx, EntityPlayer player) {
 		World world = player.getEntityWorld();
 		Entity perchedOnEntity = world.getEntityByID(message.perchedOnEntityID);
 		Entity perchedByEntity = message.perchedByEntityID != 0 ? world.getEntityByID(message.perchedByEntityID) : null;
 
-        if(!(perchedOnEntity instanceof EntityLivingBase))
-            return null;
-		ExtendedEntity perchedOnEntityExt = ExtendedEntity.getForEntity((EntityLivingBase)perchedOnEntity);
-		if(perchedOnEntityExt != null)
+		if (!(perchedOnEntity instanceof EntityLivingBase))
+			return;
+		ExtendedEntity perchedOnEntityExt = ExtendedEntity.getForEntity((EntityLivingBase) perchedOnEntity);
+		if (perchedOnEntityExt != null)
 			perchedOnEntityExt.setPerchedByEntity(perchedByEntity);
-		return null;
 	}
 	
 	
