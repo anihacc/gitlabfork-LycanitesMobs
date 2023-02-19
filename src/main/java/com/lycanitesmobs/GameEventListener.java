@@ -51,6 +51,7 @@ import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 
 public class GameEventListener {
@@ -182,6 +183,15 @@ public class GameEventListener {
 		NBTTagCompound nbt = new NBTTagCompound();
 		extendedPlayerOld.writeNBT(nbt);
 		extendedPlayerNew.readNBT(nbt);
+	}
+
+
+	// ==================================================
+	//                    Player Changed Dimension
+	// ==================================================
+	@SubscribeEvent
+	public void onPlayerChangedDimensionEvent(PlayerChangedDimensionEvent event) {
+		ExtendedPlayer.getForPlayer(event.player).needsFullSync = true;
 	}
 
 
