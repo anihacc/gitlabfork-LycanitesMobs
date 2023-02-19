@@ -52,6 +52,7 @@ import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerRespawnEvent;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 
 public class GameEventListener {
@@ -191,6 +192,15 @@ public class GameEventListener {
 	// ==================================================
 	@SubscribeEvent
 	public void onPlayerChangedDimensionEvent(PlayerChangedDimensionEvent event) {
+		ExtendedPlayer.getForPlayer(event.player).needsFullSync = true;
+	}
+
+
+	// ==================================================
+	//                    Player Respawn
+	// ==================================================
+	@SubscribeEvent
+	public void onPlayerRespawnEvent(PlayerRespawnEvent event) {
 		ExtendedPlayer.getForPlayer(event.player).needsFullSync = true;
 	}
 
